@@ -1,0 +1,29 @@
+# Stack-agnostic baseline. Entries for the project's own toolchain are added
+# with the stack decision — see docs/roadmap.md.
+
+# Environment and secrets: never committed.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# OS noise
+.DS_Store
+Thumbs.db
+
+# Editors
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+
+# Logs and coverage
+*.log
+coverage/
+.coverage
+
+# Python (only tooling under scripts/ for now)
+__pycache__/
+*.py[cod]
+.venv/
