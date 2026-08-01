@@ -1,0 +1,24 @@
+config:
+  default: true
+
+  # ~80 columns for prose. Tables and code blocks are exempt: partir una
+  # tabla la vuelve ilegible, y el código se parte por su propio formateador.
+  MD013:
+    line_length: 80
+    tables: false
+    code_blocks: false
+    headings: true
+
+  # Repeated section titles are expected across templates and specs
+  # (Contexto, Decisión...), but not twice inside the same document level.
+  MD024:
+    siblings_only: true
+
+  # Inline HTML is not used, but emoji-heavy tables trip nothing here.
+  MD033: false
+
+globs:
+  - '**/*.md'
+
+ignores:
+  - node_modules
