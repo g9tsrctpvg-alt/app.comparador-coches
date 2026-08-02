@@ -65,16 +65,18 @@ defecto, cada área funcional tiene un único doc de estado responsable:
 | Arquitectura | `docs/estado/arquitectura.md` |
 | Dominio | `docs/estado/dominio.md` |
 | Infraestructura y despliegue | `docs/estado/despliegue.md` |
-| Interfaz de usuario | Pendiente de crear |
-| Contratos de API | Pendiente de crear |
-| Modelo de datos | Pendiente de crear |
-| Integraciones externas | Pendiente de crear |
-| Autenticación | Pendiente de crear |
-| Observabilidad | Pendiente de crear |
+| Interfaz de usuario | `docs/estado/interfaz.md` — pendiente de crear |
+| Modelo de datos | `docs/estado/datos.md` — pendiente de crear |
+| Observabilidad | `docs/estado/observabilidad.md` — pendiente de crear |
 
-Los `Pendiente de crear` se crean cuando la primera spec que les afecte los
-declare como destino; hasta entonces no existirían más que como stubs vacíos.
-El seguimiento está en `docs/roadmap.md`.
+Los pendientes se crean cuando la primera spec que les afecte los declare como
+destino; hasta entonces no existirían más que como stubs vacíos. El
+seguimiento está en `docs/roadmap.md`.
+
+Tres áreas del catálogo por defecto **no aplican** a este proyecto mientras
+siga siendo una SPA estática sin backend: contratos de API, integraciones
+externas y autenticación. No hay servidor, ni terceros, ni identidad. Si
+alguna aparece, aparece con su spec y con su doc de estado.
 
 Si una spec no encaja en ninguno, la pregunta no es dónde meterla: es si falta
 un doc de estado.

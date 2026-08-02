@@ -14,12 +14,13 @@ satélites de `docs/proceso/` y, en caso de duda, manda el satélite.
 | Nombre del proyecto | `comparador-coches` | Definido |
 | Idioma de documentación | Español | Definido |
 | Idioma de código y commits | Inglés | Definido |
-| Stack | Sin decidir | Pendiente |
+| Stack | Vite · React · TypeScript · npm | Definido |
 | Comandos de CI | Ver `docs/proceso/ci-y-guardarrailes.md` | Base |
-| Nombre de servicio en logs | Sin decidir | Pendiente |
+| Nombre de servicio en logs | `comparador-coches-web` | Definido |
 
-Los dos `Pendiente` se resuelven en la decisión de stack, que es 🟡 y se
-registrará como ADR. Disparador y alcance en `docs/roadmap.md`.
+El stack está decidido en `docs/decisions/0003-stack.md`: aplicación única,
+SPA estática sin backend. Los gates de código de CI siguen pendientes de
+implementar; su estado vive en `docs/roadmap.md`.
 
 ## 2. Principios rectores
 
