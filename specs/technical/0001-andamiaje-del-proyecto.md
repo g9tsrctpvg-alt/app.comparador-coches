@@ -87,28 +87,28 @@ código activos **antes** de que exista lógica de negocio.
 
 > Obligatorios y verificables.
 
-- [ ] Desde un clon limpio, `npm ci` seguido de `npm run build` termina sin
+- [x] Desde un clon limpio, `npm ci` seguido de `npm run build` termina sin
       errores y genera el artefacto estático.
-- [ ] `npm run typecheck` pasa con `strict` activado y sin supresiones sin
+- [x] `npm run typecheck` pasa con `strict` activado y sin supresiones sin
       justificar.
-- [ ] Un import de prueba desde `src/domain/` hacia `src/ui/` o hacia `react`
+- [x] Un import de prueba desde `src/domain/` hacia `src/ui/` o hacia `react`
       hace fallar el paso de contratos de arquitectura en CI.
-- [ ] Un `cars.json` con un campo de tipo incorrecto hace fallar la carga con
+- [x] Un `cars.json` con un campo de tipo incorrecto hace fallar la carga con
       un error que nombra el campo y el registro afectados.
-- [ ] `npm test` ejecuta la suite con cobertura y falla si esta baja del suelo
+- [x] `npm test` ejecuta la suite con cobertura y falla si esta baja del suelo
       declarado.
-- [ ] Un fichero con formato incorrecto hace fallar el paso de formato sin
+- [x] Un fichero con formato incorrecto hace fallar el paso de formato sin
       modificar el fichero.
-- [ ] El workflow de CI ejecuta, en orden: formato y lint, tipado, contratos
+- [x] El workflow de CI ejecuta, en orden: formato y lint, tipado, contratos
       de arquitectura, tests con cobertura, gates documentales y escaneo de
       secretos.
 - [ ] Un push a la rama principal deja el sitio accesible en su URL de GitHub
       Pages.
 - [ ] En esa URL publicada la aplicación carga sus recursos sin errores 404,
       con el sitio servido bajo el subdirectorio del repositorio.
-- [ ] `docs/proceso/ci-y-guardarrailes.md` documenta la secuencia exacta y
+- [x] `docs/proceso/ci-y-guardarrailes.md` documenta la secuencia exacta y
       coincide con la del workflow.
-- [ ] Dependabot cubre `npm` además de `github-actions`.
+- [x] Dependabot cubre `npm` además de `github-actions`.
 
 ## Dependencias y supuestos
 
