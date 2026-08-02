@@ -1,7 +1,7 @@
 # 0001 — Explicabilidad de la puntuación y trazabilidad de fuentes
 
 - **Id:** product/0001
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-08-02
 - **Specs relacionadas:** technical/0001
