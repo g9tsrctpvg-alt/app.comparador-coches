@@ -29,7 +29,7 @@ abajo.
 | CI de gates documentales | Hecha — verde en `push` a `main` y en `pull_request` |
 | Fijar `main` como rama por defecto del repositorio | Hecha |
 | Habilitar GitHub Pages con origen GitHub Actions | Hecha |
-| Configurar branch protection en el repositorio | Abierta |
+| Configurar branch protection en el repositorio | Hecha |
 
 `Hecha (como Pendiente)` significa que el artefacto existe y declara su hueco;
 no que el área esté documentada.
@@ -50,15 +50,15 @@ no que el área esté documentada.
 
 | Tarea | Estado |
 | --- | --- |
-| `technical/0001` — andamiaje del proyecto y gates de código | `draft` |
-| `product/0001` — explicabilidad de la puntuación y fuentes | `draft` |
+| `technical/0001` — andamiaje del proyecto y gates de código | `approved` |
+| `product/0001` — explicabilidad de la puntuación y fuentes | `approved` |
 | Resolver las decisiones abiertas de `product/0001` | Hecha |
-| Gate humano: aprobar ambas specs | **Esperando a una persona** |
+| Gate humano: aprobar ambas specs | Hecha |
 | Definir la forma de `cars.json` antes de escribirlo | Abierta — `product/0001` |
 | Portar `validate_docs.py` a TypeScript | Abierta — tras `technical/0001` |
 
-Ninguna de las dos specs puede implementarse mientras siga en `draft`. Ambas
-son ya aprobables: ninguna arrastra decisiones abiertas.
+Ambas specs están **aprobadas**: se pueden implementar. `technical/0001` va
+primero y no depende de `product/0001`.
 
 El orden acordado es **andamiaje primero**: `technical/0001` no depende de
 `product/0001`, y al implementarla queda algo desplegado y verificable sobre
@@ -85,7 +85,6 @@ una sorpresa esperando fecha.
 | Suelo de cobertura sin fijar: no hay tests ni código | 2026-08-01 | Que exista el primer código; se fija por *ratcheting* al nivel que alcance la suite |
 | Acciones de GitHub fijadas por etiqueta de major, no por digest; TruffleHog va en `@main` | 2026-08-01 | Fijar cada acción a un SHA y dejar que Dependabot las actualice |
 | Tres áreas de estado sin doc (interfaz, modelo de datos, observabilidad) | 2026-08-01 | Que una spec las declare como *Doc de estado*; catálogo en `docs/proceso/consolidacion.md` §4 |
-| Branch protection sin configurar: nada obliga a que los checks estén en verde antes de fusionar, así que hoy la CI informa pero no bloquea | 2026-08-01 | Configurar checks obligatorios e historia lineal sobre `main` |
 | **Disparador cumplido, plazo decidido:** `validate_docs.py` sigue en Python con el stack ya decidido en TypeScript, y la CI arranca dos runtimes | 2026-08-02 | Portarlo a TypeScript y ejecutarlo con Vitest en cuanto `technical/0001` esté implementada; no antes, para no montar una configuración provisional |
 | Datos del catálogo con estimaciones sin marcar y precios de julio de 2026 | 2026-08-02 | `product/0001` obliga a declarar fuente y estimación por dato; los precios se reconfirman aparte |
 
