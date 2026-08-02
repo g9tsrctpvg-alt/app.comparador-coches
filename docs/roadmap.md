@@ -26,7 +26,8 @@ abajo.
 | Docs de estado de arquitectura, dominio y despliegue | Hecha (como `Pendiente`) |
 | Plantillas de spec y de ADR | Hecha |
 | ADR 0001 (formato de logs) y ADR 0002 (modelo de trabajo) | Hecha |
-| CI de gates documentales | Hecha |
+| CI de gates documentales | Hecha — verde en GitHub Actions |
+| Fijar `main` como rama por defecto del repositorio | Abierta |
 | Configurar branch protection en el repositorio | Abierta |
 
 `Hecha (como Pendiente)` significa que el artefacto existe y declara su hueco;
@@ -79,7 +80,7 @@ una sorpresa esperando fecha.
 | Suelo de cobertura sin fijar: no hay tests ni código | 2026-08-01 | Que exista el primer código; se fija por *ratcheting* al nivel que alcance la suite |
 | Acciones de GitHub sin fijar por digest (`markdownlint-cli2`, `lychee`, TruffleHog usa `@main`) | 2026-08-01 | Fijar cada acción a un SHA y dejar que Dependabot las actualice |
 | Tres áreas de estado sin doc (interfaz, modelo de datos, observabilidad) | 2026-08-01 | Que una spec las declare como *Doc de estado*; catálogo en `docs/proceso/consolidacion.md` §4 |
-| CI nunca ejecutada: el workflow no se ha validado contra GitHub Actions | 2026-08-01 | Primer push que dispare el workflow y termine en verde |
+| El disparador `push` del workflow nunca ha corrido: los tres jobs solo se han validado en eventos `pull_request` | 2026-08-02 | Primera fusión a `main` que dispare el workflow y termine en verde |
 | Branch protection sin configurar: los checks no son obligatorios | 2026-08-01 | Configurar checks obligatorios e historia lineal en el repositorio |
 | **Disparador cumplido:** `validate_docs.py` sigue en Python con el stack ya decidido en TypeScript. La CI arranca dos runtimes | 2026-08-02 | Portarlo a TypeScript y ejecutarlo con Vitest, o registrar por qué se mantiene en Python |
 | Datos del catálogo con estimaciones sin marcar y precios de julio de 2026 | 2026-08-02 | `product/0001` obliga a declarar fuente y estimación por dato; los precios se reconfirman aparte |
