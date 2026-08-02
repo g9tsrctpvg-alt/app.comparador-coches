@@ -72,7 +72,10 @@ código activos **antes** de que exista lógica de negocio.
    `comparador-coches-web`, solo para errores. No hay escritura directa a
    consola fuera del logger.
 9. Un push a la rama principal despliega el sitio construido a GitHub Pages.
-10. La secuencia de CI documentada coincide con la que ejecuta el workflow.
+10. El sitio se sirve bajo el subdirectorio del repositorio, no en la raíz del
+    dominio: la ruta base de Vite lo refleja y las rutas de los recursos
+    resuelven en la URL publicada, no solo en local.
+11. La secuencia de CI documentada coincide con la que ejecuta el workflow.
 
 ## Criterios de aceptación
 
@@ -95,6 +98,8 @@ código activos **antes** de que exista lógica de negocio.
       secretos.
 - [ ] Un push a la rama principal deja el sitio accesible en su URL de GitHub
       Pages.
+- [ ] En esa URL publicada la aplicación carga sus recursos sin errores 404,
+      con el sitio servido bajo el subdirectorio del repositorio.
 - [ ] `docs/proceso/ci-y-guardarrailes.md` documenta la secuencia exacta y
       coincide con la del workflow.
 - [ ] Dependabot cubre `npm` además de `github-actions`.
