@@ -1,8 +1,13 @@
 # comparador-coches
 
-Comparador de coches. El proyecto está en fase de base: hay contrato de
-trabajo, estructura documental y CI de gates documentales, y **todavía no hay
-stack decidido ni código de producción**.
+Comparador de coches: once candidatos puntuados sobre seis ejes, con pesos
+ajustables y recálculo en vivo.
+
+El proyecto está en fase de base. Hay contrato de trabajo, estructura
+documental, CI de gates documentales y **stack decidido** —SPA estática con
+Vite, React y TypeScript, sin backend—, pero **todavía no hay código de
+producción**: las dos specs que lo introducen siguen en `draft`, esperando el
+gate humano.
 
 ## Por dónde empezar
 
