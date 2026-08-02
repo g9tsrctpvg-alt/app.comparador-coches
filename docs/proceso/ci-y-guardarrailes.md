@@ -35,9 +35,10 @@ En cada push a la rama principal y en cada PR, en este orden:
 
 ## 4. Estado actual de la CI
 
-El workflow vive en `.github/workflows/ci.yml`. Con el stack sin decidir, los
-pasos 1–4 no se pueden instanciar todavía; los que no dependen del stack ya
-están activos.
+El workflow vive en `.github/workflows/ci.yml`. El stack ya está decidido
+(`docs/decisions/0003-stack.md`), pero los gates de código **no están
+implementados**: los instala `technical/0001`, que sigue en `draft`. La
+herramienta de cada uno ya no es una incógnita; su ausencia sí.
 
 | Paso del suelo | Estado | Implementación |
 | --- | --- | --- |
@@ -46,10 +47,11 @@ están activos.
 | Coherencia de specs y ADRs | Activo | `scripts/validate_docs.py` |
 | Escaneo de secretos | Activo | TruffleHog sobre el repositorio |
 | Actualización de dependencias | Activo | Dependabot (`github-actions`) |
-| Lint y formato de código | Pendiente | Con el stack |
-| Tipado estático estricto | Pendiente | Con el stack |
-| Contratos de arquitectura | Pendiente | Con el stack |
-| Tests y suelo de cobertura | Pendiente | Con el primer código |
+| Lint y formato de código | Pendiente | Prettier + ESLint, modo comprobación |
+| Tipado estático estricto | Pendiente | `tsc --noEmit` con `strict` |
+| Contratos de arquitectura | Pendiente | dependency-cruiser |
+| Tests y suelo de cobertura | Pendiente | Vitest con cobertura v8 |
+| Dependencias de la aplicación | Pendiente | Dependabot (`npm`) |
 
 ### Secuencia exacta en local
 

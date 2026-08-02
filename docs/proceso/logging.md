@@ -32,8 +32,15 @@
 | `Resource` | Resource | `service.name`, `service.version`, `deployment.environment` |
 | `Attributes` | Attributes | Pares clave-valor del evento; sin secretos ni PII |
 
-El valor de `service.name` está **pendiente**: se fija con la decisión de
-stack. Ver `docs/roadmap.md`.
+`service.name` vale `comparador-coches-web`.
+
+> **En navegador rige una versión reducida.** La aplicación es una SPA
+> estática: no hay `stdout`, ni petición, ni middleware. Se emiten los mismos
+> campos a `console` y **solo para errores**, sin `TraceId` porque no hay
+> petición que correlacionar. Los apartados 3 a 6 de este documento se aplican
+> en lo que tengan de aplicable; los apartados 5 y 7 rigen íntegros. El
+> alcance lo fija el addendum de
+> `docs/decisions/0001-formato-de-logs.md`.
 
 Atributos por convención, usando el nombre OTel cuando exista:
 `http.request.method`, `url.path`, `http.response.status_code`,

@@ -4,16 +4,16 @@
 > tareas y deudas abiertas. `CLAUDE.md` resume y no duplica: al cerrar una
 > fase se actualiza este documento, no el índice.
 
-**Última actualización:** 2026-08-01
+**Última actualización:** 2026-08-02
 
 ## Fases
 
 | Fase | Objetivo | Estado |
 | --- | --- | --- |
 | 0 — Base documental | Contrato instanciado, estructura de docs y specs, ADRs semilla, CI de gates documentales | Activo |
-| 1 — Decisión de stack | Lenguaje, framework, gestor de dependencias, monorepo o app única; gates de código en CI | Pendiente |
-| 2 — Primer dominio | Primera spec de producto aprobada, implementada, verificada y consolidada | Pendiente |
-| 3 — Despliegue | Artefacto desplegable y entornos | Pendiente |
+| 1 — Decisión de stack | Lenguaje, framework, gestor de dependencias, despliegue; gates de código en CI | Activo |
+| 2 — Andamiaje y dominio | Proyecto construible y explicabilidad de la puntuación | Base |
+| 3 — Migración del artefacto | Traer el comparador React existente y su diseño responsive | Pendiente |
 
 Ninguna fase se da por cerrada mientras tenga tareas abiertas en la tabla de
 abajo.
@@ -34,19 +34,40 @@ no que el área esté documentada.
 
 ## Fase 1 — Decisión de stack
 
-Es el desbloqueo con más dependencias colgando. Requiere ADR (🟡) y spec
-técnica.
+| Tarea | Estado |
+| --- | --- |
+| ADR 0003: Vite · React · TypeScript · npm · GitHub Pages | Hecha |
+| Addendum al ADR 0001: alcance de los logs sin servidor | Hecha |
+| Fijar `service.name` (`comparador-coches-web`) | Hecha |
+| Aplicación única, no monorepo | Hecha |
+| Instalar los gates de código en CI | Abierta — `technical/0001` |
+| Ampliar Dependabot al ecosistema `npm` | Abierta — `technical/0001` |
+| Habilitar GitHub Pages en el repositorio | Abierta |
+| Decidir si `validate_docs.py` se porta a TypeScript | Abierta |
+
+## Fase 2 — Andamiaje y dominio
 
 | Tarea | Estado |
 | --- | --- |
-| ADR de stack: lenguaje, framework, gestor de dependencias | Abierta |
-| Decidir monorepo o app única, y en su caso `CLAUDE.md` por app | Abierta |
-| Fijar `service.name` para los logs | Abierta |
-| Formateador y lint de código en CI | Abierta |
-| Tipado estático estricto en CI | Abierta |
-| Contratos de arquitectura ejecutables en CI | Abierta |
-| Ampliar Dependabot al ecosistema del stack | Abierta |
-| Escribir el formateador de logs OTel-shaped (ADR 0001) | Abierta |
+| `technical/0001` — andamiaje del proyecto y gates de código | `draft` |
+| `product/0001` — explicabilidad de la puntuación y fuentes | `draft` |
+| Resolver las decisiones abiertas de `product/0001` | Abierta |
+| Gate humano: aprobar ambas specs | **Esperando a una persona** |
+| Definir la forma de `cars.json` antes de escribirlo | Abierta — `product/0001` |
+
+Ninguna de las dos specs puede implementarse mientras siga en `draft`.
+`product/0001` además no puede aprobarse con decisiones abiertas.
+
+## Fase 3 — Migración del artefacto
+
+Depende de la fase 2. Tareas conocidas, aún sin spec:
+
+- Traer el artefacto React de un solo fichero al proyecto, extrayendo las
+  fórmulas a `src/domain/`.
+- Diseño responsive real: hoy está pensado para 560 px de ancho máximo.
+- Persistencia en `localStorage` y configuración compartida por URL.
+- Objetivar el eje de viaje, hoy el único que sigue siendo un juicio.
+- Eje subjetivo de conducción, tras probar los coches.
 
 ## Deudas abiertas
 
@@ -57,10 +78,11 @@ una sorpresa esperando fecha.
 | --- | --- | --- |
 | Suelo de cobertura sin fijar: no hay tests ni código | 2026-08-01 | Que exista el primer código; se fija por *ratcheting* al nivel que alcance la suite |
 | Acciones de GitHub sin fijar por digest (`markdownlint-cli2`, `lychee`, TruffleHog usa `@main`) | 2026-08-01 | Fijar cada acción a un SHA y dejar que Dependabot las actualice |
-| Seis áreas de estado sin doc (UI, contratos de API, modelo de datos, integraciones, autenticación, observabilidad) | 2026-08-01 | Que una spec las declare como *Doc de estado*; catálogo en `docs/proceso/consolidacion.md` §4 |
-| `scripts/validate_docs.py` en Python con el stack sin decidir | 2026-08-01 | Que el stack elegido traiga un runtime con el que sea más natural mantenerlo |
+| Tres áreas de estado sin doc (interfaz, modelo de datos, observabilidad) | 2026-08-01 | Que una spec las declare como *Doc de estado*; catálogo en `docs/proceso/consolidacion.md` §4 |
 | CI nunca ejecutada: el workflow no se ha validado contra GitHub Actions | 2026-08-01 | Primer push que dispare el workflow y termine en verde |
 | Branch protection sin configurar: los checks no son obligatorios | 2026-08-01 | Configurar checks obligatorios e historia lineal en el repositorio |
+| **Disparador cumplido:** `validate_docs.py` sigue en Python con el stack ya decidido en TypeScript. La CI arranca dos runtimes | 2026-08-02 | Portarlo a TypeScript y ejecutarlo con Vitest, o registrar por qué se mantiene en Python |
+| Datos del catálogo con estimaciones sin marcar y precios de julio de 2026 | 2026-08-02 | `product/0001` obliga a declarar fuente y estimación por dato; los precios se reconfirman aparte |
 
 ## Aplazamientos con disparador
 
@@ -76,6 +98,9 @@ completo está en `docs/proceso/ci-y-guardarrailes.md`, §7, y en las
 | Suite E2E | Que la cobertura unitaria deje de detectar las regresiones que importan |
 | Cobertura por *diff* | Que el suelo global deje de ser suficiente |
 | Hooks de pre-commit locales | Que el ciclo de espera de CI moleste de verdad |
+| Persistencia en servidor | Que haga falta compartir estado entre dispositivos sin pasar por la URL |
+| *Pre-rendering* y posicionamiento | Que el comparador deje de ser de uso personal |
+| Cloudflare Pages en vez de GitHub Pages | Necesitar dominio propio, cabeceras a medida o redirecciones |
 
 Un disparador que se cumple y no se atiende deja de ser aplazamiento y pasa a
 la tabla de deudas.
