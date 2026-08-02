@@ -35,34 +35,58 @@ En cada push a la rama principal y en cada PR, en este orden:
 
 ## 4. Estado actual de la CI
 
-El workflow vive en `.github/workflows/ci.yml`. El stack ya está decidido
-(`docs/decisions/0003-stack.md`), pero los gates de código **no están
-implementados**: los instala `technical/0001`, que sigue en `draft`. La
-herramienta de cada uno ya no es una incógnita; su ausencia sí.
+El workflow vive en `.github/workflows/ci.yml`. Con `technical/0001`
+implementada, el suelo de CI está completo: los seis pasos del §3 están
+activos, en el mismo orden en que aparecen ahí.
 
 | Paso del suelo | Estado | Implementación |
 | --- | --- | --- |
+| Lint y formato de código | Activo | Prettier + ESLint, modo comprobación |
+| Tipado estático estricto | Activo | `tsc --noEmit` con `strict` |
+| Contratos de arquitectura | Activo | dependency-cruiser (`domain/` no importa `ui/`, React ni React DOM) |
+| Tests y suelo de cobertura | Activo | Vitest con cobertura v8, suelo al 100% en `domain/`, `data/` y `logging/` |
 | Lint y formato de documentación | Activo | `markdownlint` sobre `**/*.md` |
 | Enlaces de documentación | Activo | `lychee` sobre `**/*.md` |
 | Coherencia de specs y ADRs | Activo | `scripts/validate_docs.py` |
 | Escaneo de secretos | Activo | TruffleHog sobre el repositorio |
-| Actualización de dependencias | Activo | Dependabot (`github-actions`) |
-| Lint y formato de código | Pendiente | Prettier + ESLint, modo comprobación |
-| Tipado estático estricto | Pendiente | `tsc --noEmit` con `strict` |
-| Contratos de arquitectura | Pendiente | dependency-cruiser |
-| Tests y suelo de cobertura | Pendiente | Vitest con cobertura v8 |
-| Dependencias de la aplicación | Pendiente | Dependabot (`npm`) |
+| Actualización de dependencias | Activo | Dependabot (`github-actions`, `npm`) |
+
+Los *jobs* del workflow están encadenados con `needs` en este orden:
+`lint → typecheck → architecture → test → docs → links → secrets`. `build`
+depende de `test` y corre en todo push y PR; `deploy` depende de `build` y
+solo se ejecuta en push a `main`, publicando a GitHub Pages.
 
 ### Secuencia exacta en local
 
 ```bash
+npm run format:check
+npm run lint
+npm run typecheck
+npm run arch:check
+npm run test:coverage
 python3 scripts/validate_docs.py
 npx --yes markdownlint-cli2 "**/*.md"
+npm run build
 ```
 
-**Pásala entera antes de dar algo por hecho.** Los pasos de código se añaden a
-esta secuencia al decidir el stack, y esta sección es su sitio: no se
-documentan en dos lugares.
+**Pásala entera antes de dar algo por hecho.**
+
+### Suelo de cobertura
+
+Se fija por *ratcheting*, al nivel que alcanza la suite hoy: el 100% de
+líneas, sentencias y funciones en `src/domain/`, `src/data/` y
+`src/logging/` (`vite.config.ts`, bloque `test.coverage`). `src/ui/` y
+`src/main.tsx` quedan **excluidos** de la medición: hoy son andamiaje mínimo
+de cableado, sin la lógica que introducirá `product/0001`, y exigirles el
+mismo suelo forzaría a testear una interfaz que va a rehacerse. Se incluyen
+en el suelo cuando dejen de ser eso — ver `docs/roadmap.md`.
+
+Dos ramas de `src/data/loadCatalog.ts` que TypeScript exige por
+`noUncheckedIndexedAccess` pero que Zod nunca deja alcanzar (`ZodError`
+siempre tiene al menos un `issue`; un índice numérico en `issue.path` solo
+existe si `raw` ya es el array validado) se resolvieron con una aserción no
+nula comentada y justificada, en vez de perseguir el 100% con una rama
+muerta.
 
 ### Qué comprueba `validate_docs.py`
 
@@ -116,9 +140,13 @@ La regla es: **se aplaza con disparador explícito, no se ignora**.
 | Detección de *breaking changes* y contract testing | Que exista un consumidor externo del contrato |
 | SDK completo de observabilidad | Que exista un backend real al que exportar |
 | Cobertura por *diff* en vez de suelo global | Que el suelo global deje de ser suficiente |
-| Gates de CD (smoke tests, canary) | Que exista despliegue real |
 | Suite E2E | Que la cobertura unitaria deje de detectar las regresiones que importan |
 | Hooks de pre-commit locales | Que el ciclo de espera de CI moleste de verdad |
+
+**Gates de CD (smoke tests, canary) — disparador cumplido.** El aplazamiento
+tenía como condición «que exista despliegue real»; desde `technical/0001`
+ese despliegue existe (GitHub Pages). Deja de ser aplazamiento y pasa a
+`docs/roadmap.md` como deuda.
 
 Un aplazamiento sin disparador es una omisión disfrazada. Un disparador que se
 cumple y no se atiende es deuda: va al roadmap.

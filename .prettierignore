@@ -1,0 +1,8 @@
+dist
+coverage
+node_modules
+package-lock.json
+
+# Markdown is governed by markdownlint (.markdownlint-cli2.yaml), not
+# Prettier: one tool per concern.
+*.md

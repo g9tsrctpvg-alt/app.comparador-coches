@@ -1,0 +1,24 @@
+[
+  {
+    "id": "kia-sportage-hev",
+    "name": "Sportage HEV",
+    "brand": "Kia",
+    "technology": "HEV",
+    "lengthMm": 4540,
+    "widthMm": 1865,
+    "heightMm": 1645,
+    "trunkLiters": 587,
+    "priceEur": 36000
+  },
+  {
+    "id": "toyota-corolla-cross",
+    "name": "Corolla Cross",
+    "brand": "Toyota",
+    "technology": "HEV",
+    "lengthMm": 4460,
+    "widthMm": 1825,
+    "heightMm": 1620,
+    "trunkLiters": 473,
+    "priceEur": 36500
+  }
+]

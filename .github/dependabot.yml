@@ -1,11 +1,14 @@
 version: 2
 
-# Only the GitHub Actions ecosystem for now: the project has no package
-# manager yet. Adding the stack's ecosystem is a task of phase 1 — see
-# docs/roadmap.md.
-
 updates:
   - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: build
+
+  - package-ecosystem: npm
     directory: /
     schedule:
       interval: weekly
