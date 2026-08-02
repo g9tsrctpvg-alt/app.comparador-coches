@@ -4,6 +4,8 @@
 - **Fecha:** 2026-08-01
 - **Nivel:** 🟡
 
+> Acotado por el **addendum de 2026-08-02**, al final de este documento.
+
 ## Contexto
 
 El proyecto arranca sin código y sin backend de observabilidad. La decisión de
@@ -66,3 +68,24 @@ registra la razón; ese documento manda sobre la práctica.
 - La disciplina de redacción (allow-list de campos, nunca objetos) cubre
   runtime; el escaneo de secretos de la CI cubre el repositorio. Son problemas
   distintos y ninguno sustituye al otro.
+
+## Addendum 2026-08-02 — alcance en una aplicación sin servidor
+
+La decisión de stack (`0003-stack.md`) fija una SPA estática sin backend. En
+un navegador no existe `stdout`, ni petición, ni middleware donde asignar
+`TraceId`: los puntos 1 y 3 de la decisión no son instanciables tal cual.
+
+Se acota, no se revoca:
+
+- La decisión original **rige íntegra para cualquier código con runtime de
+  servidor**, si algún día lo hay.
+- **En navegador** se emite la misma forma de campos —`Timestamp`,
+  `SeverityText`, `Body`, `Attributes`, `Resource`— a `console`, y **solo para
+  errores**. Sin `TraceId`, porque no hay petición que correlacionar.
+- `service.name` queda fijado a `comparador-coches-web`.
+
+Lo que **no** cambia: las reglas de qué no se loguea siguen siendo 🔴, y el
+`Body` sigue siendo estático y de baja cardinalidad. Que hoy no haya datos
+personales que redactar no relaja la regla; la hace barata de cumplir.
+
+La regla operativa vigente está en `docs/proceso/logging.md`.
