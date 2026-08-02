@@ -42,6 +42,9 @@ NOTICE_B = "**Spec consolidada ("
 
 FIELD_RE = re.compile(r"^-\s+\*\*(?P<key>[^:*]+):\*\*\s*(?P<value>.*?)\s*$")
 
+# An explicit "none" in a section that must end up with no entries.
+NOTHING_RE = re.compile(r"^(ningun[ao]|none)\s*[.．]?$", re.IGNORECASE)
+
 
 def parse_fields(text: str) -> dict[str, str]:
     """Read the ``- **Key:** value`` header block at the top of a document."""
@@ -65,15 +68,31 @@ def section(text: str, title: str) -> str | None:
     return match.group("body") if match else None
 
 
-def is_blank(body: str | None) -> bool:
-    """A section counts as empty when it holds no text beyond blockquotes."""
+def meaningful_lines(body: str | None) -> list[str]:
+    """Lines of a section, ignoring blanks and blockquotes."""
     if body is None:
-        return True
-    meaningful = [
-        line for line in body.splitlines()
+        return []
+    return [
+        line.strip() for line in body.splitlines()
         if line.strip() and not line.lstrip().startswith(">")
     ]
-    return not meaningful
+
+
+def is_blank(body: str | None) -> bool:
+    """A section counts as empty when it holds no text beyond blockquotes."""
+    return not meaningful_lines(body)
+
+
+def declares_nothing(body: str | None) -> bool:
+    """True when a section is empty or explicitly says it has no entries.
+
+    Writing "Ninguna." is clearer than leaving the section blank, which reads
+    the same as having forgotten to fill it in. Both count as nothing pending.
+    """
+    lines = meaningful_lines(body)
+    if not lines:
+        return True
+    return len(lines) == 1 and NOTHING_RE.match(lines[0]) is not None
 
 
 def check_common(path: Path, text: str, fields: dict[str, str],
@@ -116,10 +135,10 @@ def check_spec(path: Path, kind: str, errors: list[str]) -> None:
             errors.append(
                 f"{rel}: Estado '{estado}' requires at least one acceptance "
                 f"criterion")
-        if not is_blank(section(text, "Decisiones abiertas")):
+        if not declares_nothing(section(text, "Decisiones abiertas")):
             errors.append(
                 f"{rel}: Estado '{estado}' requires 'Decisiones abiertas' to "
-                f"be empty")
+                f"be empty or to say so explicitly")
         if not fields.get("Doc de estado", ""):
             errors.append(f"{rel}: Estado '{estado}' requires 'Doc de estado'")
 
