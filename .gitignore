@@ -1,5 +1,7 @@
-# Stack-agnostic baseline. Entries for the project's own toolchain are added
-# with the stack decision — see docs/roadmap.md.
+# Node / Vite toolchain, set with the stack decision (docs/decisions/0003).
+node_modules/
+dist/
+*.tsbuildinfo
 
 # Environment and secrets: never committed.
 .env
