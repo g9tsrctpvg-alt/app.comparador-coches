@@ -27,7 +27,8 @@ abajo.
 | Plantillas de spec y de ADR | Hecha |
 | ADR 0001 (formato de logs) y ADR 0002 (modelo de trabajo) | Hecha |
 | CI de gates documentales | Hecha — verde en `push` a `main` y en `pull_request` |
-| Fijar `main` como rama por defecto del repositorio | Abierta |
+| Fijar `main` como rama por defecto del repositorio | Hecha |
+| Habilitar GitHub Pages con origen GitHub Actions | Hecha |
 | Configurar branch protection en el repositorio | Abierta |
 
 `Hecha (como Pendiente)` significa que el artefacto existe y declara su hueco;
@@ -43,8 +44,7 @@ no que el área esté documentada.
 | Aplicación única, no monorepo | Hecha |
 | Instalar los gates de código en CI | Abierta — `technical/0001` |
 | Ampliar Dependabot al ecosistema `npm` | Abierta — `technical/0001` |
-| Habilitar GitHub Pages en el repositorio | Abierta |
-| Decidir si `validate_docs.py` se porta a TypeScript | Abierta |
+| Decidir si `validate_docs.py` se porta a TypeScript | Hecha — se porta tras `technical/0001` |
 
 ## Fase 2 — Andamiaje y dominio
 
@@ -52,12 +52,17 @@ no que el área esté documentada.
 | --- | --- |
 | `technical/0001` — andamiaje del proyecto y gates de código | `draft` |
 | `product/0001` — explicabilidad de la puntuación y fuentes | `draft` |
-| Resolver las decisiones abiertas de `product/0001` | Abierta |
+| Resolver las decisiones abiertas de `product/0001` | Hecha |
 | Gate humano: aprobar ambas specs | **Esperando a una persona** |
 | Definir la forma de `cars.json` antes de escribirlo | Abierta — `product/0001` |
+| Portar `validate_docs.py` a TypeScript | Abierta — tras `technical/0001` |
 
-Ninguna de las dos specs puede implementarse mientras siga en `draft`.
-`product/0001` además no puede aprobarse con decisiones abiertas.
+Ninguna de las dos specs puede implementarse mientras siga en `draft`. Ambas
+son ya aprobables: ninguna arrastra decisiones abiertas.
+
+El orden acordado es **andamiaje primero**: `technical/0001` no depende de
+`product/0001`, y al implementarla queda algo desplegado y verificable sobre
+lo que construir la explicabilidad.
 
 ## Fase 3 — Migración del artefacto
 
@@ -80,8 +85,8 @@ una sorpresa esperando fecha.
 | Suelo de cobertura sin fijar: no hay tests ni código | 2026-08-01 | Que exista el primer código; se fija por *ratcheting* al nivel que alcance la suite |
 | Acciones de GitHub fijadas por etiqueta de major, no por digest; TruffleHog va en `@main` | 2026-08-01 | Fijar cada acción a un SHA y dejar que Dependabot las actualice |
 | Tres áreas de estado sin doc (interfaz, modelo de datos, observabilidad) | 2026-08-01 | Que una spec las declare como *Doc de estado*; catálogo en `docs/proceso/consolidacion.md` §4 |
-| Branch protection sin configurar: los checks no son obligatorios | 2026-08-01 | Configurar checks obligatorios e historia lineal en el repositorio |
-| **Disparador cumplido:** `validate_docs.py` sigue en Python con el stack ya decidido en TypeScript. La CI arranca dos runtimes | 2026-08-02 | Portarlo a TypeScript y ejecutarlo con Vitest, o registrar por qué se mantiene en Python |
+| Branch protection sin configurar: nada obliga a que los checks estén en verde antes de fusionar, así que hoy la CI informa pero no bloquea | 2026-08-01 | Configurar checks obligatorios e historia lineal sobre `main` |
+| **Disparador cumplido, plazo decidido:** `validate_docs.py` sigue en Python con el stack ya decidido en TypeScript, y la CI arranca dos runtimes | 2026-08-02 | Portarlo a TypeScript y ejecutarlo con Vitest en cuanto `technical/0001` esté implementada; no antes, para no montar una configuración provisional |
 | Datos del catálogo con estimaciones sin marcar y precios de julio de 2026 | 2026-08-02 | `product/0001` obliga a declarar fuente y estimación por dato; los precios se reconfirman aparte |
 
 ## Aplazamientos con disparador
