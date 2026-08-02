@@ -1,7 +1,7 @@
 # 0001 — Andamiaje del proyecto y gates de código
 
 - **Id:** technical/0001
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** technical
 - **Fecha:** 2026-08-02
 - **Specs relacionadas:** product/0001
