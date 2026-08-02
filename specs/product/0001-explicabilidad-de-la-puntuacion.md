@@ -42,11 +42,15 @@ de antemano.
   mínimo y cuál el máximo de cada eje, con su valor.
 - **Fórmula de cada eje visible**, declarada junto al cálculo y no como texto
   independiente en la interfaz.
-- **Procedencia por dato**: cada valor del catálogo lleva su fuente y su marca
-  de estimado, y ambas viajan hasta el desglose.
+- **Procedencia por dato**: cada valor del catálogo lleva sus fuentes y su
+  marca de estimado, y ambas viajan hasta el desglose.
+- **Fuentes en conflicto**: cuando un dato tiene varias fuentes que no
+  coinciden, se conservan todas y se muestra por qué se descartaron las que no
+  rigen.
 - **Supuestos globales explícitos** —km/año, años de vida, precio del litro y
   del kWh, mezcla estética, ponderación de la dificultad de uso diario— con
-  sus valores vigentes visibles allí donde afectan.
+  sus valores vigentes visibles allí donde afectan y editables en un único
+  sitio.
 - **Penalizaciones como línea propia**: las condicionales a eléctricos
   aparecen con su condición y su efecto, no restadas de antemano.
 
@@ -68,23 +72,31 @@ de antemano.
    devuelva únicamente la puntuación.
 2. La interfaz no calcula ninguna parte de la puntuación: solo renderiza el
    desglose que recibe.
-3. Cada dato de entrada del desglose indica su valor, su unidad, su fuente y
-   si es una estimación.
-4. Cada eje indica la dirección de su normalización —mayor es mejor o menor es
+3. Cada dato de entrada del desglose indica su valor, su unidad, su fuente
+   vigente y si es una estimación.
+4. Cada dato del catálogo declara una **lista de fuentes** con al menos un
+   elemento. Exactamente una está marcada como vigente, y de ella sale el
+   valor que entra en el cálculo.
+5. Las fuentes descartadas conservan su valor y el **motivo del descarte**, y
+   el desglose las muestra cuando existen. El caso que motiva esta regla es el
+   maletero: cifra de catálogo medida hasta el techo frente a medición VDA
+   independiente.
+6. Cada eje indica la dirección de su normalización —mayor es mejor o menor es
    mejor—, el mínimo y el máximo del conjunto de candidatos, y qué modelo
    ocupa cada extremo.
-5. Los ejes con fórmula compuesta (prestaciones, fiabilidad, estética, coste)
+7. Los ejes con fórmula compuesta (prestaciones, fiabilidad, estética, coste)
    desglosan cada sumando con su propia normalización antes de combinarlos.
-6. Las penalizaciones condicionales figuran como línea explícita con su
+8. Las penalizaciones condicionales figuran como línea explícita con su
    condición, su estado —activa o no— y su efecto en puntos.
-7. El desglose indica el peso del eje y su aportación al total, de forma que
+9. El desglose indica el peso del eje y su aportación al total, de forma que
    la suma de aportaciones reproduzca la puntuación final.
-8. Los supuestos globales vigentes se muestran junto a los ejes que dependen
-   de ellos.
-9. La descripción de la fórmula de un eje procede de la misma declaración que
-   gobierna su cálculo.
-10. Un dato sin fuente declarada es un error de carga del catálogo, no un dato
-    con la fuente vacía.
+10. Los supuestos globales se editan en un **único panel**. Los desgloses que
+    dependen de ellos muestran el valor aplicado y remiten a ese panel, sin
+    ofrecer edición propia.
+11. La descripción de la fórmula de un eje procede de la misma declaración que
+    gobierna su cálculo.
+12. Un dato sin exactamente una fuente vigente es un error de carga del
+    catálogo, no un dato con la fuente vacía.
 
 ## Criterios de aceptación
 
@@ -95,14 +107,18 @@ de antemano.
       normalización, penalizaciones, peso y aportación.
 - [ ] En cada eje se identifican por nombre el modelo que marca el mínimo y el
       que marca el máximo, junto con sus valores.
-- [ ] Todo dato mostrado en un desglose lleva su fuente, y los estimados
-      aparecen distinguidos de los verificados.
+- [ ] Todo dato mostrado en un desglose lleva su fuente vigente, y los
+      estimados aparecen distinguidos de los verificados.
+- [ ] Un dato con fuentes en conflicto muestra en el desglose la cifra vigente
+      y, junto a ella, las descartadas con su valor y su motivo de descarte.
+- [ ] Los supuestos globales solo se editan desde su panel; los desgloses los
+      muestran sin ofrecer control de edición.
 - [ ] La suma de las aportaciones de los seis ejes coincide con la puntuación
       total del modelo, con tolerancia de redondeo declarada.
 - [ ] Con las penalizaciones de eléctricos activas, el desglose de un modelo
       eléctrico las muestra como línea propia con su condición y su efecto.
-- [ ] Cargar un catálogo en el que un dato carece de fuente hace fallar la
-      carga con un error que identifica el dato.
+- [ ] Cargar un catálogo en el que un dato no tiene exactamente una fuente
+      vigente hace fallar la carga con un error que identifica el dato.
 - [ ] Existe un test que, para un modelo y un eje, comprueba el desglose
       completo y no solo la puntuación.
 - [ ] Ningún módulo de la interfaz reproduce una fórmula de puntuación; la
@@ -119,8 +135,4 @@ de antemano.
 
 ## Decisiones abiertas
 
-- Cómo se declara la fuente cuando un dato procede de varias —por ejemplo, un
-  maletero contrastado contra dos mediciones independientes—: una fuente
-  principal con notas, o una lista de fuentes por dato.
-- Si los supuestos globales se muestran solo en los ejes que los usan o
-  también en un panel único, cuando ambos sitios los pueden mostrar.
+Ninguna.
