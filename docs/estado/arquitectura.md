@@ -18,19 +18,23 @@ npm**, decidida en `docs/decisions/0003-stack.md`. TypeScript corre en modo
 
 ```text
 src/
-  domain/     núcleo: tipos y validación de dominio, sin conocer UI ni React
+  domain/     núcleo: tipos, dominio de puntuación y validación, sin conocer UI ni React
+    scoring/  motor de puntuación explicable — ver docs/estado/dominio.md
   data/       carga y validación del catálogo (JSON + Zod)
   logging/    logger de navegador, forma de campos OTel
-  ui/         componentes React
+  ui/         componentes React — ver docs/estado/interfaz.md
   main.tsx    único punto de wiring
 ```
 
 ## Dirección de las dependencias
 
-`domain/` no importa de `ui/`, de `react` ni de `react-dom`. La regla es
-**ejecutable**: `dependency-cruiser` (`.dependency-cruiser.mjs`) la comprueba
-en CI (`npm run arch:check`) y falla el paso de contratos de arquitectura si
-se viola.
+`domain/` no importa de `ui/`, de `react` ni de `react-dom`. `ui/` y
+`main.tsx`, a su vez, no importan las piezas internas de fórmula de
+`domain/scoring/` (`axes/`, `normalize.ts`, `mustGet.ts`): solo
+`scoreCatalog` y tipos. Las dos reglas son **ejecutables**:
+`dependency-cruiser` (`.dependency-cruiser.mjs`) las comprueba en CI
+(`npm run arch:check`) y falla el paso de contratos de arquitectura si se
+violan.
 
 El tipo `Car` y su esquema de validación (`CarSchema`) viven en
 `domain/car.ts`, declarados con Zod: el dominio fija la forma de sus datos, y
@@ -49,11 +53,9 @@ que no valida lanza `CatalogValidationError`, identificando el campo y el
 registro afectados —por `id` cuando existe en el dato crudo, si no por
 índice—.
 
-El **contenido** del catálogo —los coches, sus fuentes, el desglose de
-puntuación— es responsabilidad de `product/0001`, todavía sin implementar.
-Lo que hay hoy es un catálogo mínimo de prueba: dos modelos con dimensiones,
-precio y tecnología, sin la estructura de fuentes por dato que introducirá
-esa spec.
+El **contenido** del catálogo —once candidatos reales, cada dato con su
+estructura de fuentes— es responsabilidad de `product/0001`, ya
+implementada: detalle en `docs/estado/dominio.md`.
 
 ## Logging
 
@@ -69,14 +71,14 @@ ESLint impide escribir a consola fuera de ese módulo.
 Vitest, con cobertura v8 y suelo por *ratcheting* al 100% de líneas,
 sentencias y funciones en `domain/`, `data/` y `logging/`
 (`vite.config.ts`, bloque `test.coverage`). `ui/` y `main.tsx` quedan fuera
-del suelo: hoy son andamiaje mínimo de cableado que `product/0001` va a
-reemplazar, y exigirles el mismo suelo obligaría a testear una interfaz que
-está a punto de rehacerse. Se incluyen en el suelo cuando dejen de ser eso —
-seguimiento en `docs/roadmap.md`.
+del suelo: es la interfaz real del comparador, no andamiaje a punto de
+rehacerse, pero no tiene tests automatizados propios todavía —su
+verificación ha sido manual, contra un navegador real—. Si debe entrar en el
+suelo es una decisión pendiente, registrada como deuda en
+`docs/roadmap.md`.
 
 ## Qué falta
 
-El dominio real del comparador —ejes de puntuación, normalización,
-desgloses explicables— no existe todavía: es el alcance de `product/0001`.
-`ui/App.tsx` es un cableado mínimo que lista los coches del catálogo para
-probar que la carga y el build funcionan; no es la interfaz del comparador.
+Nada pendiente propio de este documento. El dominio de puntuación y la
+interfaz que lo consume están descritos en `docs/estado/dominio.md` y
+`docs/estado/interfaz.md` respectivamente.
