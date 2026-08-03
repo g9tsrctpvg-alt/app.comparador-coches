@@ -1,24 +1,2060 @@
 [
   {
-    "id": "kia-sportage-hev",
-    "name": "Sportage HEV",
+    "id": "kia-ev3",
+    "name": "EV3",
     "brand": "Kia",
+    "technology": "EV",
+    "notes": [
+      "Doblemente penalizado por la configuración del usuario: viajes largos y sin carga en casa."
+    ],
+    "lengthMm": {
+      "value": 4300,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 4300,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "widthMm": {
+      "value": 1850,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1850,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "heightMm": {
+      "value": 1565,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1565,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "groundClearanceMm": {
+      "value": 140,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 140,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "trunkLiters": {
+      "value": 460,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 460,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "L"
+    },
+    "powerCv": {
+      "value": 204,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 204,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "CV"
+    },
+    "weightKg": {
+      "value": 1800,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1800,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kg"
+    },
+    "acceleration0to100": {
+      "value": 7.7,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 7.7,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "s"
+    },
+    "consumption": {
+      "value": 16,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 16,
+          "estimated": true,
+          "current": true
+        }
+      ],
+      "unit": "kWh/100km"
+    },
+    "maintenanceEurYear": {
+      "value": 250,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 250,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "€/año"
+    },
+    "priceEur": {
+      "value": 32000,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 32000,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "€"
+    },
+    "reliabilityOcu": {
+      "value": 89,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 89,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyYears": {
+      "value": 7,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 7,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "años"
+    },
+    "residualPct5y": {
+      "value": 0.4,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 0.4,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "aestheticsExterior": {
+      "value": 5,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "aestheticsInterior": {
+      "value": 3,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "travelComfort": {
+      "value": 3,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    }
+  },
+  {
+    "id": "hyundai-kona-hev",
+    "name": "Kona HEV",
+    "brand": "Hyundai",
     "technology": "HEV",
-    "lengthMm": 4540,
-    "widthMm": 1865,
-    "heightMm": 1645,
-    "trunkLiters": 587,
-    "priceEur": 36000
+    "notes": [],
+    "lengthMm": {
+      "value": 4350,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 4350,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "widthMm": {
+      "value": 1825,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1825,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "heightMm": {
+      "value": 1585,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1585,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "groundClearanceMm": {
+      "value": 165,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 165,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "trunkLiters": {
+      "value": 466,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 466,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "L"
+    },
+    "powerCv": {
+      "value": 138,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 138,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "CV"
+    },
+    "weightKg": {
+      "value": 1485,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1485,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kg"
+    },
+    "acceleration0to100": {
+      "value": 11.0,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 11.0,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "s"
+    },
+    "consumption": {
+      "value": 5.2,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 5.2,
+          "estimated": true,
+          "current": true
+        }
+      ],
+      "unit": "l/100km"
+    },
+    "maintenanceEurYear": {
+      "value": 400,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 400,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "€/año"
+    },
+    "priceEur": {
+      "value": 32000,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 32000,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "€"
+    },
+    "reliabilityOcu": {
+      "value": 87,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 87,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyYears": {
+      "value": 5,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 5,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "años"
+    },
+    "residualPct5y": {
+      "value": 0.48,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 0.48,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "aestheticsExterior": {
+      "value": 3,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "aestheticsInterior": {
+      "value": 3,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "travelComfort": {
+      "value": 3,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    }
+  },
+  {
+    "id": "hyundai-kona-electrico",
+    "name": "Kona Eléctrico",
+    "brand": "Hyundai",
+    "technology": "EV",
+    "notes": [
+      "Doblemente penalizado por la configuración del usuario: viajes largos y sin carga en casa."
+    ],
+    "lengthMm": {
+      "value": 4355,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 4355,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "widthMm": {
+      "value": 1825,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1825,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "heightMm": {
+      "value": 1580,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1580,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "groundClearanceMm": {
+      "value": 151,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 151,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "trunkLiters": {
+      "value": 466,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 466,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "L"
+    },
+    "powerCv": {
+      "value": 204,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 204,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "CV"
+    },
+    "weightKg": {
+      "value": 1615,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1615,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kg"
+    },
+    "acceleration0to100": {
+      "value": 7.8,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 7.8,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "s"
+    },
+    "consumption": {
+      "value": 15.5,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 15.5,
+          "estimated": true,
+          "current": true
+        }
+      ],
+      "unit": "kWh/100km"
+    },
+    "maintenanceEurYear": {
+      "value": 250,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 250,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "€/año"
+    },
+    "priceEur": {
+      "value": 37000,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 37000,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "€"
+    },
+    "reliabilityOcu": {
+      "value": 87,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 87,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyYears": {
+      "value": 5,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 5,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "años"
+    },
+    "residualPct5y": {
+      "value": 0.38,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 0.38,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "aestheticsExterior": {
+      "value": 3,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "aestheticsInterior": {
+      "value": 3,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "travelComfort": {
+      "value": 3,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    }
   },
   {
     "id": "toyota-corolla-cross",
     "name": "Corolla Cross",
     "brand": "Toyota",
     "technology": "HEV",
-    "lengthMm": 4460,
-    "widthMm": 1825,
-    "heightMm": 1620,
-    "trunkLiters": 473,
-    "priceEur": 36500
+    "notes": [
+      "Evitar la versión Hybrid 200 AWD-i: baja el maletero a 390-425 L y queda fuera de los requisitos.",
+      "La garantía de 10 años exige mantenimiento en red oficial; sin él, baja a 3."
+    ],
+    "lengthMm": {
+      "value": 4460,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 4460,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "widthMm": {
+      "value": 1825,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1825,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "heightMm": {
+      "value": 1620,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1620,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "groundClearanceMm": {
+      "value": 160,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 160,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "trunkLiters": {
+      "value": 473,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 473,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "L"
+    },
+    "powerCv": {
+      "value": 140,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 140,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "CV"
+    },
+    "weightKg": {
+      "value": 1385,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1385,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kg"
+    },
+    "acceleration0to100": {
+      "value": 11.1,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 11.1,
+          "estimated": true,
+          "current": true
+        }
+      ],
+      "unit": "s"
+    },
+    "consumption": {
+      "value": 5.3,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 5.3,
+          "estimated": true,
+          "current": true
+        }
+      ],
+      "unit": "l/100km"
+    },
+    "maintenanceEurYear": {
+      "value": 350,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 350,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "€/año"
+    },
+    "priceEur": {
+      "value": 36500,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 36500,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "€"
+    },
+    "reliabilityOcu": {
+      "value": 91,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 91,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyYears": {
+      "value": 10,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 10,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "años"
+    },
+    "residualPct5y": {
+      "value": 0.52,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 0.52,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "aestheticsExterior": {
+      "value": 2,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "aestheticsInterior": {
+      "value": 2,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "travelComfort": {
+      "value": 3,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    }
+  },
+  {
+    "id": "bmw-x1-xdrive25e",
+    "name": "X1 xDrive25e",
+    "brand": "BMW",
+    "technology": "PHEV",
+    "notes": [
+      "Es PHEV y el usuario no tiene carga en casa: no puede aprovechar el enchufe.",
+      "Solo entra en presupuesto como seminuevo (43.900-45.900 € con ~18.000 km); nuevo cuesta ~52.900 €."
+    ],
+    "lengthMm": {
+      "value": 4500,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 4500,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "widthMm": {
+      "value": 1845,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1845,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "heightMm": {
+      "value": 1642,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1642,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "groundClearanceMm": {
+      "value": 180,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 180,
+          "estimated": true,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "trunkLiters": {
+      "value": 490,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 490,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "L"
+    },
+    "powerCv": {
+      "value": 245,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 245,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "CV"
+    },
+    "weightKg": {
+      "value": 1930,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1930,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kg"
+    },
+    "acceleration0to100": {
+      "value": 6.8,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 6.8,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "s"
+    },
+    "consumption": {
+      "value": 7.5,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 7.5,
+          "estimated": true,
+          "current": true
+        }
+      ],
+      "unit": "l/100km"
+    },
+    "maintenanceEurYear": {
+      "value": 750,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 750,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "€/año"
+    },
+    "priceEur": {
+      "value": 44000,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 44000,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "€"
+    },
+    "reliabilityOcu": {
+      "value": 87,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 87,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyYears": {
+      "value": 3,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 3,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "años"
+    },
+    "residualPct5y": {
+      "value": 0.4,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 0.4,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "aestheticsExterior": {
+      "value": 5,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "aestheticsInterior": {
+      "value": 5,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "travelComfort": {
+      "value": 4,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    }
+  },
+  {
+    "id": "alfa-romeo-tonale",
+    "name": "Tonale",
+    "brand": "Alfa Romeo",
+    "technology": "MHEV",
+    "notes": [
+      "MHEV, no HEV: sin híbrido completo anunciado.",
+      "Último de los candidatos en fiabilidad y garantía."
+    ],
+    "lengthMm": {
+      "value": 4522,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 4522,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "widthMm": {
+      "value": 1841,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1841,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "heightMm": {
+      "value": 1601,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1601,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "groundClearanceMm": {
+      "value": 150,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 150,
+          "estimated": true,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "trunkLiters": {
+      "value": 500,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 500,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "L"
+    },
+    "powerCv": {
+      "value": 175,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 175,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "CV"
+    },
+    "weightKg": {
+      "value": 1600,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1600,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kg"
+    },
+    "acceleration0to100": {
+      "value": 8.8,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 8.8,
+          "estimated": true,
+          "current": true
+        }
+      ],
+      "unit": "s"
+    },
+    "consumption": {
+      "value": 6.8,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 6.8,
+          "estimated": true,
+          "current": true
+        }
+      ],
+      "unit": "l/100km"
+    },
+    "maintenanceEurYear": {
+      "value": 600,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 600,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "€/año"
+    },
+    "priceEur": {
+      "value": 38500,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 38500,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "€"
+    },
+    "reliabilityOcu": {
+      "value": 80,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 80,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "warrantyYears": {
+      "value": 2,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 2,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "años"
+    },
+    "residualPct5y": {
+      "value": 0.36,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 0.36,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "aestheticsExterior": {
+      "value": 4,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "aestheticsInterior": {
+      "value": 4,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "travelComfort": {
+      "value": 4,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    }
+  },
+  {
+    "id": "kia-sportage-hev",
+    "name": "Sportage HEV",
+    "brand": "Kia",
+    "technology": "HEV",
+    "notes": [],
+    "lengthMm": {
+      "value": 4540,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 4540,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "widthMm": {
+      "value": 1865,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1865,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "heightMm": {
+      "value": 1645,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1645,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "groundClearanceMm": {
+      "value": 170,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 170,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "trunkLiters": {
+      "value": 587,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 587,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "L"
+    },
+    "powerCv": {
+      "value": 239,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 239,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "CV"
+    },
+    "weightKg": {
+      "value": 1620,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1620,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kg"
+    },
+    "acceleration0to100": {
+      "value": 7.9,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 7.9,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "s"
+    },
+    "consumption": {
+      "value": 6.2,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 6.2,
+          "estimated": true,
+          "current": true
+        }
+      ],
+      "unit": "l/100km"
+    },
+    "maintenanceEurYear": {
+      "value": 400,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 400,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "€/año"
+    },
+    "priceEur": {
+      "value": 36000,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 36000,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "€"
+    },
+    "reliabilityOcu": {
+      "value": 89,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 89,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyYears": {
+      "value": 7,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 7,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "años"
+    },
+    "residualPct5y": {
+      "value": 0.52,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 0.52,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "aestheticsExterior": {
+      "value": 2,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "aestheticsInterior": {
+      "value": 4,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "travelComfort": {
+      "value": 3,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    }
+  },
+  {
+    "id": "honda-civic-e-hev",
+    "name": "Civic e:HEV",
+    "brand": "Honda",
+    "technology": "HEV",
+    "notes": [],
+    "lengthMm": {
+      "value": 4560,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 4560,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "widthMm": {
+      "value": 1802,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1802,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "heightMm": {
+      "value": 1408,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1408,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "groundClearanceMm": {
+      "value": 128,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 128,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "trunkLiters": {
+      "value": 410,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 410,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "L"
+    },
+    "powerCv": {
+      "value": 184,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 184,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "CV"
+    },
+    "weightKg": {
+      "value": 1480,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1480,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kg"
+    },
+    "acceleration0to100": {
+      "value": 7.9,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 7.9,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "s"
+    },
+    "consumption": {
+      "value": 5.4,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 5.4,
+          "estimated": true,
+          "current": true
+        }
+      ],
+      "unit": "l/100km"
+    },
+    "maintenanceEurYear": {
+      "value": 400,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 400,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "€/año"
+    },
+    "priceEur": {
+      "value": 33850,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 33850,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "€"
+    },
+    "reliabilityOcu": {
+      "value": 89,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 89,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyYears": {
+      "value": 8,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 8,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "años"
+    },
+    "residualPct5y": {
+      "value": 0.46,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 0.46,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "aestheticsExterior": {
+      "value": 2.5,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "aestheticsInterior": {
+      "value": 3,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "travelComfort": {
+      "value": 3,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    }
+  },
+  {
+    "id": "lexus-nx-350h",
+    "name": "NX 350h",
+    "brand": "Lexus",
+    "technology": "HEV",
+    "notes": [
+      "Solo disponible como seminuevo, y aun así ~51.900 €: por encima del presupuesto.",
+      "Los NX de ~29.990 € son la primera generación (NX 300h), otro coche distinto.",
+      "La garantía de 10 años exige mantenimiento en red oficial; sin él, baja a 3."
+    ],
+    "lengthMm": {
+      "value": 4660,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 4660,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "widthMm": {
+      "value": 1865,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1865,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "heightMm": {
+      "value": 1660,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1660,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "groundClearanceMm": {
+      "value": 185,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 185,
+          "estimated": true,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "trunkLiters": {
+      "value": 549,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 549,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "L"
+    },
+    "powerCv": {
+      "value": 197,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 197,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "CV"
+    },
+    "weightKg": {
+      "value": 1780,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1780,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kg"
+    },
+    "acceleration0to100": {
+      "value": 8.8,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 8.8,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "s"
+    },
+    "consumption": {
+      "value": 6.2,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 6.2,
+          "estimated": true,
+          "current": true
+        }
+      ],
+      "unit": "l/100km"
+    },
+    "maintenanceEurYear": {
+      "value": 350,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 350,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "€/año"
+    },
+    "priceEur": {
+      "value": 51900,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 51900,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "€"
+    },
+    "reliabilityOcu": {
+      "value": 93,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 93,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyYears": {
+      "value": 10,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 10,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "años"
+    },
+    "residualPct5y": {
+      "value": 0.5,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 0.5,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "aestheticsExterior": {
+      "value": 4,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "aestheticsInterior": {
+      "value": 4,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "travelComfort": {
+      "value": 4,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    }
+  },
+  {
+    "id": "mazda-cx-5",
+    "name": "CX-5",
+    "brand": "Mazda",
+    "technology": "MHEV",
+    "notes": [
+      "Doble aviso: excede la longitud original y hoy solo es MHEV.",
+      "El híbrido real (e-Skyactiv-Z) no llega hasta 2027.",
+      "Homologa 7,0 l pero las pruebas reales dan ~8,0 l."
+    ],
+    "lengthMm": {
+      "value": 4690,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 4690,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "widthMm": {
+      "value": 1860,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1860,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "heightMm": {
+      "value": 1695,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1695,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "groundClearanceMm": {
+      "value": 200,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 200,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "trunkLiters": {
+      "value": 583,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 583,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "L"
+    },
+    "powerCv": {
+      "value": 141,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 141,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "CV"
+    },
+    "weightKg": {
+      "value": 1629,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1629,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kg"
+    },
+    "acceleration0to100": {
+      "value": 10.5,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 10.5,
+          "estimated": true,
+          "current": true
+        }
+      ],
+      "unit": "s"
+    },
+    "consumption": {
+      "value": 8.0,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 8.0,
+          "estimated": true,
+          "current": true
+        }
+      ],
+      "unit": "l/100km"
+    },
+    "maintenanceEurYear": {
+      "value": 450,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 450,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "€/año"
+    },
+    "priceEur": {
+      "value": 35200,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 35200,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "€"
+    },
+    "reliabilityOcu": {
+      "value": 89,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 89,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyYears": {
+      "value": 6,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 6,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "años"
+    },
+    "residualPct5y": {
+      "value": 0.46,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 0.46,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "aestheticsExterior": {
+      "value": 4,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "aestheticsInterior": {
+      "value": 3,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "travelComfort": {
+      "value": 3,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    }
+  },
+  {
+    "id": "honda-cr-v-e-hev",
+    "name": "CR-V e:HEV",
+    "brand": "Honda",
+    "technology": "HEV",
+    "notes": [
+      "Roza el presupuesto (46.645 €) y es el más largo de los candidatos."
+    ],
+    "lengthMm": {
+      "value": 4706,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 4706,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "widthMm": {
+      "value": 1866,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1866,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "heightMm": {
+      "value": 1674,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1674,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "groundClearanceMm": {
+      "value": 200,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 200,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "trunkLiters": {
+      "value": 579,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 579,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "L"
+    },
+    "powerCv": {
+      "value": 184,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 184,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "CV"
+    },
+    "weightKg": {
+      "value": 1825,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 1825,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kg"
+    },
+    "acceleration0to100": {
+      "value": 9.4,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 9.4,
+          "estimated": true,
+          "current": true
+        }
+      ],
+      "unit": "s"
+    },
+    "consumption": {
+      "value": 6.0,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 6.0,
+          "estimated": true,
+          "current": true
+        }
+      ],
+      "unit": "l/100km"
+    },
+    "maintenanceEurYear": {
+      "value": 400,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 400,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "€/año"
+    },
+    "priceEur": {
+      "value": 46645,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 46645,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "€"
+    },
+    "reliabilityOcu": {
+      "value": 89,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 89,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyYears": {
+      "value": 8,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 8,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "años"
+    },
+    "residualPct5y": {
+      "value": 0.42,
+      "sources": [
+        {
+          "label": "Especificación del proyecto (julio 2026)",
+          "value": 0.42,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "aestheticsExterior": {
+      "value": 2,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "aestheticsInterior": {
+      "value": 3,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "travelComfort": {
+      "value": 3,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    }
   }
 ]

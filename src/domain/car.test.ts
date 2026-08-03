@@ -1,31 +1,174 @@
 import { describe, expect, it } from 'vitest';
 import { CarSchema } from './car';
 
+function sourced(
+  value: number,
+  overrides: Partial<{ sources: unknown[] }> = {},
+) {
+  return {
+    value,
+    sources: overrides.sources ?? [
+      {
+        label: 'Especificación del proyecto (julio 2026)',
+        value,
+        estimated: false,
+        current: true,
+      },
+    ],
+  };
+}
+
+function rating(value: number) {
+  return { value, label: 'Nota del usuario' };
+}
+
 const validCar = {
   id: 'kia-sportage-hev',
-  name: 'Kia Sportage HEV',
+  name: 'Sportage HEV',
   brand: 'Kia',
   technology: 'HEV',
-  lengthMm: 4540,
-  widthMm: 1865,
-  heightMm: 1645,
-  trunkLiters: 587,
-  priceEur: 36000,
+  notes: [],
+  lengthMm: sourced(4540),
+  widthMm: sourced(1865),
+  heightMm: sourced(1645),
+  groundClearanceMm: sourced(170),
+  trunkLiters: sourced(587),
+  powerCv: sourced(239),
+  weightKg: sourced(1620),
+  acceleration0to100: sourced(7.9),
+  consumption: sourced(6.2),
+  maintenanceEurYear: sourced(400),
+  priceEur: sourced(36000),
+  reliabilityOcu: sourced(89),
+  warrantyYears: sourced(7),
+  residualPct5y: sourced(0.52),
+  aestheticsExterior: rating(2),
+  aestheticsInterior: rating(4),
+  travelComfort: rating(3),
 };
 
 describe('CarSchema', () => {
-  it('accepts a car with every field present and positive', () => {
+  it('accepts a fully populated car with single-source data', () => {
     const result = CarSchema.safeParse(validCar);
     expect(result.success).toBe(true);
   });
 
-  it('rejects a technology outside the declared enum', () => {
-    const result = CarSchema.safeParse({ ...validCar, technology: 'DIESEL' });
+  it('accepts a car without the optional residual value', () => {
+    const { residualPct5y: _residualPct5y, ...withoutResidual } = validCar;
+    const result = CarSchema.safeParse(withoutResidual);
+    expect(result.success).toBe(true);
+  });
+
+  it('rejects a sourced value whose top-level value does not match the current source', () => {
+    const result = CarSchema.safeParse({
+      ...validCar,
+      trunkLiters: {
+        value: 999,
+        sources: [
+          {
+            label: 'Especificación del proyecto',
+            value: 587,
+            estimated: false,
+            current: true,
+          },
+        ],
+      },
+    });
     expect(result.success).toBe(false);
   });
 
-  it('rejects a non-positive dimension', () => {
-    const result = CarSchema.safeParse({ ...validCar, trunkLiters: 0 });
+  it('rejects a sourced value with no source marked current', () => {
+    const result = CarSchema.safeParse({
+      ...validCar,
+      trunkLiters: {
+        value: 587,
+        sources: [
+          {
+            label: 'Especificación del proyecto',
+            value: 587,
+            estimated: false,
+            current: false,
+          },
+        ],
+      },
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it('rejects a sourced value with more than one source marked current', () => {
+    const result = CarSchema.safeParse({
+      ...validCar,
+      trunkLiters: {
+        value: 587,
+        sources: [
+          { label: 'Fuente A', value: 587, estimated: false, current: true },
+          { label: 'Fuente B', value: 590, estimated: false, current: true },
+        ],
+      },
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it('accepts multiple sources when exactly one is current and discards declare a reason', () => {
+    const result = CarSchema.safeParse({
+      ...validCar,
+      trunkLiters: {
+        value: 587,
+        sources: [
+          {
+            label: 'Ficha oficial del fabricante',
+            value: 620,
+            estimated: false,
+            current: false,
+            discardedReason:
+              'Medido hasta el techo, no hasta la bandeja (norma VDA).',
+          },
+          {
+            label: 'Medición independiente km77',
+            value: 587,
+            estimated: false,
+            current: true,
+          },
+        ],
+      },
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it('rejects a discarded source with no discard reason when there is more than one source', () => {
+    const result = CarSchema.safeParse({
+      ...validCar,
+      trunkLiters: {
+        value: 587,
+        sources: [
+          {
+            label: 'Ficha oficial del fabricante',
+            value: 620,
+            estimated: false,
+            current: false,
+          },
+          {
+            label: 'Medición independiente km77',
+            value: 587,
+            estimated: false,
+            current: true,
+          },
+        ],
+      },
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it('rejects a user rating outside the 1-5 range', () => {
+    const result = CarSchema.safeParse({
+      ...validCar,
+      travelComfort: rating(6),
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it('rejects a technology outside the declared enum', () => {
+    const result = CarSchema.safeParse({ ...validCar, technology: 'DIESEL' });
     expect(result.success).toBe(false);
   });
 
@@ -34,5 +177,15 @@ describe('CarSchema', () => {
     delete withoutId.id;
     const result = CarSchema.safeParse(withoutId);
     expect(result.success).toBe(false);
+  });
+
+  it('defaults notes to an empty array when omitted', () => {
+    const withoutNotes: Record<string, unknown> = { ...validCar };
+    delete withoutNotes.notes;
+    const result = CarSchema.safeParse(withoutNotes);
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.notes).toEqual([]);
+    }
   });
 });
