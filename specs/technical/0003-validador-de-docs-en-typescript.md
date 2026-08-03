@@ -1,18 +1,18 @@
 # 0003 — Validador de documentación en TypeScript
 
 - **Id:** technical/0003
-- **Estado:** verified
+- **Estado:** consolidated
 - **Tipo:** technical
 - **Fecha:** 2026-08-03
 - **Specs relacionadas:** technical/0001
 - **ADRs relacionados:** 0003
 - **Doc de estado:** `docs/estado/arquitectura.md`, `docs/estado/despliegue.md`
 
-> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
-> implementado: su sección *Contexto* retrata el sistema **anterior** al
-> cambio y hoy no es cierta. **No es referencia del estado actual** — para
-> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
-> **criterios de aceptación**, como registro de verificación.
+> ⚠️ **Spec consolidada (2026-08-03).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/arquitectura.md` y `docs/estado/despliegue.md`. Vigentes
+> aquí solo los **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 

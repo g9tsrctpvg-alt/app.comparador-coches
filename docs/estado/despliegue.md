@@ -30,8 +30,14 @@ gestionar en el despliegue.
 `.github/workflows/ci.yml`. En cada push a `main` y en cada PR corren, en
 este orden, los seis pasos del suelo de CI
 (`docs/proceso/ci-y-guardarrailes.md`, §4): formato y lint, tipado,
-contratos de arquitectura, tests con cobertura, coherencia de specs y ADRs,
+contratos de arquitectura, tests con cobertura, lint de documentación,
 enlaces de documentación, y escaneo de secretos.
+
+La **coherencia de specs y ADRs** no es un paso aparte: la comprueba
+`scripts/validateDocs.ts` bajo Vitest, dentro del paso de tests. El *job*
+`docs` solo ejecuta `markdownlint`. Toda la CI corre sobre un único
+*runtime*, Node: desde `technical/0003` no se arranca Python en ningún
+sitio.
 
 `build` corre en todo push y PR y verifica que el sitio se construye.
 `deploy` depende de `build`, solo se ejecuta en push a `main`, y publica
