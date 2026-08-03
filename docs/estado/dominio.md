@@ -53,7 +53,18 @@ efecto en puntos) y el peso y la aportación del eje.
 `normalizeAll` (`normalize.ts`) siempre normaliza sobre el conjunto completo
 de candidatos que recibe, nunca en abstracto: `norm(v) = 10×(v−min)/(max−min)`
 si mayor es mejor, invertido si menor es mejor, y `5` (punto neutro) si todos
-los candidatos empatan.
+los candidatos empatan. Un conjunto **vacío** no tiene extremos contra los que
+normalizar, así que es un error con nombre propio —`EmptyCandidateSetError`—
+y no un fallo genérico a mitad de cálculo.
+
+Tres de los dieciocho campos los edita el usuario desde el ranking. El
+subcomponente que los representa lleva la clave `editableRating`
+(`breakdown.ts`), que nombra el campo de `Car` que cambia al moverlo: es el
+contrato entre dominio e interfaz, y existe para que la interfaz no tenga que
+reconocer un control por el texto de su etiqueta. `applyOverride`
+(`overrides.ts`) aplica esas ediciones revalidando contra
+`UserRatingSchema`: la cota 1-5 es del dominio, y una valoración fuera de
+rango falla en vez de entrar al cálculo.
 
 ## Los seis ejes
 
@@ -98,6 +109,15 @@ coste 1 — reflejan una prioridad personal, no una fórmula del negocio.
 de fuentes. La fila de referencia del Alfa Romeo Giulietta que aparece en la
 especificación original del proyecto **no está en el catálogo**: es dato de
 referencia, no un candidato a comparar, y ninguna spec la ha pedido todavía.
+
+Un catálogo **sin ningún coche** no es un catálogo válido: `loadCatalog` lo
+rechaza igual que rechaza un registro mal formado. Sin candidatos no hay
+extremos contra los que normalizar, así que el fallo se declara al cargar y
+no a mitad del primer ranking.
+
+Los valores numéricos **no declaran cota** todavía: un precio o una dimensión
+negativos validan sin error. Está registrado como deuda en
+`docs/roadmap.md`.
 
 ## Qué queda fuera
 
