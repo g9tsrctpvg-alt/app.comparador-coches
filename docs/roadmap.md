@@ -4,7 +4,7 @@
 > tareas y deudas abiertas. `CLAUDE.md` resume y no duplica: al cerrar una
 > fase se actualiza este documento, no el índice.
 
-**Última actualización:** 2026-08-03
+**Última actualización:** 2026-08-03 (tarde)
 
 ## Fases
 
@@ -51,14 +51,14 @@ no que el área esté documentada.
 | Tarea | Estado |
 | --- | --- |
 | `technical/0001` — andamiaje del proyecto y gates de código | `consolidated` |
-| `product/0001` — explicabilidad de la puntuación y fuentes | `approved` |
+| `product/0001` — explicabilidad de la puntuación y fuentes | `consolidated` |
 | Resolver las decisiones abiertas de `product/0001` | Hecha |
 | Gate humano: aprobar ambas specs | Hecha |
 | Implementar, verificar y consolidar `technical/0001` | Hecha |
 | Sitio desplegado y verificado en GitHub Pages | Hecha — `https://g9tsrctpvg-alt.github.io/app.comparador-coches/` |
-| Definir la forma de `cars.json` antes de escribirlo | Abierta — `product/0001` |
+| Definir la forma de `cars.json` antes de escribirlo | Hecha — `product/0001` |
+| Implementar, verificar y consolidar `product/0001` | Hecha |
 | Portar `validate_docs.py` a TypeScript | Abierta |
-| Implementar `product/0001` | Abierta |
 
 `technical/0001` recorrió el ciclo completo: `approved → implemented →
 verified → consolidated`, con los dos últimos criterios de aceptación
@@ -67,8 +67,11 @@ subpath— confirmados contra el despliegue real, no una simulación local.
 Su efecto ya se lee en `docs/estado/arquitectura.md` y
 `docs/estado/despliegue.md`; la propia spec queda como registro histórico.
 
-`product/0001` sigue en `approved`, sin implementar: es el siguiente trabajo
-de esta fase.
+`product/0001` recorrió el mismo ciclo completo. Su efecto ya se lee en
+`docs/estado/dominio.md` y `docs/estado/interfaz.md` (nuevo); la propia spec
+queda como registro histórico. Con las dos specs de esta fase
+`consolidated` y sin más tareas abiertas propias de fase 2 salvo el port de
+`validate_docs.py`, el trabajo que queda es el de fase 3.
 
 ## Fase 3 — Migración del artefacto
 
@@ -92,8 +95,11 @@ una sorpresa esperando fecha.
 | Acciones de GitHub fijadas por etiqueta de major, no por digest; TruffleHog va en `@main` | 2026-08-01 | Fijar cada acción a un SHA y dejar que Dependabot las actualice |
 | Tres áreas de estado sin doc (interfaz, modelo de datos, observabilidad) | 2026-08-01 | Que una spec las declare como *Doc de estado*; catálogo en `docs/proceso/consolidacion.md` §4 |
 | `validate_docs.py` sigue en Python con el stack ya decidido en TypeScript, y la CI arranca dos runtimes | 2026-08-02 | Portarlo a TypeScript y ejecutarlo con Vitest — ya accionable, `technical/0001` está `consolidated` |
-| Datos del catálogo con estimaciones sin marcar y precios de julio de 2026 | 2026-08-02 | `product/0001` obliga a declarar fuente y estimación por dato; los precios se reconfirman aparte |
+| Precios del catálogo de julio de 2026, sin reconfirmar | 2026-08-02 | Reconfirmar precios contra fuente vigente y actualizar `cars.json` |
 | **Disparador cumplido:** los gates de CD (smoke tests, canary) se aplazaban hasta que existiera despliegue real; ya existe (GitHub Pages, verde desde `technical/0001`) | 2026-08-03 | Definir smoke test post-deploy en una spec técnica, o registrar por qué se sigue aplazando |
+| `ui/` es la interfaz real del comparador, no andamiaje, pero sigue fuera del suelo de cobertura del 100% y sin tests automatizados propios | 2026-08-03 | Decidir si entra en el suelo de `vite.config.ts` y, si es que sí, escribir sus tests |
+| Fila de referencia del Alfa Romeo Giulietta de la especificación original no está en `cars.json`: `product/0001` no la pedía y queda fuera a propósito, no por olvido | 2026-08-03 | Que una spec futura la pida explícitamente como referencia, o se cierre esta fila descartándola |
+| `estetica` y `coste` combinan sus sumandos en crudo antes de la única normalización del eje, a diferencia de `prestaciones`/`fiabilidad`; el requisito 7 de `product/0001` nombra los cuatro ejes juntos y es ambiguo sobre si debería aplicarles el mismo patrón. Señalado en el PR de implementación, sin respuesta antes del merge | 2026-08-03 | Confirmación humana explícita de la lectura correcta del requisito 7, o una spec nueva si cambia el cálculo |
 
 ## Aplazamientos con disparador
 
