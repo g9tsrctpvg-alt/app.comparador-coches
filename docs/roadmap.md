@@ -4,7 +4,7 @@
 > tareas y deudas abiertas. `CLAUDE.md` resume y no duplica: al cerrar una
 > fase se actualiza este documento, no el índice.
 
-**Última actualización:** 2026-08-02
+**Última actualización:** 2026-08-03
 
 ## Fases
 
@@ -12,7 +12,7 @@
 | --- | --- | --- |
 | 0 — Base documental | Contrato instanciado, estructura de docs y specs, ADRs semilla, CI de gates documentales | Activo |
 | 1 — Decisión de stack | Lenguaje, framework, gestor de dependencias, despliegue; gates de código en CI | Activo |
-| 2 — Andamiaje y dominio | Proyecto construible y explicabilidad de la puntuación | Base |
+| 2 — Andamiaje y dominio | Proyecto construible y explicabilidad de la puntuación | Activo |
 | 3 — Migración del artefacto | Traer el comparador React existente y su diseño responsive | Pendiente |
 
 Ninguna fase se da por cerrada mientras tenga tareas abiertas en la tabla de
@@ -42,27 +42,33 @@ no que el área esté documentada.
 | Addendum al ADR 0001: alcance de los logs sin servidor | Hecha |
 | Fijar `service.name` (`comparador-coches-web`) | Hecha |
 | Aplicación única, no monorepo | Hecha |
-| Instalar los gates de código en CI | Abierta — `technical/0001` |
-| Ampliar Dependabot al ecosistema `npm` | Abierta — `technical/0001` |
-| Decidir si `validate_docs.py` se porta a TypeScript | Hecha — se porta tras `technical/0001` |
+| Instalar los gates de código en CI | Hecha — `technical/0001` |
+| Ampliar Dependabot al ecosistema `npm` | Hecha — `technical/0001` |
+| Decidir si `validate_docs.py` se porta a TypeScript | Hecha — se porta ahora que `technical/0001` está `consolidated` |
 
 ## Fase 2 — Andamiaje y dominio
 
 | Tarea | Estado |
 | --- | --- |
-| `technical/0001` — andamiaje del proyecto y gates de código | `approved` |
+| `technical/0001` — andamiaje del proyecto y gates de código | `consolidated` |
 | `product/0001` — explicabilidad de la puntuación y fuentes | `approved` |
 | Resolver las decisiones abiertas de `product/0001` | Hecha |
 | Gate humano: aprobar ambas specs | Hecha |
+| Implementar, verificar y consolidar `technical/0001` | Hecha |
+| Sitio desplegado y verificado en GitHub Pages | Hecha — `https://g9tsrctpvg-alt.github.io/app.comparador-coches/` |
 | Definir la forma de `cars.json` antes de escribirlo | Abierta — `product/0001` |
-| Portar `validate_docs.py` a TypeScript | Abierta — tras `technical/0001` |
+| Portar `validate_docs.py` a TypeScript | Abierta |
+| Implementar `product/0001` | Abierta |
 
-Ambas specs están **aprobadas**: se pueden implementar. `technical/0001` va
-primero y no depende de `product/0001`.
+`technical/0001` recorrió el ciclo completo: `approved → implemented →
+verified → consolidated`, con los dos últimos criterios de aceptación
+—sitio accesible en su URL de Pages, recursos resolviendo sin 404 bajo el
+subpath— confirmados contra el despliegue real, no una simulación local.
+Su efecto ya se lee en `docs/estado/arquitectura.md` y
+`docs/estado/despliegue.md`; la propia spec queda como registro histórico.
 
-El orden acordado es **andamiaje primero**: `technical/0001` no depende de
-`product/0001`, y al implementarla queda algo desplegado y verificable sobre
-lo que construir la explicabilidad.
+`product/0001` sigue en `approved`, sin implementar: es el siguiente trabajo
+de esta fase.
 
 ## Fase 3 — Migración del artefacto
 
@@ -85,8 +91,9 @@ una sorpresa esperando fecha.
 | Suelo de cobertura sin fijar: no hay tests ni código | 2026-08-01 | Que exista el primer código; se fija por *ratcheting* al nivel que alcance la suite |
 | Acciones de GitHub fijadas por etiqueta de major, no por digest; TruffleHog va en `@main` | 2026-08-01 | Fijar cada acción a un SHA y dejar que Dependabot las actualice |
 | Tres áreas de estado sin doc (interfaz, modelo de datos, observabilidad) | 2026-08-01 | Que una spec las declare como *Doc de estado*; catálogo en `docs/proceso/consolidacion.md` §4 |
-| **Disparador cumplido, plazo decidido:** `validate_docs.py` sigue en Python con el stack ya decidido en TypeScript, y la CI arranca dos runtimes | 2026-08-02 | Portarlo a TypeScript y ejecutarlo con Vitest en cuanto `technical/0001` esté implementada; no antes, para no montar una configuración provisional |
+| `validate_docs.py` sigue en Python con el stack ya decidido en TypeScript, y la CI arranca dos runtimes | 2026-08-02 | Portarlo a TypeScript y ejecutarlo con Vitest — ya accionable, `technical/0001` está `consolidated` |
 | Datos del catálogo con estimaciones sin marcar y precios de julio de 2026 | 2026-08-02 | `product/0001` obliga a declarar fuente y estimación por dato; los precios se reconfirman aparte |
+| **Disparador cumplido:** los gates de CD (smoke tests, canary) se aplazaban hasta que existiera despliegue real; ya existe (GitHub Pages, verde desde `technical/0001`) | 2026-08-03 | Definir smoke test post-deploy en una spec técnica, o registrar por qué se sigue aplazando |
 
 ## Aplazamientos con disparador
 
@@ -98,7 +105,6 @@ completo está en `docs/proceso/ci-y-guardarrailes.md`, §7, y en las
 | --- | --- |
 | SDK completo de OpenTelemetry | Que exista un backend real al que exportar |
 | Contract testing y *breaking changes* | Que exista un consumidor externo del contrato |
-| Gates de CD (smoke tests, canary) | Que exista despliegue real |
 | Suite E2E | Que la cobertura unitaria deje de detectar las regresiones que importan |
 | Cobertura por *diff* | Que el suelo global deje de ser suficiente |
 | Hooks de pre-commit locales | Que el ciclo de espera de CI moleste de verdad |
