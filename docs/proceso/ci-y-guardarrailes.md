@@ -47,7 +47,7 @@ activos, en el mismo orden en que aparecen ahí.
 | Tests y suelo de cobertura | Activo | Vitest con cobertura v8, suelo al 100% en `domain/`, `data/` y `logging/` |
 | Lint y formato de documentación | Activo | `markdownlint` sobre `**/*.md` |
 | Enlaces de documentación | Activo | `lychee` sobre `**/*.md` |
-| Coherencia de specs y ADRs | Activo | `scripts/validate_docs.py` |
+| Coherencia de specs y ADRs | Activo | `scripts/validateDocs.ts`, bajo Vitest |
 | Escaneo de secretos | Activo | TruffleHog sobre el repositorio |
 | Actualización de dependencias | Activo | Dependabot (`github-actions`, `npm`) |
 
@@ -64,10 +64,12 @@ npm run lint
 npm run typecheck
 npm run arch:check
 npm run test:coverage
-python3 scripts/validate_docs.py
 npx --yes markdownlint-cli2 "**/*.md"
 npm run build
 ```
+
+La coherencia de specs y ADRs ya va dentro de `npm run test:coverage`: el
+validador corre bajo Vitest, no como paso aparte.
 
 **Pásala entera antes de dar algo por hecho.**
 
@@ -88,10 +90,13 @@ existe si `raw` ya es el array validado) se resolvieron con una aserción no
 nula comentada y justificada, en vez de perseguir el 100% con una rama
 muerta.
 
-### Qué comprueba `validate_docs.py`
+### Qué comprueba el validador de documentación
 
-Traduce a comprobación mecánica las reglas de `ciclo-de-spec.md` y
-`consolidacion.md` que se pueden verificar sin juicio humano:
+Vive en `scripts/validateDocs.ts` y corre bajo Vitest, dentro del paso de
+tests. Traduce a comprobación mecánica las reglas de `ciclo-de-spec.md` y
+`consolidacion.md` que se pueden verificar sin juicio humano —**veinte
+condiciones de error**, inventariadas en la cabecera del propio fichero, con
+un test por cada una—:
 
 - Nombrado `NNNN-titulo-en-kebab-case.md` y `NNNN` único por carpeta.
 - Cabecera de campos completa, con `Estado` y `Tipo` de los valores

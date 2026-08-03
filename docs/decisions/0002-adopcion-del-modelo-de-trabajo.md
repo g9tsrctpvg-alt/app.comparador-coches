@@ -4,6 +4,8 @@
 - **Fecha:** 2026-08-01
 - **Nivel:** 🟡
 
+> Acotado por el **addendum de 2026-08-03**, al final de este documento.
+
 ## Contexto
 
 El repositorio arranca vacío. Existe un contrato de trabajo IA-First y
@@ -84,3 +86,18 @@ fuera: se decide más adelante.
 - Los gates de código quedan **aplazados con disparador**: la decisión de
   stack. Mientras tanto, el suelo de CI está declarado incompleto en
   `docs/proceso/ci-y-guardarrailes.md`, §4.
+
+## Addendum 2026-08-03 — el validador ya no está en Python
+
+El disparador que este ADR dejó declarado para revisar la herramienta —«que
+el stack elegido traiga un runtime propio con el que sea más natural
+mantenerla»— se cumplió con el ADR 0003 y `technical/0001`.
+
+La consecuencia de arriba describe el estado del 2026-08-01 y se queda como
+registro. Hoy el validador es `scripts/validateDocs.ts`, corre bajo Vitest
+dentro del paso de tests, y la CI ya no arranca Python en ningún *job*. El
+cambio lo hizo `technical/0003`, que portó las veinte condiciones de error
+una a una y añadió el test que a la versión en Python le faltaba.
+
+Lo que **no** cambia es la decisión de este ADR: que la coherencia de specs y
+ADRs se comprueba mecánicamente en CI. Solo cambia con qué.
