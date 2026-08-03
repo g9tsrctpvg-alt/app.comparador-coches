@@ -59,7 +59,7 @@ no que el área esté documentada.
 | Definir la forma de `cars.json` antes de escribirlo | Hecha — `product/0001` |
 | Implementar, verificar y consolidar `product/0001` | Hecha |
 | `technical/0002` — robustez del núcleo y desacoplo de la interfaz | `consolidated` |
-| `technical/0003` — validador de documentación en TypeScript | `implemented` |
+| `technical/0003` — validador de documentación en TypeScript | `verified` |
 
 `technical/0001` recorrió el ciclo completo: `approved → implemented →
 verified → consolidated`, con los dos últimos criterios de aceptación

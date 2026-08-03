@@ -1,7 +1,7 @@
 # 0003 — Validador de documentación en TypeScript
 
 - **Id:** technical/0003
-- **Estado:** implemented
+- **Estado:** verified
 - **Tipo:** technical
 - **Fecha:** 2026-08-03
 - **Specs relacionadas:** technical/0001
@@ -94,22 +94,22 @@ de las veinte comprobaciones sin que un test lo cante.
 
 > Obligatorios y verificables.
 
-- [ ] Existe un inventario escrito de las veinte condiciones de error del
+- [x] Existe un inventario escrito de las veinte condiciones de error del
       validador de Python, y cada una aparece en el código nuevo.
-- [ ] Cada condición tiene un test que la dispara sobre un fixture inválido y
+- [x] Cada condición tiene un test que la dispara sobre un fixture inválido y
       un test que confirma que un fixture válido no la dispara.
-- [ ] Ejecutar el validador nuevo sobre las specs y ADRs reales del
+- [x] Ejecutar el validador nuevo sobre las specs y ADRs reales del
       repositorio termina sin errores.
-- [ ] Introducir un error deliberado en un documento real —estado
+- [x] Introducir un error deliberado en un documento real —estado
       desconocido, fecha mal formada, aviso equivocado— hace fallar el
       validador nuevo, comprobado antes de revertirlo.
-- [ ] `.github/workflows/ci.yml` no contiene ninguna referencia a Python ni a
+- [x] `.github/workflows/ci.yml` no contiene ninguna referencia a Python ni a
       `actions/setup-python`.
-- [ ] `scripts/validate_docs.py` ya no existe en el repositorio.
-- [ ] Ninguna documentación de proceso sigue nombrando
+- [x] `scripts/validate_docs.py` ya no existe en el repositorio.
+- [x] Ninguna documentación de proceso sigue nombrando
       `scripts/validate_docs.py` como la implementación vigente.
-- [ ] `npm test`, `tsc --noEmit` y `eslint` cubren el validador nuevo.
-- [ ] La secuencia completa de CI pasa, con el suelo de cobertura vigente
+- [x] `npm test`, `tsc --noEmit` y `eslint` cubren el validador nuevo.
+- [x] La secuencia completa de CI pasa, con el suelo de cobertura vigente
       intacto.
 
 ## Dependencias y supuestos
