@@ -1,7 +1,7 @@
 # 0001 — Andamiaje del proyecto y gates de código
 
 - **Id:** technical/0001
-- **Estado:** implemented
+- **Estado:** verified
 - **Tipo:** technical
 - **Fecha:** 2026-08-02
 - **Specs relacionadas:** product/0001
@@ -102,9 +102,9 @@ código activos **antes** de que exista lógica de negocio.
 - [x] El workflow de CI ejecuta, en orden: formato y lint, tipado, contratos
       de arquitectura, tests con cobertura, gates documentales y escaneo de
       secretos.
-- [ ] Un push a la rama principal deja el sitio accesible en su URL de GitHub
+- [x] Un push a la rama principal deja el sitio accesible en su URL de GitHub
       Pages.
-- [ ] En esa URL publicada la aplicación carga sus recursos sin errores 404,
+- [x] En esa URL publicada la aplicación carga sus recursos sin errores 404,
       con el sitio servido bajo el subdirectorio del repositorio.
 - [x] `docs/proceso/ci-y-guardarrailes.md` documenta la secuencia exacta y
       coincide con la del workflow.
