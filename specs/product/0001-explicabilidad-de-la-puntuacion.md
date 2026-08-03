@@ -1,7 +1,7 @@
 # 0001 — Explicabilidad de la puntuación y trazabilidad de fuentes
 
 - **Id:** product/0001
-- **Estado:** implemented
+- **Estado:** verified
 - **Tipo:** product
 - **Fecha:** 2026-08-02
 - **Specs relacionadas:** technical/0001
@@ -108,26 +108,26 @@ de antemano.
 
 > Obligatorios y verificables.
 
-- [ ] Para cualquier modelo y cualquiera de los seis ejes, la interfaz muestra
+- [x] Para cualquier modelo y cualquiera de los seis ejes, la interfaz muestra
       datos de entrada, supuestos, pasos intermedios, valor crudo,
       normalización, penalizaciones, peso y aportación.
-- [ ] En cada eje se identifican por nombre el modelo que marca el mínimo y el
+- [x] En cada eje se identifican por nombre el modelo que marca el mínimo y el
       que marca el máximo, junto con sus valores.
-- [ ] Todo dato mostrado en un desglose lleva su fuente vigente, y los
+- [x] Todo dato mostrado en un desglose lleva su fuente vigente, y los
       estimados aparecen distinguidos de los verificados.
-- [ ] Un dato con fuentes en conflicto muestra en el desglose la cifra vigente
+- [x] Un dato con fuentes en conflicto muestra en el desglose la cifra vigente
       y, junto a ella, las descartadas con su valor y su motivo de descarte.
-- [ ] Los supuestos globales solo se editan desde su panel; los desgloses los
+- [x] Los supuestos globales solo se editan desde su panel; los desgloses los
       muestran sin ofrecer control de edición.
-- [ ] La suma de las aportaciones de los seis ejes coincide con la puntuación
+- [x] La suma de las aportaciones de los seis ejes coincide con la puntuación
       total del modelo, con tolerancia de redondeo declarada.
-- [ ] Con las penalizaciones de eléctricos activas, el desglose de un modelo
+- [x] Con las penalizaciones de eléctricos activas, el desglose de un modelo
       eléctrico las muestra como línea propia con su condición y su efecto.
-- [ ] Cargar un catálogo en el que un dato no tiene exactamente una fuente
+- [x] Cargar un catálogo en el que un dato no tiene exactamente una fuente
       vigente hace fallar la carga con un error que identifica el dato.
-- [ ] Existe un test que, para un modelo y un eje, comprueba el desglose
+- [x] Existe un test que, para un modelo y un eje, comprueba el desglose
       completo y no solo la puntuación.
-- [ ] Ningún módulo de la interfaz reproduce una fórmula de puntuación; la
+- [x] Ningún módulo de la interfaz reproduce una fórmula de puntuación; la
       regla de dependencias de CI lo impide.
 
 ## Dependencias y supuestos
