@@ -58,7 +58,7 @@ no que el área esté documentada.
 | Sitio desplegado y verificado en GitHub Pages | Hecha — `https://g9tsrctpvg-alt.github.io/app.comparador-coches/` |
 | Definir la forma de `cars.json` antes de escribirlo | Hecha — `product/0001` |
 | Implementar, verificar y consolidar `product/0001` | Hecha |
-| `technical/0002` — robustez del núcleo y desacoplo de la interfaz | `implemented` |
+| `technical/0002` — robustez del núcleo y desacoplo de la interfaz | `verified` |
 | Portar `validate_docs.py` a TypeScript | Abierta |
 
 `technical/0001` recorrió el ciclo completo: `approved → implemented →
@@ -76,8 +76,8 @@ Una revisión de código posterior a la consolidación encontró cinco defectos
 reales en el código que `product/0001` introdujo —el más grave, un catálogo
 vacío que hace caer la aplicación entera en vez de mostrar su mensaje de
 error—. No son un cambio de comportamiento de la spec consolidada, así que no
-se edita: se corrigen por `technical/0002`, hoy en `draft`. Cierran fase 2,
-junto al port de `validate_docs.py`, antes de pasar a fase 3.
+se edita: se corrigen por `technical/0002`. Cierran fase 2, junto al port de
+`validate_docs.py`, antes de pasar a fase 3.
 
 ## Fase 3 — Migración del artefacto
 

@@ -1,7 +1,7 @@
 # 0002 — Robustez del núcleo de puntuación y desacoplo de la interfaz
 
 - **Id:** technical/0002
-- **Estado:** implemented
+- **Estado:** verified
 - **Tipo:** technical
 - **Fecha:** 2026-08-03
 - **Specs relacionadas:** product/0001
@@ -124,28 +124,28 @@ cada uno.
 
 > Obligatorios y verificables.
 
-- [ ] Existe un test que llama al motor de puntuación con un catálogo vacío y
+- [x] Existe un test que llama al motor de puntuación con un catálogo vacío y
       comprueba que el error es el declarado por `normalizeAll`, no un
       `TypeError` de `reduce`.
-- [ ] Existe un test que comprueba que `parseCatalog([])` falla, y que el
+- [x] Existe un test que comprueba que `parseCatalog([])` falla, y que el
       mensaje identifica el catálogo vacío como causa.
-- [ ] Con la carga del catálogo fallando, la aplicación renderiza el mensaje
+- [x] Con la carga del catálogo fallando, la aplicación renderiza el mensaje
       de error y no lanza ninguna excepción — comprobado con un test que
       monta `App` con una carga que lanza.
-- [ ] Renombrar la etiqueta de presentación de un subcomponente editable en
+- [x] Renombrar la etiqueta de presentación de un subcomponente editable en
       `axes/estetica.ts` o `axes/viaje.ts` no rompe los controles de
       valoración de la interfaz.
-- [ ] Una búsqueda de comparaciones sobre etiquetas del dominio en
+- [x] Una búsqueda de comparaciones sobre etiquetas del dominio en
       `src/ui/` no devuelve ninguna coincidencia.
-- [ ] Un desglose con una fuente descartada de valor textual muestra ese
+- [x] Un desglose con una fuente descartada de valor textual muestra ese
       texto, y no `NaN`, en la lista de fuentes descartadas.
-- [ ] En el eje `coste`, las cifras del bloque de normalización se muestran
+- [x] En el eje `coste`, las cifras del bloque de normalización se muestran
       en euros, igual que las de sus datos de entrada.
-- [ ] Con «pienso venderlo» activo, el desglose de un coche sin
+- [x] Con «pienso venderlo» activo, el desglose de un coche sin
       `residualPct5y` no contiene ninguna línea de descuento residual.
-- [ ] Una valoración sobrescrita a un valor fuera de 1-5 falla de forma
+- [x] Una valoración sobrescrita a un valor fuera de 1-5 falla de forma
       explícita, comprobado por test.
-- [ ] La secuencia completa de CI pasa, con el suelo de cobertura vigente
+- [x] La secuencia completa de CI pasa, con el suelo de cobertura vigente
       intacto.
 
 ## Dependencias y supuestos
