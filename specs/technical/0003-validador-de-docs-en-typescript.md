@@ -1,7 +1,7 @@
 # 0003 — Validador de documentación en TypeScript
 
 - **Id:** technical/0003
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** technical
 - **Fecha:** 2026-08-03
 - **Specs relacionadas:** technical/0001

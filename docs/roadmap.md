@@ -59,7 +59,7 @@ no que el área esté documentada.
 | Definir la forma de `cars.json` antes de escribirlo | Hecha — `product/0001` |
 | Implementar, verificar y consolidar `product/0001` | Hecha |
 | `technical/0002` — robustez del núcleo y desacoplo de la interfaz | `consolidated` |
-| `technical/0003` — validador de documentación en TypeScript | `draft` — esperando gate humano |
+| `technical/0003` — validador de documentación en TypeScript | `approved` |
 
 `technical/0001` recorrió el ciclo completo: `approved → implemented →
 verified → consolidated`, con los dos últimos criterios de aceptación
@@ -103,7 +103,7 @@ una sorpresa esperando fecha.
 | Suelo de cobertura sin fijar: no hay tests ni código | 2026-08-01 | Que exista el primer código; se fija por *ratcheting* al nivel que alcance la suite |
 | Acciones de GitHub fijadas por etiqueta de major, no por digest; TruffleHog va en `@main` | 2026-08-01 | Fijar cada acción a un SHA y dejar que Dependabot las actualice |
 | Dos áreas de estado sin doc (modelo de datos, observabilidad); `interfaz` ya existe desde `product/0001` | 2026-08-01 | Que una spec las declare como *Doc de estado*; catálogo en `docs/proceso/consolidacion.md` §4 |
-| `validate_docs.py` sigue en Python con el stack ya decidido en TypeScript, y la CI arranca dos runtimes. Además no tiene ni un test: su corrección descansa en haberlo leído | 2026-08-02 | `technical/0003`, hoy en `draft`: port a TypeScript con un test por cada una de sus veinte condiciones de error |
+| `validate_docs.py` sigue en Python con el stack ya decidido en TypeScript, y la CI arranca dos runtimes. Además no tiene ni un test: su corrección descansa en haberlo leído | 2026-08-02 | `technical/0003`: port a TypeScript con un test por cada una de sus veinte condiciones de error |
 | Precios del catálogo de julio de 2026, sin reconfirmar | 2026-08-02 | Reconfirmar precios contra fuente vigente y actualizar `cars.json` |
 | **Disparador cumplido:** los gates de CD (smoke tests, canary) se aplazaban hasta que existiera despliegue real; ya existe (GitHub Pages, verde desde `technical/0001`) | 2026-08-03 | Definir smoke test post-deploy en una spec técnica, o registrar por qué se sigue aplazando |
 | `ui/` sigue fuera del suelo de cobertura del 100%. Desde `technical/0002` sí tiene tests, pero solo de los fallos que aquella spec corrigió, y sin interacción: `renderToStaticMarkup` no hace clic ni arrastra, así que lo interactivo se sigue comprobando a mano | 2026-08-03 | Decidir si entra en el suelo de `vite.config.ts`, y si hacen falta jsdom o *testing library* para cubrir la interacción |
