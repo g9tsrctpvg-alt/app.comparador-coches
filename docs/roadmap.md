@@ -58,7 +58,7 @@ no que el área esté documentada.
 | Sitio desplegado y verificado en GitHub Pages | Hecha — `https://g9tsrctpvg-alt.github.io/app.comparador-coches/` |
 | Definir la forma de `cars.json` antes de escribirlo | Hecha — `product/0001` |
 | Implementar, verificar y consolidar `product/0001` | Hecha |
-| `technical/0002` — robustez del núcleo y desacoplo de la interfaz | `draft` — esperando gate humano |
+| `technical/0002` — robustez del núcleo y desacoplo de la interfaz | `approved` |
 | Portar `validate_docs.py` a TypeScript | Abierta |
 
 `technical/0001` recorrió el ciclo completo: `approved → implemented →

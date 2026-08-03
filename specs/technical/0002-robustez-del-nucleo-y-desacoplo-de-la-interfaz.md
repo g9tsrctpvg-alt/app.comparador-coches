@@ -1,7 +1,7 @@
 # 0002 — Robustez del núcleo de puntuación y desacoplo de la interfaz
 
 - **Id:** technical/0002
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** technical
 - **Fecha:** 2026-08-03
 - **Specs relacionadas:** product/0001
