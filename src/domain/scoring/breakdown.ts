@@ -26,10 +26,19 @@ export interface PenaltyLine {
   effect: number;
 }
 
+/** Los tres campos de `Car` que el usuario puede editar desde el ranking.
+ * Es el contrato estable entre dominio e interfaz: la interfaz conmuta sobre
+ * estos identificadores, nunca sobre el texto de una etiqueta. */
+export type EditableRatingField =
+  'aestheticsExterior' | 'aestheticsInterior' | 'travelComfort';
+
 export interface SubcomponentBreakdown {
   label: string;
   rawValue: number;
   unit?: string;
+  /** Presente cuando este subcomponente es una valoración que el usuario
+   * edita; dice qué campo de `Car` cambia al moverla. */
+  editableRating?: EditableRatingField;
   /** Presente cuando el sumando se normaliza de forma independiente antes
    * de combinarse (prestaciones, fiabilidad). Ausente cuando el sumando es
    * una magnitud que se combina en crudo antes de la única normalización
@@ -46,6 +55,9 @@ export interface AxisBreakdown {
   assumptionsUsed: AssumptionEcho[];
   /** Ejes simples: su única normalización. */
   normalization?: Normalization;
+  /** Unidad del valor crudo del eje y de los extremos de su normalización.
+   * Sin ella la interfaz no puede saber que el crudo de `coste` son euros. */
+  rawUnit?: string;
   /** Ejes compuestos: una normalización por sumando (requisito 7). */
   subcomponents?: SubcomponentBreakdown[];
   /** 0-10, ya combinado si el eje es compuesto, antes de penalizaciones. */

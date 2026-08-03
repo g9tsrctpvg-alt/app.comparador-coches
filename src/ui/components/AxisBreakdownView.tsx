@@ -35,7 +35,10 @@ export function AxisBreakdownView({ breakdown }: AxisBreakdownViewProps) {
                     {input.discardedSources.map((discarded) => (
                       <li key={discarded.label}>
                         Descartada: {discarded.label} (
-                        {formatValue(Number(discarded.value), input.unit)})
+                        {typeof discarded.value === 'number'
+                          ? formatValue(discarded.value, input.unit)
+                          : discarded.value}
+                        )
                         {discarded.discardedReason
                           ? ` — ${discarded.discardedReason}`
                           : ''}
@@ -75,9 +78,9 @@ export function AxisBreakdownView({ breakdown }: AxisBreakdownViewProps) {
                     → normalizado{' '}
                     {formatNumber(sub.normalization.normalizedValue)}/10 (mín.{' '}
                     {sub.normalization.min.carName}{' '}
-                    {formatValue(sub.normalization.min.value)}, máx.{' '}
+                    {formatValue(sub.normalization.min.value, sub.unit)}, máx.{' '}
                     {sub.normalization.max.carName}{' '}
-                    {formatValue(sub.normalization.max.value)})
+                    {formatValue(sub.normalization.max.value, sub.unit)})
                   </>
                 )}
               </li>
@@ -90,12 +93,13 @@ export function AxisBreakdownView({ breakdown }: AxisBreakdownViewProps) {
         <div>
           <h4>Normalización del eje</h4>
           <p>
-            Valor crudo {formatValue(breakdown.normalization.rawValue)},
+            Valor crudo{' '}
+            {formatValue(breakdown.normalization.rawValue, breakdown.rawUnit)},
             dirección {breakdown.normalization.direction}. Mínimo:{' '}
             {breakdown.normalization.min.carName} (
-            {formatValue(breakdown.normalization.min.value)}). Máximo:{' '}
-            {breakdown.normalization.max.carName} (
-            {formatValue(breakdown.normalization.max.value)}
+            {formatValue(breakdown.normalization.min.value, breakdown.rawUnit)}
+            ). Máximo: {breakdown.normalization.max.carName} (
+            {formatValue(breakdown.normalization.max.value, breakdown.rawUnit)}
             ). Normalizado:{' '}
             {formatNumber(breakdown.normalization.normalizedValue)}/10.
           </p>

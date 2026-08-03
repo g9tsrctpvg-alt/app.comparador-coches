@@ -20,6 +20,8 @@ export interface RawEntry {
   value: number;
 }
 
+export class EmptyCandidateSetError extends Error {}
+
 /**
  * norm(v) = 10 × (v − min) / (max − min)  si mayor es mejor
  * norm(v) = 10 × (max − v) / (max − min)  si menor es mejor
@@ -31,6 +33,15 @@ export function normalizeAll(
   direction: NormalizationDirection,
   raw: RawEntry[],
 ): Map<string, Normalization> {
+  if (raw.length === 0) {
+    // Sin candidatos no hay mínimo ni máximo contra los que normalizar, y
+    // toda puntuación de este proyecto es relativa al conjunto. Fallar aquí
+    // y con nombre propio evita el `TypeError` opaco de `reduce`.
+    throw new EmptyCandidateSetError(
+      'No se puede normalizar contra un conjunto de candidatos vacío',
+    );
+  }
+
   const minEntry = raw.reduce((a, b) => (b.value < a.value ? b : a));
   const maxEntry = raw.reduce((a, b) => (b.value > a.value ? b : a));
   const min = minEntry.value;

@@ -2,7 +2,13 @@ import { z } from 'zod';
 import { CarSchema, type Car } from '../domain/car';
 import carsRaw from './cars.json';
 
-const CatalogSchema = z.array(CarSchema);
+// El catálogo vacío no es un catálogo válido sin coches: es un catálogo roto.
+// Toda puntuación se normaliza contra el conjunto de candidatos, así que sin
+// candidatos no hay nada que puntuar — mejor fallar al cargar que a mitad del
+// primer ranking.
+const CatalogSchema = z
+  .array(CarSchema)
+  .min(1, 'el catálogo no puede estar vacío');
 
 export class CatalogValidationError extends Error {}
 

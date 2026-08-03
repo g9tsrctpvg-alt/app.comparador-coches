@@ -57,7 +57,7 @@ export type SourcedNumber = {
   sources: SourceEntry[];
 };
 
-const UserRatingSchema = z.object({
+export const UserRatingSchema = z.object({
   value: z.number().min(1).max(5),
   label: z.string().min(1),
 });

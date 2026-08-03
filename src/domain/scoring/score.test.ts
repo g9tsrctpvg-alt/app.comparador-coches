@@ -3,8 +3,17 @@ import { DEFAULT_ASSUMPTIONS } from './assumptions';
 import { DEFAULT_WEIGHTS } from './weights';
 import { threeCarFixture } from './testFixtures';
 import { scoreCatalog } from './score';
+import { EmptyCandidateSetError } from './normalize';
 
 describe('scoreCatalog', () => {
+  it('refuses an empty catalogue by name, not with a TypeError from reduce', () => {
+    // El camino real del fallo: `App` llamaba aquí con `[]` en la rama de
+    // error de carga, y el `TypeError` opaco se llevaba toda la aplicación.
+    expect(() =>
+      scoreCatalog([], DEFAULT_WEIGHTS, DEFAULT_ASSUMPTIONS, 47000),
+    ).toThrow(EmptyCandidateSetError);
+  });
+
   it('returns one breakdown per car, covering all six axes', () => {
     const result = scoreCatalog(
       threeCarFixture,

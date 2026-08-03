@@ -115,4 +115,29 @@ describe('buildCosteBreakdown', () => {
       'Valor residual a 5 años',
     );
   });
+
+  it('shows no residual line at all for a car with no residual datum, even when selling', () => {
+    // Antes salía «Descuento por valor residual: −0 €», que presenta como
+    // cero comprobado lo que en realidad es un dato que no existe.
+    const { residualPct5y: _residualPct5y, ...withoutResidual } =
+      threeCarFixture[0]!;
+    const breakdown = buildCosteBreakdown(
+      [withoutResidual],
+      { ...DEFAULT_ASSUMPTIONS, pensandoVender: true },
+      1,
+    );
+    const sportage = breakdown.get('kia-sportage-hev')!;
+    expect(sportage.subcomponents!.map((sub) => sub.label)).not.toContain(
+      'Descuento por valor residual',
+    );
+  });
+
+  it('declares euros as the raw unit of the axis, so the interface can label it', () => {
+    const breakdown = buildCosteBreakdown(
+      threeCarFixture,
+      DEFAULT_ASSUMPTIONS,
+      1,
+    );
+    expect(breakdown.get('kia-sportage-hev')!.rawUnit).toBe('€');
+  });
 });

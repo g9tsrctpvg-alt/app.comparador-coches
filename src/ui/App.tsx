@@ -7,37 +7,16 @@ import {
 } from '../domain/scoring/assumptions';
 import { DEFAULT_WEIGHTS, type AxisWeights } from '../domain/scoring/weights';
 import { scoreCatalog } from '../domain/scoring/score';
+import {
+  applyOverride,
+  type RatingOverride,
+} from '../domain/scoring/overrides';
 import { logError } from '../logging/logger';
 import { AssumptionsPanel } from './components/AssumptionsPanel';
 import { WeightSliders } from './components/WeightSliders';
 import { RankingList } from './components/RankingList';
 
 const DEFAULT_BUDGET_EUR = 47000;
-
-interface RatingOverride {
-  aestheticsExterior?: number;
-  aestheticsInterior?: number;
-  travelComfort?: number;
-}
-
-function applyOverride(car: Car, override: RatingOverride | undefined): Car {
-  if (!override) return car;
-  return {
-    ...car,
-    aestheticsExterior:
-      override.aestheticsExterior === undefined
-        ? car.aestheticsExterior
-        : { ...car.aestheticsExterior, value: override.aestheticsExterior },
-    aestheticsInterior:
-      override.aestheticsInterior === undefined
-        ? car.aestheticsInterior
-        : { ...car.aestheticsInterior, value: override.aestheticsInterior },
-    travelComfort:
-      override.travelComfort === undefined
-        ? car.travelComfort
-        : { ...car.travelComfort, value: override.travelComfort },
-  };
-}
 
 interface AppProps {
   load?: () => Car[];
@@ -66,8 +45,11 @@ export function App({ load = loadCatalog }: AppProps) {
   );
 
   const scored = useMemo(() => {
-    const cars = 'cars' in catalogResult ? catalogResult.cars : [];
-    const carsWithOverrides = cars.map((car) =>
+    // Las reglas de los hooks obligan a que este `useMemo` corra también en
+    // la rama de error, así que la guarda va dentro: puntuar un catálogo
+    // vacío lanzaría y se llevaría por delante el mensaje de error de abajo.
+    if ('error' in catalogResult) return [];
+    const carsWithOverrides = catalogResult.cars.map((car) =>
       applyOverride(car, overrides[car.id]),
     );
     return scoreCatalog(carsWithOverrides, weights, assumptions, budgetEur);

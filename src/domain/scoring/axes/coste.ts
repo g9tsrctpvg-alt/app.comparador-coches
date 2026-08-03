@@ -93,7 +93,9 @@ export function buildCosteBreakdown(
         unit: '€',
       },
     ];
-    if (assumptions.pensandoVender) {
+    // Sin dato de residual no hay descuento que mostrar: una línea a −0 €
+    // presentaría como cero verificado lo que en realidad es un dato ausente.
+    if (assumptions.pensandoVender && car.residualPct5y) {
       subcomponents.push({
         label: 'Descuento por valor residual',
         rawValue: -components.descuentoResidual,
@@ -125,6 +127,7 @@ export function buildCosteBreakdown(
       ],
       subcomponents,
       normalization,
+      rawUnit: '€',
       rawScore: normalization.normalizedValue,
       penalties: [],
       weight,

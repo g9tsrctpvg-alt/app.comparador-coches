@@ -18,7 +18,20 @@ describe('buildViajeBreakdown', () => {
     expect(sportage.inputs).toEqual([]);
     expect(sportage.assumptionsUsed).toEqual([]);
     expect(sportage.subcomponents).toEqual([
-      { label: 'Tu valoración (editable)', rawValue: 3, unit: '/5' },
+      {
+        label: 'Tu valoración (editable)',
+        rawValue: 3,
+        unit: '/5',
+        editableRating: 'travelComfort',
+      },
     ]);
+  });
+
+  it('marks its rating with the stable field key the interface switches on', () => {
+    // La interfaz localiza los controles por esta clave. Si desapareciera,
+    // volveríamos a depender del texto de la etiqueta, que es copia.
+    const breakdown = buildViajeBreakdown(threeCarFixture, 4);
+    const sportage = breakdown.get('kia-sportage-hev')!;
+    expect(sportage.subcomponents![0]!.editableRating).toBe('travelComfort');
   });
 });
