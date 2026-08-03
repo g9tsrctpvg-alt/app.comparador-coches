@@ -32,12 +32,27 @@ describe('buildEsteticaBreakdown', () => {
         label: 'Nota exterior (tu valoración, editable)',
         rawValue: 2,
         unit: '/5',
+        editableRating: 'aestheticsExterior',
       },
       {
         label: 'Nota interior (tu valoración, editable)',
         rawValue: 4,
         unit: '/5',
+        editableRating: 'aestheticsInterior',
       },
+    ]);
+  });
+
+  it('marks both notes with the stable field keys the interface switches on', () => {
+    const breakdown = buildEsteticaBreakdown(
+      threeCarFixture,
+      DEFAULT_ASSUMPTIONS,
+      2,
+    );
+    const sportage = breakdown.get('kia-sportage-hev')!;
+    expect(sportage.subcomponents!.map((sub) => sub.editableRating)).toEqual([
+      'aestheticsExterior',
+      'aestheticsInterior',
     ]);
   });
 

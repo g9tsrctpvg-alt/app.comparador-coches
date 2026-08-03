@@ -58,7 +58,7 @@ no que el área esté documentada.
 | Sitio desplegado y verificado en GitHub Pages | Hecha — `https://g9tsrctpvg-alt.github.io/app.comparador-coches/` |
 | Definir la forma de `cars.json` antes de escribirlo | Hecha — `product/0001` |
 | Implementar, verificar y consolidar `product/0001` | Hecha |
-| `technical/0002` — robustez del núcleo y desacoplo de la interfaz | `approved` |
+| `technical/0002` — robustez del núcleo y desacoplo de la interfaz | `implemented` |
 | Portar `validate_docs.py` a TypeScript | Abierta |
 
 `technical/0001` recorrió el ciclo completo: `approved → implemented →
@@ -107,6 +107,7 @@ una sorpresa esperando fecha.
 | Fila de referencia del Alfa Romeo Giulietta de la especificación original no está en `cars.json`: `product/0001` no la pedía y queda fuera a propósito, no por olvido | 2026-08-03 | Que una spec futura la pida explícitamente como referencia, o se cierre esta fila descartándola |
 | `estetica` y `coste` combinan sus sumandos en crudo antes de la única normalización del eje, a diferencia de `prestaciones`/`fiabilidad`; el requisito 7 de `product/0001` nombra los cuatro ejes juntos y es ambiguo sobre si debería aplicarles el mismo patrón. Señalado en el PR de implementación, sin respuesta antes del merge | 2026-08-03 | Confirmación humana explícita de la lectura correcta del requisito 7, o una spec nueva si cambia el cálculo |
 | Los datos numéricos del catálogo no declaran cota: un precio o una dimensión negativos validan sin error, justo lo que el ADR 0003 citaba como motivo para elegir Zod. Fuera de alcance de `technical/0002` a propósito: son dieciocho campos con cotas distintas, no una regla global | 2026-08-03 | Decidir la cota de cada campo y declararla en `CarSchema`, con test por campo acotado |
+| `index.html` no declara icono, así que el navegador pide `/favicon.ico` en cada carga y se lleva un 404. Cosmético y preexistente desde `technical/0001` | 2026-08-03 | Añadir un icono, o declarar explícitamente que no se quiere |
 | El andamiaje de los seis ejes está copiado casi literal (mapear candidatos → `normalizeAll` → recorrer con `mustGet` → acotar a 0-10 → construir el `Map`): un cambio en la invariante común exige seis ediciones en paralelo sin que nada las obligue a coincidir | 2026-08-03 | Extraer el andamiaje común a un helper en `breakdown.ts`, o registrar por qué se prefiere la repetición |
 
 ## Aplazamientos con disparador

@@ -78,6 +78,7 @@ export function buildDiarioBreakdown(
         },
       ],
       normalization,
+      rawUnit: 'mm',
       rawScore: normalization.normalizedValue,
       penalties: [penalty],
       weight,

@@ -93,6 +93,13 @@ describe('parseCatalog', () => {
     );
   });
 
+  it('rejects an empty catalog, naming emptiness as the cause', () => {
+    // Un `cars.json` truncado a `[]` validaba antes como catálogo correcto y
+    // reventaba después, al normalizar contra cero candidatos.
+    expect(() => parseCatalog([])).toThrow(CatalogValidationError);
+    expect(() => parseCatalog([])).toThrow(/no puede estar vacío/);
+  });
+
   it('rejects a datum whose value does not match its current source', () => {
     const raw = [
       minimalCar({

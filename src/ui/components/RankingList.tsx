@@ -1,14 +1,12 @@
 import { useState } from 'react';
-import type { CarScoreBreakdown } from '../../domain/scoring/breakdown';
+import type {
+  CarScoreBreakdown,
+  EditableRatingField,
+  SubcomponentBreakdown,
+} from '../../domain/scoring/breakdown';
+import type { RatingOverride } from '../../domain/scoring/overrides';
 import { formatNumber } from '../format';
-import { assertDefined } from '../assert';
 import { AxisBreakdownView } from './AxisBreakdownView';
-
-interface RatingOverride {
-  aestheticsExterior?: number;
-  aestheticsInterior?: number;
-  travelComfort?: number;
-}
 
 interface RankingListProps {
   cars: CarScoreBreakdown[];
@@ -16,45 +14,38 @@ interface RankingListProps {
   onRatingChange: (carId: string, override: RatingOverride) => void;
 }
 
-function ratingInput(
-  label: string,
-  value: number,
-  onChange: (next: number) => void,
-) {
-  return (
-    <label>
-      {label}: {value.toFixed(1)}
-      <input
-        type="range"
-        min={1}
-        max={5}
-        step={0.5}
-        value={value}
-        onChange={(event) => onChange(Number(event.target.value))}
-      />
-    </label>
-  );
+interface EditableRating {
+  field: EditableRatingField;
+  label: string;
+  value: number;
 }
 
-function findAxis(car: CarScoreBreakdown, axisId: string) {
-  return assertDefined(
-    car.axes.find((axis) => axis.axisId === axisId),
-    `El eje «${axisId}» no está en el desglose de ${car.carName}`,
-  );
+function ratingLabel(sub: SubcomponentBreakdown): string {
+  // La etiqueta del dominio lleva su propia coletilla «(editable)» porque
+  // describe el paso de cálculo; aquí el control ya se ve editable.
+  return sub.label.replace(/\s*\([^)]*editable[^)]*\)$/i, '');
 }
 
-function findSubcomponent(
-  axis: ReturnType<typeof findAxis>,
-  predicate: (label: string) => boolean,
-) {
-  const subcomponents = assertDefined(
-    axis.subcomponents,
-    `El eje «${axis.axisId}» no tiene subcomponentes`,
-  );
-  return assertDefined(
-    subcomponents.find((sub) => predicate(sub.label)),
-    `No se encontró el subcomponente esperado en «${axis.axisId}»`,
-  );
+/**
+ * Recoge los subcomponentes que el dominio ha marcado como editables. La
+ * interfaz no sabe —ni debe saber— cuáles son: se entera por la clave
+ * `editableRating`, nunca por el texto de la etiqueta, que es copia y puede
+ * reescribirse sin que nada avise.
+ */
+export function editableRatingsOf(car: CarScoreBreakdown): EditableRating[] {
+  const found: EditableRating[] = [];
+  for (const axis of car.axes) {
+    for (const sub of axis.subcomponents ?? []) {
+      if (sub.editableRating) {
+        found.push({
+          field: sub.editableRating,
+          label: ratingLabel(sub),
+          value: sub.rawValue,
+        });
+      }
+    }
+  }
+  return found;
 }
 
 export function RankingList({
@@ -70,17 +61,6 @@ export function RankingList({
   return (
     <ol aria-label="Ranking">
       {ranked.map((car) => {
-        const estetica = findAxis(car, 'estetica');
-        const viaje = findAxis(car, 'viaje');
-        const exterior = findSubcomponent(estetica, (label) =>
-          label.startsWith('Nota exterior'),
-        );
-        const interior = findSubcomponent(estetica, (label) =>
-          label.startsWith('Nota interior'),
-        );
-        const travel = findSubcomponent(viaje, (label) =>
-          label.startsWith('Tu valoración'),
-        );
         const expanded = expandedId === car.carId;
 
         return (
@@ -96,17 +76,23 @@ export function RankingList({
 
             {expanded && (
               <div>
-                {ratingInput('Nota exterior', exterior.rawValue, (next) =>
-                  onRatingChange(car.carId, { aestheticsExterior: next }),
-                )}
-                {ratingInput('Nota interior', interior.rawValue, (next) =>
-                  onRatingChange(car.carId, { aestheticsInterior: next }),
-                )}
-                {ratingInput(
-                  'Espacio y confort en viaje',
-                  travel.rawValue,
-                  (next) => onRatingChange(car.carId, { travelComfort: next }),
-                )}
+                {editableRatingsOf(car).map((rating) => (
+                  <label key={rating.field}>
+                    {rating.label}: {rating.value.toFixed(1)}
+                    <input
+                      type="range"
+                      min={1}
+                      max={5}
+                      step={0.5}
+                      value={rating.value}
+                      onChange={(event) =>
+                        onRatingChange(car.carId, {
+                          [rating.field]: Number(event.target.value),
+                        })
+                      }
+                    />
+                  </label>
+                ))}
 
                 {car.axes.map((axis) => (
                   <AxisBreakdownView key={axis.axisId} breakdown={axis} />

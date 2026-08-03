@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { normalizeAll } from './normalize';
+import { EmptyCandidateSetError, normalizeAll } from './normalize';
 
 const entries = [
   { carId: 'a', carName: 'A', value: 10 },
@@ -26,6 +26,17 @@ describe('normalizeAll', () => {
     const normalization = result.get('b')!;
     expect(normalization.min).toEqual({ carId: 'a', carName: 'A', value: 10 });
     expect(normalization.max).toEqual({ carId: 'c', carName: 'C', value: 30 });
+  });
+
+  it('rejects an empty candidate set by name instead of failing inside reduce', () => {
+    // Antes lanzaba `TypeError: Reduce of empty array with no initial value`,
+    // que no dice nada de lo que ha pasado y llegaba hasta el render.
+    expect(() => normalizeAll('mayor-mejor', [])).toThrow(
+      EmptyCandidateSetError,
+    );
+    expect(() => normalizeAll('mayor-mejor', [])).toThrow(
+      /conjunto de candidatos vacío/,
+    );
   });
 
   it('gives the neutral midpoint to every candidate when all values tie', () => {
