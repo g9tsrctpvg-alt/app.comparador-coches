@@ -11,6 +11,10 @@ export default tseslint.config(
     rules: {
       'no-undef': 'off',
       'no-console': 'error',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { varsIgnorePattern: '^_', argsIgnorePattern: '^_' },
+      ],
     },
   },
   {
@@ -21,5 +25,13 @@ export default tseslint.config(
   {
     files: ['src/logging/logger.ts'],
     rules: { 'no-console': 'off' },
+  },
+  {
+    // Un test indexa fixtures que él mismo acaba de construir: sabe que el
+    // elemento existe. El riesgo de una aserción no nula aquí es un mensaje
+    // de fallo peor, no un bug de producción — no exige la misma
+    // justificación caso a caso que el código de dominio.
+    files: ['**/*.test.{ts,tsx}'],
+    rules: { '@typescript-eslint/no-non-null-assertion': 'off' },
   },
 );

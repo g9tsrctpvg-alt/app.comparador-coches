@@ -10,6 +10,7 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'lcov'],
       include: ['src/domain/**', 'src/data/**', 'src/logging/**'],
+      exclude: ['**/testFixtures.ts'],
       thresholds: {
         lines: 100,
         statements: 100,

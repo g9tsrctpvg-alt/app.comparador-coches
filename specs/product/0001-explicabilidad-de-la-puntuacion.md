@@ -1,13 +1,19 @@
 # 0001 — Explicabilidad de la puntuación y trazabilidad de fuentes
 
 - **Id:** product/0001
-- **Estado:** approved
+- **Estado:** implemented
 - **Tipo:** product
 - **Fecha:** 2026-08-02
 - **Specs relacionadas:** technical/0001
 - **ADRs relacionados:** 0003
 - **Doc de estado:** `docs/estado/dominio.md`, `docs/estado/interfaz.md` (se
   crea al consolidar)
+
+> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
+> implementado: su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy no es cierta. **No es referencia del estado actual** — para
+> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
+> **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
