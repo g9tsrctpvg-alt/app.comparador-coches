@@ -88,7 +88,8 @@ spec.
 
 | Tarea | Estado |
 | --- | --- |
-| `product/0002` — cuándo un eje compuesto normaliza por sumando | `draft` — esperando gate humano |
+| ADR 0004 — puntuación en escala absoluta, no relativa al conjunto | `draft` — esperando gate humano |
+| `product/0002` — el eje de uso diario, en escala absoluta | `draft` — anclajes por decidir |
 
 Tareas conocidas, aún sin spec:
 
@@ -118,7 +119,7 @@ una sorpresa esperando fecha.
 | **Disparador cumplido:** los gates de CD (smoke tests, canary) se aplazaban hasta que existiera despliegue real; ya existe (GitHub Pages, verde desde `technical/0001`) | 2026-08-03 | Definir smoke test post-deploy en una spec técnica, o registrar por qué se sigue aplazando |
 | `ui/` sigue fuera del suelo de cobertura del 100%. Desde `technical/0002` sí tiene tests, pero solo de los fallos que aquella spec corrigió, y sin interacción: `renderToStaticMarkup` no hace clic ni arrastra, así que lo interactivo se sigue comprobando a mano | 2026-08-03 | Decidir si entra en el suelo de `vite.config.ts`, y si hacen falta jsdom o *testing library* para cubrir la interacción |
 | Fila de referencia del Alfa Romeo Giulietta de la especificación original no está en `cars.json`: `product/0001` no la pedía y queda fuera a propósito, no por olvido | 2026-08-03 | Que una spec futura la pida explícitamente como referencia, o se cierre esta fila descartándola |
-| `estetica` y `coste` combinan sus sumandos en crudo antes de la única normalización del eje, a diferencia de `prestaciones`/`fiabilidad`; el requisito 7 de `product/0001` los nombra a los cuatro juntos y es ambiguo | 2026-08-03 | `product/0002`, hoy en `draft`: al medirlo, los cuatro ejes no son el mismo caso — el criterio real es si los sumandos llevan pesos declarados o son magnitudes conmensurables |
+| La puntuación de todos los ejes es relativa al conjunto de candidatos: la nota dice en qué puesto va un coche, no si el coche es bueno. Amplifica diferencias irrelevantes —64 mm de anchura estirados a toda la escala—, esconde que los once son parecidos, y entierra al candidato equilibrado. En `diario` además invierte los pesos declarados: 0,6/0,4 acaba siendo 19%/81% | 2026-08-04 | ADR 0004 fija el principio; luego una spec por eje con sus anclajes. `diario` va primero (`product/0002`) |
 | Los datos numéricos del catálogo no declaran cota: un precio o una dimensión negativos validan sin error, justo lo que el ADR 0003 citaba como motivo para elegir Zod. Fuera de alcance de `technical/0002` a propósito: son dieciocho campos con cotas distintas, no una regla global | 2026-08-03 | Decidir la cota de cada campo y declararla en `CarSchema`, con test por campo acotado |
 | `index.html` no declara icono, así que el navegador pide `/favicon.ico` en cada carga y se lleva un 404. Cosmético y preexistente desde `technical/0001` | 2026-08-03 | Añadir un icono, o declarar explícitamente que no se quiere |
 | El andamiaje de los seis ejes está copiado casi literal (mapear candidatos → `normalizeAll` → recorrer con `mustGet` → acotar a 0-10 → construir el `Map`): un cambio en la invariante común exige seis ediciones en paralelo sin que nada las obligue a coincidir | 2026-08-03 | Extraer el andamiaje común a un helper en `breakdown.ts`, o registrar por qué se prefiere la repetición |

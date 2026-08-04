@@ -1,0 +1,141 @@
+# 0002 — El eje de uso diario, en escala absoluta
+
+- **Id:** product/0002
+- **Estado:** draft
+- **Tipo:** product
+- **Fecha:** 2026-08-04
+- **Specs relacionadas:** product/0001
+- **ADRs relacionados:** 0004
+- **Doc de estado:** `docs/estado/dominio.md`
+
+## Contexto
+
+El eje `diario` mide lo incómodo que resulta un coche en el día a día:
+aparcar, calles estrechas, entrar en el garaje. Hoy se calcula así:
+
+```text
+dificultad = 0,6 × anchura(mm) + 0,4 × longitud(mm)
+```
+
+y esa dificultad se normaliza **contra los otros diez candidatos**,
+invertida: el de dificultad más alta saca un 0 y el más bajo un 10.
+
+Tiene dos problemas, y el segundo no se ve a simple vista.
+
+**Los pesos no significan lo que dicen.** `0,6/0,4` declara que la anchura
+importa más que la longitud, que es lo razonable: lo que complica aparcar
+suele ser el ancho. Pero al sumar milímetros con milímetros, lo que decide la
+nota no es el peso sino **cuánto varía cada magnitud entre los candidatos**.
+La anchura de los once va de 1802 a 1866 mm —64 mm de recorrido—; la
+longitud, de 4300 a 4706 mm —406 mm—. La longitud varía seis veces más, así
+que la influencia real acaba siendo **anchura 19% / longitud 81%**, casi la
+inversa de lo declarado. El modelo dice que le importa el ancho y calcula que
+le importa el largo.
+
+**La nota no dice si el coche es cómodo, dice en qué puesto va.** Es el
+problema general que recoge el ADR 0004. Aquí se ve claro: el EV3 saca hoy un
+10 en uso diario, pero mide 1850 mm de ancho — no es un coche cómodo de
+ciudad, es *el menos incómodo de once coches incómodos*. Con anclajes
+absolutos razonables, los once candidatos caben entre 3,2 y 5,6 sobre 10.
+
+Los dos problemas tienen la misma raíz y se arreglan con el mismo cambio: al
+poner anchura y longitud en una escala común **antes** de aplicar los pesos,
+`0,6/0,4` pasa a significar lo que dice, sin tener que tocarlo aparte.
+
+## Objetivo
+
+Que la nota de uso diario de un coche dependa de sus medidas y de un criterio
+escrito, y no de qué otros coches estén en la lista.
+
+## Alcance
+
+- **Una escala absoluta para la anchura** y **otra para la longitud**, cada
+  una con su anclaje de saturación —nota 10, por debajo ya no mejora— y su
+  anclaje de rechazo —nota 0, a partir de ahí es inaceptable—.
+- **La forma de la escala**: interpolación entre anclajes y saturación fuera
+  de ellos.
+- **La combinación de ambas** con los pesos ya declarados, que a partir de
+  ahora rigen de verdad.
+- **El desglose de este eje**: en vez de nombrar qué modelo marca cada
+  extremo, muestra la escala usada y dónde cae el coche en ella.
+
+## Fuera de alcance
+
+- **Los otros cinco ejes.** Cada uno tiene su naturaleza y sus anclajes;
+  migrarlos de golpe sería asumir que el problema y la solución son iguales
+  en todos, y no lo son. Uno por spec.
+- **Recalibrar los pesos por eje.** Este cambio deja `diario` moviendo unos
+  2,4 puntos en vez de 10, así que su peso 3 deja de significar lo mismo. Es
+  una consecuencia conocida, con su propia decisión pendiente: no se resuelve
+  aquí, donde solo un eje ha migrado y compararlo con los otros cinco todavía
+  no tendría sentido.
+- **Añadir un coche de referencia al catálogo** para calibrar anclajes.
+  Ayudaría, pero es una decisión sobre el catálogo, no sobre este eje.
+- **Cambiar qué magnitudes entran en el eje.** Siguen siendo anchura y
+  longitud. Si algún día entra la altura o el radio de giro, será otra spec.
+- **La penalización por no tener carga en casa.** Se mantiene exactamente
+  como está: es condicional a la tecnología y no depende de la escala.
+
+## Requisitos / comportamiento esperado
+
+1. La anchura se puntúa contra una escala absoluta propia: nota 10 en el
+   anclaje de saturación o por debajo, nota 0 en el de rechazo o por encima,
+   interpolación entre ambos.
+2. La longitud se puntúa igual, contra su propia escala y sus propios
+   anclajes.
+3. Las dos notas resultantes, ya en la misma escala, se combinan con los
+   pesos declarados del eje. Los pesos rigen sobre notas comparables, no
+   sobre milímetros.
+4. Ninguna nota de este eje depende de qué otros coches haya en el catálogo.
+   Añadir, quitar o editar un candidato no cambia la nota de los demás.
+5. Los anclajes son parte del modelo, no un supuesto global editable desde el
+   panel: cambiarlos es una decisión razonada, no un deslizador.
+6. El desglose del eje muestra, para cada magnitud, el valor del coche, los
+   dos anclajes de su escala y la nota que sale. Sustituye a nombrar el
+   modelo que marca cada extremo, que en una escala fija ya no significa nada.
+7. La penalización por no tener carga en casa sigue aplicándose igual, como
+   línea propia, después de combinar las dos notas.
+
+## Criterios de aceptación
+
+> Obligatorios y verificables.
+
+- [ ] La nota de uso diario de un coche es la misma tanto si el catálogo tiene
+      once candidatos como si tiene uno solo.
+- [ ] Un coche cuya anchura esté por debajo del anclaje de saturación saca un
+      10 en anchura, y otro más estrecho todavía saca también un 10.
+- [ ] Un coche cuya anchura supere el anclaje de rechazo saca un 0, y otro
+      más ancho todavía saca también un 0.
+- [ ] Dos coches que difieran solo en anchura, en una fracción dada de su
+      escala, se separan más en la nota del eje que otros dos que difieran
+      solo en longitud en esa misma fracción, en la proporción que declaran
+      los pesos.
+- [ ] El desglose del eje muestra los dos anclajes de cada escala y la nota
+      que sale de cada magnitud.
+- [ ] El desglose del eje ya no nombra qué modelo marca el mínimo ni el
+      máximo.
+- [ ] La penalización por carga en casa sigue apareciendo como línea propia,
+      con su condición y su efecto.
+
+## Dependencias y supuestos
+
+- Depende del ADR 0004, que decide el principio de escalas absolutas. Si ese
+  ADR no se aprueba, esta spec no tiene sentido.
+- Sucede al requisito 6 de `product/0001` **solo para este eje**. Aquella
+  spec está `consolidated` y no se toca; los cinco ejes que siguen con
+  normalización relativa mantienen su comportamiento hasta que cada uno tenga
+  la suya.
+- Se asume que las magnitudes del eje siguen siendo anchura y longitud, y que
+  los pesos entre ambas siguen siendo los declarados hoy.
+
+## Decisiones abiertas
+
+- **Los cuatro anclajes.** Anchura: a partir de qué medida deja de mejorar la
+  comodidad, y a partir de cuál el coche es inaceptable. Longitud: lo mismo.
+  Como referencia de por dónde se movería la conversación, con 1700/1950 mm
+  de anchura y 4000/5000 mm de longitud los once candidatos caen entre 3,2 y
+  5,6 sobre 10. Son números de trabajo para tener algo que discutir, no una
+  propuesta.
+- **Si la interpolación entre anclajes es recta o se acelera cerca del
+  rechazo.** Una recta es más simple de explicar; acelerar recoge que los
+  últimos centímetros antes de no caber duelen más que los del medio.
