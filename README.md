@@ -34,7 +34,7 @@ agentes: es un índice corto que enlaza al resto.
 ## Verificación local
 
 ```bash
-python3 scripts/validate_docs.py
+npm run test:coverage
 npx --yes markdownlint-cli2 "**/*.md"
 ```
 

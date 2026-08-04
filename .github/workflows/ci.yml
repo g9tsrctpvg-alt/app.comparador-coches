@@ -72,14 +72,9 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Set up Python
-        uses: actions/setup-python@v7
-        with:
-          python-version: '3.12'
-
-      - name: Validate specs and ADRs
-        run: python3 scripts/validate_docs.py
-
+      # La coherencia de specs y ADRs la comprueba el job `test`, del que este
+      # depende: el validador vive en scripts/validateDocs.ts y corre bajo
+      # Vitest. Aquí solo queda el lint de Markdown.
       - name: Lint Markdown
         uses: DavidAnson/markdownlint-cli2-action@v24.1.0
         with:

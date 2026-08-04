@@ -24,7 +24,13 @@ src/
   logging/    logger de navegador, forma de campos OTel
   ui/         componentes React — ver docs/estado/interfaz.md
   main.tsx    único punto de wiring
+scripts/      utillaje del repositorio, fuera del bundle
+  validateDocs.ts  validador de specs y ADRs, corre bajo Vitest
 ```
+
+`scripts/` no es código de la aplicación y nada de `src/` lo importa, así que
+no entra en el bundle. Sí entra en `tsconfig.json` y en `eslint`: es
+TypeScript del proyecto y se le exige lo mismo que al resto.
 
 ## Dirección de las dependencias
 
