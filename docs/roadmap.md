@@ -89,7 +89,7 @@ spec.
 | Tarea | Estado |
 | --- | --- |
 | ADR 0004 — puntuación en escala absoluta, no relativa al conjunto | `draft` — esperando gate humano |
-| `product/0002` — el eje de uso diario, en escala absoluta | `draft` — anclajes por decidir |
+| `product/0002` — el eje de uso diario, en escala absoluta | `draft` — sin decisiones abiertas, esperando gate humano |
 
 Tareas conocidas, aún sin spec:
 
