@@ -4,7 +4,7 @@
 > tareas y deudas abiertas. `CLAUDE.md` resume y no duplica: al cerrar una
 > fase se actualiza este documento, no el índice.
 
-**Última actualización:** 2026-08-03 (cierre de fase 2)
+**Última actualización:** 2026-08-04
 
 ## Fases
 
@@ -86,10 +86,20 @@ spec.
 
 ## Fase 3 — Migración del artefacto
 
-Depende de la fase 2. Tareas conocidas, aún sin spec:
+| Tarea | Estado |
+| --- | --- |
+| `product/0002` — cuándo un eje compuesto normaliza por sumando | `draft` — esperando gate humano |
+
+Tareas conocidas, aún sin spec:
 
 - Traer el artefacto React de un solo fichero al proyecto, extrayendo las
   fórmulas a `src/domain/`.
+- **Página que explique cómo se calcula todo.** Hoy el desglose por eje
+  responde «de dónde sale este número» coche a coche, pero no hay ningún
+  sitio que explique el modelo entero de una vez: qué mide cada eje, cómo se
+  normaliza contra el conjunto, por qué unos ejes normalizan por sumando y
+  otros no, qué significan los pesos y qué supuestos entran en el coste. Es
+  contenido distinto del desglose, no un resumen de él.
 - Diseño responsive real: hoy está pensado para 560 px de ancho máximo.
 - Persistencia en `localStorage` y configuración compartida por URL.
 - Objetivar el eje de viaje, hoy el único que sigue siendo un juicio.
@@ -108,7 +118,7 @@ una sorpresa esperando fecha.
 | **Disparador cumplido:** los gates de CD (smoke tests, canary) se aplazaban hasta que existiera despliegue real; ya existe (GitHub Pages, verde desde `technical/0001`) | 2026-08-03 | Definir smoke test post-deploy en una spec técnica, o registrar por qué se sigue aplazando |
 | `ui/` sigue fuera del suelo de cobertura del 100%. Desde `technical/0002` sí tiene tests, pero solo de los fallos que aquella spec corrigió, y sin interacción: `renderToStaticMarkup` no hace clic ni arrastra, así que lo interactivo se sigue comprobando a mano | 2026-08-03 | Decidir si entra en el suelo de `vite.config.ts`, y si hacen falta jsdom o *testing library* para cubrir la interacción |
 | Fila de referencia del Alfa Romeo Giulietta de la especificación original no está en `cars.json`: `product/0001` no la pedía y queda fuera a propósito, no por olvido | 2026-08-03 | Que una spec futura la pida explícitamente como referencia, o se cierre esta fila descartándola |
-| `estetica` y `coste` combinan sus sumandos en crudo antes de la única normalización del eje, a diferencia de `prestaciones`/`fiabilidad`; el requisito 7 de `product/0001` nombra los cuatro ejes juntos y es ambiguo sobre si debería aplicarles el mismo patrón. Señalado en el PR de implementación, sin respuesta antes del merge | 2026-08-03 | Confirmación humana explícita de la lectura correcta del requisito 7, o una spec nueva si cambia el cálculo |
+| `estetica` y `coste` combinan sus sumandos en crudo antes de la única normalización del eje, a diferencia de `prestaciones`/`fiabilidad`; el requisito 7 de `product/0001` los nombra a los cuatro juntos y es ambiguo | 2026-08-03 | `product/0002`, hoy en `draft`: al medirlo, los cuatro ejes no son el mismo caso — el criterio real es si los sumandos llevan pesos declarados o son magnitudes conmensurables |
 | Los datos numéricos del catálogo no declaran cota: un precio o una dimensión negativos validan sin error, justo lo que el ADR 0003 citaba como motivo para elegir Zod. Fuera de alcance de `technical/0002` a propósito: son dieciocho campos con cotas distintas, no una regla global | 2026-08-03 | Decidir la cota de cada campo y declararla en `CarSchema`, con test por campo acotado |
 | `index.html` no declara icono, así que el navegador pide `/favicon.ico` en cada carga y se lleva un 404. Cosmético y preexistente desde `technical/0001` | 2026-08-03 | Añadir un icono, o declarar explícitamente que no se quiere |
 | El andamiaje de los seis ejes está copiado casi literal (mapear candidatos → `normalizeAll` → recorrer con `mustGet` → acotar a 0-10 → construir el `Map`): un cambio en la invariante común exige seis ediciones en paralelo sin que nada las obligue a coincidir | 2026-08-03 | Extraer el andamiaje común a un helper en `breakdown.ts`, o registrar por qué se prefiere la repetición |
