@@ -93,6 +93,7 @@ spec.
 | `product/0003` — el eje de coste, en dos escalas absolutas | `draft` — sin decisiones abiertas, esperando gate humano |
 | `product/0004` — el eje de estética, sin normalización | `draft` — sin decisiones abiertas, esperando gate humano |
 | `product/0005` — el eje de viaje, sin normalización | `draft` — sin decisiones abiertas, esperando gate humano |
+| `product/0006` — el eje de prestaciones, en dos escalas absolutas | `draft` — sin decisiones abiertas, esperando gate humano |
 
 Tareas conocidas, aún sin spec:
 
@@ -128,6 +129,8 @@ una sorpresa esperando fecha.
 | Los datos numéricos del catálogo no declaran cota: un precio o una dimensión negativos validan sin error, justo lo que el ADR 0003 citaba como motivo para elegir Zod. Fuera de alcance de `technical/0002` a propósito: son dieciocho campos con cotas distintas, no una regla global | 2026-08-03 | Decidir la cota de cada campo y declararla en `CarSchema`, con test por campo acotado |
 | Al quitar `anios` (`product/0003`), la fórmula de valor residual —`precio × res^(años/5)`— se queda sin horizonte. Hoy no molesta porque «pienso venderlo» está desactivado y la reventa está fuera de alcance, pero la función queda inservible tal como está escrita | 2026-08-04 | Que alguien quiera analizar la reventa: entonces, spec propia que decida con qué horizonte se calcula |
 | `index.html` no declara icono, así que el navegador pide `/favicon.ico` en cada carga y se lleva un 404. Cosmético y preexistente desde `technical/0001` | 2026-08-03 | Añadir un icono, o declarar explícitamente que no se quiere |
+| La aceleración 0-100 del Corolla Cross 140H sigue sin verificar: motor.es publica la del 200H (197 CV, 8,1 s), que las notas del catálogo descartan por maletero, pero no da prestaciones del 140H. El catálogo mantiene 11,1 s estimados, y con escala absoluta (`product/0006`) el error va directo a la nota | 2026-08-05 | Encontrar la cifra en fuente publicada, o declarar el dato como estimado en la interfaz |
+| El catálogo no declara qué versión del CR-V e:HEV es. motor.es da 9,0 s en tracción delantera y 9,5 s en 4x4, y sitúa el peso de la delantera en «poco más de 1.600 kg» frente a los 1.825 kg del catálogo, hoy marcados como no estimados. El precio de 46.645 € apunta a la 4x4, pero no consta | 2026-08-05 | Fijar la versión en `cars.json` y reconfirmar peso y aceleración contra su ficha. Mueve la nota de CV/tonelada del CR-V entre 3,1 y 5,7 |
 | El andamiaje de los seis ejes está copiado casi literal (mapear candidatos → `normalizeAll` → recorrer con `mustGet` → acotar a 0-10 → construir el `Map`): un cambio en la invariante común exige seis ediciones en paralelo sin que nada las obligue a coincidir | 2026-08-03 | Extraer el andamiaje común a un helper en `breakdown.ts`, o registrar por qué se prefiere la repetición |
 
 ## Aplazamientos con disparador

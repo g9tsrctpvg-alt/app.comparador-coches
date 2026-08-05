@@ -66,7 +66,8 @@ dado, sin que la lista de candidatos la altere.
   para «me gusta o no»; cambiarlos sería otra spec.
 - **La mezcla exterior/interior.** Sigue siendo 0,6/0,4 y sigue siendo
   editable donde ya lo es.
-- **Los ejes que quedan sin migrar**: `prestaciones`, `fiabilidad` y `viaje`.
+- **Los ejes que quedan sin migrar cuando se escribe esta spec**:
+  `prestaciones`, `fiabilidad` y `viaje`. Cada uno lleva la suya.
 
 ## La escala
 
