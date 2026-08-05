@@ -91,6 +91,7 @@ spec.
 | ADR 0004 — puntuación en escala absoluta, no relativa al conjunto | `draft` — esperando gate humano |
 | `product/0002` — el eje de uso diario, en escala absoluta | `draft` — sin decisiones abiertas, esperando gate humano |
 | `product/0003` — el eje de coste, en dos escalas absolutas | `draft` — sin decisiones abiertas, esperando gate humano |
+| `product/0004` — el eje de estética, sin normalización | `draft` — sin decisiones abiertas, esperando gate humano |
 
 Tareas conocidas, aún sin spec:
 
