@@ -1,7 +1,7 @@
 # 0004 — El eje de estética, sin normalización
 
 - **Id:** product/0004
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-08-04
 - **Specs relacionadas:** product/0001, product/0002, product/0003

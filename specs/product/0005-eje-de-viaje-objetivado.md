@@ -1,7 +1,7 @@
 # 0005 — El eje de viaje, objetivado en dos escalas absolutas
 
 - **Id:** product/0005
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-08-05
 - **Specs relacionadas:** product/0001, product/0002, product/0004

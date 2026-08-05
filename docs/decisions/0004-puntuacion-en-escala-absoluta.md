@@ -1,6 +1,6 @@
 # 0004 — Puntuación en escala absoluta, no relativa al conjunto
 
-- **Estado:** draft
+- **Estado:** approved
 - **Fecha:** 2026-08-04
 - **Nivel:** 🟡
 

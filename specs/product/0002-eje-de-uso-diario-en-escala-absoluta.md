@@ -1,7 +1,7 @@
 # 0002 — El eje de uso diario, en escala absoluta
 
 - **Id:** product/0002
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-08-04
 - **Specs relacionadas:** product/0001

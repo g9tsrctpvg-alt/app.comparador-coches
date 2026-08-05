@@ -1,7 +1,7 @@
 # 0008 — El tipo de motor, visible en la comparativa
 
 - **Id:** product/0008
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-08-05
 - **Specs relacionadas:** product/0001, product/0003, product/0005
