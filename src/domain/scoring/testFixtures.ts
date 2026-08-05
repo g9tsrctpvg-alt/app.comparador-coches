@@ -21,6 +21,7 @@ interface FixtureInput {
   technology: Technology;
   lengthMm: number;
   widthMm: number;
+  wheelbaseMm: number;
   priceEur: number;
   consumption: number;
   maintenanceEurYear: number;
@@ -45,6 +46,7 @@ function buildCar(input: FixtureInput): Car {
     lengthMm: sourced(input.lengthMm, 'mm'),
     widthMm: sourced(input.widthMm, 'mm'),
     heightMm: sourced(1600, 'mm'),
+    wheelbaseMm: sourced(input.wheelbaseMm, 'mm'),
     groundClearanceMm: sourced(160, 'mm'),
     trunkLiters: sourced(500, 'L'),
     powerCv: sourced(input.powerCv, 'CV'),
@@ -75,6 +77,7 @@ export const sportageFixture = buildCar({
   technology: 'HEV',
   lengthMm: 4540,
   widthMm: 1865,
+  wheelbaseMm: 2680,
   priceEur: 36000,
   consumption: 6.2,
   maintenanceEurYear: 400,
@@ -96,6 +99,7 @@ export const x1Fixture = buildCar({
   technology: 'PHEV',
   lengthMm: 4500,
   widthMm: 1845,
+  wheelbaseMm: 2692,
   priceEur: 44000,
   consumption: 7.5,
   maintenanceEurYear: 750,
@@ -117,6 +121,7 @@ export const ev3Fixture = buildCar({
   technology: 'EV',
   lengthMm: 4300,
   widthMm: 1850,
+  wheelbaseMm: 2680,
   priceEur: 32000,
   consumption: 16,
   maintenanceEurYear: 250,

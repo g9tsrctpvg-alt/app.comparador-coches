@@ -43,6 +43,18 @@
       ],
       "unit": "mm"
     },
+    "wheelbaseMm": {
+      "value": 2680,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 2680,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "groundClearanceMm": {
       "value": 140,
       "sources": [
@@ -143,7 +155,7 @@
       "value": 89,
       "sources": [
         {
-          "label": "Especificación del proyecto (julio 2026)",
+          "label": "OCU, índice de fiabilidad 2026 — 85.590 encuestas, 39 marcas (vía motor.es)",
           "value": 89,
           "estimated": false,
           "current": true
@@ -154,7 +166,7 @@
       "value": 7,
       "sources": [
         {
-          "label": "Especificación del proyecto (julio 2026)",
+          "label": "Garantía comercial en España (diariomotor, agosto 2026)",
           "value": 7,
           "estimated": false,
           "current": true
@@ -227,6 +239,18 @@
         }
       ],
       "unit": "mm"
+    },
+    "wheelbaseMm": {
+      "value": 2660,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 2660,
+          "estimated": false,
+          "current": true
+        }
+      ]
     },
     "groundClearanceMm": {
       "value": 165,
@@ -328,7 +352,7 @@
       "value": 87,
       "sources": [
         {
-          "label": "Especificación del proyecto (julio 2026)",
+          "label": "OCU, índice de fiabilidad 2026 — 85.590 encuestas, 39 marcas (vía motor.es)",
           "value": 87,
           "estimated": false,
           "current": true
@@ -339,7 +363,7 @@
       "value": 5,
       "sources": [
         {
-          "label": "Especificación del proyecto (julio 2026)",
+          "label": "Garantía comercial en España (diariomotor, agosto 2026)",
           "value": 5,
           "estimated": false,
           "current": true
@@ -414,6 +438,18 @@
         }
       ],
       "unit": "mm"
+    },
+    "wheelbaseMm": {
+      "value": 2660,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 2660,
+          "estimated": false,
+          "current": true
+        }
+      ]
     },
     "groundClearanceMm": {
       "value": 151,
@@ -515,7 +551,7 @@
       "value": 87,
       "sources": [
         {
-          "label": "Especificación del proyecto (julio 2026)",
+          "label": "OCU, índice de fiabilidad 2026 — 85.590 encuestas, 39 marcas (vía motor.es)",
           "value": 87,
           "estimated": false,
           "current": true
@@ -526,7 +562,7 @@
       "value": 5,
       "sources": [
         {
-          "label": "Especificación del proyecto (julio 2026)",
+          "label": "Garantía comercial en España (diariomotor, agosto 2026)",
           "value": 5,
           "estimated": false,
           "current": true
@@ -602,6 +638,18 @@
         }
       ],
       "unit": "mm"
+    },
+    "wheelbaseMm": {
+      "value": 2640,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 2640,
+          "estimated": false,
+          "current": true
+        }
+      ]
     },
     "groundClearanceMm": {
       "value": 160,
@@ -703,7 +751,7 @@
       "value": 91,
       "sources": [
         {
-          "label": "Especificación del proyecto (julio 2026)",
+          "label": "OCU, índice de fiabilidad 2026 — 85.590 encuestas, 39 marcas (vía motor.es)",
           "value": 91,
           "estimated": false,
           "current": true
@@ -711,16 +759,50 @@
       ]
     },
     "warrantyYears": {
-      "value": 10,
+      "value": 3,
       "sources": [
         {
           "label": "Especificación del proyecto (julio 2026)",
           "value": 10,
           "estimated": false,
+          "current": false,
+          "discardedReason": "Confundía la garantía comercial (3 años/100.000 km) con la extensión Toyota Relax, condicionada a mantenimiento en red oficial"
+        },
+        {
+          "label": "Garantía comercial en España (diariomotor, agosto 2026)",
+          "value": 3,
+          "estimated": false,
           "current": true
         }
       ],
       "unit": "años"
+    },
+    "warrantyExtension": {
+      "years": {
+        "value": 15,
+        "unit": "años",
+        "sources": [
+          {
+            "label": "Garantía comercial en España (diariomotor, agosto 2026)",
+            "value": 15,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "kmLimit": {
+        "value": 250000,
+        "unit": "km",
+        "sources": [
+          {
+            "label": "Garantía comercial en España (diariomotor, agosto 2026)",
+            "value": 250000,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "condition": "Exige todos los mantenimientos en red oficial; se renueva en cada revisión (Toyota Relax)"
     },
     "residualPct5y": {
       "value": 0.52,
@@ -790,6 +872,18 @@
         }
       ],
       "unit": "mm"
+    },
+    "wheelbaseMm": {
+      "value": 2692,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 2692,
+          "estimated": false,
+          "current": true
+        }
+      ]
     },
     "groundClearanceMm": {
       "value": 180,
@@ -891,7 +985,7 @@
       "value": 87,
       "sources": [
         {
-          "label": "Especificación del proyecto (julio 2026)",
+          "label": "OCU, índice de fiabilidad 2026 — 85.590 encuestas, 39 marcas (vía motor.es)",
           "value": 87,
           "estimated": false,
           "current": true
@@ -902,7 +996,7 @@
       "value": 3,
       "sources": [
         {
-          "label": "Especificación del proyecto (julio 2026)",
+          "label": "Garantía comercial en España (diariomotor, agosto 2026)",
           "value": 3,
           "estimated": false,
           "current": true
@@ -978,6 +1072,18 @@
         }
       ],
       "unit": "mm"
+    },
+    "wheelbaseMm": {
+      "value": 2636,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 2636,
+          "estimated": false,
+          "current": true
+        }
+      ]
     },
     "groundClearanceMm": {
       "value": 150,
@@ -1079,19 +1185,26 @@
       "value": 80,
       "sources": [
         {
-          "label": "Especificación del proyecto (julio 2026)",
+          "label": "OCU, índice de fiabilidad 2026 — 85.590 encuestas, 39 marcas (vía motor.es)",
           "value": 80,
-          "estimated": true,
+          "estimated": false,
           "current": true
         }
       ]
     },
     "warrantyYears": {
-      "value": 2,
+      "value": 5,
       "sources": [
         {
           "label": "Especificación del proyecto (julio 2026)",
           "value": 2,
+          "estimated": false,
+          "current": false,
+          "discardedReason": "Alfa Romeo ofrece 5 años sin límite de kilómetros en España, no 2: es una de las tres únicas marcas sin tope de km"
+        },
+        {
+          "label": "Garantía comercial en España (diariomotor, agosto 2026)",
+          "value": 5,
           "estimated": false,
           "current": true
         }
@@ -1163,6 +1276,18 @@
         }
       ],
       "unit": "mm"
+    },
+    "wheelbaseMm": {
+      "value": 2680,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 2680,
+          "estimated": false,
+          "current": true
+        }
+      ]
     },
     "groundClearanceMm": {
       "value": 170,
@@ -1264,7 +1389,7 @@
       "value": 89,
       "sources": [
         {
-          "label": "Especificación del proyecto (julio 2026)",
+          "label": "OCU, índice de fiabilidad 2026 — 85.590 encuestas, 39 marcas (vía motor.es)",
           "value": 89,
           "estimated": false,
           "current": true
@@ -1275,7 +1400,7 @@
       "value": 7,
       "sources": [
         {
-          "label": "Especificación del proyecto (julio 2026)",
+          "label": "Garantía comercial en España (diariomotor, agosto 2026)",
           "value": 7,
           "estimated": false,
           "current": true
@@ -1348,6 +1473,18 @@
         }
       ],
       "unit": "mm"
+    },
+    "wheelbaseMm": {
+      "value": 2734,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 2734,
+          "estimated": false,
+          "current": true
+        }
+      ]
     },
     "groundClearanceMm": {
       "value": 128,
@@ -1449,7 +1586,7 @@
       "value": 89,
       "sources": [
         {
-          "label": "Especificación del proyecto (julio 2026)",
+          "label": "OCU, índice de fiabilidad 2026 — 85.590 encuestas, 39 marcas (vía motor.es)",
           "value": 89,
           "estimated": false,
           "current": true
@@ -1457,11 +1594,18 @@
       ]
     },
     "warrantyYears": {
-      "value": 8,
+      "value": 5,
       "sources": [
         {
           "label": "Especificación del proyecto (julio 2026)",
           "value": 8,
+          "estimated": false,
+          "current": false,
+          "discardedReason": "Honda ofrece 5 años sin límite de kilómetros en España, no 8"
+        },
+        {
+          "label": "Garantía comercial en España (diariomotor, agosto 2026)",
+          "value": 5,
           "estimated": false,
           "current": true
         }
@@ -1537,6 +1681,18 @@
         }
       ],
       "unit": "mm"
+    },
+    "wheelbaseMm": {
+      "value": 2690,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 2690,
+          "estimated": false,
+          "current": true
+        }
+      ]
     },
     "groundClearanceMm": {
       "value": 185,
@@ -1638,7 +1794,7 @@
       "value": 93,
       "sources": [
         {
-          "label": "Especificación del proyecto (julio 2026)",
+          "label": "OCU, índice de fiabilidad 2026 — 85.590 encuestas, 39 marcas (vía motor.es)",
           "value": 93,
           "estimated": false,
           "current": true
@@ -1646,16 +1802,50 @@
       ]
     },
     "warrantyYears": {
-      "value": 10,
+      "value": 3,
       "sources": [
         {
           "label": "Especificación del proyecto (julio 2026)",
           "value": 10,
           "estimated": false,
+          "current": false,
+          "discardedReason": "Confundía la garantía comercial (3 años/100.000 km) con la extensión Lexus Relax, condicionada a mantenimiento en red oficial"
+        },
+        {
+          "label": "Garantía comercial en España (diariomotor, agosto 2026)",
+          "value": 3,
+          "estimated": false,
           "current": true
         }
       ],
       "unit": "años"
+    },
+    "warrantyExtension": {
+      "years": {
+        "value": 15,
+        "unit": "años",
+        "sources": [
+          {
+            "label": "Garantía comercial en España (diariomotor, agosto 2026)",
+            "value": 15,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "kmLimit": {
+        "value": 250000,
+        "unit": "km",
+        "sources": [
+          {
+            "label": "Garantía comercial en España (diariomotor, agosto 2026)",
+            "value": 250000,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "condition": "Exige todos los mantenimientos en red oficial; se renueva en cada revisión (Lexus Relax)"
     },
     "residualPct5y": {
       "value": 0.5,
@@ -1726,6 +1916,18 @@
         }
       ],
       "unit": "mm"
+    },
+    "wheelbaseMm": {
+      "value": 2815,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 2815,
+          "estimated": false,
+          "current": true
+        }
+      ]
     },
     "groundClearanceMm": {
       "value": 200,
@@ -1827,7 +2029,7 @@
       "value": 89,
       "sources": [
         {
-          "label": "Especificación del proyecto (julio 2026)",
+          "label": "OCU, índice de fiabilidad 2026 — 85.590 encuestas, 39 marcas (vía motor.es)",
           "value": 89,
           "estimated": false,
           "current": true
@@ -1838,13 +2040,40 @@
       "value": 6,
       "sources": [
         {
-          "label": "Especificación del proyecto (julio 2026)",
+          "label": "Garantía comercial en España (diariomotor, agosto 2026)",
           "value": 6,
           "estimated": false,
           "current": true
         }
       ],
       "unit": "años"
+    },
+    "warrantyExtension": {
+      "years": {
+        "value": 10,
+        "unit": "años",
+        "sources": [
+          {
+            "label": "Garantía comercial en España (diariomotor, agosto 2026)",
+            "value": 10,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "kmLimit": {
+        "value": 200000,
+        "unit": "km",
+        "sources": [
+          {
+            "label": "Garantía comercial en España (diariomotor, agosto 2026)",
+            "value": 200000,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "condition": "Exige los mantenimientos en servicio oficial a partir del sexto año"
     },
     "residualPct5y": {
       "value": 0.46,
@@ -1876,7 +2105,8 @@
     "brand": "Honda",
     "technology": "HEV",
     "notes": [
-      "Roza el presupuesto (46.645 €) y es el más largo de los candidatos."
+      "Roza el presupuesto (46.645 €) y es el más largo de los candidatos.",
+      "Fila de la versión HEV 4x4 Advance: 579 L de maletero (la 4x2 da 587 L) y 9,5 s de 0-100."
     ],
     "lengthMm": {
       "value": 4706,
@@ -1913,6 +2143,18 @@
         }
       ],
       "unit": "mm"
+    },
+    "wheelbaseMm": {
+      "value": 2701,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 2701,
+          "estimated": false,
+          "current": true
+        }
+      ]
     },
     "groundClearanceMm": {
       "value": 200,
@@ -1963,12 +2205,19 @@
       "unit": "kg"
     },
     "acceleration0to100": {
-      "value": 9.4,
+      "value": 9.5,
       "sources": [
         {
           "label": "Especificación del proyecto (julio 2026)",
           "value": 9.4,
           "estimated": true,
+          "current": false,
+          "discardedReason": "Estimación sin versión declarada; los 579 L de maletero identifican la HEV 4x4, cuyo dato publicado es 9,5 s"
+        },
+        {
+          "label": "motor.es, ficha técnica (agosto 2026)",
+          "value": 9.5,
+          "estimated": false,
           "current": true
         }
       ],
@@ -2014,7 +2263,7 @@
       "value": 89,
       "sources": [
         {
-          "label": "Especificación del proyecto (julio 2026)",
+          "label": "OCU, índice de fiabilidad 2026 — 85.590 encuestas, 39 marcas (vía motor.es)",
           "value": 89,
           "estimated": false,
           "current": true
@@ -2022,11 +2271,18 @@
       ]
     },
     "warrantyYears": {
-      "value": 8,
+      "value": 5,
       "sources": [
         {
           "label": "Especificación del proyecto (julio 2026)",
           "value": 8,
+          "estimated": false,
+          "current": false,
+          "discardedReason": "Honda ofrece 5 años sin límite de kilómetros en España, no 8"
+        },
+        {
+          "label": "Garantía comercial en España (diariomotor, agosto 2026)",
+          "value": 5,
           "estimated": false,
           "current": true
         }

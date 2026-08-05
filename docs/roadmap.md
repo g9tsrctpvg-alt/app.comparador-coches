@@ -4,7 +4,7 @@
 > tareas y deudas abiertas. `CLAUDE.md` resume y no duplica: al cerrar una
 > fase se actualiza este documento, no el índice.
 
-**Última actualización:** 2026-08-04
+**Última actualización:** 2026-08-05
 
 ## Fases
 
@@ -88,14 +88,23 @@ spec.
 
 | Tarea | Estado |
 | --- | --- |
-| ADR 0004 — puntuación en escala absoluta, no relativa al conjunto | `draft` — esperando gate humano |
-| `product/0002` — el eje de uso diario, en escala absoluta | `draft` — sin decisiones abiertas, esperando gate humano |
-| `product/0003` — el eje de coste, en dos escalas absolutas | `draft` — sin decisiones abiertas, esperando gate humano |
-| `product/0004` — el eje de estética, sin normalización | `draft` — sin decisiones abiertas, esperando gate humano |
-| `product/0005` — el eje de viaje, objetivado en dos escalas absolutas | `draft` — sin decisiones abiertas, esperando gate humano |
-| `product/0006` — el eje de prestaciones, en dos escalas absolutas | `draft` — sin decisiones abiertas, esperando gate humano |
-| `product/0007` — el eje de fiabilidad, en dos escalas absolutas | `draft` — sin decisiones abiertas, esperando gate humano. Cierra los seis ejes |
-| `product/0008` — el tipo de motor, visible en la comparativa | `draft` — sin decisiones abiertas, esperando gate humano |
+| ADR 0004 — puntuación en escala absoluta, no relativa al conjunto | `approved` |
+| `product/0002` — el eje de uso diario, en escala absoluta | `approved` |
+| `product/0003` — el eje de coste, en dos escalas absolutas | `approved` |
+| `product/0004` — el eje de estética, sin normalización | `approved` |
+| `product/0005` — el eje de viaje, objetivado en dos escalas absolutas | `approved` |
+| `product/0006` — el eje de prestaciones, en dos escalas absolutas | `approved` |
+| `product/0007` — el eje de fiabilidad, en dos escalas absolutas | `approved` — cierra los seis ejes |
+| `product/0008` — el tipo de motor, visible en la comparativa | `approved` |
+
+Las ocho pasaron el gate humano el 2026-08-05, en un commit propio sin
+implementación. Acto seguido se actualizó el catálogo con lo que dos de ellas
+necesitaban para poder implementarse con datos ciertos: la columna de batalla
+que `product/0005` exige, las cinco filas de garantía equivocadas que
+`product/0007` habría puntuado, la separación entre garantía incondicional y
+extensión condicionada, el índice OCU con su fuente publicada, y la versión
+del CR-V, que sus 579 L de maletero identifican como la HEV 4x4. Ninguna spec
+está `implemented`: no hay todavía código de eje derivado de ellas.
 
 Tareas conocidas, aún sin spec:
 
@@ -132,17 +141,11 @@ una sorpresa esperando fecha.
 | **Disparador cumplido:** los gates de CD (smoke tests, canary) se aplazaban hasta que existiera despliegue real; ya existe (GitHub Pages, verde desde `technical/0001`) | 2026-08-03 | Definir smoke test post-deploy en una spec técnica, o registrar por qué se sigue aplazando |
 | `ui/` sigue fuera del suelo de cobertura del 100%. Desde `technical/0002` sí tiene tests, pero solo de los fallos que aquella spec corrigió, y sin interacción: `renderToStaticMarkup` no hace clic ni arrastra, así que lo interactivo se sigue comprobando a mano | 2026-08-03 | Decidir si entra en el suelo de `vite.config.ts`, y si hacen falta jsdom o *testing library* para cubrir la interacción |
 | Fila de referencia del Alfa Romeo Giulietta de la especificación original no está en `cars.json`: `product/0001` no la pedía y queda fuera a propósito, no por olvido | 2026-08-03 | Que una spec futura la pida explícitamente como referencia, o se cierre esta fila descartándola |
-| La puntuación de todos los ejes es relativa al conjunto de candidatos: la nota dice en qué puesto va un coche, no si el coche es bueno. Amplifica diferencias irrelevantes —64 mm de anchura estirados a toda la escala—, esconde que los once son parecidos, y entierra al candidato equilibrado. En `diario` además invierte los pesos declarados: 0,6/0,4 acaba siendo 19%/81% | 2026-08-04 | ADR 0004 fija el principio; una spec por eje con sus anclajes. Los seis están escritos (`product/0002`…`0007`) y esperan el gate humano; la deuda cierra cuando estén implementados y consolidados |
+| La puntuación de todos los ejes es relativa al conjunto de candidatos: la nota dice en qué puesto va un coche, no si el coche es bueno. Amplifica diferencias irrelevantes —64 mm de anchura estirados a toda la escala—, esconde que los once son parecidos, y entierra al candidato equilibrado. En `diario` además invierte los pesos declarados: 0,6/0,4 acaba siendo 19%/81% | 2026-08-04 | ADR 0004 fija el principio; una spec por eje con sus anclajes. Los seis están escritos y `approved` (`product/0002`…`0007`); la deuda cierra cuando estén implementados y consolidados |
 | Los datos numéricos del catálogo no declaran cota: un precio o una dimensión negativos validan sin error, justo lo que el ADR 0003 citaba como motivo para elegir Zod. Fuera de alcance de `technical/0002` a propósito: son dieciocho campos con cotas distintas, no una regla global | 2026-08-03 | Decidir la cota de cada campo y declararla en `CarSchema`, con test por campo acotado |
 | Al quitar `anios` (`product/0003`), la fórmula de valor residual —`precio × res^(años/5)`— se queda sin horizonte. Hoy no molesta porque «pienso venderlo» está desactivado y la reventa está fuera de alcance, pero la función queda inservible tal como está escrita | 2026-08-04 | Que alguien quiera analizar la reventa: entonces, spec propia que decida con qué horizonte se calcula |
 | `index.html` no declara icono, así que el navegador pide `/favicon.ico` en cada carga y se lleva un 404. Cosmético y preexistente desde `technical/0001` | 2026-08-03 | Añadir un icono, o declarar explícitamente que no se quiere |
 | La aceleración 0-100 del Corolla Cross 140H sigue sin verificar: motor.es publica la del 200H (197 CV, 8,1 s), que las notas del catálogo descartan por maletero, pero no da prestaciones del 140H. El catálogo mantiene 11,1 s estimados, y con escala absoluta (`product/0006`) el error va directo a la nota | 2026-08-05 | Encontrar la cifra en fuente publicada, o declarar el dato como estimado en la interfaz |
-| El catálogo no declara qué versión del CR-V e:HEV es. motor.es da 9,0 s en tracción delantera y 9,5 s en 4x4, y sitúa el peso de la delantera en «poco más de 1.600 kg» frente a los 1.825 kg del catálogo, hoy marcados como no estimados. El precio de 46.645 € apunta a la 4x4, pero no consta | 2026-08-05 | Fijar la versión en `cars.json` y reconfirmar peso y aceleración contra su ficha. Mueve la nota de CV/tonelada del CR-V entre 3,1 y 5,7 |
-| La columna `warrantyYears` tiene cinco filas equivocadas contra la garantía comercial vigente en España: NX 350h y Corolla Cross ponen 10 cuando Lexus y Toyota dan 3 años/100.000 km —los 10 son Toyota Relax, condicional a red oficial—; Civic y CR-V ponen 8 cuando Honda da 5 sin límite de km; **el Tonale pone 2 cuando Alfa Romeo da 5 sin límite de km**. Kia, Mazda, Hyundai y BMW sí cuadran | 2026-08-05 | Corregir las cinco filas contra fuente publicada y añadir la fuente a cada una |
-| `warrantyYears` no distingue años incondicionales de extensión condicionada a mantenimiento en red oficial, y `product/0007` requisito 3 exige la distinción: los 7 años de Kia y los «hasta 15» de Toyota Relax no son el mismo producto | 2026-08-05 | Separar la magnitud en dos campos —años incondicionales y extensión con su condición y límite de km— antes de implementar `product/0007` |
-| `cars.json` no trae la batalla (distancia entre ejes), que `product/0005` necesita como magnitud del eje de viaje. Los once valores están tomados de las páginas de medidas de motor.es y hay que incorporarlos con su fuente | 2026-08-05 | Añadir la columna con fuente por fila antes de implementar `product/0005` |
-| Tres maleteros del catálogo no cuadran con motor.es: Tonale 500 vs 385 L, X1 490 vs 540 L, Corolla Cross 473 vs 425 L. Probablemente tenga razón el catálogo —motor.es publica por modelo y esas tres son versiones enchufables o AWD que pierden maletero por la batería— pero con `product/0005` el eje de más peso pasa a descansar sobre esa cifra | 2026-08-05 | Confirmar los tres valores por versión concreta y añadir la fuente |
-| El índice OCU del Tonale figura como `estimated: true` y no lo es: el 80 es el valor publicado por la OCU 2026, igual que los otros diez. Es el único de la columna marcado así | 2026-08-05 | Quitar la marca de estimado y añadir la fuente a las once filas |
 | El índice de fiabilidad de la OCU es **por marca, no por modelo**: 39 marcas sobre 392 modelos analizados. El eje `fiabilidad` puntúa la marca y lo presenta como fiabilidad del coche. No lo arregla ninguna escala | 2026-08-05 | Que exista un índice por modelo publicado, o declarar la limitación en la interfaz |
 | El andamiaje de los seis ejes está copiado casi literal (mapear candidatos → `normalizeAll` → recorrer con `mustGet` → acotar a 0-10 → construir el `Map`): un cambio en la invariante común exige seis ediciones en paralelo sin que nada las obligue a coincidir | 2026-08-03 | Extraer el andamiaje común a un helper en `breakdown.ts`, o registrar por qué se prefiere la repetición |
 

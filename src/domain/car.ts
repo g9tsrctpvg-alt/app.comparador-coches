@@ -66,6 +66,24 @@ export type UserRating = z.infer<typeof UserRatingSchema>;
 export const TechnologySchema = z.enum(['ICE', 'MHEV', 'HEV', 'PHEV', 'EV']);
 export type Technology = z.infer<typeof TechnologySchema>;
 
+/**
+ * Extensión de garantía condicionada a mantenimiento en red oficial. Se
+ * declara aparte de `warrantyYears` a propósito: `product/0007` puntúa solo
+ * los años incondicionales, porque una extensión que se renueva servicio a
+ * servicio es un compromiso del comprador, no del fabricante. Esta sección
+ * es informativa y no entra en ninguna nota.
+ */
+export const WarrantyExtensionSchema = z.object({
+  years: SourcedNumberSchema,
+  kmLimit: SourcedNumberSchema.optional(),
+  condition: z.string().min(1),
+});
+export type WarrantyExtension = {
+  years: SourcedNumber;
+  kmLimit?: SourcedNumber;
+  condition: string;
+};
+
 export const CarSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
@@ -75,6 +93,7 @@ export const CarSchema = z.object({
   lengthMm: SourcedNumberSchema,
   widthMm: SourcedNumberSchema,
   heightMm: SourcedNumberSchema,
+  wheelbaseMm: SourcedNumberSchema,
   groundClearanceMm: SourcedNumberSchema,
   trunkLiters: SourcedNumberSchema,
   powerCv: SourcedNumberSchema,
@@ -85,6 +104,7 @@ export const CarSchema = z.object({
   priceEur: SourcedNumberSchema,
   reliabilityOcu: SourcedNumberSchema,
   warrantyYears: SourcedNumberSchema,
+  warrantyExtension: WarrantyExtensionSchema.optional(),
   residualPct5y: SourcedNumberSchema.optional(),
   aestheticsExterior: UserRatingSchema,
   aestheticsInterior: UserRatingSchema,
