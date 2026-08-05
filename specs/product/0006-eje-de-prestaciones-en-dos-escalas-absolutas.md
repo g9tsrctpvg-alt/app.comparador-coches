@@ -88,7 +88,7 @@ Calibrados contra modelos conocidos, con sus cifras de
 | Fiat Panda 1.0 Hybrid GSE | 70 | 980 kg | 71,4 | 14,7 s |
 | Dacia Sandero TCe 90 | 91 | 1.099 kg | 82,8 | 13,4 s |
 | VW Golf 1.5 TSI 150 | 150 | 1.317 kg | 113,9 | 8,6 s |
-| Alfa Romeo Giulietta 1.4 MultiAir 170 TCT | 170 | ≈1.340 kg | ≈127 | 7,7 s |
+| Alfa Romeo Giulietta 1.4 MultiAir 170 TCT | 170 | 1.355 kg | 125,5 | 7,7 s |
 | Toyota RAV4 220H 4x4 | 222 | 1.665 kg | 133,3 | 8,1 s |
 | VW Golf GTI | 245 | — | — | 6,4 s |
 | Cupra Formentor VZ | 310 | — | — | 4,9 s |
@@ -187,10 +187,11 @@ que con uno. Cambiarlas exige un razonamiento explícito, no un ajuste.
 - Sucede al requisito 6 de `product/0001` **solo para este eje**.
 - Se asume que las magnitudes del eje siguen siendo CV/tonelada y aceleración
   0-100, y que el reparto entre ambas sigue siendo 0,5/0,5.
-- **El peso del Giulietta 1.4 MultiAir 170 TCT es estimado.** motor.es no lo
-  publica; se acota entre el 1.4 TB 120 CV (1.280 kg) y el 2.0 JTD 170 TCT
-  (1.410 kg), lo que da 125-133 CV/t. Solo afecta a la fila de referencia,
-  no a ningún candidato.
+- **El peso del Giulietta son 1.355 kg**, según la página de medidas de
+  motor.es, lo que da 125,5 CV/t. Es un peso de modelo, no de la versión
+  1.4 MultiAir 170 concreta, pero cae dentro del rango que acotan sus dos
+  fichas vecinas —1.280 kg el 1.4 TB 120 CV, 1.410 kg el 2.0 JTD 170 TCT—.
+  Solo afecta a la fila de referencia, no a ningún candidato.
 - **La aceleración del Corolla Cross 140H sigue sin verificar.** motor.es
   publica la del 200H (197 CV, 8,1 s), que es la versión que las notas del
   catálogo descartan por maletero, pero no da prestaciones del 140H. El

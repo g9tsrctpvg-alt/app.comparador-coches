@@ -92,9 +92,10 @@ spec.
 | `product/0002` — el eje de uso diario, en escala absoluta | `draft` — sin decisiones abiertas, esperando gate humano |
 | `product/0003` — el eje de coste, en dos escalas absolutas | `draft` — sin decisiones abiertas, esperando gate humano |
 | `product/0004` — el eje de estética, sin normalización | `draft` — sin decisiones abiertas, esperando gate humano |
-| `product/0005` — el eje de viaje, sin normalización | `draft` — sin decisiones abiertas, esperando gate humano |
+| `product/0005` — el eje de viaje, objetivado en dos escalas absolutas | `draft` — sin decisiones abiertas, esperando gate humano |
 | `product/0006` — el eje de prestaciones, en dos escalas absolutas | `draft` — sin decisiones abiertas, esperando gate humano |
 | `product/0007` — el eje de fiabilidad, en dos escalas absolutas | `draft` — sin decisiones abiertas, esperando gate humano. Cierra los seis ejes |
+| `product/0008` — el tipo de motor, visible en la comparativa | `draft` — sin decisiones abiertas, esperando gate humano |
 
 Tareas conocidas, aún sin spec:
 
@@ -108,10 +109,15 @@ Tareas conocidas, aún sin spec:
   contenido distinto del desglose, no un resumen de él.
 - Diseño responsive real: hoy está pensado para 560 px de ancho máximo.
 - Persistencia en `localStorage` y configuración compartida por URL.
-- Objetivar el eje de viaje, hoy el único que sigue siendo un juicio. El
-  catálogo ya trae la capacidad de maletero con su fuente y el eje no la
-  mira: la materia prima está, no hay que salir a buscarla.
-- Eje subjetivo de conducción, tras probar los coches.
+- **Eje de autonomía y repostaje.** Es la mayor diferencia práctica entre los
+  once candidatos en un viaje largo —los térmicos e híbridos hacen 640-950 km
+  con un depósito, los eléctricos la mitad en autopista— y el modelo es hoy
+  ciego a ella. Queda fuera de `product/0005` a propósito: meter eléctricos y
+  térmicos en una misma escala de alcance mezcla cosas distintas, porque lo
+  que molesta no es solo el alcance sino el tiempo de repostaje.
+- Eje subjetivo de conducción, tras probar los coches. Es donde vuelve el
+  juicio de primera mano que `product/0005` retira de `viaje`: butacas,
+  ruido, suspensión — lo que una ficha técnica no recoge.
 
 ## Deudas abiertas
 
@@ -134,6 +140,8 @@ una sorpresa esperando fecha.
 | El catálogo no declara qué versión del CR-V e:HEV es. motor.es da 9,0 s en tracción delantera y 9,5 s en 4x4, y sitúa el peso de la delantera en «poco más de 1.600 kg» frente a los 1.825 kg del catálogo, hoy marcados como no estimados. El precio de 46.645 € apunta a la 4x4, pero no consta | 2026-08-05 | Fijar la versión en `cars.json` y reconfirmar peso y aceleración contra su ficha. Mueve la nota de CV/tonelada del CR-V entre 3,1 y 5,7 |
 | La columna `warrantyYears` tiene cinco filas equivocadas contra la garantía comercial vigente en España: NX 350h y Corolla Cross ponen 10 cuando Lexus y Toyota dan 3 años/100.000 km —los 10 son Toyota Relax, condicional a red oficial—; Civic y CR-V ponen 8 cuando Honda da 5 sin límite de km; **el Tonale pone 2 cuando Alfa Romeo da 5 sin límite de km**. Kia, Mazda, Hyundai y BMW sí cuadran | 2026-08-05 | Corregir las cinco filas contra fuente publicada y añadir la fuente a cada una |
 | `warrantyYears` no distingue años incondicionales de extensión condicionada a mantenimiento en red oficial, y `product/0007` requisito 3 exige la distinción: los 7 años de Kia y los «hasta 15» de Toyota Relax no son el mismo producto | 2026-08-05 | Separar la magnitud en dos campos —años incondicionales y extensión con su condición y límite de km— antes de implementar `product/0007` |
+| `cars.json` no trae la batalla (distancia entre ejes), que `product/0005` necesita como magnitud del eje de viaje. Los once valores están tomados de las páginas de medidas de motor.es y hay que incorporarlos con su fuente | 2026-08-05 | Añadir la columna con fuente por fila antes de implementar `product/0005` |
+| Tres maleteros del catálogo no cuadran con motor.es: Tonale 500 vs 385 L, X1 490 vs 540 L, Corolla Cross 473 vs 425 L. Probablemente tenga razón el catálogo —motor.es publica por modelo y esas tres son versiones enchufables o AWD que pierden maletero por la batería— pero con `product/0005` el eje de más peso pasa a descansar sobre esa cifra | 2026-08-05 | Confirmar los tres valores por versión concreta y añadir la fuente |
 | El índice OCU del Tonale figura como `estimated: true` y no lo es: el 80 es el valor publicado por la OCU 2026, igual que los otros diez. Es el único de la columna marcado así | 2026-08-05 | Quitar la marca de estimado y añadir la fuente a las once filas |
 | El índice de fiabilidad de la OCU es **por marca, no por modelo**: 39 marcas sobre 392 modelos analizados. El eje `fiabilidad` puntúa la marca y lo presenta como fiabilidad del coche. No lo arregla ninguna escala | 2026-08-05 | Que exista un índice por modelo publicado, o declarar la limitación en la interfaz |
 | El andamiaje de los seis ejes está copiado casi literal (mapear candidatos → `normalizeAll` → recorrer con `mustGet` → acotar a 0-10 → construir el `Map`): un cambio en la invariante común exige seis ediciones en paralelo sin que nada las obligue a coincidir | 2026-08-03 | Extraer el andamiaje común a un helper en `breakdown.ts`, o registrar por qué se prefiere la repetición |
