@@ -92,6 +92,7 @@ spec.
 | `product/0002` — el eje de uso diario, en escala absoluta | `draft` — sin decisiones abiertas, esperando gate humano |
 | `product/0003` — el eje de coste, en dos escalas absolutas | `draft` — sin decisiones abiertas, esperando gate humano |
 | `product/0004` — el eje de estética, sin normalización | `draft` — sin decisiones abiertas, esperando gate humano |
+| `product/0005` — el eje de viaje, sin normalización | `draft` — sin decisiones abiertas, esperando gate humano |
 
 Tareas conocidas, aún sin spec:
 
@@ -105,7 +106,9 @@ Tareas conocidas, aún sin spec:
   contenido distinto del desglose, no un resumen de él.
 - Diseño responsive real: hoy está pensado para 560 px de ancho máximo.
 - Persistencia en `localStorage` y configuración compartida por URL.
-- Objetivar el eje de viaje, hoy el único que sigue siendo un juicio.
+- Objetivar el eje de viaje, hoy el único que sigue siendo un juicio. El
+  catálogo ya trae la capacidad de maletero con su fuente y el eje no la
+  mira: la materia prima está, no hay que salir a buscarla.
 - Eje subjetivo de conducción, tras probar los coches.
 
 ## Deudas abiertas
