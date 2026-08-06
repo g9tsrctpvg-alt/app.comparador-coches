@@ -196,6 +196,28 @@
     "travelComfort": {
       "value": 3,
       "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "photos": {
+      "front": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Kia_EV3_Earth_SV1_Snow_White_Pearl_%281%29.jpg/1280px-Kia_EV3_Earth_SV1_Snow_White_Pearl_%281%29.jpg",
+        "credit": "Wikimedia Commons — Damian B Oh (CC BY-SA 4.0)",
+        "shows": "Kia EV3, blanco (Snow White Pearl)"
+      },
+      "side": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Kia_EV3_Earth_SV1_Snow_White_Pearl_%28120%29.jpg/1280px-Kia_EV3_Earth_SV1_Snow_White_Pearl_%28120%29.jpg",
+        "credit": "Wikimedia Commons — Damian B Oh (CC BY-SA 4.0)",
+        "shows": "Kia EV3, blanco (Snow White Pearl)"
+      },
+      "rear": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Kia_EV3_Earth_SV1_Snow_White_Pearl_%2841%29.jpg/1280px-Kia_EV3_Earth_SV1_Snow_White_Pearl_%2841%29.jpg",
+        "credit": "Wikimedia Commons — Damian B Oh (CC BY-SA 4.0)",
+        "shows": "Kia EV3, blanco (Snow White Pearl)"
+      },
+      "interior": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Kia_EV3_Earth_SV1_Navy_%282%29.jpg/1280px-Kia_EV3_Earth_SV1_Navy_%282%29.jpg",
+        "credit": "Wikimedia Commons — Damian B Oh (CC BY-SA 4.0)",
+        "shows": "Kia EV3, habitáculo en azul marino (Navy) — color distinto al de las fotos exteriores"
+      }
     }
   },
   {
@@ -393,6 +415,23 @@
     "travelComfort": {
       "value": 3,
       "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "photos": {
+      "front": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Hyundai_Kona_1.6T_Inspiration_SX2_Neoteric_Yellow_%288%29.jpg/1280px-Hyundai_Kona_1.6T_Inspiration_SX2_Neoteric_Yellow_%288%29.jpg",
+        "credit": "Wikimedia Commons — Damian B Oh (CC BY-SA 4.0)",
+        "shows": "Hyundai Kona (SX2), amarillo (Neoteric Yellow) — carrocería compartida con la versión HEV, motorización no verificable en la foto"
+      },
+      "side": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Hyundai_Kona_%28SX2%29_Washington_DC_Metro_Area%2C_USA_%282%29.jpg/1280px-Hyundai_Kona_%28SX2%29_Washington_DC_Metro_Area%2C_USA_%282%29.jpg",
+        "credit": "Wikimedia Commons — OWS Photography (CC BY 4.0)",
+        "shows": "Hyundai Kona (SX2), blanco, en marcha — carrocería compartida con la versión HEV"
+      },
+      "rear": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Hyundai_Kona_1.6T_Inspiration_SX2_Neoteric_Yellow_%2815%29.jpg/1280px-Hyundai_Kona_1.6T_Inspiration_SX2_Neoteric_Yellow_%2815%29.jpg",
+        "credit": "Wikimedia Commons — Damian B Oh (CC BY-SA 4.0)",
+        "shows": "Hyundai Kona (SX2), amarillo (Neoteric Yellow) — carrocería compartida con la versión HEV"
+      }
     }
   },
   {
@@ -592,6 +631,18 @@
     "travelComfort": {
       "value": 3,
       "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "photos": {
+      "front": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Hyundai_Kona_Electric_SX2_EV_Abyss_Black_Pearl_%2814%29.jpg/1280px-Hyundai_Kona_Electric_SX2_EV_Abyss_Black_Pearl_%2814%29.jpg",
+        "credit": "Wikimedia Commons — Damian B Oh (CC BY-SA 4.0)",
+        "shows": "Hyundai Kona Eléctrico (SX2), negro (Abyss Black Pearl)"
+      },
+      "rear": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Hyundai_Kona_Electric_SX2_EV_Abyss_Black_Pearl_%2816%29.jpg/1280px-Hyundai_Kona_Electric_SX2_EV_Abyss_Black_Pearl_%2816%29.jpg",
+        "credit": "Wikimedia Commons — Damian B Oh (CC BY-SA 4.0)",
+        "shows": "Hyundai Kona Eléctrico (SX2), negro (Abyss Black Pearl)"
+      }
     }
   },
   {
@@ -826,6 +877,33 @@
     "travelComfort": {
       "value": 3,
       "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "photos": {
+      "front": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/2020_Toyota_Corolla_Cross_-_Front.jpg/1280px-2020_Toyota_Corolla_Cross_-_Front.jpg",
+        "credit": "Wikimedia Commons — Areaseven (CC BY-SA 4.0)",
+        "shows": "Toyota Corolla Cross, blanco"
+      },
+      "side": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/2020_Toyota_Corolla_Cross_-_Side.jpg/1280px-2020_Toyota_Corolla_Cross_-_Side.jpg",
+        "credit": "Wikimedia Commons — Areaseven (CC BY-SA 4.0)",
+        "shows": "Toyota Corolla Cross, blanco"
+      },
+      "rear": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/2020_Toyota_Corolla_Cross_-_Rear.jpg/1280px-2020_Toyota_Corolla_Cross_-_Rear.jpg",
+        "credit": "Wikimedia Commons — Areaseven (CC BY-SA 4.0)",
+        "shows": "Toyota Corolla Cross, blanco"
+      },
+      "interior": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/2020_Toyota_Corolla_Cross_1.8_ZSG10R_interior_%2820201113%29.jpg/1280px-2020_Toyota_Corolla_Cross_1.8_ZSG10R_interior_%2820201113%29.jpg",
+        "credit": "Wikimedia Commons — オーバードライブ83 / Overdrive83 (CC BY-SA 4.0)",
+        "shows": "Toyota Corolla Cross, habitáculo en rojo — color distinto al de las fotos exteriores"
+      },
+      "trunk": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/2020_Toyota_Corolla_Cross_1.8_ZSG10R_trunk_%2820201113%29.jpg/1280px-2020_Toyota_Corolla_Cross_1.8_ZSG10R_trunk_%2820201113%29.jpg",
+        "credit": "Wikimedia Commons — オーバードライブ83 / Overdrive83 (CC BY-SA 4.0)",
+        "shows": "Toyota Corolla Cross, maletero vacío con los asientos traseros sin abatir"
+      }
     }
   },
   {
@@ -1026,6 +1104,23 @@
     "travelComfort": {
       "value": 4,
       "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "photos": {
+      "front": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/BMW_X1_xDrive25e_%28U11%2C_2024%29_%2854533446437%29.jpg/1280px-BMW_X1_xDrive25e_%28U11%2C_2024%29_%2854533446437%29.jpg",
+        "credit": "Wikimedia Commons — Charles, Port Chester NY vía Flickr (CC BY 2.0)",
+        "shows": "BMW X1 xDrive25e (U11), gris"
+      },
+      "side": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/BMW_X1_xDrive25e_%28U11%2C_2025%29_%2854812600570%29.jpg/1280px-BMW_X1_xDrive25e_%28U11%2C_2025%29_%2854812600570%29.jpg",
+        "credit": "Wikimedia Commons — Charles, Port Chester NY vía Flickr (CC0)",
+        "shows": "BMW X1 xDrive25e (U11), gris"
+      },
+      "rear": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/BMW_X1_xDrive25e_%28U11%2C_2025%29_%2854741928081%29.jpg/1280px-BMW_X1_xDrive25e_%28U11%2C_2025%29_%2854741928081%29.jpg",
+        "credit": "Wikimedia Commons — Charles, Port Chester NY vía Flickr (CC0)",
+        "shows": "BMW X1 xDrive25e (U11), negro"
+      }
     }
   },
   {
@@ -1233,6 +1328,23 @@
     "travelComfort": {
       "value": 4,
       "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "photos": {
+      "front": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Alfa_Romeo_Tonale_Veloce_Type_965_Grigio_Vesuvio_%284%29.jpg/1280px-Alfa_Romeo_Tonale_Veloce_Type_965_Grigio_Vesuvio_%284%29.jpg",
+        "credit": "Wikimedia Commons — Damian B Oh (CC BY-SA 4.0)",
+        "shows": "Alfa Romeo Tonale Veloce, gris (Grigio Vesuvio)"
+      },
+      "side": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Alfa_Romeo_Tonale_1.5_T_Edizione_Speciale_%E2%80%93_f_24092022.jpg/1280px-Alfa_Romeo_Tonale_1.5_T_Edizione_Speciale_%E2%80%93_f_24092022.jpg",
+        "credit": "Wikimedia Commons — M 93 (CC BY-SA 3.0 de)",
+        "shows": "Alfa Romeo Tonale Edizione Speciale, gris"
+      },
+      "rear": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Alfa_Romeo_Tonale_1.5_T_Edizione_Speciale_%E2%80%93_h_24092022.jpg/1280px-Alfa_Romeo_Tonale_1.5_T_Edizione_Speciale_%E2%80%93_h_24092022.jpg",
+        "credit": "Wikimedia Commons — M 93 (CC BY-SA 3.0 de)",
+        "shows": "Alfa Romeo Tonale Edizione Speciale, gris"
+      }
     }
   },
   {
@@ -1430,6 +1542,23 @@
     "travelComfort": {
       "value": 3,
       "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "photos": {
+      "front": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Kia_Sportage_Hybrid_NQ5_HEV_Shadow_Matte_Gray_%281%29.jpg/1280px-Kia_Sportage_Hybrid_NQ5_HEV_Shadow_Matte_Gray_%281%29.jpg",
+        "credit": "Wikimedia Commons — Damian B Oh (CC BY-SA 4.0)",
+        "shows": "Kia Sportage Hybrid (NQ5), gris mate (Shadow Matte Gray)"
+      },
+      "side": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Kia_Sportage_Hybrid_NQ5_HEV_Shadow_Matte_Gray_%289%29.jpg/1280px-Kia_Sportage_Hybrid_NQ5_HEV_Shadow_Matte_Gray_%289%29.jpg",
+        "credit": "Wikimedia Commons — Damian B Oh (CC BY-SA 4.0)",
+        "shows": "Kia Sportage Hybrid (NQ5), gris mate (Shadow Matte Gray)"
+      },
+      "rear": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Kia_Sportage_Hybrid_NQ5_HEV_Shadow_Matte_Gray_%2816%29.jpg/1280px-Kia_Sportage_Hybrid_NQ5_HEV_Shadow_Matte_Gray_%2816%29.jpg",
+        "credit": "Wikimedia Commons — Damian B Oh (CC BY-SA 4.0)",
+        "shows": "Kia Sportage Hybrid (NQ5), gris mate (Shadow Matte Gray)"
+      }
     }
   },
   {
@@ -1634,6 +1763,18 @@
     "travelComfort": {
       "value": 3,
       "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "photos": {
+      "front": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Honda_CIVIC_e%EF%BC%9AHEV_%286AA-FL4%29.jpg/1280px-Honda_CIVIC_e%EF%BC%9AHEV_%286AA-FL4%29.jpg",
+        "credit": "Wikimedia Commons — Tokumeigakarinoaoshima (CC BY-SA 4.0)",
+        "shows": "Honda Civic e:HEV (FL4), gris"
+      },
+      "rear": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Honda_CIVIC_e-HEV_%286AA-FL4%29_rear.jpg/1280px-Honda_CIVIC_e-HEV_%286AA-FL4%29_rear.jpg",
+        "credit": "Wikimedia Commons — Tokumeigakarinoaoshima (CC BY-SA 4.0)",
+        "shows": "Honda Civic e:HEV (FL4), gris"
+      }
     }
   },
   {
@@ -1869,6 +2010,23 @@
     "travelComfort": {
       "value": 4,
       "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "photos": {
+      "front": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Lexus_NX_350h_F_SPORT_2WD_%286AA-AAZH20-AWXLB%28F%29%29_front.jpg/1280px-Lexus_NX_350h_F_SPORT_2WD_%286AA-AAZH20-AWXLB%28F%29%29_front.jpg",
+        "credit": "Wikimedia Commons — Tokumeigakarinoaoshima (CC BY-SA 4.0)",
+        "shows": "Lexus NX 350h F Sport, negro"
+      },
+      "rear": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Lexus_NX_350h_F_SPORT_2WD_%286AA-AAZH20-AWXLB%28F%29%29_rear.jpg/1280px-Lexus_NX_350h_F_SPORT_2WD_%286AA-AAZH20-AWXLB%28F%29%29_rear.jpg",
+        "credit": "Wikimedia Commons — Tokumeigakarinoaoshima (CC BY-SA 4.0)",
+        "shows": "Lexus NX 350h F Sport, negro"
+      },
+      "interior": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Lexus_NX_350h_F_SPORT_2WD_%286AA-AAZH20-AWXLB%28F%29%29_interior.jpg/1280px-Lexus_NX_350h_F_SPORT_2WD_%286AA-AAZH20-AWXLB%28F%29%29_interior.jpg",
+        "credit": "Wikimedia Commons — Tokumeigakarinoaoshima (CC BY-SA 4.0)",
+        "shows": "Lexus NX 350h F Sport, habitáculo en rojo"
+      }
     }
   },
   {
@@ -2097,6 +2255,23 @@
     "travelComfort": {
       "value": 3,
       "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "photos": {
+      "front": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Mazda_CX-5_%28KF%29_Facelift_1X7A0331.jpg/1280px-Mazda_CX-5_%28KF%29_Facelift_1X7A0331.jpg",
+        "credit": "Wikimedia Commons — Alexander Migl (CC BY-SA 4.0)",
+        "shows": "Mazda CX-5 (KF), restyling, marrón (Zircon Sand)"
+      },
+      "side": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/2022_Mazda_CX-5_Preferred_%28facelift%29%2C_rear_6.21.22.jpg/1280px-2022_Mazda_CX-5_Preferred_%28facelift%29%2C_rear_6.21.22.jpg",
+        "credit": "Wikimedia Commons — Kevauto (CC BY-SA 4.0)",
+        "shows": "Mazda CX-5 (KF), restyling, azul oscuro"
+      },
+      "rear": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Mazda_CX-5_SKYACTIV-G_165_Newground_%28II%2C_Facelift%29_%E2%80%93_h_14042024.jpg/1280px-Mazda_CX-5_SKYACTIV-G_165_Newground_%28II%2C_Facelift%29_%E2%80%93_h_14042024.jpg",
+        "credit": "Wikimedia Commons — M 93 (CC BY-SA 3.0 de)",
+        "shows": "Mazda CX-5 (KF), restyling, marrón (Zircon Sand)"
+      }
     }
   },
   {
@@ -2311,6 +2486,23 @@
     "travelComfort": {
       "value": 3,
       "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "photos": {
+      "front": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Honda_CR-V_RS6_2.0_RS_e-HEV_AWD_Platinum_White_Pearl_03.jpg/1280px-Honda_CR-V_RS6_2.0_RS_e-HEV_AWD_Platinum_White_Pearl_03.jpg",
+        "credit": "Wikimedia Commons — Ethan Llamas (CC BY-SA 4.0)",
+        "shows": "Honda CR-V e:HEV RS AWD (4x4), blanco (Platinum White Pearl)"
+      },
+      "side": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Honda_CR-V_RS6_2.0_RS_e-HEV_AWD_Platinum_White_Pearl_02.jpg/1280px-Honda_CR-V_RS6_2.0_RS_e-HEV_AWD_Platinum_White_Pearl_02.jpg",
+        "credit": "Wikimedia Commons — Ethan Llamas (CC BY-SA 4.0)",
+        "shows": "Honda CR-V e:HEV RS AWD (4x4), blanco, con portaequipajes de techo instalado"
+      },
+      "interior": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Honda_CR-V_RS6_2.0_RS_e-HEV_AWD_interior.jpg/1280px-Honda_CR-V_RS6_2.0_RS_e-HEV_AWD_interior.jpg",
+        "credit": "Wikimedia Commons — Ethan Llamas (CC BY-SA 4.0)",
+        "shows": "Honda CR-V e:HEV RS AWD (4x4), habitáculo en negro"
+      }
     }
   }
 ]
