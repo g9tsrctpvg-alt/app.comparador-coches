@@ -1,0 +1,165 @@
+/*
+ * Primitivos compartidos (technical/0004, requisito 12). Un componente que
+ * necesite uno de ellos lo compone (`composes: … from`) o aplica la clase
+ * directamente; no copia sus reglas.
+ *
+ * El indicador de foco no está aquí: es una regla global sobre
+ * `:focus-visible` en `src/styles/global.css`, porque un primitivo de foco
+ * repetido por clase se puede olvidar en un componente nuevo y uno global
+ * no.
+ */
+
+/* Todo número va en monoespaciada (product/0009, requisito 7): un
+ * primitivo en vez de repetir `font-family` en cada módulo que enseña una
+ * cifra. Va primero porque otros primitivos de este fichero lo componen. */
+.mono {
+  font-family: var(--font-mono);
+}
+
+.card {
+  background: var(--color-card);
+  border: var(--size-border-hairline) solid var(--color-rule);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-card);
+}
+
+.invertedSurface {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+.label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-regular);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-mute);
+}
+
+.proportionBar {
+  display: block;
+  width: 100%;
+  background: var(--color-rule);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+/* Dos tamaños (product/0009, sección «La barra de proporción»): 3px bajo
+ * cada fila del ranking, 6px por eje en el desglose. */
+.proportionBarRow {
+  composes: proportionBar;
+  height: var(--size-bar-row);
+}
+
+.proportionBarAxis {
+  composes: proportionBar;
+  height: var(--size-bar-axis);
+}
+
+.proportionBarFill {
+  display: block;
+  height: 100%;
+  background: var(--color-accent);
+  border-radius: var(--radius-sm);
+  transition: width 0.35s ease;
+}
+
+.proportionBarFillDimmed {
+  composes: proportionBarFill;
+  background: var(--color-rule);
+}
+
+.statusMark {
+  color: var(--color-signal);
+  font-weight: var(--font-weight-bold);
+}
+
+.estimatedMark {
+  composes: mono;
+  color: var(--color-signal);
+}
+
+.secondaryText {
+  color: var(--color-mute);
+  font-size: var(--font-size-xs);
+}
+
+/* Medida de línea del texto corrido (product/0010, requisito 4): acotada en
+ * `ch`, no en el ancho de la aplicación, y con partición de palabras largas
+ * para que una cadena sin espacios no desborde a 320px (requisito 12). */
+.prose {
+  max-width: var(--size-line-measure);
+  overflow-wrap: break-word;
+}
+
+/* Texto accesible solo para lectores de pantalla, sin efecto visual: el
+ * patrón «sr-only» estándar, con las medidas de 1px que exige en tokens de
+ * tamaño en vez de en el literal habitual. */
+.visuallyHidden {
+  position: absolute;
+  width: var(--size-border-hairline);
+  height: var(--size-border-hairline);
+  padding: 0;
+  margin: calc(var(--size-border-hairline) * -1);
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Deslizador con objetivo táctil de 44×44 (product/0010, requisito 8): el
+ * elemento mide `--size-touch-min` de alto, con el carril fino centrado y
+ * el asa a tamaño táctil. Todo deslizador de la interfaz lo compone en vez
+ * de reinventar su aspecto — es el mismo caso que el indicador de foco. */
+.rangeInput {
+  appearance: none;
+  width: 100%;
+  height: var(--size-touch-min);
+  background: transparent;
+  cursor: pointer;
+}
+
+.rangeInput::-webkit-slider-runnable-track {
+  height: var(--size-bar-axis);
+  background: var(--color-rule);
+  border-radius: var(--radius-sm);
+}
+
+.rangeInput::-webkit-slider-thumb {
+  appearance: none;
+  width: var(--size-touch-min);
+  height: var(--size-touch-min);
+  border-radius: 50%;
+  background: var(--color-accent);
+  margin-top: calc((var(--size-touch-min) - var(--size-bar-axis)) / -2);
+}
+
+.rangeInput::-moz-range-track {
+  height: var(--size-bar-axis);
+  background: var(--color-rule);
+  border-radius: var(--radius-sm);
+}
+
+.rangeInput::-moz-range-thumb {
+  width: var(--size-touch-min);
+  height: var(--size-touch-min);
+  border-radius: 50%;
+  background: var(--color-accent);
+  border: none;
+}
+
+/* Casilla y su etiqueta como un único objetivo táctil de al menos 44px de
+ * alto (product/0010, requisito 8): los 16×16 px del artefacto no se
+ * migran tal cual. La casilla en sí conserva su tamaño visual nativo; lo
+ * que crece es el área accionable de la fila entera. */
+.checkboxRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--size-touch-min);
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+}

@@ -1,0 +1,40 @@
+.intro {
+  composes: secondaryText from '../primitives.module.css';
+  composes: prose from '../primitives.module.css';
+  font-family: var(--font-sans);
+  margin: 0;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.assumptionName {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+}
+
+.value {
+  composes: mono from '../primitives.module.css';
+  color: var(--color-accent);
+  font-weight: var(--font-weight-semibold);
+}
+
+.slider {
+  composes: rangeInput from '../primitives.module.css';
+}

@@ -36,9 +36,14 @@ nombrando el campo y el registro.
 El núcleo de puntuación (`src/domain/scoring/`) no expone una función que
 devuelva solo un número. `scoreCatalog(cars, weights, assumptions,
 budgetEur)` devuelve, por coche, un `CarScoreBreakdown`: sus seis
-`AxisBreakdown` —uno por eje— y el `total`, que es la suma literal de sus
-`contribution` (peso × puntuación 0-10 de cada eje). La interfaz solo
-renderiza esta estructura; no recalcula nada, y no puede: `ui-no-scoring-internals`
+`AxisBreakdown` —uno por eje—, el `total`, que es la suma literal de sus
+`contribution` (peso × puntuación 0-10 de cada eje), y `percentage`, que es
+`total` expresado sobre el máximo posible con los pesos vigentes —`10 × Σ
+pesos`—, en vez de una suma cuyo techo depende de qué pesos se hayan
+elegido. `percentageOf` (`src/domain/scoring/score.ts`) es 0, no `NaN`,
+cuando la suma de pesos es 0. Es el campo que la fila del ranking muestra en
+vez del `total` (`docs/estado/interfaz.md`): la interfaz solo renderiza esta
+estructura; no recalcula nada, y no puede: `ui-no-scoring-internals`
 (`.dependency-cruiser.mjs`) impide que `src/ui/` importe las piezas internas
 de fórmula (`domain/scoring/axes/`, `normalize.ts`, `mustGet.ts`,
 `scale.ts`), y solo le deja `scoreCatalog` y los tipos.

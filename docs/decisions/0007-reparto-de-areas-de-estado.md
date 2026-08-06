@@ -1,6 +1,6 @@
 # 0007 — El reparto de áreas de estado de este proyecto
 
-- **Estado:** draft
+- **Estado:** approved
 - **Fecha:** 2026-08-06
 - **Nivel:** 🟡
 

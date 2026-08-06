@@ -101,6 +101,12 @@ export interface CarScoreBreakdown {
   overBudget: boolean;
   axes: AxisBreakdown[];
   total: number;
+  /** `total` como porcentaje de la puntuación máxima posible con los pesos
+   * vigentes —`10 × Σ pesos`—, para que la fila del ranking muestre un techo
+   * fijo en vez de una suma que solo se puede comparar contra sí misma
+   * (product/0009, requisito 3). 0 cuando todos los pesos están a 0, en vez
+   * de dividir por cero. */
+  percentage: number;
 }
 
 export function inputDatumFrom(

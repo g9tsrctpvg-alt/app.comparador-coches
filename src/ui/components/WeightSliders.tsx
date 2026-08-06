@@ -3,31 +3,55 @@ import {
   AXIS_ORDER,
   type AxisWeights,
 } from '../../domain/scoring/weights';
+import { CollapsiblePanel } from './CollapsiblePanel';
+import styles from './WeightSliders.module.css';
 
 interface WeightSlidersProps {
   weights: AxisWeights;
   onChange: (next: AxisWeights) => void;
 }
 
+function summaryOf(weights: AxisWeights): string {
+  return AXIS_ORDER.map(
+    (axisId) => `${AXIS_LABELS[axisId]} ${weights[axisId]}`,
+  ).join(' · ');
+}
+
 export function WeightSliders({ weights, onChange }: WeightSlidersProps) {
   return (
-    <section aria-label="Pesos por eje">
-      <h2>Pesos por eje</h2>
-      {AXIS_ORDER.map((axisId) => (
-        <label key={axisId}>
-          {AXIS_LABELS[axisId]}: {weights[axisId]}
-          <input
-            type="range"
-            min={0}
-            max={10}
-            step={1}
-            value={weights[axisId]}
-            onChange={(event) =>
-              onChange({ ...weights, [axisId]: Number(event.target.value) })
-            }
-          />
-        </label>
-      ))}
-    </section>
+    <CollapsiblePanel
+      ariaLabel="Pesos por eje"
+      title="Pesos de decisión"
+      summary={summaryOf(weights)}
+    >
+      <div className={styles.rows}>
+        {AXIS_ORDER.map((axisId) => {
+          const value = weights[axisId];
+          return (
+            <label key={axisId} className={styles.row}>
+              <span className={styles.top}>
+                <span className={styles.axisName}>{AXIS_LABELS[axisId]}</span>
+                <span
+                  className={value === 0 ? styles.valueDimmed : styles.value}
+                >
+                  {value}
+                </span>
+              </span>
+              <input
+                className={styles.slider}
+                type="range"
+                min={0}
+                max={10}
+                step={1}
+                value={value}
+                onChange={(event) =>
+                  onChange({ ...weights, [axisId]: Number(event.target.value) })
+                }
+              />
+            </label>
+          );
+        })}
+      </div>
+    </CollapsiblePanel>
   );
 }

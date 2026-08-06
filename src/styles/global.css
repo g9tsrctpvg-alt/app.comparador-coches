@@ -1,0 +1,186 @@
+/*
+ * Hoja global de tokens y reset (technical/0004, valores de color y
+ * tipografía fijados por product/0009, puntos de ruptura fijados por
+ * product/0010). Es el único sitio donde vive un literal de color,
+ * espaciado, tipografía, radio, sombra, tamaño o punto de ruptura: todo lo
+ * demás en `src/ui/` lee estas custom properties por `var(--…)`.
+ */
+
+:root {
+  /* Color — los siete papeles del artefacto de referencia
+   * (product/0009, sección «La paleta»). */
+  --color-paper: #e9ebe6;
+  --color-card: #f3f5f1;
+  --color-ink: #1a2420;
+  --color-rule: #c8cfc6;
+  --color-accent: #14655c;
+
+  /* `mute` y `signal` del artefacto —#6b7a72 y #b4551b— no llegan a 4.5:1
+   * sobre `card` y `paper`. Se oscurecen manteniendo el tono
+   * (product/0009, requisito 18); el ajuste queda escrito aquí porque es
+   * donde vive el literal que lo decide. */
+  --color-mute: #5c6b62;
+  --color-signal: #a34d18;
+
+  /* Derivados de los siete papeles: mismo papel, uso distinto.
+   * `--color-mute-on-ink` es el octavo color que el artefacto escribe a
+   * mano —`#8fa69b`, texto apagado sobre `ink`— sin declararlo en su
+   * constante de colores (product/0009, sección «El artefacto ya se salta
+   * su propia paleta»); aquí se convierte en token. */
+  --color-mute-on-ink: #8fa69b;
+  --color-accent-tint: rgb(20 101 92 / 7%);
+
+  /* Espaciado — una sola escala, en incrementos de 4px. */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-7: 2rem;
+  --space-8: 3rem;
+
+  /* Tipografía — dos pilas del sistema, sin fuente web. */
+  --font-mono:
+    ui-monospace, 'SF Mono', 'Cascadia Mono', 'Segoe UI Mono', Consolas,
+    'Liberation Mono', Menlo, monospace;
+  --font-sans:
+    system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+  /* Escala tipográfica del artefacto de referencia (product/0009, sección
+   * «La tipografía»), en rem sobre una raíz de 16px: 30 el titular, 22 el
+   * nombre del líder, 15 el nombre de un coche y su puntuación, 13 el texto
+   * de un control, 11 la letra pequeña y los datos monoespaciados, 10 el
+   * rótulo `Label`, 9,5 la cabecera de tabla. */
+  --font-size-2xl: 1.875rem;
+  --font-size-xl: 1.375rem;
+  --font-size-md: 0.9375rem;
+  --font-size-sm: 0.8125rem;
+  --font-size-xs: 0.6875rem;
+  --font-size-2xs: 0.625rem;
+  --font-size-3xs: 0.59375rem;
+
+  --font-weight-regular: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Radios. */
+  --radius-sm: 0.125rem;
+  --radius-md: 0.25rem;
+
+  /* Sombras. */
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 8%);
+  --shadow-focus: 0 0 0 0.1875rem rgb(20 101 92 / 45%);
+
+  /* Tamaños — anchos y medidas propias, no espaciado entre elementos. */
+  --size-column: 35rem;
+  --size-touch-min: 2.75rem;
+  --size-position: 2ch;
+  --size-line-measure: 75ch;
+  --size-border-hairline: 0.0625rem;
+  --size-bar-row: 0.1875rem;
+  --size-bar-axis: 0.375rem;
+
+  /* Ancho máximo de la página en dos columnas (product/0010, requisito 7):
+   * lo que se aprovecha por encima de `--bp-ancho` es el ancho de la
+   * página, no el de la línea de texto, que sigue acotada por
+   * `--size-line-measure`. No es «sin límite»: a partir de aquí sobra
+   * espacio en cualquier monitor y las dos columnas dejarían de tener
+   * relación de aspecto legible. */
+  --size-page: 75rem;
+
+  /* Puntos de ruptura (product/0010, requisito 2). Una media query no puede
+   * leer una custom property, así que cualquier `@media` de `src/ui/` repite
+   * el número en px o rem: la CI comprueba que ese número coincida con uno
+   * de estos dos, convertido a la misma unidad. Son dos, no tres ni cuatro,
+   * porque el diseño solo tiene dos formas: columna única y dos columnas. */
+
+  /* 592px = los 560px de columna del artefacto más 16px de relleno a cada
+   * lado. Por debajo, la columna deja de caber entera y el diseño pasa a
+   * ser de borde a borde; por encima, ya no crece. */
+  --bp-columna: 37rem;
+
+  /* 960px = donde caben dos columnas de contenido de medida legible con su
+   * separación. Es el punto en que dejar los controles apilados sobre el
+   * ranking desperdicia media pantalla. */
+  --bp-ancho: 60rem;
+}
+
+/* Reset mínimo (technical/0004, requisito 7). */
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd,
+ol,
+ul {
+  margin: 0;
+}
+
+ol,
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+input,
+button,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+img,
+svg,
+canvas {
+  max-width: 100%;
+  display: block;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Indicador de foco compartido (requisito 8): un único primitivo, no
+ * reinventado por componente. Ningún módulo escribe `outline: none` sin
+ * sustituirlo por este mismo tratamiento en la misma regla. */
+:focus-visible {
+  outline: 0.1875rem solid var(--color-accent);
+  outline-offset: 0.125rem;
+  border-radius: var(--radius-sm);
+}
+
+/* `prefers-reduced-motion` (requisito 10): apaga toda transición y
+ * animación desde un único sitio, sin depender de que cada componente se
+ * acuerde de comprobarlo. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

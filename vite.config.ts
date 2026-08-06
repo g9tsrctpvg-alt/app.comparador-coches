@@ -6,6 +6,11 @@ export default defineConfig({
   plugins: [react()],
   test: {
     environment: 'node',
+    // `false` por defecto stubbea todo import de CSS a un módulo vacío.
+    // `validateStyleTokensRepo.test.ts` (technical/0004, requisito 13) lee
+    // el contenido real de `.module.css` y de la hoja global con
+    // `import.meta.glob`, así que necesita el CSS de verdad.
+    css: true,
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov'],

@@ -1,12 +1,18 @@
 # 0004 — Fundamento de estilos: tokens y primitivos
 
 - **Id:** technical/0004
-- **Estado:** draft
+- **Estado:** implemented
 - **Tipo:** technical
 - **Fecha:** 2026-08-06
 - **Specs relacionadas:** product/0009, product/0010, product/0011, technical/0001
 - **ADRs relacionados:** 0006
 - **Doc de estado:** `docs/estado/interfaz.md`, `docs/estado/arquitectura.md`
+
+> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
+> implementado: su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy no es cierta. **No es referencia del estado actual** — para
+> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
+> **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -144,39 +150,53 @@ no de la fontanería.
 
 > Obligatorios y verificables.
 
-- [ ] Existe una hoja global de tokens importada desde `src/main.tsx`, y
+- [x] Existe una hoja global de tokens importada desde `src/main.tsx`, y
       ningún otro fichero la importa.
-- [ ] Todo token declarado en `:root` pertenece a una de las siete familias
+- [x] Todo token declarado en `:root` pertenece a una de las siete familias
       con prefijo (`--color-`, `--space-`, `--font-`, `--radius-`,
       `--shadow-`, `--size-`, `--bp-`).
-- [ ] Ningún token de color lleva un tono en el nombre, y los siete papeles
+- [x] Ningún token de color lleva un tono en el nombre, y los siete papeles
       del requisito 4 están declarados.
-- [ ] Existen exactamente dos tokens de familia tipográfica, y buscar
+- [x] Existen exactamente dos tokens de familia tipográfica, y buscar
       `monospace`, `system-ui` o `sans-serif` en los `.module.css` no devuelve
       ninguna coincidencia.
-- [ ] Buscar `#`, `rgb(`, `hsl(` en los `.module.css` de `src/ui/` no
+- [x] Buscar `#`, `rgb(`, `hsl(` en los `.module.css` de `src/ui/` no
       devuelve ninguna coincidencia.
-- [ ] Existe un test o comprobación en CI que falla ante un literal de diseño
+- [x] Existe un test o comprobación en CI que falla ante un literal de diseño
       introducido a propósito en un módulo, y pasa al sustituirlo por su
-      token.
-- [ ] Navegando con el tabulador por la aplicación, cada control que recibe
+      token. `scripts/validateStyleTokens.test.ts`.
+- [x] Navegando con el tabulador por la aplicación, cada control que recibe
       el foco lo muestra visiblemente. Se verifica a mano en navegador, sobre
-      el build de producción.
-- [ ] Buscar `outline: none` en `src/ui/` no devuelve ninguna coincidencia
+      el build de producción: comprobado con Playwright contra
+      `npm run preview`, el primer `Tab` deja un `outline` de 3 px en color
+      acento sobre el primer control.
+- [x] Buscar `outline: none` en `src/ui/` no devuelve ninguna coincidencia
       que no vaya acompañada de un indicador sustitutorio en la misma regla.
-- [ ] Con `prefers-reduced-motion: reduce` forzado en el navegador, ninguna
-      transición de la interfaz es perceptible.
-- [ ] Cambiar el valor de un token de color en la hoja global cambia ese
+- [x] Con `prefers-reduced-motion: reduce` forzado en el navegador, ninguna
+      transición de la interfaz es perceptible. La regla global neutraliza
+      toda transición y animación; no hay ninguna transición aplicada a un
+      elemento visible todavía —`proportionBarFill` no lo consume ningún
+      componente hasta `product/0009`—, así que hoy se cumple por ausencia y
+      se reverifica en la fase siguiente, cuando la barra exista de verdad.
+- [x] Cambiar el valor de un token de color en la hoja global cambia ese
       color en toda la aplicación sin tocar ningún otro fichero. Es la
       propiedad que hace que un esquema oscuro futuro sea un cambio de tokens,
-      y se comprueba haciendo el cambio y revirtiéndolo.
-- [ ] Ninguna media query de `src/ui/` contiene un ancho que no corresponda a
-      un token `--bp-*` declarado.
-- [ ] `npm run format:check`, `npm run lint`, `npm run typecheck`,
+      y se comprueba haciendo el cambio y revirtiéndolo: comprobado
+      cambiando `--color-accent` y compilando, viendo el nuevo valor en
+      `dist/assets/*.css`, y revirtiéndolo.
+- [x] Ninguna media query de `src/ui/` contiene un ancho que no corresponda a
+      un token `--bp-*` declarado. No hay ninguna media query todavía; el
+      gate de `validateStyleTokens` lo haría fallar si apareciera una fuera
+      de los tokens.
+- [x] `npm run format:check`, `npm run lint`, `npm run typecheck`,
       `npm run arch:check`, `npm run test:coverage` y `npm run build` pasan
       en local antes de dar la spec por implementada.
 - [ ] El sitio desplegado en GitHub Pages carga sus hojas de estilo sin 404
-      bajo el subpath del repositorio.
+      bajo el subpath del repositorio. Comprobado por construcción —el `href`
+      del `<link>` generado por `vite build` ya lleva el subpath del
+      repositorio, igual que hace hoy el `<script>` que `technical/0001`
+      verificó— pero pendiente de comprobación real contra la URL pública
+      tras el próximo despliegue, que esta sesión no dispara.
 
 ## Dependencias y supuestos
 

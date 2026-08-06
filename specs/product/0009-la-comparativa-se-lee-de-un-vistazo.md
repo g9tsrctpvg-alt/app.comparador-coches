@@ -1,12 +1,18 @@
 # 0009 — La comparativa se lee de un vistazo
 
 - **Id:** product/0009
-- **Estado:** draft
+- **Estado:** consolidated
 - **Tipo:** product
 - **Fecha:** 2026-08-06
 - **Specs relacionadas:** product/0001, product/0008, product/0010, 0013, technical/0004
 - **ADRs relacionados:** 0006
 - **Doc de estado:** `docs/estado/interfaz.md`
+
+> ⚠️ **Spec consolidada (2026-08-06).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/interfaz.md`. Vigentes aquí solo los **criterios de
+> aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -296,58 +302,94 @@ qué ejes se decide, sin leer el desglose completo de nadie.
 
 > Obligatorios y verificables.
 
-- [ ] La puntuación total de los once candidatos, con los pesos y supuestos
+- [x] La puntuación total de los once candidatos, con los pesos y supuestos
       por defecto, es **idéntica** antes y después del cambio. Se comprueba
       con un test sobre `scoreCatalog`, no mirando la pantalla.
-- [ ] El porcentaje del requisito 3 lo calcula el dominio: existe un test que
+      `src/domain/scoring/scoreCatalog.snapshot.test.ts`, con los totales
+      reales como valores esperados.
+- [x] El porcentaje del requisito 3 lo calcula el dominio: existe un test que
       comprueba que con todos los pesos a 0 no se divide por cero, y que un
       coche que sacara 10 en los seis ejes daría 100.
-- [ ] `npm run arch:check` sigue pasando y `.dependency-cruiser.mjs` no se ha
+      `src/domain/scoring/score.test.ts`, `describe('percentageOf', …)`.
+- [x] `npm run arch:check` sigue pasando y `.dependency-cruiser.mjs` no se ha
       modificado.
-- [ ] Todo número visible de la interfaz se renderiza en la familia
+- [x] Todo número visible de la interfaz se renderiza en la familia
       monoespaciada y todo texto en la sans. Se recorre la interfaz a mano,
-      con el desglose de un coche abierto.
-- [ ] Existe **una sola** superficie invertida en toda la interfaz: la
-      tarjeta del líder.
-- [ ] Con un peso a 0, la barra de ese eje en el desglose y su valor en el
+      con el desglose de un coche abierto: comprobado con capturas contra
+      `npm run preview`. La única excepción deliberada es la línea de datos
+      de apoyo de la fila —tecnología, potencia, aceleración, precio—, que el
+      propio artefacto describe como monoespaciada de principio a fin,
+      incluida la palabra de la tecnología.
+- [x] Existe **una sola** superficie invertida en toda la interfaz: la
+      tarjeta del líder. `primitives.module.css` declara `.invertedSurface`
+      una vez y solo `LeaderCard` la compone.
+- [x] Con un peso a 0, la barra de ese eje en el desglose y su valor en el
       control se ven apagados, y se distinguen de un eje con peso alto y
-      puntuación baja.
-- [ ] Las filas del ranking mantienen alineados los nombres de coche entre la
+      puntuación baja. `AxisBreakdownView` usa
+      `primitives.proportionBarFillDimmed` cuando `weight === 0`;
+      `WeightSliders` apaga el valor a `--color-mute` en el mismo caso.
+- [x] Las filas del ranking mantienen alineados los nombres de coche entre la
       posición `09` y la `10`: el hueco de la posición es de ancho fijo.
-- [ ] El rótulo del control que despliega el desglose **no contiene** la
+      `--size-position: 2ch` en un `<span>` de ancho fijo.
+- [x] El rótulo del control que despliega el desglose **no contiene** la
       puntuación, ni la cadena «FUERA DE PRESUPUESTO», ni la etiqueta de
-      tecnología: cada uno vive en su propio elemento.
-- [ ] Un coche fuera de presupuesto se distingue de uno dentro **con el
+      tecnología: cada uno vive en su propio elemento. Comprobado con
+      Playwright: la fila de tabulación da como nombre accesible
+      «01 Sportage HEV, ver desglose», sin puntuación ni marca de
+      presupuesto.
+- [x] Un coche fuera de presupuesto se distingue de uno dentro **con el
       navegador en escala de grises**. Verificación a mano, declarada como
-      tal.
-- [ ] El control de despliegue expone `aria-expanded` con el valor correcto
-      en los dos estados. Comprobable con `renderToStaticMarkup`.
-- [ ] Con el desglose abierto, cada uno de los seis ejes presenta una barra
+      tal: la marca lleva su propio texto («Fuera de presupuesto») en
+      negrita, visible con cualquier filtro de color.
+- [x] El control de despliegue expone `aria-expanded` con el valor correcto
+      en los dos estados. Comprobable con `renderToStaticMarkup`; verificado
+      además en vivo con Playwright (`false` → `true` tras activar el
+      control).
+- [x] Con el desglose abierto, cada uno de los seis ejes presenta una barra
       cuya longitud es proporcional a su puntuación sobre 10, y el eje con
-      mayor puntuación tiene la barra más larga.
-- [ ] Los dos anclajes de cada magnitud se leen sin buscarlos dentro de una
+      mayor puntuación tiene la barra más larga. El ancho de
+      `proportionBarFill` es `(score / 10) * 100`, igual en los seis ejes.
+- [x] Los dos anclajes de cada magnitud se leen sin buscarlos dentro de una
       frase: el valor que vale 10 y el que vale 0 son elementos propios, no
-      texto entre paréntesis.
-- [ ] Los seis controles de peso aparecen uno por línea, y cada uno muestra
+      texto entre paréntesis. `AxisBreakdownView`, bloque `.anchors`.
+- [x] Los seis controles de peso aparecen uno por línea, y cada uno muestra
       su valor numérico actual sin necesidad de interactuar.
-- [ ] Ningún componente de `src/ui/` contiene un literal de color, espaciado
+- [x] Ningún componente de `src/ui/` contiene un literal de color, espaciado
       o tamaño de fuente: todos salen de los tokens de `technical/0004`.
-- [ ] El contraste de todo texto sobre su fondo es ≥ 4,5:1 (≥ 3:1 para texto
+      Comprobado por `scripts/validateStyleTokensRepo.test.ts` contra los
+      `.module.css` reales.
+- [x] El contraste de todo texto sobre su fondo es ≥ 4,5:1 (≥ 3:1 para texto
       grande y para las barras), medido con una herramienta de contraste
       sobre el build de producción. **Se miden explícitamente los cinco pares
       de la paleta del artefacto**: `mute` sobre `card`, `mute` sobre `paper`,
       `accent` sobre `card`, `signal` sobre `card` y el apagado sobre `ink` de
-      la tarjeta del líder. Los que no lleguen se ajustan y se anota el ajuste.
-- [ ] Navegando solo con teclado se llega a todos los controles, se despliega
+      la tarjeta del líder. Los que no lleguen se ajustan y se anota el
+      ajuste. Medidos (fórmula WCAG 2.x, sRGB): `mute` (`#5c6b62`) sobre
+      `card` 5,13:1 y sobre `paper` 4,68:1; `accent` (`#14655c`) sobre `card`
+      6,29:1; `signal` (`#a34d18`) sobre `card` 5,27:1; `mute-on-ink`
+      (`#8fa69b`) sobre `ink` 6,15:1. Los tonos del artefacto para `mute`
+      (`#6b7a72`) y `signal` (`#b4551b`) no llegaban a 4,5:1 sobre `card` ni
+      `paper` (4,11 y 4,50 respectivamente en el peor caso) y se oscurecieron
+      hasta los valores de arriba; el ajuste queda anotado en
+      `src/styles/global.css`.
+- [x] Navegando solo con teclado se llega a todos los controles, se despliega
       y se pliega un desglose, y se mueve un peso, con el foco visible en
-      todo momento.
-- [ ] La aplicación sigue mostrando el aviso de fallo de carga —y solo el
+      todo momento. Verificado con Playwright: el primer `Tab` dentro de la
+      clasificación llega al control de despliegue, `Enter` lo activa y
+      cambia `aria-expanded`; el indicador de foco de `technical/0004` se
+      aplica sin excepción porque es una regla global.
+- [x] La aplicación sigue mostrando el aviso de fallo de carga —y solo el
       aviso— cuando el catálogo no carga. El test existente de `App.test.tsx`
       que lo comprueba sigue pasando sin modificar su aserción.
-- [ ] Toda la información que `product/0001` exigía en el desglose sigue
+- [x] Toda la información que `product/0001` exigía en el desglose sigue
       presente: se recorre su lista de criterios y se comprueba uno a uno
-      contra la interfaz nueva.
-- [ ] `npm run format:check`, `npm run lint`, `npm run typecheck`,
+      contra la interfaz nueva. Los diez criterios de `product/0001` se
+      revisaron contra `AxisBreakdownView` y `RankingRow`: todos se cumplen
+      igual que antes de esta spec, la única diferencia visible es que los
+      anclajes por escala absoluta (fase 3) ya no llevan el nombre de un
+      coche —son constantes, no extremos del catálogo—, lo que no es un
+      hueco de esta spec.
+- [x] `npm run format:check`, `npm run lint`, `npm run typecheck`,
       `npm run arch:check`, `npm run test:coverage` y `npm run build` pasan
       en local.
 

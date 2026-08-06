@@ -1,9 +1,9 @@
 # Estado: interfaz de usuario
 
 > Este documento es la **autoridad sobre cómo se presenta el sistema hoy**:
-> qué componentes existen, qué renderiza cada uno y qué no hacen nunca. Si
-> hay duda sobre dónde vive un comportamiento de interfaz, gana lo que diga
-> este documento.
+> qué componentes existen, qué renderiza cada uno, cómo se estila y qué no
+> hacen nunca. Si hay duda sobre dónde vive un comportamiento de interfaz,
+> gana lo que diga este documento.
 
 **Estado:** Activo.
 
@@ -16,7 +16,10 @@ fórmula de puntuación ni recalcula un eje por su cuenta: `ui-no-scoring-intern
 hacia `domain/scoring/axes/`, `normalize.ts` o `mustGet.ts` falle el paso de
 contratos de arquitectura en CI. Lo único que `ui/` importa de
 `domain/scoring/` son tipos, valores por defecto (`DEFAULT_WEIGHTS`,
-`DEFAULT_ASSUMPTIONS`), `applyOverride` y la propia `scoreCatalog`.
+`DEFAULT_ASSUMPTIONS`), `applyOverride` y la propia `scoreCatalog`. El
+porcentaje que muestra cada fila del ranking (`percentage`, ver
+`docs/estado/dominio.md`) es un campo del propio `CarScoreBreakdown`, no un
+cálculo de la interfaz: la regla no tiene excepciones.
 
 La regla de dependencias mira imports, así que no bastaba: la interfaz podía
 —y llegó a hacerlo— acoplarse al dominio por el **texto** de las etiquetas,
@@ -26,41 +29,129 @@ localizan por la clave `editableRating` que el dominio declara. El único uso
 que queda del texto es cosmético —recortar la coletilla «(editable)» del
 rótulo del control— y degrada a no hacer nada si la redacción cambia.
 
+## Sistema de estilos
+
+La aplicación se estila con **CSS propio**: una única hoja global de tokens
+más un `Componente.module.css` por componente que lo necesita, sin
+framework de utilidades ni CSS-in-JS (ADR 0006). No hay valores de diseño
+sueltos fuera de la hoja de tokens: un literal de color, espaciado,
+tipografía o radio en cualquier otro fichero hace fallar
+`scripts/validateStyleTokensRepo.test.ts` en CI.
+
+- **`src/styles/global.css`** — importada una sola vez, desde `src/main.tsx`.
+  Declara todos los tokens en `:root` (siete papeles de color con sus
+  derivados, la escala de espaciado, las dos familias tipográficas y su
+  escala de tamaños, radios, sombras, tamaños propios y los dos puntos de
+  ruptura), el reset mínimo (`box-sizing` heredado, sin márgenes por
+  defecto, controles de formulario con tipografía heredada, `img`/`svg`
+  acotados), el indicador de foco global (`:focus-visible`, un único sitio
+  para toda la aplicación) y la neutralización de transiciones bajo
+  `prefers-reduced-motion: reduce`.
+- **`src/ui/primitives.module.css`** — primitivos compartidos entre
+  componentes: `card` (superficie de tarjeta), `invertedSurface` (fondo
+  `ink`, texto `paper` — la usa solo `LeaderCard`), `label` (rótulo de
+  sección, monoespaciado y en versalitas), `mono` (familia monoespaciada
+  para cualquier cifra), `proportionBar`/`proportionBarRow`/`proportionBarAxis`
+  con su relleno normal o apagado, `statusMark` y `estimatedMark`,
+  `secondaryText`, `prose` (medida de línea acotada a `--size-line-measure`
+  y partición de palabras largas), `visuallyHidden` (texto solo para
+  lectores de pantalla), `rangeInput` (deslizador con objetivo táctil de
+  44×44) y `checkboxRow` (casilla más etiqueta como un único objetivo
+  táctil de 44×44).
+- **La paleta** son siete papeles con nombre por función, no por tono
+  (`--color-paper`, `--color-card`, `--color-ink`, `--color-mute`,
+  `--color-rule`, `--color-accent`, `--color-signal`), más dos derivados
+  (`--color-mute-on-ink` para texto apagado sobre la superficie invertida,
+  `--color-accent-tint` para el fondo de la fila líder). `mute` y `signal`
+  están **oscurecidos** frente al artefacto original —`#5c6b62` y
+  `#a34d18` en vez de `#6b7a72` y `#b4551b`— porque los tonos originales no
+  llegaban a 4,5:1 de contraste sobre `card` ni `paper`; el ajuste vive
+  como comentario junto a la declaración en `global.css`.
+- **Los puntos de ruptura** son dos, `--bp-columna` (592px) y `--bp-ancho`
+  (960px), cada uno con su motivo escrito junto a la declaración. Una media
+  query no puede leer una custom property, así que cada `@media` de
+  `src/ui/` repite el número; `scripts/validateStyleTokens.ts` comprueba que
+  ese número —convertido a la misma unidad— coincida con uno de los dos
+  tokens.
+
 ## Componentes
 
-- **`App.tsx`** — orquesta el estado: pesos, supuestos, presupuesto,
-  filtro de "ocultar fuera de presupuesto" y las valoraciones que el
-  usuario ha sobrescrito por coche. Carga el catálogo una vez al montar; si
-  falla, lo registra con `logError` (`docs/proceso/logging.md`) y renderiza
-  el aviso de error en lugar del ranking. Recalcula `scoreCatalog` en un
-  `useMemo` cada vez que cambian pesos, supuestos, presupuesto o
+- **`App.tsx`** — orquesta el estado: pesos, supuestos, presupuesto, filtro
+  de "ocultar fuera de presupuesto" y las valoraciones que el usuario ha
+  sobrescrito por coche. Carga el catálogo una vez al montar; si falla, lo
+  registra con `logError` (`docs/proceso/logging.md`) y renderiza el aviso
+  de error (`role="alert"`) en lugar del ranking. Recalcula `scoreCatalog`
+  en un `useMemo` cada vez que cambian pesos, supuestos, presupuesto o
   valoraciones — **salvo cuando la carga ha fallado**: las reglas de los
   hooks obligan a que ese `useMemo` corra también en esa rama, así que la
-  guarda va dentro. Puntuar un catálogo vacío lanzaría y se llevaría por
-  delante el propio mensaje de error.
+  guarda va dentro. Compone la página en una columna —título, tarjeta del
+  líder, controles y clasificación— que por encima de `--bp-ancho` pasa a
+  dos columnas: los controles a un lado, la clasificación al otro.
+- **`LeaderCard`** — la única superficie invertida de la interfaz: nombra
+  al coche mejor situado con los pesos vigentes y su `percentage`. Si el
+  filtro de presupuesto deja la lista vacía, no se renderiza.
+- **`CollapsiblePanel`** — el envoltorio que comparten `WeightSliders` y
+  `AssumptionsPanel`: una tarjeta con un control de despliegue real
+  (`aria-expanded`), plegada por defecto con un resumen de una línea. Por
+  debajo de `--bp-columna` empieza plegada; por encima, una media query
+  fuerza el contenido a visible pase lo que pase el estado de React, y
+  esconde el resumen porque en ese caso ya no aporta nada.
+- **`WeightSliders`** — un control 0-10 por eje, en el orden de
+  `AXIS_ORDER`, uno por línea siempre. El valor se apaga a `--color-mute`
+  cuando vale 0.
 - **`AssumptionsPanel`** — el único punto de edición de los supuestos
   globales y del presupuesto. Ningún otro componente ofrece un control para
   ellos.
-- **`WeightSliders`** — un control 0-10 por eje, en el orden de
-  `AXIS_ORDER`.
-- **`RankingList`** — ordena los coches por `total` descendente, aplica el
-  filtro de presupuesto si está activo, y expande/colapsa el desglose
-  completo de un coche a la vez. Cuando un coche está expandido, recorre sus
-  subcomponentes y ofrece un control por cada uno que lleve
-  `editableRating`; no sabe de antemano cuáles son ni cuántos. El valor que
-  muestran es el que trae el propio `AxisBreakdown`, nunca un estado
-  paralelo.
-- **`AxisBreakdownView`** — renderiza un `AxisBreakdown` completo: cabecera
-  (peso, puntuación, aportación), descripción de la fórmula, datos de
-  entrada (valor, unidad, estimado o verificado, fuente vigente y fuentes
-  descartadas con su motivo cuando las hay), supuestos aplicados como texto
-  de solo lectura, subcomponentes (con su propia normalización cuando el eje
-  la calcula por sumando), la normalización del eje cuando existe a ese
-  nivel —rotulada con el `rawUnit` que el eje declara, para que los euros de
-  `coste` se lean como euros—, y las penalizaciones —con «No aplican a este
-  eje.» cuando no hay ninguna—. Una fuente descartada de valor textual se
-  muestra tal cual: `SourceEntrySchema` admite `string`, y convertirlo a
-  número daría `NaN`.
+- **`RankingList`** — ordena los coches por `total` descendente (con
+  `rankVisible`, compartida con `App` para que la tarjeta del líder y la
+  cabeza de la lista nunca se desincronicen), aplica el filtro de
+  presupuesto si está activo, y delega cada fila a `RankingRow`. Recibe
+  también el catálogo crudo (`rawCars`) para leer tecnología, potencia,
+  aceleración y precio: son campos de `Car`, no del desglose, y leerlos
+  directamente evita acoplar la interfaz al texto de una etiqueta del
+  dominio.
+- **`RankingRow`** — una fila de la clasificación con seis elementos
+  independientes, ninguno construido concatenando texto de otro: la
+  posición (monoespaciada, con cero a la izquierda, en un hueco de ancho
+  fijo), el nombre, una línea de apoyo monoespaciada (tecnología, potencia,
+  aceleración, precio, con la marca de estimado cuando aplica), la marca de
+  «Fuera de presupuesto» cuando corresponde, el `percentage` y una barra de
+  proporción. El control que expande el desglose expone `aria-expanded` y
+  su nombre accesible es solo la posición y el nombre del coche —nunca la
+  puntuación ni la marca de presupuesto—. Expandida, muestra primero los
+  controles de valoración editables (los subcomponentes que el dominio
+  marca con `editableRating`; la fila no sabe de antemano cuáles son ni
+  cuántos) y después el desglose completo de los seis ejes.
+- **`AxisBreakdownView`** — renderiza un `AxisBreakdown` completo como un
+  bloque delimitado: cabecera (nombre, peso, puntuación sobre 10,
+  aportación) con su barra de proporción —apagada cuando el peso es 0—,
+  descripción de la fórmula, datos de entrada (valor, unidad, estimado o
+  verificado con `EstimatedMark`, fuente vigente y fuentes descartadas con
+  su motivo cuando las hay), supuestos aplicados como texto de solo
+  lectura, subcomponentes —con sus dos anclajes de escala absoluta como
+  elementos propios («587 L → 10», «250 L → 0»), nunca como texto entre
+  paréntesis—, la normalización del eje cuando existe a ese nivel —rotulada
+  con el `rawUnit` que el eje declara—, y las penalizaciones —con «No
+  aplican a este eje.» cuando no hay ninguna—. Una fuente descartada de
+  valor textual se muestra tal cual: `SourceEntrySchema` admite `string`, y
+  convertirlo a número daría `NaN`.
+- **`EstimatedMark`** — la marca compartida de un dato estimado: la tilde
+  del artefacto (`~`) más una explicación accesible para quien no la
+  perciba visualmente. La usan `RankingRow` (línea de apoyo) y
+  `AxisBreakdownView` (datos de entrada).
+
+## Responsive
+
+Diseño móvil primero: las reglas base valen para 320px y las media queries
+—siempre sobre `--bp-columna` o `--bp-ancho`— añaden a partir de ahí. No hay
+scroll horizontal a ningún ancho probado (320 a 1440px). El texto corrido
+—fórmulas, fuentes, el párrafo introductorio de los supuestos— se acota a
+`--size-line-measure` (75 caracteres) con la utilidad `prose`; el ranking y
+los controles usan el ancho que tengan disponible. Todo objetivo táctil
+—deslizadores, casillas, botones de despliegue— mide al menos 44×44px de
+área accionable. Ninguna altura se fija en unidades de viewport clásicas
+(`vh`): la interfaz no usa ninguna, así que tampoco hay nada que romper con
+la barra de direcciones móvil.
 
 ## Formato
 
@@ -74,16 +165,25 @@ unidad es `€` y `formatNumber` en el resto.
 `AxisBreakdownView.test.tsx`—, pero **no cubren la interfaz entera**: cubren
 los fallos concretos que `technical/0002` corrigió y las invariantes que
 protegen (que el aviso de error se renderice de verdad, que renombrar una
-etiqueta del dominio no rompa los controles, que no aparezca `NaN`).
+etiqueta del dominio no rompa los controles, que no aparezca `NaN`), más las
+invariantes que `product/0009` añadió sobre el marcado (que el control de
+despliegue exponga `aria-expanded`). La puntuación de los once candidatos
+del catálogo real está protegida aparte, en
+`src/domain/scoring/scoreCatalog.snapshot.test.ts`: no es un test de `ui/`,
+pero es la comprobación de que ningún cambio de presentación mueve una
+nota.
 
 Se renderizan con `renderToStaticMarkup` de `react-dom/server`, que ya es
 dependencia. No hay jsdom ni *testing library*: no hacen falta para lo que se
 comprueba, y añadirlas es una dependencia nueva, que se decide aparte. La
-contrapartida es que estos tests no interactúan —no hacen clic ni arrastran—,
-así que el comportamiento interactivo se sigue verificando a mano contra un
-navegador real sobre el build de producción.
+contrapartida es que estos tests no interactúan —no hacen clic ni arrastran,
+no calculan estilos ni tienen viewport—, así que el comportamiento
+interactivo, visual y responsive se verifica a mano contra un navegador real
+sobre el build de producción (`npm run preview`).
 
 `src/ui/` y `src/main.tsx` siguen fuera del suelo de cobertura del 100%
 (`vite.config.ts`, `coverage.include` solo cubre `domain/`, `data/` y
 `logging/`). Si deben entrar es una decisión pendiente, registrada como deuda
-en `docs/roadmap.md`.
+en `docs/roadmap.md`. La hoja de estilos tampoco entra en ese suelo —no
+tiene ramas que ejecutar—, y su propia comprobación mecánica es
+`scripts/validateStyleTokensRepo.test.ts`, no la cobertura de Vitest.
