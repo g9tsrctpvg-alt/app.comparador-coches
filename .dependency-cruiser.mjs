@@ -12,6 +12,17 @@ export default {
       },
     },
     {
+      name: 'domain-no-storage-adapter',
+      comment:
+        'La lectura y escritura de la configuración persistida es un ' +
+        'puerto (product/0012, requisito 16): domain/ declara la forma de ' +
+        'los datos (AppConfig) pero no el adaptador que toca localStorage, ' +
+        'así que tampoco conoce window de forma transitiva.',
+      severity: 'error',
+      from: { path: '^src/domain' },
+      to: { path: '^src/adapters' },
+    },
+    {
       name: 'ui-no-scoring-internals',
       comment:
         'La interfaz solo consume el desglose ya calculado (scoreCatalog) y ' +

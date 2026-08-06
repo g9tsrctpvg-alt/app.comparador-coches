@@ -87,4 +87,128 @@ describe('App', () => {
       expect(markup).not.toContain('aria-label="Ranking"');
     });
   });
+
+  describe('configuración persistente y compartible (product/0012)', () => {
+    function fakeStorage(initial: Record<string, string> = {}) {
+      const map = new Map(Object.entries(initial));
+      return {
+        getItem: (key: string) => map.get(key) ?? null,
+        setItem: (key: string, value: string) => {
+          map.set(key, value);
+        },
+        removeItem: (key: string) => {
+          map.delete(key);
+        },
+      };
+    }
+
+    function stubBrowser({
+      search = '',
+      storage = fakeStorage(),
+    }: {
+      search?: string;
+      storage?: ReturnType<typeof fakeStorage>;
+    } = {}) {
+      vi.stubGlobal('window', {
+        location: { hash: '', search, href: `http://x.test/${search}` },
+        localStorage: storage,
+        addEventListener: () => undefined,
+        removeEventListener: () => undefined,
+      });
+    }
+
+    afterEach(() => {
+      vi.unstubAllGlobals();
+    });
+
+    it('starts from the defaults when nothing is stored and the URL is clean', () => {
+      stubBrowser();
+      const markup = renderToStaticMarkup(<App load={() => threeCarFixture} />);
+      expect(markup).toContain('Presupuesto 47.000 €');
+    });
+
+    it('restores a weight saved in localStorage when the URL is clean', () => {
+      const storage = fakeStorage({
+        'comparador-coches:config': JSON.stringify({
+          version: 1,
+          weights: {
+            viaje: 7,
+            diario: 3,
+            prestaciones: 1,
+            fiabilidad: 2,
+            estetica: 2,
+            coste: 1,
+          },
+          assumptions: {
+            kmPorAnio: 15000,
+            precioLitro: 1.55,
+            precioKwh: 0.45,
+            mezclaEstetica: 0.6,
+            ponderacionAnchoDiario: 0.6,
+            pensandoVender: false,
+            cargaEnCasa: false,
+          },
+          budgetEur: 47000,
+          hideOverBudget: false,
+          overrides: {},
+        }),
+      });
+      stubBrowser({ storage });
+      const markup = renderToStaticMarkup(<App load={() => threeCarFixture} />);
+      expect(markup).toContain('viaje 7');
+    });
+
+    it('prefers the URL over a different configuration saved in localStorage (requisito 3)', () => {
+      const storage = fakeStorage({
+        'comparador-coches:config': JSON.stringify({
+          version: 1,
+          weights: {
+            viaje: 7,
+            diario: 3,
+            prestaciones: 1,
+            fiabilidad: 2,
+            estetica: 2,
+            coste: 1,
+          },
+          assumptions: {
+            kmPorAnio: 15000,
+            precioLitro: 1.55,
+            precioKwh: 0.45,
+            mezclaEstetica: 0.6,
+            ponderacionAnchoDiario: 0.6,
+            pensandoVender: false,
+            cargaEnCasa: false,
+          },
+          budgetEur: 47000,
+          hideOverBudget: false,
+          overrides: {},
+        }),
+      });
+      stubBrowser({ search: '?budget=30000&v=1', storage });
+      const markup = renderToStaticMarkup(<App load={() => threeCarFixture} />);
+      // Gana el enlace (presupuesto 30.000), no lo guardado (peso de viaje a 7).
+      expect(markup).toContain('Presupuesto 30.000 €');
+      expect(markup).not.toContain('viaje 7');
+    });
+
+    it('falls back to defaults when localStorage holds an unknown config version', () => {
+      const storage = fakeStorage({
+        'comparador-coches:config': JSON.stringify({ version: 999 }),
+      });
+      stubBrowser({ storage });
+      const consoleError = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => undefined);
+      const markup = renderToStaticMarkup(<App load={() => threeCarFixture} />);
+      expect(markup).toContain('Presupuesto 47.000 €');
+      consoleError.mockRestore();
+    });
+
+    it('exposes an action to copy the share link and one to reset to defaults', () => {
+      stubBrowser();
+      const markup = renderToStaticMarkup(<App load={() => threeCarFixture} />);
+      expect(markup).toContain('Copiar enlace');
+      expect(markup).toContain('Restablecer valores por defecto');
+    });
+  });
 });

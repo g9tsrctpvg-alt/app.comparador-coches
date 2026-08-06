@@ -6,7 +6,7 @@ export type RatingOverride = Partial<Record<EditableRatingField, number>>;
 
 export class InvalidRatingOverrideError extends Error {}
 
-const EDITABLE_FIELDS: EditableRatingField[] = [
+export const EDITABLE_RATING_FIELDS: EditableRatingField[] = [
   'aestheticsExterior',
   'aestheticsInterior',
   'travelComfort',
@@ -27,7 +27,7 @@ export function applyOverride(
   if (!override) return car;
 
   const result = { ...car };
-  for (const field of EDITABLE_FIELDS) {
+  for (const field of EDITABLE_RATING_FIELDS) {
     const value = override[field];
     if (value === undefined) continue;
 

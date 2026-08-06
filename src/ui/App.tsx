@@ -1,31 +1,23 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { loadCatalog } from '../data/loadCatalog';
 import { loadReferences } from '../data/loadReferences';
 import type { Car } from '../domain/car';
 import type { Reference } from '../domain/reference';
-import {
-  DEFAULT_ASSUMPTIONS,
-  type GlobalAssumptions,
-} from '../domain/scoring/assumptions';
-import { DEFAULT_WEIGHTS, type AxisWeights } from '../domain/scoring/weights';
 import { scoreCatalog } from '../domain/scoring/score';
-import {
-  applyOverride,
-  type RatingOverride,
-} from '../domain/scoring/overrides';
+import { applyOverride } from '../domain/scoring/overrides';
 import { logError } from '../logging/logger';
 import { AssumptionsPanel } from './components/AssumptionsPanel';
 import { WeightSliders } from './components/WeightSliders';
 import { RankingList } from './components/RankingList';
 import { LeaderCard } from './components/LeaderCard';
 import { ViewSwitcher } from './components/ViewSwitcher';
+import { ConfigActions } from './components/ConfigActions';
 import { rankVisible } from './components/ranking';
 import { ExplicacionPage } from './ExplicacionPage';
 import { FichaTecnicaPage } from './FichaTecnicaPage';
 import { EXPLICACION_HASH, useHashRoute } from './useHashRoute';
+import { useConfig } from './useConfig';
 import styles from './App.module.css';
-
-const DEFAULT_BUDGET_EUR = 47000;
 
 interface AppProps {
   load?: () => Car[];
@@ -50,14 +42,24 @@ export function App({
     }
   }, [load, loadReferencesProp]);
 
-  const [weights, setWeights] = useState<AxisWeights>(DEFAULT_WEIGHTS);
-  const [assumptions, setAssumptions] =
-    useState<GlobalAssumptions>(DEFAULT_ASSUMPTIONS);
-  const [budgetEur, setBudgetEur] = useState(DEFAULT_BUDGET_EUR);
-  const [hideOverBudget, setHideOverBudget] = useState(false);
-  const [overrides, setOverrides] = useState<Record<string, RatingOverride>>(
-    {},
+  const validCarIds = useMemo(
+    () =>
+      'error' in catalogResult
+        ? new Set<string>()
+        : new Set(catalogResult.cars.map((car) => car.id)),
+    [catalogResult],
   );
+  const {
+    config,
+    setWeights,
+    setAssumptions,
+    setBudgetEur,
+    setHideOverBudget,
+    setOverride,
+    resetToDefaults,
+    shareUrl,
+  } = useConfig(validCarIds);
+  const { weights, assumptions, budgetEur, hideOverBudget, overrides } = config;
 
   const scored = useMemo(() => {
     // Las reglas de los hooks obligan a que este `useMemo` corra también en
@@ -105,6 +107,7 @@ export function App({
 
       <div className={styles.columns}>
         <div className={styles.controls}>
+          <ConfigActions shareUrl={shareUrl} onReset={resetToDefaults} />
           <WeightSliders weights={weights} onChange={setWeights} />
           <AssumptionsPanel
             assumptions={assumptions}
@@ -119,12 +122,7 @@ export function App({
           cars={scored}
           rawCars={catalogResult.cars}
           hideOverBudget={hideOverBudget}
-          onRatingChange={(carId, override) =>
-            setOverrides((prev) => ({
-              ...prev,
-              [carId]: { ...prev[carId], ...override },
-            }))
-          }
+          onRatingChange={setOverride}
         />
       </div>
     </main>

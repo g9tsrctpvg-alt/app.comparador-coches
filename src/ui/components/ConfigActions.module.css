@@ -1,0 +1,17 @@
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.button {
+  composes: mono from '../primitives.module.css';
+  min-height: var(--size-touch-min);
+  padding: 0 var(--space-3);
+  background: var(--color-card);
+  color: var(--color-ink);
+  border: var(--size-border-hairline) solid var(--color-rule);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: var(--font-size-xs);
+}
