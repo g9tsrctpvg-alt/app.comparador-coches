@@ -30,6 +30,7 @@ const validCar = {
   notes: [],
   lengthMm: sourced(4540),
   widthMm: sourced(1865),
+  wheelbaseMm: sourced(2680),
   heightMm: sourced(1645),
   groundClearanceMm: sourced(170),
   trunkLiters: sourced(587),
@@ -57,6 +58,34 @@ describe('CarSchema', () => {
     const { residualPct5y: _residualPct5y, ...withoutResidual } = validCar;
     const result = CarSchema.safeParse(withoutResidual);
     expect(result.success).toBe(true);
+  });
+
+  it('accepts a warranty extension and keeps it separate from the unconditional years', () => {
+    // product/0007 puntúa solo `warrantyYears`; la extensión es informativa y
+    // no debe confundirse con ella. Un Toyota tiene 3 años incondicionales y
+    // hasta 15 sujetos a mantenimiento en red oficial.
+    const result = CarSchema.safeParse({
+      ...validCar,
+      warrantyYears: sourced(3),
+      warrantyExtension: {
+        years: sourced(15),
+        kmLimit: sourced(250000),
+        condition: 'Exige todos los mantenimientos en red oficial',
+      },
+    });
+    expect(result.success).toBe(true);
+    expect(result.data?.warrantyYears.value).toBe(3);
+    expect(result.data?.warrantyExtension?.years.value).toBe(15);
+  });
+
+  it('rejects a warranty extension with no condition declared', () => {
+    // Una extensión sin condición escrita es indistinguible de garantía
+    // incondicional, que es justo lo que este campo existe para separar.
+    const result = CarSchema.safeParse({
+      ...validCar,
+      warrantyExtension: { years: sourced(15), condition: '' },
+    });
+    expect(result.success).toBe(false);
   });
 
   it('rejects a sourced value whose top-level value does not match the current source', () => {

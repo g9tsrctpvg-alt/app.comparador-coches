@@ -4,7 +4,7 @@
 > tareas y deudas abiertas. `CLAUDE.md` resume y no duplica: al cerrar una
 > fase se actualiza este documento, no el índice.
 
-**Última actualización:** 2026-08-03 (cierre de fase 2)
+**Última actualización:** 2026-08-05
 
 ## Fases
 
@@ -86,14 +86,47 @@ spec.
 
 ## Fase 3 — Migración del artefacto
 
-Depende de la fase 2. Tareas conocidas, aún sin spec:
+| Tarea | Estado |
+| --- | --- |
+| ADR 0004 — puntuación en escala absoluta, no relativa al conjunto | `approved` |
+| `product/0002` — el eje de uso diario, en escala absoluta | `approved` |
+| `product/0003` — el eje de coste, en dos escalas absolutas | `approved` |
+| `product/0004` — el eje de estética, sin normalización | `approved` |
+| `product/0005` — el eje de viaje, objetivado en dos escalas absolutas | `approved` |
+| `product/0006` — el eje de prestaciones, en dos escalas absolutas | `approved` |
+| `product/0007` — el eje de fiabilidad, en dos escalas absolutas | `approved` — cierra los seis ejes |
+| `product/0008` — el tipo de motor, visible en la comparativa | `approved` |
+
+Las ocho pasaron el gate humano el 2026-08-05, en un commit propio sin
+implementación. Acto seguido se actualizó el catálogo con lo que dos de ellas
+necesitaban para poder implementarse con datos ciertos: la columna de batalla
+que `product/0005` exige, las cinco filas de garantía equivocadas que
+`product/0007` habría puntuado, la separación entre garantía incondicional y
+extensión condicionada, el índice OCU con su fuente publicada, y la versión
+del CR-V, que sus 579 L de maletero identifican como la HEV 4x4. Ninguna spec
+está `implemented`: no hay todavía código de eje derivado de ellas.
+
+Tareas conocidas, aún sin spec:
 
 - Traer el artefacto React de un solo fichero al proyecto, extrayendo las
   fórmulas a `src/domain/`.
+- **Página que explique cómo se calcula todo.** Hoy el desglose por eje
+  responde «de dónde sale este número» coche a coche, pero no hay ningún
+  sitio que explique el modelo entero de una vez: qué mide cada eje, cómo se
+  normaliza contra el conjunto, por qué unos ejes normalizan por sumando y
+  otros no, qué significan los pesos y qué supuestos entran en el coste. Es
+  contenido distinto del desglose, no un resumen de él.
 - Diseño responsive real: hoy está pensado para 560 px de ancho máximo.
 - Persistencia en `localStorage` y configuración compartida por URL.
-- Objetivar el eje de viaje, hoy el único que sigue siendo un juicio.
-- Eje subjetivo de conducción, tras probar los coches.
+- **Eje de autonomía y repostaje.** Es la mayor diferencia práctica entre los
+  once candidatos en un viaje largo —los térmicos e híbridos hacen 640-950 km
+  con un depósito, los eléctricos la mitad en autopista— y el modelo es hoy
+  ciego a ella. Queda fuera de `product/0005` a propósito: meter eléctricos y
+  térmicos en una misma escala de alcance mezcla cosas distintas, porque lo
+  que molesta no es solo el alcance sino el tiempo de repostaje.
+- Eje subjetivo de conducción, tras probar los coches. Es donde vuelve el
+  juicio de primera mano que `product/0005` retira de `viaje`: butacas,
+  ruido, suspensión — lo que una ficha técnica no recoge.
 
 ## Deudas abiertas
 
@@ -108,9 +141,12 @@ una sorpresa esperando fecha.
 | **Disparador cumplido:** los gates de CD (smoke tests, canary) se aplazaban hasta que existiera despliegue real; ya existe (GitHub Pages, verde desde `technical/0001`) | 2026-08-03 | Definir smoke test post-deploy en una spec técnica, o registrar por qué se sigue aplazando |
 | `ui/` sigue fuera del suelo de cobertura del 100%. Desde `technical/0002` sí tiene tests, pero solo de los fallos que aquella spec corrigió, y sin interacción: `renderToStaticMarkup` no hace clic ni arrastra, así que lo interactivo se sigue comprobando a mano | 2026-08-03 | Decidir si entra en el suelo de `vite.config.ts`, y si hacen falta jsdom o *testing library* para cubrir la interacción |
 | Fila de referencia del Alfa Romeo Giulietta de la especificación original no está en `cars.json`: `product/0001` no la pedía y queda fuera a propósito, no por olvido | 2026-08-03 | Que una spec futura la pida explícitamente como referencia, o se cierre esta fila descartándola |
-| `estetica` y `coste` combinan sus sumandos en crudo antes de la única normalización del eje, a diferencia de `prestaciones`/`fiabilidad`; el requisito 7 de `product/0001` nombra los cuatro ejes juntos y es ambiguo sobre si debería aplicarles el mismo patrón. Señalado en el PR de implementación, sin respuesta antes del merge | 2026-08-03 | Confirmación humana explícita de la lectura correcta del requisito 7, o una spec nueva si cambia el cálculo |
+| La puntuación de todos los ejes es relativa al conjunto de candidatos: la nota dice en qué puesto va un coche, no si el coche es bueno. Amplifica diferencias irrelevantes —64 mm de anchura estirados a toda la escala—, esconde que los once son parecidos, y entierra al candidato equilibrado. En `diario` además invierte los pesos declarados: 0,6/0,4 acaba siendo 19%/81% | 2026-08-04 | ADR 0004 fija el principio; una spec por eje con sus anclajes. Los seis están escritos y `approved` (`product/0002`…`0007`); la deuda cierra cuando estén implementados y consolidados |
 | Los datos numéricos del catálogo no declaran cota: un precio o una dimensión negativos validan sin error, justo lo que el ADR 0003 citaba como motivo para elegir Zod. Fuera de alcance de `technical/0002` a propósito: son dieciocho campos con cotas distintas, no una regla global | 2026-08-03 | Decidir la cota de cada campo y declararla en `CarSchema`, con test por campo acotado |
+| Al quitar `anios` (`product/0003`), la fórmula de valor residual —`precio × res^(años/5)`— se queda sin horizonte. Hoy no molesta porque «pienso venderlo» está desactivado y la reventa está fuera de alcance, pero la función queda inservible tal como está escrita | 2026-08-04 | Que alguien quiera analizar la reventa: entonces, spec propia que decida con qué horizonte se calcula |
 | `index.html` no declara icono, así que el navegador pide `/favicon.ico` en cada carga y se lleva un 404. Cosmético y preexistente desde `technical/0001` | 2026-08-03 | Añadir un icono, o declarar explícitamente que no se quiere |
+| La aceleración 0-100 del Corolla Cross 140H sigue sin verificar: motor.es publica la del 200H (197 CV, 8,1 s), que las notas del catálogo descartan por maletero, pero no da prestaciones del 140H. El catálogo mantiene 11,1 s estimados, y con escala absoluta (`product/0006`) el error va directo a la nota | 2026-08-05 | Encontrar la cifra en fuente publicada, o declarar el dato como estimado en la interfaz |
+| El índice de fiabilidad de la OCU es **por marca, no por modelo**: 39 marcas sobre 392 modelos analizados. El eje `fiabilidad` puntúa la marca y lo presenta como fiabilidad del coche. No lo arregla ninguna escala | 2026-08-05 | Que exista un índice por modelo publicado, o declarar la limitación en la interfaz |
 | El andamiaje de los seis ejes está copiado casi literal (mapear candidatos → `normalizeAll` → recorrer con `mustGet` → acotar a 0-10 → construir el `Map`): un cambio en la invariante común exige seis ediciones en paralelo sin que nada las obligue a coincidir | 2026-08-03 | Extraer el andamiaje común a un helper en `breakdown.ts`, o registrar por qué se prefiere la repetición |
 
 ## Aplazamientos con disparador
