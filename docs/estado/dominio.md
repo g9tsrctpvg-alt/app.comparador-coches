@@ -67,13 +67,19 @@ cálculo. El `AxisBreakdown` (o el `SubcomponentBreakdown`, en ejes compuestos)
 lleva su `Normalization`: dirección, y qué modelo marca el mínimo y el máximo
 del conjunto recibido, con su valor.
 
-**Escala absoluta** (`scoreOnAbsoluteScale`, `scale.ts`) — la que fija el ADR
-0004 para los ejes ya migrados. Cada magnitud se puntúa contra dos anclajes
-fijos, razonados contra el mundo y no contra el catálogo: uno de saturación
-(nota 10, por debajo o por encima ya no mejora) y uno de rechazo (nota 0). No
-depende de qué otros coches haya en el catálogo: un coche solo en la lista
-saca la misma nota que si hubiera once. Entre anclajes, la nota sigue una
-curva en S (*smoothstep*):
+**Escala absoluta** — la que fija el ADR 0004 para los ejes ya migrados. Cada
+magnitud se puntúa contra dos anclajes fijos, razonados contra el mundo y no
+contra el catálogo: uno de saturación (nota 10, por debajo o por encima ya no
+mejora) y uno de rechazo (nota 0). No depende de qué otros coches haya en el
+catálogo: un coche solo en la lista saca la misma nota que si hubiera once.
+El `SubcomponentBreakdown` de un sumando migrado lleva un `AbsoluteScale`
+—valor, los dos anclajes y la nota— en vez de una `Normalization`; ninguno
+de los dos nombra un modelo del catálogo, porque la escala absoluta no tiene
+extremos que nombrar.
+
+Entre anclajes, la forma de la curva no es única. La mayoría (`diario`,
+`coste`) sigue una curva en S (*smoothstep*, `scoreOnAbsoluteScale` en
+`scale.ts`):
 
 ```text
 t    = posición entre anclajes, 0 en el bueno y 1 en el malo
@@ -82,10 +88,10 @@ nota = 10 × (1 − t²(3 − 2t))
 
 La pendiente es cero en los dos anclajes y máxima en el centro: afinar cerca
 del extremo bueno no compra casi nada, y estar cerca del extremo malo es casi
-tan malo como estarlo. El `SubcomponentBreakdown` de un sumando migrado lleva
-un `AbsoluteScale` —valor, los dos anclajes y la nota— en vez de una
-`Normalization`; ninguno de los dos nombra un modelo del catálogo, porque la
-escala absoluta no tiene extremos que nombrar.
+tan malo como estarlo. `estetica` es la excepción: su escala es lineal, sin
+`scoreOnAbsoluteScale` de por medio — ver su fila en la siguiente sección.
+`AbsoluteScale` no distingue cuál de las dos produjo la nota; describe los
+anclajes y el resultado, no la fórmula entre ambos.
 
 Tres de los dieciocho campos los edita el usuario desde el ranking. El
 subcomponente que los representa lleva la clave `editableRating`
@@ -102,24 +108,32 @@ rango falla en vez de entrar al cálculo.
 | --- | --- | --- |
 | `diario` | `0,6×escala(anchura) + 0,4×escala(longitud)` (ponderación configurable), escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
 | `coste` | `0,5×escala(precio) + 0,5×escala(uso mensual)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
+| `estetica` | `mix×nota_exterior + (1−mix)×nota_interior`, escala absoluta lineal | Cada valoración se traduce a nota antes de combinarse |
 | `prestaciones` | `0,5×norm(CV/t) + 0,5×norm(aceleración invertida)` | Cada sumando se normaliza por separado antes de combinarse |
 | `fiabilidad` | `0,7×norm(OCU) + 0,3×norm(garantía)` | Cada sumando se normaliza por separado antes de combinarse |
-| `estetica` | `mix×nota_exterior + (1−mix)×nota_interior` | Se combina en crudo; el compuesto se normaliza una sola vez |
 | `viaje` | Sin fórmula: la valoración del usuario, normalizada tal cual | Un único sumando |
 
-`diario` y `coste` son, de los seis, los dos ya migrados a escala absoluta —
-`product/0002` y `product/0003`—. Los cuatro restantes siguen con
-normalización relativa hasta que cada uno tenga su propia spec de migración.
+`diario`, `coste` y `estetica` son, de los seis, los tres ya migrados a
+escala absoluta — `product/0002`, `product/0003` y `product/0004`—. Los tres
+restantes siguen con normalización relativa hasta que cada uno tenga su
+propia spec de migración.
 
 `prestaciones` y `fiabilidad` normalizan cada sumando antes de combinarlo
 porque así están escritas sus fórmulas vigentes (`0,x×norm(...) +
-0,y×norm(...)`); `diario` y `coste`, ya migrados, puntúan cada magnitud
-contra su propia escala absoluta antes de combinarla, por el mismo motivo de
-fondo — un peso solo significa lo que dice si se aplica sobre notas ya
-comparables. `estetica` es hoy el único eje que combina sus magnitudes en
-crudo y normaliza el compuesto una sola vez: su fórmula vigente ya estaba
-escrita así, y `product/0001` la muestra —con sus sumandos en crudo como
-pasos intermedios—, sin cambiarla.
+0,y×norm(...)`); `diario`, `coste` y `estetica`, ya migrados, puntúan cada
+magnitud contra su propia escala absoluta antes de combinarla, por el mismo
+motivo de fondo — un peso solo significa lo que dice si se aplica sobre
+notas ya comparables.
+
+**`estetica` es el único de los tres migrados sin curva en S.** Su escala
+absoluta es lineal —`nota = (valoración − 1) × 2,5`—, no *smoothstep*: la
+valoración 1-5 que da el usuario ya es su juicio completo (1 = «no hay nada
+que salvar», 5 = «tan guapo como hace falta»), y comprimir los extremos con
+la misma curva que traduce milímetros o euros deformaría ese juicio dos
+veces. `AbsoluteScale` (`breakdown.ts`) no distingue qué forma de curva
+produjo la nota — describe los dos anclajes y el resultado, no la fórmula
+entre ambos — así que el mismo campo `scale` sirve para los tres ejes ya
+migrados sin necesitar un tipo nuevo.
 
 `diario` lleva una penalización condicional: `−1,5` puntos si el coche es
 eléctrico y el supuesto `cargaEnCasa` está desactivado. Se aplica después de
