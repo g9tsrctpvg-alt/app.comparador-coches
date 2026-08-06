@@ -9,7 +9,9 @@ export const SourceEntrySchema = z.object({
 });
 export type SourceEntry = z.infer<typeof SourceEntrySchema>;
 
-function sourcedValueSchema<Value extends z.ZodTypeAny>(valueSchema: Value) {
+export function sourcedValueSchema<Value extends z.ZodTypeAny>(
+  valueSchema: Value,
+) {
   return z
     .object({
       value: valueSchema,
@@ -50,7 +52,7 @@ function sourcedValueSchema<Value extends z.ZodTypeAny>(valueSchema: Value) {
     });
 }
 
-const SourcedNumberSchema = sourcedValueSchema(z.number());
+export const SourcedNumberSchema = sourcedValueSchema(z.number());
 export type SourcedNumber = {
   value: number;
   unit?: string;

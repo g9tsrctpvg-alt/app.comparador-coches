@@ -141,11 +141,11 @@ peso sería reintroducir a mano lo que el ADR 0004 quita.
 | `product/0010` — diseño responsive real | `consolidated` |
 | `product/0011` — la página que explica cómo se calcula todo | `implemented` |
 | `product/0012` — configuración persistente y compartible | `approved` |
-| `product/0013` — la ficha técnica comparada | `approved` |
+| `product/0013` — la ficha técnica comparada | `implemented` |
 | Cerrar las decisiones abiertas de las seis specs | Hecha — las cinco de producto por decisión propia, y las dos de doc de estado por el ADR 0007, que las contesta a la vez |
 | Gate humano: aprobar los ADR 0006 y 0007 y las seis specs | Hecha — 2026-08-06, en commit propio sin implementación |
 | Implementar, verificar y consolidar `product/0008` | Hecha |
-| Implementar, verificar y consolidar las seis specs nuevas | En marcha — `technical/0004` y `product/0011` implementados (queda por verificar el despliegue real en GitHub Pages en los dos); `product/0008`, `product/0009` y `product/0010` consolidados; `product/0012` y `product/0013` pendientes |
+| Implementar, verificar y consolidar las seis specs nuevas | En marcha — `technical/0004`, `product/0011` y `product/0013` implementados (queda por verificar el despliegue real en GitHub Pages en los tres); `product/0008`, `product/0009` y `product/0010` consolidados; `product/0012` pendiente |
 
 `product/0008` vive aquí y no en la fase 3 porque es presentacional: su propia
 spec declara que no depende del ADR 0004 ni de que ningún eje haya migrado, y

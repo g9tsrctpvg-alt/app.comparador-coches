@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
 
 export const EXPLICACION_HASH = '#/como-se-calcula';
+export const FICHA_TECNICA_HASH = '#/ficha-tecnica';
 
-export type Route = 'comparativa' | 'explicacion';
+export type Route = 'comparativa' | 'explicacion' | 'ficha-tecnica';
 
 function routeFromHash(hash: string): Route {
-  return hash === EXPLICACION_HASH ? 'explicacion' : 'comparativa';
+  if (hash === EXPLICACION_HASH) return 'explicacion';
+  if (hash === FICHA_TECNICA_HASH) return 'ficha-tecnica';
+  return 'comparativa';
 }
 
 /** `renderToStaticMarkup` —lo que usan los tests de `src/ui/`— corre en

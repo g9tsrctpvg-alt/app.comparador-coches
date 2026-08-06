@@ -30,6 +30,14 @@
   --color-mute-on-ink: #8fa69b;
   --color-accent-tint: rgb(20 101 92 / 7%);
 
+  /* Mismo tinte que `--color-accent-tint`, pero opaco: sobre `card`, un 7%
+   * de `accent` da este color sólido. Hace falta donde el tinte
+   * translúcido dejaría ver contenido desplazado por debajo —una celda
+   * fijada (`position: sticky`) sobre una tabla con desplazamiento propio
+   * (product/0013)—, porque ahí sí hay algo pintado detrás en el orden de
+   * apilamiento. */
+  --color-accent-tint-solid: #e2ebe7;
+
   /* Espaciado — una sola escala, en incrementos de 4px. */
   --space-1: 0.25rem;
   --space-2: 0.5rem;

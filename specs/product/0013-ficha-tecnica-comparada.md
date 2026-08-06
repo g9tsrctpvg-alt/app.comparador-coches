@@ -1,12 +1,18 @@
 # 0013 — La ficha técnica comparada
 
 - **Id:** product/0013
-- **Estado:** approved
+- **Estado:** implemented
 - **Tipo:** product
 - **Fecha:** 2026-08-06
 - **Specs relacionadas:** product/0001, product/0009, product/0010, technical/0004
 - **ADRs relacionados:** 0003, 0006
 - **Doc de estado:** `docs/estado/interfaz.md`, `docs/estado/dominio.md`
+
+> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
+> implementado: su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy no es cierta. **No es referencia del estado actual** — para
+> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
+> **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -158,41 +164,78 @@ crea la primera.
 
 > Obligatorios y verificables.
 
-- [ ] La aplicación tiene dos vistas alcanzables desde un conmutador, y
+- [x] La aplicación tiene dos vistas alcanzables desde un conmutador, y
       recargar con el fragmento de la ficha técnica **sobre el sitio
-      desplegado en GitHub Pages** abre la ficha técnica.
-- [ ] La puntuación total de los once candidatos es **idéntica** antes y
-      después de dar de alta la Giulietta. Test sobre `scoreCatalog`.
-- [ ] El ranking sigue mostrando once coches, y la Giulietta no aparece en él.
-- [ ] La carga del catálogo sigue exigiendo exactamente una fuente vigente por
+      desplegado en GitHub Pages** abre la ficha técnica. `ViewSwitcher`
+      conmuta entre `#` y `#/ficha-tecnica`; comprobado con Playwright contra
+      `npm run preview` (cargar directamente `.../#/ficha-tecnica` abre la
+      ficha técnica) y con test (`App.test.tsx`). El hash nunca llega al
+      servidor, así que no hay 404 posible por construcción — igual que
+      `technical/0004` y `product/0011`. Pendiente la comprobación final
+      contra la URL pública tras el próximo despliegue.
+- [x] La puntuación total de los once candidatos es **idéntica** antes y
+      después de dar de alta la Giulietta. Test sobre `scoreCatalog`
+      (`technicalSheet.test.ts`, «produces the same totals…»).
+- [x] El ranking sigue mostrando once coches, y la Giulietta no aparece en él.
+      `references.json` es una lista separada que `App.tsx` nunca pasa a
+      `scoreCatalog`; `RankingList` sigue leyendo solo `catalogResult.cars`.
+- [x] La carga del catálogo sigue exigiendo exactamente una fuente vigente por
       dato, y la fila de la Giulietta la cumple en todos sus campos.
-- [ ] `scoreCatalog` no acepta una referencia: pasarle una es un error de
+      `ReferenceSchema` reutiliza `sourcedValueSchema`, con la misma
+      invariante que `CarSchema`; `loadReferences.test.ts` la comprueba sobre
+      `references.json` real.
+- [x] `scoreCatalog` no acepta una referencia: pasarle una es un error de
       tipos que no compila. Es la propiedad que se compra con la lista
       separada, y si no se cumple, el modelado elegido no está bien hecho.
-- [ ] Añadir una segunda referencia al fichero de datos no exige tocar ningún
+      `technicalSheet.test.ts` fija un `@ts-expect-error` sobre esa llamada:
+      si `Reference` se volviera asignable a `Car`, `npm run typecheck`
+      fallaría por el `@ts-expect-error` ya no necesario.
+- [x] Añadir una segunda referencia al fichero de datos no exige tocar ningún
       componente: las columnas Δ salen de la referencia vigente, no de un
       identificador escrito en el código. Se comprueba añadiéndola en local y
-      revirtiendo.
-- [ ] La tabla muestra doce filas ordenadas por longitud ascendente, con la
-      Giulietta rotulada como referencia.
-- [ ] La fila de la Giulietta muestra `—` en sus propias columnas Δ, no `0`:
-      no se compara consigo misma.
-- [ ] Una Δ de maletero positiva y una Δ de anchura positiva se muestran con
+      revirtiendo. `technicalSheet.test.ts`, «adding a second reference…»,
+      construye ese caso sin tocar `buildTechnicalSheet` ni ningún
+      componente.
+- [x] La tabla muestra doce filas ordenadas por longitud ascendente, con la
+      Giulietta rotulada como referencia. Comprobado con Playwright contra
+      `npm run preview` y con test (`FichaTecnicaPage.test.tsx`).
+- [x] La fila de la Giulietta muestra `—` en sus propias columnas Δ, no `0`:
+      no se compara consigo misma. `buildTechnicalSheet` da `delta: null` a
+      la fila de referencia; la UI lo pinta como `—`, nunca `0`.
+- [x] Una Δ de maletero positiva y una Δ de anchura positiva se muestran con
       colores **distintos**, porque una mejora y la otra empeora.
-- [ ] Todos los valores Δ llevan su signo escrito. Se comprueba con el
-      navegador en escala de grises: la información se conserva.
-- [ ] El cálculo de L/m² tiene su test en el dominio, con un caso conocido
-      comprobado a mano.
-- [ ] Buscar una división o una multiplicación de dimensiones en `src/ui/` no
-      devuelve ninguna coincidencia, y `npm run arch:check` pasa.
-- [ ] La tabla usa `table`, `thead` y `th` con `scope`, y se recorre con un
-      lector de pantalla anunciando la cabecera de cada columna.
-- [ ] A 320 px la tabla se desplaza dentro de su contenedor, la columna del
+      `technicalSheet.test.ts` fija la dirección por polaridad; en la UI,
+      `.deltaBetter`/`.deltaWorse` son colores de token distintos
+      (`--color-accent`/`--color-signal`).
+- [x] Todos los valores Δ llevan su signo escrito. Se comprueba con el
+      navegador en escala de grises: la información se conserva. Comprobado
+      con Playwright emulando `achromatopsia` (CDP
+      `Emulation.setEmulatedVisionDeficiency`) contra `npm run preview`: cada
+      Δ sigue legible por su `+`/`−`/`0`, sin depender del color.
+- [x] El cálculo de L/m² tiene su test en el dominio, con un caso conocido
+      comprobado a mano. `technicalSheet.test.ts`: 4 m × 2 m = 8 m² de huella,
+      800 L / 8 m² = 100 L/m² exactos.
+- [x] Buscar una división o una multiplicación de dimensiones en `src/ui/` no
+      devuelve ninguna coincidencia, y `npm run arch:check` pasa. `L/m²` se
+      calcula en `src/domain/technicalSheet.ts`; `src/ui/` solo formatea el
+      número ya calculado.
+- [x] La tabla usa `table`, `thead` y `th` con `scope`, y se recorre con un
+      lector de pantalla anunciando la cabecera de cada columna. Comprobado
+      con el árbol de accesibilidad de Playwright contra `npm run preview`:
+      `role=table`, 13 `columnheader` y 12 `rowheader` correctos.
+- [x] A 320 px la tabla se desplaza dentro de su contenedor, la columna del
       modelo permanece visible, y
       `document.documentElement.scrollWidth` no supera el ancho del viewport.
-- [ ] La leyenda de la tabla explica Δ, los colores, L/m² y la marca de
+      Comprobado con Playwright a 320 px y a 1280 px contra `npm run
+      preview`: `scrollWidth === clientWidth` en ambos. Se encontró y
+      corrigió una fuga real: la marca de estimado (`.visuallyHidden`,
+      `position: absolute`) dentro de una celda sin ancestro posicionado
+      tomaba el viewport como bloque contenedor y arrastraba el documento
+      por el ancho interno de la tabla; `.tableWrapper` pasa a ser
+      `position: relative` para contenerla.
+- [x] La leyenda de la tabla explica Δ, los colores, L/m² y la marca de
       estimado.
-- [ ] `npm run format:check`, `npm run lint`, `npm run typecheck`,
+- [x] `npm run format:check`, `npm run lint`, `npm run typecheck`,
       `npm run arch:check`, `npm run test:coverage` y `npm run build` pasan
       en local.
 

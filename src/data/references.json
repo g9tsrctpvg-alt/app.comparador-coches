@@ -1,0 +1,68 @@
+[
+  {
+    "id": "alfa-romeo-giulietta",
+    "name": "Giulietta",
+    "brand": "Alfa Romeo",
+    "technology": "ICE",
+    "lengthMm": {
+      "value": 4351,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "auto-data.net, ficha técnica (agosto 2026)",
+          "value": 4351,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "widthMm": {
+      "value": 1798,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "auto-data.net, ficha técnica (agosto 2026)",
+          "value": 1798,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "heightMm": {
+      "value": 1465,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "auto-data.net, ficha técnica (agosto 2026)",
+          "value": 1465,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "groundClearanceMm": {
+      "value": 130,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "Estimación heredada del artefacto original (agosto 2026)",
+          "value": 130,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "trunkLiters": {
+      "value": 350,
+      "unit": "L",
+      "sources": [
+        {
+          "label": "auto-data.net, ficha técnica (agosto 2026)",
+          "value": 350,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    }
+  }
+]
