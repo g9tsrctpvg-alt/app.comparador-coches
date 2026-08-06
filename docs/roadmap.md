@@ -142,10 +142,13 @@ peso sería reintroducir a mano lo que el ADR 0004 quita.
 | `product/0011` — la página que explica cómo se calcula todo | `implemented` |
 | `product/0012` — configuración persistente y compartible | `consolidated` |
 | `product/0013` — la ficha técnica comparada | `implemented` |
+| `product/0014` — la ficha del modelo y sus fotos | `implemented` |
 | Cerrar las decisiones abiertas de las seis specs | Hecha — las cinco de producto por decisión propia, y las dos de doc de estado por el ADR 0007, que las contesta a la vez |
 | Gate humano: aprobar los ADR 0006 y 0007 y las seis specs | Hecha — 2026-08-06, en commit propio sin implementación |
+| Cerrar las cuatro decisiones abiertas de `product/0014` | Hecha — 2026-08-06, por decisión propia |
+| Gate humano: aprobar `product/0014` | Hecha — 2026-08-06, en commit propio sin implementación |
 | Implementar, verificar y consolidar `product/0008` | Hecha |
-| Implementar, verificar y consolidar las seis specs nuevas | En marcha — `technical/0004`, `product/0011` y `product/0013` implementados (queda por verificar el despliegue real en GitHub Pages en los tres, la única deuda que le queda a la fase); `product/0008`, `product/0009`, `product/0010` y `product/0012` consolidados |
+| Implementar, verificar y consolidar las siete specs nuevas | En marcha — `technical/0004`, `product/0011`, `product/0013` y `product/0014` implementados (queda por verificar el despliegue real en GitHub Pages en los cuatro, y `product/0014` tiene además la deuda de las fotos — ver más abajo); `product/0008`, `product/0009`, `product/0010` y `product/0012` consolidados |
 
 `product/0008` vive aquí y no en la fase 3 porque es presentacional: su propia
 spec declara que no depende del ADR 0004 ni de que ningún eje haya migrado, y
@@ -203,26 +206,23 @@ misma —«este coche es bueno en esto»—, y eso solo es interpretable si la
 escala se puede consultar. La escala es justo lo que hace la nota legible, y
 hoy no está en ninguna parte de la aplicación.
 
+**Una séptima tarea se sumó el 2026-08-06, ya con la fase en marcha.**
+`product/0013` había dejado dicho que «la ficha» no estaba declarada en
+ningún sitio: la tabla comparada enseña cinco de las dieciocho magnitudes del
+catálogo, y la aplicación no tenía ni una imagen. `product/0014` responde a
+eso: declara la ficha completa por bloques y añade una tercera vista —una
+columna por modelo, fila por característica, con la columna de nombres y la
+del modelo elegido como comparación fijas a la izquierda, y la foto de cada
+modelo como cabecera de su columna—. Las fotos se enlazan por URL absoluta,
+sin copiarlas al repositorio. Recorrió las cuatro fases de gate y
+`draft → approved → implemented` en la misma sesión de trabajo, con la CI
+entera verde en local y cobertura al 100 %.
+
 ## Más adelante
 
 No pertenece a ninguna fase: es alcance nuevo, no trabajo pendiente de una
 fase abierta. Se lista para no perderlo, no para bloquear nada.
 
-- **La ficha del modelo y sus fotos — `product/0014`, en `draft`.** Alcance
-  nuevo, no migración: hoy «la ficha» no está declarada en ninguna parte —es
-  la lista de columnas que eligió la tabla de `product/0013`, cinco de las
-  dieciocho magnitudes— y la aplicación no tiene ni una imagen. La spec
-  declara la ficha por bloques y añade cinco fotos por modelo (frontal,
-  lateral, trasera con portón cerrado, maletero abierto e interior), incluida
-  la fila de referencia. Sus cuatro decisiones abiertas se cerraron el
-  2026-08-06: las imágenes se **enlazan** por URL absoluta, no hay mínimo de
-  vistas para dar de alta un modelo, la ficha enseña las dieciocho
-  magnitudes, y todo ello en una **pantalla nueva** con una columna por
-  modelo, desplazamiento horizontal, la foto como cabecera de columna y la
-  columna contra la que se compara **elegida por el usuario** —la Giulietta
-  de partida, no por obligación— y fija a la izquierda a cualquier ancho. En
-  un móvil eso es una comparación de dos columnas cada vez. Queda
-  **lista para el gate humano**; pasa a ser fase cuando se apruebe.
 - **Eje de autonomía y repostaje.** Es la mayor diferencia práctica entre los
   once candidatos en un viaje largo —los térmicos e híbridos hacen 640-950 km
   con un depósito, los eléctricos la mitad en autopista— y el modelo es hoy
@@ -272,6 +272,8 @@ una sorpresa esperando fecha.
 | `index.html` no declara icono, así que el navegador pide `/favicon.ico` en cada carga y se lleva un 404. Cosmético y preexistente desde `technical/0001` | 2026-08-03 | Añadir un icono, o declarar explícitamente que no se quiere |
 | La aceleración 0-100 del Corolla Cross 140H sigue sin verificar: motor.es publica la del 200H (197 CV, 8,1 s), que las notas del catálogo descartan por maletero, pero no da prestaciones del 140H. El catálogo mantiene 11,1 s estimados, y con escala absoluta (`product/0006`) el error va directo a la nota | 2026-08-05 | Encontrar la cifra en fuente publicada, o declarar el dato como estimado en la interfaz |
 | El andamiaje de los seis ejes está copiado casi literal (mapear candidatos, puntuar cada magnitud con `scoreOnAbsoluteScale`, acotar a 0-10, construir el `Map`): un cambio en la invariante común exige seis ediciones en paralelo sin que nada las obligue a coincidir. `normalizeAll` (`normalize.ts`) ya no lo llama ningún eje —los seis migraron a escala absoluta—, y sigue en el árbol sin más uso que su propio test | 2026-08-03 | Extraer el andamiaje común a un helper en `breakdown.ts`, o registrar por qué se prefiere la repetición. Decidir si `normalizeAll` se retira o se conserva para un eje futuro que vuelva a necesitar normalización relativa |
+| `product/0014` está `implemented` sin ninguna foto real: los once candidatos y la Giulietta tienen el bloque `photos` declarado pero vacío. `npm run check:photos` existe y funciona, pero no hay ninguna URL que comprobar todavía | 2026-08-06 | Conseguir las sesenta URLs (cinco vistas × doce modelos) enlazando material de prensa oficial, con `credit` y `shows` verificados contra el acabado real del catálogo, y correr `check:photos` en verde antes de pasar la spec a `verified` |
+| `product/0014` tiene cinco criterios de aceptación que exigen revisión manual en navegador —el hueco de foto a igual tamaño con y sin ella, las dos columnas fijas visibles al desplazar, la legibilidad a 320px, la apertura/cierre del diálogo por teclado con devolución de foco, y que la página nunca se desplace en horizontal—, más el despliegue real en GitHub Pages para `#/ficha-completa`, en la misma situación que `product/0011` y `product/0013` | 2026-08-06 | Verificar los cinco criterios a mano y el despliegue real, y pasar la spec a `verified` |
 
 ## Aplazamientos con disparador
 

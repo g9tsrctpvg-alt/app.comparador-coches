@@ -13,7 +13,8 @@
     "format:check": "prettier --check .",
     "arch:check": "depcruise --config .dependency-cruiser.mjs --output-type err src",
     "test": "vitest run",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "check:photos": "node scripts/checkPhotos.ts"
   },
   "dependencies": {
     "react": "^19.0.0",
@@ -22,6 +23,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@types/node": "^26.1.2",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^6.0.5",

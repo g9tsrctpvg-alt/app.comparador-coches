@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { PhotosSchema } from './photo';
 
 export const SourceEntrySchema = z.object({
   label: z.string().min(1),
@@ -111,5 +112,6 @@ export const CarSchema = z.object({
   aestheticsExterior: UserRatingSchema,
   aestheticsInterior: UserRatingSchema,
   travelComfort: UserRatingSchema,
+  photos: PhotosSchema,
 });
 export type Car = z.infer<typeof CarSchema>;

@@ -31,6 +31,7 @@ function minimalReference(overrides: Record<string, unknown> = {}) {
     heightMm: sourced(1465, 'mm'),
     groundClearanceMm: sourced(130, 'mm'),
     trunkLiters: sourced(350, 'L'),
+    photos: {},
     ...overrides,
   };
 }

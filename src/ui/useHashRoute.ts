@@ -2,12 +2,15 @@ import { useEffect, useState } from 'react';
 
 export const EXPLICACION_HASH = '#/como-se-calcula';
 export const FICHA_TECNICA_HASH = '#/ficha-tecnica';
+export const FICHA_COMPLETA_HASH = '#/ficha-completa';
 
-export type Route = 'comparativa' | 'explicacion' | 'ficha-tecnica';
+export type Route =
+  'comparativa' | 'explicacion' | 'ficha-tecnica' | 'ficha-completa';
 
 function routeFromHash(hash: string): Route {
   if (hash === EXPLICACION_HASH) return 'explicacion';
   if (hash === FICHA_TECNICA_HASH) return 'ficha-tecnica';
+  if (hash === FICHA_COMPLETA_HASH) return 'ficha-completa';
   return 'comparativa';
 }
 

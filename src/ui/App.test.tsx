@@ -2,7 +2,11 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { App } from './App';
 import { threeCarFixture } from '../domain/scoring/testFixtures';
-import { EXPLICACION_HASH, FICHA_TECNICA_HASH } from './useHashRoute';
+import {
+  EXPLICACION_HASH,
+  FICHA_COMPLETA_HASH,
+  FICHA_TECNICA_HASH,
+} from './useHashRoute';
 
 describe('App', () => {
   it('renders the declared error message when the catalogue fails to load', () => {
@@ -45,6 +49,11 @@ describe('App', () => {
     expect(markup).toContain('aria-label="Vista"');
   });
 
+  it('links from the comparator to the ficha completa, by fragment (product/0014)', () => {
+    const markup = renderToStaticMarkup(<App load={() => threeCarFixture} />);
+    expect(markup).toContain(`href="${FICHA_COMPLETA_HASH}"`);
+  });
+
   describe('with the explanation fragment already in the URL', () => {
     afterEach(() => {
       vi.unstubAllGlobals();
@@ -84,6 +93,25 @@ describe('App', () => {
 
       const markup = renderToStaticMarkup(<App load={() => threeCarFixture} />);
       expect(markup).toContain('<table');
+      expect(markup).not.toContain('aria-label="Ranking"');
+    });
+  });
+
+  describe('with the ficha completa fragment already in the URL', () => {
+    afterEach(() => {
+      vi.unstubAllGlobals();
+    });
+
+    it('renders the ficha completa instead of the comparator (product/0014)', () => {
+      vi.stubGlobal('window', {
+        location: { hash: FICHA_COMPLETA_HASH },
+        addEventListener: () => undefined,
+        removeEventListener: () => undefined,
+      });
+
+      const markup = renderToStaticMarkup(<App load={() => threeCarFixture} />);
+      expect(markup).toContain('<table');
+      expect(markup).toContain('name="pinned-model"');
       expect(markup).not.toContain('aria-label="Ranking"');
     });
   });

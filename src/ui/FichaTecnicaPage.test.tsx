@@ -10,6 +10,7 @@ function referenceFixture(overrides: Partial<Reference> = {}): Reference {
     name: 'Giulietta',
     brand: 'Alfa Romeo',
     technology: 'ICE',
+    photos: {},
     lengthMm: {
       value: 4351,
       unit: 'mm',

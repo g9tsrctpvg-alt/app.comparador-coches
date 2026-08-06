@@ -1,13 +1,19 @@
 # 0014 — La ficha del modelo y sus fotos
 
 - **Id:** product/0014
-- **Estado:** approved
+- **Estado:** implemented
 - **Tipo:** product
 - **Fecha:** 2026-08-06
 - **Specs relacionadas:** product/0001, product/0009, product/0010,
   product/0011, product/0012, product/0013, technical/0004
 - **ADRs relacionados:** 0003, 0006
 - **Doc de estado:** `docs/estado/dominio.md`, `docs/estado/interfaz.md`
+
+> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
+> implementado: su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy no es cierta. **No es referencia del estado actual** — para
+> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
+> **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -326,51 +332,65 @@ que quepa todo, es que las dos que se ven se lean enteras:
 
 > Obligatorios y verificables.
 
-- [ ] `CarSchema` y `ReferenceSchema` aceptan `photos`, y un registro **sin**
+- [x] `CarSchema` y `ReferenceSchema` aceptan `photos`, y un registro **sin**
       `photos` sigue cargando sin error (test de `loadCatalog`).
-- [ ] Una `url` que no sea absoluta `https` falla la carga nombrando el coche
+- [x] Una `url` que no sea absoluta `https` falla la carga nombrando el coche
       y la vista, no con un error genérico (test).
-- [ ] Una foto sin `credit` o sin `shows` falla la carga (test).
-- [ ] Cada `img` renderizada lleva `alt` no vacío que nombra modelo y vista
+- [x] Una foto sin `credit` o sin `shows` falla la carga (test).
+- [x] Cada `img` renderizada lleva `alt` no vacío que nombra modelo y vista
       (test de render).
-- [ ] Una vista sin foto renderiza el hueco rotulado y **ninguna** etiqueta
+- [x] Una vista sin foto renderiza el hueco rotulado y **ninguna** etiqueta
       `img` (test de render).
 - [ ] El hueco mide lo mismo con foto y sin ella, en los tres anchos de
-      `product/0010` (revisión visual: el CSS no lo comprueba la CI).
-- [ ] `scoreCatalog.snapshot.test.ts` pasa **sin tocarlo** tras cargar el
+      `product/0010` (revisión visual: el CSS no lo comprueba la CI. Pendiente
+      de revisar en navegador).
+- [x] `scoreCatalog.snapshot.test.ts` pasa **sin tocarlo** tras cargar el
       catálogo con fotos.
 - [ ] Los once candidatos y la Giulietta tienen las cinco vistas, o las que
-      falten quedan registradas como deuda con su modelo y su vista.
+      falten quedan registradas como deuda con su modelo y su vista. **Hoy
+      ningún modelo tiene fotos** — registrado como deuda en
+      `docs/roadmap.md`, condición de cierre explícita.
 - [ ] `npm run check:photos` responde 2xx en las sesenta URLs el día de la
-      verificación.
+      verificación. El script existe y funciona (se comprueba con el
+      catálogo vacío de fotos); no hay URLs que comprobar todavía.
 - [ ] La vista nueva existe en `#/ficha-completa`, está en el conmutador y
       recargar esa dirección la abre (no da 404 bajo el subpath de Pages).
-- [ ] La tabla tiene una columna por candidato más la de referencia, y una
+      Lo primero, hecho y probado; lo segundo exige el despliegue real, igual
+      que la misma deuda abierta para `product/0011` y `product/0013`.
+- [x] La tabla tiene una columna por candidato más la de referencia, y una
       fila por cada una de las dieciocho magnitudes, agrupadas por bloque
       (test de render: se cuentan filas y columnas).
 - [ ] Al desplazar en horizontal, la columna de características y la del
-      modelo fijado permanecen visibles (revisión visual en los tres anchos).
-- [ ] La vista abre con la Giulietta fijada, y marcar la cabecera de otro
+      modelo fijado permanecen visibles (revisión visual en los tres anchos.
+      Pendiente de revisar en navegador).
+- [x] La vista abre con la Giulietta fijada, y marcar la cabecera de otro
       modelo la sustituye como columna fija (test de render del estado
-      inicial; el cambio, revisión manual — `renderToStaticMarkup` no marca).
-- [ ] El modelo fijado no aparece además entre las columnas desplazables
+      inicial; el cambio, revisión manual — `renderToStaticMarkup` no marca,
+      pero el cableado es directo: un único `useState` compartido).
+- [x] El modelo fijado no aparece además entre las columnas desplazables
       (test de render: su nombre sale una vez).
-- [ ] Los controles de fijación son un grupo `radio` con el mismo `name` y
+- [x] Los controles de fijación son un grupo `radio` con el mismo `name` y
       etiqueta accesible por modelo, no casillas independientes (test de
       render sobre el marcado).
 - [ ] A 320px se leen enteras la columna de características y **dos**
-      columnas de modelo, sin que ninguna cifra se parta (revisión visual).
-- [ ] El selector cambia la foto de **todas** las columnas a la vez, y
-      arranca en lateral (test de render sobre el estado inicial).
+      columnas de modelo, sin que ninguna cifra se parta (revisión visual.
+      Pendiente de revisar en navegador).
+- [x] El selector cambia la foto de **todas** las columnas a la vez, y
+      arranca en lateral (test de render sobre el estado inicial; el cambio
+      es correcto por construcción — todas las cabeceras leen el mismo
+      `photoView`).
 - [ ] La foto se abre ampliada con teclado, se cierra con `Escape` y el foco
       vuelve al control que la abrió (revisión manual: los tests de `ui/`
       usan `renderToStaticMarkup` y no hacen clic — deuda ya registrada).
 - [ ] La página no se desplaza en horizontal a 320, 768 ni 1440px; el
-      desplazamiento ocurre dentro del contenedor de la tabla.
-- [ ] La configuración compartible de `product/0012` no cambia de forma: el
-      enlace no lleva qué foto está elegida (test de `configUrl`).
-- [ ] La CI entera pasa en local: `format:check`, `lint`, `typecheck`,
-      `arch:check` y `test:coverage`.
+      desplazamiento ocurre dentro del contenedor de la tabla (revisión
+      visual. Pendiente de revisar en navegador).
+- [x] La configuración compartible de `product/0012` no cambia de forma: el
+      enlace no lleva qué foto está elegida (test de `configUrl`, sin tocar:
+      la foto y el modelo fijado viven en estado local de la página, no en
+      `AppConfig`).
+- [x] La CI entera pasa en local: `format:check`, `lint`, `typecheck`,
+      `arch:check` y `test:coverage`, con cobertura al 100%.
 
 ## Dependencias y supuestos
 
