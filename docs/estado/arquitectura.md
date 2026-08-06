@@ -18,9 +18,10 @@ npm**, decidida en `docs/decisions/0003-stack.md`. TypeScript corre en modo
 
 ```text
 src/
-  domain/     núcleo: tipos, dominio de puntuación y validación, sin conocer UI ni React
+  domain/     núcleo: tipos, dominio de puntuación, configuración y validación, sin conocer UI ni React
     scoring/  motor de puntuación explicable — ver docs/estado/dominio.md
   data/       carga y validación del catálogo (JSON + Zod)
+  adapters/   puertos hacia el navegador que domain/ declara pero no importa
   logging/    logger de navegador, forma de campos OTel
   ui/         componentes React — ver docs/estado/interfaz.md
   main.tsx    único punto de wiring
@@ -49,6 +50,26 @@ de esa declaración (`z.infer<typeof CarSchema>`), no al revés.
 
 `ui/` y `main.tsx` dependen de `domain/`, `data/` y `logging/`; nunca al
 contrario.
+
+## Puertos
+
+Cuando el dominio necesita algo de una capa externa —el navegador, en este
+proyecto—, lo declara como **puerto**: una forma de datos y unas funciones
+que `domain/` define y usa, sin importar quién las implementa. El adaptador
+que sí toca el navegador vive en `src/adapters/`, y el *wiring* —pasar el
+adaptador real a quien lo necesita— vive en el punto de arranque de la
+pieza que lo consume (`docs/proceso/estilo.md` §1).
+
+El primer puerto es la configuración persistida (product/0012):
+`src/domain/config.ts` declara `AppConfig` y `restoreConfig`, puros, sin
+`window`; `src/adapters/localStorageConfigPort.ts` es quien lee y escribe
+`localStorage`. La regla `domain-no-storage-adapter`
+(`.dependency-cruiser.mjs`) hace que un import de `src/domain/` hacia
+`src/adapters/` falle el paso de contratos de arquitectura en CI, así que
+`domain/` no conoce `window` ni de forma transitiva. El detalle de qué se
+persiste y cómo vive en `docs/estado/interfaz.md`, que es el doc de estado
+de esa spec para el comportamiento; este documento solo fija el patrón
+estructural.
 
 ## Carga y validación de datos
 

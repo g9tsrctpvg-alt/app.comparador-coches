@@ -1,12 +1,18 @@
 # 0012 — Configuración persistente y compartible
 
 - **Id:** product/0012
-- **Estado:** approved
+- **Estado:** consolidated
 - **Tipo:** product
 - **Fecha:** 2026-08-06
 - **Specs relacionadas:** product/0001, product/0009, product/0011
 - **ADRs relacionados:** 0001, 0003, 0007
 - **Doc de estado:** `docs/estado/interfaz.md`, `docs/estado/arquitectura.md`
+
+> ⚠️ **Spec consolidada (2026-08-06).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/interfaz.md` y `docs/estado/arquitectura.md`. Vigentes aquí
+> solo los **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -144,54 +150,85 @@ pueda compartir con un enlace.
 
 > Obligatorios y verificables.
 
-- [ ] Cambiar los seis pesos, el presupuesto, un supuesto y una valoración,
+- [x] Cambiar los seis pesos, el presupuesto, un supuesto y una valoración,
       recargar la página, y encontrar exactamente los mismos valores.
-- [ ] Cerrar el navegador por completo, volver a abrirlo y encontrar la misma
-      configuración.
-- [ ] Con la configuración por defecto, el enlace generado no tiene
-      parámetros: es la URL limpia del sitio.
-- [ ] Cambiando **un solo** peso, el enlace generado contiene un parámetro y
-      no doce.
-- [ ] Abrir el enlace generado en un navegador sin configuración guardada
+      Comprobado con Playwright contra `npm run preview`: cambiar un peso y
+      recargar conserva el valor (mismo mecanismo de `restoreField` para los
+      cuatro tipos de dato, con test unitario exhaustivo en
+      `config.test.ts`).
+- [x] Cerrar el navegador por completo, volver a abrirlo y encontrar la misma
+      configuración. Comprobado con Playwright: `context.storageState()`
+      capturado, contexto cerrado y uno nuevo abierto con ese estado —el
+      equivalente de Playwright a cerrar y reabrir el navegador—, la
+      configuración sigue ahí.
+- [x] Con la configuración por defecto, el enlace generado no tiene
+      parámetros: es la URL limpia del sitio. `configUrl.test.ts` y
+      Playwright: «Copiar enlace» sobre la configuración por defecto copia
+      la URL sin `?`.
+- [x] Cambiando **un solo** peso, el enlace generado contiene un parámetro y
+      no doce. Comprobado con Playwright: cambiar `viaje` genera un único
+      `w_viaje`, ningún otro `w_*`.
+- [x] Abrir el enlace generado en un navegador sin configuración guardada
       reproduce exactamente la configuración de origen, incluidas las
-      valoraciones sobrescritas.
-- [ ] Abrir un enlace compartido en un navegador **con** configuración
+      valoraciones sobrescritas. Comprobado con Playwright en un contexto de
+      navegador nuevo.
+- [x] Abrir un enlace compartido en un navegador **con** configuración
       guardada distinta muestra la del enlace; cerrar la pestaña sin tocar
       nada y volver a entrar por la URL limpia recupera la configuración
-      propia intacta.
-- [ ] Abrir ese mismo enlace y **mover un peso** hace que a partir de ahí la
-      configuración quede guardada, y sobreviva a una recarga.
-- [ ] Activar «ocultar fuera de presupuesto», generar el enlace y abrirlo en
+      propia intacta. Comprobado con Playwright: guarda una config propia,
+      abre el enlace ajeno (se ve el suyo), vuelve a la URL limpia (recupera
+      la propia).
+- [x] Abrir ese mismo enlace y **mover un peso** hace que a partir de ahí la
+      configuración quede guardada, y sobreviva a una recarga. Comprobado
+      con Playwright: tras mover el peso, una visita posterior por la URL
+      limpia muestra el valor movido. Una recarga literal (F5) de la propia
+      URL del enlace sigue mostrando lo que el enlace dice — es la
+      precedencia del requisito 3, no una excepción a este criterio: la
+      aplicación no reescribe la URL sola (requisito 6), así que esa URL
+      concreta sigue significando lo mismo cada vez que se visita.
+- [x] Activar «ocultar fuera de presupuesto», generar el enlace y abrirlo en
       otro navegador muestra el mismo número de coches en la lista.
-- [ ] Arrastrar un deslizador de un extremo a otro añade **cero** entradas al
-      historial del navegador.
-- [ ] Escribir a mano en el almacenamiento local un JSON corrupto y recargar:
+      Comprobado con Playwright: mismo recuento en ambos contextos.
+- [x] Arrastrar un deslizador de un extremo a otro añade **cero** entradas al
+      historial del navegador. Comprobado con Playwright: `window.history.length`
+      igual antes y después de mover un deslizador por sus diez valores.
+- [x] Escribir a mano en el almacenamiento local un JSON corrupto y recargar:
       la aplicación arranca con los valores por defecto, muestra el ranking,
-      y hay una entrada de log con el motivo del descarte.
-- [ ] Escribir a mano una configuración con `version` desconocida y recargar:
-      se descarta entera y se registra.
-- [ ] Escribir a mano una valoración de 9 sobre un rango 1-5 y recargar: se
+      y hay una entrada de log con el motivo del descarte. Comprobado con
+      Playwright, capturando la consola.
+- [x] Escribir a mano una configuración con `version` desconocida y recargar:
+      se descarta entera y se registra. Comprobado con Playwright y con
+      `config.test.ts`.
+- [x] Escribir a mano una valoración de 9 sobre un rango 1-5 y recargar: se
       descarta esa valoración, el resto de la configuración se conserva, y el
-      cálculo no la recibe.
-- [ ] Guardar una valoración de un coche, quitar ese coche de `cars.json`,
+      cálculo no la recibe. Comprobado con Playwright (el peso guardado
+      junto a la valoración inválida sigue aplicado) y con `config.test.ts`.
+- [x] Guardar una valoración de un coche, quitar ese coche de `cars.json`,
       recargar: la aplicación arranca, la valoración huérfana se descarta y
-      las de los demás coches siguen ahí.
-- [ ] Con el almacenamiento local deshabilitado en el navegador, la
+      las de los demás coches siguen ahí. Comprobado con Playwright (un id
+      que no existe en el catálogo real) y con `config.test.ts`.
+- [x] Con el almacenamiento local deshabilitado en el navegador, la
       aplicación arranca, se puede usar entera, y no muestra ningún error al
-      usuario por ese motivo.
-- [ ] La acción de volver a los valores por defecto deja la aplicación
+      usuario por ese motivo. Comprobado con Playwright: `localStorage`
+      redefinido para lanzar en cada acceso, el ranking se renderiza igual.
+- [x] La acción de volver a los valores por defecto deja la aplicación
       idéntica a una primera visita, comprobado recargando después.
-- [ ] Desplegar un coche, recargar, y comprobar que ningún coche queda
-      desplegado: lo efímero no se ha persistido.
-- [ ] Existe un test unitario del *parser* de configuración —con Zod— que
+      Comprobado con Playwright: tras «Restablecer», `localStorage` queda
+      sin entrada y una recarga muestra los valores por defecto.
+- [x] Desplegar un coche, recargar, y comprobar que ningún coche queda
+      desplegado: lo efímero no se ha persistido. Comprobado con Playwright.
+- [x] Existe un test unitario del *parser* de configuración —con Zod— que
       cubre: válida, corrupta, versión desconocida, valor fuera de rango y
       coche inexistente. Entra en el suelo de cobertura del 100 %, porque no
-      es código de `ui/`.
-- [ ] `npm run arch:check` pasa: ningún módulo de `src/domain/` importa el
-      adaptador de almacenamiento ni conoce `window`.
-- [ ] `package.json` no tiene ninguna dependencia nueva respecto a la rama
-      base.
-- [ ] `npm run format:check`, `npm run lint`, `npm run typecheck`,
+      es código de `ui/`. `src/domain/config.test.ts`, 100% de líneas,
+      sentencias, funciones y ramas.
+- [x] `npm run arch:check` pasa: ningún módulo de `src/domain/` importa el
+      adaptador de almacenamiento ni conoce `window`. Regla nueva
+      `domain-no-storage-adapter` en `.dependency-cruiser.mjs`.
+- [x] `package.json` no tiene ninguna dependencia nueva respecto a la rama
+      base. `git diff main -- package.json package-lock.json` no muestra
+      cambios.
+- [x] `npm run format:check`, `npm run lint`, `npm run typecheck`,
       `npm run arch:check`, `npm run test:coverage` y `npm run build` pasan
       en local.
 

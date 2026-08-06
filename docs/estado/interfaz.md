@@ -76,17 +76,19 @@ tipografía o radio en cualquier otro fichero hace fallar
 
 ## Componentes
 
-- **`App.tsx`** — orquesta el estado: pesos, supuestos, presupuesto, filtro
-  de "ocultar fuera de presupuesto" y las valoraciones que el usuario ha
-  sobrescrito por coche. Carga el catálogo una vez al montar; si falla, lo
-  registra con `logError` (`docs/proceso/logging.md`) y renderiza el aviso
-  de error (`role="alert"`) en lugar del ranking. Recalcula `scoreCatalog`
-  en un `useMemo` cada vez que cambian pesos, supuestos, presupuesto o
-  valoraciones — **salvo cuando la carga ha fallado**: las reglas de los
-  hooks obligan a que ese `useMemo` corra también en esa rama, así que la
-  guarda va dentro. Compone la página en una columna —título, tarjeta del
-  líder, controles y clasificación— que por encima de `--bp-ancho` pasa a
-  dos columnas: los controles a un lado, la clasificación al otro.
+- **`App.tsx`** — orquesta la vista de clasificación. Carga el catálogo una
+  vez al montar; si falla, lo registra con `logError`
+  (`docs/proceso/logging.md`) y renderiza el aviso de error (`role="alert"`)
+  en lugar del ranking. Pesos, supuestos, presupuesto, filtro de "ocultar
+  fuera de presupuesto" y valoraciones sobrescritas ya no son `useState`
+  propio: vienen del hook `useConfig` (ver «Configuración persistente y
+  compartible» más abajo). Recalcula `scoreCatalog` en un `useMemo` cada vez
+  que cambia la configuración — **salvo cuando la carga ha fallado**: las
+  reglas de los hooks obligan a que ese `useMemo` corra también en esa
+  rama, así que la guarda va dentro. Compone la página en una columna
+  —título, conmutador de vista, tarjeta del líder, controles y
+  clasificación— que por encima de `--bp-ancho` pasa a dos columnas: los
+  controles a un lado, la clasificación al otro.
 - **`LeaderCard`** — la única superficie invertida de la interfaz: nombra
   al coche mejor situado con los pesos vigentes y su `percentage`. Si el
   filtro de presupuesto deja la lista vacía, no se renderiza.
@@ -142,6 +144,66 @@ tipografía o radio en cualquier otro fichero hace fallar
   del artefacto (`~`) más una explicación accesible para quien no la
   perciba visualmente. La usan `RankingRow` (línea de apoyo) y
   `AxisBreakdownView` (datos de entrada).
+- **`ConfigActions`** (product/0012) — dos botones sobre la clasificación:
+  «Copiar enlace» —genera la URL compartible con `useConfig().shareUrl()` y
+  la copia con la Clipboard API; si falla (contexto no seguro, permiso
+  denegado) no hace nada visible, el botón sigue disponible— y «Restablecer
+  valores por defecto», que llama a `resetToDefaults()`. El primero cambia
+  su propio rótulo a «Enlace copiado» durante dos segundos tras copiar.
+
+## Configuración persistente y compartible
+
+product/0012. `useConfig` (`src/ui/useConfig.ts`) es el *wiring* entre el
+dominio —esquema y restauración puros, sin `window`— y el navegador: URL y
+`localStorage`, este último detrás de un puerto. `App.tsx` solo consume
+`config` y llama a sus `set*`; ningún componente llama a `localStorage`
+directamente.
+
+- **Un único objeto de configuración**, `AppConfig`
+  (`src/domain/config.ts`): pesos, supuestos, presupuesto, el filtro de
+  presupuesto y las valoraciones sobrescritas por coche. Es el único objeto
+  que se persiste y el único que se comparte. El filtro de presupuesto
+  viaja con la configuración a propósito: sin él, un enlace compartido no
+  reproduce la misma lista de coches.
+- **Precedencia**: lo que trae la URL gana sobre lo guardado en
+  `localStorage`, que gana sobre los valores por defecto
+  (`DEFAULT_CONFIG`). Una fuente que se descarta entera —versión
+  desconocida, JSON corrupto, no objeto— no cuenta como «hay configuración
+  ahí»: se prueba la siguiente fuente en la precedencia
+  (`resolveInitialConfig`, dentro de `useConfig`).
+- **Abrir un enlace no persiste hasta el primer cambio**: `useConfig` marca
+  la configuración inicial como «de un enlace» cuando viene de la URL, y no
+  escribe en `localStorage` hasta que el usuario mueve algo. A partir de
+  ahí, la marca se limpia y el guardado sigue las reglas normales para el
+  resto de la sesión. Como la aplicación nunca reescribe la URL sola
+  (requisito 6 de la spec), recargar la **misma** URL de un enlace sigue
+  mostrando lo que el enlace dice —es la precedencia, no una excepción—; lo
+  guardado aparece al volver por una URL limpia.
+- **Restauración con degradación por partes** (`restoreConfig`,
+  `src/domain/config.ts`): un campo presente pero inválido se descarta y
+  cae a su valor por defecto, y se registra con `logError`
+  (`docs/proceso/logging.md`); un campo simplemente ausente no cuenta como
+  descarte y no se registra —así el enlace puede omitir todo lo que no ha
+  cambiado sin generar ruido en los registros—. Las valoraciones
+  sobrescritas se restauran por coche y por campo: una nota fuera de rango
+  descarta solo esa nota, no las demás del mismo coche; un coche que ya no
+  está en el catálogo descarta todas las suyas.
+- **El enlace compartible** (`src/domain/configUrl.ts`,
+  `configToParams`/`paramsToRawConfig`) solo lleva lo que se aparta de los
+  valores por defecto, un parámetro por dato con nombre corto —`w_<eje>`,
+  `a_<supuesto>`, `budget`, `hideOverBudget`, `o_<carId>_<campo>`—, más `v`
+  con la versión, presente solo si hay algún otro parámetro. Con la
+  configuración por defecto, el enlace generado es la URL limpia del sitio.
+- **El puerto de almacenamiento** es `src/adapters/localStorageConfigPort.ts`
+  (`loadRawConfig`, `saveConfig`, `clearConfig`): el único módulo que toca
+  `window.localStorage`. `src/domain/` no lo importa —lo comprueba la regla
+  `domain-no-storage-adapter` de `.dependency-cruiser.mjs`—, así que tampoco
+  conoce `window` de forma transitiva. Si el almacenamiento no está
+  disponible (modo privado, cuota agotada, permiso denegado), la aplicación
+  sigue funcionando sin persistencia; se registra una vez por carga de
+  página, no en cada intento de guardar.
+- **Lo efímero no se persiste**: qué fila del ranking está desplegada vive
+  en el `useState` local de `RankingList`, fuera de `AppConfig`.
 
 ## Responsive
 
