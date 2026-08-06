@@ -131,16 +131,49 @@ peso sería reintroducir a mano lo que el ADR 0004 quita.
 
 | Tarea | Estado |
 | --- | --- |
+| ADR 0006 — los estilos de la interfaz: CSS propio con tokens | `draft` |
 | `product/0008` — el tipo de motor, visible en la comparativa | `approved` |
+| `technical/0004` — fundamento de estilos: tokens y primitivos | `draft` |
+| `product/0009` — la comparativa se lee de un vistazo | `draft` |
+| `product/0010` — diseño responsive real | `draft` |
+| `product/0011` — la página que explica cómo se calcula todo | `draft` |
+| `product/0012` — configuración persistente y compartible | `draft` |
+| Cerrar las decisiones abiertas de las cinco specs nuevas | Pendiente — ninguna puede aprobarse con ellas abiertas |
+| Gate humano: aprobar el ADR 0006 y las cinco specs | Pendiente |
 | Implementar, verificar y consolidar `product/0008` | Pendiente |
-| Terminar de traer el artefacto React de un solo fichero | Pendiente — las fórmulas ya están en `src/domain/` desde `product/0001`; queda la interfaz |
-| Página que explique cómo se calcula todo | Pendiente — sin spec |
-| Diseño responsive real | Pendiente — sin spec; hoy está pensado para 560 px de ancho máximo |
-| Persistencia en `localStorage` y configuración compartida por URL | Pendiente — sin spec |
+| Implementar, verificar y consolidar las cinco specs nuevas | Pendiente |
 
 `product/0008` vive aquí y no en la fase 3 porque es presentacional: su propia
 spec declara que no depende del ADR 0004 ni de que ningún eje haya migrado, y
 puede implementarse antes o después.
+
+**Las cuatro tareas que la fase tenía sin spec ya la tienen.** «Terminar de
+traer el artefacto» es `product/0009`, que lo plantea como lo que de verdad
+falta —la jerarquía visual, no las fórmulas, que están en `src/domain/` desde
+`product/0001`—; el responsive es `product/0010`; la página de explicación es
+`product/0011`; la persistencia y el enlace compartible son `product/0012`.
+`technical/0004` y el ADR 0006 son el andamiaje que las tres primeras
+necesitan y que ninguna de ellas debía montar por su cuenta: hoy el proyecto
+no tiene **ni una línea de CSS**, así que la primera hoja de estilos que se
+escriba fija el modelo para todas las demás. Esa decisión se toma antes, en
+un ADR, y no como residuo de la primera implementación que llegue.
+
+**Orden de implementación dentro de la fase.** ADR 0006 → `technical/0004` →
+`product/0009` → `product/0010`. `product/0011` va la última porque depende de
+la fase 3, y `product/0012` es ortogonal y cabe en cualquier hueco.
+`product/0008` no depende de ninguna.
+
+**El artefacto original no está en el repositorio.** Se compartió como
+referencia de diseño para esta fase, pero lo que llegó fue un alias de macOS
+—un marcador de 2,4 kB, sin el fuente dentro—, así que `product/0009` y
+`product/0010` están escritas sin haberlo visto: en términos de qué tiene que
+quedar legible y comprobable, que es como deben estar escritas de todos modos,
+pero sin su paleta, su tipografía ni su composición. Es la primera decisión
+abierta de `product/0009`, y se cierra de una de dos formas: adjuntando el
+fuente al repositorio como referencia, o declarando que el diseño se hace de
+cero y que la referencia deja de existir. Hasta entonces, la cifra de «560 px
+de ancho máximo» que esta fase arrastraba es un dato histórico sin fuente
+consultable.
 
 **La página que explica los cálculos depende de la fase 3.** Hoy el desglose
 por eje responde «de dónde sale este número» coche a coche, pero no hay ningún
@@ -192,11 +225,12 @@ una sorpresa esperando fecha.
 
 | Deuda | Detectada | Condición de cierre |
 | --- | --- | --- |
+| **`npm ci` falla en `main`.** `@eslint/js@^10.0.1` exige `eslint@^10` como *peer* y `package.json` fija `eslint@^9.17.0`: `ERESOLVE`. Los seis jobs de CI que empiezan por `npm ci` no llegan a ejecutarse, así que hoy **no hay red de seguridad**. Detectado al pasar la CI en local para las specs de la fase 4 | 2026-08-06 | Subir `eslint` a `^10` con `typescript-eslint` y `eslint-plugin-react-hooks` compatibles, o bajar `@eslint/js` a `^9`. Es una decisión de dependencias (🟡): no se toca sin aprobación |
 | Acciones de GitHub fijadas por etiqueta de major, no por digest; TruffleHog va en `@main` | 2026-08-01 | Fijar cada acción a un SHA y dejar que Dependabot las actualice |
-| Dos áreas de estado sin doc (modelo de datos, observabilidad); `interfaz` ya existe desde `product/0001` | 2026-08-01 | Que una spec las declare como *Doc de estado*; catálogo en `docs/proceso/consolidacion.md` §4 |
+| Dos áreas de estado sin doc (modelo de datos, observabilidad); `interfaz` ya existe desde `product/0001`. `product/0012` es candidata a declarar `docs/estado/datos.md`: su decisión abierta 3 es justo esa pregunta | 2026-08-01 | Que una spec las declare como *Doc de estado*; catálogo en `docs/proceso/consolidacion.md` §4 |
 | Precios del catálogo de julio de 2026. Vigentes hoy —quince días— y no bloquean nada; `product/0003` los puntúa contra una escala absoluta, así que envejecen peor que antes | 2026-08-02 | Reconfirmar precios contra fuente vigente cuando pasen meses, y actualizar `cars.json` |
 | **Disparador cumplido:** los gates de CD (smoke tests, canary) se aplazaban hasta que existiera despliegue real; ya existe (GitHub Pages, verde desde `technical/0001`) | 2026-08-03 | Definir smoke test post-deploy en una spec técnica, o registrar por qué se sigue aplazando |
-| `ui/` sigue fuera del suelo de cobertura del 100%. Desde `technical/0002` sí tiene tests, pero solo de los fallos que aquella spec corrigió, y sin interacción: `renderToStaticMarkup` no hace clic ni arrastra, así que lo interactivo se sigue comprobando a mano | 2026-08-03 | Decidir si entra en el suelo de `vite.config.ts`, y si hacen falta jsdom o *testing library* para cubrir la interacción |
+| `ui/` sigue fuera del suelo de cobertura del 100%. Desde `technical/0002` sí tiene tests, pero solo de los fallos que aquella spec corrigió, y sin interacción: `renderToStaticMarkup` no hace clic ni arrastra, así que lo interactivo se sigue comprobando a mano. **La fase 4 la ensancha:** el ADR 0006 mete CSS, que `renderToStaticMarkup` no calcula, así que contraste, foco y responsive se verifican a mano por diseño, no por dejadez | 2026-08-03 | Decidir si entra en el suelo de `vite.config.ts`, y si hacen falta jsdom o *testing library* para cubrir la interacción |
 | Fila de referencia del Alfa Romeo Giulietta de la especificación original no está en `cars.json`: `product/0001` no la pedía y queda fuera a propósito, no por olvido | 2026-08-03 | Que una spec futura la pida explícitamente como referencia, o se cierre esta fila descartándola |
 | La puntuación de todos los ejes es relativa al conjunto de candidatos: la nota dice en qué puesto va un coche, no si el coche es bueno. Amplifica diferencias irrelevantes —64 mm de anchura estirados a toda la escala—, esconde que los once son parecidos, y entierra al candidato equilibrado. En `diario` además invierte los pesos declarados: 0,6/0,4 acaba siendo 19%/81% | 2026-08-04 | ADR 0004 fija el principio; una spec por eje con sus anclajes. Los seis están escritos y `approved` (`product/0002`…`0007`); la deuda cierra cuando estén implementados y consolidados |
 | Los datos numéricos del catálogo no declaran cota: un precio o una dimensión negativos validan sin error, justo lo que el ADR 0003 citaba como motivo para elegir Zod. Fuera de alcance de `technical/0002` a propósito: son dieciocho campos con cotas distintas, no una regla global | 2026-08-03 | Decidir la cota de cada campo y declararla en `CarSchema`, con test por campo acotado |
