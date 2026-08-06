@@ -109,21 +109,34 @@ rango falla en vez de entrar al cálculo.
 | `diario` | `0,6×escala(anchura) + 0,4×escala(longitud)` (ponderación configurable), escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
 | `coste` | `0,5×escala(precio) + 0,5×escala(uso mensual)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
 | `estetica` | `mix×nota_exterior + (1−mix)×nota_interior`, escala absoluta lineal | Cada valoración se traduce a nota antes de combinarse |
+| `viaje` | `0,6×escala(maletero) + 0,4×escala(batalla)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
 | `prestaciones` | `0,5×norm(CV/t) + 0,5×norm(aceleración invertida)` | Cada sumando se normaliza por separado antes de combinarse |
 | `fiabilidad` | `0,7×norm(OCU) + 0,3×norm(garantía)` | Cada sumando se normaliza por separado antes de combinarse |
-| `viaje` | Sin fórmula: la valoración del usuario, normalizada tal cual | Un único sumando |
 
-`diario`, `coste` y `estetica` son, de los seis, los tres ya migrados a
-escala absoluta — `product/0002`, `product/0003` y `product/0004`—. Los tres
-restantes siguen con normalización relativa hasta que cada uno tenga su
-propia spec de migración.
+`diario`, `coste`, `estetica` y `viaje` son, de los seis, los cuatro ya
+migrados a escala absoluta — `product/0002`, `product/0003`, `product/0004`
+y `product/0005`—. Los dos restantes siguen con normalización relativa hasta
+que cada uno tenga su propia spec de migración.
 
 `prestaciones` y `fiabilidad` normalizan cada sumando antes de combinarlo
 porque así están escritas sus fórmulas vigentes (`0,x×norm(...) +
-0,y×norm(...)`); `diario`, `coste` y `estetica`, ya migrados, puntúan cada
-magnitud contra su propia escala absoluta antes de combinarla, por el mismo
-motivo de fondo — un peso solo significa lo que dice si se aplica sobre
-notas ya comparables.
+0,y×norm(...)`); `diario`, `coste`, `estetica` y `viaje`, ya migrados,
+puntúan cada magnitud contra su propia escala absoluta antes de combinarla,
+por el mismo motivo de fondo — un peso solo significa lo que dice si se
+aplica sobre notas ya comparables.
+
+**`viaje` ya no es una valoración subjetiva.** Antes de `product/0005` era
+un 1-5 que el usuario daba sobre fotos de catálogo — el único de los seis
+ejes sin fórmula—, y resultó estar midiendo lo bonito que parecía el
+interior (r = 0,77 con la estética) y no el espacio (r = 0,08 con el
+maletero, la única medida de espacio del catálogo). Los tres coches con la
+valoración subjetiva más alta eran los tres de marca premium juzgados en
+fotos, y eran justo los tres con menos maletero de los once. Hoy mide
+`trunkLiters` y `wheelbaseMm` — datos del catálogo con su fuente — y la
+valoración subjetiva ha desaparecido: ya no se puntúa ni se edita desde el
+ranking. El campo `travelComfort` sigue declarado en `Car` y en
+`cars.json`, sin ningún eje que lo lea; retirarlo del todo es una decisión
+pendiente, no tomada por esta spec.
 
 **`estetica` es el único de los tres migrados sin curva en S.** Su escala
 absoluta es lineal —`nota = (valoración − 1) × 2,5`—, no *smoothstep*: la
@@ -183,6 +196,27 @@ no los usa: su fórmula vigente no resta residual de ninguna de las dos
 escalas. Quedan inertes a propósito — retirarlos del todo es decisión de una
 spec futura que analice la reventa con un horizonte explícito, no de esta.
 
+### Los anclajes de `viaje`
+
+| Magnitud | Nota 10 desde | Nota 0 hasta |
+| --- | --- | --- |
+| Maletero | 620 L | 250 L |
+| Batalla | 2.850 mm | 2.400 mm |
+
+El techo de las dos escalas es el Skoda Superb —690 L de maletero, 2.841 mm
+de batalla—, la referencia generalista de «coche para viajar en familia»: a
+partir de ahí el problema deja de existir y lo que hay por encima son
+monovolúmenes y furgonetas, otra categoría. El suelo es un utilitario de
+ciudad, donde el equipaje de cuatro personas ya no cabe. El maletero pesa
+0,6 y la batalla 0,4 porque el maletero es la restricción que se
+**incumple** —el equipaje cabe o no cabe, y si no cabe se deja en casa—,
+mientras que el espacio de atrás es gradual y su medida es indirecta: dos
+coches con la misma batalla pueden repartir distinto sitio entre habitáculo
+y vanos. La batalla es una magnitud floja entre los once candidatos del
+catálogo —recorre menos de su escala que el maletero—, y eso es
+comportamiento correcto según el ADR 0004: un eje en el que los candidatos
+apenas difieren debe influir poco, no fabricar diferencias.
+
 ## Supuestos globales
 
 `GlobalAssumptions` (`src/domain/scoring/assumptions.ts`): `kmPorAnio`,
@@ -215,8 +249,9 @@ negativos validan sin error. Está registrado como deuda en
 
 ## Qué queda fuera
 
-Objetivar el eje `viaje` y añadir un eje de conducción subjetiva quedan
-fuera del dominio actual — son extensiones futuras, no ausencias por
-descuido. Corregir o completar los valores del catálogo tampoco es parte de
-este dominio: esta spec fija cómo se declara fuente y estimación, no qué
-valores son correctos.
+Un eje de autonomía y repostaje, y un eje de conducción subjetiva tras
+probar los coches, quedan fuera del dominio actual — son extensiones
+futuras, registradas en `docs/roadmap.md`, no ausencias por descuido.
+Corregir o completar los valores del catálogo tampoco es parte de este
+dominio: las specs de eje fijan cómo se declara fuente y estimación y contra
+qué se puntúa, no qué valores son correctos.
