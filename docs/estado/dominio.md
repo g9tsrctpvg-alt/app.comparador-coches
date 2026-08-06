@@ -48,38 +48,28 @@ son estimación), los supuestos globales aplicados, la descripción de la
 fórmula, el valor crudo, las penalizaciones condicionales como línea propia
 (condición, si está activa, efecto en puntos) y el peso y la aportación del
 eje. Cada sumando se puntúa contra el conjunto de candidatos o contra una
-escala absoluta, nunca las dos cosas — ver la siguiente sección.
+escala absoluta, nunca las dos cosas — ver la siguiente sección. Un campo
+opcional más, `info`, muestra dato del propio coche que no entra en ninguna
+nota — hoy solo lo usa `fiabilidad` para la extensión de garantía
+condicionada — y es distinto de `assumptionsUsed`: no es un supuesto global,
+es información del coche.
 
-## Dos formas de puntuar un sumando
+## Cómo se puntúa un sumando
 
 El ADR 0004 fija el principio: una nota debe decir si un coche es bueno, no
-en qué puesto va de once. El modelo tiene hoy dos mecanismos, y cuál usa cada
-eje depende de si ya se ha migrado al segundo:
-
-**Normalización relativa** (`normalizeAll`, `normalize.ts`) — la de antes del
-ADR 0004, y la que siguen usando los ejes sin migrar. Siempre normaliza sobre
-el conjunto completo de candidatos que recibe, nunca en abstracto:
-`norm(v) = 10×(v−min)/(max−min)` si mayor es mejor, invertido si menor es
-mejor, y `5` (punto neutro) si todos los candidatos empatan. Un conjunto
-**vacío** no tiene extremos contra los que normalizar, así que es un error con
-nombre propio —`EmptyCandidateSetError`— y no un fallo genérico a mitad de
-cálculo. El `AxisBreakdown` (o el `SubcomponentBreakdown`, en ejes compuestos)
-lleva su `Normalization`: dirección, y qué modelo marca el mínimo y el máximo
-del conjunto recibido, con su valor.
-
-**Escala absoluta** — la que fija el ADR 0004 para los ejes ya migrados. Cada
-magnitud se puntúa contra dos anclajes fijos, razonados contra el mundo y no
-contra el catálogo: uno de saturación (nota 10, por debajo o por encima ya no
-mejora) y uno de rechazo (nota 0). No depende de qué otros coches haya en el
-catálogo: un coche solo en la lista saca la misma nota que si hubiera once.
-El `SubcomponentBreakdown` de un sumando migrado lleva un `AbsoluteScale`
-—valor, los dos anclajes y la nota— en vez de una `Normalization`; ninguno
-de los dos nombra un modelo del catálogo, porque la escala absoluta no tiene
+en qué puesto va de once. **Los seis ejes puntúan hoy contra escalas
+absolutas** — cada magnitud se puntúa contra dos anclajes fijos, razonados
+contra el mundo y no contra el catálogo: uno de saturación (nota 10, por
+debajo o por encima ya no mejora) y uno de rechazo (nota 0). Ninguna nota
+depende de qué otros coches haya en el catálogo: un coche solo en la lista
+saca la misma nota que si hubiera once. El `SubcomponentBreakdown` de un
+sumando lleva un `AbsoluteScale` —valor, los dos anclajes y la nota—; no
+nombra ningún modelo del catálogo, porque la escala absoluta no tiene
 extremos que nombrar.
 
-Entre anclajes, la forma de la curva no es única. La mayoría (`diario`,
-`coste`) sigue una curva en S (*smoothstep*, `scoreOnAbsoluteScale` en
-`scale.ts`):
+Entre anclajes, la forma de la curva no es única. Cinco ejes (`diario`,
+`coste`, `viaje`, `prestaciones`, `fiabilidad`) siguen una curva en S
+(*smoothstep*, `scoreOnAbsoluteScale` en `scale.ts`):
 
 ```text
 t    = posición entre anclajes, 0 en el bueno y 1 en el malo
@@ -89,9 +79,26 @@ nota = 10 × (1 − t²(3 − 2t))
 La pendiente es cero en los dos anclajes y máxima en el centro: afinar cerca
 del extremo bueno no compra casi nada, y estar cerca del extremo malo es casi
 tan malo como estarlo. `estetica` es la excepción: su escala es lineal, sin
-`scoreOnAbsoluteScale` de por medio — ver su fila en la siguiente sección.
+`scoreOnAbsoluteScale` de por medio — el 1-5 que da el usuario ya es su
+juicio completo, y comprimir los extremos otra vez lo deformaría dos veces.
 `AbsoluteScale` no distingue cuál de las dos produjo la nota; describe los
 anclajes y el resultado, no la fórmula entre ambos.
+
+**La normalización relativa (`normalizeAll`, `normalize.ts`) ya no la llama
+ningún eje.** Fue el mecanismo de antes del ADR 0004 —
+`norm(v) = 10×(v−min)/(max−min)` si mayor es mejor, invertido si menor es
+mejor, `5` si todos empatan, siempre sobre el conjunto de candidatos
+recibido— y los seis ejes lo usaron hasta migrar, entre `product/0002` y
+`product/0007`. La función y el tipo `Normalization` siguen en el árbol,
+sin más llamador que su propio test: retirarlos o dejarlos para un eje
+futuro que vuelva a necesitar normalización relativa es una decisión
+pendiente, registrada en `docs/roadmap.md`.
+
+Un conjunto de candidatos **vacío** no tiene sentido que se puntúe: antes lo
+impedía `normalizeAll` por su cuenta, dentro de cada eje; hoy que ningún eje
+depende del conjunto para nada, la comprobación vive en la entrada única,
+`scoreCatalog` (`score.ts`), con el mismo error con nombre propio —
+`EmptyCandidateSetError`— en vez de un fallo genérico a mitad de cálculo.
 
 Tres de los dieciocho campos los edita el usuario desde el ranking. El
 subcomponente que los representa lleva la clave `editableRating`
@@ -111,22 +118,19 @@ rango falla en vez de entrar al cálculo.
 | `estetica` | `mix×nota_exterior + (1−mix)×nota_interior`, escala absoluta lineal | Cada valoración se traduce a nota antes de combinarse |
 | `viaje` | `0,6×escala(maletero) + 0,4×escala(batalla)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
 | `prestaciones` | `0,5×escala(CV/t) + 0,5×escala(aceleración invertida)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
-| `fiabilidad` | `0,7×norm(OCU) + 0,3×norm(garantía)` | Cada sumando se normaliza por separado antes de combinarse |
+| `fiabilidad` | `0,7×escala(OCU) + 0,3×escala(garantía incondicional)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
 
-`diario`, `coste`, `estetica`, `viaje` y `prestaciones` son, de los seis,
-los cinco ya migrados a escala absoluta — `product/0002` a `product/0006`—.
-Solo `fiabilidad` sigue con normalización relativa, hasta que tenga su
-propia spec de migración.
+**Los seis ejes están migrados a escala absoluta** — `product/0002` a
+`product/0007`, entre el 2026-08-04 y el 2026-08-06 —. Ninguno normaliza ya
+contra el conjunto de candidatos: un peso solo significa lo que dice si se
+aplica sobre notas ya comparables, y eso rige ahora en los seis por igual.
 
-`fiabilidad` normaliza cada sumando antes de combinarlo porque así está
-escrita su fórmula vigente (`0,7×norm(...) + 0,3×norm(...)`); los cinco ejes
-ya migrados puntúan cada magnitud contra su propia escala absoluta antes de
-combinarla, por el mismo motivo de fondo — un peso solo significa lo que
-dice si se aplica sobre notas ya comparables. `prestaciones` llegaba a este
-cambio ya sano estructuralmente —normalizaba cada sumando por separado desde
-`product/0001`—, así que migrarlo fue sustituir `normalizeAll` por
-`scoreOnAbsoluteScale` en cada sumando sin tocar el 0,5/0,5, que ya regía
-sobre notas comparables.
+`prestaciones` y `fiabilidad` llegaban a este cambio ya sanos
+estructuralmente —normalizaban cada sumando por separado desde
+`product/0001`, con sus fórmulas ya escritas como `0,x×norm(...) +
+0,y×norm(...)`—, así que migrarlos fue sustituir `normalizeAll` por
+`scoreOnAbsoluteScale` en cada sumando sin tocar el reparto declarado, que
+ya regía sobre notas comparables.
 
 **`viaje` ya no es una valoración subjetiva.** Antes de `product/0005` era
 un 1-5 que el usuario daba sobre fotos de catálogo — el único de los seis
@@ -141,7 +145,7 @@ ranking. El campo `travelComfort` sigue declarado en `Car` y en
 `cars.json`, sin ningún eje que lo lea; retirarlo del todo es una decisión
 pendiente, no tomada por esta spec.
 
-**`estetica` es el único de los tres migrados sin curva en S.** Su escala
+**`estetica` es el único de los seis sin curva en S.** Su escala
 absoluta es lineal —`nota = (valoración − 1) × 2,5`—, no *smoothstep*: la
 valoración 1-5 que da el usuario ya es su juicio completo (1 = «no hay nada
 que salvar», 5 = «tan guapo como hace falta»), y comprimir los extremos con
@@ -239,6 +243,38 @@ pedir» y no «lo que ya tengo». El peso no entra dos veces: ya paga en
 `diario` por tamaño y en `coste` por consumo; aquí solo divide a los CV, que
 es justo lo que el eje mide.
 
+### Los anclajes de `fiabilidad`
+
+| Magnitud | Nota 10 desde | Nota 0 hasta |
+| --- | --- | --- |
+| Índice de fiabilidad OCU | 93 | 64 |
+| Años de garantía incondicional | 7 | 0 |
+
+**El índice OCU no necesita anclajes inventados: son los extremos que la
+propia OCU publica** sobre 39 marcas — Lexus con 93, Land Rover con 64—, así
+que la escala es el mercado tal como se publica y no hay que justificar
+ningún recorte. Consecuencia asumida y no un fallo: nueve de los once
+candidatos del catálogo salen de marcas que caen en el tercio alto de esas
+39, así que el eje deja de separarlos — la escala relativa fabricaba un
+ranking donde solo había un empate.
+
+**La garantía puntúa solo los años incondicionales.** El 10 va en 7 años
+—Kia, MG, Omoda, Jaecoo—, el techo real del mercado sin condiciones. El 0 va
+en 0 años y no en los 3 del mínimo legal español: quedarse en el mínimo es
+una estrategia comercial, no una señal de que el coche se rompe, y anclar
+ahí habría convertido esa elección en un cero absoluto. Una extensión sujeta
+a mantenimiento en red oficial —campo `warrantyExtension` en `Car`— no suma
+a esta magnitud: es un compromiso del comprador, renovado servicio a
+servicio, no uno del fabricante. El desglose la muestra igual, como
+información que no entra en la nota (`AxisBreakdown.info`), con sus años, su
+límite de kilómetros si lo declara y su condición.
+
+**El índice OCU es por marca, no por modelo — 39 marcas sobre 392 modelos
+analizados — y ese es el límite real del eje.** Ninguna escala lo arregla:
+mientras no exista un índice por modelo publicado, `fiabilidad` puntúa la
+marca y lo presenta como fiabilidad del coche. El desglose lo declara en su
+propia descripción de fórmula, no solo aquí.
+
 ## Supuestos globales
 
 `GlobalAssumptions` (`src/domain/scoring/assumptions.ts`): `kmPorAnio`,
@@ -261,9 +297,11 @@ especificación original del proyecto **no está en el catálogo**: es dato de
 referencia, no un candidato a comparar, y ninguna spec la ha pedido todavía.
 
 Un catálogo **sin ningún coche** no es un catálogo válido: `loadCatalog` lo
-rechaza igual que rechaza un registro mal formado. Sin candidatos no hay
-extremos contra los que normalizar, así que el fallo se declara al cargar y
-no a mitad del primer ranking.
+rechaza igual que rechaza un registro mal formado, así que el fallo se
+declara al cargar y no a mitad del primer ranking. `scoreCatalog` lleva
+además su propia comprobación — con los seis ejes en escala absoluta, nada
+dentro de ellos falla por su cuenta si de todos modos se le pasara un
+catálogo vacío.
 
 Los valores numéricos **no declaran cota** todavía: un precio o una dimensión
 negativos validan sin error. Está registrado como deuda en
