@@ -214,9 +214,12 @@ fase abierta. Se lista para no perderlo, no para bloquear nada.
   dieciocho magnitudes— y la aplicación no tiene ni una imagen. La spec
   declara la ficha por bloques y añade cinco fotos por modelo (frontal,
   lateral, trasera con portón cerrado, maletero abierto e interior), incluida
-  la fila de referencia. Tiene cuatro decisiones abiertas, y la de calado es
-  si las imágenes se **enlazan** por URL absoluta o se **copian** al
-  repositorio. Pasa a ser fase cuando el gate humano la apruebe.
+  la fila de referencia. Sus cuatro decisiones abiertas se cerraron el
+  2026-08-06: las imágenes se **enlazan** por URL absoluta, no hay mínimo de
+  vistas para dar de alta un modelo, la ficha enseña las dieciocho
+  magnitudes, y todo ello en una **pantalla nueva** con una columna por
+  modelo, desplazamiento horizontal y la foto como cabecera de columna. Queda
+  **lista para el gate humano**; pasa a ser fase cuando se apruebe.
 - **Eje de autonomía y repostaje.** Es la mayor diferencia práctica entre los
   once candidatos en un viaje largo —los térmicos e híbridos hacen 640-950 km
   con un depósito, los eléctricos la mitad en autopista— y el modelo es hoy

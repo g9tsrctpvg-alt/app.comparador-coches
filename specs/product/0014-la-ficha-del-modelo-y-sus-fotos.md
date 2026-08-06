@@ -4,7 +4,8 @@
 - **Estado:** draft
 - **Tipo:** product
 - **Fecha:** 2026-08-06
-- **Specs relacionadas:** product/0001, product/0009, product/0010, product/0013
+- **Specs relacionadas:** product/0001, product/0009, product/0010,
+  product/0011, product/0012, product/0013, technical/0004
 - **ADRs relacionados:** 0003, 0006
 - **Doc de estado:** `docs/estado/dominio.md`, `docs/estado/interfaz.md`
 
@@ -49,6 +50,9 @@ fotos nuevas por modelo— y hacer que esa ficha se pueda ver entera.
 
 - **La definición de la ficha**: el inventario de campos agrupado en bloques,
   escrito de una vez, incluidos los que hoy no se enseñan en ninguna vista.
+- **Una tercera vista** que enseña la ficha entera: una columna por modelo,
+  una fila por característica, con desplazamiento horizontal propio y las
+  fotos como cabecera de cada columna.
 - **Cinco fotos por modelo**: frontal, lateral, trasera con portón cerrado,
   maletero abierto e interior en vista general.
 - **La forma del dato foto** en el catálogo: URL absoluta más procedencia y
@@ -67,8 +71,17 @@ fotos nuevas por modelo— y hacer que esa ficha se pueda ver entera.
 - **Puntuar con fotos.** Ninguna nota, peso ni aportación cambia. La estética
   sigue siendo el `UserRating` que el usuario edita; la foto es el material
   con el que lo emite, no una entrada del cálculo.
-- **Más de una foto por vista y modelo.** Ni galería, ni carrusel, ni zoom,
-  ni fotos por acabado o color: una foto por vista, y punto.
+- **Más de una foto por vista y modelo.** Ni galería, ni carrusel, ni fotos
+  por acabado o color: una foto por vista, y punto. La ampliación al pulsar
+  (requisito 8.4) enseña esa misma foto en grande, no otra.
+- **Escalar las fotos entre sí a la longitud real de cada coche.** Todas se
+  ajustan al ancho de su columna, que es el mismo para todos: la tira de
+  fotos compara **formas**, no tamaños. El tamaño lo comparan las filas de
+  medidas y la tabla de `product/0013`, que son las que llevan cifras. Es
+  funcionalidad distinta y necesitaría spec propia.
+- **Retirar o rehacer la vista de `product/0013`.** La ficha técnica
+  comparada sigue siendo la única que calcula Δ contra la referencia. Esta
+  vista no calcula ninguno: enseña dato bruto de todos los modelos.
 - **Procesar imágenes** —recortar, redimensionar, quitar fondo, generar
   miniaturas—. Se enlaza o se copia lo que hay; no se edita.
 - **Vídeo, vistas 360º y configuradores del fabricante.**
@@ -124,6 +137,13 @@ export const PhotosSchema = z
   .default({});
 ```
 
+**Las imágenes se enlazan, no se copian.** El catálogo guarda la URL del
+tercero y este despliegue no aloja ninguna imagen. Para que esa decisión sea
+reversible sin tocar la interfaz, la URL que acaba en el atributo `src` sale
+de **una única función** —`photoSrc(photo)`, en `src/domain/`— que hoy
+devuelve `photo.url` tal cual. Copiar las sesenta imágenes a `public/` más
+adelante sería cambiar esa función y nada más.
+
 **Por qué no reutiliza `sourcedValueSchema`.** Ese formato existe para
 arbitrar entre mediciones que se contradicen y para marcar lo estimado: una
 foto no se estima ni compite con otra medición de sí misma. Lo que sí necesita
@@ -152,8 +172,9 @@ aplicación existe para comparar tamaños.
 
 ### 4. Qué pasa cuando no hay foto
 
-1. Las fotos **no son requisito de alta**: un modelo sin ninguna aparece
-   entero, con todos sus datos y su nota, exactamente como hoy.
+1. Las fotos **no son requisito de alta**, y **no hay mínimo de vistas**: un
+   modelo sin ninguna foto aparece entero, con todos sus datos y su nota,
+   exactamente como hoy, y con su columna completa en la vista nueva.
 2. Una vista sin foto renderiza un **hueco visible con el rótulo de la vista**
    («Lateral — sin foto»), nunca una imagen rota ni un espacio en blanco.
 3. Una foto declarada que **falla al cargar** degrada al mismo hueco.
@@ -192,6 +213,83 @@ importa su disponibilidad a este repositorio, que es justo lo que
 `docs/proceso/ci-y-guardarrailes.md` evita. Se ejecuta a mano, y su resultado
 del día es lo que sostiene el criterio de aceptación correspondiente.
 
+### 8. La pantalla: una columna por modelo
+
+**8.1 Una vista nueva, la tercera.** Se añade al conmutador
+(`ViewSwitcher`), rotulada **«Ficha completa»** y con fragmento
+`#/ficha-completa`, por el mismo mecanismo de `useHashRoute` que ya usan la
+explicación y la ficha técnica. Se rotula así y no «Ficha del modelo» para
+que nadie tenga que distinguir «ficha» de «ficha técnica» por el contexto.
+
+**8.2 La tabla va transpuesta.** Una **columna por modelo** —los once
+candidatos y la Giulietta— y una **fila por característica**, con las
+dieciocho magnitudes de los seis bloques del requisito 1, agrupadas y con un
+encabezado de bloque por grupo. Es la disposición que responde a la pregunta
+de esta vista: **la misma característica en varios modelos a la vez**. El
+desplazamiento horizontal vive **dentro del contenedor de la tabla**; la
+página nunca se desplaza en horizontal a ningún ancho, que es invariante
+declarada en `docs/estado/interfaz.md`.
+
+**8.3 Dos columnas quedan fijas al desplazar:**
+
+1. La de **nombres de característica**, a la izquierda, sin la cual una fila
+   desplazada es una cifra sin etiqueta.
+2. La de la **referencia** —la Giulietta—, inmediatamente después. Es lo que
+   hace útil el desplazamiento: cualquier modelo al que se llegue aparece al
+   lado del coche al que sustituye, sin tener que volver al principio.
+
+**8.4 Las fotos son la cabecera de cada columna.** Van dentro de la celda de
+encabezado de su modelo, no en una tira aparte: así el ancho de la foto es el
+ancho de la columna por construcción, y no hay dos desplazamientos que
+sincronizar. Se ajustan al ancho de la columna con la relación de aspecto y
+el `contain` del requisito 5. Al pulsarlas se **amplían** sobre la pantalla,
+con `credit` y `shows` como pie. La ampliación:
+
+- se abre con ratón, con teclado (`Enter`/`Espacio` sobre un control real,
+  no un `div` con `onClick`) y con lector de pantalla;
+- se cierra con `Escape`, pulsando fuera y con un botón de cierre visible;
+- devuelve el foco al control que la abrió;
+- no añade ninguna dependencia: es `<dialog>` del navegador, no una librería.
+
+**8.5 Un selector elige qué vista se enseña.** Cinco opciones —frontal,
+lateral, trasera, maletero, interior— y **una sola activa a la vez** para
+todos los modelos: la tira de cabeceras enseña siempre lo mismo de cada
+coche, que es lo que la hace comparable. Arranca en **lateral**, que es la
+vista que más dice de la silueta. El modelo que no tenga esa foto muestra el
+hueco rotulado del requisito 4, no una columna más estrecha.
+
+**8.6 La foto elegida es estado efímero.** No se persiste ni viaja en el
+enlace compartible de `product/0012`, igual que no lo hace qué fila del
+ranking está desplegada: es una preferencia de lectura del momento.
+
+**8.7 Esta vista no puntúa ni edita.** Ni notas, ni pesos, ni valoraciones
+editables: las tres de `UserRating` se enseñan con su valor y se siguen
+editando solo desde el desglose del ranking, que es su único sitio.
+
+### 9. El móvil, que es donde esto se pone difícil
+
+Una tabla de doce columnas en 320px de ancho no cabe de ninguna manera; lo
+que la spec exige es que **falle bien**:
+
+1. **Ancho mínimo de columna** de `9rem` por debajo de `--bp-columna` y
+   `11rem` por encima. En un móvil eso deja ver la referencia fija más un
+   modelo entero, no medio modelo cortado.
+2. **Anclaje de desplazamiento** (`scroll-snap-type: x mandatory`, con cada
+   columna como punto de anclaje): el gesto cae siempre en un modelo
+   completo, nunca entre dos.
+3. **La fila del nombre del modelo queda fija arriba** al desplazarse en
+   vertical. La foto **no**: ocupa demasiado alto para llevarla pegada toda
+   la lectura, y su sitio es el principio.
+4. **El contenedor desplazable es alcanzable con teclado** (`tabindex="0"`,
+   `role="group"` y `aria-label`), porque una región que solo se desplaza con
+   gesto deja fuera a quien navega con teclado.
+5. **Ningún objetivo pulsable baja de 44×44px** de área accionable —foto,
+   opciones del selector y botón de cierre incluidos—, como el resto de la
+   interfaz desde `product/0010`.
+6. **Se verifica a mano en los tres anchos** de `product/0010` (320, 768 y
+   1440px): el CSS no lo comprueba la CI, y esta vista es justo la que más
+   depende de él.
+
 ## Criterios de aceptación
 
 > Obligatorios y verificables.
@@ -213,6 +311,22 @@ del día es lo que sostiene el criterio de aceptación correspondiente.
       falten quedan registradas como deuda con su modelo y su vista.
 - [ ] `npm run check:photos` responde 2xx en las sesenta URLs el día de la
       verificación.
+- [ ] La vista nueva existe en `#/ficha-completa`, está en el conmutador y
+      recargar esa dirección la abre (no da 404 bajo el subpath de Pages).
+- [ ] La tabla tiene una columna por candidato más la de referencia, y una
+      fila por cada una de las dieciocho magnitudes, agrupadas por bloque
+      (test de render: se cuentan filas y columnas).
+- [ ] Al desplazar en horizontal, la columna de características y la de la
+      referencia permanecen visibles (revisión visual en los tres anchos).
+- [ ] El selector cambia la foto de **todas** las columnas a la vez, y
+      arranca en lateral (test de render sobre el estado inicial).
+- [ ] La foto se abre ampliada con teclado, se cierra con `Escape` y el foco
+      vuelve al control que la abrió (revisión manual: los tests de `ui/`
+      usan `renderToStaticMarkup` y no hacen clic — deuda ya registrada).
+- [ ] La página no se desplaza en horizontal a 320, 768 ni 1440px; el
+      desplazamiento ocurre dentro del contenedor de la tabla.
+- [ ] La configuración compartible de `product/0012` no cambia de forma: el
+      enlace no lleva qué foto está elegida (test de `configUrl`).
 - [ ] La CI entera pasa en local: `format:check`, `lint`, `typecheck`,
       `arch:check` y `test:coverage`.
 
@@ -220,6 +334,14 @@ del día es lo que sostiene el criterio de aceptación correspondiente.
 
 - **Depende de `product/0013`**, que trajo la vista de ficha técnica y la fila
   de referencia. Esta spec la extiende; no la reescribe.
+- **Depende de `product/0011`** para la navegación por fragmento de URL y de
+  `technical/0004` para los tokens: la vista nueva reutiliza las dos piezas y
+  no monta enrutador ni paleta propios.
+- **Tres vistas de datos van a convivir** —clasificación, ficha técnica y
+  ficha completa—, y las cinco medidas aparecen en dos de ellas. Es
+  deliberado: una lleva Δ contra la referencia y la otra lleva las dieciocho
+  magnitudes. Si al usarlas la duplicidad molesta, la que sobra es la de
+  `product/0013`, y retirarla sería spec propia.
 - **Uso personal y sin ánimo de lucro**, sin publicidad ni monetización: es lo
   que hace aceptable enseñar fotografía de prensa ajena. Se prefiere el medio
   oficial del fabricante como origen, y `credit` lo deja escrito en cada foto.
@@ -231,24 +353,12 @@ del día es lo que sostiene el criterio de aceptación correspondiente.
 
 ## Decisiones abiertas
 
-Deben quedar vacías antes de pasar a `approved`.
+> Las cuatro que esta spec abrió se cerraron el 2026-08-06, y su respuesta
+> está en los requisitos, no aquí: **enlazar** las imágenes en vez de
+> copiarlas (requisito 2), **sin mínimo de vistas** para dar de alta un
+> modelo (requisito 4.1), **las dieciocho magnitudes** en la ficha
+> (requisito 8.2) y **una pantalla nueva** con una columna por modelo,
+> desplazamiento horizontal y la foto como cabecera de columna
+> (requisitos 8 y 9).
 
-1. **¿Enlazar o copiar?** Enlazar (lo propuesto) mantiene el catálogo como
-   está y no mete binarios en el repositorio, pero deja la vista a merced de
-   un tercero: enlaces que caducan, hosts que bloquean el enlazado directo y
-   una IP de visitante que viaja a cada dominio. Copiar a `public/photos/`
-   —sesenta imágenes, del orden de 5-8 MB en WebP— elimina las tres cosas a
-   cambio de peso en el repositorio y de pasar de enlazar a redistribuir. Sea
-   cual sea la respuesta, la URL de una foto se resuelve en **un solo punto**
-   del código, de forma que cambiar de opinión no toque ni un componente.
-2. **¿Dónde se ven?** Tres opciones: un bloque por modelo con las cinco vistas
-   (lo natural para «ver la ficha entera»); una **tira de laterales sobre la
-   tabla comparada, escalados a la longitud real de cada coche**, que es la
-   forma más directa de enseñar el problema que el proyecto resuelve; o las
-   dos. La segunda es funcionalidad nueva, no migración, y encarece la spec.
-3. **¿Se exige un mínimo de vistas?** El requisito 4 dice que no, para no
-   bloquear el alta de un modelo por una foto que no aparece. Cabe endurecerlo
-   al lateral: sin él, la comparación visual no existe para ese coche.
-4. **¿La ficha por modelo enseña las dieciocho magnitudes o un subconjunto?**
-   El requisito 1 declara el conjunto completo; enseñarlo entero es una
-   decisión distinta, y afecta a si la batalla deja de ser invisible.
+Ninguna.
