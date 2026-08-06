@@ -138,10 +138,11 @@ peso sería reintroducir a mano lo que el ADR 0004 quita.
 | `product/0010` — diseño responsive real | `draft` |
 | `product/0011` — la página que explica cómo se calcula todo | `draft` |
 | `product/0012` — configuración persistente y compartible | `draft` |
-| Cerrar las decisiones abiertas de las cinco specs nuevas | Pendiente — ninguna puede aprobarse con ellas abiertas |
-| Gate humano: aprobar el ADR 0006 y las cinco specs | Pendiente |
+| `product/0013` — la ficha técnica comparada | `draft` |
+| Cerrar las decisiones abiertas de `product/0011`, `product/0012` y `product/0013` | Pendiente — las otras tres ya no tienen |
+| Gate humano: aprobar el ADR 0006 y las seis specs | Pendiente |
 | Implementar, verificar y consolidar `product/0008` | Pendiente |
-| Implementar, verificar y consolidar las cinco specs nuevas | Pendiente |
+| Implementar, verificar y consolidar las seis specs nuevas | Pendiente |
 
 `product/0008` vive aquí y no en la fase 3 porque es presentacional: su propia
 spec declara que no depende del ADR 0004 ni de que ningún eje haya migrado, y
@@ -158,22 +159,31 @@ no tiene **ni una línea de CSS**, así que la primera hoja de estilos que se
 escriba fija el modelo para todas las demás. Esa decisión se toma antes, en
 un ADR, y no como residuo de la primera implementación que llegue.
 
+**La fase tenía una quinta tarea que nadie había registrado.** El fuente del
+artefacto, disponible desde el 2026-08-06, enseña que tiene **dos vistas**: la
+clasificación —lo único migrado— y una **ficha técnica** comparada contra el
+Alfa Romeo Giulietta, con columnas de diferencia y una métrica de litros de
+maletero por metro cuadrado de huella. No estaba en este roadmap, ni en
+`docs/estado/interfaz.md`, ni en ninguna spec. Es `product/0013`, y con ella
+la fase deja de ser «traer el aspecto» para ser lo que siempre fue: traer
+media aplicación.
+
 **Orden de implementación dentro de la fase.** ADR 0006 → `technical/0004` →
 `product/0009` → `product/0010`. `product/0011` va la última porque depende de
-la fase 3, y `product/0012` es ortogonal y cabe en cualquier hueco.
-`product/0008` no depende de ninguna.
+la fase 3; `product/0012` es ortogonal y cabe en cualquier hueco;
+`product/0013` va después de `product/0010`, y comparte con `product/0011` el
+mecanismo de navegación por fragmento de URL, así que la primera de las dos
+que se implemente lo monta y la otra lo reutiliza. `product/0008` no depende
+de ninguna.
 
-**El artefacto original no está en el repositorio.** Se compartió como
-referencia de diseño para esta fase, pero lo que llegó fue un alias de macOS
-—un marcador de 2,4 kB, sin el fuente dentro—, así que `product/0009` y
-`product/0010` están escritas sin haberlo visto: en términos de qué tiene que
-quedar legible y comprobable, que es como deben estar escritas de todos modos,
-pero sin su paleta, su tipografía ni su composición. Es la primera decisión
-abierta de `product/0009`, y se cierra de una de dos formas: adjuntando el
-fuente al repositorio como referencia, o declarando que el diseño se hace de
-cero y que la referencia deja de existir. Hasta entonces, la cifra de «560 px
-de ancho máximo» que esta fase arrastraba es un dato histórico sin fuente
-consultable.
+**El artefacto de referencia está transcrito, no enlazado.** El fuente vive
+fuera del repositorio y no se puede consultar desde aquí, así que su sistema
+de diseño —la paleta de siete papeles, las cifras en monoespaciada, los
+primitivos y la composición de la fila del ranking— está transcrito en la
+sección *El artefacto de referencia* de `product/0009`. Una referencia que no
+se puede abrir no es una referencia. Lo que el artefacto **no** aporta es
+diseño responsive: no tiene una sola media query, y su columna de 560 px es el
+punto de partida de `product/0010`, no su respuesta.
 
 **La página que explica los cálculos depende de la fase 3.** Hoy el desglose
 por eje responde «de dónde sale este número» coche a coche, pero no hay ningún
@@ -231,7 +241,7 @@ una sorpresa esperando fecha.
 | Precios del catálogo de julio de 2026. Vigentes hoy —quince días— y no bloquean nada; `product/0003` los puntúa contra una escala absoluta, así que envejecen peor que antes | 2026-08-02 | Reconfirmar precios contra fuente vigente cuando pasen meses, y actualizar `cars.json` |
 | **Disparador cumplido:** los gates de CD (smoke tests, canary) se aplazaban hasta que existiera despliegue real; ya existe (GitHub Pages, verde desde `technical/0001`) | 2026-08-03 | Definir smoke test post-deploy en una spec técnica, o registrar por qué se sigue aplazando |
 | `ui/` sigue fuera del suelo de cobertura del 100%. Desde `technical/0002` sí tiene tests, pero solo de los fallos que aquella spec corrigió, y sin interacción: `renderToStaticMarkup` no hace clic ni arrastra, así que lo interactivo se sigue comprobando a mano. **La fase 4 la ensancha:** el ADR 0006 mete CSS, que `renderToStaticMarkup` no calcula, así que contraste, foco y responsive se verifican a mano por diseño, no por dejadez | 2026-08-03 | Decidir si entra en el suelo de `vite.config.ts`, y si hacen falta jsdom o *testing library* para cubrir la interacción |
-| Fila de referencia del Alfa Romeo Giulietta de la especificación original no está en `cars.json`: `product/0001` no la pedía y queda fuera a propósito, no por olvido | 2026-08-03 | Que una spec futura la pida explícitamente como referencia, o se cierre esta fila descartándola |
+| Fila de referencia del Alfa Romeo Giulietta de la especificación original no está en `cars.json`: `product/0001` no la pedía y queda fuera a propósito, no por olvido. **Disparador cumplido:** `product/0013` la pide explícitamente, y sin ella su tabla de diferencias no tiene contra qué medir | 2026-08-03 | Que una spec futura la pida explícitamente como referencia, o se cierre esta fila descartándola. Cierra cuando `product/0013` esté consolidada |
 | La puntuación de todos los ejes es relativa al conjunto de candidatos: la nota dice en qué puesto va un coche, no si el coche es bueno. Amplifica diferencias irrelevantes —64 mm de anchura estirados a toda la escala—, esconde que los once son parecidos, y entierra al candidato equilibrado. En `diario` además invierte los pesos declarados: 0,6/0,4 acaba siendo 19%/81% | 2026-08-04 | ADR 0004 fija el principio; una spec por eje con sus anclajes. Los seis están escritos y `approved` (`product/0002`…`0007`); la deuda cierra cuando estén implementados y consolidados |
 | Los datos numéricos del catálogo no declaran cota: un precio o una dimensión negativos validan sin error, justo lo que el ADR 0003 citaba como motivo para elegir Zod. Fuera de alcance de `technical/0002` a propósito: son dieciocho campos con cotas distintas, no una regla global | 2026-08-03 | Decidir la cota de cada campo y declararla en `CarSchema`, con test por campo acotado |
 | Al quitar `anios` (`product/0003`), la fórmula de valor residual —`precio × res^(años/5)`— se queda sin horizonte. Hoy no molesta porque «pienso venderlo» está desactivado y la reventa está fuera de alcance, pero la función queda inservible tal como está escrita | 2026-08-04 | Que alguien quiera analizar la reventa: entonces, spec propia que decida con qué horizonte se calcula |

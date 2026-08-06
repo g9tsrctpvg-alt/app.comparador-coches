@@ -46,8 +46,8 @@ no de la fontanería.
   aplicación, y cómo importa cada componente su módulo.
 - **El reset mínimo.** Caja, márgenes por defecto, herencia de tipografía en
   los controles de formulario, y `img`/`svg` que no desbordan.
-- **Las preferencias del sistema.** `prefers-color-scheme` y
-  `prefers-reduced-motion` como media queries sobre los tokens.
+- **`prefers-reduced-motion`** como media query global sobre las
+  transiciones.
 - **Los puntos de ruptura declarados una sola vez**, con nombre. Los valores
   concretos y qué pasa en cada uno son de `product/0010`; que existan como
   declaración única es de aquí.
@@ -68,9 +68,12 @@ no de la fontanería.
   la spec de producto que lo pide, no a esta.
 - **Cualquier dependencia nueva.** El ADR 0006 ya decidió que no hay ninguna,
   y esta spec no la reabre.
-- **Modo oscuro como opción del usuario.** Respetar `prefers-color-scheme`
-  entra; un selector de tema en la interfaz está aplazado en el ADR 0006 con
-  su disparador.
+- **El esquema oscuro, en cualquiera de sus formas.** El artefacto de
+  referencia tiene un solo aspecto —papel claro, tinta verde oscura— y
+  añadirle una paleta oscura es inventar diseño que nadie ha pedido. Lo que
+  esta spec sí garantiza es que **hacerlo después sea un cambio de tokens y
+  nada más**: por eso el requisito 6 prohíbe los literales de color fuera de
+  la hoja global. Queda aplazado con su disparador en el ADR 0006.
 - **Meter `src/ui/` en el suelo de cobertura del 100%.** Es una deuda abierta
   del roadmap con su propia condición de cierre, y una hoja de estilos no la
   resuelve ni la agrava.
@@ -86,10 +89,11 @@ no de la fontanería.
 3. La escala de espaciado es **una sola escala**, no valores sueltos por
    componente. Un espaciado que no esté en la escala es un token nuevo, y
    añadirlo es una decisión visible en el diff de la hoja global.
-4. Los colores se declaran por **su papel, no por su tono**:
-   `--color-text-primary`, `--color-surface`, `--color-accent`,
-   `--color-danger`. Un token llamado `--color-azul` es un error: renombrar el
-   tono obliga a renombrar el token cuando cambie la paleta.
+4. Los colores se declaran por **su papel, no por su tono**. Los siete papeles
+   del artefacto de referencia —fondo de página, superficie, texto principal,
+   texto secundario, línea, acento y alerta— son los siete tokens mínimos, y
+   sus valores los fija `product/0009`. Un token llamado `--color-verde` es un
+   error: el nombre sobrevive al cambio de paleta y el tono no.
 5. Cada componente que necesite estilos propios tiene un
    `Componente.module.css` **junto a su `.tsx`**, y lo importa desde él.
    Ningún módulo declara selectores de elemento global (`body`, `a`, `input`)
@@ -109,21 +113,29 @@ no de la fontanería.
    media query que no corresponda a un punto de ruptura declarado.
 10. Bajo `prefers-reduced-motion: reduce`, las transiciones y animaciones
     declaradas quedan sin efecto. La regla vive en la hoja global y no
-    depende de que cada componente se acuerde.
-11. Bajo `prefers-color-scheme: dark`, los tokens de color toman valores
-    alternativos. **Solo cambian los tokens**: ninguna regla de ningún módulo
-    consulta el esquema de color por su cuenta.
+    depende de que cada componente se acuerde. El artefacto tiene una sola
+    transición —la barra del ranking, 0,35 s— y es justo la que hay que poder
+    apagar.
+11. **Dos familias tipográficas**, declaradas como tokens: una monoespaciada
+    para las cifras y una sans para el texto, ambas pilas del sistema. Ningún
+    componente nombra una fuente; usa `var(--font-mono)` o `var(--font-sans)`.
+    Es la decisión característica del artefacto, y como token se aplica sola.
 12. Existen como primitivos compartidos, al menos: la superficie de tarjeta,
-    el indicador de foco, la barra de proporción, la marca de estado y el
-    tratamiento del texto secundario. Un componente que necesite uno de ellos
-    lo compone, no lo copia.
+    la superficie invertida, el rótulo de sección, el indicador de foco, la
+    barra de proporción, la marca de estado y el tratamiento del texto
+    secundario. Un componente que necesite uno de ellos lo compone, no lo
+    copia. Los tres primeros ya existen en el artefacto —su `Label`, su
+    tarjeta y su tarjeta de líder—: se migran como primitivos, no como estilos
+    repetidos.
 13. La CI falla si un fichero de `src/ui/` que no sea la hoja global de tokens
     contiene un literal de color hexadecimal, `rgb(`, `hsl(`, o una longitud
-    en `px` o `rem` fuera de una media query. El mecanismo —regla de ESLint
-    sobre CSS, comprobación propia bajo Vitest, o `stylelint`— lo decide la
-    implementación, con la restricción de que `stylelint` sería dependencia
-    nueva y por tanto necesita el 🟡 que el ADR 0006 ya negó para las de
-    estilos: en la práctica, comprobación propia.
+    en `px` o `rem` fuera de una media query. Se implementa como
+    **comprobación propia bajo Vitest**, que lee los `.module.css` con
+    `import.meta.glob` y aplica las reglas, igual que
+    `scripts/validateDocsRepo.test.ts` hace con los documentos. `stylelint`
+    sería lo idiomático y es dependencia nueva, que el ADR 0006 descarta; una
+    regla de ESLint no ve dentro de un fichero CSS. El precedente del
+    validador de docs demuestra que el camino propio funciona aquí.
 14. `npm run build` sigue produciendo un `dist/` desplegable bajo el subpath
     de GitHub Pages, con las hojas de estilo resueltas sin 404. Es la misma
     invariante que `technical/0001` fijó para los recursos.
@@ -137,9 +149,11 @@ no de la fontanería.
 - [ ] Todo token declarado en `:root` pertenece a una de las siete familias
       con prefijo (`--color-`, `--space-`, `--font-`, `--radius-`,
       `--shadow-`, `--size-`, `--bp-`).
-- [ ] Ningún token de color lleva un tono en el nombre; los cinco papeles
-      mínimos —texto principal, texto secundario, superficie, acento,
-      peligro— están declarados.
+- [ ] Ningún token de color lleva un tono en el nombre, y los siete papeles
+      del requisito 4 están declarados.
+- [ ] Existen exactamente dos tokens de familia tipográfica, y buscar
+      `monospace`, `system-ui` o `sans-serif` en los `.module.css` no devuelve
+      ninguna coincidencia.
 - [ ] Buscar `#`, `rgb(`, `hsl(` en los `.module.css` de `src/ui/` no
       devuelve ninguna coincidencia.
 - [ ] Existe un test o comprobación en CI que falla ante un literal de diseño
@@ -152,9 +166,10 @@ no de la fontanería.
       que no vaya acompañada de un indicador sustitutorio en la misma regla.
 - [ ] Con `prefers-reduced-motion: reduce` forzado en el navegador, ninguna
       transición de la interfaz es perceptible.
-- [ ] Con `prefers-color-scheme: dark` forzado, la aplicación es legible y el
-      contraste de texto sobre superficie se mantiene en AA (4,5:1 para texto
-      normal). El diff que lo consigue toca únicamente valores de tokens.
+- [ ] Cambiar el valor de un token de color en la hoja global cambia ese
+      color en toda la aplicación sin tocar ningún otro fichero. Es la
+      propiedad que hace que un esquema oscuro futuro sea un cambio de tokens,
+      y se comprueba haciendo el cambio y revirtiéndolo.
 - [ ] Ninguna media query de `src/ui/` contiene un ancho que no corresponda a
       un token `--bp-*` declarado.
 - [ ] `npm run format:check`, `npm run lint`, `npm run typecheck`,
@@ -168,6 +183,11 @@ no de la fontanería.
 - **Depende del ADR 0006**, que decide CSS propio con tokens y CSS Modules,
   sin dependencias nuevas. Si el gate humano cambia esa decisión, esta spec
   se reescribe entera: no es adaptable a un framework de utilidades.
+- **Los valores de los tokens los fija `product/0009`**, a partir del
+  artefacto de referencia. Esta spec declara las familias y los nombres; sin
+  aquélla, la hoja global quedaría con la estructura correcta y sin colores.
+  El orden de implementación es esta primero, con valores provisionales, y
+  `product/0009` fijándolos: al revés no hay dónde escribirlos.
 - Se asume que Vite resuelve `*.module.css` de forma nativa, sin plugin ni
   configuración añadida. Es comportamiento estándar de Vite 8, que es la
   versión fijada en `package.json`.
@@ -182,13 +202,4 @@ no de la fontanería.
 
 ## Decisiones abiertas
 
-1. **Con qué se implementa el gate del requisito 13.** Las opciones sin
-   dependencia nueva son una comprobación propia bajo Vitest —que lee los
-   `.module.css` y busca literales, igual que `validateDocs.ts` lee los
-   documentos— o una regla de ESLint. `stylelint` sería lo idiomático y es
-   dependencia nueva, que el ADR 0006 descarta para el eje de estilos. Hay
-   que cerrarla antes de aprobar.
-2. **Si la paleta oscura entra en esta spec o en `product/0009`.** El
-   requisito 11 y su criterio piden que exista y sea legible; los **valores**
-   de la paleta son diseño. Cerrarlo en un sentido u otro antes de aprobar,
-   para que no queden dos specs creyendo que la paleta oscura es de la otra.
+Ninguna.

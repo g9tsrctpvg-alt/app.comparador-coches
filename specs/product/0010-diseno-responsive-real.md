@@ -30,10 +30,17 @@ Sin una sola línea de CSS, el contenido ocupa el ancho que tenga la ventana:
   cifras, fuentes descartadas con su motivo— no tienen a dónde partirse
   cómodamente.
 
-El artefacto del que viene el proyecto estaba pensado para **560 px de ancho
-máximo**: un móvil grande. Traer ese diseño tal cual no resuelve el problema,
-lo cambia de sitio — pasaría de no funcionar en ningún sitio a funcionar en
-uno solo.
+El artefacto del que viene el proyecto está pensado para **560 px de ancho
+máximo**: una columna centrada, sin una sola media query en todo el fichero.
+Traer ese diseño tal cual no resuelve el problema, lo cambia de sitio —
+pasaría de no funcionar en ningún sitio a funcionar en uno solo, con un
+monitor de 27 pulgadas enseñando una columna estrecha rodeada de vacío.
+
+El artefacto sí resuelve bien **un** caso, y conviene no perderlo: su tabla de
+ficha técnica se desplaza en horizontal dentro de su propio contenedor, con la
+columna del modelo fijada a la izquierda, de modo que doce columnas de datos
+caben en un móvil sin que la página entera se mueva. Es exactamente la técnica
+que el requisito 1 de esta spec generaliza.
 
 Esta spec es lo que el roadmap llama «diseño responsive real»: no una hoja de
 estilos con un par de media queries pegadas al final, sino una decisión sobre
@@ -90,9 +97,17 @@ accionar con el dedo.
    dura de esta spec: cualquier elemento que no quepa se parte, se ajusta o
    obtiene su propio contenedor con desplazamiento propio, y nunca empuja el
    ancho del documento.
-2. Los **puntos de ruptura son pocos y con nombre**, declarados una sola vez
-   como tokens `--bp-*`. La justificación de cada valor se escribe junto a su
-   declaración: un punto de ruptura sin motivo escrito es un número mágico.
+2. Los **puntos de ruptura son dos**, declarados una sola vez como tokens
+   `--bp-*`, con su motivo escrito junto a la declaración:
+
+   | Token | Valor | Por qué ese valor |
+   | --- | --- | --- |
+   | `--bp-columna` | 592 px | Los 560 px de columna del artefacto más sus 16 px de relleno a cada lado. Por debajo, la columna deja de caber entera y el diseño pasa a ser de borde a borde; por encima, ya no crece |
+   | `--bp-ancho` | 960 px | Donde caben dos columnas de contenido de medida legible con su separación. Es el punto en que dejar los controles apilados sobre el ranking desperdicia media pantalla |
+
+   Dos, y no tres o cuatro, porque el diseño solo tiene dos formas: columna
+   única y dos columnas. Un punto de ruptura que no cambia la forma es un
+   número mágico esperando a que alguien lo mueva sin saber por qué.
 3. El diseño se declara **móvil primero**: las reglas base valen para la
    pantalla estrecha y las media queries añaden a partir de ahí. Así el caso
    más restrictivo es el que no depende de que ninguna consulta se cumpla.
@@ -104,33 +119,51 @@ accionar con el dedo.
    la etiqueta y el valor por encima o al lado del deslizador, nunca los seis
    compartiendo una fila.
 6. En pantalla estrecha, **el ranking es alcanzable sin recorrer todos los
-   controles**. Si el panel de supuestos y pesos queda por delante, se puede
-   plegar, o el ranking tiene un salto directo. La forma concreta la decide
-   la implementación; el requisito es que llegar al ranking no cueste toda la
-   pantalla.
-7. **Todo objetivo táctil mide al menos 44 × 44 px** de área accionable, y
+   controles**. Los dos paneles del artefacto —«Pesos de decisión» y
+   «Supuestos de coste y presupuesto»— suman once deslizadores y cuatro
+   casillas por delante de la clasificación, que es lo que la persona ha
+   venido a ver. **Se resuelven como paneles plegables, plegados por defecto
+   por debajo de `--bp-columna`**, con su rótulo visible y un resumen de una
+   línea de lo que contienen. Por encima de ese ancho van desplegados: ahí el
+   espacio sobra y plegarlos solo añadiría un clic.
+7. A partir de `--bp-ancho`, **los controles y la clasificación se disponen en
+   dos columnas**: los paneles a un lado y el ranking al otro, de forma que
+   mover un peso y ver el efecto no exija desplazarse. La columna de texto
+   sigue acotada por el requisito 4; lo que se aprovecha es el ancho de la
+   página, no el de la línea.
+8. **Todo objetivo táctil mide al menos 44 × 44 px** de área accionable, y
    dos objetivos adyacentes están separados lo suficiente para no acertar en
    el equivocado. Aplica a los controles de despliegue, a las casillas y a
-   los deslizadores.
-8. Los **deslizadores son accionables con el dedo**: el punto de agarre tiene
+   los deslizadores. El artefacto declara sus casillas a **16 × 16 px**, que
+   es menos de la mitad del mínimo: es una de las cosas que se corrigen al
+   migrar, no de las que se copian.
+9. Los **deslizadores son accionables con el dedo**: el punto de agarre tiene
    tamaño táctil, y todo deslizador tiene **una alternativa que no exige
    arrastrar con precisión** —el propio control acepta teclado, y el valor es
-   visible mientras se mueve—.
-9. Con **zoom del navegador al 200 %** sobre una ventana de 1280 px, el
-   contenido sigue siendo utilizable y no aparece scroll horizontal: es el
-   mismo caso que un viewport de 640 px, y las reglas responsive lo cubren
-   sin trabajo adicional.
-10. En **orientación apaisada en móvil**, donde la altura escasea, ningún
+   visible mientras se mueve—. El caso más exigente es el de las valoraciones
+   del desglose: paso de 0,5 sobre un recorrido de 1 a 5, es decir nueve
+   posiciones en el ancho disponible.
+10. Con **zoom del navegador al 200 %** sobre una ventana de 1280 px, el
+    contenido sigue siendo utilizable y no aparece scroll horizontal: es el
+    mismo caso que un viewport de 640 px, y las reglas responsive lo cubren
+    sin trabajo adicional.
+11. En **orientación apaisada en móvil**, donde la altura escasea, ningún
     elemento fija una altura que impida desplazarse por el contenido. Las
     alturas de viewport, si se usan, usan `dvh` y no `vh`, para no romperse
-    con la barra de direcciones móvil.
-11. Las **líneas largas del desglose** —nombres de coche seguidos de cifras,
+    con la barra de direcciones móvil. El artefacto usa `minHeight: 100vh`
+    en su contenedor raíz: se migra como `100dvh`.
+12. Las **líneas largas del desglose** —nombres de coche seguidos de cifras,
     motivos de descarte, etiquetas de fuente— se parten por espacios sin
     desbordar. Una cadena larga sin espacios se parte antes que desbordar.
-12. **Ninguna información desaparece** por efecto del ancho. Se reordena, se
+13. **El contenido tabular ancho se desplaza dentro de su propio contenedor**,
+    no arrastrando la página. Es la técnica que el artefacto ya usa en su
+    ficha técnica, con la primera columna fijada para no perder de vista de
+    qué coche es cada fila. Es la salida por defecto del requisito 1 cuando
+    algo no cabe y no se puede partir.
+14. **Ninguna información desaparece** por efecto del ancho. Se reordena, se
     apila o se pliega tras un control explícito; no se oculta con
     `display: none` sin sustituto.
-13. Las media queries de la aplicación usan **exclusivamente** los puntos de
+15. Las media queries de la aplicación usan **exclusivamente** los puntos de
     ruptura declarados. Es la regla que `technical/0004` hace verificable.
 
 ## Criterios de aceptación
@@ -141,8 +174,16 @@ accionar con el dedo.
       `document.documentElement.scrollWidth` no supera el ancho del viewport.
       Se comprueba con el desglose de un coche **abierto**, que es el estado
       con más contenido.
-- [ ] Los puntos de ruptura son como mucho tres, están declarados como tokens
-      `--bp-*`, y cada uno lleva escrita la razón de su valor.
+- [ ] Los puntos de ruptura son exactamente los dos del requisito 2, están
+      declarados como tokens `--bp-*`, y cada uno lleva escrita la razón de su
+      valor junto a la declaración.
+- [ ] A 375 px los dos paneles de control aparecen plegados y el primer coche
+      de la clasificación es visible sin desplazarse; a 1024 px aparecen
+      desplegados.
+- [ ] A 1440 px los controles y la clasificación ocupan dos columnas, y
+      mover un peso cambia el ranking sin que haya que desplazarse.
+- [ ] A 320 px, ninguna casilla mide menos de 44 × 44 px de área accionable:
+      los 16 × 16 px del artefacto no se han migrado tal cual.
 - [ ] Buscar media queries en `src/ui/` no devuelve ninguna con un ancho
       literal que no corresponda a un token declarado.
 - [ ] A 320 px, los seis controles de peso ocupan seis líneas distintas, cada
@@ -183,19 +224,15 @@ accionar con el dedo.
   así en vez de fingir que sí.
 - Se asume que no hay imágenes en la interfaz, así que no hay imágenes
   responsive que resolver. Si algún día las hay, es otra spec.
+- **El artefacto no aporta ninguna decisión responsive que copiar**: no tiene
+  una sola media query, y su único acierto en este eje —la tabla con
+  desplazamiento propio y columna fijada— pertenece a la vista de ficha
+  técnica, que es `product/0013`. Los dos puntos de ruptura del requisito 2
+  son, por tanto, **diseño nuevo**, y por eso llevan su justificación escrita.
+- Se asume que la vista de ficha técnica (`product/0013`) cumplirá estos
+  mismos requisitos cuando exista. El requisito 13 está redactado para valer
+  para las dos vistas, no solo para la clasificación.
 
 ## Decisiones abiertas
 
-1. **Los valores concretos de los puntos de ruptura.** El requisito 2 exige
-   que sean pocos y justificados; esta spec no los fija. Hay que elegirlos
-   —y escribir el porqué de cada uno— antes de aprobar, porque «pocos y con
-   motivo» no es verificable hasta que existen.
-2. **Cómo se resuelve el requisito 6 en móvil**: panel de controles plegable,
-   salto al ranking, o los controles después del ranking. Son tres soluciones
-   con consecuencias distintas para quien llega por primera vez, y la
-   decisión es de producto, no de implementación.
-3. **Si la referencia de 560 px del artefacto original sigue significando
-   algo.** Depende de la decisión abierta 1 de `product/0009`: si el fuente
-   del artefacto se adjunta, sus decisiones de ancho son punto de partida; si
-   se declara que el diseño se hace de cero, esa cifra deja de ser una
-   restricción y pasa a ser un dato histórico.
+Ninguna.
