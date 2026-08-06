@@ -30,7 +30,9 @@ export interface PenaltyLine {
  * Es el contrato estable entre dominio e interfaz: la interfaz conmuta sobre
  * estos identificadores, nunca sobre el texto de una etiqueta. */
 export type EditableRatingField =
-  'aestheticsExterior' | 'aestheticsInterior' | 'travelComfort';
+  | 'aestheticsExterior'
+  | 'aestheticsInterior'
+  | 'travelComfort';
 
 export interface SubcomponentBreakdown {
   label: string;

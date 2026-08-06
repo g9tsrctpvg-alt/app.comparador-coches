@@ -1,5 +1,10 @@
 export type AxisId =
-  'viaje' | 'diario' | 'prestaciones' | 'fiabilidad' | 'estetica' | 'coste';
+  | 'viaje'
+  | 'diario'
+  | 'prestaciones'
+  | 'fiabilidad'
+  | 'estetica'
+  | 'coste';
 
 export type AxisWeights = Record<AxisId, number>;
 
