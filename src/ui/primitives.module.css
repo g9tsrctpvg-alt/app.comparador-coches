@@ -1,0 +1,64 @@
+/*
+ * Primitivos compartidos (technical/0004, requisito 12). Un componente que
+ * necesite uno de ellos lo compone (`composes: … from`) o aplica la clase
+ * directamente; no copia sus reglas.
+ *
+ * El indicador de foco no está aquí: es una regla global sobre
+ * `:focus-visible` en `src/styles/global.css`, porque un primitivo de foco
+ * repetido por clase se puede olvidar en un componente nuevo y uno global
+ * no.
+ */
+
+.card {
+  background: var(--color-card);
+  border: var(--size-border-hairline) solid var(--color-rule);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-card);
+}
+
+.invertedSurface {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+.label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-3xs);
+  font-weight: var(--font-weight-regular);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-mute);
+}
+
+.proportionBar {
+  display: block;
+  width: 100%;
+  background: var(--color-rule);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.proportionBarFill {
+  display: block;
+  height: 100%;
+  background: var(--color-accent);
+  border-radius: var(--radius-sm);
+  transition: width 0.35s ease;
+}
+
+.proportionBarFillDimmed {
+  composes: proportionBarFill;
+  background: var(--color-rule);
+}
+
+.statusMark {
+  color: var(--color-signal);
+  font-weight: var(--font-weight-bold);
+}
+
+.secondaryText {
+  color: var(--color-mute);
+  font-size: var(--font-size-xs);
+}

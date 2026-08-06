@@ -1,0 +1,159 @@
+/*
+ * Hoja global de tokens y reset (technical/0004). Es el único sitio donde
+ * vive un literal de color, espaciado, tipografía, radio, sombra, tamaño o
+ * punto de ruptura: todo lo demás en `src/ui/` lee estas custom properties
+ * por `var(--…)`.
+ *
+ * Los valores de color y de la escala tipográfica son provisionales:
+ * `product/0009` los fija a partir del artefacto de referencia. Los de
+ * `--bp-*` también son provisionales: `product/0010` fija sus valores
+ * definitivos y la razón de cada uno.
+ */
+
+:root {
+  /* Color — los siete papeles del artefacto (product/0009 los fija). */
+  --color-paper: #e4e4e4;
+  --color-card: #efefef;
+  --color-ink: #1c1c1c;
+  --color-mute: #6b6b6b;
+  --color-rule: #cbcbcb;
+  --color-accent: #2f6f63;
+  --color-signal: #a8461a;
+
+  /* Derivados de los siete papeles: mismo papel, uso distinto. */
+  --color-mute-on-ink: #8a8a8a;
+  --color-accent-tint: rgb(47 111 99 / 7%);
+
+  /* Espaciado — una sola escala, en incrementos de 4px. */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-7: 2rem;
+  --space-8: 3rem;
+
+  /* Tipografía — dos pilas del sistema, sin fuente web. */
+  --font-mono:
+    ui-monospace, 'SF Mono', 'Cascadia Mono', 'Segoe UI Mono', Consolas,
+    'Liberation Mono', Menlo, monospace;
+  --font-sans:
+    system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+  /* Escala tipográfica (product/0009 la fija sobre el artefacto). */
+  --font-size-2xl: 1.6rem;
+  --font-size-xl: 1.25rem;
+  --font-size-md: 1rem;
+  --font-size-sm: 0.85rem;
+  --font-size-xs: 0.75rem;
+  --font-size-2xs: 0.7rem;
+  --font-size-3xs: 0.65rem;
+  --font-size-4xs: 0.6rem;
+
+  --font-weight-regular: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Radios. */
+  --radius-sm: 0.125rem;
+  --radius-md: 0.25rem;
+
+  /* Sombras. */
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 8%);
+  --shadow-focus: 0 0 0 0.1875rem rgb(47 111 99 / 45%);
+
+  /* Tamaños — anchos y medidas propias, no espaciado entre elementos. */
+  --size-column: 35rem;
+  --size-touch-min: 2.75rem;
+  --size-position: 2ch;
+  --size-line-measure: 75ch;
+  --size-border-hairline: 0.0625rem;
+
+  /* Puntos de ruptura — declarados aquí una sola vez; product/0010 fija
+   * el valor final de cada uno con su motivo. Una media query no puede leer
+   * una custom property, así que cualquier `@media` de `src/ui/` repite el
+   * número en px: la CI comprueba que ese número coincida con uno de estos
+   * dos, convertido a la misma unidad. */
+  --bp-columna: 37rem;
+  --bp-ancho: 60rem;
+}
+
+/* Reset mínimo (technical/0004, requisito 7). */
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd,
+ol,
+ul {
+  margin: 0;
+}
+
+ol,
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+input,
+button,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+img,
+svg,
+canvas {
+  max-width: 100%;
+  display: block;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Indicador de foco compartido (requisito 8): un único primitivo, no
+ * reinventado por componente. Ningún módulo escribe `outline: none` sin
+ * sustituirlo por este mismo tratamiento en la misma regla. */
+:focus-visible {
+  outline: 0.1875rem solid var(--color-accent);
+  outline-offset: 0.125rem;
+  border-radius: var(--radius-sm);
+}
+
+/* `prefers-reduced-motion` (requisito 10): apaga toda transición y
+ * animación desde un único sitio, sin depender de que cada componente se
+ * acuerde de comprobarlo. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
