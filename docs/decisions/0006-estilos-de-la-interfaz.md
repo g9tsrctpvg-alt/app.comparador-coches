@@ -1,6 +1,6 @@
 # 0006 — Los estilos de la interfaz: CSS propio con tokens
 
-- **Estado:** draft
+- **Estado:** approved
 - **Fecha:** 2026-08-06
 - **Nivel:** 🟡
 

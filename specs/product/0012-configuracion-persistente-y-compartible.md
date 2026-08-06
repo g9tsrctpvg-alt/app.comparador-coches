@@ -1,7 +1,7 @@
 # 0012 — Configuración persistente y compartible
 
 - **Id:** product/0012
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-08-06
 - **Specs relacionadas:** product/0001, product/0009, product/0011

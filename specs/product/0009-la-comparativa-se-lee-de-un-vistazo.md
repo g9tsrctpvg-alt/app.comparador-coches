@@ -1,7 +1,7 @@
 # 0009 — La comparativa se lee de un vistazo
 
 - **Id:** product/0009
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-08-06
 - **Specs relacionadas:** product/0001, product/0008, product/0010, 0013, technical/0004

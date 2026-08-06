@@ -1,7 +1,7 @@
 # 0010 — Diseño responsive real
 
 - **Id:** product/0010
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-08-06
 - **Specs relacionadas:** product/0009, product/0011, technical/0004

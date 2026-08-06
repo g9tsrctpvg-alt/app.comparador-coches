@@ -1,7 +1,7 @@
 # 0004 — Fundamento de estilos: tokens y primitivos
 
 - **Id:** technical/0004
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** technical
 - **Fecha:** 2026-08-06
 - **Specs relacionadas:** product/0009, product/0010, product/0011, technical/0001

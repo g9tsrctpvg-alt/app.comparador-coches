@@ -1,7 +1,7 @@
 # 0011 — La página que explica cómo se calcula todo
 
 - **Id:** product/0011
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-08-06
 - **Specs relacionadas:** product/0001…0007, product/0009, technical/0004
