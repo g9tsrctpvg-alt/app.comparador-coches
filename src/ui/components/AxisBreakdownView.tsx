@@ -65,6 +65,19 @@ export function AxisBreakdownView({ breakdown }: AxisBreakdownViewProps) {
         </div>
       )}
 
+      {breakdown.info && breakdown.info.length > 0 && (
+        <div>
+          <h4>Información</h4>
+          <ul>
+            {breakdown.info.map((item) => (
+              <li key={item.label}>
+                {item.label}: {item.value}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {breakdown.subcomponents && breakdown.subcomponents.length > 0 && (
         <div>
           <h4>Pasos intermedios</h4>

@@ -126,6 +126,25 @@ describe('AxisBreakdownView', () => {
     expect(markup).toContain('5,7/10');
   });
 
+  it('shows an informational line without treating it as an applied assumption', () => {
+    const markup = renderToStaticMarkup(
+      <AxisBreakdownView
+        breakdown={baseAxis({
+          info: [
+            {
+              label: 'Extensión de garantía condicionada (no puntúa)',
+              value:
+                '15 años, hasta 100000 km — Sujeta a mantenimiento en red oficial',
+            },
+          ],
+        })}
+      />,
+    );
+    expect(markup).toContain('Información');
+    expect(markup).toContain('no puntúa');
+    expect(markup).not.toContain('Supuestos aplicados');
+  });
+
   it('says plainly when an axis has no penalties', () => {
     const markup = renderToStaticMarkup(
       <AxisBreakdownView breakdown={baseAxis()} />,

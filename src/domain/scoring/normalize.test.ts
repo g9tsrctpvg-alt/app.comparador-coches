@@ -39,6 +39,22 @@ describe('normalizeAll', () => {
     );
   });
 
+  it('finds the same min and max regardless of the order candidates arrive in', () => {
+    // No product axis still calls normalizeAll (product/0007 was the last
+    // one to migrate), so this is the only place left exercising both
+    // branches of each reduce — reordering the fixture keeps that true
+    // instead of leaving it to whichever axis happened to pass values in a
+    // convenient order.
+    const reordered = [
+      { carId: 'b', carName: 'B', value: 20 },
+      { carId: 'a', carName: 'A', value: 10 },
+      { carId: 'c', carName: 'C', value: 30 },
+    ];
+    const result = normalizeAll('mayor-mejor', reordered);
+    expect(result.get('a')!.normalizedValue).toBe(0);
+    expect(result.get('c')!.normalizedValue).toBe(10);
+  });
+
   it('gives the neutral midpoint to every candidate when all values tie', () => {
     const tied = [
       { carId: 'a', carName: 'A', value: 5 },

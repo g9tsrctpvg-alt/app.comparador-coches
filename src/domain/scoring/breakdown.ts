@@ -72,6 +72,12 @@ export interface AxisBreakdown {
   formulaDescription: string;
   inputs: InputDatum[];
   assumptionsUsed: AssumptionEcho[];
+  /** Información del coche que el desglose muestra sin que entre en la
+   * nota — por ejemplo, la extensión de garantía condicionada que
+   * `fiabilidad` declara pero no puntúa (product/0007, requisito 4).
+   * Distinta de `assumptionsUsed`: esto no es un supuesto global, es un
+   * dato propio del coche. */
+  info?: AssumptionEcho[];
   /** Ejes simples: su única normalización. */
   normalization?: Normalization;
   /** Unidad del valor crudo del eje y de los extremos de su normalización.
