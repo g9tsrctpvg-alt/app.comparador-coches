@@ -1,7 +1,7 @@
 # 0005 — El eje de viaje, objetivado en dos escalas absolutas
 
 - **Id:** product/0005
-- **Estado:** implemented
+- **Estado:** verified
 - **Tipo:** product
 - **Fecha:** 2026-08-05
 - **Specs relacionadas:** product/0001, product/0002, product/0004
@@ -193,23 +193,23 @@ que con uno.
 
 > Obligatorios y verificables.
 
-- [ ] Un coche con 620 L de maletero saca un 10 en esa magnitud, y uno con
+- [x] Un coche con 620 L de maletero saca un 10 en esa magnitud, y uno con
       700 L saca también un 10.
-- [ ] Un coche con 250 L saca un 0, y uno con 180 L saca también un 0.
-- [ ] Un coche con 2.850 mm de batalla saca un 10 en esa magnitud, y uno con
+- [x] Un coche con 250 L saca un 0, y uno con 180 L saca también un 0.
+- [x] Un coche con 2.850 mm de batalla saca un 10 en esa magnitud, y uno con
       2.400 mm saca un 0.
-- [ ] Un coche en el punto medio de una escala saca un 5 en esa magnitud, y
+- [x] Un coche en el punto medio de una escala saca un 5 en esa magnitud, y
       uno al 10% del anclaje malo saca menos de 1: la curva es en S, no una
       recta.
-- [ ] La nota del eje de un coche es la misma con once candidatos en el
+- [x] La nota del eje de un coche es la misma con once candidatos en el
       catálogo que con uno solo.
-- [ ] Dos coches con el mismo maletero y distinta batalla obtienen notas de
+- [x] Dos coches con el mismo maletero y distinta batalla obtienen notas de
       eje distintas, en la proporción que declara el reparto.
-- [ ] El ranking ya no ofrece editar una valoración de viaje, y el desglose
+- [x] El ranking ya no ofrece editar una valoración de viaje, y el desglose
       no la menciona.
-- [ ] El desglose del eje muestra los dos anclajes de cada escala y la nota
+- [x] El desglose del eje muestra los dos anclajes de cada escala y la nota
       que sale de cada magnitud.
-- [ ] El desglose del eje ya no nombra qué modelo marca el mínimo ni el
+- [x] El desglose del eje ya no nombra qué modelo marca el mínimo ni el
       máximo.
 
 ## Dependencias y supuestos
