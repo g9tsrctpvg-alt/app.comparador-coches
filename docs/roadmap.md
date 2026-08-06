@@ -208,6 +208,15 @@ hoy no está en ninguna parte de la aplicación.
 No pertenece a ninguna fase: es alcance nuevo, no trabajo pendiente de una
 fase abierta. Se lista para no perderlo, no para bloquear nada.
 
+- **La ficha del modelo y sus fotos — `product/0014`, en `draft`.** Alcance
+  nuevo, no migración: hoy «la ficha» no está declarada en ninguna parte —es
+  la lista de columnas que eligió la tabla de `product/0013`, cinco de las
+  dieciocho magnitudes— y la aplicación no tiene ni una imagen. La spec
+  declara la ficha por bloques y añade cinco fotos por modelo (frontal,
+  lateral, trasera con portón cerrado, maletero abierto e interior), incluida
+  la fila de referencia. Tiene cuatro decisiones abiertas, y la de calado es
+  si las imágenes se **enlazan** por URL absoluta o se **copian** al
+  repositorio. Pasa a ser fase cuando el gate humano la apruebe.
 - **Eje de autonomía y repostaje.** Es la mayor diferencia práctica entre los
   once candidatos en un viaje largo —los térmicos e híbridos hacen 640-950 km
   con un depósito, los eléctricos la mitad en autopista— y el modelo es hoy
