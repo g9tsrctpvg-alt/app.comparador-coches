@@ -1,6 +1,6 @@
 # 0005 — Los ADR son documentos de estado, no deltas
 
-- **Estado:** draft
+- **Estado:** approved
 - **Fecha:** 2026-08-06
 - **Nivel:** 🟡
 
