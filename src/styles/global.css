@@ -1,28 +1,37 @@
 /*
- * Hoja global de tokens y reset (technical/0004). Es el único sitio donde
- * vive un literal de color, espaciado, tipografía, radio, sombra, tamaño o
- * punto de ruptura: todo lo demás en `src/ui/` lee estas custom properties
- * por `var(--…)`.
+ * Hoja global de tokens y reset (technical/0004, valores de color y
+ * tipografía fijados por product/0009). Es el único sitio donde vive un
+ * literal de color, espaciado, tipografía, radio, sombra, tamaño o punto de
+ * ruptura: todo lo demás en `src/ui/` lee estas custom properties por
+ * `var(--…)`.
  *
- * Los valores de color y de la escala tipográfica son provisionales:
- * `product/0009` los fija a partir del artefacto de referencia. Los de
- * `--bp-*` también son provisionales: `product/0010` fija sus valores
- * definitivos y la razón de cada uno.
+ * Los `--bp-*` siguen provisionales: `product/0010` fija su valor
+ * definitivo y la razón de cada uno.
  */
 
 :root {
-  /* Color — los siete papeles del artefacto (product/0009 los fija). */
-  --color-paper: #e4e4e4;
-  --color-card: #efefef;
-  --color-ink: #1c1c1c;
-  --color-mute: #6b6b6b;
-  --color-rule: #cbcbcb;
-  --color-accent: #2f6f63;
-  --color-signal: #a8461a;
+  /* Color — los siete papeles del artefacto de referencia
+   * (product/0009, sección «La paleta»). */
+  --color-paper: #e9ebe6;
+  --color-card: #f3f5f1;
+  --color-ink: #1a2420;
+  --color-rule: #c8cfc6;
+  --color-accent: #14655c;
 
-  /* Derivados de los siete papeles: mismo papel, uso distinto. */
-  --color-mute-on-ink: #8a8a8a;
-  --color-accent-tint: rgb(47 111 99 / 7%);
+  /* `mute` y `signal` del artefacto —#6b7a72 y #b4551b— no llegan a 4.5:1
+   * sobre `card` y `paper`. Se oscurecen manteniendo el tono
+   * (product/0009, requisito 18); el ajuste queda escrito aquí porque es
+   * donde vive el literal que lo decide. */
+  --color-mute: #5c6b62;
+  --color-signal: #a34d18;
+
+  /* Derivados de los siete papeles: mismo papel, uso distinto.
+   * `--color-mute-on-ink` es el octavo color que el artefacto escribe a
+   * mano —`#8fa69b`, texto apagado sobre `ink`— sin declararlo en su
+   * constante de colores (product/0009, sección «El artefacto ya se salta
+   * su propia paleta»); aquí se convierte en token. */
+  --color-mute-on-ink: #8fa69b;
+  --color-accent-tint: rgb(20 101 92 / 7%);
 
   /* Espaciado — una sola escala, en incrementos de 4px. */
   --space-1: 0.25rem;
@@ -41,15 +50,18 @@
   --font-sans:
     system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 
-  /* Escala tipográfica (product/0009 la fija sobre el artefacto). */
-  --font-size-2xl: 1.6rem;
-  --font-size-xl: 1.25rem;
-  --font-size-md: 1rem;
-  --font-size-sm: 0.85rem;
-  --font-size-xs: 0.75rem;
-  --font-size-2xs: 0.7rem;
-  --font-size-3xs: 0.65rem;
-  --font-size-4xs: 0.6rem;
+  /* Escala tipográfica del artefacto de referencia (product/0009, sección
+   * «La tipografía»), en rem sobre una raíz de 16px: 30 el titular, 22 el
+   * nombre del líder, 15 el nombre de un coche y su puntuación, 13 el texto
+   * de un control, 11 la letra pequeña y los datos monoespaciados, 10 el
+   * rótulo `Label`, 9,5 la cabecera de tabla. */
+  --font-size-2xl: 1.875rem;
+  --font-size-xl: 1.375rem;
+  --font-size-md: 0.9375rem;
+  --font-size-sm: 0.8125rem;
+  --font-size-xs: 0.6875rem;
+  --font-size-2xs: 0.625rem;
+  --font-size-3xs: 0.59375rem;
 
   --font-weight-regular: 400;
   --font-weight-semibold: 600;
@@ -61,7 +73,7 @@
 
   /* Sombras. */
   --shadow-card: 0 1px 2px rgb(0 0 0 / 8%);
-  --shadow-focus: 0 0 0 0.1875rem rgb(47 111 99 / 45%);
+  --shadow-focus: 0 0 0 0.1875rem rgb(20 101 92 / 45%);
 
   /* Tamaños — anchos y medidas propias, no espaciado entre elementos. */
   --size-column: 35rem;
@@ -69,6 +81,8 @@
   --size-position: 2ch;
   --size-line-measure: 75ch;
   --size-border-hairline: 0.0625rem;
+  --size-bar-row: 0.1875rem;
+  --size-bar-axis: 0.375rem;
 
   /* Puntos de ruptura — declarados aquí una sola vez; product/0010 fija
    * el valor final de cada uno con su motivo. Una media query no puede leer

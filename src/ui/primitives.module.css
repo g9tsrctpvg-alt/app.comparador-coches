@@ -9,6 +9,13 @@
  * no.
  */
 
+/* Todo número va en monoespaciada (product/0009, requisito 7): un
+ * primitivo en vez de repetir `font-family` en cada módulo que enseña una
+ * cifra. Va primero porque otros primitivos de este fichero lo componen. */
+.mono {
+  font-family: var(--font-mono);
+}
+
 .card {
   background: var(--color-card);
   border: var(--size-border-hairline) solid var(--color-rule);
@@ -25,7 +32,7 @@
 .label {
   display: block;
   font-family: var(--font-mono);
-  font-size: var(--font-size-3xs);
+  font-size: var(--font-size-2xs);
   font-weight: var(--font-weight-regular);
   text-transform: uppercase;
   letter-spacing: 0.14em;
@@ -38,6 +45,18 @@
   background: var(--color-rule);
   border-radius: var(--radius-sm);
   overflow: hidden;
+}
+
+/* Dos tamaños (product/0009, sección «La barra de proporción»): 3px bajo
+ * cada fila del ranking, 6px por eje en el desglose. */
+.proportionBarRow {
+  composes: proportionBar;
+  height: var(--size-bar-row);
+}
+
+.proportionBarAxis {
+  composes: proportionBar;
+  height: var(--size-bar-axis);
 }
 
 .proportionBarFill {
@@ -58,7 +77,27 @@
   font-weight: var(--font-weight-bold);
 }
 
+.estimatedMark {
+  composes: mono;
+  color: var(--color-signal);
+}
+
 .secondaryText {
   color: var(--color-mute);
   font-size: var(--font-size-xs);
+}
+
+/* Texto accesible solo para lectores de pantalla, sin efecto visual: el
+ * patrón «sr-only» estándar, con las medidas de 1px que exige en tokens de
+ * tamaño en vez de en el literal habitual. */
+.visuallyHidden {
+  position: absolute;
+  width: var(--size-border-hairline);
+  height: var(--size-border-hairline);
+  padding: 0;
+  margin: calc(var(--size-border-hairline) * -1);
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

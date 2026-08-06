@@ -1,20 +1,23 @@
 import { useState } from 'react';
+import type { Car } from '../../domain/car';
 import type {
   CarScoreBreakdown,
   EditableRatingField,
   SubcomponentBreakdown,
 } from '../../domain/scoring/breakdown';
 import type { RatingOverride } from '../../domain/scoring/overrides';
-import { formatNumber } from '../format';
-import { AxisBreakdownView } from './AxisBreakdownView';
+import { rankVisible } from './ranking';
+import { RankingRow } from './RankingRow';
+import styles from './RankingList.module.css';
 
 interface RankingListProps {
   cars: CarScoreBreakdown[];
+  rawCars: Car[];
   hideOverBudget: boolean;
   onRatingChange: (carId: string, override: RatingOverride) => void;
 }
 
-interface EditableRating {
+export interface EditableRating {
   field: EditableRatingField;
   label: string;
   value: number;
@@ -50,56 +53,32 @@ export function editableRatingsOf(car: CarScoreBreakdown): EditableRating[] {
 
 export function RankingList({
   cars,
+  rawCars,
   hideOverBudget,
   onRatingChange,
 }: RankingListProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
-  const visible = hideOverBudget ? cars.filter((car) => !car.overBudget) : cars;
-  const ranked = [...visible].sort((a, b) => b.total - a.total);
+  const ranked = rankVisible(cars, hideOverBudget);
+  const rawById = new Map(rawCars.map((car) => [car.id, car]));
 
   return (
-    <ol aria-label="Ranking">
-      {ranked.map((car) => {
+    <ol aria-label="Ranking" className={styles.list}>
+      {ranked.map((car, index) => {
         const expanded = expandedId === car.carId;
 
         return (
-          <li key={car.carId}>
-            <button
-              type="button"
-              onClick={() => setExpandedId(expanded ? null : car.carId)}
-            >
-              {car.carName} — {formatNumber(car.total)} puntos
-              {car.overBudget && ' — FUERA DE PRESUPUESTO'}
-              {expanded ? ' (ocultar desglose)' : ' (ver desglose)'}
-            </button>
-
-            {expanded && (
-              <div>
-                {editableRatingsOf(car).map((rating) => (
-                  <label key={rating.field}>
-                    {rating.label}: {rating.value.toFixed(1)}
-                    <input
-                      type="range"
-                      min={1}
-                      max={5}
-                      step={0.5}
-                      value={rating.value}
-                      onChange={(event) =>
-                        onRatingChange(car.carId, {
-                          [rating.field]: Number(event.target.value),
-                        })
-                      }
-                    />
-                  </label>
-                ))}
-
-                {car.axes.map((axis) => (
-                  <AxisBreakdownView key={axis.axisId} breakdown={axis} />
-                ))}
-              </div>
-            )}
-          </li>
+          <RankingRow
+            key={car.carId}
+            car={car}
+            rawCar={rawById.get(car.carId)}
+            rank={index + 1}
+            isLeader={index === 0}
+            expanded={expanded}
+            onToggle={() => setExpandedId(expanded ? null : car.carId)}
+            editableRatings={editableRatingsOf(car)}
+            onRatingChange={(override) => onRatingChange(car.carId, override)}
+          />
         );
       })}
     </ol>

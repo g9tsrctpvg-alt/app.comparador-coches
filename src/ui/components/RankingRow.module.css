@@ -1,0 +1,124 @@
+.row {
+  padding: var(--space-3) 0;
+  border-bottom: var(--size-border-hairline) solid var(--color-rule);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.rowLeader {
+  composes: row;
+  background: var(--color-accent-tint);
+}
+
+.toggle {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.position {
+  composes: mono from '../primitives.module.css';
+  display: inline-block;
+  width: var(--size-position);
+  color: var(--color-mute);
+  font-size: var(--font-size-md);
+}
+
+.positionLeader {
+  composes: position;
+  color: var(--color-accent);
+}
+
+.name {
+  font-family: var(--font-sans);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-md);
+  color: var(--color-ink);
+}
+
+.secondaryLine {
+  composes: mono from '../primitives.module.css';
+  color: var(--color-mute);
+  font-size: var(--font-size-xs);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.scoreRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.bar {
+  composes: proportionBarRow from '../primitives.module.css';
+  flex: 1;
+}
+
+.score {
+  composes: mono from '../primitives.module.css';
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-md);
+  color: var(--color-ink);
+}
+
+.scoreLeader {
+  composes: score;
+  color: var(--color-accent);
+}
+
+.expanded {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-top: var(--space-2);
+}
+
+.ratings {
+  composes: card from '../primitives.module.css';
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.ratingsHeading {
+  composes: label from '../primitives.module.css';
+  margin: 0;
+}
+
+.ratingRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.ratingTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.ratingName {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+}
+
+.ratingValue {
+  composes: mono from '../primitives.module.css';
+  color: var(--color-accent);
+  font-weight: var(--font-weight-semibold);
+}
+
+.ratingSlider {
+  width: 100%;
+}

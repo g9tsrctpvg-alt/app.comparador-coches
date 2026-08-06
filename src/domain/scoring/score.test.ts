@@ -1,9 +1,18 @@
 import { describe, expect, it } from 'vitest';
 import { DEFAULT_ASSUMPTIONS } from './assumptions';
-import { DEFAULT_WEIGHTS } from './weights';
+import { AXIS_ORDER, DEFAULT_WEIGHTS, type AxisWeights } from './weights';
 import { threeCarFixture } from './testFixtures';
-import { scoreCatalog } from './score';
+import { percentageOf, scoreCatalog } from './score';
 import { EmptyCandidateSetError } from './normalize';
+
+const ZERO_WEIGHTS: AxisWeights = {
+  viaje: 0,
+  diario: 0,
+  prestaciones: 0,
+  fiabilidad: 0,
+  estetica: 0,
+  coste: 0,
+};
 
 describe('scoreCatalog', () => {
   it('refuses an empty catalogue by name, not with a TypeError from reduce', () => {
@@ -98,6 +107,25 @@ describe('scoreCatalog', () => {
     expect(ev3.overBudget).toBe(false);
   });
 
+  it('reports percentage as total over 10 × the sum of weights', () => {
+    const result = scoreCatalog(
+      threeCarFixture,
+      DEFAULT_WEIGHTS,
+      DEFAULT_ASSUMPTIONS,
+      47000,
+    );
+    const weightSum = AXIS_ORDER.reduce(
+      (sum, id) => sum + DEFAULT_WEIGHTS[id],
+      0,
+    );
+    for (const car of result) {
+      expect(car.percentage).toBeCloseTo(
+        (car.total / (10 * weightSum)) * 100,
+        9,
+      );
+    }
+  });
+
   it('shows the electric penalty as an explicit line with its condition and effect', () => {
     const result = scoreCatalog(
       threeCarFixture,
@@ -115,5 +143,20 @@ describe('scoreCatalog', () => {
         effect: -1.5,
       },
     ]);
+  });
+});
+
+describe('percentageOf', () => {
+  it('is 0 rather than dividing by zero when every weight is 0', () => {
+    expect(percentageOf(0, ZERO_WEIGHTS)).toBe(0);
+    expect(percentageOf(123, ZERO_WEIGHTS)).toBe(0);
+  });
+
+  it('is 100 for a car that scored 10 on all six axes', () => {
+    const weightSum = AXIS_ORDER.reduce(
+      (sum, id) => sum + DEFAULT_WEIGHTS[id],
+      0,
+    );
+    expect(percentageOf(10 * weightSum, DEFAULT_WEIGHTS)).toBe(100);
   });
 });

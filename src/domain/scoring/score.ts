@@ -11,6 +11,15 @@ import { buildFiabilidadBreakdown } from './axes/fiabilidad';
 import { buildEsteticaBreakdown } from './axes/estetica';
 import { buildCosteBreakdown } from './axes/coste';
 
+/** `total` como porcentaje de `10 × Σ pesos`, el máximo posible con los
+ * pesos vigentes. 0 en vez de `NaN` cuando la suma de pesos es 0: no hay
+ * máximo que alcanzar, así que no hay nada que expresar como proporción. */
+export function percentageOf(total: number, weights: AxisWeights): number {
+  const weightSum = AXIS_ORDER.reduce((sum, id) => sum + weights[id], 0);
+  if (weightSum === 0) return 0;
+  return (total / (10 * weightSum)) * 100;
+}
+
 export function scoreCatalog(
   cars: Car[],
   weights: AxisWeights,
@@ -46,6 +55,7 @@ export function scoreCatalog(
       overBudget: car.priceEur.value > budgetEur,
       axes,
       total,
+      percentage: percentageOf(total, weights),
     };
   });
 }

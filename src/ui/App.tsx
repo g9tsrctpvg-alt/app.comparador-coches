@@ -15,6 +15,9 @@ import { logError } from '../logging/logger';
 import { AssumptionsPanel } from './components/AssumptionsPanel';
 import { WeightSliders } from './components/WeightSliders';
 import { RankingList } from './components/RankingList';
+import { LeaderCard } from './components/LeaderCard';
+import { rankVisible } from './components/ranking';
+import styles from './App.module.css';
 
 const DEFAULT_BUDGET_EUR = 47000;
 
@@ -57,16 +60,21 @@ export function App({ load = loadCatalog }: AppProps) {
 
   if ('error' in catalogResult) {
     return (
-      <p role="alert">
+      <p role="alert" className={styles.error}>
         No se ha podido cargar el catálogo: {catalogResult.error}
       </p>
     );
   }
 
-  return (
-    <main>
-      <h1>Comparador de coches</h1>
+  const leader = rankVisible(scored, hideOverBudget)[0];
 
+  return (
+    <main className={styles.app}>
+      <h1 className={styles.title}>Comparador de coches</h1>
+
+      {leader && <LeaderCard car={leader} />}
+
+      <WeightSliders weights={weights} onChange={setWeights} />
       <AssumptionsPanel
         assumptions={assumptions}
         onChange={setAssumptions}
@@ -75,9 +83,9 @@ export function App({ load = loadCatalog }: AppProps) {
         hideOverBudget={hideOverBudget}
         onHideOverBudgetChange={setHideOverBudget}
       />
-      <WeightSliders weights={weights} onChange={setWeights} />
       <RankingList
         cars={scored}
+        rawCars={catalogResult.cars}
         hideOverBudget={hideOverBudget}
         onRatingChange={(carId, override) =>
           setOverrides((prev) => ({

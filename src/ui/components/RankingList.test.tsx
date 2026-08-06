@@ -39,6 +39,7 @@ function renderExpanded(cars: CarScoreBreakdown[]): string {
   return renderToStaticMarkup(
     <RankingList
       cars={cars}
+      rawCars={threeCarFixture}
       hideOverBudget={false}
       onRatingChange={() => undefined}
     />,
@@ -74,6 +75,7 @@ describe('RankingList', () => {
     const markup = renderToStaticMarkup(
       <RankingList
         cars={cars}
+        rawCars={threeCarFixture}
         hideOverBudget
         onRatingChange={() => undefined}
       />,

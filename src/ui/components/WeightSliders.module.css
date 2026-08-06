@@ -1,0 +1,51 @@
+.panel {
+  composes: card from '../primitives.module.css';
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.heading {
+  composes: label from '../primitives.module.css';
+  margin: 0;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.axisName {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+}
+
+.value {
+  composes: mono from '../primitives.module.css';
+  color: var(--color-accent);
+  font-weight: var(--font-weight-semibold);
+}
+
+.valueDimmed {
+  composes: value;
+  color: var(--color-mute);
+  font-weight: var(--font-weight-regular);
+}
+
+.slider {
+  width: 100%;
+}

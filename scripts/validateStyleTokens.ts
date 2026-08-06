@@ -34,6 +34,14 @@ const LENGTH_RE = /(?<![\w.-])(\d+(?:\.\d+)?)(px|rem)\b/g;
 const FONT_KEYWORD_RE = /\b(monospace|system-ui|sans-serif)\b/g;
 const MEDIA_PRELUDE_RE = /@media\s+([^{]+)\{/g;
 const BP_TOKEN_RE = /--bp-[a-z0-9-]+:\s*(\d+(?:\.\d+)?)(px|rem)/gi;
+const COMMENT_RE = /\/\*[\s\S]*?\*\//g;
+
+/** Un comentario CSS puede citar un valor —«3px bajo cada fila»— sin ser una
+ * declaración; se vacía antes de buscar literales, conservando la longitud
+ * del fichero para que las posiciones del resto de reglas no se muevan. */
+function blankComments(css: string): string {
+  return css.replace(COMMENT_RE, (match) => ' '.repeat(match.length));
+}
 
 const REM_TO_PX = 16;
 
@@ -109,7 +117,8 @@ export function validateStyleTokens(
   const errors: string[] = [];
   const breakpointsPx = declaredBreakpointsPx(input.globalStylesheet);
 
-  for (const [path, css] of Object.entries(input.modules)) {
+  for (const [path, rawCss] of Object.entries(input.modules)) {
+    const css = blankComments(rawCss);
     const withoutMediaPreludes = checkMediaPreludes(
       path,
       css,

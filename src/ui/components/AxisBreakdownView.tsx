@@ -1,5 +1,8 @@
 import type { AxisBreakdown } from '../../domain/scoring/breakdown';
 import { formatEur, formatNumber, formatSigned } from '../format';
+import primitives from '../primitives.module.css';
+import styles from './AxisBreakdownView.module.css';
+import { EstimatedMark } from './EstimatedMark';
 
 function formatValue(value: number, unit?: string): string {
   if (unit === '€') return formatEur(value);
@@ -12,26 +15,54 @@ interface AxisBreakdownViewProps {
 }
 
 export function AxisBreakdownView({ breakdown }: AxisBreakdownViewProps) {
+  const barPct = Math.max(0, Math.min(100, (breakdown.score / 10) * 100));
+  const dimmed = breakdown.weight === 0;
+
   return (
-    <div>
-      <p>
-        <strong>{breakdown.label}</strong> — peso {breakdown.weight}, puntuación{' '}
-        {formatNumber(breakdown.score)}/10, aportación{' '}
-        {formatNumber(breakdown.contribution)}
-      </p>
-      <p>{breakdown.formulaDescription}</p>
+    <div className={styles.axis}>
+      <header className={styles.header}>
+        <span className={styles.name}>{breakdown.label}</span>
+        <span className={styles.meta}>
+          peso <span className={styles.metaValue}>{breakdown.weight}</span>
+        </span>
+        <span className={styles.score}>{formatNumber(breakdown.score)}/10</span>
+        <span className={styles.meta}>
+          aportación{' '}
+          <span className={styles.metaValue}>
+            {formatNumber(breakdown.contribution)}
+          </span>
+        </span>
+      </header>
+
+      <div className={primitives.proportionBarAxis}>
+        <div
+          className={
+            dimmed
+              ? primitives.proportionBarFillDimmed
+              : primitives.proportionBarFill
+          }
+          style={{ width: `${barPct}%` }}
+        />
+      </div>
+
+      <p className={styles.formula}>{breakdown.formulaDescription}</p>
 
       {breakdown.inputs.length > 0 && (
         <div>
-          <h4>Datos de entrada</h4>
-          <ul>
+          <span className={styles.groupLabel}>Datos de entrada</span>
+          <ul className={styles.list}>
             {breakdown.inputs.map((input) => (
-              <li key={input.label}>
-                {input.label}: {formatValue(input.value, input.unit)}
-                {input.estimated ? ' (estimado)' : ' (verificado)'} — fuente:{' '}
-                {input.sourceLabel}
+              <li key={input.label} className={styles.inputRow}>
+                <span className={styles.inputLabel}>{input.label}</span>
+                <span className={styles.inputValue}>
+                  {formatValue(input.value, input.unit)}
+                </span>
+                {input.estimated && <EstimatedMark />}
+                <span className={styles.source}>
+                  fuente: {input.sourceLabel}
+                </span>
                 {input.discardedSources.length > 0 && (
-                  <ul>
+                  <ul className={styles.discardedList}>
                     {input.discardedSources.map((discarded) => (
                       <li key={discarded.label}>
                         Descartada: {discarded.label} (
@@ -54,11 +85,12 @@ export function AxisBreakdownView({ breakdown }: AxisBreakdownViewProps) {
 
       {breakdown.assumptionsUsed.length > 0 && (
         <div>
-          <h4>Supuestos aplicados</h4>
-          <ul>
+          <span className={styles.groupLabel}>Supuestos aplicados</span>
+          <ul className={styles.list}>
             {breakdown.assumptionsUsed.map((assumption) => (
-              <li key={assumption.label}>
-                {assumption.label}: {assumption.value}
+              <li key={assumption.label} className={styles.inputRow}>
+                <span className={styles.inputLabel}>{assumption.label}</span>
+                <span className={styles.inputValue}>{assumption.value}</span>
               </li>
             ))}
           </ul>
@@ -67,11 +99,12 @@ export function AxisBreakdownView({ breakdown }: AxisBreakdownViewProps) {
 
       {breakdown.info && breakdown.info.length > 0 && (
         <div>
-          <h4>Información</h4>
-          <ul>
+          <span className={styles.groupLabel}>Información</span>
+          <ul className={styles.list}>
             {breakdown.info.map((item) => (
-              <li key={item.label}>
-                {item.label}: {item.value}
+              <li key={item.label} className={styles.inputRow}>
+                <span className={styles.inputLabel}>{item.label}</span>
+                <span className={styles.source}>{item.value}</span>
               </li>
             ))}
           </ul>
@@ -80,29 +113,46 @@ export function AxisBreakdownView({ breakdown }: AxisBreakdownViewProps) {
 
       {breakdown.subcomponents && breakdown.subcomponents.length > 0 && (
         <div>
-          <h4>Pasos intermedios</h4>
-          <ul>
+          <span className={styles.groupLabel}>Pasos intermedios</span>
+          <ul className={styles.list}>
             {breakdown.subcomponents.map((sub) => (
               <li key={sub.label}>
-                {sub.label}: {formatValue(sub.rawValue, sub.unit)}
+                <div className={styles.inputRow}>
+                  <span className={styles.inputLabel}>{sub.label}</span>
+                  <span className={styles.inputValue}>
+                    {formatValue(sub.rawValue, sub.unit)}
+                  </span>
+                </div>
                 {sub.normalization && (
-                  <>
-                    {' '}
-                    → normalizado{' '}
+                  <p className={styles.source}>
+                    Normalizado{' '}
                     {formatNumber(sub.normalization.normalizedValue)}/10 (mín.{' '}
                     {sub.normalization.min.carName}{' '}
                     {formatValue(sub.normalization.min.value, sub.unit)}, máx.{' '}
                     {sub.normalization.max.carName}{' '}
                     {formatValue(sub.normalization.max.value, sub.unit)})
-                  </>
+                  </p>
                 )}
                 {sub.scale && (
-                  <>
-                    {' '}
-                    → nota {formatNumber(sub.scale.score)}/10 (escala:{' '}
-                    {formatValue(sub.scale.goodAnchor, sub.unit)} → 10,{' '}
-                    {formatValue(sub.scale.badAnchor, sub.unit)} → 0)
-                  </>
+                  <div className={styles.anchors}>
+                    <span className={styles.anchor}>
+                      <span className={primitives.visuallyHidden}>
+                        Valor que puntúa 10:{' '}
+                      </span>
+                      {formatValue(sub.scale.goodAnchor, sub.unit)}
+                    </span>{' '}
+                    <span className={styles.anchorScore}>→ 10</span>
+                    <span className={styles.anchor}>
+                      <span className={primitives.visuallyHidden}>
+                        Valor que puntúa 0:{' '}
+                      </span>
+                      {formatValue(sub.scale.badAnchor, sub.unit)}
+                    </span>{' '}
+                    <span className={styles.anchorScore}>→ 0</span>
+                    <span className={styles.source}>
+                      nota {formatNumber(sub.scale.score)}/10
+                    </span>
+                  </div>
                 )}
               </li>
             ))}
@@ -112,8 +162,8 @@ export function AxisBreakdownView({ breakdown }: AxisBreakdownViewProps) {
 
       {breakdown.normalization && (
         <div>
-          <h4>Normalización del eje</h4>
-          <p>
+          <span className={styles.groupLabel}>Normalización del eje</span>
+          <p className={styles.source}>
             Valor crudo{' '}
             {formatValue(breakdown.normalization.rawValue, breakdown.rawUnit)},
             dirección {breakdown.normalization.direction}. Mínimo:{' '}
@@ -128,17 +178,35 @@ export function AxisBreakdownView({ breakdown }: AxisBreakdownViewProps) {
       )}
 
       <div>
-        <h4>Penalizaciones</h4>
+        <span className={styles.groupLabel}>Penalizaciones</span>
         {breakdown.penalties.length === 0 ? (
-          <p>No aplican a este eje.</p>
+          <p className={styles.penaltyInactive}>No aplican a este eje.</p>
         ) : (
-          <ul>
+          <ul className={styles.list}>
             {breakdown.penalties.map((penalty) => (
-              <li key={penalty.label}>
-                {penalty.label} — {penalty.condition}:{' '}
-                {penalty.active
-                  ? `activa, ${formatSigned(penalty.effect)} puntos`
-                  : 'no activa'}
+              <li key={penalty.label} className={styles.inputRow}>
+                <span className={styles.inputLabel}>
+                  {penalty.label} — {penalty.condition}
+                </span>
+                <span
+                  className={
+                    penalty.active
+                      ? styles.penaltyActive
+                      : styles.penaltyInactive
+                  }
+                >
+                  {penalty.active ? (
+                    <>
+                      activa,{' '}
+                      <span className={primitives.mono}>
+                        {formatSigned(penalty.effect)}
+                      </span>{' '}
+                      puntos
+                    </>
+                  ) : (
+                    'no activa'
+                  )}
+                </span>
               </li>
             ))}
           </ul>

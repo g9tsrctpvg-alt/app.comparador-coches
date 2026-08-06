@@ -126,4 +126,17 @@ describe('validateStyleTokens', () => {
     const result = validateStyleTokens({ globalStylesheet, modules: {} });
     expect(result).toEqual({ errors: [], checked: 0 });
   });
+
+  it('ignores a length mentioned inside a comment', () => {
+    const result = validateStyleTokens({
+      globalStylesheet,
+      modules: {
+        'src/ui/Foo.module.css': `
+          /* 3px bajo cada fila del ranking, 6px por eje en el desglose. */
+          .a { padding: var(--space-4); }
+        `,
+      },
+    });
+    expect(result.errors).toEqual([]);
+  });
 });

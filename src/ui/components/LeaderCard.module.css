@@ -1,0 +1,27 @@
+.card {
+  composes: card from '../primitives.module.css';
+  composes: invertedSurface from '../primitives.module.css';
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.label {
+  composes: label from '../primitives.module.css';
+  color: var(--color-mute-on-ink);
+  display: block;
+  margin-bottom: var(--space-1);
+}
+
+.name {
+  font-family: var(--font-sans);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-xl);
+}
+
+.score {
+  composes: mono from '../primitives.module.css';
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-xl);
+}
