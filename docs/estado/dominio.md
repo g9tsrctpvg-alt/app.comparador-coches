@@ -101,24 +101,25 @@ rango falla en vez de entrar al cálculo.
 | Eje | Fórmula vigente | Cómo combina sus sumandos |
 | --- | --- | --- |
 | `diario` | `0,6×escala(anchura) + 0,4×escala(longitud)` (ponderación configurable), escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
+| `coste` | `0,5×escala(precio) + 0,5×escala(uso mensual)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
 | `prestaciones` | `0,5×norm(CV/t) + 0,5×norm(aceleración invertida)` | Cada sumando se normaliza por separado antes de combinarse |
 | `fiabilidad` | `0,7×norm(OCU) + 0,3×norm(garantía)` | Cada sumando se normaliza por separado antes de combinarse |
 | `estetica` | `mix×nota_exterior + (1−mix)×nota_interior` | Se combina en crudo; el compuesto se normaliza una sola vez |
-| `coste` | `precio + (energía+mantenimiento)×años − residual` | Se combina en crudo; el compuesto se normaliza una sola vez |
 | `viaje` | Sin fórmula: la valoración del usuario, normalizada tal cual | Un único sumando |
 
-`diario` es, de los seis, el único ya migrado a escala absoluta —
-`product/0002`—. Los cinco restantes siguen con normalización relativa hasta
-que cada uno tenga su propia spec de migración.
+`diario` y `coste` son, de los seis, los dos ya migrados a escala absoluta —
+`product/0002` y `product/0003`—. Los cuatro restantes siguen con
+normalización relativa hasta que cada uno tenga su propia spec de migración.
 
 `prestaciones` y `fiabilidad` normalizan cada sumando antes de combinarlo
 porque así están escritas sus fórmulas vigentes (`0,x×norm(...) +
-0,y×norm(...)`). `estetica` y `coste` no lo hacen: sus fórmulas vigentes
-combinan las magnitudes en crudo y normalizan el compuesto una sola vez, y
-esta spec las muestra —con sus sumandos en crudo como pasos intermedios—,
-no las cambia. Es una asimetría real entre los cuatro ejes de fórmula
-compuesta, no una inconsistencia: viene de que las fórmulas en sí ya eran
-distintas antes de que existiera el desglose.
+0,y×norm(...)`); `diario` y `coste`, ya migrados, puntúan cada magnitud
+contra su propia escala absoluta antes de combinarla, por el mismo motivo de
+fondo — un peso solo significa lo que dice si se aplica sobre notas ya
+comparables. `estetica` es hoy el único eje que combina sus magnitudes en
+crudo y normaliza el compuesto una sola vez: su fórmula vigente ya estaba
+escrita así, y `product/0001` la muestra —con sus sumandos en crudo como
+pasos intermedios—, sin cambiarla.
 
 `diario` lleva una penalización condicional: `−1,5` puntos si el coche es
 eléctrico y el supuesto `cargaEnCasa` está desactivado. Se aplica después de
@@ -141,13 +142,40 @@ la escala y dejaría a todos los candidatos indistinguibles cerca del 10.
 el mercado — 5.000 mm exactos resultaba severo con candidatos de 4,7 m que sí
 caben en una plaza normal.
 
+### Los anclajes de `coste`
+
+| Magnitud | Nota 10 hasta | Nota 0 desde |
+| --- | --- | --- |
+| Precio de compra | 25.000 € | 47.000 € |
+| Coste de uso mensual | 100 €/mes | 250 €/mes |
+
+El coste de uso mensual sale de sumar la energía anual (consumo × km/año ×
+precio del litro o del kWh, según tecnología) y el mantenimiento anual, y
+dividir entre doce; no multiplica por ningún horizonte de tenencia porque ya
+es una cifra mensual. El anclaje de rechazo del precio son los 47.000 € ya
+declarados como presupuesto — un techo duro, no se compra por encima —, y
+25.000 € es donde el precio deja de preocupar. **El peso 50/50 no es una
+preferencia, es una equivalencia:** el recorrido de la escala de precio son
+22.000 € (47.000 − 25.000); el de la escala de uso, 1.800 €/año
+((250 − 100) €/mes × 12). 22.000 € ÷ 1.800 €/año ≈ 12,2 años: teniendo el
+coche unos doce años, las dos escalas cubren la misma cantidad de dinero, y
+con recorridos equivalentes 50/50 es la única combinación coherente. Ese
+horizonte de doce años es el razonamiento detrás del peso, no un valor
+editable — `anios` ha dejado de existir como supuesto global.
+
+El valor residual y «pienso venderlo» (`residualPct5y`, `pensandoVender`)
+siguen declarados en el dominio y en el panel de supuestos, pero `coste` ya
+no los usa: su fórmula vigente no resta residual de ninguna de las dos
+escalas. Quedan inertes a propósito — retirarlos del todo es decisión de una
+spec futura que analice la reventa con un horizonte explícito, no de esta.
+
 ## Supuestos globales
 
 `GlobalAssumptions` (`src/domain/scoring/assumptions.ts`): `kmPorAnio`,
-`anios`, `precioLitro`, `precioKwh`, `mezclaEstetica`,
-`ponderacionAnchoDiario`, `pensandoVender`, `cargaEnCasa`. Se editan en un
-único sitio (el panel de supuestos de la interfaz); todo eje que los usa
-muestra el valor aplicado y remite a ese panel, sin ofrecer edición propia.
+`precioLitro`, `precioKwh`, `mezclaEstetica`, `ponderacionAnchoDiario`,
+`pensandoVender`, `cargaEnCasa`. Se editan en un único sitio (el panel de
+supuestos de la interfaz); todo eje que los usa muestra el valor aplicado y
+remite a ese panel, sin ofrecer edición propia.
 
 ## Pesos
 
