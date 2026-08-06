@@ -230,13 +230,29 @@ desplazamiento horizontal vive **dentro del contenedor de la tabla**; la
 página nunca se desplaza en horizontal a ningún ancho, que es invariante
 declarada en `docs/estado/interfaz.md`.
 
-**8.3 Dos columnas quedan fijas al desplazar:**
+**8.3 La columna de comparación la elige el usuario, y queda fija.** Junto a
+la de **nombres de característica** —que no es un modelo y siempre está a la
+izquierda, sin ella una fila desplazada es una cifra sin etiqueta— hay una
+segunda columna fija: la del modelo **contra el que se quiere comparar**. No
+es siempre la Giulietta.
 
-1. La de **nombres de característica**, a la izquierda, sin la cual una fila
-   desplazada es una cifra sin etiqueta.
-2. La de la **referencia** —la Giulietta—, inmediatamente después. Es lo que
-   hace útil el desplazamiento: cualquier modelo al que se llegue aparece al
-   lado del coche al que sustituye, sin tener que volver al principio.
+1. Cada cabecera de modelo lleva una **marca de selección**. La que está
+   marcada es la columna fija; marcar otra la sustituye. La Giulietta viene
+   marcada al abrir la vista, porque es el coche a sustituir y es la
+   comparación que el proyecto existe para hacer.
+2. **Es una elección única, y se declara como tal**: aunque se dibuje como
+   una casilla, el control es un grupo de `radio` con un nombre común y una
+   etiqueta accesible por modelo («Comparar contra el Kia EV3»). Un grupo de
+   `checkbox` de los que solo uno puede estar marcado le miente al lector de
+   pantalla sobre lo que va a pasar al pulsarlo.
+3. El modelo fijado **sale de la secuencia desplazable**: aparece una vez, no
+   dos, y desplazarse no lo trae de vuelta.
+4. **Es la misma mecánica en todos los anchos.** No hay un modo móvil y otro
+   de escritorio: la columna de características y la fijada se quedan
+   quietas, y las demás desfilan al lado. Lo único que cambia con el ancho es
+   cuántas caben a la vez — una en un móvil, las que quepan en un escritorio.
+5. **Qué columna está fijada es estado efímero**, como la foto elegida (8.6):
+   no se persiste ni viaja en el enlace compartible de `product/0012`.
 
 **8.4 Las fotos son la cabecera de cada columna.** Van dentro de la celda de
 encabezado de su modelo, no en una tira aparte: así el ancho de la foto es el
@@ -268,25 +284,41 @@ editando solo desde el desglose del ranking, que es su único sitio.
 
 ### 9. El móvil, que es donde esto se pone difícil
 
-Una tabla de doce columnas en 320px de ancho no cabe de ninguna manera; lo
-que la spec exige es que **falle bien**:
+Una tabla de doce columnas en 320px de ancho no cabe de ninguna manera. Lo
+que se enseña en un móvil es **una comparación de dos**: la columna fijada y
+la que esté a su lado, que va cambiando al desplazarse. El requisito no es
+que quepa todo, es que las dos que se ven se lean enteras:
 
-1. **Ancho mínimo de columna** de `9rem` por debajo de `--bp-columna` y
-   `11rem` por encima. En un móvil eso deja ver la referencia fija más un
-   modelo entero, no medio modelo cortado.
+1. **Reparto del ancho en móvil**: la columna de características toma
+   `6.5rem` —caben «Altura libre al suelo» en dos líneas y todos los rótulos
+   más cortos en una— y las dos de modelo se reparten el resto a partes
+   iguales, con un mínimo de `7rem` cada una. A 320px eso da dos columnas de
+   coche legibles con cifras del tamaño del resto de la aplicación. Si en la
+   verificación a 320px una cifra se parte, lo que cede es el rótulo de
+   característica —pasa a una fila propia sobre cada bloque—, no el tamaño de
+   letra.
 2. **Anclaje de desplazamiento** (`scroll-snap-type: x mandatory`, con cada
    columna como punto de anclaje): el gesto cae siempre en un modelo
-   completo, nunca entre dos.
-3. **La fila del nombre del modelo queda fija arriba** al desplazarse en
+   completo, nunca entre dos, y cada parada es una comparación cerrada entre
+   el modelo fijado y uno.
+3. **La marca de selección también es alcanzable en móvil**: se llega a ella
+   desplazándose hasta la cabecera del modelo que se quiere fijar, y al
+   marcarla la tabla vuelve al principio del desplazamiento — si no, el
+   modelo recién fijado se quedaría fuera de pantalla justo al elegirlo.
+4. **En escritorio la mecánica no cambia**: por encima de `--bp-columna` las
+   columnas de modelo miden `11rem` y se ven todas las que quepan, con la
+   fijada siempre a la izquierda. Ninguna media query introduce un segundo
+   diseño: solo cambian dos anchos.
+5. **La fila del nombre del modelo queda fija arriba** al desplazarse en
    vertical. La foto **no**: ocupa demasiado alto para llevarla pegada toda
    la lectura, y su sitio es el principio.
-4. **El contenedor desplazable es alcanzable con teclado** (`tabindex="0"`,
+6. **El contenedor desplazable es alcanzable con teclado** (`tabindex="0"`,
    `role="group"` y `aria-label`), porque una región que solo se desplaza con
    gesto deja fuera a quien navega con teclado.
-5. **Ningún objetivo pulsable baja de 44×44px** de área accionable —foto,
-   opciones del selector y botón de cierre incluidos—, como el resto de la
-   interfaz desde `product/0010`.
-6. **Se verifica a mano en los tres anchos** de `product/0010` (320, 768 y
+7. **Ningún objetivo pulsable baja de 44×44px** de área accionable —foto,
+   marca de selección, opciones del selector y botón de cierre incluidos—,
+   como el resto de la interfaz desde `product/0010`.
+8. **Se verifica a mano en los tres anchos** de `product/0010` (320, 768 y
    1440px): el CSS no lo comprueba la CI, y esta vista es justo la que más
    depende de él.
 
@@ -316,8 +348,18 @@ que la spec exige es que **falle bien**:
 - [ ] La tabla tiene una columna por candidato más la de referencia, y una
       fila por cada una de las dieciocho magnitudes, agrupadas por bloque
       (test de render: se cuentan filas y columnas).
-- [ ] Al desplazar en horizontal, la columna de características y la de la
-      referencia permanecen visibles (revisión visual en los tres anchos).
+- [ ] Al desplazar en horizontal, la columna de características y la del
+      modelo fijado permanecen visibles (revisión visual en los tres anchos).
+- [ ] La vista abre con la Giulietta fijada, y marcar la cabecera de otro
+      modelo la sustituye como columna fija (test de render del estado
+      inicial; el cambio, revisión manual — `renderToStaticMarkup` no marca).
+- [ ] El modelo fijado no aparece además entre las columnas desplazables
+      (test de render: su nombre sale una vez).
+- [ ] Los controles de fijación son un grupo `radio` con el mismo `name` y
+      etiqueta accesible por modelo, no casillas independientes (test de
+      render sobre el marcado).
+- [ ] A 320px se leen enteras la columna de características y **dos**
+      columnas de modelo, sin que ninguna cifra se parta (revisión visual).
 - [ ] El selector cambia la foto de **todas** las columnas a la vez, y
       arranca en lateral (test de render sobre el estado inicial).
 - [ ] La foto se abre ampliada con teclado, se cierra con `Escape` y el foco
@@ -358,7 +400,7 @@ que la spec exige es que **falle bien**:
 > copiarlas (requisito 2), **sin mínimo de vistas** para dar de alta un
 > modelo (requisito 4.1), **las dieciocho magnitudes** en la ficha
 > (requisito 8.2) y **una pantalla nueva** con una columna por modelo,
-> desplazamiento horizontal y la foto como cabecera de columna
-> (requisitos 8 y 9).
+> desplazamiento horizontal, la foto como cabecera de columna y la columna
+> de comparación elegible desde su cabecera (requisitos 8 y 9).
 
 Ninguna.

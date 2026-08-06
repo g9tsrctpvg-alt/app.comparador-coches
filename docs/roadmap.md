@@ -218,7 +218,10 @@ fase abierta. Se lista para no perderlo, no para bloquear nada.
   2026-08-06: las imágenes se **enlazan** por URL absoluta, no hay mínimo de
   vistas para dar de alta un modelo, la ficha enseña las dieciocho
   magnitudes, y todo ello en una **pantalla nueva** con una columna por
-  modelo, desplazamiento horizontal y la foto como cabecera de columna. Queda
+  modelo, desplazamiento horizontal, la foto como cabecera de columna y la
+  columna contra la que se compara **elegida por el usuario** —la Giulietta
+  de partida, no por obligación— y fija a la izquierda a cualquier ancho. En
+  un móvil eso es una comparación de dos columnas cada vez. Queda
   **lista para el gate humano**; pasa a ser fase cuando se apruebe.
 - **Eje de autonomía y repostaje.** Es la mayor diferencia práctica entre los
   once candidatos en un viaje largo —los térmicos e híbridos hacen 640-950 km
