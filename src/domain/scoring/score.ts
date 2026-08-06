@@ -3,6 +3,7 @@ import type { GlobalAssumptions } from './assumptions';
 import { AXIS_ORDER, type AxisId, type AxisWeights } from './weights';
 import type { AxisBreakdown, CarScoreBreakdown } from './breakdown';
 import { mustGet } from './mustGet';
+import { EmptyCandidateSetError } from './normalize';
 import { buildViajeBreakdown } from './axes/viaje';
 import { buildDiarioBreakdown } from './axes/diario';
 import { buildPrestacionesBreakdown } from './axes/prestaciones';
@@ -16,6 +17,17 @@ export function scoreCatalog(
   assumptions: GlobalAssumptions,
   budgetEur: number,
 ): CarScoreBreakdown[] {
+  if (cars.length === 0) {
+    // Ya no hay ningún eje que normalice contra el conjunto de candidatos
+    // (los seis están en escala absoluta), así que nada dentro de los ejes
+    // falla por su cuenta con un catálogo vacío. La invariante — puntuar
+    // sin candidatos no tiene sentido — sigue siendo cierta, así que se
+    // declara aquí en vez de dejar de comprobarse.
+    throw new EmptyCandidateSetError(
+      'No se puede puntuar un conjunto de candidatos vacío',
+    );
+  }
+
   const byAxis: Record<AxisId, Map<string, AxisBreakdown>> = {
     viaje: buildViajeBreakdown(cars, weights.viaje),
     diario: buildDiarioBreakdown(cars, assumptions, weights.diario),
