@@ -109,8 +109,8 @@ documentación es TypeScript bajo Vitest y la CI corre sobre un único
 | `product/0007` — el eje de fiabilidad, en dos escalas absolutas | `approved` — cierra los seis ejes |
 | Gate humano: aprobar el ADR y las seis specs de eje | Hecha — 2026-08-05, en commit propio sin implementación |
 | Actualizar el catálogo con lo que las specs exigen | Hecha — batalla, garantía, índice OCU y versión del CR-V |
-| Implementar, verificar y consolidar los seis ejes | En marcha — `product/0002` (`diario`), `product/0003` (`coste`), `product/0004` (`estetica`) y `product/0005` (`viaje`) `consolidated`; `0006` y `0007` pendientes |
-| Consolidar en `docs/estado/dominio.md` los doce anclajes **con su razonamiento** y la curva en S | En marcha — los de `diario`, `coste`, `estetica` y `viaje` ya están; el resto llega con cada eje |
+| Implementar, verificar y consolidar los seis ejes | En marcha — `product/0002` (`diario`), `product/0003` (`coste`), `product/0004` (`estetica`), `product/0005` (`viaje`) y `product/0006` (`prestaciones`) `consolidated`; solo `0007` pendiente |
+| Consolidar en `docs/estado/dominio.md` los doce anclajes **con su razonamiento** y la curva en S | En marcha — los de cinco ejes ya están; solo faltan los de `fiabilidad` |
 
 Los siete artefactos pasaron el gate humano el 2026-08-05. Acto seguido se
 actualizó el catálogo con lo que dos de ellos necesitaban para poder
