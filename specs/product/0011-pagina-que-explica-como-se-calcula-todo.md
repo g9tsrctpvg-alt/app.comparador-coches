@@ -110,9 +110,18 @@ aplicación, sin abrir el repositorio y sin tener un coche delante.
    supuestos por defecto y sus unidades se leen de `src/domain/scoring/`, no
    se reescriben a mano. Es la regla que `product/0001` ya impuso para la
    descripción de fórmula en el desglose, extendida a esta página.
-4. **La prosa explicativa —el porqué— se escribe una vez y vive en un solo
-   sitio**, como contenido de la interfaz. Un anclaje se muestra con su
-   valor leído del dominio y su razonamiento escrito al lado.
+4. **La prosa explicativa —el porqué— vive en un módulo de contenido
+   TypeScript** dentro de `src/ui/`, separado de los componentes que lo
+   renderizan. No es Markdown importado en tiempo de build ni se genera desde
+   `docs/estado/dominio.md`: lo primero añade un paso de build para nada, y lo
+   segundo ataría la interfaz al formato de un documento de proceso, que se
+   edita con otras reglas y por otros motivos.
+   Un anclaje se muestra, por tanto, con **su valor leído del dominio** —donde
+   un test detecta la desincronización— y **su razonamiento escrito en el
+   módulo de contenido**. Que el razonamiento esté también en
+   `docs/estado/dominio.md`, en registro técnico, es duplicación consciente
+   entre dos audiencias: ningún test puede comparar dos prosas, y por eso el
+   criterio de los doce anclajes se verifica a mano, uno a uno.
 5. **Cada eje tiene su bloque**, en el orden de `AXIS_ORDER`, con: qué mide,
    qué datos usa, sus anclajes con valor y razonamiento, la forma de su
    escala y su peso por defecto.
@@ -200,18 +209,15 @@ aplicación, sin abrir el repositorio y sin tener un coche delante.
 - Se asume que la parte de la página que se lee del dominio y la prosa que se
   escribe a mano se pueden mantener sincronizadas por convención más test, y
   no hace falta un generador. El requisito 3 y sus dos criterios son
-  exactamente esa red de seguridad.
+  exactamente esa red de seguridad para los **valores**. Para el
+  **razonamiento** no la hay, y el requisito 4 lo dice sin adornos: es
+  verificación a mano, y su coste real es que mover un anclaje obliga a tocar
+  dos sitios. Se acepta a cambio de no acoplar la interfaz a un doc de
+  proceso. Si algún día los anclajes se mueven a menudo, deja de compensar.
 
 ## Decisiones abiertas
 
-1. **Dónde vive la prosa explicativa.** Tres opciones con consecuencias
-   distintas: como módulo TypeScript de contenido dentro de `src/ui/`; como
-   Markdown importado en tiempo de build; o generada desde
-   `docs/estado/dominio.md` para que sea imposible que se desincronicen. La
-   tercera es la más tentadora y la más cara, y ataría la interfaz al formato
-   de un documento de proceso. Hay que cerrarla antes de aprobar: determina
-   el requisito 4 y el criterio de los doce anclajes.
-2. **Si la página se consolida en `docs/estado/interfaz.md` o merece doc de
+1. **Si la página se consolida en `docs/estado/interfaz.md` o merece doc de
    estado propio.** La cabecera declara hoy `interfaz.md`. Si el contenido
    explicativo acaba siendo un artefacto con vida propia, quizá no encaje
    ahí; `docs/proceso/consolidacion.md` §4 dice que cuando algo no encaja en

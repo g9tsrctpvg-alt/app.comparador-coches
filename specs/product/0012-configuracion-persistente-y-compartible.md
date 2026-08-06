@@ -77,6 +77,10 @@ pueda compartir con un enlace.
    presupuesto, filtro de «ocultar fuera de presupuesto» y valoraciones
    sobrescritas por coche. Es el único objeto que se persiste y el único que
    se comparte.
+   **El filtro es configuración, no estado de vista**, aunque se le parezca:
+   viaja con el presupuesto porque sin él no reproduce nada. Un enlace en el
+   que quien lo abre ve once coches y quien lo mandó veía seis no comparte una
+   comparativa, comparte otra distinta.
 2. **La configuración lleva número de versión.** Un objeto guardado con una
    versión que la aplicación no reconoce se descarta entero; no se intenta
    adivinar qué campos siguen valiendo.
@@ -85,12 +89,14 @@ pueda compartir con un enlace.
    defecto. Abrir un enlace compartido enseña **lo que el enlace dice**,
    aunque quien lo abra tenga su propia configuración guardada.
 4. **Abrir un enlace compartido no destruye en silencio la configuración
-   propia.** O bien la aplicación no guarda automáticamente lo que llega por
-   URL hasta que el usuario lo modifica, o bien avisa antes de sustituir. La
-   forma la decide la implementación; el requisito es que nadie pierda su
-   trabajo por hacer clic en un enlace ajeno.
+   propia.** Lo que llega por URL se muestra pero **no se guarda** hasta que
+   el usuario modifica algo; a partir de ese momento la configuración es suya
+   y se persiste con las reglas normales. Ver una comparativa ajena es una
+   consulta, no un cambio, y un aviso modal ante un simple clic es fricción
+   por algo que todavía no ha pasado.
 5. **La configuración se guarda al cambiar**, sin acción explícita del
-   usuario. Guardar no es una tarea que haya que recordar.
+   usuario. Guardar no es una tarea que haya que recordar. El requisito 4 es
+   su única excepción, y dura hasta el primer cambio.
 6. **La URL no se reescribe sola.** El enlace compartible se genera cuando el
    usuario lo pide, con una acción explícita de copiar. Actualizar la URL en
    cada arrastre de un deslizador llenaría el historial del navegador de
@@ -150,8 +156,13 @@ pueda compartir con un enlace.
       reproduce exactamente la configuración de origen, incluidas las
       valoraciones sobrescritas.
 - [ ] Abrir un enlace compartido en un navegador **con** configuración
-      guardada distinta muestra la del enlace, y la guardada no se pierde sin
-      que el usuario lo sepa.
+      guardada distinta muestra la del enlace; cerrar la pestaña sin tocar
+      nada y volver a entrar por la URL limpia recupera la configuración
+      propia intacta.
+- [ ] Abrir ese mismo enlace y **mover un peso** hace que a partir de ahí la
+      configuración quede guardada, y sobreviva a una recarga.
+- [ ] Activar «ocultar fuera de presupuesto», generar el enlace y abrirlo en
+      otro navegador muestra el mismo número de coches en la lista.
 - [ ] Arrastrar un deslizador de un extremo a otro añade **cero** entradas al
       historial del navegador.
 - [ ] Escribir a mano en el almacenamiento local un JSON corrupto y recargar:
@@ -214,18 +225,7 @@ pueda compartir con un enlace.
 
 ## Decisiones abiertas
 
-1. **Cómo se resuelve el requisito 4.** Las dos salidas —no guardar lo que
-   llega por URL hasta que el usuario toque algo, o avisar antes de
-   sustituir— dan experiencias distintas y hay que elegir una. La primera es
-   más silenciosa y la segunda más explícita; ninguna es obviamente mejor, y
-   por eso la decisión es de producto.
-2. **Si el filtro de «ocultar fuera de presupuesto» es configuración o es
-   estado efímero.** El presupuesto claramente es configuración. El filtro es
-   más discutible: se parece a un estado de vista, pero acompaña al
-   presupuesto y compartir uno sin el otro reproduce mal la comparativa. El
-   requisito 1 lo incluye; si se decide lo contrario, el requisito 1 y el
-   requisito 13 cambian a la vez.
-3. **Si esta spec necesita un doc de estado nuevo.** La cabecera declara
+1. **Si esta spec necesita un doc de estado nuevo.** La cabecera declara
    `interfaz.md` y `arquitectura.md`, pero un puerto de persistencia con su
    formato versionado se parece bastante al «modelo de datos» que
    `docs/proceso/consolidacion.md` §4 lista como pendiente de crear

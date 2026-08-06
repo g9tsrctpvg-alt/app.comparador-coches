@@ -139,7 +139,7 @@ peso sería reintroducir a mano lo que el ADR 0004 quita.
 | `product/0011` — la página que explica cómo se calcula todo | `draft` |
 | `product/0012` — configuración persistente y compartible | `draft` |
 | `product/0013` — la ficha técnica comparada | `draft` |
-| Cerrar las decisiones abiertas de `product/0011`, `product/0012` y `product/0013` | Pendiente — las otras tres ya no tienen |
+| Cerrar la última decisión abierta de `product/0011` y de `product/0012` | Pendiente — es la **misma** pregunta hecha dos veces: ¿aparece un doc de estado nuevo en esta fase? Las otras cuatro specs ya no tienen ninguna |
 | Gate humano: aprobar el ADR 0006 y las seis specs | Pendiente |
 | Implementar, verificar y consolidar `product/0008` | Pendiente |
 | Implementar, verificar y consolidar las seis specs nuevas | Pendiente |

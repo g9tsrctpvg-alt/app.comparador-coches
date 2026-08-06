@@ -108,37 +108,49 @@ crea la primera.
 2. **La vista activa viaja en la URL**, con el mismo mecanismo de fragmento
    que `product/0011` establece para la página de explicación. Compartir un
    enlace estando en la ficha técnica lleva a la ficha técnica.
-3. **La Giulietta se da de alta en `cars.json`** con sus fuentes, y se marca
-   en el modelo como **referencia y no candidata**.
-4. **Ninguna puntuación cambia** por dar de alta la referencia. `scoreCatalog`
-   recibe los candidatos, no la referencia, y las normalizaciones de la fase 3
-   son absolutas y no dependen del conjunto — pero el criterio se comprueba de
-   todos modos, porque es exactamente el fallo que un alta descuidada
-   provocaría.
-5. **La tabla lleva una fila por candidato más la de referencia**, ordenadas
+3. **La Giulietta se da de alta como referencia en una lista separada**, con
+   su propio esquema y sus fuentes, no como una fila más de la lista de
+   candidatos marcada con un booleano. El booleano sería menos código y
+   dejaría abierto que alguien olvide filtrar antes de puntuar; con dos listas
+   ese olvido **no es expresable**, porque no hay ningún punto del programa en
+   el que una referencia esté donde se esperan candidatos.
+4. **Una referencia tiene solo los datos que la tabla compara** —identidad,
+   tecnología, dimensiones y maletero—, y **no** los que solo sirven para
+   puntuar: ni consumo, ni fiabilidad, ni garantía, ni residual, ni
+   valoraciones del usuario. Su esquema comparte con `CarSchema` la forma de
+   los datos con fuente, no la lista de campos.
+5. **La lista de referencias admite más de una** por construcción, y hoy tiene
+   exactamente una. No hace falta decidir ahora si algún día habrá otra: la
+   estructura ya la admite sin coste, y las columnas Δ se calculan contra la
+   referencia vigente, no contra «la Giulietta» escrita en el código.
+6. **Ninguna puntuación cambia** por dar de alta la referencia. `scoreCatalog`
+   sigue recibiendo la lista de candidatos y no conoce la de referencias —
+   pero el criterio se comprueba de todos modos, porque es exactamente el
+   fallo que un alta descuidada provocaría.
+7. **La tabla lleva una fila por candidato más la de referencia**, ordenadas
    por longitud ascendente, con la referencia destacada y rotulada como tal.
-6. **Cada columna dimensional lleva su columna Δ** frente a la referencia, con
+8. **Cada columna dimensional lleva su columna Δ** frente a la referencia, con
    signo explícito —`+164`, `−12`, `0`— y color según mejore o empeore. La
    dirección de «mejor» **depende del dato**: en maletero más es mejor; en
    anchura y longitud, más es peor, porque el problema que el proyecto resuelve
    es que los sustitutos son más grandes.
-7. **La columna Δ de anchura se destaca sobre las demás.** Es la prioridad
+9. **La columna Δ de anchura se destaca sobre las demás.** Es la prioridad
    declarada del proyecto y la que gobierna el eje `diario` con un 60 %.
-8. **El color no es el único portador del signo.** El `+` y el `−` van
-   escritos: quien no distinga el verde del naranja lee la diferencia igual.
-9. **La métrica de litros por metro cuadrado la calcula el dominio**, no la
-   interfaz, y se muestra con una unidad legible. La regla
-   `ui-no-scoring-internals` sigue rigiendo: `src/ui/` no divide nada.
-10. **Los datos estimados se marcan**, con la misma convención que
+10. **El color no es el único portador del signo.** El `+` y el `−` van
+    escritos: quien no distinga el verde del naranja lee la diferencia igual.
+11. **La métrica de litros por metro cuadrado la calcula el dominio**, no la
+    interfaz, y se muestra con una unidad legible. La regla
+    `ui-no-scoring-internals` sigue rigiendo: `src/ui/` no divide nada.
+12. **Los datos estimados se marcan**, con la misma convención que
     `product/0009` fija para el desglose, y con su explicación accesible.
-11. **La tabla no arrastra la página cuando no cabe**: se desplaza dentro de
+13. **La tabla no arrastra la página cuando no cabe**: se desplaza dentro de
     su contenedor, con la columna del modelo fijada a la izquierda para no
     perder de vista de qué coche es cada fila. Es el requisito 13 de
     `product/0010` aplicado aquí.
-12. **La tabla es una tabla de verdad** —`table`, `thead`, `th` con su
+14. **La tabla es una tabla de verdad** —`table`, `thead`, `th` con su
     `scope`—, no una rejilla de `div`. Es tabular por naturaleza, y un lector
     de pantalla debe poder recorrerla por filas y columnas.
-13. **La tabla explica sus propias convenciones**: qué es Δ, qué significan
+15. **La tabla explica sus propias convenciones**: qué es Δ, qué significan
     los colores, qué es L/m² y qué marca un dato estimado. El artefacto ya lo
     hace en un párrafo al pie, y ese párrafo se migra.
 
@@ -154,6 +166,13 @@ crea la primera.
 - [ ] El ranking sigue mostrando once coches, y la Giulietta no aparece en él.
 - [ ] La carga del catálogo sigue exigiendo exactamente una fuente vigente por
       dato, y la fila de la Giulietta la cumple en todos sus campos.
+- [ ] `scoreCatalog` no acepta una referencia: pasarle una es un error de
+      tipos que no compila. Es la propiedad que se compra con la lista
+      separada, y si no se cumple, el modelado elegido no está bien hecho.
+- [ ] Añadir una segunda referencia al fichero de datos no exige tocar ningún
+      componente: las columnas Δ salen de la referencia vigente, no de un
+      identificador escrito en el código. Se comprueba añadiéndola en local y
+      revirtiendo.
 - [ ] La tabla muestra doce filas ordenadas por longitud ascendente, con la
       Giulietta rotulada como referencia.
 - [ ] La fila de la Giulietta muestra `—` en sus propias columnas Δ, no `0`:
@@ -182,15 +201,20 @@ crea la primera.
 - **Cierra la deuda de la fila de la Giulietta** registrada el 2026-08-03,
   cuya condición era «que una spec futura la pida explícitamente». La pide.
 - **Depende de `technical/0004` y `product/0009`** para verse como el resto de
-  la aplicación, y de **`product/0010`** para el requisito 11.
+  la aplicación, y de **`product/0010`** para el requisito 13.
 - **Comparte mecanismo de navegación con `product/0011`.** Las dos introducen
   una vista alcanzable por fragmento de URL; se implemente la que se
   implemente primero, la segunda reutiliza el mecanismo y no monta otro.
 - **No depende de la fase 3.** No puntúa nada.
-- Se asume que dar de alta una fila de **referencia** en el catálogo obliga a
-  distinguir en el modelo entre coche candidato y coche de referencia. Es un
-  cambio de dominio pequeño pero real, y es la razón por la que esta spec
-  declara `docs/estado/dominio.md` como segundo doc de estado.
+- Dar de alta una **referencia** obliga a distinguir en el modelo entre coche
+  candidato y coche de referencia, con esquemas separados (requisitos 3 y 4).
+  Es un cambio de dominio pequeño pero real, y es la razón por la que esta
+  spec declara `docs/estado/dominio.md` como segundo doc de estado.
+- El coste del modelado elegido es **duplicar la parte común del esquema**
+  —identidad, dimensiones, maletero— entre candidatos y referencias. Se paga a
+  sabiendas: `estilo.md` §1 dice que duplicar en el núcleo es preferible a
+  acoplarlo, y aquí la alternativa era un booleano que permite que una
+  referencia acabe puntuada.
 - Se asume que los siete datos de la tabla de referencia son los del
   artefacto, y que **hay que encontrarles fuente publicada** antes de
   implementar. Si alguno no la tiene, entra marcado como estimado, no se
@@ -200,13 +224,4 @@ crea la primera.
 
 ## Decisiones abiertas
 
-1. **Cómo se modela la referencia.** Dos salidas razonables: un campo booleano
-   en `CarSchema` que marque la fila como no candidata, o una lista separada
-   en `cars.json` con su propio esquema. La primera es menos código y arriesga
-   que alguien olvide filtrar antes de puntuar; la segunda hace imposible ese
-   olvido y duplica parte del esquema. Es una decisión de modelado de dominio
-   (🟡) y hay que cerrarla antes de aprobar.
-2. **Si la referencia debe ser una sola o varias.** El artefacto tiene una
-   —el coche que se sustituye— y con una basta para lo que la tabla resuelve.
-   Pero si el modelado de la decisión 1 admite varias sin coste, conviene
-   saberlo antes y no descubrirlo cuando alguien quiera añadir la segunda.
+Ninguna.
