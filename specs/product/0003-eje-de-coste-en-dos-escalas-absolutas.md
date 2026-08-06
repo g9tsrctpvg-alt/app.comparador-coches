@@ -1,12 +1,18 @@
 # 0003 — El eje de coste, en dos escalas absolutas
 
 - **Id:** product/0003
-- **Estado:** approved
+- **Estado:** implemented
 - **Tipo:** product
 - **Fecha:** 2026-08-04
 - **Specs relacionadas:** product/0001, product/0002
 - **ADRs relacionados:** 0004
 - **Doc de estado:** `docs/estado/dominio.md`
+
+> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
+> implementado: su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy no es cierta. **No es referencia del estado actual** — para
+> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
+> **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 

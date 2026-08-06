@@ -45,12 +45,11 @@ describe('scoreCatalog', () => {
     const coste = sportage.axes.find((axis) => axis.axisId === 'coste')!;
 
     expect(coste.label).toBe('Coste total');
-    expect(coste.formulaDescription).toContain('precio_compra');
+    expect(coste.formulaDescription).toContain('escala(precio)');
     expect(coste.inputs.map((input) => input.label)).toEqual([
       'Precio',
       'Consumo',
       'Mantenimiento anual',
-      'Valor residual a 5 años',
     ]);
     expect(coste.inputs[0]).toMatchObject({
       value: 36000,
@@ -61,8 +60,7 @@ describe('scoreCatalog', () => {
     });
     expect(coste.assumptionsUsed.length).toBeGreaterThan(0);
     expect(coste.subcomponents).toBeDefined();
-    expect(coste.normalization).toBeDefined();
-    expect(coste.normalization!.rawValue).toBeCloseTo(58098, 6);
+    expect(coste.normalization).toBeUndefined();
     expect(coste.penalties).toEqual([]);
     expect(coste.weight).toBe(DEFAULT_WEIGHTS.coste);
     expect(coste.contribution).toBeCloseTo(
