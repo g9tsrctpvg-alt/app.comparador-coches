@@ -11,6 +11,11 @@ la documentación se convierta en un archivo arqueológico.
 1. **Actualizar el/los doc(s) de estado** declarados en el campo *Doc de
    estado*, de forma que describan el comportamiento vigente **en presente** y
    sin referencias al cambio ni al estado anterior.
+   **Se lleva el porqué, no solo el qué.** Una constante sin su razonamiento
+   es un número mágico: quien la lea después no sabrá si puede moverla. Si la
+   spec justificaba un valor —un anclaje, un umbral, un reparto—, esa
+   justificación viaja con él al doc de estado. Lo que se queda atrás en una
+   spec congelada se pierde a efectos prácticos.
 2. **Estampar el aviso** correspondiente en la spec, inmediatamente después de
    la cabecera de campos y **antes** de cualquier nota de revisión previa.
 3. **Poner `Estado: consolidated`.**

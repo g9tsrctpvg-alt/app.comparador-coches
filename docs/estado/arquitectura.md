@@ -65,8 +65,8 @@ implementada: detalle en `docs/estado/dominio.md`.
 
 ## Logging
 
-`src/logging/logger.ts` implementa el logger de navegador que fija el
-addendum de `docs/decisions/0001-formato-de-logs.md`: un objeto JSON con
+`src/logging/logger.ts` implementa el logger de navegador que fija
+`docs/decisions/0001-formato-de-logs.md`: un objeto JSON con
 `Timestamp`, `SeverityText`, `Body`, `Attributes` y `Resource` (con
 `service.name: comparador-coches-web`), **solo para errores**, sin
 `TraceId` —no hay petición que correlacionar—. La regla `no-console` de

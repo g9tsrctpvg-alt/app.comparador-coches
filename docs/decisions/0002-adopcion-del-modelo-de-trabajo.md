@@ -4,8 +4,6 @@
 - **Fecha:** 2026-08-01
 - **Nivel:** 🟡
 
-> Acotado por el **addendum de 2026-08-03**, al final de este documento.
-
 ## Contexto
 
 El repositorio arranca vacío. Existe un contrato de trabajo IA-First y
@@ -25,7 +23,9 @@ fuera: se decide más adelante.
    de navegación— y el contrato se parte en satélites temáticos bajo
    `docs/proceso/`, uno por área: estructura documental, ciclo de spec,
    consolidación, ADRs, CI y guardarraíles, trazabilidad, estilo, logging,
-   enrutado de modelos y anti-patrones.
+   enrutado de modelos, calibración de escalas y anti-patrones. La lista
+   crece cuando aparece un área de proceso nueva; lo que no cambia es la
+   regla de un satélite por área.
 2. **`docs/` se separa en `docs/proceso/` y `docs/estado/`.** Los primeros
    describen cómo se trabaja; los segundos, qué hay construido, y solo se
    editan al consolidar una spec.
@@ -79,25 +79,26 @@ fuera: se decide más adelante.
   mitiga con la comprobación de enlaces en CI.
 - Las seis áreas de estado que no existen son un hueco **declarado**, no
   silencioso: están en el catálogo de `consolidacion.md` §4 y en el roadmap.
-- La CI valida hoy la coherencia de specs y ADRs con `scripts/validate_docs.py`
-  (Python 3, solo biblioteca estándar). Esa elección de herramienta es
-  provisional: **disparador** para revisarla, que el stack elegido traiga un
-  runtime propio con el que sea más natural mantenerla.
+- La CI valida la coherencia de specs y ADRs con `scripts/validateDocs.ts`,
+  que corre bajo Vitest dentro del paso de tests. La decisión es que esa
+  coherencia se comprueba **mecánicamente**; con qué herramienta es
+  circunstancial.
 - Los gates de código quedan **aplazados con disparador**: la decisión de
   stack. Mientras tanto, el suelo de CI está declarado incompleto en
   `docs/proceso/ci-y-guardarrailes.md`, §4.
 
-## Addendum 2026-08-03 — el validador ya no está en Python
+## Historial
 
-El disparador que este ADR dejó declarado para revisar la herramienta —«que
-el stack elegido traiga un runtime propio con el que sea más natural
-mantenerla»— se cumplió con el ADR 0003 y `technical/0001`.
-
-La consecuencia de arriba describe el estado del 2026-08-01 y se queda como
-registro. Hoy el validador es `scripts/validateDocs.ts`, corre bajo Vitest
-dentro del paso de tests, y la CI ya no arranca Python en ningún *job*. El
-cambio lo hizo `technical/0003`, que portó las veinte condiciones de error
-una a una y añadió el test que a la versión en Python le faltaba.
-
-Lo que **no** cambia es la decisión de este ADR: que la coherencia de specs y
-ADRs se comprueba mecánicamente en CI. Solo cambia con qué.
+- **2026-08-01** — ADR creado. El validador era `scripts/validate_docs.py`
+  (Python 3, solo biblioteca estándar), elegido como provisional porque
+  todavía no había stack: **disparador** para revisarlo, que el stack elegido
+  trajera un runtime propio con el que fuese más natural mantenerlo.
+- **2026-08-03** — Ese disparador se cumplió con el ADR 0003 y
+  `technical/0001`. `technical/0003` portó el validador a
+  `scripts/validateDocs.ts`, trasladando las veinte condiciones de error una a
+  una y añadiendo el test que a la versión en Python le faltaba; la CI ya no
+  arranca Python en ningún *job*. La decisión de fondo no cambia, solo la
+  herramienta.
+- **2026-08-06** — Añadido `calibracion-de-escalas.md` a la lista de
+  satélites de la decisión 1. La lista era exhaustiva y se había quedado
+  corta; la regla de un satélite por área no cambia.

@@ -155,3 +155,42 @@ ese despliegue existe (GitHub Pages). Deja de ser aplazamiento y pasa a
 
 Un aplazamiento sin disparador es una omisión disfrazada. Un disparador que se
 cumple y no se atiende es deuda: va al roadmap.
+
+## 8. Dos tests que no se escriben aquí
+
+No son aplazamientos —no tienen disparador porque no se quieren nunca—, sino
+rechazos razonados. Se escriben porque los dos son propuestas naturales que
+alguien volverá a hacer.
+
+### El test que fija los números de salida
+
+Pinchar la puntuación total de cada candidato y comprobar que no cambia.
+Parece una red de seguridad barata.
+
+**No lo es.** El catálogo se edita a mano y con frecuencia —los precios rotan,
+se corrigen datos, entran y salen modelos—, así que el test se rompe en cada
+edición **legítima**. Lo que pasa entonces es predecible: se actualizan los
+números esperados sin mirar, y a la tercera vez el test ya no comprueba nada.
+Ha degenerado en el ritual de actualizar los números dorados, con el coste de
+un test y el valor de ninguno.
+
+Lo que de verdad protege esas fórmulas son tests sobre **propiedades**: que un
+coche en el anclaje bueno saque un 10, que la nota de un eje no cambie al
+añadir otro coche al catálogo, que la curva sea en S y no una recta. Esos no
+se rompen cuando el catálogo cambia, porque no dependen del catálogo.
+
+### El test que comprueba que la lógica es la que es
+
+Afirmar en un test que tal eje normaliza por sumando, o que tal otro combina
+0,6/0,4. Es tautológico: eso es cierto porque así lo dice el código dos
+líneas más arriba, y deja de serlo exactamente cuando alguien cambia el
+código a propósito.
+
+Un test así no detecta un fallo, **detecta una edición**. Y además comunica
+algo falso: sugiere que quien toca el código no sabe lo que está tocando.
+
+Cuando lo que se quiere proteger es una invariante de verdad y no una línea
+concreta, la herramienta correcta es una regla ejecutable —dependency-cruiser
+para las dependencias, el validador para la coherencia documental— o un test
+sobre el **comportamiento observable**, no sobre la forma de la
+implementación.

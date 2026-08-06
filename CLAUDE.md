@@ -77,6 +77,7 @@ Estados, criterios de aprobación y verificación:
 | `docs/proceso/estilo.md` | Estilo de código, documentación y trabajo | Activo |
 | `docs/proceso/logging.md` | Qué es un log en este proyecto | Activo |
 | `docs/proceso/enrutado-de-modelos.md` | Qué modelo de IA hace qué tarea | Activo |
+| `docs/proceso/calibracion-de-escalas.md` | Cómo se fija la escala de un eje y cómo se comprueba que mide lo que dice | Activo |
 | `docs/proceso/anti-patrones.md` | Fallos que este proceso existe para evitar | Activo |
 | `docs/estado/arquitectura.md` | Cómo está construido el sistema hoy | Pendiente |
 | `docs/estado/dominio.md` | Qué modela el negocio hoy | Pendiente |

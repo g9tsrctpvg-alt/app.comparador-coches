@@ -48,6 +48,19 @@ en él**.
 Cada eje se puntúa contra una **escala absoluta propia**, fijada por juicio
 explícito y estable, no derivada del conjunto de candidatos.
 
+**La invariante que esto sirve:** dos ejes con el mismo peso, para la misma
+nota, aportan los mismos puntos. La aritmética ya lo garantiza —`contribución
+= nota × peso`—, pero solo significa algo si **la misma nota quiere decir lo
+mismo en todos los ejes**. Un 5 en coste y un 5 en uso diario tienen que ser
+comparables como juicios, no solo como números; si no, el modelo es
+aritméticamente justo y semánticamente falso.
+
+De ahí el requisito operativo: **todo eje se ancla contra algo externo al
+conjunto de candidatos**. Un eje anclado en «el mejor y el peor de los once»
+no puede cumplirla, porque su 5 significa «mitad de tabla» mientras el de al
+lado significa «mitad de lo aceptable». Sumar ejes así es sumar magnitudes
+distintas con una tabla de conversión que nadie ha escrito.
+
 Una escala declara dos anclajes: el valor a partir del cual la cosa deja de
 mejorar (nota 10) y el valor a partir del cual es inaceptable (nota 0). Entre
 ambos la nota interpola; fuera de ambos satura. Los anclajes se eligen contra
@@ -97,10 +110,15 @@ eje, en su propia spec**. Este ADR fija el principio, no los números.
   correcto.** Un eje en el que los candidatos apenas difieren influirá poco
   en el total, en vez de fabricar diferencias. `diario`, por ejemplo, pasaría
   de mover 10 puntos entre el mejor y el peor a mover unos 2,4.
-- **Coste asumido: los pesos vigentes quedan descalibrados.** Se eligieron
-  conviviendo con el comportamiento anterior, donde todo eje estiraba a
-  0-10. **Disparador** para revisarlos: que el primer eje migre a escala
-  absoluta.
+- **Los valores por defecto de los pesos pueden dejar de ser buen punto de
+  partida.** `DEFAULT_WEIGHTS` se eligió conviviendo con el comportamiento
+  anterior, donde todo eje estiraba a 0-10. No es trabajo pendiente ni deuda:
+  los pesos son un control de la interfaz —`WeightSliders`— que el usuario
+  mueve viendo el efecto al momento, no un parámetro que alguien deba
+  recalibrar y consolidar. Lo que sí queda es un criterio para quien los
+  mueva: con escalas absolutas cada eje ya mueve lo que los candidatos
+  difieren en él, así que forzar influencia desde el peso reintroduce a mano
+  lo que esta decisión quita.
 - **Coste asumido: cada eje necesita su juicio.** No hay una regla mecánica
   que produzca los anclajes; hay que pensarlos y defenderlos uno a uno. A
   cambio, quedan escritos y discutibles, en vez de emerger de la lista de
@@ -116,3 +134,20 @@ eje, en su propia spec**. Este ADR fija el principio, no los números.
 - **La página que explique los cálculos gana importancia.** Con escalas
   absolutas hay algo más que explicar —de dónde sale cada anclaje— y también
   algo más que ganar: la escala es justo lo que hace la nota interpretable.
+
+## Historial
+
+- **2026-08-04** — ADR creado.
+- **2026-08-06** — Añadida a la decisión la invariante que la motiva —misma
+  nota y mismo peso, mismos puntos; luego la misma nota debe significar lo
+  mismo en todos los ejes—. Estaba implícita en todo el razonamiento y no
+  escrita en ninguna parte, pese a ser lo que obliga a anclar contra algo
+  externo al conjunto. El método para hacerlo vive en
+  `docs/proceso/calibracion-de-escalas.md`.
+- **2026-08-06** — Corregida la consecuencia sobre los pesos. Decía que
+  quedaban descalibrados y fijaba un **disparador** para revisarlos: que el
+  primer eje migrase a escala absoluta. Redactado así fabricaba una deuda
+  inexistente —`docs/roadmap.md` establece que un disparador que se cumple y
+  no se atiende pasa a la tabla de deudas— cuando no hay nada que atender: los
+  pesos son un control de la interfaz que el usuario mueve en vivo. Se retira
+  el disparador y se mantiene la observación sobre los valores por defecto.
