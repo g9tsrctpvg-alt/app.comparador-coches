@@ -32,10 +32,15 @@ export interface PenaltyLine {
 export type EditableRatingField =
   'aestheticsExterior' | 'aestheticsInterior' | 'travelComfort';
 
-/** Un sumando puntuado contra una escala absoluta fija — dos anclajes y una
- * curva en S entre ellos (ADR 0004) — en vez de contra el conjunto de
- * candidatos. Mutuamente excluyente con `normalization`: un sumando usa una
- * de las dos formas de puntuar, nunca las dos. */
+/** Un sumando puntuado contra una escala absoluta fija —dos anclajes, no el
+ * conjunto de candidatos (ADR 0004)— en vez de normalización relativa.
+ * Entre anclajes la mayoría de ejes usan una curva en S; `estetica` usa un
+ * mapeo lineal porque el 1-5 que recibe ya es el juicio completo del
+ * usuario y comprimir los extremos otra vez lo deformaría dos veces. El
+ * campo no distingue cuál se usó — describe los anclajes y el resultado,
+ * no la forma de la curva entre ambos. Mutuamente excluyente con
+ * `normalization`: un sumando usa una de las dos formas de puntuar, nunca
+ * las dos. */
 export interface AbsoluteScale {
   value: number;
   goodAnchor: number;
