@@ -4,6 +4,8 @@
 - **Fecha:** 2026-08-04
 - **Nivel:** 🟡
 
+> Acotado por el **addendum de 2026-08-06**, al final de este documento.
+
 ## Contexto
 
 Todos los ejes puntúan hoy **relativo al conjunto de candidatos**: se busca
@@ -116,3 +118,30 @@ eje, en su propia spec**. Este ADR fija el principio, no los números.
 - **La página que explique los cálculos gana importancia.** Con escalas
   absolutas hay algo más que explicar —de dónde sale cada anclaje— y también
   algo más que ganar: la escala es justo lo que hace la nota interpretable.
+
+## Addendum 2026-08-06 — los pesos no son trabajo pendiente
+
+La consecuencia sobre los pesos está mal planteada. Decía que quedan
+descalibrados y fijaba un **disparador** para revisarlos: que el primer eje
+migrara a escala absoluta. Redactado así, el disparador fabrica una deuda que
+no existe: `docs/roadmap.md` establece que un disparador que se cumple y no se
+atiende deja de ser aplazamiento y pasa a la tabla de deudas, y aquí no hay
+nada que atender.
+
+**Los pesos son un control de la interfaz, no una entrega del proyecto.**
+`WeightSliders` los expone como deslizadores: el propietario los mueve y ve el
+efecto al momento. `DEFAULT_WEIGHTS` es únicamente el punto de partida de una
+sesión, no un parámetro del modelo que alguien deba recalibrar y consolidar.
+
+Se acota, no se revoca:
+
+- **Se mantiene la observación**: los valores por defecto se eligieron
+  conviviendo con el comportamiento anterior, donde todo eje estiraba a 0-10,
+  así que puede que ya no sean el mejor punto de partida.
+- **Se retira el disparador.** Migrar el primer eje no obliga a nadie a nada.
+  Ajustar los pesos es una acción del usuario en la aplicación, no una tarea
+  de una fase ni una deuda registrable.
+- **Sigue en pie la razón de fondo** que motivaba el aviso: con escalas
+  absolutas cada eje mueve lo que los candidatos difieren en él, y forzar
+  influencia desde el peso reintroduciría a mano lo que esta decisión quita.
+  Eso es un criterio para quien mueva los deslizadores, no trabajo pendiente.

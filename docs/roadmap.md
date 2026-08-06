@@ -167,6 +167,19 @@ fase abierta. Se lista para no perderlo, no para bloquear nada.
   suspensión — lo que una ficha técnica no recoge. No depende del proyecto
   sino de conducir los candidatos, y por eso no puede ser tarea de una fase.
 
+## Proceso
+
+El proceso —`docs/proceso/` y los ADR que lo gobiernan— no es entregable de
+ninguna fase, pero sí es trabajo del proyecto y tiene estado. Vive aquí para
+que no acabe archivado en la fase que resulte estar abierta.
+
+| Tarea | Estado |
+| --- | --- |
+| ADR 0005 — los ADR son documentos de estado, no deltas | `draft` — esperando gate humano |
+| Cambiar la regla de corrección en `docs/proceso/adrs.md` | Pendiente — depende de que ADR 0005 se apruebe |
+| Añadir `Historial` a `docs/decisions/TEMPLATE.md` y exigirlo en el validador | Pendiente — depende de ADR 0005 |
+| Convertir los cuatro addenda vigentes (0001, 0002, 0003 y 0004) al nuevo formato | Pendiente — depende de ADR 0005 |
+
 ## Deudas abiertas
 
 Toda deuda conocida se escribe. Una deuda no registrada no es una deuda: es
