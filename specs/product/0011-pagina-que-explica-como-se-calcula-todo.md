@@ -19,10 +19,9 @@ Lo que no sabe responder es **«cómo funciona esto»**. No hay ningún sitio en
 la aplicación donde se explique el modelo entero de una vez:
 
 - Qué mide cada uno de los seis ejes, y por qué esos seis.
-- Qué es un anclaje, cuáles son los doce que fija la fase 3, y **por qué
-  cada uno vale lo que vale**. Hoy ese razonamiento vive únicamente en las
-  specs de eje, que son documentos del repositorio, están en `approved`, y se
-  congelarán en cuanto se consoliden.
+- Qué es un anclaje, cuáles son los doce que fijó la fase 3, y **por qué cada
+  uno vale lo que vale**. Ese razonamiento vive en `docs/estado/dominio.md`,
+  que es un documento del repositorio: quien usa el comparador no lo ve.
 - Qué es la curva en S entre anclajes y por qué la escala no es una recta.
 - Qué significa mover un peso, y qué **no** significa: con escalas absolutas,
   un eje pesa lo que los candidatos difieren en él.
@@ -37,11 +36,12 @@ vertical —un coche, un eje, sus números—; esto es horizontal: el modelo
 completo, sin coche delante.
 
 Y gana importancia justo ahora. Mientras la puntuación era relativa al
-conjunto, la nota solo decía en qué puesto iba un coche entre once. Con las
-escalas absolutas del ADR 0004, un 7,2 pretende significar algo por sí mismo
-—«este coche es bueno en esto»— y eso **solo es interpretable si la escala se
-puede consultar**. La escala es lo que hace la nota legible; hoy la escala no
-está en ninguna parte de la aplicación.
+conjunto, la nota solo decía en qué puesto iba un coche entre once. Desde que
+la fase 3 cerró —2026-08-06, los seis ejes en escala absoluta y consolidados—
+un 7,2 pretende significar algo por sí mismo, «este coche es bueno en esto», y
+eso **solo es interpretable si la escala se puede consultar**. La escala es lo
+que hace la nota legible, y hoy la aplicación la aplica sin enseñarla en
+ninguna parte.
 
 ## Objetivo
 
@@ -191,12 +191,12 @@ aplicación, sin abrir el repositorio y sin tener un coche delante.
 
 ## Dependencias y supuestos
 
-- **Depende de que la fase 3 esté implementada y consolidada.** Es la única
-  dependencia dura de esta spec, y el roadmap ya la registra: escribir esta
-  página antes de que los ejes sean los definitivos es documentar un modelo
-  que va a cambiar. Concretamente, el criterio de los doce anclajes se
-  verifica contra `docs/estado/dominio.md`, y hoy los anclajes no están ahí:
-  están en las specs de eje, en `approved`.
+- **La dependencia de la fase 3 está satisfecha.** Era la única dura de esta
+  spec —escribirla antes de que los ejes fueran los definitivos habría sido
+  documentar un modelo a punto de cambiar—, y la fase cerró el 2026-08-06 con
+  los doce anclajes, su razonamiento y la curva en S consolidados en
+  `docs/estado/dominio.md`. El criterio de los doce anclajes se verifica
+  contra ese documento, que ya los contiene.
 - **Depende de `technical/0004` y `product/0009`** para verse como el resto
   de la aplicación. Podría implementarse antes y quedar sin estilo, pero
   entonces habría que estilarla dos veces.

@@ -101,6 +101,50 @@ describe('AxisBreakdownView', () => {
     expect(markup).toMatch(/69\.045\s*€/);
   });
 
+  it('shows both anchors and the resulting score for a subcomponent scored on an absolute scale', () => {
+    const markup = renderToStaticMarkup(
+      <AxisBreakdownView
+        breakdown={baseAxis({
+          subcomponents: [
+            {
+              label: 'Anchura',
+              rawValue: 1865,
+              unit: 'mm',
+              scale: {
+                value: 1865,
+                goodAnchor: 1765,
+                badAnchor: 2000,
+                score: 5.7,
+              },
+            },
+          ],
+        })}
+      />,
+    );
+    expect(markup).toMatch(/1\.?765\s*mm.*→\s*10/);
+    expect(markup).toMatch(/2\.?000\s*mm.*→\s*0/);
+    expect(markup).toContain('5,7/10');
+  });
+
+  it('shows an informational line without treating it as an applied assumption', () => {
+    const markup = renderToStaticMarkup(
+      <AxisBreakdownView
+        breakdown={baseAxis({
+          info: [
+            {
+              label: 'Extensión de garantía condicionada (no puntúa)',
+              value:
+                '15 años, hasta 100000 km — Sujeta a mantenimiento en red oficial',
+            },
+          ],
+        })}
+      />,
+    );
+    expect(markup).toContain('Información');
+    expect(markup).toContain('no puntúa');
+    expect(markup).not.toContain('Supuestos aplicados');
+  });
+
   it('says plainly when an axis has no penalties', () => {
     const markup = renderToStaticMarkup(
       <AxisBreakdownView breakdown={baseAxis()} />,

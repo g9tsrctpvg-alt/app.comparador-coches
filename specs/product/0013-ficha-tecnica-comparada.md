@@ -205,7 +205,7 @@ crea la primera.
 - **Comparte mecanismo de navegación con `product/0011`.** Las dos introducen
   una vista alcanzable por fragmento de URL; se implemente la que se
   implemente primero, la segunda reutiliza el mecanismo y no monta otro.
-- **No depende de la fase 3.** No puntúa nada.
+- **No depende de la fase 3**, que además ya cerró. Esta spec no puntúa nada.
 - Dar de alta una **referencia** obliga a distinguir en el modelo entre coche
   candidato y coche de referencia, con esquemas separados (requisitos 3 y 4).
   Es un cambio de dominio pequeño pero real, y es la razón por la que esta

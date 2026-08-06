@@ -213,7 +213,8 @@ accionar con el dedo.
   queries con nombre, y de **`product/0009`** para la jerarquía visual que
   esta spec reorganiza. Implementarla antes que ellas obliga a reorganizar
   dos veces.
-- **No depende de la fase 3.** Los ejes cambian de escala, no de forma.
+- **No depende de la fase 3**, que además ya cerró. Los ejes cambiaron de
+  escala, no de forma.
 - Se asume que la verificación es **manual en navegador**: los tests actuales
   usan `renderToStaticMarkup`, que no calcula estilos, no tiene viewport y no
   puede medir un `scrollWidth`. Por eso los criterios están redactados con

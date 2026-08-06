@@ -1,143 +1,167 @@
 import { describe, expect, it } from 'vitest';
 import { DEFAULT_ASSUMPTIONS } from '../assumptions';
 import { threeCarFixture } from '../testFixtures';
-import { buildCosteBreakdown, costeTotal } from './coste';
+import { buildCosteBreakdown, costeComponents } from './coste';
 
-describe('costeTotal', () => {
-  it('adds purchase price, energy and maintenance over the assumed years', () => {
-    const components = costeTotal(threeCarFixture[0]!, DEFAULT_ASSUMPTIONS);
-    expect(components.precioCompra).toBe(36000);
-    expect(components.costeEnergia).toBeCloseTo(17298, 6);
-    expect(components.costeMantenimiento).toBe(4800);
-    expect(components.total).toBeCloseTo(58098, 6);
-  });
+function priceScale(
+  breakdown: ReturnType<typeof buildCosteBreakdown>,
+  id: string,
+) {
+  return breakdown
+    .get(id)!
+    .subcomponents!.find((s) => s.label === 'Precio de compra')!.scale!;
+}
 
-  it('prices electric consumption in €/kWh instead of €/litro', () => {
-    const components = costeTotal(threeCarFixture[2]!, DEFAULT_ASSUMPTIONS);
-    expect(components.costeEnergia).toBeCloseTo(12960, 6);
-    expect(components.total).toBeCloseTo(47960, 6);
-  });
+function usageScale(
+  breakdown: ReturnType<typeof buildCosteBreakdown>,
+  id: string,
+) {
+  return breakdown
+    .get(id)!
+    .subcomponents!.find((s) => s.label === 'Coste de uso mensual')!.scale!;
+}
 
-  it('does not subtract a residual value when "pienso venderlo" is off', () => {
-    const components = costeTotal(threeCarFixture[0]!, DEFAULT_ASSUMPTIONS);
-    expect(components.descuentoResidual).toBe(0);
-  });
-
-  it('subtracts the residual value when "pienso venderlo" is on', () => {
-    const components = costeTotal(threeCarFixture[0]!, {
-      ...DEFAULT_ASSUMPTIONS,
-      pensandoVender: true,
-    });
-    expect(components.descuentoResidual).toBeGreaterThan(0);
-    expect(components.total).toBeLessThan(58098);
+describe('costeComponents', () => {
+  it('computes monthly running cost from annual energy plus annual maintenance, divided by 12', () => {
+    const car = threeCarFixture[0]!; // Sportage HEV, ICE-priced litre fuel
+    const components = costeComponents(car, DEFAULT_ASSUMPTIONS);
+    const energiaAnual =
+      (car.consumption.value / 100) *
+      DEFAULT_ASSUMPTIONS.kmPorAnio *
+      DEFAULT_ASSUMPTIONS.precioLitro;
+    const expected = (energiaAnual + car.maintenanceEurYear.value) / 12;
+    expect(components.costeUsoMensual).toBeCloseTo(expected, 6);
+    expect(components.precioCompra).toBe(car.priceEur.value);
   });
 });
 
 describe('buildCosteBreakdown', () => {
-  it('scores the cheapest total cost highest (menor coste = mejor)', () => {
+  it('does not depend on which other candidates are in the catalogue', () => {
+    const withThree = buildCosteBreakdown(
+      threeCarFixture,
+      DEFAULT_ASSUMPTIONS,
+      1,
+    );
+    const alone = buildCosteBreakdown(
+      [threeCarFixture[0]!],
+      DEFAULT_ASSUMPTIONS,
+      1,
+    );
+    expect(alone.get('kia-sportage-hev')!.score).toBe(
+      withThree.get('kia-sportage-hev')!.score,
+    );
+  });
+
+  it('scores 10 on price at and below 25000 EUR', () => {
+    const car = {
+      ...threeCarFixture[0]!,
+      priceEur: { ...threeCarFixture[0]!.priceEur, value: 20000 },
+    };
+    const breakdown = buildCosteBreakdown([car], DEFAULT_ASSUMPTIONS, 1);
+    expect(priceScale(breakdown, car.id).score).toBe(10);
+  });
+
+  it('scores 0 on price at and above 47000 EUR', () => {
+    const car = {
+      ...threeCarFixture[0]!,
+      priceEur: { ...threeCarFixture[0]!.priceEur, value: 60000 },
+    };
+    const breakdown = buildCosteBreakdown([car], DEFAULT_ASSUMPTIONS, 1);
+    expect(priceScale(breakdown, car.id).score).toBe(0);
+  });
+
+  it('scores 10 on monthly running cost at 100 EUR/month and 0 at 250 EUR/month', () => {
+    // Consumo y mantenimiento a mano para fijar el coste de uso exacto.
+    const cheap = {
+      ...threeCarFixture[0]!,
+      id: 'cheap',
+      consumption: { ...threeCarFixture[0]!.consumption, value: 0 },
+      maintenanceEurYear: {
+        ...threeCarFixture[0]!.maintenanceEurYear,
+        value: 1200,
+      },
+    };
+    const pricey = {
+      ...threeCarFixture[0]!,
+      id: 'pricey',
+      consumption: { ...threeCarFixture[0]!.consumption, value: 0 },
+      maintenanceEurYear: {
+        ...threeCarFixture[0]!.maintenanceEurYear,
+        value: 3000,
+      },
+    };
+    const breakdown = buildCosteBreakdown(
+      [cheap, pricey],
+      DEFAULT_ASSUMPTIONS,
+      1,
+    );
+    expect(usageScale(breakdown, 'cheap').score).toBe(10);
+    expect(usageScale(breakdown, 'pricey').score).toBe(0);
+  });
+
+  it('combines the two scales 50/50', () => {
     const breakdown = buildCosteBreakdown(
       threeCarFixture,
       DEFAULT_ASSUMPTIONS,
       1,
     );
-    const ev3 = breakdown.get('kia-ev3')!;
-    const x1 = breakdown.get('bmw-x1-xdrive25e')!;
-    expect(ev3.normalization!.normalizedValue).toBe(10);
-    expect(x1.normalization!.normalizedValue).toBe(0);
+    for (const car of threeCarFixture) {
+      const entry = breakdown.get(car.id)!;
+      const price = priceScale(breakdown, car.id).score;
+      const usage = usageScale(breakdown, car.id).score;
+      expect(entry.rawScore).toBeCloseTo(0.5 * price + 0.5 * usage, 9);
+      expect(entry.score).toBe(entry.rawScore);
+    }
   });
 
-  it('lists purchase price, energy and maintenance as informational subcomponents', () => {
+  it('gives cars with the same price but different running cost different axis scores', () => {
+    const base = threeCarFixture[0]!;
+    const carA = {
+      ...base,
+      id: 'a',
+      maintenanceEurYear: { ...base.maintenanceEurYear, value: 200 },
+    };
+    const carB = {
+      ...base,
+      id: 'b',
+      maintenanceEurYear: { ...base.maintenanceEurYear, value: 2000 },
+    };
+    const breakdown = buildCosteBreakdown([carA, carB], DEFAULT_ASSUMPTIONS, 1);
+    expect(breakdown.get('a')!.score).not.toBe(breakdown.get('b')!.score);
+  });
+
+  it('shows both anchors and the resulting score for each magnitude, and names no model', () => {
     const breakdown = buildCosteBreakdown(
       threeCarFixture,
       DEFAULT_ASSUMPTIONS,
       1,
     );
     const sportage = breakdown.get('kia-sportage-hev')!;
-    expect(sportage.subcomponents!.map((sub) => sub.label)).toEqual([
-      'Precio de compra',
-      'Energía (12 años)',
-      'Mantenimiento (12 años)',
+    expect(sportage.normalization).toBeUndefined();
+    expect(priceScale(breakdown, 'kia-sportage-hev')).toMatchObject({
+      goodAnchor: 25000,
+      badAnchor: 47000,
+    });
+    expect(usageScale(breakdown, 'kia-sportage-hev')).toMatchObject({
+      goodAnchor: 100,
+      badAnchor: 250,
+    });
+    expect(
+      sportage.subcomponents!.every((s) => s.normalization === undefined),
+    ).toBe(true);
+  });
+
+  it('names price and consumption and maintenance as inputs, each with their source', () => {
+    const breakdown = buildCosteBreakdown(
+      threeCarFixture,
+      DEFAULT_ASSUMPTIONS,
+      1,
+    );
+    const sportage = breakdown.get('kia-sportage-hev')!;
+    expect(sportage.inputs.map((input) => input.label)).toEqual([
+      'Precio',
+      'Consumo',
+      'Mantenimiento anual',
     ]);
-  });
-
-  it('adds the residual discount subcomponent only when "pienso venderlo" is on', () => {
-    const breakdown = buildCosteBreakdown(
-      threeCarFixture,
-      { ...DEFAULT_ASSUMPTIONS, pensandoVender: true },
-      1,
-    );
-    const sportage = breakdown.get('kia-sportage-hev')!;
-    const residualLine = sportage.subcomponents!.find(
-      (sub) => sub.label === 'Descuento por valor residual',
-    );
-    expect(residualLine).toBeDefined();
-    expect(residualLine!.rawValue).toBeLessThan(0);
-  });
-
-  it('echoes the assumptions applied', () => {
-    const breakdown = buildCosteBreakdown(
-      threeCarFixture,
-      DEFAULT_ASSUMPTIONS,
-      1,
-    );
-    const sportage = breakdown.get('kia-sportage-hev')!;
-    expect(sportage.assumptionsUsed).toEqual([
-      { label: 'Km/año', value: '15000' },
-      { label: 'Años', value: '12' },
-      { label: '€/litro', value: '1.55' },
-      { label: '€/kWh', value: '0.45' },
-      { label: 'Pienso venderlo', value: 'No' },
-    ]);
-  });
-
-  it('includes the residual value as an input only for cars that declare it', () => {
-    const breakdown = buildCosteBreakdown(
-      threeCarFixture,
-      DEFAULT_ASSUMPTIONS,
-      1,
-    );
-    const sportage = breakdown.get('kia-sportage-hev')!;
-    expect(sportage.inputs.map((input) => input.label)).toContain(
-      'Valor residual a 5 años',
-    );
-  });
-
-  it('omits the residual value as an input for a car that never declared one', () => {
-    const { residualPct5y: _residualPct5y, ...withoutResidual } =
-      threeCarFixture[0]!;
-    const breakdown = buildCosteBreakdown(
-      [withoutResidual],
-      DEFAULT_ASSUMPTIONS,
-      1,
-    );
-    const sportage = breakdown.get('kia-sportage-hev')!;
-    expect(sportage.inputs.map((input) => input.label)).not.toContain(
-      'Valor residual a 5 años',
-    );
-  });
-
-  it('shows no residual line at all for a car with no residual datum, even when selling', () => {
-    // Antes salía «Descuento por valor residual: −0 €», que presenta como
-    // cero comprobado lo que en realidad es un dato que no existe.
-    const { residualPct5y: _residualPct5y, ...withoutResidual } =
-      threeCarFixture[0]!;
-    const breakdown = buildCosteBreakdown(
-      [withoutResidual],
-      { ...DEFAULT_ASSUMPTIONS, pensandoVender: true },
-      1,
-    );
-    const sportage = breakdown.get('kia-sportage-hev')!;
-    expect(sportage.subcomponents!.map((sub) => sub.label)).not.toContain(
-      'Descuento por valor residual',
-    );
-  });
-
-  it('declares euros as the raw unit of the axis, so the interface can label it', () => {
-    const breakdown = buildCosteBreakdown(
-      threeCarFixture,
-      DEFAULT_ASSUMPTIONS,
-      1,
-    );
-    expect(breakdown.get('kia-sportage-hev')!.rawUnit).toBe('€');
   });
 });

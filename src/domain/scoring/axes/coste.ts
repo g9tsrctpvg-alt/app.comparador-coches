@@ -1,58 +1,49 @@
 import type { Car } from '../../car';
 import type { GlobalAssumptions } from '../assumptions';
-import { normalizeAll } from '../normalize';
-import {
-  inputDatumFrom,
-  type AxisBreakdown,
-  type SubcomponentBreakdown,
-} from '../breakdown';
-import { mustGet } from '../mustGet';
+import { scoreOnAbsoluteScale } from '../scale';
+import { inputDatumFrom, type AxisBreakdown } from '../breakdown';
+
+// El presupuesto ya declarado (47.000 €) como techo duro: por encima no se
+// compra. 25.000 € es donde el precio deja de preocupar; por debajo, empate.
+const PRECIO_BUENO_EUR = 25000;
+const PRECIO_MALO_EUR = 47000;
+// 22.000 € de recorrido en precio ÷ (150 €/mes × 12) de recorrido en uso ≈
+// 12,2 años: con el coche unos doce años, ambas escalas cubren el mismo
+// dinero, y por eso 50/50 es la única combinación coherente.
+const USO_BUENO_EUR_MES = 100;
+const USO_MALO_EUR_MES = 250;
 
 export function costeFormula(assumptions: GlobalAssumptions): string {
   return (
-    `precio_compra + (energía + mantenimiento) × ${assumptions.anios} años` +
-    (assumptions.pensandoVender ? ' − valor_residual' : '') +
-    `. energía = (consumo/100) × ${assumptions.kmPorAnio} km/año × años × precio_unitario ` +
+    `nota = 0,5 × escala(precio) + 0,5 × escala(coste de uso mensual). ` +
+    `escala(precio): 10 hasta ${PRECIO_BUENO_EUR.toLocaleString('es-ES')} €, ` +
+    `0 desde ${PRECIO_MALO_EUR.toLocaleString('es-ES')} €. ` +
+    `escala(uso): 10 hasta ${USO_BUENO_EUR_MES} €/mes, 0 desde ${USO_MALO_EUR_MES} €/mes. ` +
+    `coste de uso mensual = (energía anual + mantenimiento anual) / 12; ` +
+    `energía anual = (consumo/100) × ${assumptions.kmPorAnio} km/año × precio_unitario ` +
     `(${assumptions.precioLitro.toFixed(2)} €/l ó ${assumptions.precioKwh.toFixed(2)} €/kWh). ` +
-    (assumptions.pensandoVender
-      ? 'residual = precio × res^(años/5).'
-      : 'Residual no se resta: "pienso venderlo" está desactivado.')
+    'Ambas escalas son absolutas: no dependen de qué otros candidatos haya en el catálogo.'
   );
 }
 
 interface CosteComponents {
   precioCompra: number;
-  costeEnergia: number;
-  costeMantenimiento: number;
-  descuentoResidual: number;
-  total: number;
+  costeUsoMensual: number;
 }
 
-export function costeTotal(
+export function costeComponents(
   car: Car,
   assumptions: GlobalAssumptions,
 ): CosteComponents {
   const precioUnitario =
     car.technology === 'EV' ? assumptions.precioKwh : assumptions.precioLitro;
-  const costeEnergia =
-    (car.consumption.value / 100) *
-    assumptions.kmPorAnio *
-    assumptions.anios *
-    precioUnitario;
-  const costeMantenimiento = car.maintenanceEurYear.value * assumptions.anios;
-  const precioCompra = car.priceEur.value;
-
-  const descuentoResidual =
-    assumptions.pensandoVender && car.residualPct5y
-      ? precioCompra * Math.pow(car.residualPct5y.value, assumptions.anios / 5)
-      : 0;
+  const energiaAnual =
+    (car.consumption.value / 100) * assumptions.kmPorAnio * precioUnitario;
+  const mantenimientoAnual = car.maintenanceEurYear.value;
 
   return {
-    precioCompra,
-    costeEnergia,
-    costeMantenimiento,
-    descuentoResidual,
-    total: precioCompra + costeEnergia + costeMantenimiento - descuentoResidual,
+    precioCompra: car.priceEur.value,
+    costeUsoMensual: (energiaAnual + mantenimientoAnual) / 12,
   };
 }
 
@@ -61,47 +52,23 @@ export function buildCosteBreakdown(
   assumptions: GlobalAssumptions,
   weight: number,
 ): Map<string, AxisBreakdown> {
-  const componentsByCar = new Map<string, CosteComponents>();
-  const raw = cars.map((car) => {
-    const components = costeTotal(car, assumptions);
-    componentsByCar.set(car.id, components);
-    return { carId: car.id, carName: car.name, value: components.total };
-  });
-  const normalizations = normalizeAll('menor-mejor', raw);
   const formula = costeFormula(assumptions);
 
   const result = new Map<string, AxisBreakdown>();
   for (const car of cars) {
-    const normalization = mustGet(normalizations, car.id);
-    const components = mustGet(componentsByCar, car.id);
-    const score = Math.min(10, Math.max(0, normalization.normalizedValue));
-
-    const subcomponents: SubcomponentBreakdown[] = [
-      {
-        label: 'Precio de compra',
-        rawValue: components.precioCompra,
-        unit: '€',
-      },
-      {
-        label: `Energía (${assumptions.anios} años)`,
-        rawValue: components.costeEnergia,
-        unit: '€',
-      },
-      {
-        label: `Mantenimiento (${assumptions.anios} años)`,
-        rawValue: components.costeMantenimiento,
-        unit: '€',
-      },
-    ];
-    // Sin dato de residual no hay descuento que mostrar: una línea a −0 €
-    // presentaría como cero verificado lo que en realidad es un dato ausente.
-    if (assumptions.pensandoVender && car.residualPct5y) {
-      subcomponents.push({
-        label: 'Descuento por valor residual',
-        rawValue: -components.descuentoResidual,
-        unit: '€',
-      });
-    }
+    const { precioCompra, costeUsoMensual } = costeComponents(car, assumptions);
+    const precioScore = scoreOnAbsoluteScale(
+      precioCompra,
+      PRECIO_BUENO_EUR,
+      PRECIO_MALO_EUR,
+    );
+    const usoScore = scoreOnAbsoluteScale(
+      costeUsoMensual,
+      USO_BUENO_EUR_MES,
+      USO_MALO_EUR_MES,
+    );
+    const rawScore = 0.5 * precioScore + 0.5 * usoScore;
+    const score = Math.min(10, Math.max(0, rawScore));
 
     result.set(car.id, {
       axisId: 'coste',
@@ -111,24 +78,37 @@ export function buildCosteBreakdown(
         inputDatumFrom('Precio', car.priceEur),
         inputDatumFrom('Consumo', car.consumption),
         inputDatumFrom('Mantenimiento anual', car.maintenanceEurYear),
-        ...(car.residualPct5y
-          ? [inputDatumFrom('Valor residual a 5 años', car.residualPct5y)]
-          : []),
       ],
       assumptionsUsed: [
         { label: 'Km/año', value: String(assumptions.kmPorAnio) },
-        { label: 'Años', value: String(assumptions.anios) },
         { label: '€/litro', value: assumptions.precioLitro.toFixed(2) },
         { label: '€/kWh', value: assumptions.precioKwh.toFixed(2) },
+      ],
+      subcomponents: [
         {
-          label: 'Pienso venderlo',
-          value: assumptions.pensandoVender ? 'Sí' : 'No',
+          label: 'Precio de compra',
+          rawValue: precioCompra,
+          unit: '€',
+          scale: {
+            value: precioCompra,
+            goodAnchor: PRECIO_BUENO_EUR,
+            badAnchor: PRECIO_MALO_EUR,
+            score: precioScore,
+          },
+        },
+        {
+          label: 'Coste de uso mensual',
+          rawValue: costeUsoMensual,
+          unit: '€/mes',
+          scale: {
+            value: costeUsoMensual,
+            goodAnchor: USO_BUENO_EUR_MES,
+            badAnchor: USO_MALO_EUR_MES,
+            score: usoScore,
+          },
         },
       ],
-      subcomponents,
-      normalization,
-      rawUnit: '€',
-      rawScore: normalization.normalizedValue,
+      rawScore,
       penalties: [],
       weight,
       score,

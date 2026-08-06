@@ -85,10 +85,12 @@ describe('RankingList', () => {
 });
 
 describe('editableRatingsOf', () => {
-  it('finds exactly the three editable ratings the domain declares', () => {
+  it('finds exactly the two editable ratings the domain declares', () => {
+    // Antes de product/0005 había una tercera: la valoración subjetiva de
+    // viaje. Esa spec la retira, así que aquí solo quedan las dos de
+    // estética — es el propio dominio quien decide, no esta lista.
     const sportage = scored().find((car) => car.carId === 'kia-sportage-hev')!;
     expect(editableRatingsOf(sportage).map((rating) => rating.field)).toEqual([
-      'travelComfort',
       'aestheticsExterior',
       'aestheticsInterior',
     ]);
@@ -101,17 +103,16 @@ describe('editableRatingsOf', () => {
     );
     expect(byField.get('aestheticsExterior')).toBe(2);
     expect(byField.get('aestheticsInterior')).toBe(4);
-    expect(byField.get('travelComfort')).toBe(3);
   });
 
-  it('still finds all three after every label has been rewritten', () => {
+  it('still finds both after every label has been rewritten', () => {
     // La prueba de fuego del desacoplo: cambiar la copia no puede afectar a
     // qué controles aparecen ni a qué campo edita cada uno.
     const [rewritten] = withRewrittenLabels(
       scored().filter((car) => car.carId === 'kia-sportage-hev'),
     );
     expect(editableRatingsOf(rewritten!).map((rating) => rating.field)).toEqual(
-      ['travelComfort', 'aestheticsExterior', 'aestheticsInterior'],
+      ['aestheticsExterior', 'aestheticsInterior'],
     );
   });
 
@@ -119,7 +120,7 @@ describe('editableRatingsOf', () => {
     const sportage = scored().find((car) => car.carId === 'kia-sportage-hev')!;
     const labels = editableRatingsOf(sportage).map((rating) => rating.label);
     expect(labels).toContain('Nota exterior');
-    expect(labels).toContain('Tu valoración');
+    expect(labels).toContain('Nota interior');
     for (const label of labels) {
       expect(label).not.toMatch(/editable/i);
     }

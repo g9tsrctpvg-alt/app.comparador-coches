@@ -30,9 +30,23 @@ export interface PenaltyLine {
  * Es el contrato estable entre dominio e interfaz: la interfaz conmuta sobre
  * estos identificadores, nunca sobre el texto de una etiqueta. */
 export type EditableRatingField =
-  | 'aestheticsExterior'
-  | 'aestheticsInterior'
-  | 'travelComfort';
+  'aestheticsExterior' | 'aestheticsInterior' | 'travelComfort';
+
+/** Un sumando puntuado contra una escala absoluta fija —dos anclajes, no el
+ * conjunto de candidatos (ADR 0004)— en vez de normalización relativa.
+ * Entre anclajes la mayoría de ejes usan una curva en S; `estetica` usa un
+ * mapeo lineal porque el 1-5 que recibe ya es el juicio completo del
+ * usuario y comprimir los extremos otra vez lo deformaría dos veces. El
+ * campo no distingue cuál se usó — describe los anclajes y el resultado,
+ * no la forma de la curva entre ambos. Mutuamente excluyente con
+ * `normalization`: un sumando usa una de las dos formas de puntuar, nunca
+ * las dos. */
+export interface AbsoluteScale {
+  value: number;
+  goodAnchor: number;
+  badAnchor: number;
+  score: number;
+}
 
 export interface SubcomponentBreakdown {
   label: string;
@@ -42,11 +56,14 @@ export interface SubcomponentBreakdown {
    * edita; dice qué campo de `Car` cambia al moverla. */
   editableRating?: EditableRatingField;
   /** Presente cuando el sumando se normaliza de forma independiente antes
-   * de combinarse (prestaciones, fiabilidad). Ausente cuando el sumando es
-   * una magnitud que se combina en crudo antes de la única normalización
-   * del eje (estética, coste) — la fórmula original ya las combina así, y
-   * esta spec la muestra, no la cambia. */
+   * de combinarse contra el conjunto de candidatos (ejes sin migrar).
+   * Ausente cuando el sumando es una magnitud que se combina en crudo antes
+   * de la única normalización del eje, o cuando el eje puntúa contra una
+   * escala absoluta (`scale`). */
   normalization?: Normalization;
+  /** Presente cuando el sumando se puntúa contra una escala absoluta fija,
+   * ya migrada por su spec de eje. */
+  scale?: AbsoluteScale;
 }
 
 export interface AxisBreakdown {
@@ -55,6 +72,12 @@ export interface AxisBreakdown {
   formulaDescription: string;
   inputs: InputDatum[];
   assumptionsUsed: AssumptionEcho[];
+  /** Información del coche que el desglose muestra sin que entre en la
+   * nota — por ejemplo, la extensión de garantía condicionada que
+   * `fiabilidad` declara pero no puntúa (product/0007, requisito 4).
+   * Distinta de `assumptionsUsed`: esto no es un supuesto global, es un
+   * dato propio del coche. */
+  info?: AssumptionEcho[];
   /** Ejes simples: su única normalización. */
   normalization?: Normalization;
   /** Unidad del valor crudo del eje y de los extremos de su normalización.

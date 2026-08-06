@@ -1,12 +1,18 @@
 # 0007 — El eje de fiabilidad, en dos escalas absolutas
 
 - **Id:** product/0007
-- **Estado:** approved
+- **Estado:** consolidated
 - **Tipo:** product
 - **Fecha:** 2026-08-05
 - **Specs relacionadas:** product/0001, product/0002, product/0003, product/0006
 - **ADRs relacionados:** 0004
 - **Doc de estado:** `docs/estado/dominio.md`
+
+> ⚠️ **Spec consolidada (2026-08-06).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/dominio.md`. Vigentes aquí solo los **criterios de
+> aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -207,22 +213,22 @@ parece.
 
 > Obligatorios y verificables.
 
-- [ ] Un coche de una marca con índice 93 saca un 10 en esa magnitud, y uno
+- [x] Un coche de una marca con índice 93 saca un 10 en esa magnitud, y uno
       con 96 saca también un 10.
-- [ ] Un coche de una marca con índice 64 saca un 0, y uno con 50 saca
+- [x] Un coche de una marca con índice 64 saca un 0, y uno con 50 saca
       también un 0.
-- [ ] Un coche con 7 años de garantía incondicional saca un 10 en esa
+- [x] Un coche con 7 años de garantía incondicional saca un 10 en esa
       magnitud, y uno con 10 años saca también un 10.
-- [ ] Un coche con 3 años de garantía saca aproximadamente un 3,9, no un 0.
-- [ ] Un coche con 3 años incondicionales y una extensión condicionada a 15
+- [x] Un coche con 3 años de garantía saca aproximadamente un 3,9, no un 0.
+- [x] Un coche con 3 años incondicionales y una extensión condicionada a 15
       saca la misma nota de garantía que otro con 3 años y sin extensión.
-- [ ] La nota del eje de un coche es la misma con once candidatos en el
+- [x] La nota del eje de un coche es la misma con once candidatos en el
       catálogo que con uno solo.
-- [ ] El desglose del eje muestra los dos anclajes de cada escala y la nota
+- [x] El desglose del eje muestra los dos anclajes de cada escala y la nota
       que sale de cada magnitud.
-- [ ] El desglose del eje ya no nombra qué modelo marca el mínimo ni el
+- [x] El desglose del eje ya no nombra qué modelo marca el mínimo ni el
       máximo.
-- [ ] El desglose declara que el índice es por marca y muestra la extensión
+- [x] El desglose declara que el índice es por marca y muestra la extensión
       condicionada cuando existe.
 
 ## Dependencias y supuestos

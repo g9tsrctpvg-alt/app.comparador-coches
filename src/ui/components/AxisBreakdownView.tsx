@@ -65,6 +65,19 @@ export function AxisBreakdownView({ breakdown }: AxisBreakdownViewProps) {
         </div>
       )}
 
+      {breakdown.info && breakdown.info.length > 0 && (
+        <div>
+          <h4>Información</h4>
+          <ul>
+            {breakdown.info.map((item) => (
+              <li key={item.label}>
+                {item.label}: {item.value}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {breakdown.subcomponents && breakdown.subcomponents.length > 0 && (
         <div>
           <h4>Pasos intermedios</h4>
@@ -81,6 +94,14 @@ export function AxisBreakdownView({ breakdown }: AxisBreakdownViewProps) {
                     {formatValue(sub.normalization.min.value, sub.unit)}, máx.{' '}
                     {sub.normalization.max.carName}{' '}
                     {formatValue(sub.normalization.max.value, sub.unit)})
+                  </>
+                )}
+                {sub.scale && (
+                  <>
+                    {' '}
+                    → nota {formatNumber(sub.scale.score)}/10 (escala:{' '}
+                    {formatValue(sub.scale.goodAnchor, sub.unit)} → 10,{' '}
+                    {formatValue(sub.scale.badAnchor, sub.unit)} → 0)
                   </>
                 )}
               </li>

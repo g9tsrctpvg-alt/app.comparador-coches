@@ -246,9 +246,16 @@ qué ejes se decide, sin leer el desglose completo de nadie.
    teclado.
 10. Dentro del desglose, **cada eje es un bloque delimitado** con: cabecera
     (nombre del eje, peso, puntuación sobre 10, aportación al total), y a
-    continuación los grupos que `product/0001` fijó —datos de entrada,
-    supuestos aplicados, pasos intermedios, normalización, penalizaciones—
-    visualmente distinguibles entre sí.
+    continuación los grupos que hoy renderiza `AxisBreakdownView` —datos de
+    entrada, supuestos aplicados, información, pasos intermedios, escala o
+    normalización, penalizaciones— visualmente distinguibles entre sí.
+    **La escala es ahora el grupo que más importa.** Desde que la fase 3
+    cerró, cada magnitud lleva sus dos anclajes —«620 L → 10, 250 L → 0»— en
+    vez de un mínimo y un máximo del conjunto. Es lo que convierte la nota en
+    interpretable, y hoy se lee como una línea de texto entre paréntesis.
+    `normalization` sigue en el tipo y ya no lo usa ningún eje: el diseño no
+    le reserva sitio destacado, pero tampoco puede romperse si algún día
+    reaparece.
 11. **Cada eje muestra su puntuación como barra sobre la escala 0-10** —la
     barra de 6 px del artefacto—, con la escala implícita en la propia barra.
     La barra acompaña al número; no lo sustituye. **Un eje con peso 0 se ve
@@ -318,6 +325,9 @@ qué ejes se decide, sin leer el desglose completo de nadie.
 - [ ] Con el desglose abierto, cada uno de los seis ejes presenta una barra
       cuya longitud es proporcional a su puntuación sobre 10, y el eje con
       mayor puntuación tiene la barra más larga.
+- [ ] Los dos anclajes de cada magnitud se leen sin buscarlos dentro de una
+      frase: el valor que vale 10 y el que vale 0 son elementos propios, no
+      texto entre paréntesis.
 - [ ] Los seis controles de peso aparecen uno por línea, y cada uno muestra
       su valor numérico actual sin necesidad de interactuar.
 - [ ] Ningún componente de `src/ui/` contiene un literal de color, espaciado
@@ -349,9 +359,11 @@ qué ejes se decide, sin leer el desglose completo de nadie.
 - **Depende del ADR 0006** en el sentido de que su enfoque de estilos es el
   que se aplica. Si el gate lo cambia, los criterios sobre literales y tokens
   cambian con él; los criterios sobre jerarquía, contraste y teclado no.
-- **No depende de la fase 3.** Las escalas absolutas cambian los números que
-  el desglose enseña, no su estructura. Esta spec puede implementarse antes o
-  después de que los ejes migren.
+- **La fase 3 ya cerró**, así que el desglose que esta spec estructura es el
+  definitivo: seis ejes en escala absoluta, con su campo `scale` en el
+  desglose. Nunca fue una dependencia —las escalas cambian los números que se
+  enseñan, no su estructura—, pero implementar el diseño sobre el modelo ya
+  estable ahorra revisarlo dos veces.
 - **Se relaciona con `product/0008`** pero no lo bloquea ni lo requiere: si
   `0008` ya está implementado, esta spec le da sitio en la jerarquía; si no,
   el sitio queda reservado y `0008` lo ocupa después.

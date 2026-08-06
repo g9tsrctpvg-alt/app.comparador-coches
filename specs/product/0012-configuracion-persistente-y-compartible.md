@@ -11,7 +11,7 @@
 ## Contexto
 
 Todo el estado con el que el usuario configura la comparativa vive en `useState`
-dentro de `App.tsx`, y solo ahí: los seis pesos, los ocho supuestos globales, el
+dentro de `App.tsx`, y solo ahí: los seis pesos, los siete supuestos globales, el
 presupuesto, el filtro de «ocultar fuera de presupuesto» y las valoraciones que
 el usuario ha sobrescrito por coche.
 
@@ -197,16 +197,18 @@ pueda compartir con un enlace.
 
 ## Dependencias y supuestos
 
-- **No depende de la fase 3 ni de las demás specs de la fase 4.** Es
-  ortogonal: persiste lo que haya, sea cual sea la escala de los ejes y el
-  aspecto de la interfaz. Puede implementarse en cualquier orden.
-- **Interacción conocida con `product/0003`:** aquella spec quita `anios` de
-  los supuestos globales. Una configuración guardada antes de ese cambio
-  contendrá un campo que después no existirá. Es exactamente el caso que el
-  número de versión resuelve, y por eso el requisito 2 no es una precaución
-  teórica.
+- **No depende de las demás specs de la fase 4.** Es ortogonal: persiste lo
+  que haya, sea cual sea el aspecto de la interfaz. Puede implementarse en
+  cualquier orden.
+- **El requisito 2 no es una precaución teórica, y hay precedente.**
+  `product/0003` retiró `anios` de `GlobalAssumptions` al implementarse: un
+  supuesto que existía dejó de existir, y con él su control en el panel. Si
+  la persistencia hubiera estado en marcha, toda configuración guardada antes
+  de ese cambio habría traído un campo que ya no encaja. Es exactamente lo que
+  el número de versión resuelve, y la fase 3 acaba de demostrar que los
+  supuestos se mueven.
 - Se asume que la configuración cabe holgadamente en una URL. Con seis pesos,
-  ocho supuestos, el presupuesto, un filtro y hasta treinta y tres
+  siete supuestos, el presupuesto, un filtro y hasta treinta y tres
   valoraciones —y omitiendo todo lo que esté en su valor por defecto—, el
   caso peor está muy por debajo del límite práctico de unos 2.000 caracteres.
   Si algún día no cupiera, el requisito 8 es lo que hace que el caso normal

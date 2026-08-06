@@ -1,12 +1,18 @@
 # 0004 — El eje de estética, sin normalización
 
 - **Id:** product/0004
-- **Estado:** approved
+- **Estado:** consolidated
 - **Tipo:** product
 - **Fecha:** 2026-08-04
 - **Specs relacionadas:** product/0001, product/0002, product/0003
 - **ADRs relacionados:** 0004
 - **Doc de estado:** `docs/estado/dominio.md`
+
+> ⚠️ **Spec consolidada (2026-08-06).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/dominio.md`. Vigentes aquí solo los **criterios de
+> aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -113,16 +119,16 @@ valoraciones dejaran de moverse en el mismo rango.
 
 > Obligatorios y verificables.
 
-- [ ] Un coche valorado 5 en exterior y 5 en interior saca un 10 en el eje.
-- [ ] Un coche valorado 1 y 1 saca un 0.
-- [ ] Un coche valorado 3 y 3 saca un 5.
-- [ ] La nota del eje de un coche es la misma con once candidatos en el
+- [x] Un coche valorado 5 en exterior y 5 en interior saca un 10 en el eje.
+- [x] Un coche valorado 1 y 1 saca un 0.
+- [x] Un coche valorado 3 y 3 saca un 5.
+- [x] La nota del eje de un coche es la misma con once candidatos en el
       catálogo que con uno solo.
-- [ ] Con todos los candidatos valorados 4, todos sacan 7,5; con todos
+- [x] Con todos los candidatos valorados 4, todos sacan 7,5; con todos
       valorados 2, todos sacan 2,5. Las dos situaciones dan notas distintas.
-- [ ] El desglose del eje ya no nombra qué modelo marca el mínimo ni el
+- [x] El desglose del eje ya no nombra qué modelo marca el mínimo ni el
       máximo.
-- [ ] El desglose muestra las dos valoraciones con su nota y la mezcla
+- [x] El desglose muestra las dos valoraciones con su nota y la mezcla
       aplicada.
 
 ## Dependencias y supuestos
