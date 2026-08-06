@@ -40,22 +40,52 @@ budgetEur)` devuelve, por coche, un `CarScoreBreakdown`: sus seis
 `contribution` (peso × puntuación 0-10 de cada eje). La interfaz solo
 renderiza esta estructura; no recalcula nada, y no puede: `ui-no-scoring-internals`
 (`.dependency-cruiser.mjs`) impide que `src/ui/` importe las piezas internas
-de fórmula (`domain/scoring/axes/`, `normalize.ts`, `mustGet.ts`), y solo le
-deja `scoreCatalog` y los tipos.
+de fórmula (`domain/scoring/axes/`, `normalize.ts`, `mustGet.ts`,
+`scale.ts`), y solo le deja `scoreCatalog` y los tipos.
 
 Cada `AxisBreakdown` declara: los datos de entrada usados (con fuente y si
 son estimación), los supuestos globales aplicados, la descripción de la
-fórmula, el valor crudo, la normalización —dirección, y qué modelo marca el
-mínimo y el máximo del conjunto de candidatos recibido, con su valor—, las
-penalizaciones condicionales como línea propia (condición, si está activa,
-efecto en puntos) y el peso y la aportación del eje.
+fórmula, el valor crudo, las penalizaciones condicionales como línea propia
+(condición, si está activa, efecto en puntos) y el peso y la aportación del
+eje. Cada sumando se puntúa contra el conjunto de candidatos o contra una
+escala absoluta, nunca las dos cosas — ver la siguiente sección.
 
-`normalizeAll` (`normalize.ts`) siempre normaliza sobre el conjunto completo
-de candidatos que recibe, nunca en abstracto: `norm(v) = 10×(v−min)/(max−min)`
-si mayor es mejor, invertido si menor es mejor, y `5` (punto neutro) si todos
-los candidatos empatan. Un conjunto **vacío** no tiene extremos contra los que
-normalizar, así que es un error con nombre propio —`EmptyCandidateSetError`—
-y no un fallo genérico a mitad de cálculo.
+## Dos formas de puntuar un sumando
+
+El ADR 0004 fija el principio: una nota debe decir si un coche es bueno, no
+en qué puesto va de once. El modelo tiene hoy dos mecanismos, y cuál usa cada
+eje depende de si ya se ha migrado al segundo:
+
+**Normalización relativa** (`normalizeAll`, `normalize.ts`) — la de antes del
+ADR 0004, y la que siguen usando los ejes sin migrar. Siempre normaliza sobre
+el conjunto completo de candidatos que recibe, nunca en abstracto:
+`norm(v) = 10×(v−min)/(max−min)` si mayor es mejor, invertido si menor es
+mejor, y `5` (punto neutro) si todos los candidatos empatan. Un conjunto
+**vacío** no tiene extremos contra los que normalizar, así que es un error con
+nombre propio —`EmptyCandidateSetError`— y no un fallo genérico a mitad de
+cálculo. El `AxisBreakdown` (o el `SubcomponentBreakdown`, en ejes compuestos)
+lleva su `Normalization`: dirección, y qué modelo marca el mínimo y el máximo
+del conjunto recibido, con su valor.
+
+**Escala absoluta** (`scoreOnAbsoluteScale`, `scale.ts`) — la que fija el ADR
+0004 para los ejes ya migrados. Cada magnitud se puntúa contra dos anclajes
+fijos, razonados contra el mundo y no contra el catálogo: uno de saturación
+(nota 10, por debajo o por encima ya no mejora) y uno de rechazo (nota 0). No
+depende de qué otros coches haya en el catálogo: un coche solo en la lista
+saca la misma nota que si hubiera once. Entre anclajes, la nota sigue una
+curva en S (*smoothstep*):
+
+```text
+t    = posición entre anclajes, 0 en el bueno y 1 en el malo
+nota = 10 × (1 − t²(3 − 2t))
+```
+
+La pendiente es cero en los dos anclajes y máxima en el centro: afinar cerca
+del extremo bueno no compra casi nada, y estar cerca del extremo malo es casi
+tan malo como estarlo. El `SubcomponentBreakdown` de un sumando migrado lleva
+un `AbsoluteScale` —valor, los dos anclajes y la nota— en vez de una
+`Normalization`; ninguno de los dos nombra un modelo del catálogo, porque la
+escala absoluta no tiene extremos que nombrar.
 
 Tres de los dieciocho campos los edita el usuario desde el ranking. El
 subcomponente que los representa lleva la clave `editableRating`
@@ -70,12 +100,16 @@ rango falla en vez de entrar al cálculo.
 
 | Eje | Fórmula vigente | Cómo combina sus sumandos |
 | --- | --- | --- |
-| `diario` | `0,6×anchura + 0,4×longitud` (ponderación configurable), normalizada invertida | Una sola normalización sobre la dificultad compuesta |
+| `diario` | `0,6×escala(anchura) + 0,4×escala(longitud)` (ponderación configurable), escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
 | `prestaciones` | `0,5×norm(CV/t) + 0,5×norm(aceleración invertida)` | Cada sumando se normaliza por separado antes de combinarse |
 | `fiabilidad` | `0,7×norm(OCU) + 0,3×norm(garantía)` | Cada sumando se normaliza por separado antes de combinarse |
 | `estetica` | `mix×nota_exterior + (1−mix)×nota_interior` | Se combina en crudo; el compuesto se normaliza una sola vez |
 | `coste` | `precio + (energía+mantenimiento)×años − residual` | Se combina en crudo; el compuesto se normaliza una sola vez |
 | `viaje` | Sin fórmula: la valoración del usuario, normalizada tal cual | Un único sumando |
+
+`diario` es, de los seis, el único ya migrado a escala absoluta —
+`product/0002`—. Los cinco restantes siguen con normalización relativa hasta
+que cada uno tenga su propia spec de migración.
 
 `prestaciones` y `fiabilidad` normalizan cada sumando antes de combinarlo
 porque así están escritas sus fórmulas vigentes (`0,x×norm(...) +
@@ -87,7 +121,25 @@ compuesta, no una inconsistencia: viene de que las fórmulas en sí ya eran
 distintas antes de que existiera el desglose.
 
 `diario` lleva una penalización condicional: `−1,5` puntos si el coche es
-eléctrico y el supuesto `cargaEnCasa` está desactivado.
+eléctrico y el supuesto `cargaEnCasa` está desactivado. Se aplica después de
+combinar las dos escalas, y el resultado se acota de nuevo a 0-10.
+
+### Los anclajes de `diario`
+
+| Magnitud | Nota 10 hasta | Nota 0 desde |
+| --- | --- | --- |
+| Anchura | 1.765 mm | 2.000 mm |
+| Longitud | 4.000 mm | 5.200 mm |
+
+Ambas medidas son de carrocería, sin espejos. **Anchura:** 1.765 mm es la
+referencia de «esto ya no es un problema» (Corsa, Polo); 2.000 mm es el techo
+práctico del mercado de turismos (Clase S, X7, Q7, Range Rover caben en
+56 mm). Anclar el 0 más arriba, en algo verdaderamente inmanejable, hundiría
+la escala y dejaría a todos los candidatos indistinguibles cerca del 10.
+**Longitud:** por debajo de 4.000 mm el coche aparca en cualquier hueco; el
+0 en 5.200 mm lo pone el tamaño de una plaza de aparcamiento con margen, no
+el mercado — 5.000 mm exactos resultaba severo con candidatos de 4,7 m que sí
+caben en una plaza normal.
 
 ## Supuestos globales
 
