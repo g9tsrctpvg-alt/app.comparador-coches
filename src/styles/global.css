@@ -30,6 +30,12 @@
   --color-mute-on-ink: #8fa69b;
   --color-accent-tint: rgb(20 101 92 / 7%);
 
+  /* Fondo de `::backdrop` tras la foto ampliada (product/0014, requisito
+   * 8.4): un `<dialog>` nativo no puede leer una custom property para su
+   * propio pseudo-elemento salvo que también se declare aquí, junto al
+   * resto de la paleta. */
+  --color-backdrop: rgb(0 0 0 / 60%);
+
   /* Mismo tinte que `--color-accent-tint`, pero opaco: sobre `card`, un 7%
    * de `accent` da este color sólido. Hace falta donde el tinte
    * translúcido dejaría ver contenido desplazado por debajo —una celda
@@ -112,6 +118,14 @@
    * separación. Es el punto en que dejar los controles apilados sobre el
    * ranking desperdicia media pantalla. */
   --bp-ancho: 60rem;
+
+  /* Ficha completa (product/0014, requisito 9): anchos de columna de la
+   * tabla transpuesta. La de características es constante; la de cada
+   * modelo tiene un mínimo flexible por debajo de `--bp-columna` —dos
+   * modelos legibles a 320px— y un ancho fijo por encima. */
+  --size-ficha-feature-column: 6.5rem;
+  --size-ficha-model-min: 7rem;
+  --size-ficha-model-desktop: 11rem;
 }
 
 /* Reset mínimo (technical/0004, requisito 7). */

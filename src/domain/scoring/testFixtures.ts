@@ -64,6 +64,7 @@ function buildCar(input: FixtureInput): Car {
     aestheticsExterior: rating(input.aestheticsExterior),
     aestheticsInterior: rating(input.aestheticsInterior),
     travelComfort: rating(input.travelComfort),
+    photos: {},
   };
 }
 

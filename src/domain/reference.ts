@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { SourcedNumberSchema, TechnologySchema } from './car';
+import { PhotosSchema } from './photo';
 
 /**
  * Un coche de referencia (product/0013, requisitos 3 y 4): el punto de
@@ -21,5 +22,6 @@ export const ReferenceSchema = z.object({
   heightMm: SourcedNumberSchema,
   groundClearanceMm: SourcedNumberSchema,
   trunkLiters: SourcedNumberSchema,
+  photos: PhotosSchema,
 });
 export type Reference = z.infer<typeof ReferenceSchema>;

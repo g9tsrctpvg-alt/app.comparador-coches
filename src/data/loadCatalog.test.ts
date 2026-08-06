@@ -49,6 +49,7 @@ function minimalCar(overrides: Record<string, unknown> = {}) {
     aestheticsExterior: rating(2),
     aestheticsInterior: rating(4),
     travelComfort: rating(3),
+    photos: {},
     ...overrides,
   };
 }
@@ -129,6 +130,59 @@ describe('parseCatalog', () => {
       }),
     ];
     expect(() => parseCatalog(raw)).toThrow(CatalogValidationError);
+  });
+
+  it('accepts a car with no photos block at all', () => {
+    const { photos: _photos, ...withoutPhotos } = minimalCar();
+    const result = parseCatalog([withoutPhotos]);
+    expect(result[0]?.photos).toEqual({});
+  });
+
+  it('rejects a photo whose URL is not https, naming the car and the view', () => {
+    const raw = [
+      minimalCar({
+        photos: {
+          front: {
+            url: 'http://example.com/kia-sportage-frontal.jpg',
+            credit: 'Kia Media',
+            shows: 'Sportage HEV, gris',
+          },
+        },
+      }),
+    ];
+    expect(() => parseCatalog(raw)).toThrow(CatalogValidationError);
+    expect(() => parseCatalog(raw)).toThrow(/kia-sportage-hev/);
+    expect(() => parseCatalog(raw)).toThrow(/photos\.front/);
+  });
+
+  it('rejects a photo without credit', () => {
+    const raw = [
+      minimalCar({
+        photos: {
+          side: {
+            url: 'https://example.com/kia-sportage-lateral.jpg',
+            credit: '',
+            shows: 'Sportage HEV, gris',
+          },
+        },
+      }),
+    ];
+    expect(() => parseCatalog(raw)).toThrow(/photos\.side\.credit/);
+  });
+
+  it('rejects a photo without shows', () => {
+    const raw = [
+      minimalCar({
+        photos: {
+          rear: {
+            url: 'https://example.com/kia-sportage-trasera.jpg',
+            credit: 'Kia Media',
+            shows: '',
+          },
+        },
+      }),
+    ];
+    expect(() => parseCatalog(raw)).toThrow(/photos\.rear\.shows/);
   });
 });
 

@@ -1,0 +1,295 @@
+.page {
+  max-width: var(--size-column);
+  margin: 0 auto;
+  padding: var(--space-5) var(--space-4) var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+@media (min-width: 60rem) {
+  .page {
+    max-width: var(--size-page);
+  }
+}
+
+.title {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+  margin: 0;
+}
+
+.explainLink {
+  composes: mono from './primitives.module.css';
+  color: var(--color-accent);
+  align-self: flex-start;
+}
+
+/* Selector de vista de foto (requisito 8.5): un único grupo de radios, sin
+ * borde de `fieldset` por defecto — el propio contenedor ya vive dentro de
+ * una página con jerarquía visual marcada por `.label`. */
+.viewSelector {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.viewOption {
+  composes: mono from './primitives.module.css';
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--size-touch-min);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+/* La tabla no arrastra la página cuando no cabe (requisito 8.2, que reaplica
+ * el requisito 13 de `product/0010`): el desplazamiento horizontal vive
+ * dentro de este contenedor. El anclaje (requisito 9.2) hace que el gesto
+ * caiga siempre en un modelo completo. */
+.tableWrapper {
+  overflow-x: auto;
+  border: var(--size-border-hairline) solid var(--color-rule);
+  border-radius: var(--radius-md);
+  scroll-snap-type: x mandatory;
+  position: relative;
+}
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-xs);
+  color: var(--color-ink);
+}
+
+.table th,
+.table td {
+  padding: var(--space-2) var(--space-3);
+  text-align: right;
+  white-space: nowrap;
+  border-bottom: var(--size-border-hairline) solid var(--color-rule);
+  vertical-align: middle;
+}
+
+/* Cabecera de bloque (requisito 8.2): una fila que abarca todas las
+ * columnas, no una columna más. */
+.blockHeader {
+  text-align: left;
+  background: var(--color-card);
+  color: var(--color-mute);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-2xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Columna de nombres de característica: fija a la izquierda a cualquier
+ * ancho (requisito 8.3), nunca un modelo. */
+.featureHeader,
+.featureCell {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  text-align: left;
+  font-weight: var(--font-weight-regular);
+  color: var(--color-mute);
+  background: var(--color-paper);
+  border-right: var(--size-border-hairline) solid var(--color-rule);
+  width: var(--size-ficha-feature-column);
+  min-width: var(--size-ficha-feature-column);
+  max-width: var(--size-ficha-feature-column);
+  white-space: normal;
+}
+
+.featureCell {
+  background: var(--color-card);
+}
+
+/* Columna del modelo elegido como comparación (requisito 8.3): fija justo
+ * después de la de características, con fondo opaco —igual que en
+ * `FichaTecnicaPage`— porque va encima de columnas que han quedado debajo al
+ * desplazar. */
+.pinnedHeader,
+.pinnedCell {
+  position: sticky;
+  left: var(--size-ficha-feature-column);
+  z-index: 1;
+  background: var(--color-accent-tint-solid);
+  border-right: var(--size-border-hairline) solid var(--color-rule);
+}
+
+.modelHeader,
+.modelCell,
+.pinnedHeader,
+.pinnedCell {
+  width: var(--size-ficha-model-min);
+  min-width: var(--size-ficha-model-min);
+}
+
+/* Cada columna de modelo desplazable es un punto de anclaje (requisito
+ * 9.2): el gesto cae siempre en un modelo completo. La columna fijada no lo
+ * necesita — nunca se desplaza fuera de vista. */
+.modelHeader {
+  scroll-snap-align: start;
+}
+
+@media (min-width: 37rem) {
+  .modelHeader,
+  .modelCell,
+  .pinnedHeader,
+  .pinnedCell {
+    width: var(--size-ficha-model-desktop);
+    min-width: var(--size-ficha-model-desktop);
+  }
+}
+
+.modelHeader,
+.pinnedHeader {
+  text-align: left;
+  vertical-align: top;
+}
+
+.modelName {
+  display: block;
+  font-family: var(--font-sans);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  color: var(--color-ink);
+  white-space: normal;
+}
+
+.referenceTag {
+  composes: mono from './primitives.module.css';
+  display: block;
+  color: var(--color-accent);
+  font-size: var(--font-size-2xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Marca de fijación (requisito 8.3.2): semánticamente un radio —solo un
+ * modelo puede estar fijado a la vez—, dibujada como una casilla para que no
+ * se confunda con el selector de vista de foto, que sí muestra su forma
+ * nativa de radio. */
+.pinControl {
+  appearance: none;
+  width: var(--size-touch-min);
+  height: var(--size-touch-min);
+  min-width: var(--size-touch-min);
+  border: calc(var(--size-border-hairline) * 2) solid var(--color-rule);
+  border-radius: var(--radius-sm);
+  background: var(--color-card);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  color: var(--color-paper);
+  font-weight: var(--font-weight-bold);
+  margin: 0 0 var(--space-2);
+}
+
+.pinControl:checked {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.pinControl:checked::after {
+  content: '✓';
+}
+
+.photoButton {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: var(--color-card);
+  cursor: pointer;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-2);
+}
+
+.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.photoPlaceholder {
+  composes: mono from './primitives.module.css';
+  composes: secondaryText from './primitives.module.css';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  aspect-ratio: 4 / 3;
+  background: var(--color-card);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-2);
+  white-space: normal;
+}
+
+.legend {
+  composes: prose from './primitives.module.css';
+  composes: secondaryText from './primitives.module.css';
+  font-family: var(--font-sans);
+  margin: 0;
+}
+
+/* La foto ampliada (requisito 8.4): `<dialog>` nativo, sin dependencia
+ * nueva. Centrado por el navegador vía el pseudo-elemento `::backdrop`
+ * estándar; aquí solo se acota el ancho y se compone con los tokens. */
+.dialog {
+  border: 0;
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  max-width: min(90vw, var(--size-column));
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+.dialog::backdrop {
+  background: var(--color-backdrop);
+}
+
+.dialogFigure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.dialogImage {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+}
+
+.dialogCaption {
+  composes: mono from './primitives.module.css';
+  composes: secondaryText from './primitives.module.css';
+}
+
+.dialogClose {
+  composes: mono from './primitives.module.css';
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  width: var(--size-touch-min);
+  height: var(--size-touch-min);
+  border: var(--size-border-hairline) solid var(--color-rule);
+  border-radius: var(--radius-sm);
+  background: var(--color-card);
+  cursor: pointer;
+  font-size: var(--font-size-md);
+}

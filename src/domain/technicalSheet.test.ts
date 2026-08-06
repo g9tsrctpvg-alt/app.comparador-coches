@@ -25,6 +25,7 @@ function referenceFixture(overrides: Partial<Reference> = {}): Reference {
     name: 'Referencia',
     brand: 'Marca',
     technology: 'ICE',
+    photos: {},
     lengthMm: sourced(4351, 'mm'),
     widthMm: sourced(1798, 'mm'),
     heightMm: sourced(1465, 'mm'),

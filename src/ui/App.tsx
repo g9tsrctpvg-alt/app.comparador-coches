@@ -15,6 +15,7 @@ import { ConfigActions } from './components/ConfigActions';
 import { rankVisible } from './components/ranking';
 import { ExplicacionPage } from './ExplicacionPage';
 import { FichaTecnicaPage } from './FichaTecnicaPage';
+import { FichaCompletaPage } from './FichaCompletaPage';
 import { EXPLICACION_HASH, useHashRoute } from './useHashRoute';
 import { useConfig } from './useConfig';
 import styles from './App.module.css';
@@ -87,6 +88,15 @@ export function App({
   if (route === 'ficha-tecnica') {
     return (
       <FichaTecnicaPage
+        cars={catalogResult.cars}
+        references={catalogResult.references}
+      />
+    );
+  }
+
+  if (route === 'ficha-completa') {
+    return (
+      <FichaCompletaPage
         cars={catalogResult.cars}
         references={catalogResult.references}
       />
