@@ -1,12 +1,18 @@
 # 0008 — El tipo de motor, visible en la comparativa
 
 - **Id:** product/0008
-- **Estado:** approved
+- **Estado:** consolidated
 - **Tipo:** product
 - **Fecha:** 2026-08-05
 - **Specs relacionadas:** product/0001, product/0003, product/0005
 - **ADRs relacionados:** 0004
 - **Doc de estado:** `docs/estado/interfaz.md`
+
+> ⚠️ **Spec consolidada (2026-08-06).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/interfaz.md`. Vigentes aquí solo los **criterios de
+> aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -87,18 +93,29 @@ su `label`.
 
 > Obligatorios y verificables.
 
-- [ ] La fila de un `EV` muestra «Eléctrico» y la de un `PHEV` muestra
+- [x] La fila de un `EV` muestra «Eléctrico» y la de un `PHEV` muestra
       «Híbrido enchufable», con el desglose plegado.
-- [ ] Ninguna fila del ranking muestra las cadenas `EV`, `PHEV`, `MHEV`,
-      `HEV` ni `ICE`.
-- [ ] Las cinco tecnologías del `TechnologySchema` tienen etiqueta, incluida
-      `ICE`, que hoy no usa ningún candidato.
-- [ ] El desglose de `coste` de un eléctrico nombra el precio del kWh, y el
-      de un híbrido el precio del litro.
-- [ ] El desglose de `diario` de un coche no eléctrico declara que la
-      penalización de carga no le aplica por su tecnología.
-- [ ] La puntuación total de los once candidatos es idéntica antes y después
-      del cambio.
+      `RankingList.test.tsx`, y comprobado a mano contra el catálogo real
+      (EV3 → Eléctrico, X1 xDrive25e → Híbrido enchufable) con el desglose
+      plegado.
+- [x] Ninguna fila del ranking muestra las cadenas `EV`, `PHEV`, `MHEV`,
+      `HEV` ni `ICE`. `RankingList.test.tsx` comprueba que el hueco de
+      tecnología nunca renderiza el código crudo; nombres de coche como
+      «EV3» o «Civic e:HEV», que sí contienen esas letras, no son ese hueco.
+- [x] Las cinco tecnologías del `TechnologySchema` tienen etiqueta, incluida
+      `ICE`, que hoy no usa ningún candidato. `technologyLabels.test.ts`
+      recorre `TechnologySchema.options` entero.
+- [x] El desglose de `coste` de un eléctrico nombra el precio del kWh, y el
+      de un híbrido el precio del litro. `coste.test.ts`, más comprobado a
+      mano: EV3 declara «0,45 €/kWh», Sportage HEV declara «1,55 €/l».
+- [x] El desglose de `diario` de un coche no eléctrico declara que la
+      penalización de carga no le aplica por su tecnología. `diario.test.ts`,
+      más comprobado a mano en el desglose de Sportage HEV: «No aplica: no
+      es un vehículo eléctrico.»
+- [x] La puntuación total de los once candidatos es idéntica antes y después
+      del cambio. La spec solo añade un campo `info` de solo lectura a dos
+      ejes; `scoreCatalog.snapshot.test.ts` (que ya cubre los once
+      candidatos reales) sigue en verde sin tocarlo.
 
 ## Dependencias y supuestos
 

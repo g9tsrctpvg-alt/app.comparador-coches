@@ -197,4 +197,19 @@ describe('buildDiarioBreakdown', () => {
       'Longitud',
     ]);
   });
+
+  it('declares that the home-charging penalty only applies to electric cars, active or not (product/0008)', () => {
+    const breakdown = buildDiarioBreakdown(
+      threeCarFixture,
+      DEFAULT_ASSUMPTIONS,
+      3,
+    );
+    const ev3 = breakdown.get('kia-ev3')!; // eléctrico, penalización activa
+    const sportage = breakdown.get('kia-sportage-hev')!; // no eléctrico
+
+    expect(ev3.info).toHaveLength(1);
+    expect(ev3.info![0]!.value).toContain('Aplica');
+    expect(sportage.info).toHaveLength(1);
+    expect(sportage.info![0]!.value).toContain('No aplica');
+  });
 });

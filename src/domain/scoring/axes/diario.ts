@@ -82,6 +82,15 @@ export function buildDiarioBreakdown(
           value: assumptions.cargaEnCasa ? 'Sí' : 'No',
         },
       ],
+      info: [
+        {
+          label: 'Penalización por carga en casa',
+          value:
+            car.technology === 'EV'
+              ? 'Aplica: es un vehículo eléctrico.'
+              : 'No aplica: no es un vehículo eléctrico.',
+        },
+      ],
       subcomponents: [
         {
           label: 'Anchura',

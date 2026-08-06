@@ -62,6 +62,21 @@ describe('RankingList', () => {
     expect(() => renderExpanded(withRewrittenLabels(scored()))).not.toThrow();
   });
 
+  it('shows a readable technology label, never the raw code (product/0008)', () => {
+    // threeCarFixture cubre HEV (Sportage), PHEV (X1) y EV (EV3). El propio
+    // nombre del coche «EV3» y del catálogo real «Civic e:HEV» contienen las
+    // siglas como texto legítimo, así que la comprobación mira solo el hueco
+    // de tecnología —`<span>…</span>` inmediatamente tras el botón—, no el
+    // marcado entero.
+    const markup = renderExpanded(scored());
+    expect(markup).toContain('<span>Híbrido</span>');
+    expect(markup).toContain('<span>Híbrido enchufable</span>');
+    expect(markup).toContain('<span>Eléctrico</span>');
+    for (const code of ['EV', 'PHEV', 'MHEV', 'HEV', 'ICE']) {
+      expect(markup).not.toContain(`<span>${code}</span>`);
+    }
+  });
+
   it('hides the cars over budget when asked to', () => {
     const cars = scoreCatalog(
       threeCarFixture,

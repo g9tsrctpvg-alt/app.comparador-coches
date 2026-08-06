@@ -84,6 +84,15 @@ export function buildCosteBreakdown(
         { label: '€/litro', value: assumptions.precioLitro.toFixed(2) },
         { label: '€/kWh', value: assumptions.precioKwh.toFixed(2) },
       ],
+      info: [
+        {
+          label: 'Precio unitario de la energía aplicado',
+          value:
+            car.technology === 'EV'
+              ? `${assumptions.precioKwh.toFixed(2)} €/kWh — es un vehículo eléctrico`
+              : `${assumptions.precioLitro.toFixed(2)} €/l — no es un vehículo eléctrico`,
+        },
+      ],
       subcomponents: [
         {
           label: 'Precio de compra',

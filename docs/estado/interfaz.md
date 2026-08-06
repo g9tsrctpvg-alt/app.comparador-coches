@@ -116,7 +116,10 @@ tipografía o radio en cualquier otro fichero hace fallar
   fijo), el nombre, una línea de apoyo monoespaciada (tecnología, potencia,
   aceleración, precio, con la marca de estimado cuando aplica), la marca de
   «Fuera de presupuesto» cuando corresponde, el `percentage` y una barra de
-  proporción. El control que expande el desglose expone `aria-expanded` y
+  proporción. La tecnología se muestra con su etiqueta legible
+  (`src/ui/technologyLabels.ts`, product/0008: «Eléctrico», «Híbrido
+  enchufable»…), nunca con la sigla del modelo de datos. El control que
+  expande el desglose expone `aria-expanded` y
   su nombre accesible es solo la posición y el nombre del coche —nunca la
   puntuación ni la marca de presupuesto—. Expandida, muestra primero los
   controles de valoración editables (los subcomponentes que el dominio
