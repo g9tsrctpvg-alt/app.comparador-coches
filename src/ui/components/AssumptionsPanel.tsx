@@ -64,17 +64,6 @@ export function AssumptionsPanel({
         />
       </label>
       <label>
-        Años de vida útil: {assumptions.anios}
-        <input
-          type="range"
-          min={1}
-          max={20}
-          step={1}
-          value={assumptions.anios}
-          onChange={(event) => set('anios', Number(event.target.value))}
-        />
-      </label>
-      <label>
         €/litro: {assumptions.precioLitro.toFixed(2)}
         <input
           type="range"
