@@ -32,6 +32,17 @@ export interface PenaltyLine {
 export type EditableRatingField =
   'aestheticsExterior' | 'aestheticsInterior' | 'travelComfort';
 
+/** Un sumando puntuado contra una escala absoluta fija — dos anclajes y una
+ * curva en S entre ellos (ADR 0004) — en vez de contra el conjunto de
+ * candidatos. Mutuamente excluyente con `normalization`: un sumando usa una
+ * de las dos formas de puntuar, nunca las dos. */
+export interface AbsoluteScale {
+  value: number;
+  goodAnchor: number;
+  badAnchor: number;
+  score: number;
+}
+
 export interface SubcomponentBreakdown {
   label: string;
   rawValue: number;
@@ -40,11 +51,14 @@ export interface SubcomponentBreakdown {
    * edita; dice qué campo de `Car` cambia al moverla. */
   editableRating?: EditableRatingField;
   /** Presente cuando el sumando se normaliza de forma independiente antes
-   * de combinarse (prestaciones, fiabilidad). Ausente cuando el sumando es
-   * una magnitud que se combina en crudo antes de la única normalización
-   * del eje (estética, coste) — la fórmula original ya las combina así, y
-   * esta spec la muestra, no la cambia. */
+   * de combinarse contra el conjunto de candidatos (ejes sin migrar).
+   * Ausente cuando el sumando es una magnitud que se combina en crudo antes
+   * de la única normalización del eje, o cuando el eje puntúa contra una
+   * escala absoluta (`scale`). */
   normalization?: Normalization;
+  /** Presente cuando el sumando se puntúa contra una escala absoluta fija,
+   * ya migrada por su spec de eje. */
+  scale?: AbsoluteScale;
 }
 
 export interface AxisBreakdown {

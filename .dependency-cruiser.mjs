@@ -20,7 +20,7 @@ export default {
         'requisito 2 y último criterio de aceptación).',
       severity: 'error',
       from: { path: '^(src/ui|src/main\\.tsx)' },
-      to: { path: '^src/domain/scoring/(axes|normalize|mustGet)' },
+      to: { path: '^src/domain/scoring/(axes|normalize|mustGet|scale)' },
     },
   ],
   options: {
