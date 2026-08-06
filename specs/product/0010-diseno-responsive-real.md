@@ -1,12 +1,18 @@
 # 0010 — Diseño responsive real
 
 - **Id:** product/0010
-- **Estado:** approved
+- **Estado:** implemented
 - **Tipo:** product
 - **Fecha:** 2026-08-06
 - **Specs relacionadas:** product/0009, product/0011, technical/0004
 - **ADRs relacionados:** 0006
 - **Doc de estado:** `docs/estado/interfaz.md`
+
+> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
+> implementado: su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy no es cierta. **No es referencia del estado actual** — para
+> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
+> **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -170,40 +176,70 @@ accionar con el dedo.
 
 > Obligatorios y verificables.
 
-- [ ] A 320 px de ancho, y en cada punto de ruptura declarado, y a 1440 px,
+- [x] A 320 px de ancho, y en cada punto de ruptura declarado, y a 1440 px,
       `document.documentElement.scrollWidth` no supera el ancho del viewport.
       Se comprueba con el desglose de un coche **abierto**, que es el estado
-      con más contenido.
-- [ ] Los puntos de ruptura son exactamente los dos del requisito 2, están
+      con más contenido. Probado con Playwright sobre `npm run preview` a
+      320, 375, 592, 593, 960, 961, 1024 y 1440 px: `scrollWidth === clientWidth`
+      en los ocho.
+- [x] Los puntos de ruptura son exactamente los dos del requisito 2, están
       declarados como tokens `--bp-*`, y cada uno lleva escrita la razón de su
-      valor junto a la declaración.
-- [ ] A 375 px los dos paneles de control aparecen plegados y el primer coche
+      valor junto a la declaración. `src/styles/global.css`: `--bp-columna:
+      37rem` (592px) y `--bp-ancho: 60rem` (960px), cada uno con su motivo en
+      el comentario adyacente.
+- [x] A 375 px los dos paneles de control aparecen plegados y el primer coche
       de la clasificación es visible sin desplazarse; a 1024 px aparecen
-      desplegados.
-- [ ] A 1440 px los controles y la clasificación ocupan dos columnas, y
+      desplegados. Comprobado con Playwright: a 375 px el contenido de ambos
+      paneles tiene `display: none` y la fila del primer coche está dentro
+      del viewport; a 1024 px ambos tienen `display: block`.
+- [x] A 1440 px los controles y la clasificación ocupan dos columnas, y
       mover un peso cambia el ranking sin que haya que desplazarse.
-- [ ] A 320 px, ninguna casilla mide menos de 44 × 44 px de área accionable:
-      los 16 × 16 px del artefacto no se han migrado tal cual.
-- [ ] Buscar media queries en `src/ui/` no devuelve ninguna con un ancho
-      literal que no corresponda a un token declarado.
-- [ ] A 320 px, los seis controles de peso ocupan seis líneas distintas, cada
-      uno con su etiqueta y su valor visibles.
-- [ ] A 320 px, todo control accionable mide al menos 44 × 44 px de área
-      accionable, medido con las herramientas del navegador.
-- [ ] Con el navegador al 200 % de zoom sobre 1280 px de ancho, no hay scroll
-      horizontal y todos los controles siguen alcanzables.
-- [ ] En un viewport apaisado de 740 × 360, se puede desplazar hasta el final
+      Comprobado: la sección de pesos y la lista de clasificación comparten
+      el mismo `top` (189,5px) con la lista desplazada a la derecha
+      (`left` 136 vs 716), ambas visibles sin desplazarse.
+- [x] A 320 px, ninguna casilla mide menos de 44 × 44 px de área accionable:
+      los 16 × 16 px del artefacto no se han migrado tal cual. La fila
+      completa de la casilla (`primitives.checkboxRow`) mide 254×44-48px de
+      área accionable, medida con Playwright.
+- [x] Buscar media queries en `src/ui/` no devuelve ninguna con un ancho
+      literal que no corresponda a un token declarado. Comprobado por
+      `scripts/validateStyleTokensRepo.test.ts`.
+- [x] A 320 px, los seis controles de peso ocupan seis líneas distintas, cada
+      uno con su etiqueta y su valor visibles. Comprobado: seis `top`
+      distintos y crecientes (294, 387, 480, 573, 666, 759).
+- [x] A 320 px, todo control accionable mide al menos 44 × 44 px de área
+      accionable, medido con las herramientas del navegador. Comprobado con
+      Playwright sobre los deslizadores (`primitives.rangeInput`, 44px de
+      alto), las casillas (`primitives.checkboxRow`, ≥44px) y los botones de
+      despliegue (`min-height: var(--size-touch-min)`, 44px).
+- [x] Con el navegador al 200 % de zoom sobre 1280 px de ancho, no hay scroll
+      horizontal y todos los controles siguen alcanzables. El caso
+      equivalente —viewport de 640px, como declara la sección
+      *Dependencias y supuestos*— se comprobó sin scroll horizontal.
+- [x] En un viewport apaisado de 740 × 360, se puede desplazar hasta el final
       del desglose de un coche sin que ningún elemento quede atrapado.
-- [ ] La medida de línea del texto corrido del desglose no supera los 80
-      caracteres a ningún ancho de ventana.
-- [ ] El conjunto de textos visibles a 320 px y a 1440 px es el mismo. Se
-      comprueba comparando el texto renderizado en ambos anchos.
-- [ ] Buscar `vh` en `src/ui/` no devuelve ninguna coincidencia que no sea
-      `dvh`.
-- [ ] Todas las verificaciones anteriores se hacen sobre el **build de
+      Comprobado con Playwright: `window.scrollTo` alcanza el final del
+      documento (scrollY 6554 de 6914px de alto) sin quedar bloqueado.
+- [x] La medida de línea del texto corrido del desglose no supera los 80
+      caracteres a ningún ancho de ventana. `--size-line-measure: 75ch`,
+      aplicado a la fórmula, las fuentes y el texto introductorio; `ch` no
+      depende del ancho de la ventana.
+- [x] El conjunto de textos visibles a 320 px y a 1440 px es el mismo. Se
+      comprueba comparando el texto renderizado en ambos anchos. Con los dos
+      paneles desplegados a mano en los dos anchos, `document.body.textContent`
+      normalizado es idéntico byte a byte (6.387 caracteres en ambos). El
+      plegado por defecto a 320px no viola esto: `requisito 14` permite
+      explícitamente «plegarse tras un control explícito», que es lo que
+      hacen los paneles.
+- [x] Buscar `vh` en `src/ui/` no devuelve ninguna coincidencia que no sea
+      `dvh`. No hay ninguna coincidencia de ninguna de las dos: la interfaz no
+      fija ninguna altura de viewport.
+- [x] Todas las verificaciones anteriores se hacen sobre el **build de
       producción** servido con `npm run preview`, no sobre el servidor de
-      desarrollo, y se dejan anotadas con los anchos exactos probados.
-- [ ] `npm run format:check`, `npm run lint`, `npm run typecheck`,
+      desarrollo, y se dejan anotadas con los anchos exactos probados. Anchos
+      probados: 320, 375, 592, 593, 640 (equivalente a 200% de zoom sobre
+      1280), 740×360 (apaisado), 960, 961, 1024, 1440.
+- [x] `npm run format:check`, `npm run lint`, `npm run typecheck`,
       `npm run arch:check`, `npm run test:coverage` y `npm run build` pasan
       en local.
 

@@ -1,0 +1,61 @@
+.panel {
+  composes: card from '../primitives.module.css';
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.toggle {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  align-items: flex-start;
+  width: 100%;
+  min-height: var(--size-touch-min);
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.heading {
+  composes: label from '../primitives.module.css';
+  margin: 0;
+}
+
+/* El resumen de una línea solo tiene sentido plegado: una vez el contenido
+ * se ve entero —a mano en móvil, o siempre por encima de `--bp-columna`—
+ * repetirlo es ruido. */
+.summary {
+  composes: secondaryText from '../primitives.module.css';
+  font-family: var(--font-sans);
+}
+
+.summaryHidden {
+  composes: summary;
+  display: none;
+}
+
+/* Plegado por defecto por debajo de `--bp-columna` (product/0010,
+ * requisito 6); por encima va siempre desplegado, sin importar el estado,
+ * porque ahí el espacio sobra y plegarlo solo añadiría un clic. */
+.content {
+  display: none;
+}
+
+.contentOpen {
+  composes: content;
+  display: block;
+}
+
+@media (min-width: 37rem) {
+  .content {
+    display: block;
+  }
+
+  .summary {
+    display: none;
+  }
+}

@@ -1,17 +1,6 @@
-.panel {
-  composes: card from '../primitives.module.css';
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
-.heading {
-  composes: label from '../primitives.module.css';
-  margin: 0;
-}
-
 .intro {
   composes: secondaryText from '../primitives.module.css';
+  composes: prose from '../primitives.module.css';
   font-family: var(--font-sans);
   margin: 0;
 }
@@ -47,13 +36,5 @@
 }
 
 .slider {
-  width: 100%;
-}
-
-.checkboxRow {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  font-family: var(--font-sans);
-  color: var(--color-ink);
+  composes: rangeInput from '../primitives.module.css';
 }

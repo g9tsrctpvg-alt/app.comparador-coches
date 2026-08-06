@@ -1,12 +1,9 @@
 /*
  * Hoja global de tokens y reset (technical/0004, valores de color y
- * tipografía fijados por product/0009). Es el único sitio donde vive un
- * literal de color, espaciado, tipografía, radio, sombra, tamaño o punto de
- * ruptura: todo lo demás en `src/ui/` lee estas custom properties por
- * `var(--…)`.
- *
- * Los `--bp-*` siguen provisionales: `product/0010` fija su valor
- * definitivo y la razón de cada uno.
+ * tipografía fijados por product/0009, puntos de ruptura fijados por
+ * product/0010). Es el único sitio donde vive un literal de color,
+ * espaciado, tipografía, radio, sombra, tamaño o punto de ruptura: todo lo
+ * demás en `src/ui/` lee estas custom properties por `var(--…)`.
  */
 
 :root {
@@ -84,12 +81,28 @@
   --size-bar-row: 0.1875rem;
   --size-bar-axis: 0.375rem;
 
-  /* Puntos de ruptura — declarados aquí una sola vez; product/0010 fija
-   * el valor final de cada uno con su motivo. Una media query no puede leer
-   * una custom property, así que cualquier `@media` de `src/ui/` repite el
-   * número en px: la CI comprueba que ese número coincida con uno de estos
-   * dos, convertido a la misma unidad. */
+  /* Ancho máximo de la página en dos columnas (product/0010, requisito 7):
+   * lo que se aprovecha por encima de `--bp-ancho` es el ancho de la
+   * página, no el de la línea de texto, que sigue acotada por
+   * `--size-line-measure`. No es «sin límite»: a partir de aquí sobra
+   * espacio en cualquier monitor y las dos columnas dejarían de tener
+   * relación de aspecto legible. */
+  --size-page: 75rem;
+
+  /* Puntos de ruptura (product/0010, requisito 2). Una media query no puede
+   * leer una custom property, así que cualquier `@media` de `src/ui/` repite
+   * el número en px o rem: la CI comprueba que ese número coincida con uno
+   * de estos dos, convertido a la misma unidad. Son dos, no tres ni cuatro,
+   * porque el diseño solo tiene dos formas: columna única y dos columnas. */
+
+  /* 592px = los 560px de columna del artefacto más 16px de relleno a cada
+   * lado. Por debajo, la columna deja de caber entera y el diseño pasa a
+   * ser de borde a borde; por encima, ya no crece. */
   --bp-columna: 37rem;
+
+  /* 960px = donde caben dos columnas de contenido de medida legible con su
+   * separación. Es el punto en que dejar los controles apilados sobre el
+   * ranking desperdicia media pantalla. */
   --bp-ancho: 60rem;
 }
 

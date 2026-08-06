@@ -1,4 +1,6 @@
 import type { GlobalAssumptions } from '../../domain/scoring/assumptions';
+import primitives from '../primitives.module.css';
+import { CollapsiblePanel } from './CollapsiblePanel';
 import styles from './AssumptionsPanel.module.css';
 
 interface AssumptionsPanelProps {
@@ -25,9 +27,14 @@ export function AssumptionsPanel({
     onChange({ ...assumptions, [key]: value });
   }
 
+  const summary = `Presupuesto ${budgetEur.toLocaleString('es-ES')} € · ${assumptions.kmPorAnio.toLocaleString('es-ES')} km/año`;
+
   return (
-    <section aria-label="Supuestos globales" className={styles.panel}>
-      <h2 className={styles.heading}>Supuestos de coste y presupuesto</h2>
+    <CollapsiblePanel
+      ariaLabel="Supuestos globales"
+      title="Supuestos de coste y presupuesto"
+      summary={summary}
+    >
       <p className={styles.intro}>
         Se editan aquí, en un único sitio. Los desgloses por eje muestran el
         valor aplicado, pero no lo editan.
@@ -52,7 +59,7 @@ export function AssumptionsPanel({
           />
         </label>
 
-        <label className={styles.checkboxRow}>
+        <label className={primitives.checkboxRow}>
           <input
             type="checkbox"
             checked={hideOverBudget}
@@ -159,7 +166,7 @@ export function AssumptionsPanel({
           />
         </label>
 
-        <label className={styles.checkboxRow}>
+        <label className={primitives.checkboxRow}>
           <input
             type="checkbox"
             checked={assumptions.pensandoVender}
@@ -167,7 +174,7 @@ export function AssumptionsPanel({
           />
           Pienso venderlo (resta valor residual al coste)
         </label>
-        <label className={styles.checkboxRow}>
+        <label className={primitives.checkboxRow}>
           <input
             type="checkbox"
             checked={assumptions.cargaEnCasa}
@@ -176,6 +183,6 @@ export function AssumptionsPanel({
           Tengo carga en casa
         </label>
       </div>
-    </section>
+    </CollapsiblePanel>
   );
 }

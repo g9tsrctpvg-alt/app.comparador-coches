@@ -44,6 +44,7 @@
 
 .formula {
   composes: secondaryText from '../primitives.module.css';
+  composes: prose from '../primitives.module.css';
 }
 
 .groupLabel {
@@ -76,11 +77,13 @@
 
 .source {
   composes: secondaryText from '../primitives.module.css';
+  composes: prose from '../primitives.module.css';
   width: 100%;
 }
 
 .discardedList {
   composes: secondaryText from '../primitives.module.css';
+  composes: prose from '../primitives.module.css';
   width: 100%;
   padding-left: var(--space-4);
   display: flex;

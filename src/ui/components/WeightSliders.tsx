@@ -3,6 +3,7 @@ import {
   AXIS_ORDER,
   type AxisWeights,
 } from '../../domain/scoring/weights';
+import { CollapsiblePanel } from './CollapsiblePanel';
 import styles from './WeightSliders.module.css';
 
 interface WeightSlidersProps {
@@ -10,10 +11,19 @@ interface WeightSlidersProps {
   onChange: (next: AxisWeights) => void;
 }
 
+function summaryOf(weights: AxisWeights): string {
+  return AXIS_ORDER.map(
+    (axisId) => `${AXIS_LABELS[axisId]} ${weights[axisId]}`,
+  ).join(' · ');
+}
+
 export function WeightSliders({ weights, onChange }: WeightSlidersProps) {
   return (
-    <section aria-label="Pesos por eje" className={styles.panel}>
-      <h2 className={styles.heading}>Pesos de decisión</h2>
+    <CollapsiblePanel
+      ariaLabel="Pesos por eje"
+      title="Pesos de decisión"
+      summary={summaryOf(weights)}
+    >
       <div className={styles.rows}>
         {AXIS_ORDER.map((axisId) => {
           const value = weights[axisId];
@@ -42,6 +52,6 @@ export function WeightSliders({ weights, onChange }: WeightSlidersProps) {
           );
         })}
       </div>
-    </section>
+    </CollapsiblePanel>
   );
 }

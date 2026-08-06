@@ -74,26 +74,30 @@ export function App({ load = loadCatalog }: AppProps) {
 
       {leader && <LeaderCard car={leader} />}
 
-      <WeightSliders weights={weights} onChange={setWeights} />
-      <AssumptionsPanel
-        assumptions={assumptions}
-        onChange={setAssumptions}
-        budgetEur={budgetEur}
-        onBudgetChange={setBudgetEur}
-        hideOverBudget={hideOverBudget}
-        onHideOverBudgetChange={setHideOverBudget}
-      />
-      <RankingList
-        cars={scored}
-        rawCars={catalogResult.cars}
-        hideOverBudget={hideOverBudget}
-        onRatingChange={(carId, override) =>
-          setOverrides((prev) => ({
-            ...prev,
-            [carId]: { ...prev[carId], ...override },
-          }))
-        }
-      />
+      <div className={styles.columns}>
+        <div className={styles.controls}>
+          <WeightSliders weights={weights} onChange={setWeights} />
+          <AssumptionsPanel
+            assumptions={assumptions}
+            onChange={setAssumptions}
+            budgetEur={budgetEur}
+            onBudgetChange={setBudgetEur}
+            hideOverBudget={hideOverBudget}
+            onHideOverBudgetChange={setHideOverBudget}
+          />
+        </div>
+        <RankingList
+          cars={scored}
+          rawCars={catalogResult.cars}
+          hideOverBudget={hideOverBudget}
+          onRatingChange={(carId, override) =>
+            setOverrides((prev) => ({
+              ...prev,
+              [carId]: { ...prev[carId], ...override },
+            }))
+          }
+        />
+      </div>
     </main>
   );
 }

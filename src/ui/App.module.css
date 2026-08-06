@@ -24,3 +24,31 @@
   color: var(--color-signal);
   font-family: var(--font-sans);
 }
+
+/* Móvil primero: una columna. A partir de `--bp-ancho` los controles y la
+ * clasificación pasan a dos columnas (product/0010, requisito 7), y la
+ * página deja de estar acotada a `--size-column` para poder aprovechar el
+ * ancho — el texto corrido sigue acotado por su propia medida de línea. */
+.columns {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+@media (min-width: 60rem) {
+  .app {
+    max-width: var(--size-page);
+  }
+
+  .columns {
+    display: grid;
+    grid-template-columns: minmax(0, var(--size-column)) minmax(0, 1fr);
+    align-items: start;
+  }
+}
