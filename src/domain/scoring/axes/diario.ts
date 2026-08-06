@@ -1,29 +1,30 @@
 import type { Car } from '../../car';
 import type { GlobalAssumptions } from '../assumptions';
-import { normalizeAll } from '../normalize';
+import { scoreOnAbsoluteScale } from '../scale';
 import {
   inputDatumFrom,
   type AxisBreakdown,
   type PenaltyLine,
 } from '../breakdown';
-import { mustGet } from '../mustGet';
+
+// Corsa/Polo: por debajo de esta anchura ya no hay problema de aparcar.
+const ANCHURA_BUENO_MM = 1765;
+// Techo práctico del mercado de turismos (Clase S, X7, Range Rover, Q7).
+const ANCHURA_MALO_MM = 2000;
+// Por debajo de esto el coche aparca en cualquier hueco.
+const LONGITUD_BUENO_MM = 4000;
+// El límite lo pone la plaza de aparcamiento, no el mercado.
+const LONGITUD_MALO_MM = 5200;
 
 export function diarioFormula(assumptions: GlobalAssumptions): string {
   const ancho = assumptions.ponderacionAnchoDiario;
   const largo = 1 - ancho;
   return (
-    `dificultad = ${ancho.toFixed(1)} × anchura + ${largo.toFixed(1)} × longitud; ` +
-    'se normaliza invertida, menor dificultad = mejor puntuación.'
+    `nota = ${ancho.toFixed(1)} × escala(anchura) + ${largo.toFixed(1)} × escala(longitud). ` +
+    `escala(anchura): 10 hasta ${ANCHURA_BUENO_MM} mm, 0 desde ${ANCHURA_MALO_MM} mm. ` +
+    `escala(longitud): 10 hasta ${LONGITUD_BUENO_MM} mm, 0 desde ${LONGITUD_MALO_MM} mm. ` +
+    'Curva en S entre anclajes, absoluta: no depende de qué otros candidatos haya en el catálogo.'
   );
-}
-
-export function diarioDificultad(
-  car: Car,
-  assumptions: GlobalAssumptions,
-): number {
-  const anchoPeso = assumptions.ponderacionAnchoDiario;
-  const largoPeso = 1 - anchoPeso;
-  return anchoPeso * car.widthMm.value + largoPeso * car.lengthMm.value;
 }
 
 const CARGA_PENALTY_POINTS = -1.5;
@@ -43,22 +44,26 @@ export function buildDiarioBreakdown(
   assumptions: GlobalAssumptions,
   weight: number,
 ): Map<string, AxisBreakdown> {
-  const raw = cars.map((car) => ({
-    carId: car.id,
-    carName: car.name,
-    value: diarioDificultad(car, assumptions),
-  }));
-  const normalizations = normalizeAll('menor-mejor', raw);
+  const ancho = assumptions.ponderacionAnchoDiario;
+  const largo = 1 - ancho;
   const formula = diarioFormula(assumptions);
 
   const result = new Map<string, AxisBreakdown>();
   for (const car of cars) {
-    const normalization = mustGet(normalizations, car.id);
-    const penalty = cargaPenalty(car, assumptions);
-    const score = Math.min(
-      10,
-      Math.max(0, normalization.normalizedValue + penalty.effect),
+    const anchuraScore = scoreOnAbsoluteScale(
+      car.widthMm.value,
+      ANCHURA_BUENO_MM,
+      ANCHURA_MALO_MM,
     );
+    const longitudScore = scoreOnAbsoluteScale(
+      car.lengthMm.value,
+      LONGITUD_BUENO_MM,
+      LONGITUD_MALO_MM,
+    );
+    const rawScore = ancho * anchuraScore + largo * longitudScore;
+    const penalty = cargaPenalty(car, assumptions);
+    const score = Math.min(10, Math.max(0, rawScore + penalty.effect));
+
     result.set(car.id, {
       axisId: 'diario',
       label: 'Facilidad de uso diario',
@@ -70,16 +75,38 @@ export function buildDiarioBreakdown(
       assumptionsUsed: [
         {
           label: 'Ponderación anchura/longitud',
-          value: `${assumptions.ponderacionAnchoDiario.toFixed(1)} / ${(1 - assumptions.ponderacionAnchoDiario).toFixed(1)}`,
+          value: `${ancho.toFixed(1)} / ${largo.toFixed(1)}`,
         },
         {
           label: 'Carga en casa',
           value: assumptions.cargaEnCasa ? 'Sí' : 'No',
         },
       ],
-      normalization,
-      rawUnit: 'mm',
-      rawScore: normalization.normalizedValue,
+      subcomponents: [
+        {
+          label: 'Anchura',
+          rawValue: car.widthMm.value,
+          unit: 'mm',
+          scale: {
+            value: car.widthMm.value,
+            goodAnchor: ANCHURA_BUENO_MM,
+            badAnchor: ANCHURA_MALO_MM,
+            score: anchuraScore,
+          },
+        },
+        {
+          label: 'Longitud',
+          rawValue: car.lengthMm.value,
+          unit: 'mm',
+          scale: {
+            value: car.lengthMm.value,
+            goodAnchor: LONGITUD_BUENO_MM,
+            badAnchor: LONGITUD_MALO_MM,
+            score: longitudScore,
+          },
+        },
+      ],
+      rawScore,
       penalties: [penalty],
       weight,
       score,

@@ -83,6 +83,14 @@ export function AxisBreakdownView({ breakdown }: AxisBreakdownViewProps) {
                     {formatValue(sub.normalization.max.value, sub.unit)})
                   </>
                 )}
+                {sub.scale && (
+                  <>
+                    {' '}
+                    → nota {formatNumber(sub.scale.score)}/10 (escala:{' '}
+                    {formatValue(sub.scale.goodAnchor, sub.unit)} → 10,{' '}
+                    {formatValue(sub.scale.badAnchor, sub.unit)} → 0)
+                  </>
+                )}
               </li>
             ))}
           </ul>
