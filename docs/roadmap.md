@@ -139,13 +139,13 @@ peso sería reintroducir a mano lo que el ADR 0004 quita.
 | `technical/0004` — fundamento de estilos: tokens y primitivos | `implemented` |
 | `product/0009` — la comparativa se lee de un vistazo | `consolidated` |
 | `product/0010` — diseño responsive real | `consolidated` |
-| `product/0011` — la página que explica cómo se calcula todo | `approved` |
+| `product/0011` — la página que explica cómo se calcula todo | `implemented` |
 | `product/0012` — configuración persistente y compartible | `approved` |
 | `product/0013` — la ficha técnica comparada | `approved` |
 | Cerrar las decisiones abiertas de las seis specs | Hecha — las cinco de producto por decisión propia, y las dos de doc de estado por el ADR 0007, que las contesta a la vez |
 | Gate humano: aprobar los ADR 0006 y 0007 y las seis specs | Hecha — 2026-08-06, en commit propio sin implementación |
 | Implementar, verificar y consolidar `product/0008` | Hecha |
-| Implementar, verificar y consolidar las seis specs nuevas | En marcha — `technical/0004` implementado (queda por verificar el despliegue real en GitHub Pages); `product/0009` y `product/0010` consolidados en `docs/estado/interfaz.md`; `product/0011`, `product/0012` y `product/0013` pendientes |
+| Implementar, verificar y consolidar las seis specs nuevas | En marcha — `technical/0004` y `product/0011` implementados (queda por verificar el despliegue real en GitHub Pages en los dos); `product/0008`, `product/0009` y `product/0010` consolidados; `product/0012` y `product/0013` pendientes |
 
 `product/0008` vive aquí y no en la fase 3 porque es presentacional: su propia
 spec declara que no depende del ADR 0004 ni de que ningún eje haya migrado, y

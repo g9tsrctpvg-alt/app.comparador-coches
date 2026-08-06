@@ -25,6 +25,12 @@
   font-family: var(--font-sans);
 }
 
+.explainLink {
+  composes: mono from './primitives.module.css';
+  color: var(--color-accent);
+  align-self: flex-start;
+}
+
 /* Móvil primero: una columna. A partir de `--bp-ancho` los controles y la
  * clasificación pasan a dos columnas (product/0010, requisito 7), y la
  * página deja de estar acotada a `--size-column` para poder aprovechar el
