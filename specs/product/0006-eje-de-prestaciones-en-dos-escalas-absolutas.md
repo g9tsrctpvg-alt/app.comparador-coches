@@ -1,7 +1,7 @@
 # 0006 — El eje de prestaciones, en dos escalas absolutas
 
 - **Id:** product/0006
-- **Estado:** implemented
+- **Estado:** verified
 - **Tipo:** product
 - **Fecha:** 2026-08-05
 - **Specs relacionadas:** product/0001, product/0002, product/0003
@@ -168,23 +168,23 @@ que con uno. Cambiarlas exige un razonamiento explícito, no un ajuste.
 
 > Obligatorios y verificables.
 
-- [ ] Un coche de 145 CV/t saca un 10 en esa magnitud, y uno de 180 CV/t saca
+- [x] Un coche de 145 CV/t saca un 10 en esa magnitud, y uno de 180 CV/t saca
       también un 10.
-- [ ] Un coche de 75 CV/t saca un 0, y uno de 60 CV/t saca también un 0.
-- [ ] Un coche que hace el 0-100 en 6,5 s saca un 10 en esa magnitud, y uno
+- [x] Un coche de 75 CV/t saca un 0, y uno de 60 CV/t saca también un 0.
+- [x] Un coche que hace el 0-100 en 6,5 s saca un 10 en esa magnitud, y uno
       que lo hace en 5,0 s saca también un 10.
-- [ ] Un coche que hace el 0-100 en 13,0 s saca un 0, y uno que lo hace en
+- [x] Un coche que hace el 0-100 en 13,0 s saca un 0, y uno que lo hace en
       15,0 s saca también un 0.
-- [ ] Un coche en el punto medio de una escala saca un 5 en esa magnitud, y
+- [x] Un coche en el punto medio de una escala saca un 5 en esa magnitud, y
       uno al 10% del anclaje malo saca menos de 1: la curva es en S, no una
       recta.
-- [ ] La nota del eje de un coche es la misma con once candidatos en el
+- [x] La nota del eje de un coche es la misma con once candidatos en el
       catálogo que con uno solo.
-- [ ] Dos coches con los mismos CV/t y distinta aceleración obtienen notas de
+- [x] Dos coches con los mismos CV/t y distinta aceleración obtienen notas de
       eje distintas.
-- [ ] El desglose del eje muestra los dos anclajes de cada escala y la nota
+- [x] El desglose del eje muestra los dos anclajes de cada escala y la nota
       que sale de cada magnitud.
-- [ ] El desglose del eje ya no nombra qué modelo marca el mínimo ni el
+- [x] El desglose del eje ya no nombra qué modelo marca el mínimo ni el
       máximo.
 
 ## Dependencias y supuestos
