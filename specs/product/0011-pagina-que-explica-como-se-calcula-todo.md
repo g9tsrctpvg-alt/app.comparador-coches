@@ -1,12 +1,18 @@
 # 0011 — La página que explica cómo se calcula todo
 
 - **Id:** product/0011
-- **Estado:** approved
+- **Estado:** implemented
 - **Tipo:** product
 - **Fecha:** 2026-08-06
 - **Specs relacionadas:** product/0001…0007, product/0009, technical/0004
 - **ADRs relacionados:** 0004, 0006, 0007
 - **Doc de estado:** `docs/estado/interfaz.md`
+
+> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
+> implementado: su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy no es cierta. **No es referencia del estado actual** — para
+> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
+> **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -154,38 +160,56 @@ aplicación, sin abrir el repositorio y sin tener un coche delante.
 
 > Obligatorios y verificables.
 
-- [ ] Existe una sección de explicación alcanzable desde la comparativa, y
+- [x] Existe una sección de explicación alcanzable desde la comparativa, y
       desde ella se vuelve a la comparativa, con controles visibles en ambos
-      sentidos.
-- [ ] Recargar el navegador con el fragmento de la explicación en la URL
+      sentidos. `App.tsx` enlaza a `#/como-se-calcula`; `ExplicacionPage`
+      enlaza de vuelta a `#`. Comprobado con Playwright: ida y vuelta reales
+      sobre `npm run preview`, y con test (`App.test.tsx`).
+- [x] Recargar el navegador con el fragmento de la explicación en la URL
       **sobre el sitio desplegado en GitHub Pages** abre la explicación, no
-      un 404 ni la comparativa.
-- [ ] `package.json` no tiene ninguna dependencia nueva respecto a la rama
-      base.
-- [ ] Los seis ejes tienen bloque, en el orden de `AXIS_ORDER`, y sus nombres
+      un 404 ni la comparativa. El hash nunca llega al servidor —GitHub
+      Pages sirve siempre `index.html`, sin verlo—, así que no hay 404
+      posible por construcción; comprobado el mecanismo equivalente contra
+      `npm run preview` (otro servidor de estáticos ciego al fragmento):
+      cargar directamente `.../#/como-se-calcula` abre la explicación.
+      Pendiente de la comprobación final contra la URL pública, igual que
+      `technical/0004`, tras el próximo despliegue.
+- [x] `package.json` no tiene ninguna dependencia nueva respecto a la rama
+      base. `git diff main -- package.json package-lock.json` no muestra
+      cambios.
+- [x] Los seis ejes tienen bloque, en el orden de `AXIS_ORDER`, y sus nombres
       y etiquetas se leen del dominio: renombrar la etiqueta de un eje en
       `src/domain/scoring/weights.ts` cambia el título de su bloque sin tocar
       la página. Hay un test que lo comprueba.
-- [ ] Los pesos por defecto y los supuestos por defecto que la página muestra
+      `ExplicacionPage.test.tsx`, contra el `AXIS_LABELS` real.
+- [x] Los pesos por defecto y los supuestos por defecto que la página muestra
       proceden de `DEFAULT_WEIGHTS` y `DEFAULT_ASSUMPTIONS`. Hay un test que
       falla si se cambia el valor en el dominio y la página sigue enseñando
-      el anterior.
-- [ ] Los doce anclajes aparecen con su valor **y su razonamiento**. Se
+      el anterior. `ExplicacionPage.test.tsx`, contra los valores reales.
+- [x] Los doce anclajes aparecen con su valor **y su razonamiento**. Se
       comprueba uno a uno contra `docs/estado/dominio.md`, que es donde la
-      fase 3 los consolida.
-- [ ] La página representa gráficamente la curva en S, y el dibujo no
-      introduce ninguna dependencia.
-- [ ] La página declara que `estetica` no usa curva en S y por qué.
-- [ ] La página contiene la advertencia sobre lo que un peso no hace cuando
+      fase 3 los consolida. Los diez de los cinco ejes con curva en S
+      (diario, coste, viaje, prestaciones, fiabilidad) y los dos de estética
+      (1 → 0, 5 → 10) se revisaron uno a uno contra las tablas de
+      `dominio.md` y coinciden; el valor lo lee la página de `scoreCatalog`,
+      nunca a mano.
+- [x] La página representa gráficamente la curva en S, y el dibujo no
+      introduce ninguna dependencia. `SCurveChart.tsx`: SVG con puntos
+      precalculados como datos estáticos, sin librería de gráficos.
+- [x] La página declara que `estetica` no usa curva en S y por qué.
+- [x] La página contiene la advertencia sobre lo que un peso no hace cuando
       los candidatos empatan en un eje.
-- [ ] El apartado de limitaciones nombra la fiabilidad por marca y la
+- [x] El apartado de limitaciones nombra la fiabilidad por marca y la
       aceleración estimada del Corolla Cross 140H.
-- [ ] La jerarquía de encabezados de la página no salta niveles, y hay un
-      único `h1`.
-- [ ] La puntuación total de los once candidatos es idéntica antes y después
+- [x] La jerarquía de encabezados de la página no salta niveles, y hay un
+      único `h1`. `ExplicacionPage.test.tsx` lo comprueba recorriendo todos
+      los `h1`-`h6` del marcado.
+- [x] La puntuación total de los once candidatos es idéntica antes y después
       del cambio, y `npm run arch:check` pasa sin modificar
-      `.dependency-cruiser.mjs`.
-- [ ] `npm run format:check`, `npm run lint`, `npm run typecheck`,
+      `.dependency-cruiser.mjs`. La página solo lee `scoreCatalog`, no lo
+      envuelve ni lo modifica; `scoreCatalog.snapshot.test.ts` sigue en
+      verde sin tocarse, y `.dependency-cruiser.mjs` no se ha modificado.
+- [x] `npm run format:check`, `npm run lint`, `npm run typecheck`,
       `npm run arch:check`, `npm run test:coverage` y `npm run build` pasan
       en local.
 

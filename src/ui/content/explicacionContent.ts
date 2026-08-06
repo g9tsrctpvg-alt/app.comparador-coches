@@ -1,0 +1,125 @@
+import type { AxisId } from '../../domain/scoring/weights';
+
+/**
+ * La prosa explicativa —el porqué— de la página «Cómo se calcula todo»
+ * (product/0011, requisito 4). Vive aquí, separada de los componentes que
+ * la renderizan, y no en `docs/estado/dominio.md`: son dos audiencias
+ * distintas y no se generan una de la otra.
+ *
+ * Lo que **no** vive aquí son los valores —nombres de eje, pesos,
+ * supuestos, y el valor de cada anclaje—: esos se leen en la página
+ * directamente de `src/domain/scoring/`, vía `scoreCatalog`, para que
+ * cambiarlos en el dominio cambie la página sin tocar este fichero. Por
+ * eso `anchorReasoning` es un array posicional, no un mapa por etiqueta:
+ * empareja con `AxisBreakdown.subcomponents` por índice, nunca por el
+ * texto de una etiqueta que pueda reescribirse.
+ */
+export interface AxisContent {
+  measures: string;
+  data: string;
+  anchorReasoning: string[];
+  /** Solo `estetica`: por qué es el único eje sin curva en S. */
+  curveException?: string;
+}
+
+export const AXIS_CONTENT: Record<AxisId, AxisContent> = {
+  viaje: {
+    measures:
+      'El espacio para viajar: el sitio para el equipaje y para las ' +
+      'piernas de quien va detrás.',
+    data: 'Litros de maletero y batalla (la distancia entre ejes, que aproxima el espacio interior).',
+    anchorReasoning: [
+      'El techo lo marca el Škoda Superb —690 L—, la referencia de «coche para viajar en familia»: a partir de ahí lo que hay son monovolúmenes y furgonetas, otra categoría. El suelo es un utilitario de ciudad, donde el equipaje de cuatro personas ya no cabe.',
+      'Mismas referencias de coche que el maletero. El maletero pesa más —0,6 frente a 0,4— porque es la restricción que se incumple: el equipaje cabe o no cabe. El espacio de atrás es gradual, y la batalla solo lo mide de forma indirecta.',
+    ],
+  },
+  diario: {
+    measures:
+      'Qué tan fácil es usar el coche en el día a día: aparcarlo, moverlo por ciudad, meterlo en un hueco estrecho.',
+    data: 'Anchura y longitud de carrocería, sin espejos.',
+    anchorReasoning: [
+      'Con 1.765 mm aparcar deja de ser un problema —coches como el Corsa o el Polo—. 2.000 mm es el techo práctico del mercado de turismos: ahí ya están la Clase S, el X7, el Q7 o el Range Rover. Anclar el cero más arriba, en algo de verdad inmanejable, hundiría la escala y dejaría a todos los coches pegados cerca del 10.',
+      'Por debajo de 4.000 mm el coche aparca en cualquier hueco. Los 5.200 mm del cero los pone el tamaño de una plaza de aparcamiento con margen, no el mercado: 5.000 mm exactos resultaba severo con coches de 4,7 m que sí caben en una plaza normal.',
+    ],
+  },
+  prestaciones: {
+    measures:
+      'Cuánto empuje tiene el coche: potencia relativa al peso y aceleración.',
+    data: 'CV por tonelada, y aceleración de 0 a 100 km/h.',
+    anchorReasoning: [
+      'El suelo son coches reales que van justos: el Fiat Panda Hybrid (71,4 CV/t) y el Dacia Sandero TCe 90, coches que funcionan pero en los que incorporarse a una autovía cargado es un cálculo. El techo se pone con margen por encima del Alfa Romeo Giulietta 1.4 (125,5 CV/t) —la referencia de «esto ya no se puede pedir»—, para que un 10 signifique eso y no «lo que ya tengo».',
+      'Mismo criterio que los CV por tonelada: el suelo es el Dacia Sandero (13,4 s) y el techo se fija con margen sobre el Giulietta (7,7 s), en territorio de Golf GTI.',
+    ],
+  },
+  fiabilidad: {
+    measures:
+      'Cuánto se puede confiar en el coche: fiabilidad de la marca y años de garantía.',
+    data: 'Índice de fiabilidad de la OCU (por marca, no por modelo) y años de garantía incondicional.',
+    anchorReasoning: [
+      'Son los extremos que la propia OCU publica sobre 39 marcas —Lexus arriba, Land Rover abajo—: la escala es el mercado tal como se publica, sin ningún recorte que justificar.',
+      'El 10 va en el techo real del mercado sin condiciones —Kia, MG, Omoda, Jaecoo—. El 0 va en 0 años y no en los 3 del mínimo legal español: quedarse en el mínimo es una estrategia comercial, no una señal de que el coche se rompe. Una extensión de garantía sujeta a mantenimiento en red oficial no cuenta para esta nota: es un compromiso del comprador, no del fabricante, y el desglose de cada coche la muestra aparte, como información que no puntúa.',
+    ],
+  },
+  estetica: {
+    measures: 'Cuánto gusta el diseño, exterior e interior.',
+    data: 'Tu propia valoración de 1 a 5 para el exterior y para el interior: es el único eje que editas tú directamente, no un dato del catálogo.',
+    anchorReasoning: [
+      'Es tu juicio completo: 1 significa «no hay nada que salvar», 5 significa «tan guapo como hace falta». No hay una referencia externa que razonar, porque la referencia eres tú.',
+      'La misma escala se aplica al interior. La mezcla entre exterior e interior es un supuesto global, no algo que decida este eje.',
+    ],
+    curveException:
+      'Es el único eje sin curva en S. Tu valoración de 1 a 5 ya es tu juicio completo, y comprimir los extremos con la misma curva que usan los milímetros o los euros lo deformaría dos veces. Por eso aquí la nota es una línea recta: el 1 vale 0, el 5 vale 10, y los pasos intermedios se reparten por igual.',
+  },
+  coste: {
+    measures: 'Cuánto cuesta el coche: de compra y de uso mensual.',
+    data: 'Precio de compra, y un coste de uso mensual calculado a partir del consumo, los km/año, el precio del combustible o de la electricidad, y el mantenimiento anual.',
+    anchorReasoning: [
+      'El presupuesto ya declarado —el mismo que se puede ajustar en el panel de supuestos— es el techo duro: por encima, no se compra. Por debajo del otro anclaje, el precio deja de preocupar.',
+      'El peso 50/50 entre precio y uso no es una preferencia, es una equivalencia: el recorrido de la escala de precio son 22.000 €; el de uso, 1.800 €/año. 22.000 € ÷ 1.800 €/año ≈ 12,2 años — teniendo el coche unos doce años, las dos escalas cubren la misma cantidad de dinero, y con recorridos equivalentes 50/50 es la única combinación coherente.',
+    ],
+  },
+};
+
+export const CURVE_EXPLANATION =
+  'Entre los dos anclajes, la nota no sube en línea recta: sube poco cerca ' +
+  'de los extremos y rápido en el centro. Afinar cerca del anclaje bueno no ' +
+  'compra casi nada —ya casi es un 10—, y estar cerca del anclaje malo es ' +
+  'casi tan malo como estarlo del todo. Es una curva en S, y la usan cinco ' +
+  'de los seis ejes: todos menos estética.';
+
+export const WEIGHT_TIE_WARNING =
+  'Con estas escalas fijas, subir el peso de un eje no cambia nada si los ' +
+  'candidatos que estás mirando sacan la misma nota en él: un peso ' +
+  'multiplica una diferencia, y si no hay diferencia, no hay nada que ' +
+  'multiplicar. Mover un deslizador y no ver que el orden cambie no es un ' +
+  'fallo: es que ese eje ya no distingue a los coches que tienes delante.';
+
+export const PROVENANCE_EXPLANATION =
+  'Todo dato del catálogo declara su fuente. Cuando dos fuentes no ' +
+  'coinciden en un valor, el comparador se queda con la vigente y muestra ' +
+  'la otra como descartada, con su propio valor y el motivo por el que no ' +
+  'se usa. Un dato marcado como estimado no viene de una fuente publicada ' +
+  '—es la mejor cifra disponible— y se distingue del resto con una tilde ' +
+  '(~) junto a la cifra, con su explicación accesible al lado.';
+
+export interface KnownLimitation {
+  title: string;
+  description: string;
+}
+
+export const KNOWN_LIMITATIONS: KnownLimitation[] = [
+  {
+    title: 'La fiabilidad de la OCU es por marca, no por modelo',
+    description:
+      'Hoy no existe un índice público desglosado por modelo, así que el ' +
+      'eje de fiabilidad puntúa la marca entera y lo presenta como si ' +
+      'fuera del coche concreto.',
+  },
+  {
+    title: 'La aceleración del Toyota Corolla Cross 140H es una estimación',
+    description:
+      'El fabricante no publica esa cifra para esta versión: la que se ' +
+      'usa es la mejor estimación disponible, marcada como tal en el ' +
+      'desglose.',
+  },
+];

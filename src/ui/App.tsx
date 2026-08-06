@@ -17,6 +17,8 @@ import { WeightSliders } from './components/WeightSliders';
 import { RankingList } from './components/RankingList';
 import { LeaderCard } from './components/LeaderCard';
 import { rankVisible } from './components/ranking';
+import { ExplicacionPage } from './ExplicacionPage';
+import { EXPLICACION_HASH, useHashRoute } from './useHashRoute';
 import styles from './App.module.css';
 
 const DEFAULT_BUDGET_EUR = 47000;
@@ -28,6 +30,7 @@ interface AppProps {
 type CatalogResult = { cars: Car[] } | { error: string };
 
 export function App({ load = loadCatalog }: AppProps) {
+  const route = useHashRoute();
   const catalogResult = useMemo<CatalogResult>(() => {
     try {
       return { cars: load() };
@@ -66,11 +69,18 @@ export function App({ load = loadCatalog }: AppProps) {
     );
   }
 
+  if (route === 'explicacion') {
+    return <ExplicacionPage cars={catalogResult.cars} />;
+  }
+
   const leader = rankVisible(scored, hideOverBudget)[0];
 
   return (
     <main className={styles.app}>
       <h1 className={styles.title}>Comparador de coches</h1>
+      <a href={EXPLICACION_HASH} className={styles.explainLink}>
+        Cómo se calcula todo →
+      </a>
 
       {leader && <LeaderCard car={leader} />}
 
