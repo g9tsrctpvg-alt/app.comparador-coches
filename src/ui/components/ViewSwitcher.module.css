@@ -1,0 +1,22 @@
+.switcher {
+  display: flex;
+  gap: var(--space-2);
+  border-bottom: var(--size-border-hairline) solid var(--color-rule);
+}
+
+.link,
+.active {
+  composes: mono from '../primitives.module.css';
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--size-touch-min);
+  padding: 0 var(--space-1);
+  color: var(--color-mute);
+  border-bottom: calc(var(--size-border-hairline) * 2) solid transparent;
+}
+
+.active {
+  color: var(--color-accent);
+  font-weight: var(--font-weight-semibold);
+  border-bottom-color: var(--color-accent);
+}

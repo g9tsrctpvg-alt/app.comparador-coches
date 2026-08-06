@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
 import { loadCatalog } from '../data/loadCatalog';
+import { loadReferences } from '../data/loadReferences';
 import type { Car } from '../domain/car';
+import type { Reference } from '../domain/reference';
 import {
   DEFAULT_ASSUMPTIONS,
   type GlobalAssumptions,
@@ -16,8 +18,10 @@ import { AssumptionsPanel } from './components/AssumptionsPanel';
 import { WeightSliders } from './components/WeightSliders';
 import { RankingList } from './components/RankingList';
 import { LeaderCard } from './components/LeaderCard';
+import { ViewSwitcher } from './components/ViewSwitcher';
 import { rankVisible } from './components/ranking';
 import { ExplicacionPage } from './ExplicacionPage';
+import { FichaTecnicaPage } from './FichaTecnicaPage';
 import { EXPLICACION_HASH, useHashRoute } from './useHashRoute';
 import styles from './App.module.css';
 
@@ -25,21 +29,26 @@ const DEFAULT_BUDGET_EUR = 47000;
 
 interface AppProps {
   load?: () => Car[];
+  loadReferences?: () => Reference[];
 }
 
-type CatalogResult = { cars: Car[] } | { error: string };
+type CatalogResult =
+  { cars: Car[]; references: Reference[] } | { error: string };
 
-export function App({ load = loadCatalog }: AppProps) {
+export function App({
+  load = loadCatalog,
+  loadReferences: loadReferencesProp = loadReferences,
+}: AppProps) {
   const route = useHashRoute();
   const catalogResult = useMemo<CatalogResult>(() => {
     try {
-      return { cars: load() };
+      return { cars: load(), references: loadReferencesProp() };
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
       logError('catalog_load_failed', { 'error.message': message });
       return { error: message };
     }
-  }, [load]);
+  }, [load, loadReferencesProp]);
 
   const [weights, setWeights] = useState<AxisWeights>(DEFAULT_WEIGHTS);
   const [assumptions, setAssumptions] =
@@ -73,11 +82,21 @@ export function App({ load = loadCatalog }: AppProps) {
     return <ExplicacionPage cars={catalogResult.cars} />;
   }
 
+  if (route === 'ficha-tecnica') {
+    return (
+      <FichaTecnicaPage
+        cars={catalogResult.cars}
+        references={catalogResult.references}
+      />
+    );
+  }
+
   const leader = rankVisible(scored, hideOverBudget)[0];
 
   return (
     <main className={styles.app}>
       <h1 className={styles.title}>Comparador de coches</h1>
+      <ViewSwitcher route={route} />
       <a href={EXPLICACION_HASH} className={styles.explainLink}>
         Cómo se calcula todo →
       </a>
