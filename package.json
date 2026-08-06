@@ -27,7 +27,7 @@
     "@vitejs/plugin-react": "^6.0.5",
     "@vitest/coverage-v8": "^4.1.10",
     "dependency-cruiser": "^18.1.0",
-    "eslint": "^9.17.0",
+    "eslint": "^10.0.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "prettier": "^3.4.2",
     "typescript": "^5.7.2",
