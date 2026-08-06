@@ -1,7 +1,7 @@
 # 0002 — El eje de uso diario, en escala absoluta
 
 - **Id:** product/0002
-- **Estado:** implemented
+- **Estado:** verified
 - **Tipo:** product
 - **Fecha:** 2026-08-04
 - **Specs relacionadas:** product/0001
@@ -173,24 +173,24 @@ que con uno. Cambiarlas exige un razonamiento explícito, no un ajuste.
 
 > Obligatorios y verificables.
 
-- [ ] La nota de uso diario de un coche es la misma tanto si el catálogo tiene
+- [x] La nota de uso diario de un coche es la misma tanto si el catálogo tiene
       once candidatos como si tiene uno solo.
-- [ ] Un coche de 1765 mm de ancho saca un 10 en anchura, y uno de 1663 mm
+- [x] Un coche de 1765 mm de ancho saca un 10 en anchura, y uno de 1663 mm
       —un Smart— saca también un 10.
-- [ ] Un coche de 2000 mm de ancho saca un 0 en anchura, y uno de 2010 mm
+- [x] Un coche de 2000 mm de ancho saca un 0 en anchura, y uno de 2010 mm
       —un Audi Q7— saca también un 0.
-- [ ] Un coche en el punto medio de una escala saca un 5 en esa magnitud, y
+- [x] Un coche en el punto medio de una escala saca un 5 en esa magnitud, y
       uno al 10% del anclaje malo saca menos de 1: la curva es en S, no una
       recta.
-- [ ] Dos coches que difieran solo en anchura, en una fracción dada de su
+- [x] Dos coches que difieran solo en anchura, en una fracción dada de su
       escala, se separan más en la nota del eje que otros dos que difieran
       solo en longitud en esa misma fracción, en la proporción que declaran
       los pesos.
-- [ ] El desglose del eje muestra los dos anclajes de cada escala y la nota
+- [x] El desglose del eje muestra los dos anclajes de cada escala y la nota
       que sale de cada magnitud.
-- [ ] El desglose del eje ya no nombra qué modelo marca el mínimo ni el
+- [x] El desglose del eje ya no nombra qué modelo marca el mínimo ni el
       máximo.
-- [ ] La penalización por carga en casa sigue apareciendo como línea propia,
+- [x] La penalización por carga en casa sigue apareciendo como línea propia,
       con su condición y su efecto.
 
 ## Dependencias y supuestos
