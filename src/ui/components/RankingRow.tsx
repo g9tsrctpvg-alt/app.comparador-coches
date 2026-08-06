@@ -6,6 +6,7 @@ import primitives from '../primitives.module.css';
 import { AxisBreakdownView } from './AxisBreakdownView';
 import { EstimatedMark } from './EstimatedMark';
 import type { EditableRating } from './RankingList';
+import { TECHNOLOGY_LABELS } from '../technologyLabels';
 import styles from './RankingRow.module.css';
 
 interface RankingRowProps {
@@ -57,7 +58,7 @@ export function RankingRow({
 
       {rawCar && (
         <p className={styles.secondaryLine}>
-          <span>{rawCar.technology}</span>
+          <span>{TECHNOLOGY_LABELS[rawCar.technology]}</span>
           <span>·</span>
           <span>{formatNumber(rawCar.powerCv.value, 0)} CV</span>
           <span>·</span>

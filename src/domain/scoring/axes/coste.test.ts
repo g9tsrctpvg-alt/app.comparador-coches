@@ -164,4 +164,23 @@ describe('buildCosteBreakdown', () => {
       'Mantenimiento anual',
     ]);
   });
+
+  it('declares the kWh price for an electric car and the litre price for a non-electric one (product/0008)', () => {
+    const breakdown = buildCosteBreakdown(
+      threeCarFixture,
+      DEFAULT_ASSUMPTIONS,
+      1,
+    );
+    const ev3 = breakdown.get('kia-ev3')!; // eléctrico
+    const sportage = breakdown.get('kia-sportage-hev')!; // no eléctrico
+
+    expect(ev3.info).toHaveLength(1);
+    expect(ev3.info![0]!.value).toContain(
+      `${DEFAULT_ASSUMPTIONS.precioKwh.toFixed(2)} €/kWh`,
+    );
+    expect(sportage.info).toHaveLength(1);
+    expect(sportage.info![0]!.value).toContain(
+      `${DEFAULT_ASSUMPTIONS.precioLitro.toFixed(2)} €/l`,
+    );
+  });
 });

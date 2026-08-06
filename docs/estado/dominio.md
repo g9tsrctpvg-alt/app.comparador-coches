@@ -55,8 +55,12 @@ fórmula, el valor crudo, las penalizaciones condicionales como línea propia
 eje. Cada sumando se puntúa contra el conjunto de candidatos o contra una
 escala absoluta, nunca las dos cosas — ver la siguiente sección. Un campo
 opcional más, `info`, muestra dato del propio coche que no entra en ninguna
-nota — hoy solo lo usa `fiabilidad` para la extensión de garantía
-condicionada — y es distinto de `assumptionsUsed`: no es un supuesto global,
+nota. Lo usan `fiabilidad`, para la extensión de garantía condicionada;
+`coste`, para declarar qué precio unitario de la energía se ha aplicado y
+que es la tecnología del coche quien lo decide (product/0008); y `diario`,
+para declarar que la penalización por carga en casa solo puede aplicar a un
+vehículo eléctrico, esté activa o no. Es distinto de `assumptionsUsed`: no
+es un supuesto global,
 es información del coche.
 
 ## Cómo se puntúa un sumando
