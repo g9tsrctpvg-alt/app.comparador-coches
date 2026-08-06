@@ -133,25 +133,74 @@ peso sería reintroducir a mano lo que el ADR 0004 quita.
 
 | Tarea | Estado |
 | --- | --- |
+| ADR 0006 — los estilos de la interfaz: CSS propio con tokens | `draft` |
 | `product/0008` — el tipo de motor, visible en la comparativa | `approved` |
+| `technical/0004` — fundamento de estilos: tokens y primitivos | `draft` |
+| `product/0009` — la comparativa se lee de un vistazo | `draft` |
+| `product/0010` — diseño responsive real | `draft` |
+| `product/0011` — la página que explica cómo se calcula todo | `draft` |
+| `product/0012` — configuración persistente y compartible | `draft` |
+| `product/0013` — la ficha técnica comparada | `draft` |
+| Cerrar las decisiones abiertas de las seis specs | Hecha — las cinco de producto por decisión propia, y las dos de doc de estado por el ADR 0007, que las contesta a la vez |
+| Gate humano: aprobar los ADR 0006 y 0007 y las seis specs | Pendiente |
 | Implementar, verificar y consolidar `product/0008` | Pendiente |
-| Terminar de traer el artefacto React de un solo fichero | Pendiente — las fórmulas ya están en `src/domain/` desde `product/0001`; queda la interfaz |
-| Página que explique cómo se calcula todo | Pendiente — sin spec |
-| Diseño responsive real | Pendiente — sin spec; hoy está pensado para 560 px de ancho máximo |
-| Persistencia en `localStorage` y configuración compartida por URL | Pendiente — sin spec |
+| Implementar, verificar y consolidar las seis specs nuevas | Pendiente |
 
 `product/0008` vive aquí y no en la fase 3 porque es presentacional: su propia
 spec declara que no depende del ADR 0004 ni de que ningún eje haya migrado, y
 puede implementarse antes o después.
 
-**La página que explica los cálculos depende de la fase 3.** Hoy el desglose
+**Las cuatro tareas que la fase tenía sin spec ya la tienen.** «Terminar de
+traer el artefacto» es `product/0009`, que lo plantea como lo que de verdad
+falta —la jerarquía visual, no las fórmulas, que están en `src/domain/` desde
+`product/0001`—; el responsive es `product/0010`; la página de explicación es
+`product/0011`; la persistencia y el enlace compartible son `product/0012`.
+`technical/0004` y el ADR 0006 son el andamiaje que las tres primeras
+necesitan y que ninguna de ellas debía montar por su cuenta: hoy el proyecto
+no tiene **ni una línea de CSS**, así que la primera hoja de estilos que se
+escriba fija el modelo para todas las demás. Esa decisión se toma antes, en
+un ADR, y no como residuo de la primera implementación que llegue.
+
+**La fase tenía una quinta tarea que nadie había registrado.** El fuente del
+artefacto, disponible desde el 2026-08-06, enseña que tiene **dos vistas**: la
+clasificación —lo único migrado— y una **ficha técnica** comparada contra el
+Alfa Romeo Giulietta, con columnas de diferencia y una métrica de litros de
+maletero por metro cuadrado de huella. No estaba en este roadmap, ni en
+`docs/estado/interfaz.md`, ni en ninguna spec. Es `product/0013`, y con ella
+la fase deja de ser «traer el aspecto» para ser lo que siempre fue: traer
+media aplicación.
+
+**Orden de implementación dentro de la fase.** ADR 0006 → `technical/0004` →
+`product/0009` → `product/0010`. `product/0013` va después de `product/0010`,
+y comparte con `product/0011` el mecanismo de navegación por fragmento de URL,
+así que la primera de las dos que se implemente lo monta y la otra lo
+reutiliza. `product/0012` es ortogonal y cabe en cualquier hueco, y
+`product/0008` no depende de ninguna.
+
+**La fase 3 ya no bloquea a `product/0011`.** Se cerró el 2026-08-06, con los
+doce anclajes y la curva en S consolidados en `docs/estado/dominio.md`. La
+única dependencia dura que tenía la página de explicación está satisfecha, y
+el orden de arriba pasa a ser de conveniencia —verse como el resto de la
+aplicación— y no de bloqueo.
+
+**El artefacto de referencia está transcrito, no enlazado.** El fuente vive
+fuera del repositorio y no se puede consultar desde aquí, así que su sistema
+de diseño —la paleta de siete papeles, las cifras en monoespaciada, los
+primitivos y la composición de la fila del ranking— está transcrito en la
+sección *El artefacto de referencia* de `product/0009`. Una referencia que no
+se puede abrir no es una referencia. Lo que el artefacto **no** aporta es
+diseño responsive: no tiene una sola media query, y su columna de 560 px es el
+punto de partida de `product/0010`, no su respuesta.
+
+**Por qué la página que explica los cálculos importa más ahora.** El desglose
 por eje responde «de dónde sale este número» coche a coche, pero no hay ningún
 sitio que explique el modelo entero de una vez: qué mide cada eje, de dónde
 sale cada anclaje, qué significan los pesos y qué supuestos entran en el
-coste. Es contenido distinto del desglose, no un resumen de él — y escribirlo
-antes de que los ejes sean los definitivos sería documentar un modelo que va a
-cambiar. Con escalas absolutas gana importancia: la escala es justo lo que
-hace la nota interpretable.
+coste. Es contenido distinto del desglose, no un resumen de él. Con las
+escalas absolutas ya en producción, una nota pretende significar algo por sí
+misma —«este coche es bueno en esto»—, y eso solo es interpretable si la
+escala se puede consultar. La escala es justo lo que hace la nota legible, y
+hoy no está en ninguna parte de la aplicación.
 
 ## Más adelante
 
@@ -179,6 +228,8 @@ que no acabe archivado en la fase que resulte estar abierta.
 | Tarea | Estado |
 | --- | --- |
 | ADR 0005 — los ADR son documentos de estado, no deltas | `approved` |
+| ADR 0007 — el reparto de áreas de estado de este proyecto | `draft` |
+| Apuntar `docs/proceso/consolidacion.md` §4 al ADR 0007 en vez de repetir la tabla | Hecha — y §4 pasa a mandar sobre *cuándo* se crea un doc, no sobre cuáles hay |
 | Cambiar la regla de corrección en `docs/proceso/adrs.md` | Hecha |
 | Añadir `Historial` a `docs/decisions/TEMPLATE.md` y exigirlo en el validador | Hecha — condición de error 16, ahora cinco secciones |
 | Convertir los cuatro addenda vigentes al nuevo formato | Hecha — 0001, 0002, 0003 y 0004 |
@@ -195,11 +246,11 @@ una sorpresa esperando fecha.
 | Deuda | Detectada | Condición de cierre |
 | --- | --- | --- |
 | Acciones de GitHub fijadas por etiqueta de major, no por digest; TruffleHog va en `@main` | 2026-08-01 | Fijar cada acción a un SHA y dejar que Dependabot las actualice |
-| Dos áreas de estado sin doc (modelo de datos, observabilidad); `interfaz` ya existe desde `product/0001` | 2026-08-01 | Que una spec las declare como *Doc de estado*; catálogo en `docs/proceso/consolidacion.md` §4 |
+| **Reducida a una área:** queda `observabilidad` sin doc. El «modelo de datos» deja de estar pendiente — el ADR 0007 fija que en este proyecto lo cubre `docs/estado/dominio.md`, donde el catálogo ya está descrito, y que `docs/estado/datos.md` no se crea | 2026-08-01 | Que una spec declare `docs/estado/observabilidad.md` como *Doc de estado*; reparto vigente en el ADR 0007 |
 | Precios del catálogo de julio de 2026. Vigentes hoy —quince días— y no bloquean nada; `product/0003` los puntúa contra una escala absoluta, así que envejecen peor que antes | 2026-08-02 | Reconfirmar precios contra fuente vigente cuando pasen meses, y actualizar `cars.json` |
 | **Disparador cumplido:** los gates de CD (smoke tests, canary) se aplazaban hasta que existiera despliegue real; ya existe (GitHub Pages, verde desde `technical/0001`) | 2026-08-03 | Definir smoke test post-deploy en una spec técnica, o registrar por qué se sigue aplazando |
-| `ui/` sigue fuera del suelo de cobertura del 100%. Desde `technical/0002` sí tiene tests, pero solo de los fallos que aquella spec corrigió, y sin interacción: `renderToStaticMarkup` no hace clic ni arrastra, así que lo interactivo se sigue comprobando a mano | 2026-08-03 | Decidir si entra en el suelo de `vite.config.ts`, y si hacen falta jsdom o *testing library* para cubrir la interacción |
-| Fila de referencia del Alfa Romeo Giulietta de la especificación original no está en `cars.json`: `product/0001` no la pedía y queda fuera a propósito, no por olvido | 2026-08-03 | Que una spec futura la pida explícitamente como referencia, o se cierre esta fila descartándola |
+| `ui/` sigue fuera del suelo de cobertura del 100%. Desde `technical/0002` sí tiene tests, pero solo de los fallos que aquella spec corrigió, y sin interacción: `renderToStaticMarkup` no hace clic ni arrastra, así que lo interactivo se sigue comprobando a mano. **La fase 4 la ensancha:** el ADR 0006 mete CSS, que `renderToStaticMarkup` no calcula, así que contraste, foco y responsive se verifican a mano por diseño, no por dejadez | 2026-08-03 | Decidir si entra en el suelo de `vite.config.ts`, y si hacen falta jsdom o *testing library* para cubrir la interacción |
+| Fila de referencia del Alfa Romeo Giulietta de la especificación original no está en `cars.json`: `product/0001` no la pedía y queda fuera a propósito, no por olvido. **Disparador cumplido:** `product/0013` la pide explícitamente, y sin ella su tabla de diferencias no tiene contra qué medir | 2026-08-03 | Que una spec futura la pida explícitamente como referencia, o se cierre esta fila descartándola. Cierra cuando `product/0013` esté consolidada |
 | Los datos numéricos del catálogo no declaran cota: un precio o una dimensión negativos validan sin error, justo lo que el ADR 0003 citaba como motivo para elegir Zod. Fuera de alcance de `technical/0002` a propósito: son dieciocho campos con cotas distintas, no una regla global | 2026-08-03 | Decidir la cota de cada campo y declararla en `CarSchema`, con test por campo acotado |
 | `product/0003` quitó `anios`, y con él la fórmula de valor residual —`precio × res^(años/5)`— que dependía de ese horizonte: `coste` ya no la calcula. No molesta porque «pienso venderlo» está desactivado por defecto y la reventa está fuera de alcance, pero `pensandoVender` y `residualPct5y` quedan declarados sin ningún eje que los use | 2026-08-04 | Que alguien quiera analizar la reventa: entonces, spec propia que decida con qué horizonte se calcula, y si `pensandoVender`/`residualPct5y` se retiran o se reconectan |
 | `index.html` no declara icono, así que el navegador pide `/favicon.ico` en cada carga y se lleva un 404. Cosmético y preexistente desde `technical/0001` | 2026-08-03 | Añadir un icono, o declarar explícitamente que no se quiere |
