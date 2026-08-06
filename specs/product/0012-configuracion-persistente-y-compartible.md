@@ -5,7 +5,7 @@
 - **Tipo:** product
 - **Fecha:** 2026-08-06
 - **Specs relacionadas:** product/0001, product/0009, product/0011
-- **ADRs relacionados:** 0001, 0003
+- **ADRs relacionados:** 0001, 0003, 0007
 - **Doc de estado:** `docs/estado/interfaz.md`, `docs/estado/arquitectura.md`
 
 ## Contexto
@@ -215,6 +215,11 @@ pueda compartir con un enlace.
   síncrono, está disponible en todos los navegadores objetivo y no necesita
   permiso. El requisito 16 lo mantiene detrás de un puerto, así que
   sustituirlo por `IndexedDB` más adelante no tocaría el dominio.
+- **El ADR 0007 fija que la configuración persistida no es modelo de datos**,
+  y por tanto no crea `docs/estado/datos.md`: es estado de usuario
+  serializado —sin fuentes, sin auditoría, sin entrar en ninguna fórmula—, no
+  una descripción del mundo. El comportamiento se consolida en `interfaz.md`
+  y el puerto en `arquitectura.md`, que es lo que la cabecera ya declaraba.
 - Se asume que la configuración es **datos del propio usuario en su propio
   navegador**: no hay datos de terceros, ni credenciales, ni nada que
   justifique cifrado o consentimiento. Si algún día se persistiera algo que
@@ -225,10 +230,4 @@ pueda compartir con un enlace.
 
 ## Decisiones abiertas
 
-1. **Si esta spec necesita un doc de estado nuevo.** La cabecera declara
-   `interfaz.md` y `arquitectura.md`, pero un puerto de persistencia con su
-   formato versionado se parece bastante al «modelo de datos» que
-   `docs/proceso/consolidacion.md` §4 lista como pendiente de crear
-   (`docs/estado/datos.md`). Cerrarlo antes de aprobar: es una de las dos
-   áreas sin doc registradas como deuda en el roadmap, y esta spec es
-   candidata a ser la que la declare.
+Ninguna.

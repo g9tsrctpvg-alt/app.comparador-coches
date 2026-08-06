@@ -62,26 +62,24 @@ Estamparlo antes es exactamente el fallo que este flujo persigue.
 
 ## 4. Qué doc recibe qué
 
-El campo *Doc de estado* de cada spec lo declara explícitamente. Como guía por
-defecto, cada área funcional tiene un único doc de estado responsable:
+El campo *Doc de estado* de cada spec lo declara explícitamente. Cada área
+funcional tiene un único doc responsable, y **el reparto de áreas de este
+proyecto lo fija el ADR 0007** (`docs/decisions/0007-reparto-de-areas-de-estado.md`),
+que es la tabla vigente. No se repite aquí: un reparto escrito en dos sitios
+se desincroniza, y el ADR es quien manda.
 
-| Área | Doc de estado |
-| --- | --- |
-| Arquitectura | `docs/estado/arquitectura.md` |
-| Dominio | `docs/estado/dominio.md` |
-| Infraestructura y despliegue | `docs/estado/despliegue.md` |
-| Interfaz de usuario | `docs/estado/interfaz.md` — pendiente de crear |
-| Modelo de datos | `docs/estado/datos.md` — pendiente de crear |
-| Observabilidad | `docs/estado/observabilidad.md` — pendiente de crear |
+Lo que sí manda este documento es **cuándo se crea un doc de estado nuevo**:
 
-Los pendientes se crean cuando la primera spec que les afecte los declare como
-destino; hasta entonces no existirían más que como stubs vacíos. El
-seguimiento está en `docs/roadmap.md`.
+- Un doc de estado responde a un **área**, no a un artefacto. La pregunta ante
+  una spec que no encaja no es «¿merece esto un doc?», sino «¿de qué área es,
+  y quién manda sobre esa área?». Un doc por componente, por vista o por
+  fichero es el camino a un doc de estado por pantalla.
+- Un área declarada **pendiente de crear** obtiene su doc cuando la primera
+  spec que la afecte lo declare como destino; hasta entonces no existiría más
+  que como stub vacío. El seguimiento está en `docs/roadmap.md`.
+- Un área declarada **no aplica** vuelve a existir con la spec que la traiga,
+  y entonces trae su doc con ella.
 
-Tres áreas del catálogo por defecto **no aplican** a este proyecto mientras
-siga siendo una SPA estática sin backend: contratos de API, integraciones
-externas y autenticación. No hay servidor, ni terceros, ni identidad. Si
-alguna aparece, aparece con su spec y con su doc de estado.
-
-Si una spec no encaja en ninguno, la pregunta no es dónde meterla: es si falta
-un doc de estado.
+Solo cuando la respuesta a «¿de qué área es esto?» sea **de ninguna**, falta
+un doc de estado — y eso es una corrección del ADR 0007, con su entrada en el
+historial.

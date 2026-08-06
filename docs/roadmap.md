@@ -139,8 +139,8 @@ peso sería reintroducir a mano lo que el ADR 0004 quita.
 | `product/0011` — la página que explica cómo se calcula todo | `draft` |
 | `product/0012` — configuración persistente y compartible | `draft` |
 | `product/0013` — la ficha técnica comparada | `draft` |
-| Cerrar la última decisión abierta de `product/0011` y de `product/0012` | Pendiente — es la **misma** pregunta hecha dos veces: ¿aparece un doc de estado nuevo en esta fase? Las otras cuatro specs ya no tienen ninguna |
-| Gate humano: aprobar el ADR 0006 y las seis specs | Pendiente |
+| Cerrar las decisiones abiertas de las seis specs | Hecha — las cinco de producto por decisión propia, y las dos de doc de estado por el ADR 0007, que las contesta a la vez |
+| Gate humano: aprobar los ADR 0006 y 0007 y las seis specs | Pendiente |
 | Implementar, verificar y consolidar `product/0008` | Pendiente |
 | Implementar, verificar y consolidar las seis specs nuevas | Pendiente |
 
@@ -220,6 +220,8 @@ que no acabe archivado en la fase que resulte estar abierta.
 | Tarea | Estado |
 | --- | --- |
 | ADR 0005 — los ADR son documentos de estado, no deltas | `approved` |
+| ADR 0007 — el reparto de áreas de estado de este proyecto | `draft` |
+| Apuntar `docs/proceso/consolidacion.md` §4 al ADR 0007 en vez de repetir la tabla | Hecha — y §4 pasa a mandar sobre *cuándo* se crea un doc, no sobre cuáles hay |
 | Cambiar la regla de corrección en `docs/proceso/adrs.md` | Hecha |
 | Añadir `Historial` a `docs/decisions/TEMPLATE.md` y exigirlo en el validador | Hecha — condición de error 16, ahora cinco secciones |
 | Convertir los cuatro addenda vigentes al nuevo formato | Hecha — 0001, 0002, 0003 y 0004 |
@@ -237,7 +239,7 @@ una sorpresa esperando fecha.
 | --- | --- | --- |
 | **`npm ci` falla en `main`.** `@eslint/js@^10.0.1` exige `eslint@^10` como *peer* y `package.json` fija `eslint@^9.17.0`: `ERESOLVE`. Los seis jobs de CI que empiezan por `npm ci` no llegan a ejecutarse, así que hoy **no hay red de seguridad**. Detectado al pasar la CI en local para las specs de la fase 4 | 2026-08-06 | Subir `eslint` a `^10` con `typescript-eslint` y `eslint-plugin-react-hooks` compatibles, o bajar `@eslint/js` a `^9`. Es una decisión de dependencias (🟡): no se toca sin aprobación |
 | Acciones de GitHub fijadas por etiqueta de major, no por digest; TruffleHog va en `@main` | 2026-08-01 | Fijar cada acción a un SHA y dejar que Dependabot las actualice |
-| Dos áreas de estado sin doc (modelo de datos, observabilidad); `interfaz` ya existe desde `product/0001`. `product/0012` es candidata a declarar `docs/estado/datos.md`: su decisión abierta 3 es justo esa pregunta | 2026-08-01 | Que una spec las declare como *Doc de estado*; catálogo en `docs/proceso/consolidacion.md` §4 |
+| **Reducida a una área:** queda `observabilidad` sin doc. El «modelo de datos» deja de estar pendiente — el ADR 0007 fija que en este proyecto lo cubre `docs/estado/dominio.md`, donde el catálogo ya está descrito, y que `docs/estado/datos.md` no se crea | 2026-08-01 | Que una spec declare `docs/estado/observabilidad.md` como *Doc de estado*; reparto vigente en el ADR 0007 |
 | Precios del catálogo de julio de 2026. Vigentes hoy —quince días— y no bloquean nada; `product/0003` los puntúa contra una escala absoluta, así que envejecen peor que antes | 2026-08-02 | Reconfirmar precios contra fuente vigente cuando pasen meses, y actualizar `cars.json` |
 | **Disparador cumplido:** los gates de CD (smoke tests, canary) se aplazaban hasta que existiera despliegue real; ya existe (GitHub Pages, verde desde `technical/0001`) | 2026-08-03 | Definir smoke test post-deploy en una spec técnica, o registrar por qué se sigue aplazando |
 | `ui/` sigue fuera del suelo de cobertura del 100%. Desde `technical/0002` sí tiene tests, pero solo de los fallos que aquella spec corrigió, y sin interacción: `renderToStaticMarkup` no hace clic ni arrastra, así que lo interactivo se sigue comprobando a mano. **La fase 4 la ensancha:** el ADR 0006 mete CSS, que `renderToStaticMarkup` no calcula, así que contraste, foco y responsive se verifican a mano por diseño, no por dejadez | 2026-08-03 | Decidir si entra en el suelo de `vite.config.ts`, y si hacen falta jsdom o *testing library* para cubrir la interacción |

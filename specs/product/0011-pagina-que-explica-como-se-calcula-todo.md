@@ -5,7 +5,7 @@
 - **Tipo:** product
 - **Fecha:** 2026-08-06
 - **Specs relacionadas:** product/0001…0007, product/0009, technical/0004
-- **ADRs relacionados:** 0004, 0006
+- **ADRs relacionados:** 0004, 0006, 0007
 - **Doc de estado:** `docs/estado/interfaz.md`
 
 ## Contexto
@@ -200,6 +200,10 @@ aplicación, sin abrir el repositorio y sin tener un coche delante.
 - **Depende de `technical/0004` y `product/0009`** para verse como el resto
   de la aplicación. Podría implementarse antes y quedar sin estilo, pero
   entonces habría que estilarla dos veces.
+- **El ADR 0007 fija que esta vista es interfaz**, no un área con doc propio:
+  es una superficie de la aplicación, y el modelo que presenta ya tiene
+  autoridad en `docs/estado/dominio.md`. Por eso el campo *Doc de estado*
+  declara solo `interfaz.md`.
 - Se asume que el contenido explicativo se escribe **en español**, como el
   resto de la interfaz, mientras los identificadores del dominio siguen en
   inglés.
@@ -217,8 +221,4 @@ aplicación, sin abrir el repositorio y sin tener un coche delante.
 
 ## Decisiones abiertas
 
-1. **Si la página se consolida en `docs/estado/interfaz.md` o merece doc de
-   estado propio.** La cabecera declara hoy `interfaz.md`. Si el contenido
-   explicativo acaba siendo un artefacto con vida propia, quizá no encaje
-   ahí; `docs/proceso/consolidacion.md` §4 dice que cuando algo no encaja en
-   ningún doc de estado, la pregunta es si falta un doc de estado.
+Ninguna.
