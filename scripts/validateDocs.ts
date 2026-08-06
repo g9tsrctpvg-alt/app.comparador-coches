@@ -31,7 +31,7 @@
  *
  * Solo ADRs:
  * 15. `Nivel` que no es 🟢, 🟡 ni 🔴.
- * 16. Una de sus cuatro secciones obligatorias, vacía.
+ * 16. Una de sus cinco secciones obligatorias, vacía.
  *
  * De conjunto:
  * 17. Nombre de fichero que no es `NNNN-titulo-en-kebab-case.md`.
@@ -99,6 +99,9 @@ const ADR_SECTIONS = [
   'Decisión',
   'Alternativas consideradas',
   'Consecuencias',
+  // ADR 0005: un ADR describe lo que rige hoy y se corrige en su sitio, así
+  // que cada corrección deja aquí una entrada fechada.
+  'Historial',
 ];
 
 const SPEC_DIRS: Record<SpecKind, string> = {

@@ -53,7 +53,7 @@ no que el área esté documentada.
 | Tarea | Estado |
 | --- | --- |
 | ADR 0003: Vite · React · TypeScript · npm · GitHub Pages | Hecha |
-| Addendum al ADR 0001: alcance de los logs sin servidor | Hecha |
+| Acotar el ADR 0001: alcance de los logs sin servidor | Hecha |
 | Fijar `service.name` (`comparador-coches-web`) | Hecha |
 | Aplicación única, no monorepo | Hecha |
 | Instalar los gates de código en CI | Hecha — `technical/0001` |
@@ -175,10 +175,10 @@ que no acabe archivado en la fase que resulte estar abierta.
 
 | Tarea | Estado |
 | --- | --- |
-| ADR 0005 — los ADR son documentos de estado, no deltas | `draft` — esperando gate humano |
-| Cambiar la regla de corrección en `docs/proceso/adrs.md` | Pendiente — depende de que ADR 0005 se apruebe |
-| Añadir `Historial` a `docs/decisions/TEMPLATE.md` y exigirlo en el validador | Pendiente — depende de ADR 0005 |
-| Convertir los cuatro addenda vigentes (0001, 0002, 0003 y 0004) al nuevo formato | Pendiente — depende de ADR 0005 |
+| ADR 0005 — los ADR son documentos de estado, no deltas | `approved` |
+| Cambiar la regla de corrección en `docs/proceso/adrs.md` | Hecha |
+| Añadir `Historial` a `docs/decisions/TEMPLATE.md` y exigirlo en el validador | Hecha — condición de error 16, ahora cinco secciones |
+| Convertir los cuatro addenda vigentes al nuevo formato | Hecha — 0001, 0002, 0003 y 0004 |
 
 ## Deudas abiertas
 

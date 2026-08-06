@@ -56,12 +56,12 @@ pesos, notas estéticas y supuestos van a `localStorage` para persistir entre
 sesiones y a la URL para poder compartir una configuración. Si la URL trae
 configuración, gana sobre `localStorage`.
 
-**Alcance del ADR 0001.** Ese ADR fija un formato de log con `stdout`,
+**Alcance del ADR 0001.** Ese ADR fijaba un formato de log con `stdout`,
 `TraceId` por petición y middleware, que no es instanciable en un navegador.
 Queda acotado al código con runtime de servidor; en navegador se emite la
-misma forma de campos a `console`, solo para errores. El ADR 0001 recibe un
-addendum fechado que lo remite aquí. `service.name` queda fijado a
-`comparador-coches-web`.
+misma forma de campos a `console`, solo para errores. El ADR 0001 recoge esa
+acotación en su decisión, con la entrada correspondiente en su historial.
+`service.name` queda fijado a `comparador-coches-web`.
 
 ## Alternativas consideradas
 
@@ -113,3 +113,10 @@ addendum fechado que lo remite aquí. `service.name` queda fijado a
   falta compartir estado entre dispositivos sin pasar por la URL.
 - **Aplazado:** *pre-rendering* o mejora del posicionamiento. **Disparador:**
   que el comparador deje de ser de uso personal y se quiera indexar.
+
+## Historial
+
+- **2026-08-02** — ADR creado.
+- **2026-08-06** — Reescrita la mención al ADR 0001: decía que aquel «recibe
+  un addendum fechado que lo remite aquí», y desde el ADR 0005 los ADR no
+  llevan addenda. La acotación es la misma; solo cambia dónde vive.

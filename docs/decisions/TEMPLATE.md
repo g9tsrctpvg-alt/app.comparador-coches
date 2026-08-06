@@ -21,3 +21,9 @@ alternativas es un comunicado, no una decisión.)
 
 (Qué se gana, qué se pierde y qué queda aplazado. Cada aplazamiento con su
 **disparador explícito**.)
+
+## Historial
+
+(Obligatorio. Una entrada fechada por corrección: qué cambió y por qué. La
+primera es la creación del ADR. El detalle verbatim vive en git; aquí va el
+resumen que permite leer el documento sin bajar a él.)

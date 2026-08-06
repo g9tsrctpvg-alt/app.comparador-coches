@@ -4,8 +4,6 @@
 - **Fecha:** 2026-08-04
 - **Nivel:** 🟡
 
-> Acotado por el **addendum de 2026-08-06**, al final de este documento.
-
 ## Contexto
 
 Todos los ejes puntúan hoy **relativo al conjunto de candidatos**: se busca
@@ -99,10 +97,15 @@ eje, en su propia spec**. Este ADR fija el principio, no los números.
   correcto.** Un eje en el que los candidatos apenas difieren influirá poco
   en el total, en vez de fabricar diferencias. `diario`, por ejemplo, pasaría
   de mover 10 puntos entre el mejor y el peor a mover unos 2,4.
-- **Coste asumido: los pesos vigentes quedan descalibrados.** Se eligieron
-  conviviendo con el comportamiento anterior, donde todo eje estiraba a
-  0-10. **Disparador** para revisarlos: que el primer eje migre a escala
-  absoluta.
+- **Los valores por defecto de los pesos pueden dejar de ser buen punto de
+  partida.** `DEFAULT_WEIGHTS` se eligió conviviendo con el comportamiento
+  anterior, donde todo eje estiraba a 0-10. No es trabajo pendiente ni deuda:
+  los pesos son un control de la interfaz —`WeightSliders`— que el usuario
+  mueve viendo el efecto al momento, no un parámetro que alguien deba
+  recalibrar y consolidar. Lo que sí queda es un criterio para quien los
+  mueva: con escalas absolutas cada eje ya mueve lo que los candidatos
+  difieren en él, así que forzar influencia desde el peso reintroduce a mano
+  lo que esta decisión quita.
 - **Coste asumido: cada eje necesita su juicio.** No hay una regla mecánica
   que produzca los anclajes; hay que pensarlos y defenderlos uno a uno. A
   cambio, quedan escritos y discutibles, en vez de emerger de la lista de
@@ -119,29 +122,13 @@ eje, en su propia spec**. Este ADR fija el principio, no los números.
   absolutas hay algo más que explicar —de dónde sale cada anclaje— y también
   algo más que ganar: la escala es justo lo que hace la nota interpretable.
 
-## Addendum 2026-08-06 — los pesos no son trabajo pendiente
+## Historial
 
-La consecuencia sobre los pesos está mal planteada. Decía que quedan
-descalibrados y fijaba un **disparador** para revisarlos: que el primer eje
-migrara a escala absoluta. Redactado así, el disparador fabrica una deuda que
-no existe: `docs/roadmap.md` establece que un disparador que se cumple y no se
-atiende deja de ser aplazamiento y pasa a la tabla de deudas, y aquí no hay
-nada que atender.
-
-**Los pesos son un control de la interfaz, no una entrega del proyecto.**
-`WeightSliders` los expone como deslizadores: el propietario los mueve y ve el
-efecto al momento. `DEFAULT_WEIGHTS` es únicamente el punto de partida de una
-sesión, no un parámetro del modelo que alguien deba recalibrar y consolidar.
-
-Se acota, no se revoca:
-
-- **Se mantiene la observación**: los valores por defecto se eligieron
-  conviviendo con el comportamiento anterior, donde todo eje estiraba a 0-10,
-  así que puede que ya no sean el mejor punto de partida.
-- **Se retira el disparador.** Migrar el primer eje no obliga a nadie a nada.
-  Ajustar los pesos es una acción del usuario en la aplicación, no una tarea
-  de una fase ni una deuda registrable.
-- **Sigue en pie la razón de fondo** que motivaba el aviso: con escalas
-  absolutas cada eje mueve lo que los candidatos difieren en él, y forzar
-  influencia desde el peso reintroduciría a mano lo que esta decisión quita.
-  Eso es un criterio para quien mueva los deslizadores, no trabajo pendiente.
+- **2026-08-04** — ADR creado.
+- **2026-08-06** — Corregida la consecuencia sobre los pesos. Decía que
+  quedaban descalibrados y fijaba un **disparador** para revisarlos: que el
+  primer eje migrase a escala absoluta. Redactado así fabricaba una deuda
+  inexistente —`docs/roadmap.md` establece que un disparador que se cumple y
+  no se atiende pasa a la tabla de deudas— cuando no hay nada que atender: los
+  pesos son un control de la interfaz que el usuario mueve en vivo. Se retira
+  el disparador y se mantiene la observación sobre los valores por defecto.

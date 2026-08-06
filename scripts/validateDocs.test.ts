@@ -74,6 +74,10 @@ function validAdr(overrides: Partial<Record<string, string>> = {}): string {
     '',
     'Lo que implica.',
     '',
+    '## Historial',
+    '',
+    '- **2026-08-06** — ADR creado.',
+    '',
   ].join('\n');
 }
 
@@ -447,12 +451,13 @@ describe('15 — Nivel outside the three autonomy levels', () => {
 });
 
 describe('16 — a mandatory ADR section left empty', () => {
-  it('fires for each of the four', () => {
+  it('fires for each of the five', () => {
     const sections: Record<string, string> = {
       Contexto: 'El porqué.',
       Decisión: 'Lo decidido.',
       'Alternativas consideradas': 'Las otras opciones.',
       Consecuencias: 'Lo que implica.',
+      Historial: '- **2026-08-06** — ADR creado.',
     };
     for (const [title, prose] of Object.entries(sections)) {
       const emptied = validAdr().replace(prose, '');
@@ -463,7 +468,7 @@ describe('16 — a mandatory ADR section left empty', () => {
     }
   });
 
-  it('stays quiet when all four have prose', () => {
+  it('stays quiet when all five have prose', () => {
     expect(run(healthyRepo()).errors).toEqual([]);
   });
 });
