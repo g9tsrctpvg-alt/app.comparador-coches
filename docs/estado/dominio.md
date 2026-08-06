@@ -110,20 +110,23 @@ rango falla en vez de entrar al cálculo.
 | `coste` | `0,5×escala(precio) + 0,5×escala(uso mensual)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
 | `estetica` | `mix×nota_exterior + (1−mix)×nota_interior`, escala absoluta lineal | Cada valoración se traduce a nota antes de combinarse |
 | `viaje` | `0,6×escala(maletero) + 0,4×escala(batalla)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
-| `prestaciones` | `0,5×norm(CV/t) + 0,5×norm(aceleración invertida)` | Cada sumando se normaliza por separado antes de combinarse |
+| `prestaciones` | `0,5×escala(CV/t) + 0,5×escala(aceleración invertida)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
 | `fiabilidad` | `0,7×norm(OCU) + 0,3×norm(garantía)` | Cada sumando se normaliza por separado antes de combinarse |
 
-`diario`, `coste`, `estetica` y `viaje` son, de los seis, los cuatro ya
-migrados a escala absoluta — `product/0002`, `product/0003`, `product/0004`
-y `product/0005`—. Los dos restantes siguen con normalización relativa hasta
-que cada uno tenga su propia spec de migración.
+`diario`, `coste`, `estetica`, `viaje` y `prestaciones` son, de los seis,
+los cinco ya migrados a escala absoluta — `product/0002` a `product/0006`—.
+Solo `fiabilidad` sigue con normalización relativa, hasta que tenga su
+propia spec de migración.
 
-`prestaciones` y `fiabilidad` normalizan cada sumando antes de combinarlo
-porque así están escritas sus fórmulas vigentes (`0,x×norm(...) +
-0,y×norm(...)`); `diario`, `coste`, `estetica` y `viaje`, ya migrados,
-puntúan cada magnitud contra su propia escala absoluta antes de combinarla,
-por el mismo motivo de fondo — un peso solo significa lo que dice si se
-aplica sobre notas ya comparables.
+`fiabilidad` normaliza cada sumando antes de combinarlo porque así está
+escrita su fórmula vigente (`0,7×norm(...) + 0,3×norm(...)`); los cinco ejes
+ya migrados puntúan cada magnitud contra su propia escala absoluta antes de
+combinarla, por el mismo motivo de fondo — un peso solo significa lo que
+dice si se aplica sobre notas ya comparables. `prestaciones` llegaba a este
+cambio ya sano estructuralmente —normalizaba cada sumando por separado desde
+`product/0001`—, así que migrarlo fue sustituir `normalizeAll` por
+`scoreOnAbsoluteScale` en cada sumando sin tocar el 0,5/0,5, que ya regía
+sobre notas comparables.
 
 **`viaje` ya no es una valoración subjetiva.** Antes de `product/0005` era
 un 1-5 que el usuario daba sobre fotos de catálogo — el único de los seis
@@ -216,6 +219,25 @@ y vanos. La batalla es una magnitud floja entre los once candidatos del
 catálogo —recorre menos de su escala que el maletero—, y eso es
 comportamiento correcto según el ADR 0004: un eje en el que los candidatos
 apenas difieren debe influir poco, no fabricar diferencias.
+
+### Los anclajes de `prestaciones`
+
+| Magnitud | Nota 10 desde | Nota 0 hasta |
+| --- | --- | --- |
+| CV por tonelada | 145 | 75 |
+| Aceleración 0-100 | 6,5 s | 13,0 s |
+
+Los ceros están anclados en coches reales que van justos, no en un supuesto:
+el Fiat Panda 1.0 Hybrid GSE (71,4 CV/t) y el Dacia Sandero TCe 90 (13,4 s)
+son el suelo práctico del mercado — coches que funcionan, pero en los que
+incorporarse a una autovía cargado es un cálculo. Los dieces están donde el
+empuje deja de ser un tema: el Alfa Romeo Giulietta 1.4 MultiAir 170 CV
+(125,5 CV/t, 7,7 s) es la referencia de primera mano de «esto ya no se puede
+pedir», y el 10 se pone con margen por encima de él, en territorio de Golf
+GTI — 145 CV/t y 6,5 s —, para que un 10 signifique «esto ya no se puede
+pedir» y no «lo que ya tengo». El peso no entra dos veces: ya paga en
+`diario` por tamaño y en `coste` por consumo; aquí solo divide a los CV, que
+es justo lo que el eje mide.
 
 ## Supuestos globales
 
