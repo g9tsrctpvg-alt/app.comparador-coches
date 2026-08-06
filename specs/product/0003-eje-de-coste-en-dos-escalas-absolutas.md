@@ -1,7 +1,7 @@
 # 0003 — El eje de coste, en dos escalas absolutas
 
 - **Id:** product/0003
-- **Estado:** implemented
+- **Estado:** verified
 - **Tipo:** product
 - **Fecha:** 2026-08-04
 - **Specs relacionadas:** product/0001, product/0002
@@ -135,20 +135,20 @@ de ser coherente para un horizonte de doce.
 
 > Obligatorios y verificables.
 
-- [ ] Un coche de 25.000 € saca un 10 en precio, y uno de 20.000 € saca
+- [x] Un coche de 25.000 € saca un 10 en precio, y uno de 20.000 € saca
       también un 10.
-- [ ] Un coche de 47.000 € saca un 0 en precio, y uno de 60.000 € saca
+- [x] Un coche de 47.000 € saca un 0 en precio, y uno de 60.000 € saca
       también un 0.
-- [ ] Un coche con 100 €/mes de uso saca un 10 en uso, y uno con 250 €/mes
+- [x] Un coche con 100 €/mes de uso saca un 10 en uso, y uno con 250 €/mes
       saca un 0.
-- [ ] La nota del eje de un coche es la misma con once candidatos en el
+- [x] La nota del eje de un coche es la misma con once candidatos en el
       catálogo que con uno solo.
-- [ ] Dos coches con el mismo precio y distinto coste de uso obtienen notas
+- [x] Dos coches con el mismo precio y distinto coste de uso obtienen notas
       de eje distintas: el uso no queda difuminado por el precio.
-- [ ] `anios` no aparece en `GlobalAssumptions` ni en el panel de supuestos.
-- [ ] El desglose del eje muestra los cuatro anclajes y las dos notas
+- [x] `anios` no aparece en `GlobalAssumptions` ni en el panel de supuestos.
+- [x] El desglose del eje muestra los cuatro anclajes y las dos notas
       intermedias.
-- [ ] El desglose del eje ya no nombra qué modelo marca el mínimo ni el
+- [x] El desglose del eje ya no nombra qué modelo marca el mínimo ni el
       máximo.
 
 ## Dependencias y supuestos
