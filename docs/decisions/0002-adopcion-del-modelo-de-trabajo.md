@@ -23,7 +23,9 @@ fuera: se decide más adelante.
    de navegación— y el contrato se parte en satélites temáticos bajo
    `docs/proceso/`, uno por área: estructura documental, ciclo de spec,
    consolidación, ADRs, CI y guardarraíles, trazabilidad, estilo, logging,
-   enrutado de modelos y anti-patrones.
+   enrutado de modelos, calibración de escalas y anti-patrones. La lista
+   crece cuando aparece un área de proceso nueva; lo que no cambia es la
+   regla de un satélite por área.
 2. **`docs/` se separa en `docs/proceso/` y `docs/estado/`.** Los primeros
    describen cómo se trabaja; los segundos, qué hay construido, y solo se
    editan al consolidar una spec.
@@ -97,3 +99,6 @@ fuera: se decide más adelante.
   una y añadiendo el test que a la versión en Python le faltaba; la CI ya no
   arranca Python en ningún *job*. La decisión de fondo no cambia, solo la
   herramienta.
+- **2026-08-06** — Añadido `calibracion-de-escalas.md` a la lista de
+  satélites de la decisión 1. La lista era exhaustiva y se había quedado
+  corta; la regla de un satélite por área no cambia.

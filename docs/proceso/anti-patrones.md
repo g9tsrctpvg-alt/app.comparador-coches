@@ -23,6 +23,17 @@
    ahorra y añade riesgo de integración.
 10. **Loguear objetos en vez de campos de allow-list.** La disciplina de
     redacción no puede depender de la memoria.
+11. **Fijar en un test los números de salida del catálogo.** Se rompe con cada
+    edición legítima y degenera en actualizar los números dorados. Se prueban
+    propiedades, no resultados.
+12. **Escribir un test que afirme lo que el código dice dos líneas más
+    arriba.** No detecta un fallo, detecta una edición.
+13. **Calibrar un eje contra los propios candidatos.** La nota pasa a decir en
+    qué puesto va, no si el candidato es bueno, y deja de ser comparable con
+    la de los demás ejes.
+14. **Sobrescribir un dato del catálogo al corregirlo.** El valor anterior se
+    conserva como fuente descartada con su motivo; si no, no se distingue una
+    corrección de un cambio de opinión.
 
 ## Cómo usar esta lista
 
@@ -38,3 +49,5 @@ correspondiente:
 | 8 | `ci-y-guardarrailes.md` |
 | 9 | `enrutado-de-modelos.md` |
 | 10 | `logging.md` |
+| 11, 12 | `ci-y-guardarrailes.md` |
+| 13, 14 | `calibracion-de-escalas.md` |

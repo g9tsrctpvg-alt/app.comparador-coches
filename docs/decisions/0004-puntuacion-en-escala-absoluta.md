@@ -48,6 +48,19 @@ en él**.
 Cada eje se puntúa contra una **escala absoluta propia**, fijada por juicio
 explícito y estable, no derivada del conjunto de candidatos.
 
+**La invariante que esto sirve:** dos ejes con el mismo peso, para la misma
+nota, aportan los mismos puntos. La aritmética ya lo garantiza —`contribución
+= nota × peso`—, pero solo significa algo si **la misma nota quiere decir lo
+mismo en todos los ejes**. Un 5 en coste y un 5 en uso diario tienen que ser
+comparables como juicios, no solo como números; si no, el modelo es
+aritméticamente justo y semánticamente falso.
+
+De ahí el requisito operativo: **todo eje se ancla contra algo externo al
+conjunto de candidatos**. Un eje anclado en «el mejor y el peor de los once»
+no puede cumplirla, porque su 5 significa «mitad de tabla» mientras el de al
+lado significa «mitad de lo aceptable». Sumar ejes así es sumar magnitudes
+distintas con una tabla de conversión que nadie ha escrito.
+
 Una escala declara dos anclajes: el valor a partir del cual la cosa deja de
 mejorar (nota 10) y el valor a partir del cual es inaceptable (nota 0). Entre
 ambos la nota interpola; fuera de ambos satura. Los anclajes se eligen contra
@@ -125,6 +138,12 @@ eje, en su propia spec**. Este ADR fija el principio, no los números.
 ## Historial
 
 - **2026-08-04** — ADR creado.
+- **2026-08-06** — Añadida a la decisión la invariante que la motiva —misma
+  nota y mismo peso, mismos puntos; luego la misma nota debe significar lo
+  mismo en todos los ejes—. Estaba implícita en todo el razonamiento y no
+  escrita en ninguna parte, pese a ser lo que obliga a anclar contra algo
+  externo al conjunto. El método para hacerlo vive en
+  `docs/proceso/calibracion-de-escalas.md`.
 - **2026-08-06** — Corregida la consecuencia sobre los pesos. Decía que
   quedaban descalibrados y fijaba un **disparador** para revisarlos: que el
   primer eje migrase a escala absoluta. Redactado así fabricaba una deuda

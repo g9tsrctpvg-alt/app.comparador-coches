@@ -110,6 +110,7 @@ documentación es TypeScript bajo Vitest y la CI corre sobre un único
 | Gate humano: aprobar el ADR y las seis specs de eje | Hecha — 2026-08-05, en commit propio sin implementación |
 | Actualizar el catálogo con lo que las specs exigen | Hecha — batalla, garantía, índice OCU y versión del CR-V |
 | Implementar, verificar y consolidar los seis ejes | Pendiente |
+| Consolidar en `docs/estado/dominio.md` los doce anclajes **con su razonamiento** y la curva en S | Pendiente — hoy solo viven en specs, que se congelan |
 
 Los siete artefactos pasaron el gate humano el 2026-08-05. Acto seguido se
 actualizó el catálogo con lo que dos de ellos necesitaban para poder
@@ -179,6 +180,10 @@ que no acabe archivado en la fase que resulte estar abierta.
 | Cambiar la regla de corrección en `docs/proceso/adrs.md` | Hecha |
 | Añadir `Historial` a `docs/decisions/TEMPLATE.md` y exigirlo en el validador | Hecha — condición de error 16, ahora cinco secciones |
 | Convertir los cuatro addenda vigentes al nuevo formato | Hecha — 0001, 0002, 0003 y 0004 |
+| Escribir el método de calibración de escalas | Hecha — `docs/proceso/calibracion-de-escalas.md` |
+| Registrar la invariante entre ejes en el ADR 0004 | Hecha |
+| Registrar los dos tests que no se escriben, y cuatro anti-patrones nuevos | Hecha — `ci-y-guardarrailes.md` §8, anti-patrones 11-14 |
+| Exigir que la consolidación se lleve el porqué, no solo el qué | Hecha — `consolidacion.md` §1 |
 
 ## Deudas abiertas
 
