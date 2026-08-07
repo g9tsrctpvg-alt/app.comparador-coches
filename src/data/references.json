@@ -71,14 +71,19 @@
         "shows": "Alfa Romeo Giulietta, blanco"
       },
       "side": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Alfa_Romeo_Giulietta_rear_20100718.jpg/1280px-Alfa_Romeo_Giulietta_rear_20100718.jpg",
-        "credit": "Wikimedia Commons — M 93 (CC BY)",
-        "shows": "Alfa Romeo Giulietta, blanco"
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/2011_Alfa_Romeo_Giulietta_2.0_JTDm.JPG/1280px-2011_Alfa_Romeo_Giulietta_2.0_JTDm.JPG",
+        "credit": "Wikimedia Commons — Corvettec6r (CC0)",
+        "shows": "Alfa Romeo Giulietta, negro, de perfil estricto"
       },
       "rear": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/2011_Alfa_Romeo_Giulietta_%28940%29_QV_hatchback_%282015-07-24%29_02.jpg/1280px-2011_Alfa_Romeo_Giulietta_%28940%29_QV_hatchback_%282015-07-24%29_02.jpg",
         "credit": "Wikimedia Commons — OSX (dominio público)",
         "shows": "Alfa Romeo Giulietta QV, gris plata — color distinto al de las otras dos fotos"
+      },
+      "interior": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Alfa_Romeo_Giulietta_interior.jpg/1280px-Alfa_Romeo_Giulietta_interior.jpg",
+        "credit": "Wikimedia Commons — David Villarreal Fernández (CC BY-SA 2.0)",
+        "shows": "Alfa Romeo Giulietta, habitáculo en negro"
       }
     }
   }

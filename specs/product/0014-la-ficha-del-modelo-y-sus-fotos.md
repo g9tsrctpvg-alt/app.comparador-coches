@@ -403,15 +403,25 @@ Una tabla de doce columnas en 320px de ancho no cabe de ninguna manera.
       catálogo con fotos.
 - [x] Los once candidatos y la Giulietta tienen las cinco vistas, o las que
       falten quedan registradas como deuda con su modelo y su vista.
-      **37 de las 60 fotos posibles están cargadas** —de Wikimedia Commons,
+      **47 de las 60 fotos posibles están cargadas** —de Wikimedia Commons,
       con `credit` y `shows` verificados contra el acabado real cuando la
       nota del catálogo lo exige (CR-V AWD, no la 4x2; NX 350h, no el
-      300h)—; solo `toyota-corolla-cross` tiene las cinco. De las 23 vistas
-      que faltan, 11 son de maletero (todos los modelos salvo el Corolla
-      Cross), 8 de interior, 3 de lateral y 1 de trasera. Quedan registradas
-      como deuda en `docs/roadmap.md`, con su modelo y su vista.
+      300h)—; `toyota-corolla-cross` y `mazda-cx-5` tienen las cinco, y el
+      **interior está completo en los doce**. De las 13 vistas que faltan,
+      10 son de maletero y 3 de lateral. Quedan registradas como deuda en
+      `docs/roadmap.md`, con su modelo y su vista.
+      > **Segunda tanda, 2026-08-07.** Sumó diez fotos —los ocho interiores
+      > que faltaban, el maletero del CX-5 y la trasera del CR-V— y corrigió
+      > **dos errores de la primera**: los huecos `side` del CX-5 y de la
+      > Giulietta llevaban fotos de tres cuartos **trasero** —ficheros
+      > llamados `…rear…`—, de modo que la ficha enseñaba dos traseras y
+      > ningún perfil en esos dos coches. Ambos se han sustituido por
+      > perfiles estrictos. Se descartaron candidatas que no cumplían el
+      > encuadre en vez de colarlas: el «lateral» del Lexus NX resultó ser
+      > otro tres cuartos trasero al mirarlo a tamaño completo, y los
+      > laterales del Kona Eléctrico y del Civic no aparecieron.
 - [x] `npm run check:photos` responde 2xx en todas las URLs declaradas el día
-      de la verificación. **37/37 en verde** el 2026-08-06.
+      de la verificación. **47/47 en verde** el 2026-08-07.
 - [ ] La vista nueva existe en `#/ficha-completa`, está en el conmutador y
       recargar esa dirección la abre (no da 404 bajo el subpath de Pages).
       Lo primero, hecho y probado; lo segundo exige el despliegue real, igual
