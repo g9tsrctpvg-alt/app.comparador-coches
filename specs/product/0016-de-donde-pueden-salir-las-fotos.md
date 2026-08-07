@@ -186,13 +186,15 @@ señaladamente el maletero.
       criterio de aceptación que contaba las 47 fotos.
 - [x] La skill `add-model` describe el orden de preferencia del requisito 1 y
       ya no presenta Commons como única vía (revisión del texto).
-- [ ] Ninguna foto del catálogo declara en `credit` una licencia que su fuente
-      no publique (revisión de las entradas nuevas que se añadan bajo esta
-      spec). **Sin entradas nuevas todavía**: las 47 de hoy son de Commons y
-      declaran la licencia que Commons publica. Se verificará con la primera
-      tanda que use un origen nuevo.
-- [x] `npm run check:photos` sigue en verde sobre el catálogo entero: 47/47 el
-      2026-08-07.
+- [x] Ninguna foto del catálogo declara en `credit` una licencia que su fuente
+      no publique. Las dos primeras entradas bajo esta spec —lateral y
+      maletero del Kona Eléctrico, de Hyundai Newsroom— acreditan
+      `"Hyundai Newsroom Europa (medio oficial de Hyundai)"`, **sin licencia**,
+      porque la fuente no publica ninguna con nombre (requisito 2).
+- [x] `npm run check:photos` sigue en verde sobre el catálogo entero: 49/49 el
+      2026-08-07, incluidas las dos servidas por Hyundai. Se comprobó además
+      que **cargan sin cabecera `Referer`**, que era el riesgo que anticipa el
+      requisito 4.1.
 - [x] La CI entera pasa en local.
 
 ## Dependencias y supuestos
