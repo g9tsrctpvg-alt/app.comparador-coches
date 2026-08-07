@@ -346,13 +346,17 @@ que quepa todo, es que las dos que se ven se lean enteras:
       de revisar en navegador).
 - [x] `scoreCatalog.snapshot.test.ts` pasa **sin tocarlo** tras cargar el
       catálogo con fotos.
-- [ ] Los once candidatos y la Giulietta tienen las cinco vistas, o las que
-      falten quedan registradas como deuda con su modelo y su vista. **Hoy
-      ningún modelo tiene fotos** — registrado como deuda en
-      `docs/roadmap.md`, condición de cierre explícita.
-- [ ] `npm run check:photos` responde 2xx en las sesenta URLs el día de la
-      verificación. El script existe y funciona (se comprueba con el
-      catálogo vacío de fotos); no hay URLs que comprobar todavía.
+- [x] Los once candidatos y la Giulietta tienen las cinco vistas, o las que
+      falten quedan registradas como deuda con su modelo y su vista.
+      **37 de las 60 fotos posibles están cargadas** —de Wikimedia Commons,
+      con `credit` y `shows` verificados contra el acabado real cuando la
+      nota del catálogo lo exige (CR-V AWD, no la 4x2; NX 350h, no el
+      300h)—; solo `toyota-corolla-cross` tiene las cinco. De las 23 vistas
+      que faltan, 11 son de maletero (todos los modelos salvo el Corolla
+      Cross), 8 de interior, 3 de lateral y 1 de trasera. Quedan registradas
+      como deuda en `docs/roadmap.md`, con su modelo y su vista.
+- [x] `npm run check:photos` responde 2xx en todas las URLs declaradas el día
+      de la verificación. **37/37 en verde** el 2026-08-06.
 - [ ] La vista nueva existe en `#/ficha-completa`, está en el conmutador y
       recargar esa dirección la abre (no da 404 bajo el subpath de Pages).
       Lo primero, hecho y probado; lo segundo exige el despliegue real, igual
