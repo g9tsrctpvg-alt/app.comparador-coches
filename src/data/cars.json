@@ -1824,10 +1824,12 @@
     "name": "NX 350h",
     "brand": "Lexus",
     "technology": "HEV",
+    "published": false,
     "notes": [
       "Solo disponible como seminuevo, y aun así ~51.900 €: por encima del presupuesto.",
       "Los NX de ~29.990 € son la primera generación (NX 300h), otro coche distinto.",
-      "La garantía de 10 años exige mantenimiento en red oficial; sin él, baja a 3."
+      "La garantía de 10 años exige mantenimiento en red oficial; sin él, baja a 3.",
+      "Despublicado el 2026-08-07: fuera de presupuesto/rango."
     ],
     "lengthMm": {
       "value": 4660,
