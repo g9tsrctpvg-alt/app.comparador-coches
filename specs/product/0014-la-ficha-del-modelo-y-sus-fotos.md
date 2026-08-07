@@ -403,15 +403,15 @@ Una tabla de doce columnas en 320px de ancho no cabe de ninguna manera.
       catálogo con fotos.
 - [x] Los once candidatos y la Giulietta tienen las cinco vistas, o las que
       falten quedan registradas como deuda con su modelo y su vista.
-      **47 de las 60 fotos posibles están cargadas**, todas de Wikimedia
-      Commons —la única fuente que se usó al implementar; `product/0016` abre
-      después otros tres orígenes—, con `credit` y `shows` verificados contra
-      el acabado real cuando la nota del catálogo lo exige (CR-V AWD, no la
-      4x2; NX 350h, no el 300h). `toyota-corolla-cross` y `mazda-cx-5` tienen
-      las cinco, y el
-      **interior está completo en los doce**. De las 13 vistas que faltan,
-      10 son de maletero y 3 de lateral. Quedan registradas como deuda en
-      `docs/roadmap.md`, con su modelo y su vista.
+      **49 de las 60 fotos posibles están cargadas**: 47 de Wikimedia Commons
+      —la única fuente que se usó al implementar— y 2 de Hyundai Newsroom, ya
+      bajo `product/0016`. Todas con `credit` y `shows` verificados contra el
+      acabado real cuando la nota del catálogo lo exige (CR-V AWD, no la 4x2;
+      NX 350h, no el 300h). `toyota-corolla-cross`, `mazda-cx-5` y
+      `hyundai-kona-electrico` tienen las cinco, y el **interior está completo
+      en los doce**. De las 11 vistas que faltan, 9 son de maletero y 2 de
+      lateral. Quedan registradas como deuda en `docs/roadmap.md`, con su
+      modelo y su vista.
       > **Segunda tanda, 2026-08-07.** Sumó diez fotos —los ocho interiores
       > que faltaban, el maletero del CX-5 y la trasera del CR-V— y corrigió
       > **dos errores de la primera**: los huecos `side` del CX-5 y de la
@@ -423,7 +423,7 @@ Una tabla de doce columnas en 320px de ancho no cabe de ninguna manera.
       > otro tres cuartos trasero al mirarlo a tamaño completo, y los
       > laterales del Kona Eléctrico y del Civic no aparecieron.
 - [x] `npm run check:photos` responde 2xx en todas las URLs declaradas el día
-      de la verificación. **47/47 en verde** el 2026-08-07.
+      de la verificación. **49/49 en verde** el 2026-08-07.
 - [ ] La vista nueva existe en `#/ficha-completa`, está en el conmutador y
       recargar esa dirección la abre (no da 404 bajo el subpath de Pages).
       Lo primero, hecho y probado; lo segundo exige el despliegue real, igual
