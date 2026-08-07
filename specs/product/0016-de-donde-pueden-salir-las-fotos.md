@@ -1,7 +1,7 @@
 # 0016 — De dónde pueden salir las fotos
 
 - **Id:** product/0016
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-08-07
 - **Specs relacionadas:** product/0014
