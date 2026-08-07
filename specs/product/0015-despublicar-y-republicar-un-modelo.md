@@ -1,7 +1,7 @@
 # 0015 — Despublicar y republicar un modelo
 
 - **Id:** product/0015
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-08-07
 - **Specs relacionadas:** product/0001, product/0014
