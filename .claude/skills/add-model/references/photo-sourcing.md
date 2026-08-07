@@ -1,10 +1,42 @@
 # Buscar y verificar las 5 fotos de un modelo
 
 Este es el flujo que de verdad funcionó al rellenar las fotos de los doce
-modelos de `product/0014` — no una descripción teórica. Se apoya en la API
-pública de Wikimedia Commons porque aloja fotografía verificable, con
-autoría y licencia claras, y con licencias que permiten enlazar sin copiar
-el archivo al repositorio (`product/0014`, decisión: enlazar, no copiar).
+modelos de `product/0014` — no una descripción teórica.
+
+## De dónde puede salir una foto
+
+Lo fija `product/0016`, y son **cuatro orígenes en orden de preferencia**:
+
+1. **La sala de prensa del fabricante** (Kia Press, Hyundai Newsroom,
+   Stellantis Media, BMW PressClub, Honda Press, Toyota/Lexus Media…). Son
+   imágenes publicadas para que se reproduzcan al hablar del coche, y las
+   que con más seguridad enseñan la versión correcta.
+2. **Wikimedia Commons** y repositorios de licencia libre equivalentes. La
+   opción más limpia cuando tiene la vista que hace falta, y la única con
+   API cómoda — por eso el resto de esta guía la usa como ejemplo.
+3. **El configurador o la web comercial del fabricante**, si la sala de
+   prensa no llega.
+4. **Importadores nacionales y concesionarios oficiales.** Los últimos, pero
+   **son los que fotografían stock real y por tanto casi los únicos que
+   enseñan el maletero abierto**. Si buscas maletero, ve aquí pronto: en
+   Commons prácticamente no existe esa vista.
+
+Fuera quedan, y no es negociable sin decisión humana escrita: agencias y
+bancos de imágenes (Getty, Shutterstock), prensa con marca de agua, y fotos
+de particulares en foros, redes o anuncios de compraventa.
+
+**Enlazar, nunca copiar.** El repositorio no aloja ninguna imagen. Es la
+distinción sobre la que se sostiene todo lo anterior.
+
+## Qué se escribe en `credit`
+
+- Con licencia con nombre: `"Wikimedia Commons — <Autor> (<Licencia>)"`.
+- Sin licencia con nombre —el caso normal fuera de Commons—: el titular y el
+  medio, `"Kia Press (medio oficial de Kia)"`. Si es un concesionario,
+  **nómbralo**, no pongas «un concesionario».
+- **Nunca inventes una licencia.** Escribir «CC BY» donde la fuente no
+  declara nada es peor que no escribir licencia, porque le da a quien lo lea
+  después una seguridad que no existe.
 
 ## Las cinco vistas y su encuadre
 
@@ -13,14 +45,28 @@ el archivo al repositorio (`product/0014`, decisión: enlazar, no copiar).
 | Frontal | `front` | Recto, coche centrado, ruedas rectas. Un 3/4 no vale. |
 | Lateral | `side` | Lo más cercano a 90º que encuentres. Si tras buscar en serio no aparece un perfil estricto, vale una foto "casi perfil" —coche entero visible, poco escorzo— pero nunca un 3/4 claro etiquetado como si fuera lateral. |
 | Trasera | `rear` | Con el portón/maletero **cerrado**. |
-| Maletero | `trunk` | Portón **abierto**, maletero **vacío**, asientos traseros **sin abatir**. Es la vista más difícil de encontrar: la mayoría de fotografía de aficionado no la incluye. |
+| Maletero | `trunk` | Portón **abierto**, maletero **vacío**, asientos traseros **sin abatir**. Es la vista más difícil de encontrar: la mayoría de fotografía de aficionado no la incluye. Empieza por concesionarios (origen 4). |
 | Interior | `interior` | Vista general del habitáculo delantero —salpicadero, volante, consola—, no un detalle de una sola pieza. |
 
 Una vista que no se encuentra con confianza razonable se deja **vacía**, no
 se rellena con lo más parecido que haya. El esquema (`PhotoSchema`,
 `src/domain/photo.ts`) no exige mínimo de vistas por coche.
 
+**La versión manda... salvo en maletero e interior.** La regla general es que
+la foto sea del modelo y la motorización que puntúa la ficha. `product/0016`
+abre una excepción **solo en esas dos vistas**: vale otro acabado o
+motorización del mismo modelo y generación, siempre que **`shows` lo diga** y
+que el acabado no cambie lo que se ve (si la tapicería es de otro material, o
+el maletero lleva doble fondo distinto, no vale). En frontal, lateral y
+trasera no hay excepción: ahí las llantas y los faldones cambian justo lo que
+esta aplicación existe para comparar.
+
 ## Buscar en Wikimedia Commons
+
+Lo que sigue es específico de Commons, que es el origen 2 y el único con API
+pública cómoda. Para los orígenes 1, 3 y 4 no hay API: se busca en la web del
+medio y se coge la URL de la imagen a tamaño grande, con las mismas reglas de
+verificación —**mirarla** y comprobar la versión— y el `credit` de arriba.
 
 La API es `https://commons.wikimedia.org/w/api.php`. Dos formas de buscar,
 según lo que sepas del coche:
@@ -116,3 +162,16 @@ que todas responden 2xx — no solo las nuevas, el script comprueba el
 catálogo entero. Una URL que devuelve 404 o 403 en la verificación final no
 se deja "para luego": o se sustituye por otra candidata, o la vista se
 deja vacía.
+
+Fuera de Commons esto se vuelve más importante, no menos:
+
+- **Quita los parámetros de seguimiento** (`?utm_...` y equivalentes) de la
+  URL antes de guardarla.
+- **Un 403 suele ser bloqueo por `Referer`**, no un enlace roto: la
+  aplicación pide las miniaturas con `referrerpolicy="no-referrer"` y hay
+  medios que lo rechazan. Si pasa, **descarta esa foto y busca otra**; no se
+  toca la política de *referrer* de toda la aplicación por una imagen
+  (`product/0016`, requisito 4.1).
+- **Los enlaces de configuradores y concesionarios caducan** mucho antes que
+  los de Commons. Son los primeros que hay que sospechar cuando
+  `check:photos` se ponga rojo sin que nadie haya tocado el catálogo.
