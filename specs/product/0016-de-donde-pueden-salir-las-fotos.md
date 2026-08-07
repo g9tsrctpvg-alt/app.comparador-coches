@@ -1,12 +1,18 @@
 # 0016 — De dónde pueden salir las fotos
 
 - **Id:** product/0016
-- **Estado:** approved
+- **Estado:** implemented
 - **Tipo:** product
 - **Fecha:** 2026-08-07
 - **Specs relacionadas:** product/0014
 - **ADRs relacionados:** 0003
 - **Doc de estado:** `docs/estado/interfaz.md`
+
+> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
+> implementado: su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy no es cierta. **No es referencia del estado actual** — para
+> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
+> **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -174,15 +180,20 @@ señaladamente el maletero.
 
 > Obligatorios y verificables.
 
-- [ ] `product/0014` queda enmendada donde decía o daba a entender que la
-      fuente era Commons, con referencia a esta spec.
-- [ ] La skill `add-model` describe el orden de preferencia del requisito 1 y
+- [x] `product/0014` queda enmendada donde decía o daba a entender que la
+      fuente era Commons, con referencia a esta spec: el supuesto de uso
+      personal, el de comprobar la versión —ahora con su excepción— y el
+      criterio de aceptación que contaba las 47 fotos.
+- [x] La skill `add-model` describe el orden de preferencia del requisito 1 y
       ya no presenta Commons como única vía (revisión del texto).
 - [ ] Ninguna foto del catálogo declara en `credit` una licencia que su fuente
       no publique (revisión de las entradas nuevas que se añadan bajo esta
-      spec).
-- [ ] `npm run check:photos` sigue en verde sobre el catálogo entero.
-- [ ] La CI entera pasa en local.
+      spec). **Sin entradas nuevas todavía**: las 47 de hoy son de Commons y
+      declaran la licencia que Commons publica. Se verificará con la primera
+      tanda que use un origen nuevo.
+- [x] `npm run check:photos` sigue en verde sobre el catálogo entero: 47/47 el
+      2026-08-07.
+- [x] La CI entera pasa en local.
 
 ## Dependencias y supuestos
 

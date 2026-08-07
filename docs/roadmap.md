@@ -253,7 +253,10 @@ fase abierta. Se lista para no perderlo, no para bloquear nada.
   se cerraron el 2026-08-07: **sí entran** importadores y concesionarios
   oficiales —los últimos, y con el crédito nombrando a cuál—, y **sí vale**
   una unidad de otro acabado o motorización **solo en maletero e interior**,
-  declarándolo en `shows`. Pendiente del gate humano.
+  declarándolo en `shows`. Recorrió `draft → approved → implemented` el
+  2026-08-07: enmendó `product/0014` y reescribió la guía de fotos de la skill
+  `add-model`. **Queda usarla**: los diez maleteros que faltan siguen ahí, y
+  cerrarlos es ya trabajo de datos, no de proceso.
 - **Eje de autonomía y repostaje.** Es la mayor diferencia práctica entre los
   once candidatos en un viaje largo —los térmicos e híbridos hacen 640-950 km
   con un depósito, los eléctricos la mitad en autopista— y el modelo es hoy

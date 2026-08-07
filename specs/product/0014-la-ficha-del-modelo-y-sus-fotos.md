@@ -5,7 +5,7 @@
 - **Tipo:** product
 - **Fecha:** 2026-08-06
 - **Specs relacionadas:** product/0001, product/0009, product/0010,
-  product/0011, product/0012, product/0013, technical/0004
+  product/0011, product/0012, product/0013, product/0016, technical/0004
 - **ADRs relacionados:** 0003, 0006
 - **Doc de estado:** `docs/estado/dominio.md`, `docs/estado/interfaz.md`
 
@@ -403,10 +403,12 @@ Una tabla de doce columnas en 320px de ancho no cabe de ninguna manera.
       catálogo con fotos.
 - [x] Los once candidatos y la Giulietta tienen las cinco vistas, o las que
       falten quedan registradas como deuda con su modelo y su vista.
-      **47 de las 60 fotos posibles están cargadas** —de Wikimedia Commons,
-      con `credit` y `shows` verificados contra el acabado real cuando la
-      nota del catálogo lo exige (CR-V AWD, no la 4x2; NX 350h, no el
-      300h)—; `toyota-corolla-cross` y `mazda-cx-5` tienen las cinco, y el
+      **47 de las 60 fotos posibles están cargadas**, todas de Wikimedia
+      Commons —la única fuente que se usó al implementar; `product/0016` abre
+      después otros tres orígenes—, con `credit` y `shows` verificados contra
+      el acabado real cuando la nota del catálogo lo exige (CR-V AWD, no la
+      4x2; NX 350h, no el 300h). `toyota-corolla-cross` y `mazda-cx-5` tienen
+      las cinco, y el
       **interior está completo en los doce**. De las 13 vistas que faltan,
       10 son de maletero y 3 de lateral. Quedan registradas como deuda en
       `docs/roadmap.md`, con su modelo y su vista.
@@ -486,8 +488,21 @@ Una tabla de doce columnas en 320px de ancho no cabe de ninguna manera.
 - **Uso personal y sin ánimo de lucro**, sin publicidad ni monetización: es lo
   que hace aceptable enseñar fotografía de prensa ajena. Se prefiere el medio
   oficial del fabricante como origen, y `credit` lo deja escrito en cada foto.
+  > **`product/0016` desarrolla este supuesto (2026-08-07).** Aquí quedó en
+  > una preferencia sin lista ni reglas, y al implementar se acabó usando
+  > **solo Wikimedia Commons** —una limitación que nunca estuvo en esta spec y
+  > que dejó diez maleteros sin cubrir—. `product/0016` declara los cuatro
+  > orígenes aceptables y qué escribir en `credit` cuando la fuente no publica
+  > licencia con nombre. También deja escrito lo que aquí se daba por
+  > supuesto sin decirlo: la aplicación está **desplegada en abierto**, no es
+  > privada; lo que sostiene el planteamiento es que no se monetiza, se
+  > atribuye y se enlaza en vez de copiar.
 - **Quien recopila las URLs comprueba la versión**: la foto tiene que
   corresponder al modelo que el catálogo puntúa, y `shows` lo declara.
+  `product/0016` abre a esto una **excepción acotada en maletero e interior**
+  —vale otro acabado o motorización del mismo modelo, declarándolo en `shows`
+  y solo si no cambia lo que se ve—. En frontal, lateral y trasera sigue
+  entero, porque ahí sí cambia lo que se compara.
 - **GitHub Pages sirve sin cabeceras propias** (ADR 0003): no hay `CSP` que
   restrinja `img-src`, así que un dominio externo carga sin configurar nada.
   El reverso es que tampoco hay dónde restringirlo si algún día se quisiera.
