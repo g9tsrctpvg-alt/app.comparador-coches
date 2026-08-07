@@ -245,22 +245,38 @@
   content: '✓';
 }
 
+/* El botón es solo el envoltorio accionable (requisito 8.4): no impone la
+ * relación de aspecto ni la altura de la foto. Lo hacía —`aspect-ratio` aquí
+ * y `height: 100%` en la imagen— y en WebKit la miniatura salía en blanco: un
+ * `<button>` nativo lleva `appearance: push-button` y maqueta su contenido en
+ * una caja anónima propia, contra la que ese porcentaje puede resolverse a
+ * cero. La caja se pintaba del tamaño correcto y la imagen de dentro medía
+ * nada, sin disparar `onError` —no había fallo de carga que reportar—, y la
+ * misma URL se veía perfecta en el diálogo, que nunca dependió de esto.
+ * Ahora la relación de aspecto vive en la propia `img` (ver `.photo`), que es
+ * una caja normal en todos los motores, y el botón se limita a ceñirse a
+ * ella. `appearance: none` remata la neutralización. */
 .photoButton {
+  appearance: none;
   display: block;
   width: 100%;
   padding: 0;
   border: 0;
   background: var(--color-card);
   cursor: pointer;
-  aspect-ratio: 4 / 3;
   overflow: hidden;
   border-radius: var(--radius-sm);
   margin-bottom: var(--space-2);
 }
 
+/* La imagen lleva su propia relación de aspecto, no la hereda del botón: así
+ * su altura no depende de resolver un porcentaje contra la caja de un
+ * elemento de formulario. El hueco sigue midiendo lo mismo con foto y sin
+ * ella (requisito 4.4) porque `.photoPlaceholder` declara la misma. */
 .photo {
+  display: block;
   width: 100%;
-  height: 100%;
+  aspect-ratio: 4 / 3;
   object-fit: contain;
 }
 

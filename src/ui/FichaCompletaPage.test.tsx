@@ -3,6 +3,16 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { FichaCompletaPage, TOTAL_FIELD_COUNT } from './FichaCompletaPage';
 import { threeCarFixture } from '../domain/scoring/testFixtures';
 import type { Reference } from '../domain/reference';
+import fichaCompletaCss from './FichaCompletaPage.module.css?raw';
+
+/** El cuerpo de una regla CSS por su selector, para afirmar sobre ella. */
+function ruleBody(css: string, selector: string): string {
+  const match = new RegExp(`^\\.${selector}\\s*\\{([^}]*)\\}`, 'm').exec(css);
+  if (match?.[1] === undefined) {
+    throw new Error(`No se encontró la regla .${selector}`);
+  }
+  return match[1];
+}
 
 function referenceFixture(overrides: Partial<Reference> = {}): Reference {
   return {
@@ -202,14 +212,14 @@ describe('FichaCompletaPage', () => {
       />,
     );
     expect(markup).toContain('alt="Giulietta, vista lateral"');
-    // Sin `loading="lazy"` (product/0014, corrección de 2026-08-07): con un
-    // único `photoView` activo a la vez hay como mucho una docena de `<img>`
-    // en el DOM, no las «sesenta peticiones» que motivaron el diferido
-    // original, y perezosa dentro de una tabla con columnas fijas por
-    // `position: sticky` nunca llegaba a disparar la carga en algunos
-    // navegadores: la miniatura se quedaba en blanco aunque la foto ampliada
-    // —sin `loading="lazy"`— sí cargaba al pulsarla.
+    // Ni `loading="lazy"` ni `decoding="async"` (product/0014, corrección de
+    // 2026-08-07): con un único `photoView` activo a la vez hay como mucho
+    // una docena de `<img>` en el DOM, así que ninguno de los dos compra
+    // nada, y son los dos atributos que la miniatura —que salía en blanco en
+    // iOS Safari— llevaba y la foto ampliada del diálogo —que siempre se vio
+    // bien, con la misma URL— no.
     expect(markup).not.toContain('loading=');
+    expect(markup).not.toContain('decoding=');
   });
 
   it('shows a labelled placeholder, no <img>, for a candidate with no photo of the selected view', () => {
@@ -256,6 +266,27 @@ describe('FichaCompletaPage', () => {
         `aria-label="Comparar contra ${threeCarFixture[0]?.name}"[^>]*checked=""`,
       ),
     );
+  });
+
+  // Regresión de la corrección del 2026-08-07: la miniatura salía en blanco en
+  // iOS Safari porque tomaba su altura del `<button>` que la envuelve, con
+  // `height: 100%` contra una `aspect-ratio` declarada en el botón. Un
+  // `<button>` nativo maqueta su contenido en una caja anónima propia y ese
+  // porcentaje puede resolverse a cero. Estas dos afirmaciones fijan la forma
+  // que quita la dependencia; sin ellas el fallo vuelve sin que nada se ponga
+  // rojo, porque no se puede reproducir sin un WebKit delante.
+  describe('the photo box does not take its height from the button', () => {
+    it('declares the aspect ratio on the image itself, with no percentage height', () => {
+      const photo = ruleBody(fichaCompletaCss, 'photo');
+      expect(photo).toMatch(/aspect-ratio:\s*4\s*\/\s*3/);
+      expect(photo).not.toMatch(/height:\s*100%/);
+    });
+
+    it('keeps the button as a neutral wrapper, with no aspect ratio of its own', () => {
+      const button = ruleBody(fichaCompletaCss, 'photoButton');
+      expect(button).toMatch(/appearance:\s*none/);
+      expect(button).not.toMatch(/aspect-ratio/);
+    });
   });
 
   it('renders the closed photo dialog with no figure until a photo is opened', () => {
