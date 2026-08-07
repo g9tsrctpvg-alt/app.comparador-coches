@@ -43,6 +43,7 @@ function buildCar(input: FixtureInput): Car {
     brand: input.brand,
     technology: input.technology,
     notes: [],
+    published: true,
     lengthMm: sourced(input.lengthMm, 'mm'),
     widthMm: sourced(input.widthMm, 'mm'),
     heightMm: sourced(1600, 'mm'),

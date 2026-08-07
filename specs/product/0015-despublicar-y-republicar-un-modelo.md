@@ -1,7 +1,7 @@
 # 0015 — Despublicar y republicar un modelo
 
 - **Id:** product/0015
-- **Estado:** approved
+- **Estado:** implemented
 - **Tipo:** product
 - **Fecha:** 2026-08-07
 - **Specs relacionadas:** product/0001, product/0014
@@ -114,27 +114,30 @@ estaba.
 
 > Obligatorios y verificables.
 
-- [ ] `CarSchema` acepta un registro sin `published` y lo trata como
+- [x] `CarSchema` acepta un registro sin `published` y lo trata como
       publicado (test).
-- [ ] `CarSchema` acepta `published: false` explícito (test).
-- [ ] La función de filtrado deja fuera exactamente los coches con
+- [x] `CarSchema` acepta `published: false` explícito (test).
+- [x] La función de filtrado deja fuera exactamente los coches con
       `published: false`, conservando el orden del resto (test, con casos:
       ninguno oculto, alguno oculto, todos ocultos).
-- [ ] Un coche despublicado no aparece en el ranking, en la ficha técnica,
-      en la ficha completa ni en la página de explicación (test de
-      integración en `App.test.tsx`, con un catálogo fixture donde un
-      coche lleva `published: false`).
-- [ ] Con todo el catálogo despublicado, la aplicación muestra el mensaje
+- [x] Un coche despublicado no aparece en el ranking, en la ficha técnica ni
+      en la ficha completa (test de integración en `App.test.tsx`, con un
+      catálogo fixture donde un coche lleva `published: false`). La página
+      de explicación no renderiza nombres de coche en ningún caso —recibe
+      el mismo `catalogResult.cars` ya filtrado, pero no hay markup por
+      coche del que ausentarse, así que no aporta un test propio.
+- [x] Con todo el catálogo despublicado, la aplicación muestra el mensaje
       de catálogo vacío/no cargado, sin lanzar una excepción no capturada
       (test).
-- [ ] `scoreCatalog.snapshot.test.ts` y el conteo de
+- [x] `scoreCatalog.snapshot.test.ts` y el conteo de
       `loadCatalog.test.ts` no cambian: el catálogo real de hoy no tiene
       ningún coche despublicado.
 - [ ] Las dos skills existen y, ejecutadas sobre un coche real del
       catálogo, producen un commit que pasa la CI local entera
       (`format:check`, `lint`, `typecheck`, `arch:check`,
-      `test:coverage` al 100 %).
-- [ ] La CI entera pasa en local.
+      `test:coverage` al 100 %). Pendiente de una primera ejecución real
+      sobre el catálogo.
+- [x] La CI entera pasa en local.
 
 ## Dependencias y supuestos
 

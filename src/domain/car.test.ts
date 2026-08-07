@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { CarSchema } from './car';
+import { CarSchema, publishedCars, type Car } from './car';
+import { sportageFixture } from './scoring/testFixtures';
 
 function sourced(
   value: number,
@@ -216,5 +217,46 @@ describe('CarSchema', () => {
     if (result.success) {
       expect(result.data.notes).toEqual([]);
     }
+  });
+
+  it('defaults published to true when omitted (product/0015): no existing car changes state', () => {
+    const withoutPublished: Record<string, unknown> = { ...validCar };
+    delete withoutPublished.published;
+    const result = CarSchema.safeParse(withoutPublished);
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.published).toBe(true);
+    }
+  });
+
+  it('accepts published: false explicitly', () => {
+    const result = CarSchema.safeParse({ ...validCar, published: false });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.published).toBe(false);
+    }
+  });
+});
+
+describe('publishedCars', () => {
+  function carWith(id: string, published: boolean): Car {
+    return { ...sportageFixture, id, published };
+  }
+
+  it('keeps every car when none are unpublished', () => {
+    const cars = [carWith('a', true), carWith('b', true)];
+    expect(publishedCars(cars)).toEqual(cars);
+  });
+
+  it('drops exactly the unpublished cars, keeping the rest in order', () => {
+    const a = carWith('a', true);
+    const b = carWith('b', false);
+    const c = carWith('c', true);
+    expect(publishedCars([a, b, c])).toEqual([a, c]);
+  });
+
+  it('returns an empty list when every car is unpublished', () => {
+    const cars = [carWith('a', false), carWith('b', false)];
+    expect(publishedCars(cars)).toEqual([]);
   });
 });

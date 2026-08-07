@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { loadCatalog } from '../data/loadCatalog';
 import { loadReferences } from '../data/loadReferences';
-import type { Car } from '../domain/car';
+import { publishedCars, type Car } from '../domain/car';
 import type { Reference } from '../domain/reference';
 import { scoreCatalog } from '../domain/scoring/score';
 import { applyOverride } from '../domain/scoring/overrides';
@@ -35,7 +35,16 @@ export function App({
   const route = useHashRoute();
   const catalogResult = useMemo<CatalogResult>(() => {
     try {
-      return { cars: load(), references: loadReferencesProp() };
+      // `load()` devuelve todos los coches del fichero, publicados o no
+      // (product/0015): un catálogo con candidatos pero ninguno publicado
+      // se trata igual que uno vacío, con el mismo mensaje de abajo, en vez
+      // de dejar pasar una lista vacía a `scoreCatalog`, que lanzaría sin
+      // capturar.
+      const cars = publishedCars(load());
+      if (cars.length === 0) {
+        throw new Error('el catálogo no puede estar vacío');
+      }
+      return { cars, references: loadReferencesProp() };
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
       logError('catalog_load_failed', { 'error.message': message });
