@@ -431,6 +431,11 @@
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Hyundai_Kona_1.6T_Inspiration_SX2_Neoteric_Yellow_%2815%29.jpg/1280px-Hyundai_Kona_1.6T_Inspiration_SX2_Neoteric_Yellow_%2815%29.jpg",
         "credit": "Wikimedia Commons — Damian B Oh (CC BY-SA 4.0)",
         "shows": "Hyundai Kona (SX2), amarillo (Neoteric Yellow) — carrocería compartida con la versión HEV"
+      },
+      "interior": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Hyundai_Kona_Inspiration_SX2_Black_Monotone_%283%29.jpg/1280px-Hyundai_Kona_Inspiration_SX2_Black_Monotone_%283%29.jpg",
+        "credit": "Wikimedia Commons — Damian B Oh (CC BY-SA 4.0)",
+        "shows": "Hyundai Kona (SX2) Inspiration, habitáculo en negro — habitáculo compartido con la versión HEV, motorización no verificable en la foto"
       }
     }
   },
@@ -642,6 +647,11 @@
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Hyundai_Kona_Electric_SX2_EV_Abyss_Black_Pearl_%2816%29.jpg/1280px-Hyundai_Kona_Electric_SX2_EV_Abyss_Black_Pearl_%2816%29.jpg",
         "credit": "Wikimedia Commons — Damian B Oh (CC BY-SA 4.0)",
         "shows": "Hyundai Kona Eléctrico (SX2), negro (Abyss Black Pearl)"
+      },
+      "interior": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/20230419_%ED%98%84%EB%8C%80_%EB%89%B4_%EC%BD%94%EB%82%98_%EC%9D%BC%EB%A0%89%ED%8A%B8%EB%A6%AD_%EC%8B%A4%EB%82%B4.jpg/1280px-20230419_%ED%98%84%EB%8C%80_%EB%89%B4_%EC%BD%94%EB%82%98_%EC%9D%BC%EB%A0%89%ED%8A%B8%EB%A6%AD_%EC%8B%A4%EB%82%B4.jpg",
+        "credit": "Wikimedia Commons — Striker9498 (CC BY-SA 3.0)",
+        "shows": "Hyundai Kona Eléctrico (SX2), habitáculo en beige — tapicería de color distinto al del exterior negro de las otras fotos"
       }
     }
   },
@@ -1120,6 +1130,11 @@
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/BMW_X1_xDrive25e_%28U11%2C_2025%29_%2854741928081%29.jpg/1280px-BMW_X1_xDrive25e_%28U11%2C_2025%29_%2854741928081%29.jpg",
         "credit": "Wikimedia Commons — Charles, Port Chester NY vía Flickr (CC0)",
         "shows": "BMW X1 xDrive25e (U11), negro"
+      },
+      "interior": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/BMW_X1_U11_Interior1.jpg/1280px-BMW_X1_U11_Interior1.jpg",
+        "credit": "Wikimedia Commons — Pixelatedfacealex (CC BY-SA 4.0)",
+        "shows": "BMW X1 (U11), habitáculo en negro — motorización no verificable en la foto"
       }
     }
   },
@@ -1344,6 +1359,11 @@
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Alfa_Romeo_Tonale_1.5_T_Edizione_Speciale_%E2%80%93_h_24092022.jpg/1280px-Alfa_Romeo_Tonale_1.5_T_Edizione_Speciale_%E2%80%93_h_24092022.jpg",
         "credit": "Wikimedia Commons — M 93 (CC BY-SA 3.0 de)",
         "shows": "Alfa Romeo Tonale Edizione Speciale, gris"
+      },
+      "interior": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Alfa_Romeo_Tonale_PLUG-IN_HYBRID_Q4_VELOCE_%283LA-AV113_0001%29_interior.jpg/1280px-Alfa_Romeo_Tonale_PLUG-IN_HYBRID_Q4_VELOCE_%283LA-AV113_0001%29_interior.jpg",
+        "credit": "Wikimedia Commons — Tokumeigakarinoaoshima (CC BY-SA 4.0)",
+        "shows": "Alfa Romeo Tonale Plug-in Hybrid Q4 Veloce, habitáculo en negro y con volante a la derecha — mismo habitáculo que el 1.5 MHEV que puntúa la ficha"
       }
     }
   },
@@ -1558,6 +1578,11 @@
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Kia_Sportage_Hybrid_NQ5_HEV_Shadow_Matte_Gray_%2816%29.jpg/1280px-Kia_Sportage_Hybrid_NQ5_HEV_Shadow_Matte_Gray_%2816%29.jpg",
         "credit": "Wikimedia Commons — Damian B Oh (CC BY-SA 4.0)",
         "shows": "Kia Sportage Hybrid (NQ5), gris mate (Shadow Matte Gray)"
+      },
+      "interior": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Kia_Sportage_NQ5_PE_1.6T_EX_HEV_interior.jpg/1280px-Kia_Sportage_NQ5_PE_1.6T_EX_HEV_interior.jpg",
+        "credit": "Wikimedia Commons — Ethan Llamas (CC BY-SA 4.0)",
+        "shows": "Kia Sportage HEV (NQ5 restyling) acabado EX, salpicadero con pantalla curva — foto de salón, con reflejos"
       }
     }
   },
@@ -1774,6 +1799,11 @@
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Honda_CIVIC_e-HEV_%286AA-FL4%29_rear.jpg/1280px-Honda_CIVIC_e-HEV_%286AA-FL4%29_rear.jpg",
         "credit": "Wikimedia Commons — Tokumeigakarinoaoshima (CC BY-SA 4.0)",
         "shows": "Honda Civic e:HEV (FL4), gris"
+      },
+      "interior": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Honda_CIVIC_e%EF%BC%9AHEV_EX_%286AA-FL4%29_interior.jpg/1280px-Honda_CIVIC_e%EF%BC%9AHEV_EX_%286AA-FL4%29_interior.jpg",
+        "credit": "Wikimedia Commons — Tokumeigakarinoaoshima (CC BY-SA 4.0)",
+        "shows": "Honda Civic e:HEV (FL4), habitáculo en gris claro y con volante a la derecha"
       }
     }
   },
@@ -2263,14 +2293,24 @@
         "shows": "Mazda CX-5 (KF), restyling, marrón (Zircon Sand)"
       },
       "side": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/2022_Mazda_CX-5_Preferred_%28facelift%29%2C_rear_6.21.22.jpg/1280px-2022_Mazda_CX-5_Preferred_%28facelift%29%2C_rear_6.21.22.jpg",
-        "credit": "Wikimedia Commons — Kevauto (CC BY-SA 4.0)",
-        "shows": "Mazda CX-5 (KF), restyling, azul oscuro"
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Mazda_CX5_2017_Seitenansicht.JPG/1280px-Mazda_CX5_2017_Seitenansicht.JPG",
+        "credit": "Wikimedia Commons — KarleHorn (CC BY 3.0)",
+        "shows": "Mazda CX-5 (KF), rojo, de perfil estricto — unidad prefacelift; el restyling que puntúa la ficha no cambia la silueta, solo frontal y trasera"
       },
       "rear": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Mazda_CX-5_SKYACTIV-G_165_Newground_%28II%2C_Facelift%29_%E2%80%93_h_14042024.jpg/1280px-Mazda_CX-5_SKYACTIV-G_165_Newground_%28II%2C_Facelift%29_%E2%80%93_h_14042024.jpg",
         "credit": "Wikimedia Commons — M 93 (CC BY-SA 3.0 de)",
         "shows": "Mazda CX-5 (KF), restyling, marrón (Zircon Sand)"
+      },
+      "trunk": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/The_trunkroom_of_Mazda_CX-5_25S_L_Package_2WD_%286BA-KF5P%29.jpg/1280px-The_trunkroom_of_Mazda_CX-5_25S_L_Package_2WD_%286BA-KF5P%29.jpg",
+        "credit": "Wikimedia Commons — Tokumeigakarinoaoshima (CC BY-SA 4.0)",
+        "shows": "Mazda CX-5 (KF) 25S, maletero abierto y vacío con los asientos traseros sin abatir"
+      },
+      "interior": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/2025_Mazda_CX-5_2.5_AWD_Turbo_interior.jpg/1280px-2025_Mazda_CX-5_2.5_AWD_Turbo_interior.jpg",
+        "credit": "Wikimedia Commons — Ethan Llamas (CC BY-SA 4.0)",
+        "shows": "Mazda CX-5 (KF), habitáculo en negro — unidad 2.5 Turbo AWD; mismo habitáculo que el MHEV que puntúa la ficha"
       }
     }
   },
@@ -2497,6 +2537,11 @@
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Honda_CR-V_RS6_2.0_RS_e-HEV_AWD_Platinum_White_Pearl_02.jpg/1280px-Honda_CR-V_RS6_2.0_RS_e-HEV_AWD_Platinum_White_Pearl_02.jpg",
         "credit": "Wikimedia Commons — Ethan Llamas (CC BY-SA 4.0)",
         "shows": "Honda CR-V e:HEV RS AWD (4x4), blanco, con portaequipajes de techo instalado"
+      },
+      "rear": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Honda_CR-V_RS6_2.0_RS_e-HEV_AWD_Platinum_White_Pearl_04.jpg/1280px-Honda_CR-V_RS6_2.0_RS_e-HEV_AWD_Platinum_White_Pearl_04.jpg",
+        "credit": "Wikimedia Commons — Ethan Llamas (CC BY-SA 4.0)",
+        "shows": "Honda CR-V e:HEV RS AWD (4x4), blanco (Platinum White Pearl), tres cuartos trasero con el portón cerrado"
       },
       "interior": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Honda_CR-V_RS6_2.0_RS_e-HEV_AWD_interior.jpg/1280px-Honda_CR-V_RS6_2.0_RS_e-HEV_AWD_interior.jpg",
