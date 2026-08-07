@@ -29,26 +29,24 @@
   align-self: flex-start;
 }
 
-/* Selector de vista de foto (requisito 8.5): un único grupo de radios, sin
- * borde de `fieldset` por defecto — el propio contenedor ya vive dentro de
- * una página con jerarquía visual marcada por `.label`. */
+/* Selector de vista de foto (requisito 8.5, corrección 2026-08-07): un
+ * `<select>` nativo en vez de un grupo de radios — la misma elección
+ * excluyente con menos superficie táctil en pantallas estrechas. */
 .viewSelector {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-3);
-  border: 0;
-  padding: 0;
-  margin: 0;
 }
 
-.viewOption {
+.viewSelect {
   composes: mono from './primitives.module.css';
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
   min-height: var(--size-touch-min);
+  padding: var(--space-2) var(--space-3);
   color: var(--color-ink);
+  background: var(--color-card);
+  border: var(--size-border-hairline) solid var(--color-rule);
+  border-radius: var(--radius-sm);
   cursor: pointer;
 }
 
@@ -136,17 +134,28 @@
 /* El rótulo de característica repetido en cada celda (requisito 9.1,
  * corrección 2026-08-07): solo hace falta por debajo de 37rem, donde la
  * columna de rótulos de arriba está oculta y una cifra suelta no dice a qué
- * característica pertenece. */
+ * característica pertenece. Alineado a la derecha, igual que el valor de
+ * debajo (corrección 2026-08-07): a la izquierda, la línea divisoria de
+ * `border-bottom` quedaba a la altura de un rótulo corto y un valor corto a
+ * la vez, y en la fila siguiente el rótulo largo la tapaba por completo —el
+ * separador solo se leía como tal en las filas donde ambos coincidían. */
 .cellLabel {
   composes: mono from './primitives.module.css';
   display: block;
-  text-align: left;
+  text-align: right;
   white-space: normal;
   color: var(--color-mute);
   font-size: var(--font-size-2xs);
   text-transform: uppercase;
   letter-spacing: 0.04em;
   margin-bottom: var(--space-1);
+}
+
+/* El valor de la celda (corrección 2026-08-07): más grande que su propio
+ * rótulo — es el dato que se está comparando, el rótulo solo dice de qué es. */
+.cellValue {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
 }
 
 @media (min-width: 37rem) {
@@ -190,6 +199,16 @@
   .cellLabel {
     display: none;
   }
+
+  /* El énfasis del valor sobre su rótulo solo tiene sentido por debajo de
+   * este punto de ruptura, donde el rótulo va junto al valor dentro de la
+   * misma celda (`.cellLabel`, arriba). A partir de aquí el nombre de la
+   * característica vive en su propia columna fija y el valor vuelve al
+   * tamaño normal de la tabla. */
+  .cellValue {
+    font-size: inherit;
+    font-weight: inherit;
+  }
 }
 
 .modelHeader,
@@ -216,33 +235,40 @@
   letter-spacing: 0.08em;
 }
 
-/* Marca de fijación (requisito 8.3.2): semánticamente un radio —solo un
- * modelo puede estar fijado a la vez—, dibujada como una casilla para que no
- * se confunda con el selector de vista de foto, que sí muestra su forma
- * nativa de radio. */
-.pinControl {
-  appearance: none;
-  width: var(--size-touch-min);
-  height: var(--size-touch-min);
-  min-width: var(--size-touch-min);
-  border: calc(var(--size-border-hairline) * 2) solid var(--color-rule);
-  border-radius: var(--radius-sm);
-  background: var(--color-card);
+/* Fijación (requisito 8.3.2, corrección 2026-08-07): antes una casilla
+ * aparte encima de la foto —le quitaba alto a la miniatura, que es la parte
+ * que sí importa mirar—; ahora el propio nombre + marca es el objetivo, con
+ * el radio real estirado por encima (`.pinInput`) para que cubra toda la
+ * etiqueta y no solo el texto. Semánticamente sigue siendo un radio —solo un
+ * modelo puede estar fijado a la vez—, así que el foco de teclado y el lector
+ * de pantalla lo tratan como tal; el marco de abajo es solo la señal visual
+ * de cuál está marcado. */
+.pinLabel {
+  position: relative;
+  display: block;
+  min-height: var(--size-touch-min);
   cursor: pointer;
-  display: grid;
-  place-items: center;
-  color: var(--color-paper);
-  font-weight: var(--font-weight-bold);
-  margin: 0 0 var(--space-2);
 }
 
-.pinControl:checked {
-  background: var(--color-accent);
+.pinInput {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.modelInfo {
+  display: block;
+  padding: var(--space-2);
+  margin: calc(var(--space-2) * -1);
+  border: calc(var(--size-border-hairline) * 2) solid transparent;
+  border-radius: var(--radius-sm);
+}
+
+.pinInput:checked ~ .modelInfo {
   border-color: var(--color-accent);
-}
-
-.pinControl:checked::after {
-  content: '✓';
+  background: var(--color-accent-tint);
 }
 
 /* El botón es solo el envoltorio accionable (requisito 8.4): no impone la

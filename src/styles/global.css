@@ -122,12 +122,17 @@
   /* Ficha completa (product/0014, requisito 9): anchos de columna de la
    * tabla transpuesta. La de características solo existe por encima de
    * `--bp-columna`, así que por debajo el ancho de cada modelo ya no tiene
-   * que compartir sitio con ella —corrección del 2026-08-07—: a 320px caben
-   * dos modelos completos de `9rem`, no dos apretados junto a una columna
-   * de rótulos. Por encima de `--bp-columna`, la de características vuelve
-   * y el modelo pasa a un ancho fijo mayor. */
+   * que compartir sitio con ella. Por encima de `--bp-columna`, la de
+   * características vuelve y el modelo pasa a un ancho fijo mayor.
+   *
+   * `--size-ficha-model-min` subió de `9rem` a `11rem` (corrección
+   * 2026-08-07): a `9rem` un iPhone de 393px de ancho lógico enseñaba dos
+   * columnas y media apretadas —la foto de cada una, en miniatura de
+   * verdad—; a `11rem` enseña dos completas con la foto y las
+   * características legibles sin abrir el diálogo, al precio de perder el
+   * asomo de la tercera como pista de que hay más para desplazar. */
   --size-ficha-feature-column: 6.5rem;
-  --size-ficha-model-min: 9rem;
+  --size-ficha-model-min: 11rem;
   --size-ficha-model-desktop: 11rem;
 }
 

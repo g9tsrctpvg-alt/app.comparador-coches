@@ -159,16 +159,20 @@ function CellContent({
     );
   }
   if (cell.kind === 'rating') {
-    return <>{formatNumber(cell.value, 0)} / 5</>;
+    return (
+      <span className={styles.cellValue}>
+        {formatNumber(cell.value, 0)} / 5
+      </span>
+    );
   }
   const unit = cell.unit ?? def.unitFallback ?? '';
   return (
-    <>
+    <span className={styles.cellValue}>
       {def.isEuro
         ? formatEur(cell.value)
         : `${formatNumber(cell.value, def.decimals ?? 0)}${unit ? ` ${unit}` : ''}`}
       {cell.estimated && <EstimatedMark />}
-    </>
+    </span>
   );
 }
 
@@ -242,20 +246,24 @@ function ModelHeaderCell({
       scope="col"
       className={isPinned ? styles.pinnedHeader : styles.modelHeader}
     >
-      <input
-        type="radio"
-        name="pinned-model"
-        value={entity.id}
-        checked={isPinned}
-        onChange={() => onPin(entity.id)}
-        aria-label={`Comparar contra ${entity.name}`}
-        className={styles.pinControl}
-      />
       <PhotoBox entity={entity} photoView={photoView} onOpen={onOpenPhoto} />
-      <span className={styles.modelName}>{entity.name}</span>
-      <span className={primitives.secondaryText}>
-        {entity.brand} · {TECHNOLOGY_LABELS[entity.technology]}
-      </span>
+      <label className={styles.pinLabel}>
+        <input
+          type="radio"
+          name="pinned-model"
+          value={entity.id}
+          checked={isPinned}
+          onChange={() => onPin(entity.id)}
+          aria-label={`Comparar contra ${entity.name}`}
+          className={styles.pinInput}
+        />
+        <span className={styles.modelInfo}>
+          <span className={styles.modelName}>{entity.name}</span>
+          <span className={primitives.secondaryText}>
+            {entity.brand} · {TECHNOLOGY_LABELS[entity.technology]}
+          </span>
+        </span>
+      </label>
       {entity.kind === 'reference' && (
         <span className={styles.referenceTag}>Referencia</span>
       )}
@@ -319,21 +327,24 @@ export function FichaCompletaPage({
         Cómo se calcula todo →
       </a>
 
-      <fieldset className={styles.viewSelector}>
-        <legend className={primitives.label}>Vista de la foto</legend>
-        {PHOTO_VIEWS.map((view) => (
-          <label key={view} className={styles.viewOption}>
-            <input
-              type="radio"
-              name="photo-view"
-              value={view}
-              checked={photoView === view}
-              onChange={() => setPhotoView(view)}
-            />
-            {PHOTO_VIEW_LABELS[view]}
-          </label>
-        ))}
-      </fieldset>
+      <div className={styles.viewSelector}>
+        <label className={primitives.label} htmlFor="photo-view-select">
+          Vista de la foto
+        </label>
+        <select
+          id="photo-view-select"
+          name="photo-view"
+          className={styles.viewSelect}
+          value={photoView}
+          onChange={(event) => setPhotoView(event.target.value as PhotoView)}
+        >
+          {PHOTO_VIEWS.map((view) => (
+            <option key={view} value={view}>
+              {PHOTO_VIEW_LABELS[view]}
+            </option>
+          ))}
+        </select>
+      </div>
 
       <div
         className={styles.tableWrapper}
