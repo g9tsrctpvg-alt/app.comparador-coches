@@ -240,6 +240,18 @@ fase abierta. Se lista para no perderlo, no para bloquear nada.
   cobertura al 100 %. Queda pendiente ejecutar de verdad una de las dos
   skills sobre un coche real del catálogo, como primera verificación fuera
   de los tests.
+- **De dónde pueden salir las fotos — `product/0016`, en `draft`.** Tras dos
+  tandas de búsqueda faltan trece de las sesenta vistas, y **diez son de
+  maletero**: Wikimedia Commons es fotografía de aficionado en salones, donde
+  nadie abre el portón, y el hueco no se cierra insistiendo en esa fuente. La
+  spec declara qué orígenes son aceptables —sala de prensa del fabricante
+  primero, Commons después, configurador oficial como último recurso—, qué se
+  escribe en `credit` cuando la fuente no publica licencia con nombre, y qué
+  hacer con lo que se rompe al salir de Commons (bloqueo por `Referer`,
+  enlaces que caducan). **No reabre** la decisión de enlazar en vez de copiar:
+  la refuerza, porque es lo que sostiene el resto. Pendiente del gate humano y
+  con dos decisiones abiertas: si entran concesionarios e importadores, y si
+  vale un maletero de otra versión del mismo modelo.
 - **Eje de autonomía y repostaje.** Es la mayor diferencia práctica entre los
   once candidatos en un viaje largo —los térmicos e híbridos hacen 640-950 km
   con un depósito, los eléctricos la mitad en autopista— y el modelo es hoy
