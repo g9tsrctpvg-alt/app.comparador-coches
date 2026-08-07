@@ -286,15 +286,21 @@ es siempre la Giulietta.
    pantalla sobre lo que va a pasar al pulsarlo.
 3. El modelo fijado **sale de la secuencia desplazable**: aparece una vez, no
    dos, y desplazarse no lo trae de vuelta.
-4. **Es la misma mecánica en todos los anchos, sujeto a la corrección del
-   2026-08-07 que reescribe el requisito 9.** Se pensó así: la columna de
+4. **Es la misma mecánica en todos los anchos para la columna fijada —sujeto
+   a dos correcciones del 2026-08-07 que entre las dos reescriben el
+   requisito 9—, y solo para ella.** Se pensó así de partida: la columna de
    características y la fijada se quedan quietas a cualquier ancho, y las
    demás desfilan al lado. En la práctica, por debajo de `--bp-columna`
-   (37rem) esas dos columnas fijas dejaban solo **una** columna de modelo
-   legible, y ganaban una franja de sitio que hoy se reparte entre dos
-   columnas de modelo enteras. Por encima de `--bp-columna` la mecánica no
-   cambia: la de características y la fijada se quedan quietas, y las demás
-   desfilan al lado.
+   (37rem) esas **dos** columnas fijas a la vez dejaban solo **una** columna
+   de modelo legible. La primera corrección quitó ambas por debajo de ese
+   ancho, y la segunda devolvió solo la fijada —la de características sigue
+   sin existir ahí, fundida en cada celda (requisito 9.1)—, porque una sola
+   columna fija no repite el problema que la primera corrección evitaba: cabe
+   igual una columna de modelo entera desplazándose al lado, y de propina se
+   deja de perder de vista contra qué se está comparando en cuanto se
+   desplaza. Por encima de `--bp-columna` la mecánica no cambia desde el
+   principio: la de características y la fijada se quedan quietas, y las
+   demás desfilan al lado.
 5. **Qué columna está fijada es estado efímero**, como la foto elegida (8.6):
    no se persiste ni viaja en el enlace compartible de `product/0012`.
 
@@ -341,35 +347,48 @@ Una tabla de doce columnas en 320px de ancho no cabe de ninguna manera.
 > que se enseña en un móvil pasa a ser dos modelos cualesquiera de la
 > secuencia**, no necesariamente el fijado y su vecino. El requisito sigue
 > siendo el mismo: no es que quepa todo, es que lo que se ve se lea entero.
+>
+> **Segunda corrección del 2026-08-07.** En el uso real, perder de vista el
+> modelo fijado en cuanto se desplaza resultó peor que el problema que la
+> corrección anterior resolvía: comparar deja de serlo si el término de la
+> comparación se sale de pantalla al primer gesto. Esta versión devuelve la
+> columna fijada a **sticky** a cualquier ancho —igual que en la mecánica
+> original del requisito 8.3—, pero deja la columna de características donde
+> la dejó la corrección anterior: fundida en cada celda, no reinstaurada como
+> columna aparte. Fijar solo una columna, no dos, es lo que sigue dejando
+> sitio a una columna de modelo entera desplazándose al lado; con las dos
+> fijas volvería el problema original. El ancho de columna de modelo no
+> cambia por esto: sigue siendo `11rem` (corrección previa, ver requisito
+> 9.1).
 
-1. **Por debajo de `--bp-columna` (37rem) no hay columna de características
-   ni columna fija.** El rótulo de cada característica —«Longitud»,
-   «Potencia»...— se repite dentro de cada celda de dato en vez de vivir en
-   una columna aparte, y el modelo elegido para comparar (requisito 8.3) deja
-   de estar pegado a la izquierda: es una columna desplazable más, la
-   primera de la secuencia. Se ven **dos columnas de modelo completas**, de
-   `9rem` cada una, con cifras del mismo tamaño que el resto de la
-   aplicación. La cabecera de bloque —«Tamaño y espacio», «Mecánica y
-   prestaciones»...— sigue ocupando el ancho completo, sin cambios: sigue
-   siendo el separador entre grupos de características.
+1. **Por debajo de `--bp-columna` (37rem) no hay columna de características,
+   y la fijada vuelve a ser sticky** (segunda corrección de arriba). El
+   rótulo de cada característica —«Longitud», «Potencia»...— se repite
+   dentro de cada celda de dato en vez de vivir en una columna aparte; el
+   modelo elegido para comparar (requisito 8.3), en cambio, sí queda pegado
+   a la izquierda igual que en escritorio. Se ven **una columna de modelo
+   fija más una desplazándose al lado**, ambas de `11rem`, con cifras del
+   mismo tamaño que el resto de la aplicación. La cabecera de bloque
+   —«Tamaño y espacio», «Mecánica y prestaciones»...— sigue ocupando el
+   ancho completo, sin cambios: sigue siendo el separador entre grupos de
+   características.
 2. **Anclaje de desplazamiento** (`scroll-snap-type: x mandatory`, con cada
-   columna de modelo como punto de anclaje, incluida la que esté fijada): el
-   gesto cae siempre en un modelo completo, nunca entre dos. Al no haber ya
-   columnas que se queden quietas, desplazarse saca de pantalla al modelo
-   fijado igual que a cualquier otro — dejó de ser una comparación cerrada
-   contra él en cada parada, y pasó a ser explorar la secuencia entera de
-   dos en dos.
+   columna de modelo **desplazable** como punto de anclaje): el gesto cae
+   siempre en un modelo completo, nunca entre dos. La fijada no es un punto
+   de anclaje —sticky, nunca se desplaza fuera de vista— igual que en
+   escritorio.
 3. **La marca de selección sigue siendo alcanzable en móvil**: se llega a
    ella desplazándose hasta la cabecera del modelo que se quiere fijar, y al
    marcarla la tabla vuelve al principio del desplazamiento — así el modelo
    recién fijado abre la secuencia en vez de quedar fuera de pantalla justo
    al elegirlo.
 4. **En escritorio la mecánica no cambia**: por encima de `--bp-columna` la
-   columna de características y la fijada vuelven a quedarse quietas, las
-   columnas de modelo miden `11rem` y se ven todas las que quepan, con la
-   fijada siempre a la izquierda —la mecánica original del requisito 8.3—.
-   Solo hay una media query, y solo cambia qué columnas son fijas y cuánto
-   miden las de modelo; no hay un tercer diseño intermedio.
+   columna de características y la fijada siguen quietas, las columnas de
+   modelo miden `11rem` y se ven todas las que quepan, con la fijada siempre
+   a la izquierda —la mecánica original del requisito 8.3—. Solo hay una
+   media query, y solo cambia si existe la columna de características y
+   dónde se pega la fijada —al borde o justo después de ella—; no hay un
+   tercer diseño intermedio.
 5. **La fila del nombre del modelo queda fija arriba** al desplazarse en
    vertical. La foto **no**: ocupa demasiado alto para llevarla pegada toda
    la lectura, y su sitio es el principio.
@@ -433,7 +452,8 @@ Una tabla de doce columnas en 320px de ancho no cabe de ninguna manera.
       (test de render: se cuentan filas y columnas).
 - [ ] En escritorio (≥`--bp-columna`), al desplazar en horizontal, la columna
       de características y la del modelo fijado permanecen visibles; por
-      debajo de `--bp-columna` ninguna columna es fija (requisito 9,
+      debajo de `--bp-columna` la columna de características no existe pero
+      la del modelo fijado sigue siendo visible (requisito 9, segunda
       corrección 2026-08-07) (revisión visual en los tres anchos. Pendiente
       de revisar en navegador).
 - [x] Cada celda de dato lleva su propio rótulo de característica, oculto por
@@ -452,10 +472,10 @@ Una tabla de doce columnas en 320px de ancho no cabe de ninguna manera.
 - [x] Los controles de fijación son un grupo `radio` con el mismo `name` y
       etiqueta accesible por modelo, no casillas independientes (test de
       render sobre el marcado).
-- [ ] A 320px se leen enteras **dos** columnas de modelo completas, sin
-      columna de características aparte y sin que ninguna cifra se parta
-      (requisito 9.1, corrección 2026-08-07) (revisión visual. Pendiente de
-      revisar en navegador).
+- [ ] A 320px se leen enteras **dos** columnas de modelo completas —la fijada
+      y una desplazándose al lado—, sin columna de características aparte y
+      sin que ninguna cifra se parta (requisito 9.1, segunda corrección
+      2026-08-07) (revisión visual. Pendiente de revisar en navegador).
 - [x] El selector cambia la foto de **todas** las columnas a la vez, y
       arranca en lateral (test de render sobre el estado inicial; el cambio
       es correcto por construcción — todas las cabeceras leen el mismo

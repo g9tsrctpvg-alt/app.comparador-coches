@@ -101,14 +101,20 @@
   display: none;
 }
 
-/* Columna del modelo elegido como comparación (requisito 8.3): en móvil es
- * una columna desplazable más —no hay sitio para fijar nada cuando ya se
- * gana espacio quitando la de características (requisito 9.1)—; a partir de
- * 37rem, fija justo después de la de características, con fondo opaco
- * —igual que en `FichaTecnicaPage`— porque va encima de columnas que han
- * quedado debajo al desplazar. */
+/* Columna del modelo elegido como comparación (requisito 8.3, corrección
+ * 2026-08-07 —segunda—): fija a la izquierda a cualquier ancho, con fondo
+ * opaco —igual que en `FichaTecnicaPage`— porque va encima de columnas que
+ * han quedado debajo al desplazar. Por debajo de `--bp-columna` no compite
+ * por sitio con la columna de características —esa sigue sin existir ahí,
+ * fundida en cada celda (requisito 9.1)—, así que fijarla no repite el
+ * problema que la primera corrección de este mismo día evitaba: sigue
+ * cabiendo una columna de modelo entera desplazándose al lado. */
 .pinnedHeader,
 .pinnedCell {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  scroll-snap-align: none;
   background: var(--color-accent-tint-solid);
   border-right: var(--size-border-hairline) solid var(--color-rule);
 }
@@ -121,13 +127,12 @@
   min-width: var(--size-ficha-model-min);
 }
 
-/* Cada columna de modelo es un punto de anclaje (requisito 9.2): el gesto
- * cae siempre en un modelo completo. En escritorio la fijada no lo necesita
- * —nunca se desplaza fuera de vista—, así que el bloque de ahí abajo la
- * quita del anclaje. */
-.modelHeader,
-.pinnedHeader,
-.pinnedCell {
+/* Cada columna de modelo desplazable es un punto de anclaje (requisito 9.2):
+ * el gesto cae siempre en un modelo completo. La fijada no entra aquí —desde
+ * la corrección de arriba es sticky a cualquier ancho, nunca se desplaza
+ * fuera de vista, así que anclarla no pinta nada—; `scroll-snap-align: none`
+ * ya viene declarado junto al resto de su regla. */
+.modelHeader {
   scroll-snap-align: start;
 }
 
@@ -180,12 +185,12 @@
     background: var(--color-card);
   }
 
+  /* A partir de aquí la columna de características vuelve (arriba), y la
+   * fijada —ya sticky a cualquier ancho— se desplaza a la derecha de esa
+   * columna en vez de pegarse al borde. */
   .pinnedHeader,
   .pinnedCell {
-    position: sticky;
     left: var(--size-ficha-feature-column);
-    z-index: 1;
-    scroll-snap-align: none;
   }
 
   .modelHeader,
