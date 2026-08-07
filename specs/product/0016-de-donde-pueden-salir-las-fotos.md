@@ -191,8 +191,8 @@ señaladamente el maletero.
       maletero del Kona Eléctrico, de Hyundai Newsroom— acreditan
       `"Hyundai Newsroom Europa (medio oficial de Hyundai)"`, **sin licencia**,
       porque la fuente no publica ninguna con nombre (requisito 2).
-- [x] `npm run check:photos` sigue en verde sobre el catálogo entero: 49/49 el
-      2026-08-07, incluidas las dos servidas por Hyundai. Se comprobó además
+- [x] `npm run check:photos` sigue en verde sobre el catálogo entero: 50/50 el
+      2026-08-07, incluidas las tres servidas por Hyundai y Honda. Se comprobó además
       que **cargan sin cabecera `Referer`**, que era el riesgo que anticipa el
       requisito 4.1.
 - [x] La CI entera pasa en local.
