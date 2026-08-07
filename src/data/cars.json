@@ -2333,9 +2333,11 @@
     "name": "CR-V e:HEV",
     "brand": "Honda",
     "technology": "HEV",
+    "published": false,
     "notes": [
       "Roza el presupuesto (46.645 €) y es el más largo de los candidatos.",
-      "Fila de la versión HEV 4x4 Advance: 579 L de maletero (la 4x2 da 587 L) y 9,5 s de 0-100."
+      "Fila de la versión HEV 4x4 Advance: 579 L de maletero (la 4x2 da 587 L) y 9,5 s de 0-100.",
+      "Despublicado el 2026-08-07: fuera de presupuesto/rango."
     ],
     "lengthMm": {
       "value": 4706,
