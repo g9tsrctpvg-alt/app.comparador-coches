@@ -93,37 +93,24 @@
   letter-spacing: 0.08em;
 }
 
-/* Columna de nombres de característica: fija a la izquierda a cualquier
- * ancho (requisito 8.3), nunca un modelo. */
+/* Columna de nombres de característica: por debajo de 37rem no existe —ver
+ * requisito 9, corregido el 2026-08-07— y reaparece fija a la izquierda a
+ * partir de ahí (requisito 8.3). Quitar el `display` de aquí sería fácil de
+ * pasar por alto en el bloque de escritorio, así que se declara aquí, junto
+ * al resto de reglas que la esconden. */
 .featureHeader,
 .featureCell {
-  position: sticky;
-  left: 0;
-  z-index: 2;
-  text-align: left;
-  font-weight: var(--font-weight-regular);
-  color: var(--color-mute);
-  background: var(--color-paper);
-  border-right: var(--size-border-hairline) solid var(--color-rule);
-  width: var(--size-ficha-feature-column);
-  min-width: var(--size-ficha-feature-column);
-  max-width: var(--size-ficha-feature-column);
-  white-space: normal;
+  display: none;
 }
 
-.featureCell {
-  background: var(--color-card);
-}
-
-/* Columna del modelo elegido como comparación (requisito 8.3): fija justo
- * después de la de características, con fondo opaco —igual que en
- * `FichaTecnicaPage`— porque va encima de columnas que han quedado debajo al
- * desplazar. */
+/* Columna del modelo elegido como comparación (requisito 8.3): en móvil es
+ * una columna desplazable más —no hay sitio para fijar nada cuando ya se
+ * gana espacio quitando la de características (requisito 9.1)—; a partir de
+ * 37rem, fija justo después de la de características, con fondo opaco
+ * —igual que en `FichaTecnicaPage`— porque va encima de columnas que han
+ * quedado debajo al desplazar. */
 .pinnedHeader,
 .pinnedCell {
-  position: sticky;
-  left: var(--size-ficha-feature-column);
-  z-index: 1;
   background: var(--color-accent-tint-solid);
   border-right: var(--size-border-hairline) solid var(--color-rule);
 }
@@ -136,20 +123,72 @@
   min-width: var(--size-ficha-model-min);
 }
 
-/* Cada columna de modelo desplazable es un punto de anclaje (requisito
- * 9.2): el gesto cae siempre en un modelo completo. La columna fijada no lo
- * necesita — nunca se desplaza fuera de vista. */
-.modelHeader {
+/* Cada columna de modelo es un punto de anclaje (requisito 9.2): el gesto
+ * cae siempre en un modelo completo. En escritorio la fijada no lo necesita
+ * —nunca se desplaza fuera de vista—, así que el bloque de ahí abajo la
+ * quita del anclaje. */
+.modelHeader,
+.pinnedHeader,
+.pinnedCell {
   scroll-snap-align: start;
 }
 
+/* El rótulo de característica repetido en cada celda (requisito 9.1,
+ * corrección 2026-08-07): solo hace falta por debajo de 37rem, donde la
+ * columna de rótulos de arriba está oculta y una cifra suelta no dice a qué
+ * característica pertenece. */
+.cellLabel {
+  composes: mono from './primitives.module.css';
+  display: block;
+  text-align: left;
+  white-space: normal;
+  color: var(--color-mute);
+  font-size: var(--font-size-2xs);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: var(--space-1);
+}
+
 @media (min-width: 37rem) {
+  .featureHeader,
+  .featureCell {
+    display: table-cell;
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    text-align: left;
+    font-weight: var(--font-weight-regular);
+    color: var(--color-mute);
+    background: var(--color-paper);
+    border-right: var(--size-border-hairline) solid var(--color-rule);
+    width: var(--size-ficha-feature-column);
+    min-width: var(--size-ficha-feature-column);
+    max-width: var(--size-ficha-feature-column);
+    white-space: normal;
+  }
+
+  .featureCell {
+    background: var(--color-card);
+  }
+
+  .pinnedHeader,
+  .pinnedCell {
+    position: sticky;
+    left: var(--size-ficha-feature-column);
+    z-index: 1;
+    scroll-snap-align: none;
+  }
+
   .modelHeader,
   .modelCell,
   .pinnedHeader,
   .pinnedCell {
     width: var(--size-ficha-model-desktop);
     min-width: var(--size-ficha-model-desktop);
+  }
+
+  .cellLabel {
+    display: none;
   }
 }
 
