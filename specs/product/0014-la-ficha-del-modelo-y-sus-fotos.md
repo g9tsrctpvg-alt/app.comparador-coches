@@ -347,7 +347,7 @@ Una tabla de doce columnas en 320px de ancho no cabe de ninguna manera.
 > que se enseña en un móvil pasa a ser dos modelos cualesquiera de la
 > secuencia**, no necesariamente el fijado y su vecino. El requisito sigue
 > siendo el mismo: no es que quepa todo, es que lo que se ve se lea entero.
-
+>
 > **Segunda corrección del 2026-08-07.** En el uso real, perder de vista el
 > modelo fijado en cuanto se desplaza resultó peor que el problema que la
 > corrección anterior resolvía: comparar deja de serlo si el término de la
