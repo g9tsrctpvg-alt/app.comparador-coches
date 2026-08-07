@@ -116,6 +116,64 @@ describe('App', () => {
     });
   });
 
+  describe('despublicar un modelo (product/0015)', () => {
+    function withEv3Unpublished() {
+      return threeCarFixture.map((car) =>
+        car.id === 'kia-ev3' ? { ...car, published: false } : car,
+      );
+    }
+
+    it('leaves an unpublished car out of the ranking, keeping the rest', () => {
+      const markup = renderToStaticMarkup(<App load={withEv3Unpublished} />);
+      expect(markup).toContain('Sportage HEV');
+      expect(markup).toContain('X1 xDrive25e');
+      expect(markup).not.toContain('EV3');
+    });
+
+    it('leaves an unpublished car out of the ficha técnica', () => {
+      vi.stubGlobal('window', {
+        location: { hash: FICHA_TECNICA_HASH },
+        addEventListener: () => undefined,
+        removeEventListener: () => undefined,
+      });
+      const markup = renderToStaticMarkup(<App load={withEv3Unpublished} />);
+      expect(markup).toContain('Sportage HEV');
+      expect(markup).not.toContain('EV3');
+      vi.unstubAllGlobals();
+    });
+
+    it('leaves an unpublished car out of the ficha completa', () => {
+      vi.stubGlobal('window', {
+        location: { hash: FICHA_COMPLETA_HASH },
+        addEventListener: () => undefined,
+        removeEventListener: () => undefined,
+      });
+      const markup = renderToStaticMarkup(<App load={withEv3Unpublished} />);
+      expect(markup).toContain('Sportage HEV');
+      expect(markup).not.toContain('EV3');
+      vi.unstubAllGlobals();
+    });
+
+    it('treats every candidate unpublished the same as an empty catalogue', () => {
+      const consoleError = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => undefined);
+
+      const allUnpublished = () =>
+        threeCarFixture.map((car) => ({ ...car, published: false }));
+
+      let markup = '';
+      expect(() => {
+        markup = renderToStaticMarkup(<App load={allUnpublished} />);
+      }).not.toThrow();
+
+      expect(markup).toContain('No se ha podido cargar el catálogo');
+      expect(markup).toContain('el catálogo no puede estar vacío');
+
+      consoleError.mockRestore();
+    });
+  });
+
   describe('configuración persistente y compartible (product/0012)', () => {
     function fakeStorage(initial: Record<string, string> = {}) {
       const map = new Map(Object.entries(initial));

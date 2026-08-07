@@ -31,6 +31,7 @@ function minimalCar(overrides: Record<string, unknown> = {}) {
     brand: 'Kia',
     technology: 'HEV',
     notes: [],
+    published: true,
     lengthMm: sourced(4540, 'mm'),
     widthMm: sourced(1865, 'mm'),
     wheelbaseMm: sourced(2680, 'mm'),

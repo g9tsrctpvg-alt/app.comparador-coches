@@ -93,6 +93,7 @@ export const CarSchema = z.object({
   brand: z.string().min(1),
   technology: TechnologySchema,
   notes: z.array(z.string()).default([]),
+  published: z.boolean().default(true),
   lengthMm: SourcedNumberSchema,
   widthMm: SourcedNumberSchema,
   heightMm: SourcedNumberSchema,
@@ -115,3 +116,15 @@ export const CarSchema = z.object({
   photos: PhotosSchema,
 });
 export type Car = z.infer<typeof CarSchema>;
+
+/**
+ * Los candidatos activos hoy (product/0015): `loadCatalog` sigue validando
+ * y devolviendo *todos* los coches del fichero, publicados o no —un coche
+ * oculto sigue siendo un dato real del catálogo—, así que el filtro vive
+ * aquí, en un único sitio, para que ranking, ficha técnica, ficha completa
+ * y la página de explicación no tengan cada una que acordarse de mirar
+ * `published` por su cuenta.
+ */
+export function publishedCars(cars: Car[]): Car[] {
+  return cars.filter((car) => car.published);
+}

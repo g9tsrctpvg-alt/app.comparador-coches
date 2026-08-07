@@ -223,6 +223,23 @@ entera verde en local y cobertura al 100 %.
 No pertenece a ninguna fase: es alcance nuevo, no trabajo pendiente de una
 fase abierta. Se lista para no perderlo, no para bloquear nada.
 
+- **Despublicar y republicar un modelo — `product/0015`, `implemented`.**
+  Hasta ahora la única forma de sacar un coche de la comparativa era borrar
+  su entrada del catálogo, perdiendo las fuentes y las fotos que costó
+  reunir. La spec añade un campo `published` a `Car` (por defecto `true`,
+  así que ningún coche del catálogo actual cambió de estado al añadirlo),
+  un punto único en el dominio —`publishedCars()` en `src/domain/car.ts`—
+  que separa «todos los coches del fichero» de «los candidatos activos
+  hoy» y que `src/ui/App.tsx` aplica antes de repartir el catálogo a
+  cualquier vista, y dos skills de Claude Code —`unpublish-model` y
+  `republish-model`— que activan o desactivan el campo dejando una nota
+  fechada del motivo. No borra nada nunca, y no toca cómo se puntúa un
+  coche publicado (el ADR 0004 ya hace que la nota de uno no dependa de qué
+  otros estén hoy en la lista). Recorrió `draft → approved → implemented`
+  en la misma sesión de trabajo, con la CI entera verde en local y
+  cobertura al 100 %. Queda pendiente ejecutar de verdad una de las dos
+  skills sobre un coche real del catálogo, como primera verificación fuera
+  de los tests.
 - **Eje de autonomía y repostaje.** Es la mayor diferencia práctica entre los
   once candidatos en un viaje largo —los térmicos e híbridos hacen 640-950 km
   con un depósito, los eléctricos la mitad en autopista— y el modelo es hoy
