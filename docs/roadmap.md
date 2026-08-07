@@ -223,6 +223,17 @@ entera verde en local y cobertura al 100 %.
 No pertenece a ninguna fase: es alcance nuevo, no trabajo pendiente de una
 fase abierta. Se lista para no perderlo, no para bloquear nada.
 
+- **Despublicar y republicar un modelo — `product/0015`, en `draft`.** Hoy
+  la única forma de sacar un coche de la comparativa es borrar su entrada
+  del catálogo, perdiendo las fuentes y las fotos que costó reunir. La spec
+  añade un campo `published` a `Car` (por defecto `true`, así que ningún
+  coche del catálogo actual cambia de estado), un punto único en el dominio
+  que separa «todos los coches del fichero» de «los candidatos activos
+  hoy», y dos skills de Claude Code —`unpublish-model` y
+  `republish-model`— que activan o desactivan el campo dejando una nota
+  fechada del motivo. No borra nada nunca, y no toca cómo se puntúa un
+  coche publicado (el ADR 0004 ya hace que la nota de uno no dependa de qué
+  otros estén hoy en la lista). Pendiente del gate humano.
 - **Eje de autonomía y repostaje.** Es la mayor diferencia práctica entre los
   once candidatos en un viaje largo —los térmicos e híbridos hacen 640-950 km
   con un depósito, los eléctricos la mitad en autopista— y el modelo es hoy
