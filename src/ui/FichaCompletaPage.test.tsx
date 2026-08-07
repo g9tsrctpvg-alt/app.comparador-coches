@@ -173,7 +173,14 @@ describe('FichaCompletaPage', () => {
       />,
     );
     expect(markup).toContain('alt="Giulietta, vista lateral"');
-    expect(markup).toContain('loading="lazy"');
+    // Sin `loading="lazy"` (product/0014, corrección de 2026-08-07): con un
+    // único `photoView` activo a la vez hay como mucho una docena de `<img>`
+    // en el DOM, no las «sesenta peticiones» que motivaron el diferido
+    // original, y perezosa dentro de una tabla con columnas fijas por
+    // `position: sticky` nunca llegaba a disparar la carga en algunos
+    // navegadores: la miniatura se quedaba en blanco aunque la foto ampliada
+    // —sin `loading="lazy"`— sí cargaba al pulsarla.
+    expect(markup).not.toContain('loading=');
   });
 
   it('shows a labelled placeholder, no <img>, for a candidate with no photo of the selected view', () => {
