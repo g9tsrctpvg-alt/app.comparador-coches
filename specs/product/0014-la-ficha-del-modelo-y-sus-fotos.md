@@ -193,23 +193,47 @@ aplicación existe para comparar tamaños.
    vista: «Kia EV3, vista lateral». Nunca decorativa, nunca vacía.
 2. Hueco de **relación de aspecto fija** y `object-fit: contain`: recortar
    deforma la comparación justo en los extremos que importan —morro y cola—,
-   así que la imagen se ajusta dentro del hueco y no al revés.
-3. `decoding="async"`: decodificar no debe bloquear el hilo principal.
-   > **Corrección del 2026-08-07:** esta sección pedía también
-   > `loading="lazy"`, contando «doce modelos por cinco vistas, sesenta
-   > peticiones» como motivo. La página solo muestra **una** vista de foto a
-   > la vez —el selector de arriba cambia las doce a la vez, no las suma—,
-   > así que nunca hay más de una docena de `<img>` en el DOM; el cálculo
-   > que justificaba diferir la carga no aplicaba a como quedó construida la
-   > página. Y diferir sí tenía coste: dentro de la tabla con columnas fijas
-   > por `position: sticky` y desplazamiento horizontal, la carga perezosa
-   > no llegaba a dispararse en algunos navegadores, dejando la miniatura en
-   > blanco aunque la foto ampliada —que nunca fue perezosa— sí cargaba al
-   > pulsarla. Se retira `loading="lazy"` de la miniatura.
+   así que la imagen se ajusta dentro del hueco y no al revés. **La relación
+   de aspecto la declara la propia `img`**, no su contenedor, y la imagen no
+   usa alturas en porcentaje. El botón que la envuelve (requisito 8.4) es
+   solo el elemento accionable: se ciñe a la imagen y lleva
+   `appearance: none`. Ver la corrección de abajo.
+3. Sin `loading="lazy"` ni `decoding="async"`: con una sola vista activa a la
+   vez nunca hay más de una docena de `<img>` en el DOM, así que ninguno de
+   los dos compra nada, y ambos han estado bajo sospecha del fallo que
+   describe la corrección.
 4. `referrerpolicy="no-referrer"`: la visita no le cuenta al host de la imagen
    desde qué página se la pide.
 5. Las medidas y el hueco salen de los tokens de `technical/0004` (ADR 0006).
    Ningún literal de color, espaciado o radio fuera de la hoja de tokens.
+
+> **Corrección del 2026-08-07 — la miniatura salía en blanco.** En iOS Safari
+> las miniaturas de cabecera no se veían: un hueco del tamaño correcto, con su
+> fondo, y nada dentro. **No era un fallo de carga** —`onError` no llegaba a
+> dispararse, así que no degradaba al hueco rotulado del requisito 4.3— y la
+> **misma URL se veía perfecta** al pulsar y abrir la foto ampliada. Eso
+> descarta la red, el host y `referrerpolicy`.
+>
+> La causa está en cómo se construía el hueco: `aspect-ratio` vivía en el
+> `<button>` y la imagen tomaba su altura de él con `height: 100%`. Un
+> `<button>` nativo no es una caja normal —lleva `appearance: push-button` y
+> maqueta su contenido en una caja anónima propia—, y contra ella ese
+> porcentaje puede resolverse a cero: la caja se pinta del tamaño correcto y
+> la imagen de dentro mide nada. La foto del diálogo nunca dependió de eso
+> (`height: auto`, dentro de un `<figure>`), y por eso siempre se vio.
+>
+> La corrección quita la dependencia entera en vez de parchearla: la
+> `aspect-ratio` pasa a la `img` —una caja normal en todos los motores—, el
+> botón se ciñe a ella con `appearance: none`, y se retiran `loading="lazy"`
+> y `decoding="async"`, los dos atributos que la miniatura llevaba y la foto
+> del diálogo no.
+>
+> **Se corrigió a ciegas en cuanto al motor**: este entorno no tiene WebKit,
+> así que el fallo no se pudo reproducir ni la corrección verificar sobre
+> Safari. Lo que sí se comprobó, en Chromium a 390 y 1280px, es que el hueco
+> mide lo mismo antes y después y que foto y hueco vacío siguen midiendo
+> igual entre sí (requisito 4.4). Queda pendiente de confirmación visual en
+> un iPhone real, como el resto de criterios manuales de esta spec.
 
 ### 6. Las fotos no tocan la puntuación
 

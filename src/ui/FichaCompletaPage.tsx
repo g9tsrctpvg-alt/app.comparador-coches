@@ -203,10 +203,15 @@ function PhotoBox({
       className={styles.photoButton}
       onClick={() => onOpen(entity, photoView, photo)}
     >
+      {/* Sin `decoding="async"`: era el último atributo que esta miniatura
+          llevaba y la foto del diálogo —que sí se ve— no, y con una docena de
+          imágenes pequeñas no compra nada medible. WebKit tiene fallos
+          conocidos de pintado con decodificación asíncrona dentro de
+          contenedores desplazables compuestos, que es exactamente donde vive
+          esta tabla. */}
       <img
         src={src}
         alt={`${entity.name}, vista ${PHOTO_VIEW_LABELS[photoView].toLowerCase()}`}
-        decoding="async"
         referrerPolicy="no-referrer"
         className={styles.photo}
         onError={() => setFailedSrc(src)}
