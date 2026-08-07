@@ -931,9 +931,11 @@
     "name": "X1 xDrive25e",
     "brand": "BMW",
     "technology": "PHEV",
+    "published": false,
     "notes": [
       "Es PHEV y el usuario no tiene carga en casa: no puede aprovechar el enchufe.",
-      "Solo entra en presupuesto como seminuevo (43.900-45.900 € con ~18.000 km); nuevo cuesta ~52.900 €."
+      "Solo entra en presupuesto como seminuevo (43.900-45.900 € con ~18.000 km); nuevo cuesta ~52.900 €.",
+      "Despublicado el 2026-08-07: fuera de presupuesto/rango."
     ],
     "lengthMm": {
       "value": 4500,
