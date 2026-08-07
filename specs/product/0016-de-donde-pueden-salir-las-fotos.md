@@ -85,9 +85,20 @@ salió esto» dependa de la memoria de quien la puso.
 3. **El configurador o la web comercial del propio fabricante**, cuando la
    sala de prensa no llega. Es el mismo titular de derechos, con enlaces más
    frágiles.
+4. **Importadores nacionales y concesionarios oficiales de la marca**
+   (decisión del 2026-08-07). Son los que fotografían **stock real**, y por
+   eso son los únicos que enseñan de forma rutinaria el **maletero abierto**,
+   que es la vista que ninguna de las tres anteriores cubre. Entran los
+   últimos y con dos cautelas escritas, porque no son el titular de la marca:
+   `credit` nombra al concesionario o importador concreto —no «un
+   concesionario»—, y su enlace es el más frágil de los cuatro, así que es el
+   primero que hay que sospechar cuando `check:photos` se ponga rojo.
 
 Cualquier otro origen **no entra sin decisión humana explícita**, caso a caso
-y escrita. No hay una cuarta categoría abierta.
+y escrita. No hay una quinta categoría abierta: en particular, que un
+concesionario sea aceptable **no** convierte en aceptable a cualquiera que
+venda coches en internet (portales de anuncios, compraventas, agregadores),
+que no son de la marca y cuya autoría no es verificable.
 
 ### 2. Qué se escribe en `credit`
 
@@ -105,10 +116,36 @@ lo lea dentro de un año **reconstruir de dónde salió la imagen**:
 
 ### 3. La versión sigue mandando sobre la fuente
 
-Nada de esto relaja el requisito 3 de `product/0014`: la foto tiene que
-corresponder al modelo y la motorización que el catálogo puntúa, y `shows` lo
-declara. Una foto oficial de la versión equivocada es peor que una de
-aficionado de la correcta, porque parece más fiable.
+La regla general no cambia: la foto tiene que corresponder al modelo y la
+motorización que el catálogo puntúa, y `shows` lo declara. Una foto oficial de
+la versión equivocada es peor que una de aficionado de la correcta, porque
+parece más fiable.
+
+**Excepción acotada para maletero e interior** (decisión del 2026-08-07). En
+esas dos vistas se admite una unidad de **otro acabado o motorización del
+mismo modelo y generación**, con dos condiciones:
+
+1. **`shows` dice qué unidad se fotografió**, con sus palabras, sin disimular
+   la diferencia: «Mazda CX-5 (KF), habitáculo en negro — unidad 2.5 Turbo
+   AWD; mismo habitáculo que el MHEV que puntúa la ficha». Quien lo lea tiene
+   que enterarse sin abrir la URL.
+2. **Solo si lo que se ve no cambia entre versiones.** Si el acabado altera de
+   verdad lo que enseña la foto —tapicería de otro material, salpicadero
+   distinto, doble fondo o rueda de repuesto que cambian el maletero—, la
+   excepción no aplica y la vista se deja vacía.
+
+**Por qué solo estas dos.** El maletero y el habitáculo son los mismos en todo
+el modelo salvo detalle de tapicería; el exterior no. Un lateral de otra
+motorización puede traer llantas, faldones o escapes distintos, y esta
+aplicación existe justo para comparar formas y tamaños: ahí la diferencia
+falsea lo que el usuario está mirando. En frontal, lateral y trasera el
+requisito 3 de `product/0014` sigue entero.
+
+Esto **regulariza lo que ya se estaba haciendo**: entre las 47 fotos ya
+cargadas hay casos que se apoyaban en esta excepción sin que estuviera escrita
+(el interior del Tonale es el PHEV Q4 y el del CX-5 el 2.5 Turbo, ambos
+declarados en `shows`). Quedaban correctos por criterio de quien los puso, no
+por regla — que es exactamente lo que esta spec viene a arreglar.
 
 ### 4. Consecuencias técnicas de salir de Commons
 
@@ -168,11 +205,11 @@ señaladamente el maletero.
 
 ## Decisiones abiertas
 
-1. **¿Entran los concesionarios y los importadores nacionales** —que publican
-   fotos propias de stock real, a menudo con el maletero abierto, que es justo
-   la vista que falta— o se quedan fuera con el resto de terceros? Tienen
-   autoría identificable, pero no son el titular de la marca.
-2. **¿Se acepta una foto de maletero de una versión distinta** del mismo
-   modelo (otro acabado o motorización) cuando el maletero es idéntico, o el
-   requisito 3 lo prohíbe también aquí? Hoy diez modelos no tienen la vista, y
-   esta es la relajación que más huecos cerraría.
+> Las dos que esta spec abrió se cerraron el 2026-08-07, y su respuesta está
+> en los requisitos, no aquí: **sí entran** importadores y concesionarios
+> oficiales, los últimos y con el crédito nombrando a cuál (requisito 1.4), y
+> **sí vale** una unidad de otro acabado o motorización **solo en maletero e
+> interior**, declarándolo en `shows` y solo cuando no cambie lo que se ve
+> (requisito 3).
+
+Ninguna.

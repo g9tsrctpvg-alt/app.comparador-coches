@@ -249,9 +249,11 @@ fase abierta. Se lista para no perderlo, no para bloquear nada.
   escribe en `credit` cuando la fuente no publica licencia con nombre, y qué
   hacer con lo que se rompe al salir de Commons (bloqueo por `Referer`,
   enlaces que caducan). **No reabre** la decisión de enlazar en vez de copiar:
-  la refuerza, porque es lo que sostiene el resto. Pendiente del gate humano y
-  con dos decisiones abiertas: si entran concesionarios e importadores, y si
-  vale un maletero de otra versión del mismo modelo.
+  la refuerza, porque es lo que sostiene el resto. Sus dos decisiones abiertas
+  se cerraron el 2026-08-07: **sí entran** importadores y concesionarios
+  oficiales —los últimos, y con el crédito nombrando a cuál—, y **sí vale**
+  una unidad de otro acabado o motorización **solo en maletero e interior**,
+  declarándolo en `shows`. Pendiente del gate humano.
 - **Eje de autonomía y repostaje.** Es la mayor diferencia práctica entre los
   once candidatos en un viaje largo —los térmicos e híbridos hacen 640-950 km
   con un depósito, los eléctricos la mitad en autopista— y el modelo es hoy
