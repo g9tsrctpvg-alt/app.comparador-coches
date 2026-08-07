@@ -196,11 +196,13 @@ describe('FichaCompletaPage', () => {
         references={[referenceFixture()]}
       />,
     );
-    expect(markup).toMatch(/name="photo-view"/);
-    const checked = markup.match(/name="photo-view"[^>]*checked=""/g) ?? [];
-    expect(checked).toHaveLength(1);
+    // Un `<select>` nativo (corrección 2026-08-07), no un grupo de radios:
+    // misma elección excluyente con menos superficie táctil en móvil.
+    expect(markup).toMatch(/<select[^>]*name="photo-view"/);
+    const selected = markup.match(/<option[^>]*selected=""/g) ?? [];
+    expect(selected).toHaveLength(1);
     expect(markup).toMatch(
-      /<input[^>]*name="photo-view"[^>]*checked=""[^>]*value="side"/,
+      /<option value="side" selected="">Lateral<\/option>/,
     );
   });
 
