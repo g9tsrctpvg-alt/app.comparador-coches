@@ -1,7 +1,7 @@
 # 0014 — La ficha del modelo y sus fotos
 
 - **Id:** product/0014
-- **Estado:** implemented
+- **Estado:** draft
 - **Tipo:** product
 - **Fecha:** 2026-08-06
 - **Specs relacionadas:** product/0001, product/0009, product/0010,
@@ -253,10 +253,15 @@ es siempre la Giulietta.
    pantalla sobre lo que va a pasar al pulsarlo.
 3. El modelo fijado **sale de la secuencia desplazable**: aparece una vez, no
    dos, y desplazarse no lo trae de vuelta.
-4. **Es la misma mecánica en todos los anchos.** No hay un modo móvil y otro
-   de escritorio: la columna de características y la fijada se quedan
-   quietas, y las demás desfilan al lado. Lo único que cambia con el ancho es
-   cuántas caben a la vez — una en un móvil, las que quepan en un escritorio.
+4. **Es la misma mecánica en todos los anchos, sujeto a la corrección del
+   2026-08-07 que reescribe el requisito 9.** Se pensó así: la columna de
+   características y la fijada se quedan quietas a cualquier ancho, y las
+   demás desfilan al lado. En la práctica, por debajo de `--bp-columna`
+   (37rem) esas dos columnas fijas dejaban solo **una** columna de modelo
+   legible, y ganaban una franja de sitio que hoy se reparte entre dos
+   columnas de modelo enteras. Por encima de `--bp-columna` la mecánica no
+   cambia: la de características y la fijada se quedan quietas, y las demás
+   desfilan al lado.
 5. **Qué columna está fijada es estado efímero**, como la foto elegida (8.6):
    no se persiste ni viaja en el enlace compartible de `product/0012`.
 
@@ -290,31 +295,48 @@ editando solo desde el desglose del ranking, que es su único sitio.
 
 ### 9. El móvil, que es donde esto se pone difícil
 
-Una tabla de doce columnas en 320px de ancho no cabe de ninguna manera. Lo
-que se enseña en un móvil es **una comparación de dos**: la columna fijada y
-la que esté a su lado, que va cambiando al desplazarse. El requisito no es
-que quepa todo, es que las dos que se ven se lean enteras:
+Una tabla de doce columnas en 320px de ancho no cabe de ninguna manera.
 
-1. **Reparto del ancho en móvil**: la columna de características toma
-   `6.5rem` —caben «Altura libre al suelo» en dos líneas y todos los rótulos
-   más cortos en una— y las dos de modelo se reparten el resto a partes
-   iguales, con un mínimo de `7rem` cada una. A 320px eso da dos columnas de
-   coche legibles con cifras del tamaño del resto de la aplicación. Si en la
-   verificación a 320px una cifra se parte, lo que cede es el rótulo de
-   característica —pasa a una fila propia sobre cada bloque—, no el tamaño de
-   letra.
+> **Corrección del 2026-08-07.** La primera versión de este requisito
+> mantenía la columna de características y la fijada quietas a cualquier
+> ancho (requisito 8.3), y por debajo de `--bp-columna` eso dejaba sitio para
+> **una sola** columna de modelo legible junto a las dos fijas. Comparar de
+> uno en uno en el ancho donde más se usa la aplicación resultó una mala
+> experiencia: mucho scroll vertical para leer poco por pantalla. Esta
+> versión libera esa franja quitando ambas columnas fijas por debajo de
+> `--bp-columna` y repartiendo el ancho entero entre modelos, así que **lo
+> que se enseña en un móvil pasa a ser dos modelos cualesquiera de la
+> secuencia**, no necesariamente el fijado y su vecino. El requisito sigue
+> siendo el mismo: no es que quepa todo, es que lo que se ve se lea entero.
+
+1. **Por debajo de `--bp-columna` (37rem) no hay columna de características
+   ni columna fija.** El rótulo de cada característica —«Longitud»,
+   «Potencia»...— se repite dentro de cada celda de dato en vez de vivir en
+   una columna aparte, y el modelo elegido para comparar (requisito 8.3) deja
+   de estar pegado a la izquierda: es una columna desplazable más, la
+   primera de la secuencia. Se ven **dos columnas de modelo completas**, de
+   `9rem` cada una, con cifras del mismo tamaño que el resto de la
+   aplicación. La cabecera de bloque —«Tamaño y espacio», «Mecánica y
+   prestaciones»...— sigue ocupando el ancho completo, sin cambios: sigue
+   siendo el separador entre grupos de características.
 2. **Anclaje de desplazamiento** (`scroll-snap-type: x mandatory`, con cada
-   columna como punto de anclaje): el gesto cae siempre en un modelo
-   completo, nunca entre dos, y cada parada es una comparación cerrada entre
-   el modelo fijado y uno.
-3. **La marca de selección también es alcanzable en móvil**: se llega a ella
-   desplazándose hasta la cabecera del modelo que se quiere fijar, y al
-   marcarla la tabla vuelve al principio del desplazamiento — si no, el
-   modelo recién fijado se quedaría fuera de pantalla justo al elegirlo.
-4. **En escritorio la mecánica no cambia**: por encima de `--bp-columna` las
+   columna de modelo como punto de anclaje, incluida la que esté fijada): el
+   gesto cae siempre en un modelo completo, nunca entre dos. Al no haber ya
+   columnas que se queden quietas, desplazarse saca de pantalla al modelo
+   fijado igual que a cualquier otro — dejó de ser una comparación cerrada
+   contra él en cada parada, y pasó a ser explorar la secuencia entera de
+   dos en dos.
+3. **La marca de selección sigue siendo alcanzable en móvil**: se llega a
+   ella desplazándose hasta la cabecera del modelo que se quiere fijar, y al
+   marcarla la tabla vuelve al principio del desplazamiento — así el modelo
+   recién fijado abre la secuencia en vez de quedar fuera de pantalla justo
+   al elegirlo.
+4. **En escritorio la mecánica no cambia**: por encima de `--bp-columna` la
+   columna de características y la fijada vuelven a quedarse quietas, las
    columnas de modelo miden `11rem` y se ven todas las que quepan, con la
-   fijada siempre a la izquierda. Ninguna media query introduce un segundo
-   diseño: solo cambian dos anchos.
+   fijada siempre a la izquierda —la mecánica original del requisito 8.3—.
+   Solo hay una media query, y solo cambia qué columnas son fijas y cuánto
+   miden las de modelo; no hay un tercer diseño intermedio.
 5. **La fila del nombre del modelo queda fija arriba** al desplazarse en
    vertical. La foto **no**: ocupa demasiado alto para llevarla pegada toda
    la lectura, y su sitio es el principio.
@@ -364,9 +386,18 @@ que quepa todo, es que las dos que se ven se lean enteras:
 - [x] La tabla tiene una columna por candidato más la de referencia, y una
       fila por cada una de las dieciocho magnitudes, agrupadas por bloque
       (test de render: se cuentan filas y columnas).
-- [ ] Al desplazar en horizontal, la columna de características y la del
-      modelo fijado permanecen visibles (revisión visual en los tres anchos.
-      Pendiente de revisar en navegador).
+- [ ] En escritorio (≥`--bp-columna`), al desplazar en horizontal, la columna
+      de características y la del modelo fijado permanecen visibles; por
+      debajo de `--bp-columna` ninguna columna es fija (requisito 9,
+      corrección 2026-08-07) (revisión visual en los tres anchos. Pendiente
+      de revisar en navegador).
+- [x] Cada celda de dato lleva su propio rótulo de característica, oculto por
+      CSS en escritorio y visible por debajo de `--bp-columna` (requisito
+      9.1, test de render: se cuenta un rótulo por columna en una magnitud;
+      correcto por construcción para el resto — todas las celdas de dato
+      pasan por el mismo marcado).
+- [x] La cabecera de columna «Característica» no es visible, solo accesible
+      por lector de pantalla (requisito 8.3, test de render).
 - [x] La vista abre con la Giulietta fijada, y marcar la cabecera de otro
       modelo la sustituye como columna fija (test de render del estado
       inicial; el cambio, revisión manual — `renderToStaticMarkup` no marca,
@@ -376,9 +407,10 @@ que quepa todo, es que las dos que se ven se lean enteras:
 - [x] Los controles de fijación son un grupo `radio` con el mismo `name` y
       etiqueta accesible por modelo, no casillas independientes (test de
       render sobre el marcado).
-- [ ] A 320px se leen enteras la columna de características y **dos**
-      columnas de modelo, sin que ninguna cifra se parta (revisión visual.
-      Pendiente de revisar en navegador).
+- [ ] A 320px se leen enteras **dos** columnas de modelo completas, sin
+      columna de características aparte y sin que ninguna cifra se parta
+      (requisito 9.1, corrección 2026-08-07) (revisión visual. Pendiente de
+      revisar en navegador).
 - [x] El selector cambia la foto de **todas** las columnas a la vez, y
       arranca en lateral (test de render sobre el estado inicial; el cambio
       es correcto por construcción — todas las cabeceras leen el mismo
