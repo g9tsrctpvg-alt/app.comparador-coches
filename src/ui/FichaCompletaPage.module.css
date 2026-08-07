@@ -235,33 +235,40 @@
   letter-spacing: 0.08em;
 }
 
-/* Marca de fijación (requisito 8.3.2): semánticamente un radio —solo un
- * modelo puede estar fijado a la vez—, dibujada como una casilla para que no
- * se confunda con el selector de vista de foto, que sí muestra su forma
- * nativa de radio. */
-.pinControl {
-  appearance: none;
-  width: var(--size-touch-min);
-  height: var(--size-touch-min);
-  min-width: var(--size-touch-min);
-  border: calc(var(--size-border-hairline) * 2) solid var(--color-rule);
-  border-radius: var(--radius-sm);
-  background: var(--color-card);
+/* Fijación (requisito 8.3.2, corrección 2026-08-07): antes una casilla
+ * aparte encima de la foto —le quitaba alto a la miniatura, que es la parte
+ * que sí importa mirar—; ahora el propio nombre + marca es el objetivo, con
+ * el radio real estirado por encima (`.pinInput`) para que cubra toda la
+ * etiqueta y no solo el texto. Semánticamente sigue siendo un radio —solo un
+ * modelo puede estar fijado a la vez—, así que el foco de teclado y el lector
+ * de pantalla lo tratan como tal; el marco de abajo es solo la señal visual
+ * de cuál está marcado. */
+.pinLabel {
+  position: relative;
+  display: block;
+  min-height: var(--size-touch-min);
   cursor: pointer;
-  display: grid;
-  place-items: center;
-  color: var(--color-paper);
-  font-weight: var(--font-weight-bold);
-  margin: 0 0 var(--space-2);
 }
 
-.pinControl:checked {
-  background: var(--color-accent);
+.pinInput {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.modelInfo {
+  display: block;
+  padding: var(--space-2);
+  margin: calc(var(--space-2) * -1);
+  border: calc(var(--size-border-hairline) * 2) solid transparent;
+  border-radius: var(--radius-sm);
+}
+
+.pinInput:checked ~ .modelInfo {
   border-color: var(--color-accent);
-}
-
-.pinControl:checked::after {
-  content: '✓';
+  background: var(--color-accent-tint);
 }
 
 /* El botón es solo el envoltorio accionable (requisito 8.4): no impone la

@@ -246,20 +246,24 @@ function ModelHeaderCell({
       scope="col"
       className={isPinned ? styles.pinnedHeader : styles.modelHeader}
     >
-      <input
-        type="radio"
-        name="pinned-model"
-        value={entity.id}
-        checked={isPinned}
-        onChange={() => onPin(entity.id)}
-        aria-label={`Comparar contra ${entity.name}`}
-        className={styles.pinControl}
-      />
       <PhotoBox entity={entity} photoView={photoView} onOpen={onOpenPhoto} />
-      <span className={styles.modelName}>{entity.name}</span>
-      <span className={primitives.secondaryText}>
-        {entity.brand} · {TECHNOLOGY_LABELS[entity.technology]}
-      </span>
+      <label className={styles.pinLabel}>
+        <input
+          type="radio"
+          name="pinned-model"
+          value={entity.id}
+          checked={isPinned}
+          onChange={() => onPin(entity.id)}
+          aria-label={`Comparar contra ${entity.name}`}
+          className={styles.pinInput}
+        />
+        <span className={styles.modelInfo}>
+          <span className={styles.modelName}>{entity.name}</span>
+          <span className={primitives.secondaryText}>
+            {entity.brand} · {TECHNOLOGY_LABELS[entity.technology]}
+          </span>
+        </span>
+      </label>
       {entity.kind === 'reference' && (
         <span className={styles.referenceTag}>Referencia</span>
       )}
