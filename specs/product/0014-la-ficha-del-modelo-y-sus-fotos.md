@@ -194,9 +194,18 @@ aplicación existe para comparar tamaños.
 2. Hueco de **relación de aspecto fija** y `object-fit: contain`: recortar
    deforma la comparación justo en los extremos que importan —morro y cola—,
    así que la imagen se ajusta dentro del hueco y no al revés.
-3. `loading="lazy"` y `decoding="async"`: doce modelos por cinco vistas son
-   sesenta peticiones a terceros y ninguna es crítica para la primera
-   pantalla.
+3. `decoding="async"`: decodificar no debe bloquear el hilo principal.
+   > **Corrección del 2026-08-07:** esta sección pedía también
+   > `loading="lazy"`, contando «doce modelos por cinco vistas, sesenta
+   > peticiones» como motivo. La página solo muestra **una** vista de foto a
+   > la vez —el selector de arriba cambia las doce a la vez, no las suma—,
+   > así que nunca hay más de una docena de `<img>` en el DOM; el cálculo
+   > que justificaba diferir la carga no aplicaba a como quedó construida la
+   > página. Y diferir sí tenía coste: dentro de la tabla con columnas fijas
+   > por `position: sticky` y desplazamiento horizontal, la carga perezosa
+   > no llegaba a dispararse en algunos navegadores, dejando la miniatura en
+   > blanco aunque la foto ampliada —que nunca fue perezosa— sí cargaba al
+   > pulsarla. Se retira `loading="lazy"` de la miniatura.
 4. `referrerpolicy="no-referrer"`: la visita no le cuenta al host de la imagen
    desde qué página se la pide.
 5. Las medidas y el hueco salen de los tokens de `technical/0004` (ADR 0006).

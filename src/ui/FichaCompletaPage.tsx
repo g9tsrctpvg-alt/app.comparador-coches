@@ -181,8 +181,14 @@ function PhotoBox({
   photoView: PhotoView;
   onOpen: (entity: FichaCompletaEntity, view: PhotoView, photo: Photo) => void;
 }) {
+  // Una `src` que no carga —foto declarada, host caído o bloqueada por la
+  // red de quien mira— degrada al mismo hueco que «sin foto» (product/0014,
+  // sección 4.3), en vez de dejar el icono de imagen rota. Guardar la propia
+  // `src` fallida, no un booleano, evita quedarse en modo «hueco» si el
+  // usuario cambia de vista y esa sí carga.
+  const [failedSrc, setFailedSrc] = useState<string | null>(null);
   const photo = entity.photos[photoView];
-  if (photo === undefined) {
+  if (photo === undefined || photoSrc(photo) === failedSrc) {
     return (
       <div className={styles.photoPlaceholder}>
         <span className={primitives.visuallyHidden}>{entity.name}, </span>
@@ -190,6 +196,7 @@ function PhotoBox({
       </div>
     );
   }
+  const src = photoSrc(photo);
   return (
     <button
       type="button"
@@ -197,12 +204,12 @@ function PhotoBox({
       onClick={() => onOpen(entity, photoView, photo)}
     >
       <img
-        src={photoSrc(photo)}
+        src={src}
         alt={`${entity.name}, vista ${PHOTO_VIEW_LABELS[photoView].toLowerCase()}`}
-        loading="lazy"
         decoding="async"
         referrerPolicy="no-referrer"
         className={styles.photo}
+        onError={() => setFailedSrc(src)}
       />
     </button>
   );
