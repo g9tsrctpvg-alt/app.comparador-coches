@@ -95,6 +95,35 @@ describe('FichaCompletaPage', () => {
     expect(dataRows).toHaveLength(TOTAL_FIELD_COUNT);
   });
 
+  it('repeats every feature label inside its own cell, for mobile (product/0014, requisito 9.1)', () => {
+    // Por debajo de 37rem la columna de rótulos desaparece (corrección
+    // 2026-08-07); cada celda lleva el suyo, oculto por CSS en escritorio,
+    // así que tiene que estar en el marcado sin depender del ancho.
+    const markup = renderToStaticMarkup(
+      <FichaCompletaPage
+        cars={threeCarFixture}
+        references={[referenceFixture()]}
+      />,
+    );
+    const cellLabels = markup.match(/cellLabel[^"]*">Longitud</g) ?? [];
+    // Una por cada columna: la fijada más los tres candidatos.
+    expect(cellLabels).toHaveLength(4);
+  });
+
+  it('keeps the corner header cell for screen readers only, with no visible label', () => {
+    // No aporta nada que la fila (`th scope="row"`) no diga ya (corrección
+    // 2026-08-07 del requisito 8.3): se oculta visualmente, no se borra.
+    const markup = renderToStaticMarkup(
+      <FichaCompletaPage
+        cars={threeCarFixture}
+        references={[referenceFixture()]}
+      />,
+    );
+    expect(markup).toMatch(
+      /<th scope="col" class="[^"]*featureHeader[^"]*"><span class="[^"]*visuallyHidden[^"]*">Característica<\/span><\/th>/,
+    );
+  });
+
   it('renders the block headers', () => {
     const markup = renderToStaticMarkup(
       <FichaCompletaPage

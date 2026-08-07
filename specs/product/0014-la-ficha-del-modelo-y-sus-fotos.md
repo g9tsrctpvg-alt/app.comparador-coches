@@ -1,7 +1,7 @@
 # 0014 — La ficha del modelo y sus fotos
 
 - **Id:** product/0014
-- **Estado:** approved
+- **Estado:** implemented
 - **Tipo:** product
 - **Fecha:** 2026-08-06
 - **Specs relacionadas:** product/0001, product/0009, product/0010,

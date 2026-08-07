@@ -120,11 +120,14 @@
   --bp-ancho: 60rem;
 
   /* Ficha completa (product/0014, requisito 9): anchos de columna de la
-   * tabla transpuesta. La de características es constante; la de cada
-   * modelo tiene un mínimo flexible por debajo de `--bp-columna` —dos
-   * modelos legibles a 320px— y un ancho fijo por encima. */
+   * tabla transpuesta. La de características solo existe por encima de
+   * `--bp-columna`, así que por debajo el ancho de cada modelo ya no tiene
+   * que compartir sitio con ella —corrección del 2026-08-07—: a 320px caben
+   * dos modelos completos de `9rem`, no dos apretados junto a una columna
+   * de rótulos. Por encima de `--bp-columna`, la de características vuelve
+   * y el modelo pasa a un ancho fijo mayor. */
   --size-ficha-feature-column: 6.5rem;
-  --size-ficha-model-min: 7rem;
+  --size-ficha-model-min: 9rem;
   --size-ficha-model-desktop: 11rem;
 }
 

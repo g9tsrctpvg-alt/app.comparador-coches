@@ -338,7 +338,14 @@ export function FichaCompletaPage({
           <thead>
             <tr>
               <th scope="col" className={styles.featureHeader}>
-                Característica
+                {/* No visible (corrección 2026-08-07 del requisito 8.3): cada
+                    fila ya lleva su propio rótulo al lado, así que repetir
+                    "Característica" en la esquina no añadía información —
+                    solo ocupaba sitio. Se queda para quien lee con lector de
+                    pantalla la cabecera de la columna. */}
+                <span className={primitives.visuallyHidden}>
+                  Característica
+                </span>
               </th>
               {pinnedEntity && (
                 <ModelHeaderCell
@@ -384,6 +391,7 @@ export function FichaCompletaPage({
                           ' ',
                         )}
                       >
+                        <span className={styles.cellLabel}>{def.label}</span>
                         <CellContent
                           cell={pinnedEntity.cells[def.key]}
                           def={def}
@@ -397,6 +405,7 @@ export function FichaCompletaPage({
                           ' ',
                         )}
                       >
+                        <span className={styles.cellLabel}>{def.label}</span>
                         <CellContent cell={entity.cells[def.key]} def={def} />
                       </td>
                     ))}
