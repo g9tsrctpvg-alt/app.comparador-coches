@@ -85,6 +85,11 @@ independiente que ya usa el resto del catálogo para batalla (motor.es) y
 sigue el mismo principio: una fuente publicada y nombrada, nunca de
 memoria.
 
+km77 publica el dato en **centímetros enteros**, así que la resolución
+real de esta magnitud es de 10 mm. El campo se guarda en milímetros
+(`rearShoulderWidthMm`) por coherencia con el resto de medidas del
+catálogo, pero no debe leerse como si tuviera precisión milimétrica.
+
 ### De dónde salen los anclajes
 
 Calibrados contra los mismos coches de referencia que ya fijaron maletero
@@ -98,9 +103,14 @@ metodología:
 | Alfa Romeo Giulietta (estándar, 2014) | **1.310 mm** | [km77](https://www.km77.com/coches/alfa-romeo/giulietta/2014/estandar/mediciones-propias) |
 
 El maletero VDA que muestran estas mismas fichas de km77 coincide con los
-anclajes de maletero de `product/0005` (Sandero 328 L exacto; Superb Combi
-510-690 L; Giulietta 275-350 L), lo que da confianza en que son las mismas
+anclajes de maletero de `product/0005` (Sandero 328 L exacto; Giulietta
+275-350 L, y 0005 usa el 350 L), lo que confirma que son las mismas
 versiones que ya se usaron para calibrar las otras dos magnitudes.
+
+**Las tres cifras de esta tabla están verificadas abriendo cada ficha**,
+no solo leídas de una búsqueda: es el dato del que cuelga toda la escala.
+Las de la tabla de candidatos, más abajo, no tienen esa verificación
+directa.
 
 **El recorrido es corto a propósito: 80 mm.** Es una magnitud con poco
 rango real entre un utilitario y un familiar grande — mucho menos que el
@@ -125,10 +135,24 @@ sí sola.
 | Honda CR-V e:HEV | 1.420 mm | 10,0 (saturado) | [km77](https://www.km77.com/coches/honda/cr-v/2024/estandar/hev/cr-v-elegance-full-hybrid-4x4/mediciones-propias/detalle) |
 
 **Cuatro de los once candidatos saturan la nota máxima**, y dos de ellos
-(Civic, CR-V, 1.420 mm) superan al propio Skoda Superb de referencia
-(1.390 mm). Ver «Decisiones abiertas» — es exactamente el tipo de señal
-que `docs/proceso/calibracion-de-escalas.md` pide comprobar antes de dar
-un anclaje por bueno.
+(Civic y CR-V, 1.420 mm) superan al propio Skoda Superb de referencia
+(1.390 mm). `docs/proceso/calibracion-de-escalas.md` pide mirar con
+sospecha una escala donde el catálogo se agolpa en un extremo, así que se
+comprobó — **y aquí es comportamiento correcto, no un anclaje mal puesto**.
+
+La razón es que el anclaje bueno significa «a partir de aquí deja de
+mejorar», no «lo mejor que existe» (mismo documento, sección 2). En
+anchura de hombros, una berlina grande y un SUV medio ya son coches
+anchos: caber tres atrás sin agolparse deja de ser el problema mucho antes
+de llegar al coche más ancho del mercado. Que once candidatos de segmento
+C/D y SUV medio se concentren en la parte alta es la descripción correcta
+de la realidad. El extremo malo lo marcan los coches donde el problema sí
+existe —un utilitario de ciudad tipo Sandero, y por debajo un smart—, y
+ninguno de ellos está ni va a estar en esta lista.
+
+Es el mismo caso que la batalla en `product/0005`, que ya se aceptó
+sabiendo que aportaría poco: según el ADR 0004, una magnitud en la que los
+candidatos apenas difieren debe influir poco, no fabricar diferencias.
 
 ## Requisitos / comportamiento esperado
 
@@ -180,25 +204,21 @@ un anclaje por bueno.
 
 ## Decisiones abiertas
 
-- **Verificación manual de las cifras de km77.** Se han obtenido con
-  `WebFetch` (un modelo intermedio leyendo el HTML de cada ficha), no
-  contrastadas a ojo contra una captura de cada tabla. Antes de aprobar,
-  alguien debería confirmar al menos 2-3 —incluidas las tres de
-  referencia— abriendo la URL directamente.
-- **La saturación en el anclaje bueno.** Cuatro de once candidatos sacan
-  10,0, y dos (Civic, CR-V) superan al Skoda Superb de referencia. Decidir
-  si se acepta —como ya se aceptó que la batalla «aporte poco»— o si
-  conviene buscar una referencia con más anchura de hombros que el Superb
-  para que el anclaje bueno vuelva a ser «a partir de aquí deja de
-  mejorar» de verdad.
 - **Versión no exactamente coincidente con la fuente de motor.es** en
   cinco candidatos (Kona HEV, Kona Eléctrico, Alfa Romeo Tonale, Kia
   Sportage HEV, Lexus NX 350h): km77 no publica una ficha «mediciones
   propias» de la motorización/acabado exacto que usa el resto de la ficha
-  de esos coches; se ha usado la más cercana disponible. Detalle
-  version-a-versión en el registro de la investigación, no reproducido
-  aquí para no duplicarlo — confirmar si es aceptable o si hace falta
-  seguir buscando la versión exacta.
-- **Nombre final del campo** en `CarSchema` — esta spec no lo fija
-  (propuesta de trabajo: `rearShoulderWidthMm`); lo decide la spec técnica
-  que implemente esto.
+  de esos coches, y se ha tomado la más cercana de la misma generación y
+  carrocería.
+
+  Hay indicio de que no importa: en el Kona, la ficha genérica del modelo
+  y la de la motorización concreta dan **el mismo valor** (138 cm) y el
+  mismo maletero VDA, lo que apunta a que la anchura de hombros no varía
+  por motorización dentro de una generación —es una cota de la carrocería,
+  no del motor—. Pero es un indicio de un caso, no una comprobación.
+
+  Queda por decidir si se acepta como está o si hace falta confirmarlo en
+  los otros cuatro antes de aprobar. Nótese que la regla del catálogo «un
+  dato por versión, no por modelo» (`calibracion-de-escalas.md`, sección
+  6) nació de magnitudes que **sí** cambian con la motorización —maletero
+  del enchufable, garantía—, y esta puede no ser una de ellas.
