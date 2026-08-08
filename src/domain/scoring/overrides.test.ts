@@ -17,24 +17,21 @@ describe('applyOverride', () => {
     expect(result.aestheticsInterior).toEqual(
       sportageFixture.aestheticsInterior,
     );
-    expect(result.travelComfort).toEqual(sportageFixture.travelComfort);
   });
 
-  it('replaces the three editable ratings when all are declared', () => {
+  it('replaces both editable ratings when both are declared', () => {
     const result = applyOverride(sportageFixture, {
       aestheticsExterior: 1,
-      aestheticsInterior: 5,
-      travelComfort: 3.5,
+      aestheticsInterior: 3.5,
     });
     expect(result.aestheticsExterior.value).toBe(1);
-    expect(result.aestheticsInterior.value).toBe(5);
-    expect(result.travelComfort.value).toBe(3.5);
+    expect(result.aestheticsInterior.value).toBe(3.5);
   });
 
   it('keeps the rating label the catalogue declared', () => {
-    const result = applyOverride(sportageFixture, { travelComfort: 2 });
-    expect(result.travelComfort.label).toBe(
-      sportageFixture.travelComfort.label,
+    const result = applyOverride(sportageFixture, { aestheticsInterior: 2 });
+    expect(result.aestheticsInterior.label).toBe(
+      sportageFixture.aestheticsInterior.label,
     );
   });
 
@@ -47,9 +44,9 @@ describe('applyOverride', () => {
   it('rejects a rating below the 1-5 range the domain declares', () => {
     // El `<input type="range">` del ranking respeta la cota, pero era el
     // único que lo hacía: cualquier otra vía de entrada la esquivaba.
-    expect(() => applyOverride(sportageFixture, { travelComfort: 0 })).toThrow(
-      /fuera del rango permitido/,
-    );
+    expect(() =>
+      applyOverride(sportageFixture, { aestheticsInterior: 0 }),
+    ).toThrow(/fuera del rango permitido/);
   });
 
   it('names the offending field and car in the error', () => {

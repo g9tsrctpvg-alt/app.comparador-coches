@@ -26,11 +26,14 @@ export interface PenaltyLine {
   effect: number;
 }
 
-/** Los tres campos de `Car` que el usuario puede editar desde el ranking.
- * Es el contrato estable entre dominio e interfaz: la interfaz conmuta sobre
- * estos identificadores, nunca sobre el texto de una etiqueta. */
-export type EditableRatingField =
-  'aestheticsExterior' | 'aestheticsInterior' | 'travelComfort';
+/** Los campos de `Car` que el usuario puede editar desde el ranking: solo
+ * los de estética, que son juicios sin referente externo. Es el contrato
+ * estable entre dominio e interfaz: la interfaz conmuta sobre estos
+ * identificadores, nunca sobre el texto de una etiqueta.
+ *
+ * El confort de viaje no está aquí porque no es un juicio: lo calcula el
+ * eje `viaje` a partir de magnitudes medidas (product/0005, product/0017). */
+export type EditableRatingField = 'aestheticsExterior' | 'aestheticsInterior';
 
 /** Un sumando puntuado contra una escala absoluta fija —dos anclajes, no el
  * conjunto de candidatos (ADR 0004)— en vez de normalización relativa.

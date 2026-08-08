@@ -114,7 +114,7 @@ describe('paramsToRawConfig', () => {
   it('round-trips an override', () => {
     const original = {
       ...DEFAULT_CONFIG,
-      overrides: { 'kia-ev3': { travelComfort: 5 } },
+      overrides: { 'kia-ev3': { aestheticsInterior: 5 } },
     };
     const raw = paramsToRawConfig(configToParams(original));
     const { config } = restoreConfig(raw, CARS);

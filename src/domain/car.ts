@@ -98,6 +98,13 @@ export const CarSchema = z.object({
   widthMm: SourcedNumberSchema,
   heightMm: SourcedNumberSchema,
   wheelbaseMm: SourcedNumberSchema,
+  /**
+   * Anchura interior de la segunda fila medida a la altura de los hombros
+   * (product/0017). km77 la publica en centímetros enteros, así que la
+   * resolución real es de 10 mm aunque se guarde en milímetros como el
+   * resto de medidas.
+   */
+  rearShoulderWidthMm: SourcedNumberSchema,
   groundClearanceMm: SourcedNumberSchema,
   trunkLiters: SourcedNumberSchema,
   powerCv: SourcedNumberSchema,
@@ -112,7 +119,6 @@ export const CarSchema = z.object({
   residualPct5y: SourcedNumberSchema.optional(),
   aestheticsExterior: UserRatingSchema,
   aestheticsInterior: UserRatingSchema,
-  travelComfort: UserRatingSchema,
   photos: PhotosSchema,
 });
 export type Car = z.infer<typeof CarSchema>;

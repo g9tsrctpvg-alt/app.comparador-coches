@@ -9,7 +9,6 @@ export class InvalidRatingOverrideError extends Error {}
 export const EDITABLE_RATING_FIELDS: EditableRatingField[] = [
   'aestheticsExterior',
   'aestheticsInterior',
-  'travelComfort',
 ];
 
 /**

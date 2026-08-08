@@ -65,6 +65,11 @@ const BLOCKS: BlockDef[] = [
       { key: 'heightMm', label: 'Altura', unitFallback: 'mm' },
       { key: 'wheelbaseMm', label: 'Batalla', unitFallback: 'mm' },
       {
+        key: 'rearShoulderWidthMm',
+        label: 'Anchura de hombros atrás',
+        unitFallback: 'mm',
+      },
+      {
         key: 'groundClearanceMm',
         label: 'Altura libre al suelo',
         unitFallback: 'mm',
@@ -125,7 +130,6 @@ const BLOCKS: BlockDef[] = [
     fields: [
       { key: 'aestheticsExterior', label: 'Estética exterior' },
       { key: 'aestheticsInterior', label: 'Estética interior' },
-      { key: 'travelComfort', label: 'Confort de viaje' },
     ],
   },
 ];

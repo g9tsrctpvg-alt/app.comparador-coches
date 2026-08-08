@@ -55,6 +55,18 @@
         }
       ]
     },
+    "rearShoulderWidthMm": {
+      "value": 1340,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — Standard (2025) (agosto 2026): 134 cm a la altura de los hombros, https://www.km77.com/coches/kia/ev3/2025/estandar/mediciones-propias/detalle",
+          "value": 1340,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "groundClearanceMm": {
       "value": 140,
       "sources": [
@@ -193,10 +205,6 @@
       "value": 3,
       "label": "Valoración del usuario sobre fotos de catálogo"
     },
-    "travelComfort": {
-      "value": 3,
-      "label": "Valoración del usuario sobre fotos de catálogo"
-    },
     "photos": {
       "front": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Kia_EV3_Earth_SV1_Snow_White_Pearl_%281%29.jpg/1280px-Kia_EV3_Earth_SV1_Snow_White_Pearl_%281%29.jpg",
@@ -269,6 +277,18 @@
         {
           "label": "motor.es, ficha de medidas (agosto 2026)",
           "value": 2660,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1380,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — Hibrido N Line Style 1.6 GDi 129 CV (agosto 2026): 138 cm a la altura de los hombros, https://www.km77.com/coches/hyundai/kona/2023/estandar/hibrido/kona-n-line-style-hibrido-16-gdi-129-cv/mediciones-propias/detalle",
+          "value": 1380,
           "estimated": false,
           "current": true
         }
@@ -412,10 +432,6 @@
       "value": 3,
       "label": "Valoración del usuario sobre fotos de catálogo"
     },
-    "travelComfort": {
-      "value": 3,
-      "label": "Valoración del usuario sobre fotos de catálogo"
-    },
     "photos": {
       "front": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Hyundai_Kona_1.6T_Inspiration_SX2_Neoteric_Yellow_%288%29.jpg/1280px-Hyundai_Kona_1.6T_Inspiration_SX2_Neoteric_Yellow_%288%29.jpg",
@@ -490,6 +506,18 @@
         {
           "label": "motor.es, ficha de medidas (agosto 2026)",
           "value": 2660,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1380,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — Electrico Tecno 204 CV 65 kWh (agosto 2026): 138 cm a la altura de los hombros, https://www.km77.com/coches/hyundai/kona/2023/estandar/electric/kona-electrico-204-cv-65-kwh-tecno/mediciones-propias/detalle",
+          "value": 1380,
           "estimated": false,
           "current": true
         }
@@ -633,10 +661,6 @@
       "value": 3,
       "label": "Valoración del usuario sobre fotos de catálogo"
     },
-    "travelComfort": {
-      "value": 3,
-      "label": "Valoración del usuario sobre fotos de catálogo"
-    },
     "photos": {
       "front": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Hyundai_Kona_Electric_SX2_EV_Abyss_Black_Pearl_%2814%29.jpg/1280px-Hyundai_Kona_Electric_SX2_EV_Abyss_Black_Pearl_%2814%29.jpg",
@@ -717,6 +741,18 @@
         {
           "label": "motor.es, ficha de medidas (agosto 2026)",
           "value": 2640,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1350,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — Style 140H Hybrid FWD (agosto 2026): 135 cm a la altura de los hombros, https://www.km77.com/coches/toyota/corolla-cross/2023/estandar/estandar/corolla-cross-style-18-hybrid/mediciones-propias/detalle",
+          "value": 1350,
           "estimated": false,
           "current": true
         }
@@ -894,10 +930,6 @@
       "value": 2,
       "label": "Valoración del usuario sobre fotos de catálogo"
     },
-    "travelComfort": {
-      "value": 3,
-      "label": "Valoración del usuario sobre fotos de catálogo"
-    },
     "photos": {
       "front": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/2020_Toyota_Corolla_Cross_-_Front.jpg/1280px-2020_Toyota_Corolla_Cross_-_Front.jpg",
@@ -980,6 +1012,18 @@
         {
           "label": "motor.es, ficha de medidas (agosto 2026)",
           "value": 2692,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1380,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — xDrive25e (agosto 2026): 138 cm a la altura de los hombros, https://www.km77.com/coches/bmw/x1/2023/estandar/e/x1-xdrive25e/mediciones-propias/detalle",
+          "value": 1380,
           "estimated": false,
           "current": true
         }
@@ -1123,10 +1167,6 @@
       "value": 5,
       "label": "Valoración del usuario sobre fotos de catálogo"
     },
-    "travelComfort": {
-      "value": 4,
-      "label": "Valoración del usuario sobre fotos de catálogo"
-    },
     "photos": {
       "front": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/BMW_X1_xDrive25e_%28U11%2C_2024%29_%2854533446437%29.jpg/1280px-BMW_X1_xDrive25e_%28U11%2C_2024%29_%2854533446437%29.jpg",
@@ -1202,6 +1242,18 @@
         {
           "label": "motor.es, ficha de medidas (agosto 2026)",
           "value": 2636,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1370,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — ficha estandar del modelo (agosto 2026): 137 cm a la altura de los hombros, https://www.km77.com/coches/alfa-romeo/tonale/2022/estandar/mediciones-propias/detalle",
+          "value": 1370,
           "estimated": false,
           "current": true
         }
@@ -1352,10 +1404,6 @@
       "value": 4,
       "label": "Valoración del usuario sobre fotos de catálogo"
     },
-    "travelComfort": {
-      "value": 4,
-      "label": "Valoración del usuario sobre fotos de catálogo"
-    },
     "photos": {
       "front": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Alfa_Romeo_Tonale_Veloce_Type_965_Grigio_Vesuvio_%284%29.jpg/1280px-Alfa_Romeo_Tonale_Veloce_Type_965_Grigio_Vesuvio_%284%29.jpg",
@@ -1428,6 +1476,18 @@
         {
           "label": "motor.es, ficha de medidas (agosto 2026)",
           "value": 2680,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1390,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — ficha HEV del modelo (agosto 2026): 139 cm a la altura de los hombros, https://www.km77.com/coches/kia/sportage/2022/estandar/hev/mediciones-propias",
+          "value": 1390,
           "estimated": false,
           "current": true
         }
@@ -1571,10 +1631,6 @@
       "value": 4,
       "label": "Valoración del usuario sobre fotos de catálogo"
     },
-    "travelComfort": {
-      "value": 3,
-      "label": "Valoración del usuario sobre fotos de catálogo"
-    },
     "photos": {
       "front": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Kia_Sportage_Hybrid_NQ5_HEV_Shadow_Matte_Gray_%281%29.jpg/1280px-Kia_Sportage_Hybrid_NQ5_HEV_Shadow_Matte_Gray_%281%29.jpg",
@@ -1647,6 +1703,18 @@
         {
           "label": "motor.es, ficha de medidas (agosto 2026)",
           "value": 2734,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1420,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — e:HEV Advance (agosto 2026): 142 cm a la altura de los hombros, https://www.km77.com/coches/honda/civic/2023/5-puertas/hev/civic-ehev-advance/mediciones-propias/detalle",
+          "value": 1420,
           "estimated": false,
           "current": true
         }
@@ -1797,10 +1865,6 @@
       "value": 3,
       "label": "Valoración del usuario sobre fotos de catálogo"
     },
-    "travelComfort": {
-      "value": 3,
-      "label": "Valoración del usuario sobre fotos de catálogo"
-    },
     "photos": {
       "front": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Honda_CIVIC_e%EF%BC%9AHEV_%286AA-FL4%29.jpg/1280px-Honda_CIVIC_e%EF%BC%9AHEV_%286AA-FL4%29.jpg",
@@ -1874,6 +1938,18 @@
         {
           "label": "motor.es, ficha de medidas (agosto 2026)",
           "value": 2690,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1380,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — 350h 4WD Business (agosto 2026): 138 cm a la altura de los hombros, https://www.km77.com/coches/lexus/nx/2022/estandar/hev/nx-350h-4wd-business/mediciones-propias/detalle",
+          "value": 1380,
           "estimated": false,
           "current": true
         }
@@ -2051,10 +2127,6 @@
       "value": 4,
       "label": "Valoración del usuario sobre fotos de catálogo"
     },
-    "travelComfort": {
-      "value": 4,
-      "label": "Valoración del usuario sobre fotos de catálogo"
-    },
     "photos": {
       "front": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Lexus_NX_350h_F_SPORT_2WD_%286AA-AAZH20-AWXLB%28F%29%29_front.jpg/1280px-Lexus_NX_350h_F_SPORT_2WD_%286AA-AAZH20-AWXLB%28F%29%29_front.jpg",
@@ -2126,6 +2198,18 @@
         {
           "label": "motor.es, ficha de medidas (agosto 2026)",
           "value": 2815,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1390,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — 2.0 e-SKYACTIV G MHEV 165 CV 2WD Takumi (agosto 2026): 139 cm a la altura de los hombros, https://www.km77.com/coches/mazda/cx-5/2022/estandar/estandar/cx-5-20-e-skyactiv-g-mhev-121-kw-165-cv-2wd-takumi/mediciones-propias/detalle",
+          "value": 1390,
           "estimated": false,
           "current": true
         }
@@ -2296,10 +2380,6 @@
       "value": 3,
       "label": "Valoración del usuario sobre fotos de catálogo"
     },
-    "travelComfort": {
-      "value": 3,
-      "label": "Valoración del usuario sobre fotos de catálogo"
-    },
     "photos": {
       "front": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Mazda_CX-5_%28KF%29_Facelift_1X7A0331.jpg/1280px-Mazda_CX-5_%28KF%29_Facelift_1X7A0331.jpg",
@@ -2382,6 +2462,18 @@
         {
           "label": "motor.es, ficha de medidas (agosto 2026)",
           "value": 2701,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1420,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — Full Hybrid 4x4 (agosto 2026): 142 cm a la altura de los hombros, https://www.km77.com/coches/honda/cr-v/2024/estandar/hev/cr-v-elegance-full-hybrid-4x4/mediciones-propias/detalle",
+          "value": 1420,
           "estimated": false,
           "current": true
         }
@@ -2536,10 +2628,6 @@
       "label": "Valoración del usuario sobre fotos de catálogo"
     },
     "aestheticsInterior": {
-      "value": 3,
-      "label": "Valoración del usuario sobre fotos de catálogo"
-    },
-    "travelComfort": {
       "value": 3,
       "label": "Valoración del usuario sobre fotos de catálogo"
     },

@@ -21,6 +21,7 @@ export const FICHA_COMPLETA_FIELDS = [
   'widthMm',
   'heightMm',
   'wheelbaseMm',
+  'rearShoulderWidthMm',
   'groundClearanceMm',
   'trunkLiters',
   'litersPerSquareMeter',
@@ -36,7 +37,6 @@ export const FICHA_COMPLETA_FIELDS = [
   'warrantyExtensionYears',
   'aestheticsExterior',
   'aestheticsInterior',
-  'travelComfort',
 ] as const;
 export type FichaCompletaField = (typeof FICHA_COMPLETA_FIELDS)[number];
 
@@ -61,6 +61,7 @@ interface EntityLike {
   widthMm: SourcedNumber;
   heightMm?: SourcedNumber;
   wheelbaseMm?: SourcedNumber;
+  rearShoulderWidthMm?: SourcedNumber;
   groundClearanceMm?: SourcedNumber;
   trunkLiters: SourcedNumber;
   powerCv?: SourcedNumber;
@@ -75,7 +76,6 @@ interface EntityLike {
   warrantyExtension?: { years: SourcedNumber };
   aestheticsExterior?: UserRating;
   aestheticsInterior?: UserRating;
-  travelComfort?: UserRating;
 }
 
 function sourcedCell(sourced: SourcedNumber | undefined): FichaCompletaCell {
@@ -123,6 +123,7 @@ function cellsOf(
     widthMm: sourcedCell(entity.widthMm),
     heightMm: sourcedCell(entity.heightMm),
     wheelbaseMm: sourcedCell(entity.wheelbaseMm),
+    rearShoulderWidthMm: sourcedCell(entity.rearShoulderWidthMm),
     groundClearanceMm: sourcedCell(entity.groundClearanceMm),
     trunkLiters: sourcedCell(entity.trunkLiters),
     litersPerSquareMeter: litersPerSquareMeterCell(entity),
@@ -138,7 +139,6 @@ function cellsOf(
     warrantyExtensionYears: sourcedCell(entity.warrantyExtension?.years),
     aestheticsExterior: ratingCell(entity.aestheticsExterior),
     aestheticsInterior: ratingCell(entity.aestheticsInterior),
-    travelComfort: ratingCell(entity.travelComfort),
   };
 }
 
