@@ -16,6 +16,7 @@ import { scoreCatalog } from './score';
  * este test fallara era la señal esperada, no una regresión.
  */
 const EXPECTED_TOTALS: Record<string, number> = {
+  'hyundai-tucson-hev': 101.71240913329606,
   'kia-sportage-hev': 97.96663732897088,
   'bmw-x1-xdrive25e': 96.8858574088462,
   'mazda-cx-5': 93.85054990055077,
