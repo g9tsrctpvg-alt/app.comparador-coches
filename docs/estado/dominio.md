@@ -24,8 +24,11 @@ Un `Car` (`src/domain/car.ts`) tiene identidad (`id`, `name`, `brand`,
   hasta el techo frente a medición VDA independiente.
 - **`UserRating`** — `{ value, unit? }`, sin `sources`. Es el formato de un
   juicio propio del usuario, no un dato con procedencia externa:
-  `aestheticsExterior`, `aestheticsInterior` y `travelComfort`. Se edita
+  `aestheticsExterior` y `aestheticsInterior`, los dos únicos. Se edita
   desde el propio ranking y no lleva ni estimación ni fuente que declarar.
+  Solo la estética se juzga así, porque el gusto no tiene referente externo
+  contra el que anclar; todo lo demás que el modelo puntúa es una
+  afirmación sobre el mundo y se mide.
 
 Un dato sin exactamente una fuente vigente no es un dato con la fuente
 vacía: es un error de carga del catálogo, y `loadCatalog` lo rechaza
@@ -125,7 +128,7 @@ rango falla en vez de entrar al cálculo.
 | `diario` | `0,6×escala(anchura) + 0,4×escala(longitud)` (ponderación configurable), escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
 | `coste` | `0,5×escala(precio) + 0,5×escala(uso mensual)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
 | `estetica` | `mix×nota_exterior + (1−mix)×nota_interior`, escala absoluta lineal | Cada valoración se traduce a nota antes de combinarse |
-| `viaje` | `0,6×escala(maletero) + 0,4×escala(batalla)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
+| `viaje` | `0,5×escala(maletero) + 0,25×escala(batalla) + 0,25×escala(anchura de hombros)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
 | `prestaciones` | `0,5×escala(CV/t) + 0,5×escala(aceleración invertida)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
 | `fiabilidad` | `0,7×escala(OCU) + 0,3×escala(garantía incondicional)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
 
@@ -148,11 +151,11 @@ interior (r = 0,77 con la estética) y no el espacio (r = 0,08 con el
 maletero, la única medida de espacio del catálogo). Los tres coches con la
 valoración subjetiva más alta eran los tres de marca premium juzgados en
 fotos, y eran justo los tres con menos maletero de los once. Hoy mide
-`trunkLiters` y `wheelbaseMm` — datos del catálogo con su fuente — y la
-valoración subjetiva ha desaparecido: ya no se puntúa ni se edita desde el
-ranking. El campo `travelComfort` sigue declarado en `Car` y en
-`cars.json`, sin ningún eje que lo lea; retirarlo del todo es una decisión
-pendiente, no tomada por esta spec.
+`trunkLiters`, `wheelbaseMm` y `rearShoulderWidthMm` — datos del catálogo
+con su fuente — y la valoración subjetiva ha desaparecido por completo: no
+se puntúa, no se edita desde el ranking y el campo `travelComfort` ya no
+existe ni en `Car` ni en `cars.json`. El confort de viaje es un dato
+calculado, no una nota que nadie dé.
 
 **`estetica` es el único de los seis sin curva en S.** Su escala
 absoluta es lineal —`nota = (valoración − 1) × 2,5`—, no *smoothstep*: la
@@ -218,20 +221,40 @@ spec futura que analice la reventa con un horizonte explícito, no de esta.
 | --- | --- | --- |
 | Maletero | 620 L | 250 L |
 | Batalla | 2.850 mm | 2.400 mm |
+| Anchura de hombros (2ª fila) | 1.390 mm | 1.310 mm |
 
-El techo de las dos escalas es el Skoda Superb —690 L de maletero, 2.841 mm
-de batalla—, la referencia generalista de «coche para viajar en familia»: a
-partir de ahí el problema deja de existir y lo que hay por encima son
-monovolúmenes y furgonetas, otra categoría. El suelo es un utilitario de
-ciudad, donde el equipaje de cuatro personas ya no cabe. El maletero pesa
-0,6 y la batalla 0,4 porque el maletero es la restricción que se
-**incumple** —el equipaje cabe o no cabe, y si no cabe se deja en casa—,
-mientras que el espacio de atrás es gradual y su medida es indirecta: dos
-coches con la misma batalla pueden repartir distinto sitio entre habitáculo
-y vanos. La batalla es una magnitud floja entre los once candidatos del
-catálogo —recorre menos de su escala que el maletero—, y eso es
+El techo de las tres escalas es el Skoda Superb —690 L de maletero, 2.841 mm
+de batalla, 1.390 mm de anchura de hombros—, la referencia generalista de
+«coche para viajar en familia»: a partir de ahí el problema deja de existir
+y lo que hay por encima son monovolúmenes y furgonetas, otra categoría. El
+suelo es un utilitario de ciudad, donde el equipaje de cuatro personas ya no
+cabe y tres atrás van agolpados: Dacia Sandero y Alfa Romeo Giulietta miden
+ambos 1.310 mm de hombros, y el Sandero da los 328 L que fijan el suelo de
+maletero.
+
+**El maletero pesa 0,5 y las otras dos 0,25 cada una** porque el maletero es
+la restricción que se **incumple** —el equipaje cabe o no cabe, y si no cabe
+se deja en casa—, mientras que el espacio de atrás es gradual. Batalla y
+anchura de hombros miden ese mismo espacio en dos direcciones, a lo largo y
+a lo ancho, y pesan igual entre sí porque ninguna es mejor proxy que la
+otra: la batalla reparte entre habitáculo y vanos, así que dos coches con la
+misma batalla pueden dar distinto sitio a las piernas; la anchura de hombros
+se mide dentro del habitáculo pero solo a una altura.
+
+Las dos magnitudes de espacio trasero son **flojas entre los candidatos del
+catálogo** —recorren menos de su escala que el maletero—, y eso es
 comportamiento correcto según el ADR 0004: un eje en el que los candidatos
-apenas difieren debe influir poco, no fabricar diferencias.
+apenas difieren debe influir poco, no fabricar diferencias. En anchura de
+hombros varios candidatos saturan el 10, y alguno supera al propio Superb:
+también es correcto. El anclaje bueno significa «a partir de aquí deja de
+mejorar», no «lo mejor que existe», y en una berlina grande o un SUV medio
+caber tres atrás dejó de ser el problema mucho antes de llegar al coche más
+ancho del mercado.
+
+**La anchura de hombros se publica en centímetros enteros** (km77, ficha de
+mediciones propias, fila «Anchura» de la segunda fila). Se guarda en
+milímetros por coherencia con el resto de medidas, pero su resolución real
+es de 10 mm y no debe leerse como precisión milimétrica.
 
 ### Los anclajes de `prestaciones`
 
