@@ -10,47 +10,60 @@ export const SourceEntrySchema = z.object({
 });
 export type SourceEntry = z.infer<typeof SourceEntrySchema>;
 
+interface SourcedValueData<Value> {
+  value: Value;
+  unit?: string;
+  sources: SourceEntry[];
+}
+
 export function sourcedValueSchema<Value extends z.ZodTypeAny>(
   valueSchema: Value,
 ) {
-  return z
-    .object({
-      value: valueSchema,
-      unit: z.string().optional(),
-      sources: z.array(SourceEntrySchema).min(1),
-    })
-    .superRefine((data, ctx) => {
-      const current = data.sources.filter((s) => s.current);
-      if (current.length !== 1) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: `debe declarar exactamente una fuente vigente (hay ${current.length})`,
-          path: ['sources'],
-        });
-        return;
-      }
-      // El chequeo de arriba ya garantiza current.length === 1.
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- invariante comprobada arriba
-      if (current[0]!.value !== data.value) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'el valor no coincide con el de la fuente vigente',
-          path: ['value'],
-        });
-      }
-      if (data.sources.length > 1) {
-        data.sources.forEach((source, index) => {
-          if (!source.current && !source.discardedReason) {
-            ctx.addIssue({
-              code: z.ZodIssueCode.custom,
-              message:
-                'una fuente descartada debe declarar el motivo del descarte',
-              path: ['sources', index, 'discardedReason'],
-            });
-          }
-        });
-      }
-    });
+  const base = z.object({
+    value: valueSchema,
+    unit: z.string().optional(),
+    sources: z.array(SourceEntrySchema).min(1),
+  });
+  // Zod v4 no resuelve el tipo de salida de un `z.object` cuyo shape
+  // contiene un `ZodTypeAny` genérico todavía sin instanciar: dentro de
+  // esta función, `.superRefine` exigiría un output ya resuelto que aquí
+  // es un mapped type que TypeScript no simplifica sobre un parámetro de
+  // tipo abierto. Se le da a `base` la forma que Zod ya produce en
+  // tiempo de ejecución para rodear esa limitación de inferencia — no
+  // cambia ninguna validación, solo lo que TypeScript es capaz de ver.
+  const typed = base as unknown as z.ZodType<SourcedValueData<z.output<Value>>>;
+  return typed.superRefine((data, ctx) => {
+    const current = data.sources.filter((s) => s.current);
+    if (current.length !== 1) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `debe declarar exactamente una fuente vigente (hay ${current.length})`,
+        path: ['sources'],
+      });
+      return;
+    }
+    // El chequeo de arriba ya garantiza current.length === 1.
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- invariante comprobada arriba
+    if (current[0]!.value !== data.value) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'el valor no coincide con el de la fuente vigente',
+        path: ['value'],
+      });
+    }
+    if (data.sources.length > 1) {
+      data.sources.forEach((source, index) => {
+        if (!source.current && !source.discardedReason) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message:
+              'una fuente descartada debe declarar el motivo del descarte',
+            path: ['sources', index, 'discardedReason'],
+          });
+        }
+      });
+    }
+  });
 }
 
 export const SourcedNumberSchema = sourcedValueSchema(z.number());
