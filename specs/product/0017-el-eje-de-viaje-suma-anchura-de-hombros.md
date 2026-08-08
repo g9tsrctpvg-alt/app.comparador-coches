@@ -109,8 +109,8 @@ versiones que ya se usaron para calibrar las otras dos magnitudes.
 
 **Las tres cifras de esta tabla están verificadas abriendo cada ficha**,
 no solo leídas de una búsqueda: es el dato del que cuelga toda la escala.
-Las de la tabla de candidatos, más abajo, no tienen esa verificación
-directa.
+Las de la tabla de candidatos, más abajo, están revisadas contra sus URLs
+por una persona (2026-08-07).
 
 **El recorrido es corto a propósito: 80 mm.** Es una magnitud con poco
 rango real entre un utilitario y un familiar grande — mucho menos que el
@@ -201,24 +201,20 @@ candidatos apenas difieren debe influir poco, no fabricar diferencias.
   alta **antes** (mientras esta spec sigue en `draft`) se añaden sin él,
   siguiendo el esquema vigente hoy, y quedan como deuda de migración en
   `docs/roadmap.md` hasta que esta spec se implemente.
+- **Se acepta que en cinco candidatos la ficha de km77 no sea de la
+  motorización exacta** que respalda el resto de sus datos (Kona HEV, Kona
+  Eléctrico, Alfa Romeo Tonale, Kia Sportage HEV, Lexus NX 350h): km77 no
+  publica «mediciones propias» de esas versiones concretas y se toma la más
+  cercana de la misma generación y carrocería.
+
+  El motivo de que aquí sí valga: la anchura de hombros es una cota de la
+  **carrocería**, no del motor. En el Kona se puede comprobar —la ficha
+  genérica del modelo y la de la motorización concreta dan el mismo valor,
+  138 cm, y el mismo maletero VDA—. La regla «un dato por versión, no por
+  modelo» (`calibracion-de-escalas.md`, sección 6) nació de magnitudes que
+  **sí** cambian con la motorización, como el maletero del enchufable o la
+  garantía; esta no es una de ellas.
 
 ## Decisiones abiertas
 
-- **Versión no exactamente coincidente con la fuente de motor.es** en
-  cinco candidatos (Kona HEV, Kona Eléctrico, Alfa Romeo Tonale, Kia
-  Sportage HEV, Lexus NX 350h): km77 no publica una ficha «mediciones
-  propias» de la motorización/acabado exacto que usa el resto de la ficha
-  de esos coches, y se ha tomado la más cercana de la misma generación y
-  carrocería.
-
-  Hay indicio de que no importa: en el Kona, la ficha genérica del modelo
-  y la de la motorización concreta dan **el mismo valor** (138 cm) y el
-  mismo maletero VDA, lo que apunta a que la anchura de hombros no varía
-  por motorización dentro de una generación —es una cota de la carrocería,
-  no del motor—. Pero es un indicio de un caso, no una comprobación.
-
-  Queda por decidir si se acepta como está o si hace falta confirmarlo en
-  los otros cuatro antes de aprobar. Nótese que la regla del catálogo «un
-  dato por versión, no por modelo» (`calibracion-de-escalas.md`, sección
-  6) nació de magnitudes que **sí** cambian con la motorización —maletero
-  del enchufable, garantía—, y esta puede no ser una de ellas.
+Ninguna.
