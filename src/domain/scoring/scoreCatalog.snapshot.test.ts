@@ -23,6 +23,7 @@ const EXPECTED_TOTALS: Record<string, number> = {
   'lexus-nx-350h': 92.08250900913761,
   'kia-ev3': 91.65061342363553,
   'hyundai-kona-electrico': 91.24811252655694,
+  'kia-ev5': 90.78440773754107,
   'hyundai-kona-hev': 90.18142374060288,
   'volkswagen-id4': 88.96141434633013,
   'alfa-romeo-tonale': 87.30712480928283,

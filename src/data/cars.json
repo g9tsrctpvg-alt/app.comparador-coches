@@ -2928,5 +2928,232 @@
         "shows": "Volkswagen ID.4 Pro, salpicadero, volante y consola central, tapicería bicolor negro y marrón"
       }
     }
+  },
+  {
+    "id": "kia-ev5",
+    "name": "EV5",
+    "brand": "Kia",
+    "technology": "EV",
+    "notes": [
+      "Versión GT-Line (81,4 kWh, 217 CV, tracción delantera), el acabado superior de la gama — motor.es y km77, agosto 2026. El precio incluye el descuento oficial de fábrica (1.634 €) que km77 declara aparte del PVP. Roza el presupuesto de referencia (51.437 €).",
+      "Sin foto de lateral estricto ni de maletero: no se ha encontrado en Wikimedia Commons un perfil cercano a 90º ni una vista con el portón abierto para este modelo.",
+      "Mantenimiento anual estimado por el rango genérico de un eléctrico en España (150-300 €/año), no por un coste de revisión desglosado del modelo.",
+      "Valor residual a 5 años estimado por comparación con otros eléctricos del catálogo: el EV5 se lanzó en 2025 y no tiene todavía histórico real de mercado de segunda mano a ese horizonte."
+    ],
+    "lengthMm": {
+      "value": 4610,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 4610,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "widthMm": {
+      "value": 1875,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 1875,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "heightMm": {
+      "value": 1680,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 1680,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "wheelbaseMm": {
+      "value": 2750,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 2750,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1400,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — KIA EV5 (agosto 2026): 140 cm de anchura de hombros en la 2ª fila, https://www.km77.com/coches/kia/ev5/2025/mediciones-propias/detalle",
+          "value": 1400,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "groundClearanceMm": {
+      "value": 167,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV (agosto 2026)",
+          "value": 167,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "trunkLiters": {
+      "value": 566,
+      "unit": "L",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 566,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "powerCv": {
+      "value": 217,
+      "unit": "CV",
+      "sources": [
+        {
+          "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV (agosto 2026)",
+          "value": 217,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "weightKg": {
+      "value": 2069,
+      "unit": "kg",
+      "sources": [
+        {
+          "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV (agosto 2026)",
+          "value": 2069,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "acceleration0to100": {
+      "value": 8.4,
+      "unit": "s",
+      "sources": [
+        {
+          "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV (agosto 2026)",
+          "value": 8.4,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "consumption": {
+      "value": 17.8,
+      "unit": "kWh/100km",
+      "sources": [
+        {
+          "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV, consumo WLTP combinado (agosto 2026)",
+          "value": 17.8,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "maintenanceEurYear": {
+      "value": 220,
+      "unit": "€/año",
+      "sources": [
+        {
+          "label": "Rango genérico de mantenimiento de un eléctrico en España, 150-300 €/año (agosto 2026)",
+          "value": 220,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "priceEur": {
+      "value": 51437,
+      "unit": "€",
+      "sources": [
+        {
+          "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV, PVP con descuento oficial (agosto 2026)",
+          "value": 51437,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "reliabilityOcu": {
+      "value": 89,
+      "sources": [
+        {
+          "label": "OCU, índice de fiabilidad 2026 — 85.590 encuestas, 39 marcas (vía motor.es)",
+          "value": 89,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyYears": {
+      "value": 7,
+      "unit": "años",
+      "sources": [
+        {
+          "label": "Garantía comercial en España (diariomotor, agosto 2026)",
+          "value": 7,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "residualPct5y": {
+      "value": 0.4,
+      "sources": [
+        {
+          "label": "Estimación por comparación con otros eléctricos del catálogo; sin histórico real a 5 años por ser un modelo de 2025 (agosto 2026)",
+          "value": 0.4,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "aestheticsExterior": {
+      "value": 3,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "aestheticsInterior": {
+      "value": 4,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "photos": {
+      "front": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Kia_EV5_GT-Line_IAA_2025_DSC_2079.jpg/1280px-Kia_EV5_GT-Line_IAA_2025_DSC_2079.jpg",
+        "credit": "Wikimedia Commons — Alexander Migl (CC BY-SA 4.0)",
+        "shows": "Kia EV5 GT-Line, gris oscuro, IAA Mobility 2025 (Múnich) — foto de salón"
+      },
+      "rear": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Kia_EV5_GT-Line_IAA_2025_DSC_2077.jpg/1280px-Kia_EV5_GT-Line_IAA_2025_DSC_2077.jpg",
+        "credit": "Wikimedia Commons — Alexander Migl (CC BY-SA 4.0)",
+        "shows": "Kia EV5 GT-Line, gris oscuro, IAA Mobility 2025 (Múnich) — foto de salón, portón cerrado, rótulo «EV5 GT-Line» visible"
+      },
+      "interior": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Kia_EV5_GT-Line_IAA_2025_DSC_2420.jpg/1280px-Kia_EV5_GT-Line_IAA_2025_DSC_2420.jpg",
+        "credit": "Wikimedia Commons — Alexander Migl (CC BY-SA 4.0)",
+        "shows": "Kia EV5 GT-Line, volante, pantallas y consola central — foto de salón, IAA Mobility 2025"
+      }
+    }
   }
 ]
