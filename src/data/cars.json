@@ -2653,5 +2653,280 @@
         "shows": "Honda CR-V e:HEV RS AWD (4x4), habitáculo en negro"
       }
     }
+  },
+  {
+    "id": "volkswagen-id4",
+    "name": "ID.4",
+    "brand": "Volkswagen",
+    "technology": "EV",
+    "notes": [
+      "Versión Pro (210 kW / 286 CV, batería de 77 kWh, tracción trasera), la de acceso a la gama 2026 tras la retirada de las versiones Pure y Pro Más — motor.es, agosto 2026.",
+      "Altura libre al suelo con fuentes muy dispares entre sí (116-210 mm según la fuente): se usa 152 mm (CarsGuide, ficha ID.4 Pro) marcado como estimado; ninguna ficha oficial en español lo publica.",
+      "Sin foto de maletero: no se ha encontrado en Wikimedia Commons una vista con el portón abierto.",
+      "La foto lateral es de una unidad de lanzamiento (2020, acabado no confirmado); no ha habido rediseño exterior desde entonces —el próximo llega a finales de 2026—, así que la carrocería es la misma, pero no es la misma unidad que las otras tres fotos.",
+      "Mantenimiento anual estimado a partir de la cuota del plan Volkswagen Long Drive (15.000 km/año), no de un coste de revisión desglosado.",
+      "Valor residual a 5 años estimado por el patrón general de depreciación de eléctricos en el mercado, sin fuente específica de España para este modelo."
+    ],
+    "lengthMm": {
+      "value": 4582,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 4582,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "widthMm": {
+      "value": 1852,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 1852,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "heightMm": {
+      "value": 1632,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 1632,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "wheelbaseMm": {
+      "value": 2769,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 2769,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1370,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — ID.4 estándar (agosto 2026): 137 cm a la altura de los hombros, https://www.km77.com/coches/volkswagen/id4/2021/estandar/mediciones-propias",
+          "value": 1370,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "groundClearanceMm": {
+      "value": 152,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "CarsGuide, ficha de dimensiones ID.4 Pro (agosto 2026)",
+          "value": 152,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "trunkLiters": {
+      "value": 543,
+      "unit": "L",
+      "sources": [
+        {
+          "label": "volkswagen.es, medidas oficiales (agosto 2026)",
+          "value": 533,
+          "estimated": false,
+          "current": false,
+          "discardedReason": "cifra oficial del fabricante, 10 L por debajo de la medición coincidente de motor.es y km77 (543 L); se mantiene esta última"
+        },
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 543,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "powerCv": {
+      "value": 286,
+      "unit": "CV",
+      "sources": [
+        {
+          "label": "motor.es, gama 2026 (agosto 2026)",
+          "value": 286,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "weightKg": {
+      "value": 2156,
+      "unit": "kg",
+      "sources": [
+        {
+          "label": "km77, ficha ID.4 Pro 210 kW 286 CV 77 kWh (agosto 2026)",
+          "value": 2156,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "acceleration0to100": {
+      "value": 6.7,
+      "unit": "s",
+      "sources": [
+        {
+          "label": "km77, ficha ID.4 Pro 210 kW 286 CV 77 kWh (agosto 2026)",
+          "value": 6.7,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "consumption": {
+      "value": 16.0,
+      "unit": "kWh/100km",
+      "sources": [
+        {
+          "label": "km77, ficha ID.4 Pro 210 kW 286 CV 77 kWh, consumo WLTP combinado (agosto 2026)",
+          "value": 16.0,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "maintenanceEurYear": {
+      "value": 155,
+      "unit": "€/año",
+      "sources": [
+        {
+          "label": "carwow.es, plan Volkswagen Long Drive 12,90 €/mes a 15.000 km/año (agosto 2026)",
+          "value": 155,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "priceEur": {
+      "value": 46544,
+      "unit": "€",
+      "sources": [
+        {
+          "label": "km77, ficha ID.4 Pro 210 kW 286 CV 77 kWh (2023-2024)",
+          "value": 43685,
+          "estimated": false,
+          "current": false,
+          "discardedReason": "precio de la gama anterior a la reestructuración 2026 de la gama (Pure/Pro Más retiradas); se mantiene el precio vigente de motor.es"
+        },
+        {
+          "label": "motor.es, gama 2026, versión Pro RWD (agosto 2026)",
+          "value": 46544,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "reliabilityOcu": {
+      "value": 82,
+      "sources": [
+        {
+          "label": "OCU, índice de fiabilidad 2026 — 85.590 encuestas, 39 marcas (vía carwow.es, agosto 2026)",
+          "value": 82,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyYears": {
+      "value": 3,
+      "unit": "años",
+      "sources": [
+        {
+          "label": "Garantía comercial Volkswagen España (agosto 2026)",
+          "value": 3,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyExtension": {
+      "years": {
+        "value": 8,
+        "unit": "años",
+        "sources": [
+          {
+            "label": "Garantía de la batería de tracción, Volkswagen España (agosto 2026)",
+            "value": 8,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "kmLimit": {
+        "value": 160000,
+        "unit": "km",
+        "sources": [
+          {
+            "label": "Garantía de la batería de tracción, Volkswagen España (agosto 2026)",
+            "value": 160000,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "condition": "Capacidad mínima garantizada del 70 % de la batería; a diferencia de otras extensiones del catálogo, no depende de mantenimiento en la red oficial."
+    },
+    "residualPct5y": {
+      "value": 0.4,
+      "sources": [
+        {
+          "label": "Estimación de mercado, patrón de depreciación de eléctricos a 5 años (agosto 2026)",
+          "value": 0.4,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "aestheticsExterior": {
+      "value": 4,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "aestheticsInterior": {
+      "value": 3,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "photos": {
+      "front": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Volkswagen_ID.4_Pro_%28ZAA-E2EBJ%29_front.jpg/1280px-Volkswagen_ID.4_Pro_%28ZAA-E2EBJ%29_front.jpg",
+        "credit": "Wikimedia Commons — Tokumeigakarinoaoshima (CC0)",
+        "shows": "Volkswagen ID.4 Pro, azul, unidad de exposición (matrícula ZAA-E2EBJ) — foto de showroom"
+      },
+      "side": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/2/24/Volkswagen_ID.4_side.png",
+        "credit": "Wikimedia Commons — Capital, revista francesa, vía YouTube (CC BY 3.0)",
+        "shows": "Volkswagen ID.4 de lanzamiento (2020), gris/plata, acabado no confirmado — perfil casi completo, coche entero visible"
+      },
+      "rear": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Volkswagen_ID.4_Pro_%28ZAA-E2EBJ%29_rear.jpg/1280px-Volkswagen_ID.4_Pro_%28ZAA-E2EBJ%29_rear.jpg",
+        "credit": "Wikimedia Commons — Tokumeigakarinoaoshima (CC0)",
+        "shows": "Volkswagen ID.4 Pro, azul, unidad de exposición (matrícula ZAA-E2EBJ) — foto de showroom, portón cerrado"
+      },
+      "interior": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Volkswagen_ID.4_Pro_%28ZAA-E2EBJ%29_interior.jpg/1280px-Volkswagen_ID.4_Pro_%28ZAA-E2EBJ%29_interior.jpg",
+        "credit": "Wikimedia Commons — Tokumeigakarinoaoshima (CC0)",
+        "shows": "Volkswagen ID.4 Pro, salpicadero, volante y consola central, tapicería bicolor negro y marrón"
+      }
+    }
   }
 ]
