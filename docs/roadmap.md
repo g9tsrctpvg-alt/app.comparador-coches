@@ -4,7 +4,7 @@
 > tareas y deudas abiertas. `CLAUDE.md` resume y no duplica: al cerrar una
 > fase se actualiza este documento, no el índice.
 
-**Última actualización:** 2026-08-06
+**Última actualización:** 2026-08-08
 
 ## Fases
 
@@ -15,10 +15,19 @@
 | 2 — Andamiaje y dominio | Proyecto construible y explicabilidad de la puntuación | Cerrada |
 | 3 — Puntuación en escala absoluta | Que la nota diga si un coche es bueno, no en qué puesto va de once | Cerrada |
 | 4 — Migración del artefacto | Traer el comparador React existente y su diseño responsive | Pendiente |
+| 5 — Rediseño y ficha única | Que la aplicación se lea como un producto y no como el artefacto, y que las dos fichas sean una | Pendiente |
 
 Ninguna fase se da por cerrada mientras tenga tareas abiertas en la tabla de
 abajo. Las tres primeras ya no tienen ninguna; la deuda que dejaron vive en
 *Deudas abiertas*, que no pertenece a ninguna fase.
+
+**La fase 5 es alcance nuevo, no trabajo pendiente de la 4.** El objetivo de
+la fase 4 es *traer* el artefacto, y eso incluye traer sus carencias: el
+artefacto no tiene un solo `:hover`, ni jerarquía entre marca y vista, ni una
+fuente elegida. Mejorarlo por encima de lo que era no cabe en «migración», y
+meterlo ahí dejaría la fase 4 sin criterio para cerrarse nunca. La fase 5 sí
+toca una entrega de la 4 —`product/0013`, que `product/0018` sustituye—, y esa
+dependencia queda anotada en la tabla de la fase 4.
 
 **La fase 3 era «Migración del artefacto» hasta el 2026-08-06.** Se renumeró
 a 4 al abrirse el rediseño de la puntuación, que va delante por dos motivos:
@@ -141,7 +150,7 @@ peso sería reintroducir a mano lo que el ADR 0004 quita.
 | `product/0010` — diseño responsive real | `consolidated` |
 | `product/0011` — la página que explica cómo se calcula todo | `implemented` |
 | `product/0012` — configuración persistente y compartible | `consolidated` |
-| `product/0013` — la ficha técnica comparada | `implemented` |
+| `product/0013` — la ficha técnica comparada | `implemented` — la sustituye `product/0018` (fase 5); pendiente del gate humano |
 | `product/0014` — la ficha del modelo y sus fotos | `implemented` |
 | Cerrar las decisiones abiertas de las seis specs | Hecha — las cinco de producto por decisión propia, y las dos de doc de estado por el ADR 0007, que las contesta a la vez |
 | Gate humano: aprobar los ADR 0006 y 0007 y las seis specs | Hecha — 2026-08-06, en commit propio sin implementación |
@@ -217,6 +226,54 @@ modelo como cabecera de su columna—. Las fotos se enlazan por URL absoluta,
 sin copiarlas al repositorio. Recorrió las cuatro fases de gate y
 `draft → approved → implemented` en la misma sesión de trabajo, con la CI
 entera verde en local y cobertura al 100 %.
+
+## Fase 5 — Rediseño y ficha única
+
+| Tarea | Estado |
+| --- | --- |
+| ADR 0008 — una tipografía propia, servida desde el repositorio | `draft` |
+| `technical/0005` — refuerzo del sistema visual: jerarquía, estados y shell | `draft` |
+| `product/0018` — una sola ficha, con diferencias contra el modelo elegido | `draft` |
+| Gate humano: aprobar el ADR 0008 y las dos specs, y marcar `product/0013` como `superseded` | Pendiente |
+| Implementar, verificar y consolidar las dos specs | Pendiente |
+| `product/0019` — la portada enseña el coche | Sin redactar |
+
+**Qué motiva la fase.** Dos cosas independientes que se hacen juntas porque
+tocan los mismos ficheros:
+
+1. **La aplicación se ve como lo que es, una traducción literal del
+   artefacto.** No hay ni un `:hover` ni un `:active` en los dieciséis
+   ficheros CSS del repositorio; las cuatro páginas abren con el mismo `<h1>`
+   a 30 px, de modo que el elemento más grande de cada pantalla nunca dice
+   dónde estás; esa cabecera está copiada literalmente en tres componentes con
+   sus clases duplicadas en tres módulos; el cuerpo de las dos tablas va a
+   11 px; y la familia tipográfica la elige el sistema operativo de quien
+   mira. El ADR 0006 ya señaló las tres carencias del artefacto —foco,
+   `:hover` y media queries— y arregló dos.
+2. **Hay dos vistas que son la misma vista.** Las seis magnitudes de
+   `#/ficha-tecnica` son un subconjunto exacto de las veinte de
+   `#/ficha-completa`, y sus dos módulos de dominio ya están acoplados. Lo
+   único que la técnica tiene y la completa no es la Δ; lo único que la
+   completa tiene y la técnica no es, entre otras cosas, el mecanismo que esa
+   Δ necesitaría para dejar de estar clavada contra la Giulietta: la columna
+   fijada ya es «el modelo contra el que comparo», pero luego no resta.
+
+**Orden de implementación.** ADR 0008 → `technical/0005` → `product/0018`.
+No es de conveniencia: la escala tipográfica depende de la altura de x de la
+familia que la pinta, y la ficha unificada consume el shell, el primitivo de
+tabla y los papeles de dirección que `technical/0005` declara. Al revés habría
+que escribir dos veces la cabecera que aquélla elimina.
+
+**`product/0019` no está redactada a propósito.** Enseñar la foto del coche en
+la tarjeta del líder y en la fila desplegada es la mayor ganancia de «producto
+acabado» por unidad de trabajo, y reutiliza `photoSrc` y el degradado a hueco
+que `product/0014` ya tiene. Pero **cambia qué información muestra la
+portada**, así que es producto y no cabe en `technical/0005`. Se separa para
+que no bloquee al resto.
+
+**Lo que esta fase no toca:** la paleta —los siete papeles de `product/0009`
+conservan su valor—, el esquema oscuro —sigue aplazado por el ADR 0006 con su
+disparador—, la puntuación, y los datos del catálogo.
 
 ## Más adelante
 
