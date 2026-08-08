@@ -28,6 +28,7 @@ const EXPECTED_TOTALS: Record<string, number> = {
   'volkswagen-id4': 88.96141434633013,
   'alfa-romeo-tonale': 87.30712480928283,
   'honda-cr-v-e-hev': 85.20253371896445,
+  'hyundai-ioniq-5': 81.73846287330642,
   'toyota-corolla-cross': 77.19501728998509,
 };
 

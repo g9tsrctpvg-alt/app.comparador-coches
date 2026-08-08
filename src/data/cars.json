@@ -3155,5 +3155,234 @@
         "shows": "Kia EV5 GT-Line, volante, pantallas y consola central — foto de salón, IAA Mobility 2025"
       }
     }
+  },
+  {
+    "id": "hyundai-ioniq-5",
+    "name": "IONIQ 5",
+    "brand": "Hyundai",
+    "technology": "EV",
+    "notes": [
+      "Versión Light (84 kWh, 228 CV, tracción trasera), la de acceso a la batería grande de la gama 2025 — motor.es y km77, agosto 2026. Roza el presupuesto de referencia (48.070 €).",
+      "Sin foto de lateral estricto ni de maletero: no se ha encontrado en Wikimedia Commons un perfil cercano a 90º ni una vista con el portón abierto para este modelo.",
+      "Las fotos frontal y trasera son del acabado Long Range Prestige (mercado coreano), no del Light que puntúa la ficha, aunque sí del mismo retoque de carrocería 2024/2025 (chasis NE1) — llantas y algún detalle de parachoques pueden no coincidir exactamente con el Light.",
+      "El maletero declarado (520 L) es solo el trasero; el Ioniq 5 tiene además un maletero delantero (frunk) de 57 L bajo el capó que el catálogo no puntúa por separado, igual que el resto de eléctricos.",
+      "Mantenimiento anual estimado por el rango genérico de un eléctrico en España, no por un coste de revisión desglosado del modelo.",
+      "Valor residual a 5 años estimado a partir de datos de mercado de EEUU (retiene ~43% a 5 años/60.000 millas); sin fuente de reventa española específica del modelo."
+    ],
+    "lengthMm": {
+      "value": 4650,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 4650,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "widthMm": {
+      "value": 1890,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 1890,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "heightMm": {
+      "value": 1600,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 1600,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "wheelbaseMm": {
+      "value": 3000,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 3000,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1460,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — IONIQ 5 Light RWD (agosto 2026): 146 cm de anchura de hombros en la 2ª fila, https://www.km77.com/coches/hyundai/ioniq-5/2021/estandar/estandar/ioniq-5-218-cv-bateria-74-kwh-rwd-light/mediciones-propias/detalle",
+          "value": 1460,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "groundClearanceMm": {
+      "value": 160,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha IONIQ 5 Light 84 kWh 228 CV RWD (agosto 2026)",
+          "value": 160,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "trunkLiters": {
+      "value": 520,
+      "unit": "L",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 520,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "powerCv": {
+      "value": 228,
+      "unit": "CV",
+      "sources": [
+        {
+          "label": "km77, ficha IONIQ 5 Light 84 kWh 228 CV RWD (agosto 2026)",
+          "value": 228,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "weightKg": {
+      "value": 2060,
+      "unit": "kg",
+      "sources": [
+        {
+          "label": "km77, ficha IONIQ 5 Light 84 kWh 228 CV RWD (agosto 2026)",
+          "value": 2060,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "acceleration0to100": {
+      "value": 7.5,
+      "unit": "s",
+      "sources": [
+        {
+          "label": "km77, ficha IONIQ 5 Light 84 kWh 228 CV RWD (agosto 2026)",
+          "value": 7.5,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "consumption": {
+      "value": 16.0,
+      "unit": "kWh/100km",
+      "sources": [
+        {
+          "label": "km77, ficha IONIQ 5 Light 84 kWh 228 CV RWD, consumo WLTP combinado (agosto 2026)",
+          "value": 16.0,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "maintenanceEurYear": {
+      "value": 250,
+      "unit": "€/año",
+      "sources": [
+        {
+          "label": "Rango genérico de mantenimiento de un eléctrico en España (agosto 2026)",
+          "value": 250,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "priceEur": {
+      "value": 48070,
+      "unit": "€",
+      "sources": [
+        {
+          "label": "km77, ficha IONIQ 5 Light 84 kWh 228 CV RWD (agosto 2026)",
+          "value": 48070,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "reliabilityOcu": {
+      "value": 87,
+      "sources": [
+        {
+          "label": "OCU, índice de fiabilidad 2026 — 85.590 encuestas, 39 marcas (vía motor.es)",
+          "value": 87,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyYears": {
+      "value": 5,
+      "unit": "años",
+      "sources": [
+        {
+          "label": "Garantía comercial en España (diariomotor, agosto 2026)",
+          "value": 5,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "residualPct5y": {
+      "value": 0.43,
+      "sources": [
+        {
+          "label": "iSeeCars, retención de valor a 5 años/60.000 millas (mercado EEUU, agosto 2026)",
+          "value": 0.43,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "aestheticsExterior": {
+      "value": 2,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "aestheticsInterior": {
+      "value": 3,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "photos": {
+      "front": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Hyundai_IONIQ_5_Long_Range_Prestige_NE1_PE_Atlas_White_Matte_%2811%29.jpg/1280px-Hyundai_IONIQ_5_Long_Range_Prestige_NE1_PE_Atlas_White_Matte_%2811%29.jpg",
+        "credit": "Wikimedia Commons — Damian B Oh (CC BY-SA 4.0)",
+        "shows": "Hyundai IONIQ 5 Long Range Prestige (chasis NE1, el mismo retoque 2024/2025 que la ficha), blanco Atlas Matte, Hyundai Motorstudio Goyang — acabado distinto al Light que puntúa la ficha, llantas y detalles de parachoques pueden variar"
+      },
+      "rear": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Hyundai_IONIQ_5_Long_Range_Prestige_NE1_PE_Atlas_White_Matte_%2813%29.jpg/1280px-Hyundai_IONIQ_5_Long_Range_Prestige_NE1_PE_Atlas_White_Matte_%2813%29.jpg",
+        "credit": "Wikimedia Commons — Damian B Oh (CC BY-SA 4.0)",
+        "shows": "Hyundai IONIQ 5 Long Range Prestige (chasis NE1), blanco Atlas Matte, Hyundai Motorstudio Goyang — misma salvedad de acabado que la foto frontal"
+      },
+      "interior": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Hyundai_Ioniq_5_NE_Interior_%281%29.jpg/1280px-Hyundai_Ioniq_5_NE_Interior_%281%29.jpg",
+        "credit": "Wikimedia Commons — Damian B Oh (CC BY-SA 4.0)",
+        "shows": "Hyundai IONIQ 5, doble pantalla curva y volante — foto de salón"
+      }
+    }
   }
 ]
