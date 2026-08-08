@@ -3,7 +3,7 @@
 - **Id:** product/0017
 - **Estado:** consolidated
 - **Tipo:** product
-- **Fecha:** 2026-08-07
+- **Fecha:** 2026-08-08
 - **Specs relacionadas:** product/0005
 - **ADRs relacionados:** 0004
 - **Doc de estado:** `docs/estado/dominio.md`
@@ -116,7 +116,7 @@ versiones que ya se usaron para calibrar las otras dos magnitudes.
 **Las tres cifras de esta tabla están verificadas abriendo cada ficha**,
 no solo leídas de una búsqueda: es el dato del que cuelga toda la escala.
 Las de la tabla de candidatos, más abajo, están revisadas contra sus URLs
-por una persona (2026-08-07).
+por una persona (2026-08-08).
 
 **El recorrido es corto a propósito: 80 mm.** Es una magnitud con poco
 rango real entre un utilitario y un familiar grande — mucho menos que el
