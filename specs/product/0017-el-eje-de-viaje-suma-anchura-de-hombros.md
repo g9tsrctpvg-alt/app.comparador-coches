@@ -1,7 +1,7 @@
 # 0017 — El eje de viaje suma una tercera magnitud: anchura de hombros
 
 - **Id:** product/0017
-- **Estado:** implemented
+- **Estado:** verified
 - **Tipo:** product
 - **Fecha:** 2026-08-07
 - **Specs relacionadas:** product/0005
@@ -179,19 +179,19 @@ candidatos apenas difieren debe influir poco, no fabricar diferencias.
 
 > Obligatorios y verificables.
 
-- [ ] Un coche con 1.390 mm de anchura de hombros o más saca un 10 en esa
+- [x] Un coche con 1.390 mm de anchura de hombros o más saca un 10 en esa
       magnitud, y uno con 1.310 mm o menos saca un 0.
-- [ ] Un coche en el punto medio de la escala (1.350 mm) saca un 5,0.
-- [ ] La nota del eje `viaje` de un coche es la misma con once candidatos
+- [x] Un coche en el punto medio de la escala (1.350 mm) saca un 5,0.
+- [x] La nota del eje `viaje` de un coche es la misma con once candidatos
       en el catálogo que con uno solo.
-- [ ] El desglose del eje `viaje` muestra las tres magnitudes con su
+- [x] El desglose del eje `viaje` muestra las tres magnitudes con su
       valor, sus dos anclajes y su nota.
-- [ ] `travelComfort` no aparece en `CarSchema`, `cars.json`,
+- [x] `travelComfort` no aparece en `CarSchema`, `cars.json`,
       `EDITABLE_RATING_FIELDS`, la ficha completa, ni en ningún test del
       repositorio.
-- [ ] Los candidatos publicados en el momento de implementar llevan la
+- [x] Los candidatos publicados en el momento de implementar llevan la
       anchura de hombros con fuente real citada (km77).
-- [ ] `npm run test:coverage` sigue en 100% tras el cambio.
+- [x] `npm run test:coverage` sigue en 100% tras el cambio.
 
 ## Dependencias y supuestos
 
