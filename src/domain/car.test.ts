@@ -32,6 +32,7 @@ const validCar = {
   lengthMm: sourced(4540),
   widthMm: sourced(1865),
   wheelbaseMm: sourced(2680),
+  rearShoulderWidthMm: sourced(1390),
   heightMm: sourced(1645),
   groundClearanceMm: sourced(170),
   trunkLiters: sourced(587),
@@ -46,7 +47,6 @@ const validCar = {
   residualPct5y: sourced(0.52),
   aestheticsExterior: rating(2),
   aestheticsInterior: rating(4),
-  travelComfort: rating(3),
 };
 
 describe('CarSchema', () => {
@@ -192,7 +192,7 @@ describe('CarSchema', () => {
   it('rejects a user rating outside the 1-5 range', () => {
     const result = CarSchema.safeParse({
       ...validCar,
-      travelComfort: rating(6),
+      aestheticsInterior: rating(6),
     });
     expect(result.success).toBe(false);
   });

@@ -55,6 +55,18 @@
         }
       ]
     },
+    "rearShoulderWidthMm": {
+      "value": 1340,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — Standard (2025) (agosto 2026): 134 cm a la altura de los hombros, https://www.km77.com/coches/kia/ev3/2025/estandar/mediciones-propias/detalle",
+          "value": 1340,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "groundClearanceMm": {
       "value": 140,
       "sources": [
@@ -193,10 +205,6 @@
       "value": 3,
       "label": "Valoración del usuario sobre fotos de catálogo"
     },
-    "travelComfort": {
-      "value": 3,
-      "label": "Valoración del usuario sobre fotos de catálogo"
-    },
     "photos": {
       "front": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Kia_EV3_Earth_SV1_Snow_White_Pearl_%281%29.jpg/1280px-Kia_EV3_Earth_SV1_Snow_White_Pearl_%281%29.jpg",
@@ -269,6 +277,18 @@
         {
           "label": "motor.es, ficha de medidas (agosto 2026)",
           "value": 2660,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1380,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — Hibrido N Line Style 1.6 GDi 129 CV (agosto 2026): 138 cm a la altura de los hombros, https://www.km77.com/coches/hyundai/kona/2023/estandar/hibrido/kona-n-line-style-hibrido-16-gdi-129-cv/mediciones-propias/detalle",
+          "value": 1380,
           "estimated": false,
           "current": true
         }
@@ -412,10 +432,6 @@
       "value": 3,
       "label": "Valoración del usuario sobre fotos de catálogo"
     },
-    "travelComfort": {
-      "value": 3,
-      "label": "Valoración del usuario sobre fotos de catálogo"
-    },
     "photos": {
       "front": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Hyundai_Kona_1.6T_Inspiration_SX2_Neoteric_Yellow_%288%29.jpg/1280px-Hyundai_Kona_1.6T_Inspiration_SX2_Neoteric_Yellow_%288%29.jpg",
@@ -490,6 +506,18 @@
         {
           "label": "motor.es, ficha de medidas (agosto 2026)",
           "value": 2660,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1380,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — Electrico Tecno 204 CV 65 kWh (agosto 2026): 138 cm a la altura de los hombros, https://www.km77.com/coches/hyundai/kona/2023/estandar/electric/kona-electrico-204-cv-65-kwh-tecno/mediciones-propias/detalle",
+          "value": 1380,
           "estimated": false,
           "current": true
         }
@@ -633,10 +661,6 @@
       "value": 3,
       "label": "Valoración del usuario sobre fotos de catálogo"
     },
-    "travelComfort": {
-      "value": 3,
-      "label": "Valoración del usuario sobre fotos de catálogo"
-    },
     "photos": {
       "front": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Hyundai_Kona_Electric_SX2_EV_Abyss_Black_Pearl_%2814%29.jpg/1280px-Hyundai_Kona_Electric_SX2_EV_Abyss_Black_Pearl_%2814%29.jpg",
@@ -717,6 +741,18 @@
         {
           "label": "motor.es, ficha de medidas (agosto 2026)",
           "value": 2640,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1350,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — Style 140H Hybrid FWD (agosto 2026): 135 cm a la altura de los hombros, https://www.km77.com/coches/toyota/corolla-cross/2023/estandar/estandar/corolla-cross-style-18-hybrid/mediciones-propias/detalle",
+          "value": 1350,
           "estimated": false,
           "current": true
         }
@@ -894,10 +930,6 @@
       "value": 2,
       "label": "Valoración del usuario sobre fotos de catálogo"
     },
-    "travelComfort": {
-      "value": 3,
-      "label": "Valoración del usuario sobre fotos de catálogo"
-    },
     "photos": {
       "front": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/2020_Toyota_Corolla_Cross_-_Front.jpg/1280px-2020_Toyota_Corolla_Cross_-_Front.jpg",
@@ -931,9 +963,11 @@
     "name": "X1 xDrive25e",
     "brand": "BMW",
     "technology": "PHEV",
+    "published": false,
     "notes": [
       "Es PHEV y el usuario no tiene carga en casa: no puede aprovechar el enchufe.",
-      "Solo entra en presupuesto como seminuevo (43.900-45.900 € con ~18.000 km); nuevo cuesta ~52.900 €."
+      "Solo entra en presupuesto como seminuevo (43.900-45.900 € con ~18.000 km); nuevo cuesta ~52.900 €.",
+      "Despublicado el 2026-08-08: fuera de presupuesto/rango."
     ],
     "lengthMm": {
       "value": 4500,
@@ -978,6 +1012,18 @@
         {
           "label": "motor.es, ficha de medidas (agosto 2026)",
           "value": 2692,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1380,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — xDrive25e (agosto 2026): 138 cm a la altura de los hombros, https://www.km77.com/coches/bmw/x1/2023/estandar/e/x1-xdrive25e/mediciones-propias/detalle",
+          "value": 1380,
           "estimated": false,
           "current": true
         }
@@ -1121,10 +1167,6 @@
       "value": 5,
       "label": "Valoración del usuario sobre fotos de catálogo"
     },
-    "travelComfort": {
-      "value": 4,
-      "label": "Valoración del usuario sobre fotos de catálogo"
-    },
     "photos": {
       "front": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/BMW_X1_xDrive25e_%28U11%2C_2024%29_%2854533446437%29.jpg/1280px-BMW_X1_xDrive25e_%28U11%2C_2024%29_%2854533446437%29.jpg",
@@ -1200,6 +1242,18 @@
         {
           "label": "motor.es, ficha de medidas (agosto 2026)",
           "value": 2636,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1370,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — ficha estandar del modelo (agosto 2026): 137 cm a la altura de los hombros, https://www.km77.com/coches/alfa-romeo/tonale/2022/estandar/mediciones-propias/detalle",
+          "value": 1370,
           "estimated": false,
           "current": true
         }
@@ -1350,10 +1404,6 @@
       "value": 4,
       "label": "Valoración del usuario sobre fotos de catálogo"
     },
-    "travelComfort": {
-      "value": 4,
-      "label": "Valoración del usuario sobre fotos de catálogo"
-    },
     "photos": {
       "front": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Alfa_Romeo_Tonale_Veloce_Type_965_Grigio_Vesuvio_%284%29.jpg/1280px-Alfa_Romeo_Tonale_Veloce_Type_965_Grigio_Vesuvio_%284%29.jpg",
@@ -1426,6 +1476,18 @@
         {
           "label": "motor.es, ficha de medidas (agosto 2026)",
           "value": 2680,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1390,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — ficha HEV del modelo (agosto 2026): 139 cm a la altura de los hombros, https://www.km77.com/coches/kia/sportage/2022/estandar/hev/mediciones-propias",
+          "value": 1390,
           "estimated": false,
           "current": true
         }
@@ -1569,10 +1631,6 @@
       "value": 4,
       "label": "Valoración del usuario sobre fotos de catálogo"
     },
-    "travelComfort": {
-      "value": 3,
-      "label": "Valoración del usuario sobre fotos de catálogo"
-    },
     "photos": {
       "front": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Kia_Sportage_Hybrid_NQ5_HEV_Shadow_Matte_Gray_%281%29.jpg/1280px-Kia_Sportage_Hybrid_NQ5_HEV_Shadow_Matte_Gray_%281%29.jpg",
@@ -1645,6 +1703,18 @@
         {
           "label": "motor.es, ficha de medidas (agosto 2026)",
           "value": 2734,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1420,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — e:HEV Advance (agosto 2026): 142 cm a la altura de los hombros, https://www.km77.com/coches/honda/civic/2023/5-puertas/hev/civic-ehev-advance/mediciones-propias/detalle",
+          "value": 1420,
           "estimated": false,
           "current": true
         }
@@ -1795,10 +1865,6 @@
       "value": 3,
       "label": "Valoración del usuario sobre fotos de catálogo"
     },
-    "travelComfort": {
-      "value": 3,
-      "label": "Valoración del usuario sobre fotos de catálogo"
-    },
     "photos": {
       "front": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Honda_CIVIC_e%EF%BC%9AHEV_%286AA-FL4%29.jpg/1280px-Honda_CIVIC_e%EF%BC%9AHEV_%286AA-FL4%29.jpg",
@@ -1822,10 +1888,12 @@
     "name": "NX 350h",
     "brand": "Lexus",
     "technology": "HEV",
+    "published": false,
     "notes": [
       "Solo disponible como seminuevo, y aun así ~51.900 €: por encima del presupuesto.",
       "Los NX de ~29.990 € son la primera generación (NX 300h), otro coche distinto.",
-      "La garantía de 10 años exige mantenimiento en red oficial; sin él, baja a 3."
+      "La garantía de 10 años exige mantenimiento en red oficial; sin él, baja a 3.",
+      "Despublicado el 2026-08-08: fuera de presupuesto/rango."
     ],
     "lengthMm": {
       "value": 4660,
@@ -1870,6 +1938,18 @@
         {
           "label": "motor.es, ficha de medidas (agosto 2026)",
           "value": 2690,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1380,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — 350h 4WD Business (agosto 2026): 138 cm a la altura de los hombros, https://www.km77.com/coches/lexus/nx/2022/estandar/hev/nx-350h-4wd-business/mediciones-propias/detalle",
+          "value": 1380,
           "estimated": false,
           "current": true
         }
@@ -2047,10 +2127,6 @@
       "value": 4,
       "label": "Valoración del usuario sobre fotos de catálogo"
     },
-    "travelComfort": {
-      "value": 4,
-      "label": "Valoración del usuario sobre fotos de catálogo"
-    },
     "photos": {
       "front": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Lexus_NX_350h_F_SPORT_2WD_%286AA-AAZH20-AWXLB%28F%29%29_front.jpg/1280px-Lexus_NX_350h_F_SPORT_2WD_%286AA-AAZH20-AWXLB%28F%29%29_front.jpg",
@@ -2122,6 +2198,18 @@
         {
           "label": "motor.es, ficha de medidas (agosto 2026)",
           "value": 2815,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1390,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — 2.0 e-SKYACTIV G MHEV 165 CV 2WD Takumi (agosto 2026): 139 cm a la altura de los hombros, https://www.km77.com/coches/mazda/cx-5/2022/estandar/estandar/cx-5-20-e-skyactiv-g-mhev-121-kw-165-cv-2wd-takumi/mediciones-propias/detalle",
+          "value": 1390,
           "estimated": false,
           "current": true
         }
@@ -2292,10 +2380,6 @@
       "value": 3,
       "label": "Valoración del usuario sobre fotos de catálogo"
     },
-    "travelComfort": {
-      "value": 3,
-      "label": "Valoración del usuario sobre fotos de catálogo"
-    },
     "photos": {
       "front": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Mazda_CX-5_%28KF%29_Facelift_1X7A0331.jpg/1280px-Mazda_CX-5_%28KF%29_Facelift_1X7A0331.jpg",
@@ -2329,9 +2413,11 @@
     "name": "CR-V e:HEV",
     "brand": "Honda",
     "technology": "HEV",
+    "published": false,
     "notes": [
       "Roza el presupuesto (46.645 €) y es el más largo de los candidatos.",
-      "Fila de la versión HEV 4x4 Advance: 579 L de maletero (la 4x2 da 587 L) y 9,5 s de 0-100."
+      "Fila de la versión HEV 4x4 Advance: 579 L de maletero (la 4x2 da 587 L) y 9,5 s de 0-100.",
+      "Despublicado el 2026-08-08: fuera de presupuesto/rango."
     ],
     "lengthMm": {
       "value": 4706,
@@ -2376,6 +2462,18 @@
         {
           "label": "motor.es, ficha de medidas (agosto 2026)",
           "value": 2701,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1420,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — Full Hybrid 4x4 (agosto 2026): 142 cm a la altura de los hombros, https://www.km77.com/coches/honda/cr-v/2024/estandar/hev/cr-v-elegance-full-hybrid-4x4/mediciones-propias/detalle",
+          "value": 1420,
           "estimated": false,
           "current": true
         }
@@ -2533,10 +2631,6 @@
       "value": 3,
       "label": "Valoración del usuario sobre fotos de catálogo"
     },
-    "travelComfort": {
-      "value": 3,
-      "label": "Valoración del usuario sobre fotos de catálogo"
-    },
     "photos": {
       "front": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Honda_CR-V_RS6_2.0_RS_e-HEV_AWD_Platinum_White_Pearl_03.jpg/1280px-Honda_CR-V_RS6_2.0_RS_e-HEV_AWD_Platinum_White_Pearl_03.jpg",
@@ -2557,6 +2651,1193 @@
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Honda_CR-V_RS6_2.0_RS_e-HEV_AWD_interior.jpg/1280px-Honda_CR-V_RS6_2.0_RS_e-HEV_AWD_interior.jpg",
         "credit": "Wikimedia Commons — Ethan Llamas (CC BY-SA 4.0)",
         "shows": "Honda CR-V e:HEV RS AWD (4x4), habitáculo en negro"
+      }
+    }
+  },
+  {
+    "id": "volkswagen-id4",
+    "name": "ID.4",
+    "brand": "Volkswagen",
+    "technology": "EV",
+    "notes": [
+      "Versión Pro (210 kW / 286 CV, batería de 77 kWh, tracción trasera), la de acceso a la gama 2026 tras la retirada de las versiones Pure y Pro Más — motor.es, agosto 2026.",
+      "Altura libre al suelo con fuentes muy dispares entre sí (116-210 mm según la fuente): se usa 152 mm (CarsGuide, ficha ID.4 Pro) marcado como estimado; ninguna ficha oficial en español lo publica.",
+      "Sin foto de maletero: no se ha encontrado en Wikimedia Commons una vista con el portón abierto.",
+      "La foto lateral es de una unidad de lanzamiento (2020, acabado no confirmado); no ha habido rediseño exterior desde entonces —el próximo llega a finales de 2026—, así que la carrocería es la misma, pero no es la misma unidad que las otras tres fotos.",
+      "Mantenimiento anual estimado a partir de la cuota del plan Volkswagen Long Drive (15.000 km/año), no de un coste de revisión desglosado.",
+      "Valor residual a 5 años estimado por el patrón general de depreciación de eléctricos en el mercado, sin fuente específica de España para este modelo."
+    ],
+    "lengthMm": {
+      "value": 4582,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 4582,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "widthMm": {
+      "value": 1852,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 1852,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "heightMm": {
+      "value": 1632,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 1632,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "wheelbaseMm": {
+      "value": 2769,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 2769,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1370,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — ID.4 estándar (agosto 2026): 137 cm a la altura de los hombros, https://www.km77.com/coches/volkswagen/id4/2021/estandar/mediciones-propias",
+          "value": 1370,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "groundClearanceMm": {
+      "value": 152,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "CarsGuide, ficha de dimensiones ID.4 Pro (agosto 2026)",
+          "value": 152,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "trunkLiters": {
+      "value": 543,
+      "unit": "L",
+      "sources": [
+        {
+          "label": "volkswagen.es, medidas oficiales (agosto 2026)",
+          "value": 533,
+          "estimated": false,
+          "current": false,
+          "discardedReason": "cifra oficial del fabricante, 10 L por debajo de la medición coincidente de motor.es y km77 (543 L); se mantiene esta última"
+        },
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 543,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "powerCv": {
+      "value": 286,
+      "unit": "CV",
+      "sources": [
+        {
+          "label": "motor.es, gama 2026 (agosto 2026)",
+          "value": 286,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "weightKg": {
+      "value": 2156,
+      "unit": "kg",
+      "sources": [
+        {
+          "label": "km77, ficha ID.4 Pro 210 kW 286 CV 77 kWh (agosto 2026)",
+          "value": 2156,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "acceleration0to100": {
+      "value": 6.7,
+      "unit": "s",
+      "sources": [
+        {
+          "label": "km77, ficha ID.4 Pro 210 kW 286 CV 77 kWh (agosto 2026)",
+          "value": 6.7,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "consumption": {
+      "value": 16.0,
+      "unit": "kWh/100km",
+      "sources": [
+        {
+          "label": "km77, ficha ID.4 Pro 210 kW 286 CV 77 kWh, consumo WLTP combinado (agosto 2026)",
+          "value": 16.0,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "maintenanceEurYear": {
+      "value": 155,
+      "unit": "€/año",
+      "sources": [
+        {
+          "label": "carwow.es, plan Volkswagen Long Drive 12,90 €/mes a 15.000 km/año (agosto 2026)",
+          "value": 155,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "priceEur": {
+      "value": 46544,
+      "unit": "€",
+      "sources": [
+        {
+          "label": "km77, ficha ID.4 Pro 210 kW 286 CV 77 kWh (2023-2024)",
+          "value": 43685,
+          "estimated": false,
+          "current": false,
+          "discardedReason": "precio de la gama anterior a la reestructuración 2026 de la gama (Pure/Pro Más retiradas); se mantiene el precio vigente de motor.es"
+        },
+        {
+          "label": "motor.es, gama 2026, versión Pro RWD (agosto 2026)",
+          "value": 46544,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "reliabilityOcu": {
+      "value": 82,
+      "sources": [
+        {
+          "label": "OCU, índice de fiabilidad 2026 — 85.590 encuestas, 39 marcas (vía carwow.es, agosto 2026)",
+          "value": 82,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyYears": {
+      "value": 3,
+      "unit": "años",
+      "sources": [
+        {
+          "label": "Garantía comercial Volkswagen España (agosto 2026)",
+          "value": 3,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyExtension": {
+      "years": {
+        "value": 8,
+        "unit": "años",
+        "sources": [
+          {
+            "label": "Garantía de la batería de tracción, Volkswagen España (agosto 2026)",
+            "value": 8,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "kmLimit": {
+        "value": 160000,
+        "unit": "km",
+        "sources": [
+          {
+            "label": "Garantía de la batería de tracción, Volkswagen España (agosto 2026)",
+            "value": 160000,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "condition": "Capacidad mínima garantizada del 70 % de la batería; a diferencia de otras extensiones del catálogo, no depende de mantenimiento en la red oficial."
+    },
+    "residualPct5y": {
+      "value": 0.4,
+      "sources": [
+        {
+          "label": "Estimación de mercado, patrón de depreciación de eléctricos a 5 años (agosto 2026)",
+          "value": 0.4,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "aestheticsExterior": {
+      "value": 4,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "aestheticsInterior": {
+      "value": 3,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "photos": {
+      "front": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Volkswagen_ID.4_Pro_%28ZAA-E2EBJ%29_front.jpg/1280px-Volkswagen_ID.4_Pro_%28ZAA-E2EBJ%29_front.jpg",
+        "credit": "Wikimedia Commons — Tokumeigakarinoaoshima (CC0)",
+        "shows": "Volkswagen ID.4 Pro, azul, unidad de exposición (matrícula ZAA-E2EBJ) — foto de showroom"
+      },
+      "side": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/2/24/Volkswagen_ID.4_side.png",
+        "credit": "Wikimedia Commons — Capital, revista francesa, vía YouTube (CC BY 3.0)",
+        "shows": "Volkswagen ID.4 de lanzamiento (2020), gris/plata, acabado no confirmado — perfil casi completo, coche entero visible"
+      },
+      "rear": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Volkswagen_ID.4_Pro_%28ZAA-E2EBJ%29_rear.jpg/1280px-Volkswagen_ID.4_Pro_%28ZAA-E2EBJ%29_rear.jpg",
+        "credit": "Wikimedia Commons — Tokumeigakarinoaoshima (CC0)",
+        "shows": "Volkswagen ID.4 Pro, azul, unidad de exposición (matrícula ZAA-E2EBJ) — foto de showroom, portón cerrado"
+      },
+      "interior": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Volkswagen_ID.4_Pro_%28ZAA-E2EBJ%29_interior.jpg/1280px-Volkswagen_ID.4_Pro_%28ZAA-E2EBJ%29_interior.jpg",
+        "credit": "Wikimedia Commons — Tokumeigakarinoaoshima (CC0)",
+        "shows": "Volkswagen ID.4 Pro, salpicadero, volante y consola central, tapicería bicolor negro y marrón"
+      }
+    }
+  },
+  {
+    "id": "kia-ev5",
+    "name": "EV5",
+    "brand": "Kia",
+    "technology": "EV",
+    "notes": [
+      "Versión GT-Line (81,4 kWh, 217 CV, tracción delantera), el acabado superior de la gama — motor.es y km77, agosto 2026. El precio incluye el descuento oficial de fábrica (1.634 €) que km77 declara aparte del PVP. Roza el presupuesto de referencia (51.437 €).",
+      "Sin foto de lateral estricto ni de maletero: no se ha encontrado en Wikimedia Commons un perfil cercano a 90º ni una vista con el portón abierto para este modelo.",
+      "Mantenimiento anual estimado por el rango genérico de un eléctrico en España (150-300 €/año), no por un coste de revisión desglosado del modelo.",
+      "Valor residual a 5 años estimado por comparación con otros eléctricos del catálogo: el EV5 se lanzó en 2025 y no tiene todavía histórico real de mercado de segunda mano a ese horizonte."
+    ],
+    "lengthMm": {
+      "value": 4610,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 4610,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "widthMm": {
+      "value": 1875,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 1875,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "heightMm": {
+      "value": 1680,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 1680,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "wheelbaseMm": {
+      "value": 2750,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 2750,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1400,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — KIA EV5 (agosto 2026): 140 cm de anchura de hombros en la 2ª fila, https://www.km77.com/coches/kia/ev5/2025/mediciones-propias/detalle",
+          "value": 1400,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "groundClearanceMm": {
+      "value": 167,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV (agosto 2026)",
+          "value": 167,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "trunkLiters": {
+      "value": 566,
+      "unit": "L",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 566,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "powerCv": {
+      "value": 217,
+      "unit": "CV",
+      "sources": [
+        {
+          "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV (agosto 2026)",
+          "value": 217,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "weightKg": {
+      "value": 2069,
+      "unit": "kg",
+      "sources": [
+        {
+          "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV (agosto 2026)",
+          "value": 2069,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "acceleration0to100": {
+      "value": 8.4,
+      "unit": "s",
+      "sources": [
+        {
+          "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV (agosto 2026)",
+          "value": 8.4,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "consumption": {
+      "value": 17.8,
+      "unit": "kWh/100km",
+      "sources": [
+        {
+          "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV, consumo WLTP combinado (agosto 2026)",
+          "value": 17.8,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "maintenanceEurYear": {
+      "value": 220,
+      "unit": "€/año",
+      "sources": [
+        {
+          "label": "Rango genérico de mantenimiento de un eléctrico en España, 150-300 €/año (agosto 2026)",
+          "value": 220,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "priceEur": {
+      "value": 51437,
+      "unit": "€",
+      "sources": [
+        {
+          "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV, PVP con descuento oficial (agosto 2026)",
+          "value": 51437,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "reliabilityOcu": {
+      "value": 89,
+      "sources": [
+        {
+          "label": "OCU, índice de fiabilidad 2026 — 85.590 encuestas, 39 marcas (vía motor.es)",
+          "value": 89,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyYears": {
+      "value": 7,
+      "unit": "años",
+      "sources": [
+        {
+          "label": "Garantía comercial en España (diariomotor, agosto 2026)",
+          "value": 7,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "residualPct5y": {
+      "value": 0.4,
+      "sources": [
+        {
+          "label": "Estimación por comparación con otros eléctricos del catálogo; sin histórico real a 5 años por ser un modelo de 2025 (agosto 2026)",
+          "value": 0.4,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "aestheticsExterior": {
+      "value": 3,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "aestheticsInterior": {
+      "value": 4,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "photos": {
+      "front": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Kia_EV5_GT-Line_IAA_2025_DSC_2079.jpg/1280px-Kia_EV5_GT-Line_IAA_2025_DSC_2079.jpg",
+        "credit": "Wikimedia Commons — Alexander Migl (CC BY-SA 4.0)",
+        "shows": "Kia EV5 GT-Line, gris oscuro, IAA Mobility 2025 (Múnich) — foto de salón"
+      },
+      "rear": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Kia_EV5_GT-Line_IAA_2025_DSC_2077.jpg/1280px-Kia_EV5_GT-Line_IAA_2025_DSC_2077.jpg",
+        "credit": "Wikimedia Commons — Alexander Migl (CC BY-SA 4.0)",
+        "shows": "Kia EV5 GT-Line, gris oscuro, IAA Mobility 2025 (Múnich) — foto de salón, portón cerrado, rótulo «EV5 GT-Line» visible"
+      },
+      "interior": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Kia_EV5_GT-Line_IAA_2025_DSC_2420.jpg/1280px-Kia_EV5_GT-Line_IAA_2025_DSC_2420.jpg",
+        "credit": "Wikimedia Commons — Alexander Migl (CC BY-SA 4.0)",
+        "shows": "Kia EV5 GT-Line, volante, pantallas y consola central — foto de salón, IAA Mobility 2025"
+      }
+    }
+  },
+  {
+    "id": "hyundai-ioniq-5",
+    "name": "IONIQ 5",
+    "brand": "Hyundai",
+    "technology": "EV",
+    "notes": [
+      "Versión Light (84 kWh, 228 CV, tracción trasera), la de acceso a la batería grande de la gama 2025 — motor.es y km77, agosto 2026. Roza el presupuesto de referencia (48.070 €).",
+      "Sin foto de lateral estricto ni de maletero: no se ha encontrado en Wikimedia Commons un perfil cercano a 90º ni una vista con el portón abierto para este modelo.",
+      "Las fotos frontal y trasera son del acabado Long Range Prestige (mercado coreano), no del Light que puntúa la ficha, aunque sí del mismo retoque de carrocería 2024/2025 (chasis NE1) — llantas y algún detalle de parachoques pueden no coincidir exactamente con el Light.",
+      "El maletero declarado (520 L) es solo el trasero; el Ioniq 5 tiene además un maletero delantero (frunk) de 57 L bajo el capó que el catálogo no puntúa por separado, igual que el resto de eléctricos.",
+      "Mantenimiento anual estimado por el rango genérico de un eléctrico en España, no por un coste de revisión desglosado del modelo.",
+      "Valor residual a 5 años estimado a partir de datos de mercado de EEUU (retiene ~43% a 5 años/60.000 millas); sin fuente de reventa española específica del modelo."
+    ],
+    "lengthMm": {
+      "value": 4650,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 4650,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "widthMm": {
+      "value": 1890,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 1890,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "heightMm": {
+      "value": 1600,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 1600,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "wheelbaseMm": {
+      "value": 3000,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 3000,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1460,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — IONIQ 5 Light RWD (agosto 2026): 146 cm de anchura de hombros en la 2ª fila, https://www.km77.com/coches/hyundai/ioniq-5/2021/estandar/estandar/ioniq-5-218-cv-bateria-74-kwh-rwd-light/mediciones-propias/detalle",
+          "value": 1460,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "groundClearanceMm": {
+      "value": 160,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha IONIQ 5 Light 84 kWh 228 CV RWD (agosto 2026)",
+          "value": 160,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "trunkLiters": {
+      "value": 520,
+      "unit": "L",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 520,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "powerCv": {
+      "value": 228,
+      "unit": "CV",
+      "sources": [
+        {
+          "label": "km77, ficha IONIQ 5 Light 84 kWh 228 CV RWD (agosto 2026)",
+          "value": 228,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "weightKg": {
+      "value": 2060,
+      "unit": "kg",
+      "sources": [
+        {
+          "label": "km77, ficha IONIQ 5 Light 84 kWh 228 CV RWD (agosto 2026)",
+          "value": 2060,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "acceleration0to100": {
+      "value": 7.5,
+      "unit": "s",
+      "sources": [
+        {
+          "label": "km77, ficha IONIQ 5 Light 84 kWh 228 CV RWD (agosto 2026)",
+          "value": 7.5,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "consumption": {
+      "value": 16.0,
+      "unit": "kWh/100km",
+      "sources": [
+        {
+          "label": "km77, ficha IONIQ 5 Light 84 kWh 228 CV RWD, consumo WLTP combinado (agosto 2026)",
+          "value": 16.0,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "maintenanceEurYear": {
+      "value": 250,
+      "unit": "€/año",
+      "sources": [
+        {
+          "label": "Rango genérico de mantenimiento de un eléctrico en España (agosto 2026)",
+          "value": 250,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "priceEur": {
+      "value": 48070,
+      "unit": "€",
+      "sources": [
+        {
+          "label": "km77, ficha IONIQ 5 Light 84 kWh 228 CV RWD (agosto 2026)",
+          "value": 48070,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "reliabilityOcu": {
+      "value": 87,
+      "sources": [
+        {
+          "label": "OCU, índice de fiabilidad 2026 — 85.590 encuestas, 39 marcas (vía motor.es)",
+          "value": 87,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyYears": {
+      "value": 5,
+      "unit": "años",
+      "sources": [
+        {
+          "label": "Garantía comercial en España (diariomotor, agosto 2026)",
+          "value": 5,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "residualPct5y": {
+      "value": 0.43,
+      "sources": [
+        {
+          "label": "iSeeCars, retención de valor a 5 años/60.000 millas (mercado EEUU, agosto 2026)",
+          "value": 0.43,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "aestheticsExterior": {
+      "value": 2,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "aestheticsInterior": {
+      "value": 3,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "photos": {
+      "front": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Hyundai_IONIQ_5_Long_Range_Prestige_NE1_PE_Atlas_White_Matte_%2811%29.jpg/1280px-Hyundai_IONIQ_5_Long_Range_Prestige_NE1_PE_Atlas_White_Matte_%2811%29.jpg",
+        "credit": "Wikimedia Commons — Damian B Oh (CC BY-SA 4.0)",
+        "shows": "Hyundai IONIQ 5 Long Range Prestige (chasis NE1, el mismo retoque 2024/2025 que la ficha), blanco Atlas Matte, Hyundai Motorstudio Goyang — acabado distinto al Light que puntúa la ficha, llantas y detalles de parachoques pueden variar"
+      },
+      "rear": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Hyundai_IONIQ_5_Long_Range_Prestige_NE1_PE_Atlas_White_Matte_%2813%29.jpg/1280px-Hyundai_IONIQ_5_Long_Range_Prestige_NE1_PE_Atlas_White_Matte_%2813%29.jpg",
+        "credit": "Wikimedia Commons — Damian B Oh (CC BY-SA 4.0)",
+        "shows": "Hyundai IONIQ 5 Long Range Prestige (chasis NE1), blanco Atlas Matte, Hyundai Motorstudio Goyang — misma salvedad de acabado que la foto frontal"
+      },
+      "interior": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Hyundai_Ioniq_5_NE_Interior_%281%29.jpg/1280px-Hyundai_Ioniq_5_NE_Interior_%281%29.jpg",
+        "credit": "Wikimedia Commons — Damian B Oh (CC BY-SA 4.0)",
+        "shows": "Hyundai IONIQ 5, doble pantalla curva y volante — foto de salón"
+      }
+    }
+  },
+  {
+    "id": "hyundai-tucson-hev",
+    "name": "Tucson HEV",
+    "brand": "Hyundai",
+    "technology": "HEV",
+    "notes": [
+      "Versión Klass (1.6 T-GDi HEV, 215 CV, tracción delantera), la de acceso a la gama HEV — motor.es y km77, agosto 2026.",
+      "Mantenimiento anual estimado a partir de la media de las dos primeras revisiones oficiales (M1 ~168 €, M2 ~250 € a los 2 años), no de un coste anual desglosado del fabricante.",
+      "Valor residual a 5 años estimado por comparación con el Kia Sportage HEV del catálogo (misma plataforma del grupo Hyundai-Kia, segmento y tecnología); sin fuente de reventa española específica del Tucson HEV.",
+      "Sin foto de lateral estricto ni de maletero: no se ha encontrado en Wikimedia Commons un perfil cercano a 90º ni una vista con el portón abierto para este modelo."
+    ],
+    "lengthMm": {
+      "value": 4510,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 4510,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "widthMm": {
+      "value": 1865,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 1865,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "heightMm": {
+      "value": 1650,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 1650,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "wheelbaseMm": {
+      "value": 2680,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 2680,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1390,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — Hyundai Tucson (agosto 2026): 139 cm de anchura de hombros en la 2ª fila, https://www.km77.com/coches/hyundai/tucson/2024/mediciones-propias/detalle",
+          "value": 1390,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "groundClearanceMm": {
+      "value": 170,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha Tucson Klass 1.6 T-GDi HEV 215 CV (agosto 2026)",
+          "value": 170,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "trunkLiters": {
+      "value": 616,
+      "unit": "L",
+      "sources": [
+        {
+          "label": "km77, ficha Tucson Klass 1.6 T-GDi HEV 215 CV (agosto 2026)",
+          "value": 616,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "powerCv": {
+      "value": 215,
+      "unit": "CV",
+      "sources": [
+        {
+          "label": "km77, ficha Tucson Klass 1.6 T-GDi HEV 215 CV (agosto 2026)",
+          "value": 215,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "weightKg": {
+      "value": 1650,
+      "unit": "kg",
+      "sources": [
+        {
+          "label": "km77, ficha Tucson Klass 1.6 T-GDi HEV 215 CV (agosto 2026)",
+          "value": 1650,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "acceleration0to100": {
+      "value": 8.2,
+      "unit": "s",
+      "sources": [
+        {
+          "label": "km77, ficha Tucson Klass 1.6 T-GDi HEV 215 CV (agosto 2026)",
+          "value": 8.2,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "consumption": {
+      "value": 5.7,
+      "unit": "l/100km",
+      "sources": [
+        {
+          "label": "km77, ficha Tucson Klass 1.6 T-GDi HEV 215 CV, consumo WLTP combinado (agosto 2026)",
+          "value": 5.7,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "maintenanceEurYear": {
+      "value": 170,
+      "unit": "€/año",
+      "sources": [
+        {
+          "label": "Media de revisiones oficiales M1/M2, totalrenting.es y carwow.es (agosto 2026)",
+          "value": 170,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "priceEur": {
+      "value": 40325,
+      "unit": "€",
+      "sources": [
+        {
+          "label": "km77, ficha Tucson Klass 1.6 T-GDi HEV 215 CV (agosto 2026)",
+          "value": 40325,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "reliabilityOcu": {
+      "value": 87,
+      "sources": [
+        {
+          "label": "OCU, índice de fiabilidad 2026 — 85.590 encuestas, 39 marcas (vía motor.es)",
+          "value": 87,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyYears": {
+      "value": 5,
+      "unit": "años",
+      "sources": [
+        {
+          "label": "Garantía comercial en España (diariomotor, agosto 2026)",
+          "value": 5,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "residualPct5y": {
+      "value": 0.5,
+      "sources": [
+        {
+          "label": "Estimación por comparación con el Kia Sportage HEV del catálogo, mismo grupo y segmento (agosto 2026)",
+          "value": 0.5,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "aestheticsExterior": {
+      "value": 4,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "aestheticsInterior": {
+      "value": 4,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "photos": {
+      "front": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Hyundai_Tucson_NX4_1.6_GLS_HEV_Pine_Green_Matte_-_front.jpg/1280px-Hyundai_Tucson_NX4_1.6_GLS_HEV_Pine_Green_Matte_-_front.jpg",
+        "credit": "Wikimedia Commons — Ethan Llamas (CC BY-SA 4.0)",
+        "shows": "Hyundai Tucson NX4 (retoque 2024) 1.6 GLS HEV, verde Pine Green Matte, rótulo «Tucson Hybrid» — foto de salón, ligero ángulo, no perfectamente recta"
+      },
+      "rear": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Hyundai_Tucson_NX4_1.6_GLS_HEV_Pine_Green_Matte_-_rear.jpg/1280px-Hyundai_Tucson_NX4_1.6_GLS_HEV_Pine_Green_Matte_-_rear.jpg",
+        "credit": "Wikimedia Commons — Ethan Llamas (CC BY-SA 4.0)",
+        "shows": "Hyundai Tucson NX4 (retoque 2024) 1.6 GLS HEV, verde Pine Green Matte, rótulo «Tucson Hybrid» — foto de salón, portón cerrado"
+      },
+      "interior": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Hyundai_Tucson_NX4_1.6_GLS_HEV_-_interior_view.jpg/1280px-Hyundai_Tucson_NX4_1.6_GLS_HEV_-_interior_view.jpg",
+        "credit": "Wikimedia Commons — Ethan Llamas (CC BY-SA 4.0)",
+        "shows": "Hyundai Tucson NX4 1.6 GLS HEV, salpicadero, volante y pantallas — foto de salón"
+      }
+    }
+  },
+  {
+    "id": "hyundai-tucson-phev",
+    "name": "Tucson PHEV",
+    "brand": "Hyundai",
+    "technology": "PHEV",
+    "notes": [
+      "Versión Klass (1.6 T-GDi PHEV, 288 CV, tracción delantera, batería de 13,8 kWh, 71 km de autonomía eléctrica WLTP) — motor.es y km77, agosto 2026.",
+      "Maletero menor que el HEV del catálogo (558 L frente a 616 L) por el hueco que ocupa la batería, igual que ya señala el catálogo para el BMW X1 xDrive25e frente a otras motorizaciones.",
+      "Mantenimiento anual estimado por el rango genérico de revisión de Hyundai (desde ~250 €, algo más que el HEV por el cambio de aceite anual recomendado en PHEV), no por un coste desglosado del modelo.",
+      "Valor residual a 5 años estimado por comparación con el BMW X1 xDrive25e del catálogo (mismo tipo PHEV); sin fuente de reventa española específica del Tucson PHEV.",
+      "Las fotos frontal y trasera son del acabado N-Line, no del Klass que puntúa la ficha, aunque sí de la misma generación retocada (2024) — llantas y algún detalle de parachoques pueden no coincidir exactamente con el Klass.",
+      "Sin foto de lateral estricto ni de maletero: no se ha encontrado en Wikimedia Commons un perfil cercano a 90º ni una vista con el portón abierto para este modelo."
+    ],
+    "lengthMm": {
+      "value": 4510,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 4510,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "widthMm": {
+      "value": 1865,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 1865,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "heightMm": {
+      "value": 1650,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 1650,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "wheelbaseMm": {
+      "value": 2680,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 2680,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1390,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — Hyundai Tucson (agosto 2026): 139 cm de anchura de hombros en la 2ª fila, misma carrocería que el HEV, https://www.km77.com/coches/hyundai/tucson/2024/mediciones-propias/detalle",
+          "value": 1390,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "groundClearanceMm": {
+      "value": 170,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha Tucson Klass 1.6 T-GDi PHEV 288 CV (agosto 2026)",
+          "value": 170,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "trunkLiters": {
+      "value": 558,
+      "unit": "L",
+      "sources": [
+        {
+          "label": "km77, ficha Tucson Klass 1.6 T-GDi PHEV 288 CV (agosto 2026)",
+          "value": 558,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "powerCv": {
+      "value": 288,
+      "unit": "CV",
+      "sources": [
+        {
+          "label": "km77, ficha Tucson Klass 1.6 T-GDi PHEV 288 CV (agosto 2026)",
+          "value": 288,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "weightKg": {
+      "value": 1832,
+      "unit": "kg",
+      "sources": [
+        {
+          "label": "km77, ficha Tucson Klass 1.6 T-GDi PHEV 288 CV (agosto 2026)",
+          "value": 1832,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "acceleration0to100": {
+      "value": 7.5,
+      "unit": "s",
+      "sources": [
+        {
+          "label": "km77, ficha Tucson Klass 1.6 T-GDi PHEV 288 CV (agosto 2026)",
+          "value": 7.5,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "consumption": {
+      "value": 2.7,
+      "unit": "l/100km",
+      "sources": [
+        {
+          "label": "km77, ficha Tucson Klass 1.6 T-GDi PHEV 288 CV, consumo WLTP combinado (agosto 2026)",
+          "value": 2.7,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "maintenanceEurYear": {
+      "value": 230,
+      "unit": "€/año",
+      "sources": [
+        {
+          "label": "Rango genérico de revisión de Hyundai en España, totalrenting.es (agosto 2026)",
+          "value": 230,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "priceEur": {
+      "value": 43625,
+      "unit": "€",
+      "sources": [
+        {
+          "label": "km77, ficha Tucson Klass 1.6 T-GDi PHEV 288 CV (agosto 2026)",
+          "value": 43625,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "reliabilityOcu": {
+      "value": 87,
+      "sources": [
+        {
+          "label": "OCU, índice de fiabilidad 2026 — 85.590 encuestas, 39 marcas (vía motor.es)",
+          "value": 87,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyYears": {
+      "value": 5,
+      "unit": "años",
+      "sources": [
+        {
+          "label": "Garantía comercial en España (diariomotor, agosto 2026)",
+          "value": 5,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "residualPct5y": {
+      "value": 0.4,
+      "sources": [
+        {
+          "label": "Estimación por comparación con el BMW X1 xDrive25e del catálogo, mismo tipo PHEV (agosto 2026)",
+          "value": 0.4,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "aestheticsExterior": {
+      "value": 4,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "aestheticsInterior": {
+      "value": 4,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "photos": {
+      "front": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Hyundai_Tucson_%28NX4%2C_SWB%29_PHEV_1X7A1858.jpg/1280px-Hyundai_Tucson_%28NX4%2C_SWB%29_PHEV_1X7A1858.jpg",
+        "credit": "Wikimedia Commons — Alexander Migl (CC BY-SA 4.0)",
+        "shows": "Hyundai Tucson NX4 (retoque 2024) PHEV, acabado N-Line (no Klass, el que puntúa la ficha), blanco, Stuttgart — foto de calle en ángulo 3/4, no perfectamente recta"
+      },
+      "rear": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Hyundai_Tucson_%28NX4%2C_SWB%29_PHEV_1X7A1859.jpg/1280px-Hyundai_Tucson_%28NX4%2C_SWB%29_PHEV_1X7A1859.jpg",
+        "credit": "Wikimedia Commons — Alexander Migl (CC BY-SA 4.0)",
+        "shows": "Hyundai Tucson NX4 (retoque 2024) PHEV, acabado N-Line, blanco, Stuttgart — misma salvedad que la foto frontal"
+      },
+      "interior": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Hyundai_Tucson_NX4_1.6_GLS_HEV_-_interior_view.jpg/1280px-Hyundai_Tucson_NX4_1.6_GLS_HEV_-_interior_view.jpg",
+        "credit": "Wikimedia Commons — Ethan Llamas (CC BY-SA 4.0)",
+        "shows": "Interior compartido con hyundai-tucson-hev (misma generación NX4 retocada, salpicadero equivalente entre HEV y PHEV) — excepción permitida por la skill solo para maletero e interior"
       }
     }
   }

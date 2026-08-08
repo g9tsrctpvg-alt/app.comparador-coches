@@ -130,13 +130,13 @@ describe('restoreConfig', () => {
     const result = restoreConfig(
       validRaw({
         overrides: {
-          'kia-ev3': { aestheticsExterior: 9, travelComfort: 3 },
+          'kia-ev3': { aestheticsExterior: 9, aestheticsInterior: 3 },
         },
       }),
       CARS,
     );
     expect(result.config.overrides).toEqual({
-      'kia-ev3': { travelComfort: 3 },
+      'kia-ev3': { aestheticsInterior: 3 },
     });
     const logged = JSON.parse(errorSpy.mock.calls[0]?.[0] as string);
     expect(logged.Body).toBe('config_rating_discarded');

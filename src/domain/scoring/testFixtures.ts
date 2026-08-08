@@ -22,6 +22,7 @@ interface FixtureInput {
   lengthMm: number;
   widthMm: number;
   wheelbaseMm: number;
+  rearShoulderWidthMm: number;
   priceEur: number;
   consumption: number;
   maintenanceEurYear: number;
@@ -33,7 +34,6 @@ interface FixtureInput {
   residualPct5y: number;
   aestheticsExterior: number;
   aestheticsInterior: number;
-  travelComfort: number;
 }
 
 function buildCar(input: FixtureInput): Car {
@@ -48,6 +48,7 @@ function buildCar(input: FixtureInput): Car {
     widthMm: sourced(input.widthMm, 'mm'),
     heightMm: sourced(1600, 'mm'),
     wheelbaseMm: sourced(input.wheelbaseMm, 'mm'),
+    rearShoulderWidthMm: sourced(input.rearShoulderWidthMm, 'mm'),
     groundClearanceMm: sourced(160, 'mm'),
     trunkLiters: sourced(500, 'L'),
     powerCv: sourced(input.powerCv, 'CV'),
@@ -64,7 +65,6 @@ function buildCar(input: FixtureInput): Car {
     residualPct5y: sourced(input.residualPct5y),
     aestheticsExterior: rating(input.aestheticsExterior),
     aestheticsInterior: rating(input.aestheticsInterior),
-    travelComfort: rating(input.travelComfort),
     photos: {},
   };
 }
@@ -80,6 +80,7 @@ export const sportageFixture = buildCar({
   lengthMm: 4540,
   widthMm: 1865,
   wheelbaseMm: 2680,
+  rearShoulderWidthMm: 1390,
   priceEur: 36000,
   consumption: 6.2,
   maintenanceEurYear: 400,
@@ -91,7 +92,6 @@ export const sportageFixture = buildCar({
   residualPct5y: 0.52,
   aestheticsExterior: 2,
   aestheticsInterior: 4,
-  travelComfort: 3,
 });
 
 export const x1Fixture = buildCar({
@@ -102,6 +102,7 @@ export const x1Fixture = buildCar({
   lengthMm: 4500,
   widthMm: 1845,
   wheelbaseMm: 2692,
+  rearShoulderWidthMm: 1380,
   priceEur: 44000,
   consumption: 7.5,
   maintenanceEurYear: 750,
@@ -113,7 +114,6 @@ export const x1Fixture = buildCar({
   residualPct5y: 0.4,
   aestheticsExterior: 5,
   aestheticsInterior: 5,
-  travelComfort: 4,
 });
 
 export const ev3Fixture = buildCar({
@@ -124,6 +124,7 @@ export const ev3Fixture = buildCar({
   lengthMm: 4300,
   widthMm: 1850,
   wheelbaseMm: 2680,
+  rearShoulderWidthMm: 1340,
   priceEur: 32000,
   consumption: 16,
   maintenanceEurYear: 250,
@@ -135,7 +136,6 @@ export const ev3Fixture = buildCar({
   residualPct5y: 0.4,
   aestheticsExterior: 5,
   aestheticsInterior: 3,
-  travelComfort: 3,
 });
 
 export const threeCarFixture: Car[] = [sportageFixture, x1Fixture, ev3Fixture];

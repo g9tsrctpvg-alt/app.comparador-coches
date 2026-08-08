@@ -35,6 +35,7 @@ function minimalCar(overrides: Record<string, unknown> = {}) {
     lengthMm: sourced(4540, 'mm'),
     widthMm: sourced(1865, 'mm'),
     wheelbaseMm: sourced(2680, 'mm'),
+    rearShoulderWidthMm: sourced(1390, 'mm'),
     heightMm: sourced(1645, 'mm'),
     groundClearanceMm: sourced(170, 'mm'),
     trunkLiters: sourced(587, 'L'),
@@ -49,7 +50,6 @@ function minimalCar(overrides: Record<string, unknown> = {}) {
     residualPct5y: sourced(0.52),
     aestheticsExterior: rating(2),
     aestheticsInterior: rating(4),
-    travelComfort: rating(3),
     photos: {},
     ...overrides,
   };
@@ -190,6 +190,6 @@ describe('parseCatalog', () => {
 describe('loadCatalog', () => {
   it('loads the bundled catalog without throwing, with all eleven candidates', () => {
     const cars = loadCatalog();
-    expect(cars).toHaveLength(11);
+    expect(cars).toHaveLength(16);
   });
 });

@@ -47,14 +47,14 @@ describe('ExplicacionPage', () => {
     );
   });
 
-  it('shows all twelve anchors with a value taken from the domain', () => {
+  it('shows all thirteen anchors with a value taken from the domain', () => {
     const markup = render();
-    // Los cinco ejes con curva en S, dos anclajes cada uno, más los dos de
-    // estética (editables por el usuario, pero con la misma forma de
-    // anclaje): doce en total.
+    // Los cinco ejes con curva en S, dos magnitudes cada uno salvo `viaje`,
+    // que desde product/0017 tiene tres, más las dos de estética (editables
+    // por el usuario, pero con la misma forma de anclaje): trece en total.
     const anchorCount = (markup.match(/→ 10/g) ?? []).length;
-    expect(anchorCount).toBe(12);
-    expect((markup.match(/→ 0/g) ?? []).length).toBe(12);
+    expect(anchorCount).toBe(13);
+    expect((markup.match(/→ 0/g) ?? []).length).toBe(13);
   });
 
   it('declares that estética is the only axis without an S-curve, and why', () => {

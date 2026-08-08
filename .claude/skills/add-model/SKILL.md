@@ -24,8 +24,10 @@ relleno de formulario.
 1. Rama nueva para esta unidad de trabajo (`docs/proceso/trazabilidad.md`).
 2. Identidad: `id`, `name`, `brand`, `technology`.
 3. Las 19 magnitudes, cada una con una fuente real — la sección más larga.
-4. Las 3 valoraciones subjetivas: se piden al usuario, nunca se inventan.
-5. Las 5 fotos — flujo completo en `references/photo-sourcing.md`.
+4. Las 5 fotos — flujo completo en `references/photo-sourcing.md`.
+5. Las valoraciones subjetivas, **enseñándole las fotos del paso 4 al
+   usuario** para que las puntúe. Es interactivo por diseño: van después de
+   las fotos porque se valoran sobre ellas.
 6. Actualizar los dos tests que dan por hecho once candidatos.
 7. Registrar como deuda lo que falte, en `docs/roadmap.md`.
 8. CI local entera en verde.
@@ -60,13 +62,21 @@ de acabar mezclando datos de dos coches distintos.
   fuente con `current: true`, y su `value` tiene que coincidir con el
   `value` de fuera — no son dos sitios independientes, son el mismo dato
   escrito dos veces por diseño, para que quede trazado de dónde sale.
-- **`UserRating`** — `{ value: 1-5, label }`. Es el formato de
-  `aestheticsExterior`, `aestheticsInterior` y `travelComfort`: un juicio
-  propio, no un dato con procedencia. **No los rellenes tú.** Pregúntale al
-  usuario las tres notas, o dale el coche con esos tres campos ausentes y
-  dilo explícitamente en el resumen final — el catálogo carga igual sin
-  ellos si se declaran como deuda, pero nunca deben llevar un número que
-  te hayas inventado, ni «de momento un 3» a modo de relleno.
+- **`UserRating`** — `{ value: 1-5, label }`. Es el formato de las
+  valoraciones de **estética**, `aestheticsExterior` y
+  `aestheticsInterior`: un juicio propio, no un dato con procedencia. **No
+  los rellenes tú**, ni siquiera «de momento un 3» a modo de relleno. Se
+  piden al usuario en la sesión interactiva de la sección 6, que va después
+  de las fotos porque se valoran mirándolas.
+
+  **El confort de viaje no es una valoración subjetiva.** Es un dato
+  objetivo, calculado por el eje `viaje` a partir de magnitudes medidas
+  (`src/domain/scoring/axes/viaje.ts`) — nunca preguntes al usuario una
+  «nota de viaje» ni una «nota de confort». El campo `travelComfort` que
+  aún sobrevive en `CarSchema` es un resto sin uso que `product/0005` dejó
+  pendiente de retirar y que `product/0017` retira; si al dar el alta ese
+  campo todavía existe en el esquema, míralo en `car.ts` y trátalo como
+  deuda de migración, no como algo que valore una persona.
 
 **Cómo investigar cada magnitud**: busca la ficha técnica oficial del
 fabricante para el mercado español (o europeo si no la hay en español) y,
@@ -135,16 +145,42 @@ de Wikimedia, el encuadre exacto de cada vista, y cómo construir `credit` y
 una vista sin foto se deja vacía; una foto del coche, generación o
 motorización equivocados no es aceptable bajo ninguna circunstancia.
 
-## 6. Registrar lo que falte
+## 6. Las valoraciones de estética, con el usuario delante
 
-Cualquier vista sin foto, cualquier magnitud estimada, cualquier valoración
-subjetiva pendiente: todo eso va como fila nueva en la tabla **Deudas
+**Este paso es interactivo y no se puede resolver solo.** Las dos notas de
+estética son un juicio del usuario, y un juicio necesita mirar el coche:
+por eso van después de las fotos y no antes.
+
+Cuando tengas las fotos de la sección 5 verificadas, **enséñaselas** —las
+mismas que van a quedar en la ficha, no otras buscadas aparte— y pídele las
+dos notas:
+
+- `aestheticsExterior`, sobre las vistas frontal, lateral y trasera.
+- `aestheticsInterior`, sobre la vista de interior.
+
+Aprovechar las fotos de la ficha para esto no es un atajo: es lo correcto.
+Garantiza que el usuario puntúa **la misma versión y el mismo acabado** que
+el catálogo declara, en vez de una impresión general de la gama formada con
+imágenes distintas.
+
+Si el usuario no puede valorar en ese momento, deja los campos ausentes y
+regístralo como deuda (sección 7). Un coche sin las notas de estética sigue
+siendo un alta válida; un coche con notas inventadas, no.
+
+El `label` de cada `UserRating` describe **cómo se emitió el juicio**, no
+repite la nota — el catálogo actual usa
+`"Valoración del usuario sobre fotos de catálogo"`.
+
+## 7. Registrar lo que falte
+
+Cualquier vista sin foto, cualquier magnitud estimada, cualquier nota de
+estética pendiente: todo eso va como fila nueva en la tabla **Deudas
 abiertas** de `docs/roadmap.md`, nombrando el coche y el campo o la vista
 exactos — sigue el estilo de las filas que ya hay ahí para
 `product/0014`. Una deuda sin registrar no es una deuda, es una sorpresa
 para quien abra el catálogo después.
 
-## 7. Antes de dar la tarea por terminada
+## 8. Antes de dar la tarea por terminada
 
 Corre la CI entera en local, en este orden — cada paso depende de que el
 anterior esté limpio:
@@ -162,7 +198,7 @@ Si `test:coverage` falla por algo que no sea los dos tests de la sección 4,
 no lo ignores: en este proyecto una cobertura por debajo del 100% no se
 tolera nunca, así que un fallo aquí es una señal real.
 
-## 8. El commit
+## 9. El commit
 
 Un commit, `data(web): add <marca> <modelo> to the catalogue`, en inglés,
 que solo toque `src/data/cars.json` y los dos tests de la sección 4 —y
