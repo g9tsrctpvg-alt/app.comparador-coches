@@ -1,7 +1,7 @@
 # 0017 — El eje de viaje suma una tercera magnitud: anchura de hombros
 
 - **Id:** product/0017
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-08-07
 - **Specs relacionadas:** product/0005
