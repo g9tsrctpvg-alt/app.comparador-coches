@@ -191,6 +191,16 @@ candidatos apenas difieren debe influir poco, no fabricar diferencias.
 
 - Depende del ADR 0004 (principio de escalas absolutas) y sucede a
   `product/0005`, que dejó abierta la decisión sobre `travelComfort`.
+- **No introduce ningún ADR nuevo, y es deliberado.** Añadir una tercera
+  magnitud medida a un eje es aplicar el principio que ya decidió el ADR
+  0004, no decidir otro; y la retirada de `travelComfort` la delegó
+  `product/0005` explícitamente en «la spec que implemente esta», no en un
+  ADR.
+- **Retirar `travelComfort` no hipoteca el futuro eje subjetivo de
+  conducción** (`docs/roadmap.md`, «Fuera de fase»). Ese eje va a medir
+  butacas, ruido y suspensión tras conducir los coches: campos propios que
+  aún no existen, no un `travelComfort` genérico valorado sobre fotos. Lo
+  que se retira aquí es un resto sin uso, no un cimiento.
 - **El catálogo necesita una columna nueva** para los candidatos
   publicados hoy (ocho) y para los tres despublicados por presupuesto
   (BMW X1 xDrive25e, Lexus NX 350h, Honda CR-V e:HEV) si en algún momento
