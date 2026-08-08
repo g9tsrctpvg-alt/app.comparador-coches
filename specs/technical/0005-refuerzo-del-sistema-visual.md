@@ -1,7 +1,7 @@
 # 0005 — Refuerzo del sistema visual: jerarquía, estados y shell
 
 - **Id:** technical/0005
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** technical
 - **Fecha:** 2026-08-08
 - **Specs relacionadas:** technical/0004, product/0009, product/0010, product/0018

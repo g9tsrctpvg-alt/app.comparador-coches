@@ -1,6 +1,6 @@
 # 0008 — Una tipografía propia, servida desde el repositorio
 
-- **Estado:** draft
+- **Estado:** approved
 - **Fecha:** 2026-08-08
 - **Nivel:** 🟡
 

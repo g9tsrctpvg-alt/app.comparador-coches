@@ -1,7 +1,7 @@
 # 0018 — Una sola ficha, con diferencias contra el modelo elegido
 
 - **Id:** product/0018
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-08-08
 - **Specs relacionadas:** product/0013, product/0014, product/0016, technical/0005

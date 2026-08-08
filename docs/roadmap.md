@@ -231,11 +231,11 @@ entera verde en local y cobertura al 100 %.
 
 | Tarea | Estado |
 | --- | --- |
-| ADR 0008 — una tipografía propia, servida desde el repositorio | `draft` |
-| `technical/0005` — refuerzo del sistema visual: jerarquía, estados y shell | `draft` |
-| `product/0018` — una sola ficha, con diferencias contra el modelo elegido | `draft` |
-| Gate humano: aprobar el ADR 0008 y las dos specs, y marcar `product/0013` como `superseded` | Pendiente |
-| Implementar, verificar y consolidar las dos specs | Pendiente |
+| ADR 0008 — una tipografía propia, servida desde el repositorio | `approved` |
+| `technical/0005` — refuerzo del sistema visual: jerarquía, estados y shell | `approved` |
+| `product/0018` — una sola ficha, con diferencias contra el modelo elegido | `approved` |
+| Gate humano: aprobar el ADR 0008 y las dos specs, y marcar `product/0013` como `superseded` | Hecha — 2026-08-08, en commit propio sin implementación |
+| Implementar, verificar y consolidar las dos specs | En marcha |
 | `product/0019` — la portada enseña el coche | Sin redactar |
 
 **Qué motiva la fase.** Dos cosas independientes que se hacen juntas porque

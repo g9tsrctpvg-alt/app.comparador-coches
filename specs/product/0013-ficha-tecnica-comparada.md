@@ -1,18 +1,20 @@
 # 0013 — La ficha técnica comparada
 
 - **Id:** product/0013
-- **Estado:** implemented
+- **Estado:** superseded
 - **Tipo:** product
 - **Fecha:** 2026-08-06
 - **Specs relacionadas:** product/0001, product/0009, product/0010, technical/0004
 - **ADRs relacionados:** 0003, 0006
 - **Doc de estado:** `docs/estado/interfaz.md`, `docs/estado/dominio.md`
 
-> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
-> implementado: su sección *Contexto* retrata el sistema **anterior** al
-> cambio y hoy no es cierta. **No es referencia del estado actual** — para
-> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
-> **criterios de aceptación**, como registro de verificación.
+> ⚠️ **Spec sustituida por `product/0018` (2026-08-08).** La vista
+> `#/ficha-tecnica` que esta spec introdujo deja de existir como página
+> propia: su comportamiento —la Δ, la polaridad, los litros por metro
+> cuadrado y la leyenda— queda recogido dentro de `product/0018`, que funde
+> esta ficha con `product/0014` en una sola vista. No se edita esta spec para
+> reflejarlo: se congela aquí, como registro de lo que fue, y `product/0018`
+> es la referencia para lo que hay hoy.
 
 ## Contexto
 
