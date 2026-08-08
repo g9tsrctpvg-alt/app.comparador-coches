@@ -3611,5 +3611,234 @@
         "shows": "Hyundai Tucson NX4 1.6 GLS HEV, salpicadero, volante y pantallas — foto de salón"
       }
     }
+  },
+  {
+    "id": "hyundai-tucson-phev",
+    "name": "Tucson PHEV",
+    "brand": "Hyundai",
+    "technology": "PHEV",
+    "notes": [
+      "Versión Klass (1.6 T-GDi PHEV, 288 CV, tracción delantera, batería de 13,8 kWh, 71 km de autonomía eléctrica WLTP) — motor.es y km77, agosto 2026.",
+      "Maletero menor que el HEV del catálogo (558 L frente a 616 L) por el hueco que ocupa la batería, igual que ya señala el catálogo para el BMW X1 xDrive25e frente a otras motorizaciones.",
+      "Mantenimiento anual estimado por el rango genérico de revisión de Hyundai (desde ~250 €, algo más que el HEV por el cambio de aceite anual recomendado en PHEV), no por un coste desglosado del modelo.",
+      "Valor residual a 5 años estimado por comparación con el BMW X1 xDrive25e del catálogo (mismo tipo PHEV); sin fuente de reventa española específica del Tucson PHEV.",
+      "Las fotos frontal y trasera son del acabado N-Line, no del Klass que puntúa la ficha, aunque sí de la misma generación retocada (2024) — llantas y algún detalle de parachoques pueden no coincidir exactamente con el Klass.",
+      "Sin foto de lateral estricto ni de maletero: no se ha encontrado en Wikimedia Commons un perfil cercano a 90º ni una vista con el portón abierto para este modelo."
+    ],
+    "lengthMm": {
+      "value": 4510,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 4510,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "widthMm": {
+      "value": 1865,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 1865,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "heightMm": {
+      "value": 1650,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 1650,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "wheelbaseMm": {
+      "value": 2680,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "motor.es, ficha de medidas (agosto 2026)",
+          "value": 2680,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1390,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — Hyundai Tucson (agosto 2026): 139 cm de anchura de hombros en la 2ª fila, misma carrocería que el HEV, https://www.km77.com/coches/hyundai/tucson/2024/mediciones-propias/detalle",
+          "value": 1390,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "groundClearanceMm": {
+      "value": 170,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha Tucson Klass 1.6 T-GDi PHEV 288 CV (agosto 2026)",
+          "value": 170,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "trunkLiters": {
+      "value": 558,
+      "unit": "L",
+      "sources": [
+        {
+          "label": "km77, ficha Tucson Klass 1.6 T-GDi PHEV 288 CV (agosto 2026)",
+          "value": 558,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "powerCv": {
+      "value": 288,
+      "unit": "CV",
+      "sources": [
+        {
+          "label": "km77, ficha Tucson Klass 1.6 T-GDi PHEV 288 CV (agosto 2026)",
+          "value": 288,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "weightKg": {
+      "value": 1832,
+      "unit": "kg",
+      "sources": [
+        {
+          "label": "km77, ficha Tucson Klass 1.6 T-GDi PHEV 288 CV (agosto 2026)",
+          "value": 1832,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "acceleration0to100": {
+      "value": 7.5,
+      "unit": "s",
+      "sources": [
+        {
+          "label": "km77, ficha Tucson Klass 1.6 T-GDi PHEV 288 CV (agosto 2026)",
+          "value": 7.5,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "consumption": {
+      "value": 2.7,
+      "unit": "l/100km",
+      "sources": [
+        {
+          "label": "km77, ficha Tucson Klass 1.6 T-GDi PHEV 288 CV, consumo WLTP combinado (agosto 2026)",
+          "value": 2.7,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "maintenanceEurYear": {
+      "value": 230,
+      "unit": "€/año",
+      "sources": [
+        {
+          "label": "Rango genérico de revisión de Hyundai en España, totalrenting.es (agosto 2026)",
+          "value": 230,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "priceEur": {
+      "value": 43625,
+      "unit": "€",
+      "sources": [
+        {
+          "label": "km77, ficha Tucson Klass 1.6 T-GDi PHEV 288 CV (agosto 2026)",
+          "value": 43625,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "reliabilityOcu": {
+      "value": 87,
+      "sources": [
+        {
+          "label": "OCU, índice de fiabilidad 2026 — 85.590 encuestas, 39 marcas (vía motor.es)",
+          "value": 87,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyYears": {
+      "value": 5,
+      "unit": "años",
+      "sources": [
+        {
+          "label": "Garantía comercial en España (diariomotor, agosto 2026)",
+          "value": 5,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "residualPct5y": {
+      "value": 0.4,
+      "sources": [
+        {
+          "label": "Estimación por comparación con el BMW X1 xDrive25e del catálogo, mismo tipo PHEV (agosto 2026)",
+          "value": 0.4,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "aestheticsExterior": {
+      "value": 4,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "aestheticsInterior": {
+      "value": 4,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "photos": {
+      "front": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Hyundai_Tucson_%28NX4%2C_SWB%29_PHEV_1X7A1858.jpg/1280px-Hyundai_Tucson_%28NX4%2C_SWB%29_PHEV_1X7A1858.jpg",
+        "credit": "Wikimedia Commons — Alexander Migl (CC BY-SA 4.0)",
+        "shows": "Hyundai Tucson NX4 (retoque 2024) PHEV, acabado N-Line (no Klass, el que puntúa la ficha), blanco, Stuttgart — foto de calle en ángulo 3/4, no perfectamente recta"
+      },
+      "rear": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Hyundai_Tucson_%28NX4%2C_SWB%29_PHEV_1X7A1859.jpg/1280px-Hyundai_Tucson_%28NX4%2C_SWB%29_PHEV_1X7A1859.jpg",
+        "credit": "Wikimedia Commons — Alexander Migl (CC BY-SA 4.0)",
+        "shows": "Hyundai Tucson NX4 (retoque 2024) PHEV, acabado N-Line, blanco, Stuttgart — misma salvedad que la foto frontal"
+      },
+      "interior": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Hyundai_Tucson_NX4_1.6_GLS_HEV_-_interior_view.jpg/1280px-Hyundai_Tucson_NX4_1.6_GLS_HEV_-_interior_view.jpg",
+        "credit": "Wikimedia Commons — Ethan Llamas (CC BY-SA 4.0)",
+        "shows": "Interior compartido con hyundai-tucson-hev (misma generación NX4 retocada, salpicadero equivalente entre HEV y PHEV) — excepción permitida por la skill solo para maletero e interior"
+      }
+    }
   }
 ]
