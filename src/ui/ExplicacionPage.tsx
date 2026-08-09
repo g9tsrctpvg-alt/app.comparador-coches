@@ -17,6 +17,7 @@ import {
 } from './content/explicacionContent';
 import { SCurveChart } from './components/SCurveChart';
 import primitives from './primitives.module.css';
+import shellStyles from './components/AppShell.module.css';
 import styles from './ExplicacionPage.module.css';
 
 interface ExplicacionPageProps {
@@ -83,11 +84,8 @@ export function ExplicacionPage({ cars }: ExplicacionPageProps) {
     .find((penalty) => penalty.active);
 
   return (
-    <main className={styles.page}>
-      <a href="#" className={styles.backLink}>
-        ← Volver a la comparativa
-      </a>
-      <h1 className={styles.title}>Cómo se calcula todo</h1>
+    <>
+      <h1 className={shellStyles.viewTitle}>Cómo se calcula todo</h1>
       <p className={styles.intro}>
         El desglose de cada coche responde «de dónde sale este número». Esta
         página responde «cómo funciona el modelo entero», sin ningún coche
@@ -277,10 +275,6 @@ export function ExplicacionPage({ cars }: ExplicacionPageProps) {
         </h2>
         <p className={styles.sectionIntro}>{PROVENANCE_EXPLANATION}</p>
       </section>
-
-      <a href="#" className={styles.backLink}>
-        ← Volver a la comparativa
-      </a>
-    </main>
+    </>
   );
 }

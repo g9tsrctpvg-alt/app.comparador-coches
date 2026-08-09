@@ -72,7 +72,6 @@ describe('App', () => {
 
       const markup = renderToStaticMarkup(<App load={() => threeCarFixture} />);
       expect(markup).toContain('Cómo se calcula todo');
-      expect(markup).toContain('Volver a la comparativa');
       expect(markup).not.toContain('aria-label="Ranking"');
     });
   });

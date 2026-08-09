@@ -1,10 +1,23 @@
 /*
  * Hoja global de tokens y reset (technical/0004, valores de color y
  * tipografía fijados por product/0009, puntos de ruptura fijados por
- * product/0010). Es el único sitio donde vive un literal de color,
- * espaciado, tipografía, radio, sombra, tamaño o punto de ruptura: todo lo
- * demás en `src/ui/` lee estas custom properties por `var(--…)`.
+ * product/0010, escala tipográfica y estados ampliados por technical/0005).
+ * Es el único sitio donde vive un literal de color, espaciado, tipografía,
+ * radio, sombra, tamaño o punto de ruptura: todo lo demás en `src/ui/` lee
+ * estas custom properties por `var(--…)`.
  */
+
+/* Fuente propia auto-hospedada (ADR 0008): variable, subset `latin`, que ya
+ * cubre el español completo. `font-optical-sizing: auto` en `body` deja que
+ * el eje óptico de la variable ajuste el trazo entre el cuerpo de tabla y el
+ * titular sin cargar un segundo fichero. */
+@font-face {
+  font-family: 'Inter';
+  src: url('../assets/fonts/inter-variable-latin.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   /* Color — los siete papeles del artefacto de referencia
@@ -30,6 +43,10 @@
   --color-mute-on-ink: #8fa69b;
   --color-accent-tint: rgb(20 101 92 / 7%);
 
+  /* El mismo tinte, más marcado: para `:active`/pulsado, donde el tinte de
+   * `:hover` no basta para distinguir el estado (technical/0005). */
+  --color-accent-tint-strong: rgb(20 101 92 / 14%);
+
   /* Fondo de `::backdrop` tras la foto ampliada (product/0014, requisito
    * 8.4): un `<dialog>` nativo no puede leer una custom property para su
    * propio pseudo-elemento salvo que también se declare aquí, junto al
@@ -44,6 +61,34 @@
    * apilamiento. */
   --color-accent-tint-solid: #e2ebe7;
 
+  /* Segundo nivel de superficie (technical/0005, requisito 1.4): más claro
+   * que `card` en la misma dirección en que `card` ya se aparta de `paper`,
+   * para una tarjeta que se lee «por encima» de otra sin depender solo de
+   * la sombra. La distancia es deliberadamente pequeña —la elevación la
+   * lleva `--shadow-raised`, no el color—. */
+  --color-card-raised: #fbfdfa;
+
+  /* Separador estructural (technical/0005, requisito 1.4): el doble de
+   * contraste que el pelo de `--color-rule` (2,56:1 sobre `card` frente a
+   * 1,45:1), para límites de sección —cabecera, pie, bloque de tabla— que
+   * necesitan leerse sin ser una línea de dato. No es texto, así que no se
+   * mide contra el umbral de 4,5:1 de los tokens de tipografía. */
+  --color-rule-strong: #929d94;
+
+  /* Tercer nivel de texto (technical/0005, requisito 1.4). `mute` ya está en
+   * el límite de 4,5:1 con `paper` (4,68:1): no hay hueco para un tono más
+   * claro que siga sirviendo texto de cuerpo. `ink-tertiary` renuncia a ese
+   * umbral a cambio de 3,49:1 sobre `paper` y 3,82:1 sobre `card` —el suelo
+   * de texto grande de WCAG AA (1.4.3)— y por eso solo se usa en texto de al
+   * menos `--font-size-lg`, o en elementos no textuales. */
+  --color-ink-tertiary: #727f76;
+
+  /* Papeles de dirección (technical/0005, requisito 1.6): mismo tono que
+   * `accent` y `signal` —ya verificados a 6,28:1 y 5,27:1 sobre `card`—, con
+   * el nombre que dice lo que significan en una Δ, no de qué color son. */
+  --color-positive: #14655c;
+  --color-negative: #a34d18;
+
   /* Espaciado — una sola escala, en incrementos de 4px. */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -54,37 +99,71 @@
   --space-7: 2rem;
   --space-8: 3rem;
 
-  /* Tipografía — dos pilas del sistema, sin fuente web. */
+  /* Tipografía. `--font-mono` sigue siendo la pila del sistema (ADR 0008 no
+   * la toca: la regla «todo número en monoespaciada» de product/0009 no
+   * depende de qué mono sea). `--font-sans` antepone la variable propia del
+   * ADR 0008 a la misma pila de respaldo de siempre, para que un fallo de
+   * carga —red bloqueada, caché corrupta— deje la aplicación como antes de
+   * esta decisión, no rota. */
   --font-mono:
     ui-monospace, 'SF Mono', 'Cascadia Mono', 'Segoe UI Mono', Consolas,
     'Liberation Mono', Menlo, monospace;
   --font-sans:
-    system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif;
 
-  /* Escala tipográfica del artefacto de referencia (product/0009, sección
-   * «La tipografía»), en rem sobre una raíz de 16px: 30 el titular, 22 el
-   * nombre del líder, 15 el nombre de un coche y su puntuación, 13 el texto
-   * de un control, 11 la letra pequeña y los datos monoespaciados, 10 el
-   * rótulo `Label`, 9,5 la cabecera de tabla. */
-  --font-size-2xl: 1.875rem;
+  /* Escala tipográfica (technical/0005, requisito 1.1: sube el suelo y abre
+   * la cima sobre la que fijó product/0009). En rem sobre una raíz de 16px:
+   * 40 el título de vista, 28 un titular de sección, 22 el nombre del líder,
+   * 18 subtítulos y cifras destacadas, 16 el texto base, 14 controles y
+   * celdas, 12 la letra pequeña, 11 el rótulo `Label` en versalitas. El
+   * cuerpo de tabla deja de ir a 11px: sube a `--font-size-xs`, 12px. No
+   * existe un escalón por debajo de 11px: por debajo de eso el texto deja
+   * de ser accesible en pantalla y `technical/0004` no declaraba ningún uso
+   * para el suyo, `--font-size-3xs`, que por eso desaparece aquí. */
+  --font-size-display: 2.5rem;
+  --font-size-2xl: 1.75rem;
   --font-size-xl: 1.375rem;
-  --font-size-md: 0.9375rem;
-  --font-size-sm: 0.8125rem;
-  --font-size-xs: 0.6875rem;
-  --font-size-2xs: 0.625rem;
-  --font-size-3xs: 0.59375rem;
+  --font-size-lg: 1.125rem;
+  --font-size-md: 1rem;
+  --font-size-sm: 0.875rem;
+  --font-size-xs: 0.75rem;
+  --font-size-2xs: 0.6875rem;
 
   --font-weight-regular: 400;
+  --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
+
+  /* Altura de línea y espaciado entre letras (technical/0005, requisito
+   * 1.2): antes literales sueltos y repetidos en cuatro `.module.css`
+   * distintos, con el mismo valor cada vez. */
+  --line-height-tight: 1.05;
+  --line-height-body: 1.5;
+
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-wide: 0.04em;
+  --letter-spacing-wider: 0.08em;
+  --letter-spacing-widest: 0.14em;
 
   /* Radios. */
   --radius-sm: 0.125rem;
   --radius-md: 0.25rem;
+  --radius-lg: 0.5rem;
 
-  /* Sombras. */
+  /* Sombras. La de foco —`--shadow-focus`— se retira: no la consumía ningún
+   * componente, porque el indicador de foco real usa `outline`, no
+   * `box-shadow` (ver más abajo). */
   --shadow-card: 0 1px 2px rgb(0 0 0 / 8%);
-  --shadow-focus: 0 0 0 0.1875rem rgb(20 101 92 / 45%);
+  --shadow-raised:
+    0 0.125rem 0.5rem rgb(0 0 0 / 10%), 0 0.0625rem 0.125rem rgb(0 0 0 / 6%);
+  --shadow-overlay: 0 0.75rem 2rem rgb(0 0 0 / 18%);
+
+  /* Duración y curva de las transiciones (technical/0005, requisito 1.7):
+   * antes un `0.35s ease` escrito a mano en `primitives.module.css`. */
+  --duration-fast: 0.15s;
+  --duration-base: 0.35s;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
   /* Tamaños — anchos y medidas propias, no espaciado entre elementos. */
   --size-column: 35rem;
@@ -94,6 +173,11 @@
   --size-border-hairline: 0.0625rem;
   --size-bar-row: 0.1875rem;
   --size-bar-axis: 0.375rem;
+
+  /* Altura de la cabecera del shell (technical/0005, requisito 1.8): la
+   * cabecera fija de una tabla se desplaza por este mismo valor para no
+   * quedar debajo de la cabecera de la aplicación. */
+  --size-header-height: 3.5rem;
 
   /* Ancho máximo de la página en dos columnas (product/0010, requisito 7):
    * lo que se aprovecha por encima de `--bp-ancho` es el ancho de la
@@ -188,7 +272,8 @@ body {
   background: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans);
-  line-height: 1.5;
+  font-optical-sizing: auto;
+  line-height: var(--line-height-body);
   -webkit-font-smoothing: antialiased;
 }
 

@@ -38,20 +38,30 @@ La aplicación sirve **una familia tipográfica variable propia, alojada en el
 repositorio**, para el papel `--font-sans`.
 
 1. **Formato y ubicación.** Un único `.woff2` variable en
-   `src/assets/fonts/`, referenciado con `url()` **desde
-   `src/styles/global.css`**. Así lo procesa el pipeline de Vite: le pone
-   huella de contenido y reescribe la ruta respetando
-   `base: '/app.comparador-coches/'`, que es justo lo que un fichero en
-   `public/` obligaría a resolver a mano.
+   `src/assets/fonts/inter-variable-latin.woff2` (73.020 bytes),
+   referenciado con `url()` **desde `src/styles/global.css`**. Así lo procesa
+   el pipeline de Vite: le pone huella de contenido y reescribe la ruta
+   respetando `base: '/app.comparador-coches/'`, que es justo lo que un
+   fichero en `public/` obligaría a resolver a mano. **Procedencia**: servido
+   por Google Fonts (`fonts.gstatic.com`) bajo licencia SIL Open Font License
+   1.1, subset `latin`, versión `v20` de su distribución de Inter —el mismo
+   binario que serviría `https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900`
+   para ese subset—, descargado una sola vez y comprometido al repositorio;
+   la aplicación no vuelve a pedirle nada a ese dominio en tiempo de
+   ejecución.
 2. **La familia es Inter**, en su distribución variable con eje óptico
    (`opsz`). Un solo fichero cubre todo el rango que el rediseño abre: con
    `font-optical-sizing: auto` el navegador ajusta el trazo y el espaciado
    entre el cuerpo de tabla y el titular sin cargar una segunda fuente. Está
    dibujada para interfaz a tamaños pequeños, que es donde vive el 90 % del
    texto de este proyecto, y su licencia es SIL Open Font License 1.1.
-3. **Subset latino** (`latin` y `latin-ext`, que cubre el español completo) y
-   `font-display: swap`: la página se lee con la pila del sistema mientras la
-   fuente llega, y nunca queda texto invisible.
+3. **Subset `latin`** (el segmento que Google Fonts sirve bajo ese nombre:
+   `U+0000-00FF` más puntuación general `U+2000-206F`) cubre el español
+   completo —incluida `ñ`, las vocales acentuadas, `ü`, `¿` y `¡`— sin cargar
+   `latin-ext`, pensado para vietnamita, islandés y centroeuropeo, que este
+   proyecto no necesita. Junto a `font-display: swap`: la página se lee con
+   la pila del sistema mientras la fuente llega, y nunca queda texto
+   invisible.
 4. **La pila del sistema sigue declarada como respaldo** dentro del propio
    token `--font-sans`. Si la fuente no carga —red bloqueada, caché
    corrupta—, la aplicación se ve como hoy, no rota.
@@ -115,12 +125,12 @@ Sigue sin haber dependencias nuevas de producción. El recuento se mantiene en
 
 **Se pierde:**
 
-- Bytes: entre 90 y 130 KB de `.woff2` variable con el subset latino. Se
-  cachean tras la primera carga y no bloquean el pintado gracias a `swap`,
-  pero son bytes que hoy no se pagan.
+- Bytes: 73 KB de `.woff2` variable con el subset `latin`. Se cachean tras la
+  primera carga y no bloquean el pintado gracias a `swap`, pero son bytes que
+  hoy no se pagan.
 - Un binario en el repositorio. Es el primer artefacto que no es texto y que
-  no se puede revisar en un diff; hay que fiarse de su procedencia y dejarla
-  escrita al añadirlo.
+  no se puede revisar en un diff; por eso su procedencia queda escrita en el
+  requisito de abajo, verificable por cualquiera sin fiarse de un commit.
 - Un salto visual perceptible al cargar (*FOUT*). Es la contrapartida elegida
   frente a `font-display: block`, que esconde el texto: se prefiere texto
   legible al instante y un reflujo, a una página en blanco.

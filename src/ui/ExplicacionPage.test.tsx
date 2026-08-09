@@ -86,9 +86,12 @@ describe('ExplicacionPage', () => {
     }
   });
 
-  it('offers a way back to the comparator', () => {
+  it('renders its own view title as the only heading (technical/0005, requisito 4.2)', () => {
+    // La vuelta a la comparativa ya no es un enlace propio de esta página:
+    // la marca de `AppHeader`, montada por `AppShell`, cumple ese papel una
+    // sola vez para las cuatro vistas.
     const markup = render();
-    expect(markup).toContain('Volver a la comparativa');
+    expect(markup).toMatch(/<h1[^>]*>Cómo se calcula todo<\/h1>/);
   });
 
   it('renders no score calculation of its own: only reads what scoreCatalog already computed', () => {

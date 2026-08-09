@@ -16,9 +16,8 @@ import {
 import { formatEur, formatNumber } from './format';
 import { TECHNOLOGY_LABELS } from './technologyLabels';
 import { EstimatedMark } from './components/EstimatedMark';
-import { ViewSwitcher } from './components/ViewSwitcher';
-import { EXPLICACION_HASH } from './useHashRoute';
 import primitives from './primitives.module.css';
+import shellStyles from './components/AppShell.module.css';
 import styles from './FichaCompletaPage.module.css';
 
 interface FichaCompletaPageProps {
@@ -324,12 +323,8 @@ export function FichaCompletaPage({
   }
 
   return (
-    <main className={styles.page}>
-      <h1 className={styles.title}>Comparador de coches</h1>
-      <ViewSwitcher route="ficha-completa" />
-      <a href={EXPLICACION_HASH} className={styles.explainLink}>
-        Cómo se calcula todo →
-      </a>
+    <>
+      <h1 className={shellStyles.viewTitle}>Ficha completa</h1>
 
       <div className={styles.viewSelector}>
         <label className={primitives.label} htmlFor="photo-view-select">
@@ -414,7 +409,7 @@ export function FichaCompletaPage({
                     </th>
                     {pinnedEntity && (
                       <td
-                        className={[primitives.mono, styles.pinnedCell].join(
+                        className={[primitives.numeric, styles.pinnedCell].join(
                           ' ',
                         )}
                       >
@@ -428,7 +423,7 @@ export function FichaCompletaPage({
                     {scrollableEntities.map((entity) => (
                       <td
                         key={entity.id}
-                        className={[primitives.mono, styles.modelCell].join(
+                        className={[primitives.numeric, styles.modelCell].join(
                           ' ',
                         )}
                       >
@@ -485,6 +480,6 @@ export function FichaCompletaPage({
           </>
         )}
       </dialog>
-    </main>
+    </>
   );
 }

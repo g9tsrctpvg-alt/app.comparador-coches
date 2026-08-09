@@ -235,15 +235,17 @@ describe('FichaCompletaPage', () => {
     expect(markup).toContain('Lateral — sin foto');
   });
 
-  it('renders the view switcher with ficha completa marked as active', () => {
+  it('renders its own view title as the only heading (technical/0005, requisito 4.2)', () => {
+    // La navegación ya no vive aquí: la monta `AppShell`, una sola vez,
+    // fuera de cada página.
     const markup = renderToStaticMarkup(
       <FichaCompletaPage
         cars={threeCarFixture}
         references={[referenceFixture()]}
       />,
     );
-    expect(markup).toContain('aria-label="Vista"');
-    expect(markup).toMatch(/Ficha completa<\/a>/);
+    expect(markup).toMatch(/<h1[^>]*>Ficha completa<\/h1>/);
+    expect(markup).not.toContain('aria-label="Vista"');
   });
 
   it('renders the horizontally scrolling container as a focusable group', () => {

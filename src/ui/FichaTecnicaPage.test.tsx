@@ -130,15 +130,17 @@ describe('FichaTecnicaPage', () => {
     expect(markup).toContain('litros de maletero por cada metro cuadrado');
   });
 
-  it('renders the view switcher with the ficha técnica marked as active', () => {
+  it('renders its own view title as the only heading (technical/0005, requisito 4.2)', () => {
+    // La navegación ya no vive aquí: la monta `AppShell`, una sola vez,
+    // fuera de cada página.
     const markup = renderToStaticMarkup(
       <FichaTecnicaPage
         cars={threeCarFixture}
         references={[referenceFixture()]}
       />,
     );
-    expect(markup).toContain('aria-label="Vista"');
-    expect(markup).toMatch(/Ficha técnica<\/a>/);
+    expect(markup).toMatch(/<h1[^>]*>Ficha técnica<\/h1>/);
+    expect(markup).not.toContain('aria-label="Vista"');
   });
 
   it('renders with no reference registered, leaving deltas as em dashes throughout', () => {

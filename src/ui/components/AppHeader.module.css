@@ -1,0 +1,36 @@
+/* Fija al desplazar, con fondo opaco —nada de `backdrop-filter`, que se
+ * degrada de forma distinta en cada motor (technical/0005, requisito 4.4)—
+ * y por encima de cualquier cabecera de tabla fija, que se desplaza por
+ * `--size-header-height` para no quedar debajo de ésta. */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: var(--color-card-raised);
+  border-bottom: var(--size-border-hairline) solid var(--color-rule);
+}
+
+.inner {
+  max-width: var(--size-page);
+  margin: 0 auto;
+  height: var(--size-header-height);
+  padding: 0 var(--space-4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  overflow-x: auto;
+}
+
+.brand {
+  composes: mono from '../primitives.module.css';
+  flex-shrink: 0;
+  color: var(--color-ink);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.brand:hover {
+  color: var(--color-accent);
+}

@@ -10,9 +10,8 @@ import {
 import { formatNumber, formatSigned } from './format';
 import { TECHNOLOGY_LABELS } from './technologyLabels';
 import { EstimatedMark } from './components/EstimatedMark';
-import { ViewSwitcher } from './components/ViewSwitcher';
-import { EXPLICACION_HASH } from './useHashRoute';
 import primitives from './primitives.module.css';
+import shellStyles from './components/AppShell.module.css';
 import styles from './FichaTecnicaPage.module.css';
 
 interface FichaTecnicaPageProps {
@@ -126,12 +125,8 @@ export function FichaTecnicaPage({ cars, references }: FichaTecnicaPageProps) {
   );
 
   return (
-    <main className={styles.page}>
-      <h1 className={styles.title}>Comparador de coches</h1>
-      <ViewSwitcher route="ficha-tecnica" />
-      <a href={EXPLICACION_HASH} className={styles.explainLink}>
-        Cómo se calcula todo →
-      </a>
+    <>
+      <h1 className={shellStyles.viewTitle}>Ficha técnica</h1>
 
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
@@ -176,6 +171,6 @@ export function FichaTecnicaPage({ cars, references }: FichaTecnicaPageProps) {
         más alto, mejor aprovechado está el espacio—. La marca <EstimatedMark />{' '}
         señala un dato estimado, sin fuente publicada verificada directamente.
       </p>
-    </main>
+    </>
   );
 }
