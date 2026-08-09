@@ -406,6 +406,18 @@ th.blockHeader {
   margin: calc(var(--space-2) * -1);
   border: calc(var(--size-border-hairline) * 2) solid transparent;
   border-radius: var(--radius-sm);
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+/* `:hover`/`:active` sobre el radio real, no sobre la etiqueta (technical/0005,
+ * requisito 2.1): el radio cubre toda la etiqueta (`.pinInput`, arriba), así
+ * que es él quien recibe el puntero. */
+.pinInput:hover ~ .modelInfo {
+  background: var(--color-card-raised);
+}
+
+.pinInput:active ~ .modelInfo {
+  background: var(--color-accent-tint);
 }
 
 .pinInput:checked ~ .modelInfo {
