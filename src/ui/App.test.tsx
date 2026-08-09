@@ -5,6 +5,7 @@ import { threeCarFixture } from '../domain/scoring/testFixtures';
 import {
   EXPLICACION_HASH,
   FICHA_COMPLETA_HASH,
+  FICHA_HASH,
   FICHA_TECNICA_HASH,
 } from './useHashRoute';
 
@@ -43,15 +44,10 @@ describe('App', () => {
     expect(markup).toContain(`href="${EXPLICACION_HASH}"`);
   });
 
-  it('links from the comparator to the ficha técnica, by fragment (product/0013, requisito 1)', () => {
+  it('links from the comparator to the (now unified) ficha, by fragment (product/0018)', () => {
     const markup = renderToStaticMarkup(<App load={() => threeCarFixture} />);
-    expect(markup).toContain(`href="${FICHA_TECNICA_HASH}"`);
+    expect(markup).toContain(`href="${FICHA_HASH}"`);
     expect(markup).toContain('aria-label="Vista"');
-  });
-
-  it('links from the comparator to the ficha completa, by fragment (product/0014)', () => {
-    const markup = renderToStaticMarkup(<App load={() => threeCarFixture} />);
-    expect(markup).toContain(`href="${FICHA_COMPLETA_HASH}"`);
   });
 
   describe('with the explanation fragment already in the URL', () => {
@@ -76,14 +72,14 @@ describe('App', () => {
     });
   });
 
-  describe('with the ficha técnica fragment already in the URL', () => {
+  describe('with a pre-fusion ficha fragment already in the URL (product/0018, requisito 1.3)', () => {
     afterEach(() => {
       vi.unstubAllGlobals();
     });
 
-    it('renders the ficha técnica instead of the comparator (product/0013, requisito 2)', () => {
-      // Igual que con la explicación: recargar con el fragmento de la ficha
-      // técnica en la URL debe abrir la ficha técnica, no la clasificación.
+    it('resolves #/ficha-tecnica as an alias of the unified ficha, not the ranking', () => {
+      // Ningún enlace ya compartido con el hash de la extinta ficha técnica
+      // debe dejar de llevar a algo: sigue abriendo la ficha, fundida.
       vi.stubGlobal('window', {
         location: { hash: FICHA_TECNICA_HASH },
         addEventListener: () => undefined,
@@ -92,16 +88,11 @@ describe('App', () => {
 
       const markup = renderToStaticMarkup(<App load={() => threeCarFixture} />);
       expect(markup).toContain('<table');
+      expect(markup).toContain('name="pinned-model"');
       expect(markup).not.toContain('aria-label="Ranking"');
     });
-  });
 
-  describe('with the ficha completa fragment already in the URL', () => {
-    afterEach(() => {
-      vi.unstubAllGlobals();
-    });
-
-    it('renders the ficha completa instead of the comparator (product/0014)', () => {
+    it('resolves #/ficha-completa as an alias of the unified ficha, not the ranking', () => {
       vi.stubGlobal('window', {
         location: { hash: FICHA_COMPLETA_HASH },
         addEventListener: () => undefined,

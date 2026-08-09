@@ -14,8 +14,7 @@ import { ConfigActions } from './components/ConfigActions';
 import { AppShell } from './components/AppShell';
 import { rankVisible } from './components/ranking';
 import { ExplicacionPage } from './ExplicacionPage';
-import { FichaTecnicaPage } from './FichaTecnicaPage';
-import { FichaCompletaPage } from './FichaCompletaPage';
+import { FichaPage } from './FichaPage';
 import { useHashRoute } from './useHashRoute';
 import { useConfig } from './useConfig';
 import shellStyles from './components/AppShell.module.css';
@@ -101,21 +100,10 @@ export function App({
     );
   }
 
-  if (route === 'ficha-tecnica') {
+  if (route === 'ficha') {
     return (
       <AppShell route={route}>
-        <FichaTecnicaPage
-          cars={catalogResult.cars}
-          references={catalogResult.references}
-        />
-      </AppShell>
-    );
-  }
-
-  if (route === 'ficha-completa') {
-    return (
-      <AppShell route={route}>
-        <FichaCompletaPage
+        <FichaPage
           cars={catalogResult.cars}
           references={catalogResult.references}
         />

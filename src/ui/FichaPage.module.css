@@ -1,3 +1,65 @@
+/* La barra de herramientas (product/0018, requisito 4): tres controles —
+ * campos, comparación y orden— más el selector de vista de foto de
+ * `product/0014`, que no es uno de los tres: es un mando aparte para las
+ * fotos, no para la tabla. */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-5);
+}
+
+.toolbarControl {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.toolbarSelect {
+  composes: mono from './primitives.module.css';
+  min-height: var(--size-touch-min);
+  padding: var(--space-2) var(--space-3);
+  color: var(--color-ink);
+  background: var(--color-card);
+  border: var(--size-border-hairline) solid var(--color-rule);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--ease-out);
+}
+
+.toolbarSelect:hover {
+  border-color: var(--color-rule-strong);
+}
+
+/* La opción «Ninguno» del control de comparación (requisito 2.3): mismo
+ * grupo de radios que las cabeceras de columna —comparte `name` con
+ * `.pinInput`—, así que no es un cuarto control, solo una forma más de
+ * responder a la misma pregunta. Vive en la barra porque no hay una
+ * columna propia donde ponerla. */
+.noneOption {
+  composes: mono from './primitives.module.css';
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--size-touch-min);
+  padding: 0 var(--space-3);
+  color: var(--color-ink);
+  background: var(--color-card);
+  border: var(--size-border-hairline) solid var(--color-rule);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--ease-out);
+}
+
+.noneOption:hover {
+  border-color: var(--color-rule-strong);
+}
+
+.noneOption:has(:checked) {
+  border-color: var(--color-accent);
+  background: var(--color-accent-tint);
+}
+
 /* Selector de vista de foto (requisito 8.5, corrección 2026-08-07): un
  * `<select>` nativo en vez de un grupo de radios — la misma elección
  * excluyente con menos superficie táctil en pantallas estrechas. */
@@ -172,6 +234,36 @@
   font-weight: var(--font-weight-semibold);
 }
 
+/* La Δ (product/0018, requisito 2): una línea propia bajo el valor, no una
+ * columna aparte — en la tabla transpuesta no hay sitio para duplicar
+ * columnas. El signo lo escribe `formatSigned` en el propio texto; el color
+ * de aquí es refuerzo, nunca el único portador (product/0013, requisito
+ * 10, que esta fusión no relaja). */
+.cellDelta {
+  composes: mono from './primitives.module.css';
+  display: block;
+  font-size: var(--font-size-2xs);
+  margin-top: var(--space-1);
+}
+
+.deltaBetter {
+  color: var(--color-positive);
+}
+
+.deltaWorse {
+  color: var(--color-negative);
+}
+
+.deltaNeutral {
+  color: var(--color-mute);
+}
+
+/* La anchura es la prioridad declarada del proyecto (product/0013,
+ * requisito 9): conserva su énfasis en los dos modos de campos. */
+.deltaEmphasized {
+  font-weight: var(--font-weight-bold);
+}
+
 @media (min-width: 37rem) {
   .featureHeader,
   .featureCell {
@@ -249,13 +341,10 @@
   white-space: normal;
 }
 
+/* Absorbe el primitivo `.tag` (technical/0005, requisito 3.1): antes
+ * declarada aquí y, por duplicado, en `FichaTecnicaPage.module.css`. */
 .referenceTag {
-  composes: mono from './primitives.module.css';
-  display: block;
-  color: var(--color-accent);
-  font-size: var(--font-size-2xs);
-  text-transform: uppercase;
-  letter-spacing: var(--letter-spacing-wider);
+  composes: tag from './primitives.module.css';
 }
 
 /* Fijación (requisito 8.3.2, corrección 2026-08-07): antes una casilla
@@ -316,6 +405,15 @@
   overflow: hidden;
   border-radius: var(--radius-sm);
   margin-bottom: var(--space-2);
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.photoButton:hover {
+  opacity: 0.85;
+}
+
+.photoButton:active {
+  opacity: 0.7;
 }
 
 /* La imagen lleva su propia relación de aspecto, no la hereda del botón: así
@@ -396,4 +494,15 @@
   background: var(--color-card);
   cursor: pointer;
   font-size: var(--font-size-md);
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.dialogClose:hover {
+  background: var(--color-card-raised);
+  border-color: var(--color-rule-strong);
+}
+
+.dialogClose:active {
+  background: var(--color-accent-tint-solid);
+  border-color: var(--color-accent);
 }

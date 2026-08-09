@@ -2,25 +2,29 @@ import { Fragment, useMemo, useRef, useState } from 'react';
 import type { Car } from '../domain/car';
 import type { Reference } from '../domain/reference';
 import {
-  buildFichaCompleta,
-  type FichaCompletaCell,
-  type FichaCompletaEntity,
-  type FichaCompletaField,
-} from '../domain/fichaCompleta';
+  buildFicha,
+  sortFicha,
+  withComparison,
+  type DeltaDirection,
+  type FichaCell,
+  type FichaEntity,
+  type FichaField,
+  type FichaSortCriterion,
+} from '../domain/ficha';
 import {
   PHOTO_VIEWS,
   photoSrc,
   type Photo,
   type PhotoView,
 } from '../domain/photo';
-import { formatEur, formatNumber } from './format';
+import { formatEur, formatNumber, formatSigned } from './format';
 import { TECHNOLOGY_LABELS } from './technologyLabels';
 import { EstimatedMark } from './components/EstimatedMark';
 import primitives from './primitives.module.css';
 import shellStyles from './components/AppShell.module.css';
-import styles from './FichaCompletaPage.module.css';
+import styles from './FichaPage.module.css';
 
-interface FichaCompletaPageProps {
+interface FichaPageProps {
   cars: Car[];
   references: Reference[];
 }
@@ -34,7 +38,7 @@ const PHOTO_VIEW_LABELS: Record<PhotoView, string> = {
 };
 
 interface FieldDef {
-  key: FichaCompletaField;
+  key: FichaField;
   label: string;
   unitFallback?: string;
   decimals?: number;
@@ -43,18 +47,19 @@ interface FieldDef {
 
 interface BlockDef {
   id: string;
-  label: string;
+  /** `null` cuando el grupo no necesita cabecera propia (requisito 4.3):
+   * en «Esenciales» solo hay un grupo, y rotularlo no añade nada. */
+  label: string | null;
   fields: FieldDef[];
 }
 
 /**
- * Las diecinueve magnitudes de `product/0014` (requisito 1), agrupadas y
- * rotuladas — el dominio (`fichaCompleta.ts`) solo declara las claves y
- * extrae los valores; etiquetas, unidades de respaldo y decimales son
- * decisión de la interfaz, igual que `DIMENSION_COLUMNS` en
- * `FichaTecnicaPage`.
+ * Las veinte magnitudes de la ficha (product/0014, requisito 1; product/0018
+ * las reparte en dos conjuntos), agrupadas y rotuladas — el dominio
+ * (`ficha.ts`) solo declara las claves y extrae los valores; etiquetas,
+ * unidades de respaldo y decimales son decisión de la interfaz.
  */
-const BLOCKS: BlockDef[] = [
+const COMPLETE_BLOCKS: BlockDef[] = [
   {
     id: 'tamano',
     label: 'Tamaño y espacio',
@@ -133,26 +138,101 @@ const BLOCKS: BlockDef[] = [
   },
 ];
 
+/**
+ * El conjunto «Esenciales» (product/0018, requisito 4.1): las seis
+ * magnitudes de la extinta ficha técnica —longitud, anchura, altura, altura
+ * libre al suelo, maletero y litros por m²—, sin cabecera de bloque porque
+ * aquí solo hay un grupo.
+ */
+const ESSENTIAL_BLOCKS: BlockDef[] = [
+  {
+    id: 'esenciales',
+    label: null,
+    fields: [
+      { key: 'lengthMm', label: 'Longitud', unitFallback: 'mm' },
+      { key: 'widthMm', label: 'Anchura', unitFallback: 'mm' },
+      { key: 'heightMm', label: 'Altura', unitFallback: 'mm' },
+      {
+        key: 'groundClearanceMm',
+        label: 'Altura libre al suelo',
+        unitFallback: 'mm',
+      },
+      { key: 'trunkLiters', label: 'Maletero', unitFallback: 'L' },
+      {
+        key: 'litersPerSquareMeter',
+        label: 'Litros por m²',
+        unitFallback: 'L/m²',
+        decimals: 1,
+      },
+    ],
+  },
+];
+
+type FieldSet = 'esenciales' | 'completa';
+
+const SORT_OPTIONS: { value: FichaSortCriterion; label: string }[] = [
+  { value: 'catalog', label: 'Catálogo' },
+  { value: 'lengthMm', label: 'Longitud' },
+  { value: 'widthMm', label: 'Anchura' },
+  { value: 'priceEur', label: 'Precio' },
+];
+
 // Exportado para que el test de estructura compruebe el número de filas de
 // datos sin repetir la cuenta a mano.
-export const TOTAL_FIELD_COUNT = BLOCKS.reduce(
+export const TOTAL_FIELD_COUNT = COMPLETE_BLOCKS.reduce(
   (sum, block) => sum + block.fields.length,
   0,
 );
 
 interface OpenPhoto {
-  entity: FichaCompletaEntity;
+  entity: FichaEntity;
   view: PhotoView;
   photo: Photo;
 }
 
-function CellContent({
+const DIRECTION_CLASS: Record<DeltaDirection, string> = {
+  better: styles.deltaBetter ?? '',
+  worse: styles.deltaWorse ?? '',
+  neutral: styles.deltaNeutral ?? '',
+};
+
+/** El signo va siempre escrito (product/0013, requisito 10, que esta fusión
+ * no relaja): el color de `DIRECTION_CLASS` es refuerzo, nunca la única
+ * vía de leer si una diferencia es favorable. */
+function formatDelta(value: number, def: FieldDef): string {
+  if (def.isEuro) {
+    const magnitude = formatEur(Math.abs(value));
+    if (value > 0) return `+${magnitude}`;
+    if (value < 0) return `−${magnitude}`;
+    return magnitude;
+  }
+  const unit = def.unitFallback ?? '';
+  const formatted = formatSigned(value, def.decimals ?? 0);
+  return unit ? `${formatted} ${unit}` : formatted;
+}
+
+function CellValue({
   cell,
   def,
 }: {
-  cell: FichaCompletaCell;
+  cell: Exclude<FichaCell, { kind: 'missing' }>;
   def: FieldDef;
 }) {
+  if (cell.kind === 'rating') {
+    return <>{formatNumber(cell.value, 0)} / 5</>;
+  }
+  const unit = cell.unit ?? def.unitFallback ?? '';
+  return (
+    <>
+      {def.isEuro
+        ? formatEur(cell.value)
+        : `${formatNumber(cell.value, def.decimals ?? 0)}${unit ? ` ${unit}` : ''}`}
+      {cell.estimated && <EstimatedMark />}
+    </>
+  );
+}
+
+function CellContent({ cell, def }: { cell: FichaCell; def: FieldDef }) {
   if (cell.kind === 'missing') {
     return (
       <>
@@ -161,21 +241,23 @@ function CellContent({
       </>
     );
   }
-  if (cell.kind === 'rating') {
-    return (
-      <span className={styles.cellValue}>
-        {formatNumber(cell.value, 0)} / 5
-      </span>
-    );
-  }
-  const unit = cell.unit ?? def.unitFallback ?? '';
   return (
-    <span className={styles.cellValue}>
-      {def.isEuro
-        ? formatEur(cell.value)
-        : `${formatNumber(cell.value, def.decimals ?? 0)}${unit ? ` ${unit}` : ''}`}
-      {cell.estimated && <EstimatedMark />}
-    </span>
+    <>
+      <span className={styles.cellValue}>
+        <CellValue cell={cell} def={def} />
+      </span>
+      {cell.delta !== null && (
+        <span
+          className={[
+            styles.cellDelta,
+            DIRECTION_CLASS[cell.delta.direction],
+            def.key === 'widthMm' ? styles.deltaEmphasized : '',
+          ].join(' ')}
+        >
+          {formatDelta(cell.delta.value, def)}
+        </span>
+      )}
+    </>
   );
 }
 
@@ -184,9 +266,9 @@ function PhotoBox({
   photoView,
   onOpen,
 }: {
-  entity: FichaCompletaEntity;
+  entity: FichaEntity;
   photoView: PhotoView;
-  onOpen: (entity: FichaCompletaEntity, view: PhotoView, photo: Photo) => void;
+  onOpen: (entity: FichaEntity, view: PhotoView, photo: Photo) => void;
 }) {
   // Una `src` que no carga —foto declarada, host caído o bloqueada por la
   // red de quien mira— degrada al mismo hueco que «sin foto» (product/0014,
@@ -234,15 +316,11 @@ function ModelHeaderCell({
   onPin,
   onOpenPhoto,
 }: {
-  entity: FichaCompletaEntity;
+  entity: FichaEntity;
   isPinned: boolean;
   photoView: PhotoView;
   onPin: (id: string) => void;
-  onOpenPhoto: (
-    entity: FichaCompletaEntity,
-    view: PhotoView,
-    photo: Photo,
-  ) => void;
+  onOpenPhoto: (entity: FichaEntity, view: PhotoView, photo: Photo) => void;
 }) {
   return (
     <th
@@ -275,45 +353,55 @@ function ModelHeaderCell({
 }
 
 /**
- * La ficha completa (product/0014): una columna por modelo, una fila por
- * característica, con la columna de nombres y la de comparación fijas a la
- * izquierda mientras el resto se desplaza. No calcula nada: `fichaCompleta.ts`
- * ya entrega cada celda lista para formatear (`ui-no-scoring-internals`).
+ * La ficha (product/0018): una columna por modelo, una fila por
+ * característica, con la columna del modelo de comparación fija a la
+ * izquierda mientras el resto se desplaza. Funde la extinta ficha técnica
+ * (product/0013) y la ficha completa (product/0014) en una sola vista: la
+ * Δ que antes solo existía contra el Alfa Romeo Giulietta ahora se calcula
+ * contra cualquier modelo que se elija, y un conmutador de campos recupera
+ * la lectura «de un vistazo» de seis magnitudes cuando no hace falta ver
+ * las veinte. No calcula nada por su cuenta: `ficha.ts` ya entrega cada
+ * celda lista para formatear (`ui-no-scoring-internals`).
  */
-export function FichaCompletaPage({
-  cars,
-  references,
-}: FichaCompletaPageProps) {
-  const entities = useMemo(
-    () => buildFichaCompleta(cars, references),
+export function FichaPage({ cars, references }: FichaPageProps) {
+  const baseEntities = useMemo(
+    () => buildFicha(cars, references),
     [cars, references],
   );
 
-  const [pinnedId, setPinnedId] = useState<string>(
-    () => references[0]?.id ?? entities[0]?.id ?? '',
+  const [comparisonId, setComparisonId] = useState<string | null>(
+    () => references[0]?.id ?? null,
   );
+  const [fieldSet, setFieldSet] = useState<FieldSet>('esenciales');
+  const [sortCriterion, setSortCriterion] =
+    useState<FichaSortCriterion>('lengthMm');
   const [photoView, setPhotoView] = useState<PhotoView>('side');
   const [openPhoto, setOpenPhoto] = useState<OpenPhoto | null>(null);
 
   const dialogRef = useRef<HTMLDialogElement>(null);
   const tableWrapperRef = useRef<HTMLDivElement>(null);
 
-  const pinnedEntity = entities.find((e) => e.id === pinnedId) ?? entities[0];
-  const scrollableEntities = entities.filter((e) => e.id !== pinnedEntity?.id);
-  const columnCount = 2 + scrollableEntities.length;
+  const entitiesWithDelta = useMemo(
+    () => withComparison(baseEntities, comparisonId),
+    [baseEntities, comparisonId],
+  );
 
-  function handlePin(id: string) {
-    setPinnedId(id);
-    // El modelo recién fijado no debe quedar fuera de pantalla en el mismo
-    // gesto que lo elige (requisito 9.3).
+  const pinnedEntity = entitiesWithDelta.find((e) => e.id === comparisonId);
+  const scrollableEntities = sortFicha(
+    entitiesWithDelta.filter((e) => e.id !== pinnedEntity?.id),
+    sortCriterion,
+  );
+  const columnCount = 1 + (pinnedEntity ? 1 : 0) + scrollableEntities.length;
+  const blocks = fieldSet === 'esenciales' ? ESSENTIAL_BLOCKS : COMPLETE_BLOCKS;
+
+  function handleComparisonChange(id: string | null) {
+    setComparisonId(id);
+    // El modelo recién fijado —o «Ninguno»— no debe dejar la tabla
+    // desplazada a mitad de camino (requisito 9.3, extendido a este caso).
     tableWrapperRef.current?.scrollTo({ left: 0 });
   }
 
-  function handleOpenPhoto(
-    entity: FichaCompletaEntity,
-    view: PhotoView,
-    photo: Photo,
-  ) {
+  function handleOpenPhoto(entity: FichaEntity, view: PhotoView, photo: Photo) {
     setOpenPhoto({ entity, view, photo });
     dialogRef.current?.showModal();
   }
@@ -324,25 +412,78 @@ export function FichaCompletaPage({
 
   return (
     <>
-      <h1 className={shellStyles.viewTitle}>Ficha completa</h1>
+      <h1 className={shellStyles.viewTitle}>Ficha</h1>
 
-      <div className={styles.viewSelector}>
-        <label className={primitives.label} htmlFor="photo-view-select">
-          Vista de la foto
-        </label>
-        <select
-          id="photo-view-select"
-          name="photo-view"
-          className={styles.viewSelect}
-          value={photoView}
-          onChange={(event) => setPhotoView(event.target.value as PhotoView)}
-        >
-          {PHOTO_VIEWS.map((view) => (
-            <option key={view} value={view}>
-              {PHOTO_VIEW_LABELS[view]}
-            </option>
-          ))}
-        </select>
+      <div className={styles.toolbar}>
+        <div className={styles.toolbarControl}>
+          <label className={primitives.label} htmlFor="field-set-select">
+            Campos
+          </label>
+          <select
+            id="field-set-select"
+            className={styles.toolbarSelect}
+            value={fieldSet}
+            onChange={(event) => setFieldSet(event.target.value as FieldSet)}
+          >
+            <option value="esenciales">Esenciales</option>
+            <option value="completa">Completa</option>
+          </select>
+        </div>
+
+        <div className={styles.toolbarControl}>
+          <span className={primitives.label} id="comparison-label">
+            Comparar contra
+          </span>
+          <label className={styles.noneOption}>
+            <input
+              type="radio"
+              name="pinned-model"
+              checked={comparisonId === null}
+              onChange={() => handleComparisonChange(null)}
+              aria-label="No comparar contra ningún modelo"
+            />
+            Ninguno
+          </label>
+        </div>
+
+        <div className={styles.toolbarControl}>
+          <label className={primitives.label} htmlFor="sort-select">
+            Orden
+          </label>
+          <select
+            id="sort-select"
+            className={styles.toolbarSelect}
+            value={sortCriterion}
+            onChange={(event) =>
+              setSortCriterion(event.target.value as FichaSortCriterion)
+            }
+          >
+            {SORT_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className={styles.viewSelector}>
+          <label className={primitives.label} htmlFor="photo-view-select">
+            Vista de la foto
+          </label>
+          <select
+            id="photo-view-select"
+            name="photo-view"
+            className={styles.viewSelect}
+            value={photoView}
+            onChange={(event) => setPhotoView(event.target.value as PhotoView)}
+          >
+            {PHOTO_VIEWS.map((view) => (
+              <option key={view} value={view}>
+                {PHOTO_VIEW_LABELS[view]}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <div
@@ -350,12 +491,13 @@ export function FichaCompletaPage({
         ref={tableWrapperRef}
         tabIndex={0}
         role="group"
-        aria-label="Ficha completa, con desplazamiento horizontal"
+        aria-label="Ficha, con desplazamiento horizontal"
       >
         <table className={styles.table}>
           <caption className={primitives.visuallyHidden}>
-            Ficha completa: las diecinueve magnitudes de cada modelo, con una
-            columna fija para el modelo elegido como comparación
+            Ficha comparada: las magnitudes de cada modelo, con su diferencia
+            frente al modelo de comparación elegido, y una columna fija para ese
+            modelo
           </caption>
           <thead>
             <tr>
@@ -374,7 +516,7 @@ export function FichaCompletaPage({
                   entity={pinnedEntity}
                   isPinned
                   photoView={photoView}
-                  onPin={handlePin}
+                  onPin={handleComparisonChange}
                   onOpenPhoto={handleOpenPhoto}
                 />
               )}
@@ -384,24 +526,26 @@ export function FichaCompletaPage({
                   entity={entity}
                   isPinned={false}
                   photoView={photoView}
-                  onPin={handlePin}
+                  onPin={handleComparisonChange}
                   onOpenPhoto={handleOpenPhoto}
                 />
               ))}
             </tr>
           </thead>
           <tbody>
-            {BLOCKS.map((block) => (
+            {blocks.map((block) => (
               <Fragment key={block.id}>
-                <tr>
-                  <th
-                    scope="colgroup"
-                    colSpan={columnCount}
-                    className={styles.blockHeader}
-                  >
-                    {block.label}
-                  </th>
-                </tr>
+                {block.label !== null && (
+                  <tr>
+                    <th
+                      scope="colgroup"
+                      colSpan={columnCount}
+                      className={styles.blockHeader}
+                    >
+                      {block.label}
+                    </th>
+                  </tr>
+                )}
                 {block.fields.map((def) => (
                   <tr key={def.key}>
                     <th scope="row" className={styles.featureCell}>
@@ -440,11 +584,19 @@ export function FichaCompletaPage({
       </div>
 
       <p className={styles.legend}>
-        Cada columna es un modelo; márquela para fijarla como comparación
-        —empieza fijado el Alfa Romeo Giulietta, el coche a sustituir—. El
-        selector de arriba cambia qué vista de foto enseñan todas las columnas a
-        la vez. La marca <EstimatedMark /> señala un dato estimado, sin fuente
-        publicada verificada directamente.
+        Cada columna es un modelo; márquela —o marque «Ninguno»— para elegir
+        contra qué se comparan las demás. Cuando hay un modelo de comparación,
+        cada celda muestra debajo su diferencia, con el signo siempre escrito:
+        el color es un refuerzo, nunca la única vía de leerlo. En maletero,
+        litros por m², potencia, fiabilidad, garantía y las dos notas de
+        estética, más es mejor; en anchura, longitud, peso, aceleración,
+        consumo, precio y mantenimiento, más es peor, porque el problema que
+        resuelve el proyecto es que los sustitutos son más grandes y más caros.
+        Altura, altura libre al suelo y batalla no tienen una dirección
+        declarada. La columna de anchura va en negrita: es la prioridad
+        declarada del proyecto. El selector de vista de foto cambia qué vista
+        enseñan todas las columnas a la vez. La marca <EstimatedMark /> señala
+        un dato estimado, sin fuente publicada verificada directamente.
       </p>
 
       <dialog
