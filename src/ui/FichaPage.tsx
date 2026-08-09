@@ -542,7 +542,16 @@ export function FichaPage({ cars, references }: FichaPageProps) {
                       colSpan={columnCount}
                       className={styles.blockHeader}
                     >
-                      {block.label}
+                      {/* La celda entera abarca todas las columnas para que
+                          la banda de fondo cubra la fila (requisito 8.2);
+                          el rótulo va en su propio `sticky` para seguir
+                          legible al desplazar — sin esto, desaparece por la
+                          izquierda en cuanto se avanza más allá de la
+                          primera columna, porque una celda de ese ancho no
+                          puede fijarse entera sin salirse de la tabla. */}
+                      <span className={styles.blockHeaderLabel}>
+                        {block.label}
+                      </span>
                     </th>
                   </tr>
                 )}

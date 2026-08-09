@@ -174,10 +174,19 @@
   --size-bar-row: 0.1875rem;
   --size-bar-axis: 0.375rem;
 
-  /* Altura de la cabecera del shell (technical/0005, requisito 1.8): la
-   * cabecera fija de una tabla se desplaza por este mismo valor para no
-   * quedar debajo de la cabecera de la aplicación. */
+  /* Altura de la cabecera del shell (technical/0005, requisito 1.8). */
   --size-header-height: 3.5rem;
+
+  /* Alto máximo del envoltorio de una tabla con `<thead>` fijo (technical/0005,
+   * requisito 5.1). `position: sticky` fija un elemento contra su ancestro
+   * de scroll más cercano, y un envoltorio con `overflow-x: auto` —
+   * necesario para que la tabla no arrastre la página al desplazarse en
+   * horizontal (product/0010, requisito 13)— ya es ese ancestro en
+   * cualquier eje, no solo el horizontal: no hay forma de que un `sticky`
+   * de dentro «atraviese» ese contenedor hasta la página. La cabecera se
+   * fija contra el propio envoltorio, que por eso necesita su scroll
+   * vertical acotado en vez de crecer con el contenido. */
+  --size-table-max-height: 70dvh;
 
   /* Ancho máximo de la página en dos columnas (product/0010, requisito 7):
    * lo que se aprovecha por encima de `--bp-ancho` es el ancho de la

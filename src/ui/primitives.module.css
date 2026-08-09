@@ -147,6 +147,13 @@
  * `FichaCompletaPage.module.css` con el mismo borde, el mismo radio y el
  * mismo `overflow-x: auto` — el mecanismo que hace que la tabla no arrastre
  * la página cuando no cabe (product/0010, requisito 13). */
+/* Sin opinión sobre `overflow-y` a propósito: `overflow-x: auto` ya hace de
+ * este envoltorio el ancestro de scroll de cualquier `position: sticky` de
+ * dentro, en cualquier eje —es cómo funciona `sticky`, no un matiz de este
+ * proyecto—, así que quien necesite un `<thead>` fijo en vertical (técnico
+ * / requisito 5.1) declara su propio `overflow-y` y su propio alto máximo;
+ * fijarlo aquí competiría con esa decisión sin que ninguno de los dos
+ * ganara de forma predecible entre ficheros. */
 .tableShell {
   overflow-x: auto;
   border: var(--size-border-hairline) solid var(--color-rule);

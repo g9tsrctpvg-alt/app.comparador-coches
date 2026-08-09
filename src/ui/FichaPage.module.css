@@ -89,10 +89,20 @@
 /* La tabla no arrastra la página cuando no cabe (requisito 8.2, que reaplica
  * el requisito 13 de `product/0010`): el desplazamiento horizontal vive
  * dentro de este contenedor. El anclaje (requisito 9.2) hace que el gesto
- * caiga siempre en un modelo completo. */
+ * caiga siempre en un modelo completo.
+ *
+ * El alto máximo y el scroll vertical propio (technical/0005, requisito
+ * 5.1) son la otra mitad de la misma decisión: `overflow-x: auto` —de
+ * `.tableShell`— ya convierte a este contenedor en el ancestro de scroll de
+ * cualquier `position: sticky` de dentro, así que la cabecera fija de la
+ * tabla se fija contra ÉL, no contra la página. Sin un alto acotado, ese
+ * `sticky` no tiene contra qué desplazarse: el envoltorio crecería con el
+ * contenido y nunca llegaría a haber nada que «bajar» dentro de él. */
 .tableWrapper {
   composes: tableShell from './primitives.module.css';
   scroll-snap-type: x mandatory;
+  max-height: var(--size-table-max-height);
+  overflow-y: auto;
 }
 
 .table {
@@ -129,7 +139,14 @@
 
 /* Cabecera de bloque (requisito 8.2): una fila que abarca todas las
  * columnas, no una columna más. */
-.blockHeader {
+/* `th.blockHeader`, no `.blockHeader` a secas (verificación manual,
+ * technical/0005): `.table th, .table td` ya trae `text-align: right` con
+ * la misma especificidad que una clase sola —empate que gana por orden de
+ * declaración, no por significado—, y esta regla necesitaba igualarla
+ * para imponerse. El rótulo llevaba alineado a la derecha desde
+ * `product/0014`, invisible en un colspan de nueve columnas salvo
+ * desplazando la tabla entera hasta el final. */
+th.blockHeader {
   text-align: left;
   background: var(--color-card);
   color: var(--color-mute);
@@ -137,6 +154,17 @@
   font-size: var(--font-size-2xs);
   text-transform: uppercase;
   letter-spacing: var(--letter-spacing-wider);
+}
+
+/* El rótulo del bloque se fija a la izquierda dentro de su propia celda
+ * (technical/0005, requisito 5.1, corrección de verificación manual): la
+ * celda en sí no puede fijarse entera —abarca todas las columnas, más ancha
+ * que el contenedor— así que quien se fija es el texto, con
+ * `position: sticky` propio dentro de ese ancestro de scroll. */
+.blockHeaderLabel {
+  position: sticky;
+  left: var(--space-3);
+  display: inline-block;
 }
 
 /* Columna de nombres de característica: por debajo de 37rem no existe —ver
@@ -169,16 +197,18 @@
 
 /* Cabecera fija en vertical (technical/0005, requisito 5.1): al bajar por
  * las veinte filas de la ficha, se pierde qué modelo es cada columna. Fija
- * por debajo de `AppHeader` —desplazada por el mismo `--size-header-height`
- * para no quedar tapada— y con fondo opaco, igual que la fijación
- * horizontal de arriba y por la misma razón: hay contenido pasando por
- * debajo. `.pinnedHeader` cruza los dos ejes —fija a la izquierda y
- * arriba a la vez—, así que sube de z-index para quedar por encima de
- * `.modelHeader` en la esquina donde ambos coinciden. */
+ * contra `.tableWrapper` —su propio ancestro de scroll, no la página; ver
+ * el comentario de `.tableWrapper` más arriba—, con `top: 0` porque no hay
+ * ninguna otra cabecera que despejar dentro de ese contenedor. Fondo
+ * opaco, igual que la fijación horizontal de arriba y por la misma razón:
+ * hay contenido pasando por debajo. `.pinnedHeader` cruza los dos ejes
+ * —fija a la izquierda y arriba a la vez—, así que sube de z-index para
+ * quedar por encima de `.modelHeader` en la esquina donde ambos
+ * coinciden. */
 .modelHeader,
 .pinnedHeader {
   position: sticky;
-  top: var(--size-header-height);
+  top: 0;
 }
 
 .modelHeader {
@@ -291,7 +321,7 @@
    * (z-index 2), que solo fijan uno. */
   .featureHeader {
     position: sticky;
-    top: var(--size-header-height);
+    top: 0;
     z-index: 4;
   }
 
