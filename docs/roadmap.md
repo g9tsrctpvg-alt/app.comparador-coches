@@ -243,6 +243,14 @@ entera verde en local y cobertura al 100 %.
 | Gate humano: aprobar `product/0020` y `technical/0006` | Hecha — 2026-08-12, en commit propio sin implementación, tras confirmación explícita del usuario en modo plan |
 | Implementar y verificar las dos specs | Hecha — CI entera en verde en local, verificación manual en navegador (pastillas y `<select>` a 320/592/960/1440px, navegación real del `<select>`, foco visible en los dos) |
 | Consolidar `product/0020` en `docs/estado/interfaz.md` | Hecha — 2026-08-12. `technical/0006` se queda fuera: sus criterios pendientes bloquean `verified` (ver deudas abiertas) |
+| `technical/0007` — anclaje de eje en el desplazamiento táctil de la ficha | `draft` |
+
+**`technical/0007` nace de otra revisión del despliegue** (2026-08-12): en
+un gesto táctil diagonal —pensado como «hacia abajo», con un componente
+horizontal mínimo—, el anclaje de scroll horizontal de la ficha
+(`scroll-snap-align`) podía saltar de una columna de modelo a la siguiente
+sin que quien mira la ficha lo pidiera. Amplía `technical/0005`, requisito
+5, sin editarla —está `consolidated`—.
 
 **`product/0020` y `technical/0006` nacen de revisar el despliegue real**
 (2026-08-12): con el rediseño ya visible en producción, el vistazo inicial
