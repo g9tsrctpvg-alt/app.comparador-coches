@@ -2935,7 +2935,7 @@
     "brand": "Kia",
     "technology": "EV",
     "notes": [
-      "Versión GT-Line (81,4 kWh, 217 CV, tracción delantera), el acabado superior de la gama — motor.es y km77, agosto 2026. El precio incluye el descuento oficial de fábrica (1.634 €) que km77 declara aparte del PVP. Roza el presupuesto de referencia (51.437 €).",
+      "Versión GT-Line (81,4 kWh, 217 CV, tracción delantera), el acabado superior de la gama — motor.es y km77, agosto 2026. El precio es el PVP de catálogo sin descuentos, para no mezclarlo con precios ya rebajados de otros modelos: km77 declara aparte un descuento oficial de fábrica de 1.634 €, que llevaría el precio a 51.437 €. Supera el presupuesto de referencia (47.000 €).",
       "Sin foto de lateral estricto ni de maletero: no se ha encontrado en Wikimedia Commons un perfil cercano a 90º ni una vista con el portón abierto para este modelo.",
       "Mantenimiento anual estimado por el rango genérico de un eléctrico en España (150-300 €/año), no por un coste de revisión desglosado del modelo.",
       "Valor residual a 5 años estimado por comparación con otros eléctricos del catálogo: el EV5 se lanzó en 2025 y no tiene todavía histórico real de mercado de segunda mano a ese horizonte."
@@ -3085,12 +3085,19 @@
       ]
     },
     "priceEur": {
-      "value": 51437,
+      "value": 53071,
       "unit": "€",
       "sources": [
         {
           "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV, PVP con descuento oficial (agosto 2026)",
           "value": 51437,
+          "estimated": false,
+          "current": false,
+          "discardedReason": "PVP con el descuento oficial de fábrica (1.634 €) ya aplicado; el catálogo registra el PVP de catálogo sin descuentos para poder comparar precios de forma homogénea entre modelos"
+        },
+        {
+          "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV, PVP sin descuento (agosto 2026)",
+          "value": 53071,
           "estimated": false,
           "current": true
         }
