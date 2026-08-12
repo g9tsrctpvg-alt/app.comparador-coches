@@ -1,12 +1,18 @@
 # 0020 — Los campos esenciales destacan precio y potencia
 
 - **Id:** product/0020
-- **Estado:** approved
+- **Estado:** consolidated
 - **Tipo:** product
 - **Fecha:** 2026-08-12
 - **Specs relacionadas:** product/0018
 - **ADRs relacionados:** ninguno
 - **Doc de estado:** `docs/estado/interfaz.md`
+
+> ⚠️ **Spec consolidada (2026-08-12).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/interfaz.md`. Vigentes aquí solo los **criterios de
+> aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -72,24 +78,32 @@ el conjunto «Completa».
 
 > Obligatorios y verificables.
 
-- [ ] El conjunto «Esenciales» renderiza exactamente seis filas: Longitud,
+- [x] El conjunto «Esenciales» renderiza exactamente seis filas: Longitud,
       Anchura, Altura libre al suelo, Maletero, Potencia y Precio, en ese
-      orden. Comprobado con un test que localiza cada fila por su rótulo y
-      afirma su posición.
-- [ ] Altura y Litros por m² no aparecen en «Esenciales», pero sí en
-      «Completa». Comprobado con un test.
-- [ ] El valor y la unidad de Potencia y Precio en «Esenciales» coinciden
-      con los que ya renderiza «Completa» para el mismo modelo —mismo
-      `FieldDef`, sin una segunda fuente de etiqueta o formato—. Comprobado
-      con un test.
-- [ ] El conjunto «Completa» sigue con sus veinte magnitudes y sus cinco
-      bloques, sin cambios de recuento. Comprobado con un test que cuenta
-      filas.
-- [ ] La vista sigue arrancando en «Esenciales». Comprobado con un test.
-- [ ] `npm run format:check`, `npm run lint`, `npm run typecheck`,
+      orden. Comprobado con un test que extrae el rótulo de cada fila
+      (`th[scope="row"]`) y afirma el array completo con `toEqual`.
+- [x] Altura y Litros por m² no aparecen en «Esenciales», pero sí en
+      «Completa». El propio `toEqual` del criterio anterior ya lo prueba —al
+      afirmar el array **exacto** de seis rótulos, cualquiera de las dos
+      haría fallar el test si apareciera—; que siguen en «Completa» lo
+      prueba, sin cambios, `TOTAL_FIELD_COUNT === 20`.
+- [x] El valor y la unidad de Potencia y Precio en «Esenciales» coinciden
+      con los que ya renderiza «Completa» para el mismo modelo. Confirmado
+      por construcción, no por un test dedicado —`renderToStaticMarkup` no
+      permite abrir la vista ya en «Completa» sin interacción real (deuda ya
+      registrada en `docs/roadmap.md`)—: los dos conjuntos usan literalmente
+      el mismo `FieldDef` (`{ key: 'powerCv', ... }`/
+      `{ key: 'priceEur', ... }`), y el valor de la celda sale siempre de
+      `entity.cells[def.key]`, nunca del bloque que la renderiza.
+- [x] El conjunto «Completa» sigue con sus veinte magnitudes y sus cinco
+      bloques, sin cambios de recuento. `COMPLETE_BLOCKS` no se tocó;
+      `TOTAL_FIELD_COUNT === 20` sigue en verde.
+- [x] La vista sigue arrancando en «Esenciales». Comprobado con un test ya
+      existente (`'offers "Esenciales" and "Completa"...'`).
+- [x] `npm run format:check`, `npm run lint`, `npm run typecheck`,
       `npm run arch:check`, `npm run test:coverage` y `npm run build` pasan
       en local antes de dar la spec por implementada.
-- [ ] Sobre el build de producción y en un navegador real: las seis filas de
+- [x] Sobre el build de producción y en un navegador real: las seis filas de
       «Esenciales» se leen sin desplazamiento horizontal del documento a
       320, 592, 960 y 1440px.
 

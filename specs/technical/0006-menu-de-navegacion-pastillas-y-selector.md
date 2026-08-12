@@ -1,12 +1,18 @@
 # 0006 — Menú de navegación: pastillas y selector en móvil
 
 - **Id:** technical/0006
-- **Estado:** approved
+- **Estado:** implemented
 - **Tipo:** technical
 - **Fecha:** 2026-08-12
 - **Specs relacionadas:** technical/0005
 - **ADRs relacionados:** ninguno
 - **Doc de estado:** `docs/estado/interfaz.md`
+
+> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
+> implementado: su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy no es cierta. **No es referencia del estado actual** — para
+> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
+> **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -74,41 +80,75 @@ por un control que no lo necesite.
    marca más, según el ancho, las pastillas o el selector, deberían caber
    sin desplazamiento—. Si alguna combinación todavía lo necesitara, la
    regla se queda y este requisito se anota como no cumplido, con el motivo.
+   > **No se cumple, medido.** A 320px, la marca («Comparador de coches»,
+   > 168px) más el `<select>` (191px, por «Cómo se calcula», la opción más
+   > larga) más el hueco y el relleno del contenedor (48px) suman 407px
+   > sobre 320px disponibles: `.inner` sigue necesitando su propio scroll
+   > interno, y a 592px —justo el borde donde aparecen las pastillas— le
+   > faltan 31px. La regla se queda. Lo que sí mejora, y es lo que
+   > `product/0010` exige de verdad: el **documento** no se desplaza en
+   > horizontal a ningún ancho —confirmado con Playwright a 320/592/960/
+   > 1440px—, porque el scroll, cuando hace falta, se queda dentro de
+   > `.inner`, nunca sube a la página. Retirar la regla exigiría acortar la
+   > marca o las etiquetas de destino, un cambio de contenido fuera del
+   > alcance de esta spec.
 
 ## Criterios de aceptación
 
 > Obligatorios y verificables.
 
-- [ ] En escritorio, los tres destinos aparecen dentro de un contenedor con
+- [x] En escritorio, los tres destinos aparecen dentro de un contenedor con
       borde, y el activo lleva un fondo distinto al de los otros dos.
-      Comprobado con un test sobre el marcado (clase del contenedor y del
-      destino activo).
-- [ ] Por debajo de `--bp-columna` existe un `<select>` con tres `<option>`,
+      Verificado con Playwright: fondo `rgba(20, 101, 92, 0.07)`
+      (`--color-accent-tint`) sobre el activo, transparente sobre los
+      demás, contenedor con borde visible.
+- [x] Por debajo de `--bp-columna` existe un `<select>` con tres `<option>`,
       uno por destino, y el de la ruta activa lleva `selected`. Comprobado
-      con un test.
-- [ ] El `<select>` tiene nombre accesible. Comprobado con un test.
-- [ ] `aria-current="page"` sigue marcando solo el destino activo, tanto en
+      con un test (`ViewSwitcher.test.tsx`).
+- [x] El `<select>` tiene nombre accesible. Comprobado con un test
+      (`aria-label="Vista"`, igual que el `<nav>`).
+- [x] `aria-current="page"` sigue marcando solo el destino activo, tanto en
       el grupo de pastillas como en el `<select>` (el atributo no aplica al
       `<select>` en sí — se verifica que la opción activa es la
       seleccionada). Comprobado con un test.
-- [ ] Elegir un destino distinto en el `<select>` navega de verdad: cambiar
+- [x] Elegir un destino distinto en el `<select>` navega de verdad: cambiar
       su valor mueve `window.location.hash` y la vista que se renderiza
       después es la del destino elegido. Verificado a mano con Playwright
-      sobre el build de producción.
+      sobre el build de producción, en las dos direcciones (Clasificación
+      → Cómo se calcula y de vuelta).
 - [ ] `.buttonGhost`/`.buttonSolid` u otro primitivo de botón ya declarado
       queda compuesto por el grupo de pastillas, no reinventado —o, si el
       contenedor necesita algo que ningún primitivo actual cubre, la
       diferencia queda documentada aquí, no en el código sin más.
-- [ ] Ningún `.module.css` nuevo declara un color, radio, duración o
+      **No se compone**, y queda documentado aquí por qué no: `.active`
+      necesita un fondo persistente (`--color-accent-tint`, la pastilla),
+      pero `.buttonGhost` ya fija `background: transparent` en su propia
+      regla — y la composición entre ficheros de CSS Modules resuelve los
+      conflictos a favor del primitivo (hallazgo empírico de
+      `technical/0005`), así que ese fondo perdería siempre. Tampoco encaja
+      en lo semántico: `.buttonGhost` es «sin superficie propia hasta que
+      se interactúa», y un indicador de página activa necesita justo lo
+      contrario, una superficie persistente. `.link`/`.active` sí reutilizan
+      `mono` (la misma base tipográfica que compone toda la familia de
+      botones) y los mismos tokens de color, radio y duración que
+      `.buttonGhost` — la diferencia es solo el fondo persistente, no toda
+      la superficie de la clase.
+- [x] Ningún `.module.css` nuevo declara un color, radio, duración o
       tipografía como literal: todo sale de `var(--…)`.
       `scripts/validateStyleTokensRepo.test.ts` en verde.
-- [ ] `npm run format:check`, `npm run lint`, `npm run typecheck`,
+- [x] `npm run format:check`, `npm run lint`, `npm run typecheck`,
       `npm run arch:check`, `npm run test:coverage` y `npm run build` pasan
       en local antes de dar la spec por implementada.
 - [ ] Sobre el build de producción y en un navegador real, a 320, 592, 960
       y 1440px: no hay desplazamiento horizontal de la cabecera ni del
       documento; el elemento con el foco lo muestra, tanto en las pastillas
       como en el `<select>`.
+      **El documento, sin desplazamiento horizontal a ningún ancho —
+      confirmado—. La cabecera, no del todo**: sigue necesitándolo a 320px y
+      justo en el borde de 592px (ver la nota de medición en el requisito
+      4). El foco se muestra correctamente en ambos casos —pastillas y
+      `<select>`—, confirmado con Playwright (segundo tabulador en
+      escritorio, primer tabulador tras la marca en móvil).
 - [ ] El sitio desplegado en GitHub Pages sirve el marcado nuevo sin 404.
       Solo comprobable tras un `push` a `main`
       (`docs/estado/despliegue.md`); mismo motivo que ya deja este mismo
