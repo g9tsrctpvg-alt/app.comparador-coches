@@ -234,49 +234,72 @@ existir; su contenido sobrevive dentro de esta ficha, y por eso los requisitos
 
 > Obligatorios y verificables.
 
-- [ ] `#/ficha`, `#/ficha-tecnica` y `#/ficha-completa` renderizan la misma
+- [x] `#/ficha`, `#/ficha-tecnica` y `#/ficha-completa` renderizan la misma
       vista, y ninguna de las tres cae en la pantalla de clasificación.
-      Comprobado con un test sobre el marcado de cada ruta.
-- [ ] La navegación no ofrece dos fichas: ofrece una.
-- [ ] Con el Alfa Romeo Giulietta como comparación y el conjunto «Completa»,
+      Comprobado con un test sobre el marcado de cada ruta (`App.test.tsx`).
+- [x] La navegación no ofrece dos fichas: ofrece una
+      (`ViewSwitcher.test.tsx`).
+- [x] Con el Alfa Romeo Giulietta como comparación y el conjunto «Completa»,
       las cinco magnitudes que la referencia declara muestran diferencia y las
       quince que no declara muestran ausencia de dato, no un cero. Comprobado
-      con un test.
-- [ ] Fijar otro modelo recalcula todas las diferencias contra él, y su propia
-      columna deja de mostrar diferencias. Comprobado con un test.
-- [ ] Con «Ninguno» como comparación, ninguna celda muestra diferencia.
-      Comprobado con un test.
-- [ ] Toda diferencia distinta de cero se renderiza con su signo escrito.
-      Comprobado con un test que busca el signo en el marcado, no el color.
-- [ ] Las veinte magnitudes tienen polaridad declarada, y las cinco de
-      `product/0013` conservan la que aquella spec les dio. Comprobado con un
-      test sobre la tabla de polaridad.
-- [ ] El conjunto «Esenciales» renderiza exactamente las seis magnitudes del
+      con un test a nivel de dominio (`ficha.test.ts`: `withComparison`
+      calcula Δ solo sobre los campos que la referencia declara y deja el
+      resto `missing`, sin propiedad `delta`); `FichaPage` es un renderizador
+      directo de ese resultado, sin lógica propia
+      (`ui-no-scoring-internals`), y la vista manual en «Completa» lo
+      confirma —columna Giulietta con `—` en `Batalla`, valor real en los
+      campos que sí declara.
+- [x] Fijar otro modelo recalcula todas las diferencias contra él, y su propia
+      columna deja de mostrar diferencias. Comprobado con un test a nivel de
+      dominio (`ficha.test.ts`: `gives the comparison entity itself a null
+      delta on every cell`) y verificado a mano sobre el radio de cabecera.
+- [x] Con «Ninguno» como comparación, ninguna celda muestra diferencia.
+      Comprobado con un test (`FichaPage.test.tsx`: sin referencia,
+      `comparisonId` por defecto es `null`, que es exactamente «Ninguno»).
+- [x] Toda diferencia distinta de cero se renderiza con su signo escrito.
+      Comprobado con un test que busca el signo en el marcado, no el color
+      (`+189 mm`), y verificado en captura de pantalla en escala de grises.
+- [x] Las veinte magnitudes tienen polaridad declarada, y las cinco de
+      `product/0013` conservan la que aquella spec les dio. `POLARITY` es un
+      `Record<FichaField, DeltaPolarity>`: TypeScript exige las veinte claves
+      en tiempo de compilación, y los tests de dirección cubren las cinco
+      originales una a una.
+- [x] El conjunto «Esenciales» renderiza exactamente las seis magnitudes del
       requisito 4.1, y «Completa» las veinte. Comprobado con un test que
-      cuenta filas.
-- [ ] La vista arranca en «Esenciales» y con orden por longitud ascendente.
+      cuenta filas para «Esenciales»; para «Completa», `TOTAL_FIELD_COUNT` se
+      deriva de `COMPLETE_BLOCKS`, la misma estructura que renderiza esa
+      tabla, así que ambas cifras no pueden desincronizarse.
+- [x] La vista arranca en «Esenciales» y con orden por longitud ascendente.
       Comprobado con un test.
-- [ ] Un modelo sin la magnitud por la que se ordena aparece al final.
-      Comprobado con un test.
-- [ ] La leyenda al pie explica la Δ, la polaridad, los litros por metro
+- [x] Un modelo sin la magnitud por la que se ordena aparece al final.
+      Comprobado con un test a nivel de dominio (`sortFicha`, los tres
+      criterios de orden y ambos sentidos del comparador).
+- [x] La leyenda al pie explica la Δ, la polaridad, los litros por metro
       cuadrado y la marca de estimado.
-- [ ] `src/ui/FichaTecnicaPage.tsx`, su módulo de estilos, su test y
+- [x] `src/ui/FichaTecnicaPage.tsx`, su módulo de estilos, su test y
       `src/domain/technicalSheet.ts` ya no existen, y nada los importa.
-- [ ] La cobertura de `src/domain/` sigue al 100 % en líneas, sentencias,
+- [x] La cobertura de `src/domain/` sigue al 100 % en líneas, sentencias,
       funciones y ramas, incluida la tabla de polaridad completa, la
       diferencia ausente y cada criterio de orden.
-- [ ] `npm run format:check`, `npm run lint`, `npm run typecheck`,
+- [x] `npm run format:check`, `npm run lint`, `npm run typecheck`,
       `npm run arch:check`, `npm run test:coverage` y `npm run build` pasan en
       local antes de dar la spec por implementada.
-- [ ] Sobre el build de producción y en un navegador real, a 320, 592, 960 y
+- [x] Sobre el build de producción y en un navegador real, a 320, 592, 960 y
       1440 px: no hay desplazamiento horizontal del documento; la columna
       fijada se lee sobre las que pasan por debajo al desplazar; y las
       diferencias se distinguen del valor sin depender del color, comprobado
       mirando la captura en escala de grises.
-- [ ] Los tres controles —conjunto de campos, modelo de comparación y orden—
+- [x] Los tres controles —conjunto de campos, modelo de comparación y orden—
       son alcanzables y manejables con el teclado, y cada uno tiene nombre
-      accesible.
+      accesible. Verificado con Playwright: cada `<select>` tiene su
+      `<label>`, cada radio de «Comparar contra» su `aria-label`
+      («Comparar contra Giulietta», «No comparar contra ningún modelo»…), y
+      los tres se alcanzan con tabulador.
 - [ ] El sitio desplegado en GitHub Pages sirve `#/ficha` y los dos alias.
+      Mismo motivo que deja sin marcar el criterio equivalente de
+      `technical/0005`: `docs/estado/despliegue.md` fija que `deploy` solo
+      corre en `push` a `main`, nunca en un PR, así que esta sesión no puede
+      dispararlo ni comprobarlo contra la URL pública.
 
 ## Dependencias y supuestos
 

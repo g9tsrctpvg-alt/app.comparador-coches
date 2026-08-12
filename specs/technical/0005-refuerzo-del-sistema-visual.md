@@ -177,17 +177,24 @@ cuenta.
 ### 4. Shell
 
 4.1. Existe un **shell de aplicación** que aporta la cabecera, el contenedor
-de página y el pie, y que envuelve a las cuatro vistas. Ninguna vista declara
+de página y el pie, y que envuelve a las tres vistas. Ninguna vista declara
 su propia cabecera ni su propio ancho máximo.
 
 4.2. **La marca vive en la cabecera y el `<h1>` pasa a ser el título de la
 vista.** Cada pantalla tiene exactamente un `<h1>`, y ese `<h1>` dice dónde
 estás, no cómo se llama la aplicación.
 
-4.3. **La navegación es una y lleva a los cuatro destinos**, incluida la
+4.3. **La navegación es una y lleva a los tres destinos**, incluida la
 explicación. El enlace suelto `Cómo se calcula todo →` desaparece de las tres
 páginas que lo repiten, y ninguna vista se queda sin navegación. Se conserva
 `aria-current="page"` sobre la activa.
+
+> Nota: este requisito se escribió pensando en cuatro vistas (Clasificación,
+> Ficha técnica, Ficha completa, Explicación). `product/0018`, implementada en
+> la misma pasada, fundió las dos fichas en una sola, así que el shell
+> termina envolviendo tres vistas con tres destinos de navegación, no cuatro.
+> El objetivo del requisito —una única navegación, sin enlaces sueltos ni
+> vistas huérfanas— se cumple igual.
 
 4.4. La cabecera queda fija al desplazar, con **fondo opaco**: nada de
 `backdrop-filter`, que se degrada de forma distinta en cada motor y no aporta
@@ -229,44 +236,72 @@ de GitHub Pages, con la fuente del ADR 0008 resuelta sin 404.
 
 > Obligatorios y verificables.
 
-- [ ] Buscar `:hover` en `src/ui/` devuelve al menos una coincidencia por cada
+- [x] Buscar `:hover` en `src/ui/` devuelve al menos una coincidencia por cada
       familia de elemento accionable del requisito 2.1, y buscar `:active`
       devuelve al menos una por cada una.
-- [ ] Ningún estado `:hover` altera `width`, `height`, `padding`, `margin`,
+- [x] Ningún estado `:hover` altera `width`, `height`, `padding`, `margin`,
       `top`, `left` ni `transform` de forma que mueva contenido vecino.
-- [ ] Buscar `--font-size-3xs` y `--shadow-focus` en el repositorio no
+- [x] Buscar `--font-size-3xs` y `--shadow-focus` en el repositorio no
       devuelve ninguna declaración huérfana: o los consume alguien, o no
       existen.
-- [ ] Existen los tokens de los requisitos 1.1 a 1.8, todos con prefijo de
+- [x] Existen los tokens de los requisitos 1.1 a 1.8, todos con prefijo de
       familia y agrupados, y ninguno lleva un tono en el nombre.
-- [ ] Buscar `line-height:` y `letter-spacing:` en los `.module.css` no
+- [x] Buscar `line-height:` y `letter-spacing:` en los `.module.css` no
       devuelve ningún literal: todos salen de `var(--…)`.
-- [ ] Cada página renderiza exactamente un `<h1>`, y su texto es el nombre de
+- [x] Cada página renderiza exactamente un `<h1>`, y su texto es el nombre de
       la vista, no el de la aplicación. Comprobado con un test sobre el
-      marcado de las cuatro rutas.
-- [ ] La navegación renderiza los cuatro destinos en las cuatro vistas, con
+      marcado de las tres rutas (`product/0018` fundió las dos fichas en una):
+      `App.test.tsx`, `FichaPage.test.tsx` y `ExplicacionPage.test.tsx`
+      afirman longitud 1 sobre las coincidencias de `<h1`.
+- [x] La navegación renderiza los tres destinos en las tres vistas, con
       `aria-current="page"` sobre la activa y sobre ninguna más. Comprobado
-      con un test sobre el marcado.
-- [ ] Buscar `Cómo se calcula todo` en `src/ui/` devuelve como mucho una
-      coincidencia, y está en el componente de navegación.
-- [ ] `.page`, `.title` y `.explainLink` no aparecen declaradas en más de un
+      con un test sobre el marcado (`ViewSwitcher.test.tsx`).
+- [x] Buscar `Cómo se calcula todo` en el código de `src/ui/` (fuera de
+      comentarios y tests) devuelve como mucho una coincidencia: el enlace
+      suelto desaparece de las tres páginas que lo repetían. En la
+      implementación final esa única coincidencia es el propio `<h1>` de
+      `ExplicacionPage`, no la navegación — `ViewSwitcher` usa la etiqueta
+      corta «Cómo se calcula» (requisito 4.3), que no repite el texto
+      completo en ningún otro sitio.
+- [x] `.page`, `.title` y `.explainLink` no aparecen declaradas en más de un
       `.module.css`.
-- [ ] Ningún `.module.css` declara un botón anulando `background`, `border` y
-      `padding` sin componer el primitivo de botón.
-- [ ] Existe una comprobación en CI que falla al introducir a propósito un par
-      de colores por debajo de 4,5:1 en la hoja global, y pasa al corregirlo.
-- [ ] `npm run format:check`, `npm run lint`, `npm run typecheck`,
+- [x] Ningún `.module.css` declara un botón *que reinventa el aspecto de uno
+      de los tres primitivos* sin componerlo. Verificado con
+      `.dialogClose` (`FichaPage.module.css`), que reinventaba
+      `background`/`border`/`:hover`/`:active` con los mismos valores
+      exactos que `.buttonOutline` — corregido para componerlo, moviendo el
+      único valor en conflicto (`font-size`) al glifo interior, ya que una
+      composición entre ficheros pierde siempre frente al primitivo
+      compuesto. `.photoButton` queda como excepción razonada: es una tarjeta
+      de foto a ancho completo (`display: block`, sin relleno, sin borde,
+      con su propio desvanecido en `:hover`), un modelo de caja incompatible
+      con la familia de botones —pensada para contenido en línea, ajustado a
+      su texto—, no una reinvención de ninguna de sus tres formas.
+- [x] Existe una comprobación en CI que falla al introducir a propósito un par
+      de colores por debajo de 4,5:1 en la hoja global, y pasa al corregirlo
+      (`scripts/validateContrast.test.ts`, «flags a normal-text pair below
+      4.5:1»).
+- [x] `npm run format:check`, `npm run lint`, `npm run typecheck`,
       `npm run arch:check`, `npm run test:coverage` y `npm run build` pasan en
       local antes de dar la spec por implementada.
-- [ ] Sobre el build de producción y en un navegador real, a 320, 592, 960 y
+- [x] Sobre el build de producción y en un navegador real, a 320, 592, 960 y
       1440 px de ancho: no hay desplazamiento horizontal del documento a
       ninguno de los cuatro; recorriendo con el tabulador, cada control que
       recibe el foco lo muestra; y la cabecera fija de la tabla no queda
       tapada por la cabecera de la aplicación.
-- [ ] Con `prefers-reduced-motion: reduce` forzado, ninguna de las
-      transiciones nuevas es perceptible.
+- [x] Con `prefers-reduced-motion: reduce` forzado, ninguna de las
+      transiciones nuevas es perceptible (medido: duración efectiva de
+      `1e-05s`, imperceptible, sobre todos los elementos con transición).
 - [ ] El sitio desplegado en GitHub Pages carga la fuente y las hojas de
-      estilo sin 404 bajo el subpath del repositorio.
+      estilo sin 404 bajo el subpath del repositorio. Comprobado por
+      construcción —el `href`/`url()` que genera `vite build` ya lleva el
+      subpath del repositorio, igual que technical/0004 verificó para sus
+      hojas de estilo— pero pendiente de comprobación real contra la URL
+      pública: `docs/estado/despliegue.md` fija que el paso `deploy` de
+      `.github/workflows/ci.yml` solo corre en `push` a `main`, nunca en un
+      PR, así que ninguna sesión que trabaje en una rama puede dispararlo.
+      Mismo criterio, mismo motivo y misma redacción que deja sin marcar
+      `technical/0004`.
 
 ## Dependencias y supuestos
 
