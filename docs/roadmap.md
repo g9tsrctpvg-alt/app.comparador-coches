@@ -247,6 +247,7 @@ entera verde en local y cobertura al 100 %.
 | Gate humano: aprobar `technical/0007` | Hecha — 2026-08-12, en commit propio sin implementación |
 | Implementar y verificar la spec | Hecha — CI entera en verde en local, verificación manual con Playwright simulando la secuencia de eventos táctiles (`touchstart`/`touchmove`/`touchend`/`touchcancel`), con el límite honesto de que este entorno no tiene una pantalla táctil real |
 | Consolidar `technical/0007` en `docs/estado/interfaz.md` | Hecha — 2026-08-12 |
+| `technical/0008` — el anclaje de eje no desactiva el scroll del eje bloqueado | `draft` |
 
 **`technical/0007` nace de otra revisión del despliegue** (2026-08-12): en
 un gesto táctil diagonal —pensado como «hacia abajo», con un componente
@@ -254,6 +255,16 @@ horizontal mínimo—, el anclaje de scroll horizontal de la ficha
 (`scroll-snap-align`) podía saltar de una columna de modelo a la siguiente
 sin que quien mira la ficha lo pidiera. Amplía `technical/0005`, requisito
 5, sin editarla —está `consolidated`—.
+
+**`technical/0008` nace de un reporte del usuario sobre el propio
+`technical/0007`, ya desplegado** (2026-08-12): el scroll horizontal de la
+ficha se reseteaba al hacer scroll vertical, en un porcentaje alto de los
+gestos aunque no siempre. Sospecha razonada: `attachScrollAxisLock`
+desactivaba el eje bloqueado con `overflow: hidden`, y `scroll-snap-type: x
+mandatory` (`technical/0005`) puede perder el punto de anclaje al
+reactivarlo. La corrección deja de tocar `overflow` — corrige la posición
+del eje bloqueado a mano, en cada evento `scroll`, en vez de desactivar el
+eje—. Amplía `technical/0007` sin editarlo —está `consolidated`—.
 
 **`product/0020` y `technical/0006` nacen de revisar el despliegue real**
 (2026-08-12): con el rediseño ya visible en producción, el vistazo inicial
