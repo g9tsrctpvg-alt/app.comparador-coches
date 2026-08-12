@@ -247,7 +247,10 @@ entera verde en local y cobertura al 100 %.
 | Gate humano: aprobar `technical/0007` | Hecha — 2026-08-12, en commit propio sin implementación |
 | Implementar y verificar la spec | Hecha — CI entera en verde en local, verificación manual con Playwright simulando la secuencia de eventos táctiles (`touchstart`/`touchmove`/`touchend`/`touchcancel`), con el límite honesto de que este entorno no tiene una pantalla táctil real |
 | Consolidar `technical/0007` en `docs/estado/interfaz.md` | Hecha — 2026-08-12 |
-| `technical/0008` — el anclaje de eje no desactiva el scroll del eje bloqueado | `draft` |
+| `technical/0008` — el anclaje de eje no desactiva el scroll del eje bloqueado | `consolidated` |
+| Gate humano: aprobar `technical/0008` | Hecha — 2026-08-12, en commit propio sin implementación, tras confirmación explícita del usuario en el chat |
+| Implementar y verificar la spec | Hecha — CI entera en verde en local, verificación manual con Playwright: control frente al propio scroll-snap del navegador (un `scrollLeft += 500` sin gesto activo se reencaja solo a `529`; con el eje anclado, el mismo `+= 500` vuelve exacto a `1`, no al punto de anclaje más cercano), más los casos de `technical/0007` repetidos sobre el nuevo mecanismo |
+| Consolidar `technical/0008` en `docs/estado/interfaz.md` | Hecha — 2026-08-12 |
 
 **`technical/0007` nace de otra revisión del despliegue** (2026-08-12): en
 un gesto táctil diagonal —pensado como «hacia abajo», con un componente

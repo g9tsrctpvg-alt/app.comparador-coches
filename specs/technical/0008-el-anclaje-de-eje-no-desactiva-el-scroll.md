@@ -1,12 +1,18 @@
 # 0008 — El anclaje de eje no desactiva el scroll del eje bloqueado
 
 - **Id:** technical/0008
-- **Estado:** approved
+- **Estado:** consolidated
 - **Tipo:** technical
 - **Fecha:** 2026-08-12
 - **Specs relacionadas:** technical/0007
 - **ADRs relacionados:** ninguno
 - **Doc de estado:** `docs/estado/interfaz.md`
+
+> ⚠️ **Spec consolidada (2026-08-12).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/interfaz.md`. Vigentes aquí solo los **criterios de
+> aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -81,26 +87,53 @@ scroll-snap que pueda perder la posición.
 
 > Obligatorios y verificables.
 
-- [ ] Un gesto táctil simulado con desplazamiento mayoritariamente vertical
+- [x] Un gesto táctil simulado con desplazamiento mayoritariamente vertical
       (`dy` grande, `dx` pequeño) seguido de un evento `scroll` sintético con
       `scrollLeft` desplazado: `.tableWrapper.scrollLeft` vuelve al valor que
       tenía al fijarse el eje, sin que `overflowX` cambie nunca de su valor
       declarado en CSS (`element.style.overflowX` se queda en `''` durante
-      todo el gesto).
-- [ ] Un gesto mayoritariamente horizontal, simétrico: `scrollTop` vuelve al
+      todo el gesto). Verificado con Playwright, con un control frente al
+      propio scroll-snap del navegador para no confundir uno con otro: sin
+      ningún gesto activo, forzar `scrollLeft += 500` reasigna a `529` —el
+      navegador ya reencaja solo—; con el eje vertical anclado
+      (`dx=2, dy=30`) y `scrollLeft` fijado en `1` al iniciar el gesto, el
+      mismo `+= 500` seguido del evento `scroll` deja `scrollLeft` en `1`
+      exacto, no en el punto de anclaje más cercano a `501` — prueba que es
+      esta lógica la que corrige, no el navegador por su cuenta.
+      `overflowX` se queda en `''` en todo momento.
+- [x] Un gesto mayoritariamente horizontal, simétrico: `scrollTop` vuelve al
       valor guardado ante un evento `scroll` sintético que lo desplace, sin
-      que `overflowY` cambie nunca de `''`.
-- [ ] Un gesto por debajo del umbral de 10px no fija ningún eje y el
+      que `overflowY` cambie nunca de `''`. Verificado con `dx=30, dy=2`:
+      `scrollTop` fijado en `0` al iniciar, un `+= 40` seguido de `scroll`
+      lo deja en `0`; `overflowY` se queda en `''`. Este eje no tiene
+      `scroll-snap-type`, así que no hace falta el control del criterio
+      anterior — cualquier corrección observada es necesariamente de esta
+      lógica.
+- [x] Un gesto por debajo del umbral de 10px no fija ningún eje y el
       listener de `scroll` no corrige nada — mismo criterio que
-      `technical/0007`, ahora sin `overflow` de por medio.
-- [ ] `touchcancel` limpia el eje anclado igual que `touchend`: tras
-      cancelar, un evento `scroll` posterior no se corrige.
-- [ ] El desplazamiento por teclado (flechas, con el contenedor enfocado) no
-      cambia.
-- [ ] `npm run format:check`, `npm run lint`, `npm run typecheck`,
+      `technical/0007`, ahora sin `overflow` de por medio. Verificado con
+      `dx=3, dy=4`: un `scrollTop += 55` posterior al `touchmove`
+      sub-umbral, con `scroll` disparado, queda en `55` sin corregir.
+- [x] `touchcancel` limpia el eje anclado igual que `touchend`: tras
+      cancelar, un evento `scroll` posterior no se corrige. Verificado:
+      tras anclar el eje horizontal (`dx=30, dy=2`) y disparar
+      `touchcancel`, un `scrollTop += 77` con `scroll` queda en `77`, sin
+      corregir.
+- [x] El desplazamiento por teclado (flechas, con el contenedor enfocado) no
+      cambia. Este cambio no añade ningún listener de teclado ni toca
+      `keydown`/`keyup` — por construcción no puede interferir. Verificado
+      además con Playwright: sobre un `.tableWrapper` recién enfocado
+      (`scrollLeft` inicial `1`), una pulsación de `ArrowRight` lo mueve a
+      `12`, reproducible en tres ejecuciones consecutivas. El paso siguiente
+      resultó intermitente en este entorno sin cabeza —quedarse en `12` tras
+      una segunda pulsación en algunas ejecuciones—, pero es ruido del
+      desplazamiento por teclado combinado con `scroll-snap-type` en
+      Chromium headless, no algo que dependa de este cambio: no hay
+      `keydown` en el código nuevo que pueda ser la causa.
+- [x] `npm run format:check`, `npm run lint`, `npm run typecheck`,
       `npm run arch:check`, `npm run test:coverage` y `npm run build` pasan
       en local antes de dar la spec por implementada.
-- [ ] **Límite honesto de esta verificación**: lo anterior prueba que la
+- [x] **Límite honesto de esta verificación**: lo anterior prueba que la
       lógica reacciona bien a la secuencia de eventos que se le da —incluido
       un evento `scroll` sintético—, no que un navegador real, en un
       dispositivo real, jamás dispare `scroll-snap` de una forma que
