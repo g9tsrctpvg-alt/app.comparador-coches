@@ -1,18 +1,18 @@
 # 0011 — La página que explica cómo se calcula todo
 
 - **Id:** product/0011
-- **Estado:** verified
+- **Estado:** consolidated
 - **Tipo:** product
 - **Fecha:** 2026-08-06
 - **Specs relacionadas:** product/0001…0007, product/0009, technical/0004
 - **ADRs relacionados:** 0004, 0006, 0007
 - **Doc de estado:** `docs/estado/interfaz.md`
 
-> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
-> implementado: su sección *Contexto* retrata el sistema **anterior** al
-> cambio y hoy no es cierta. **No es referencia del estado actual** — para
-> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
-> **criterios de aceptación**, como registro de verificación.
+> ⚠️ **Spec consolidada (2026-08-12).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/interfaz.md`. Vigentes aquí solo los **criterios de
+> aceptación**, como registro de verificación.
 
 ## Contexto
 

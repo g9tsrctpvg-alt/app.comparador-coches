@@ -1,18 +1,18 @@
 # 0018 — Una sola ficha, con diferencias contra el modelo elegido
 
 - **Id:** product/0018
-- **Estado:** verified
+- **Estado:** consolidated
 - **Tipo:** product
 - **Fecha:** 2026-08-08
 - **Specs relacionadas:** product/0013, product/0014, product/0016, technical/0005
 - **ADRs relacionados:** 0006, 0007
 - **Doc de estado:** `docs/estado/interfaz.md`, `docs/estado/dominio.md`
 
-> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
-> implementado: su sección *Contexto* retrata el sistema **anterior** al
-> cambio y hoy no es cierta. **No es referencia del estado actual** — para
-> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
-> **criterios de aceptación**, como registro de verificación.
+> ⚠️ **Spec consolidada (2026-08-12).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/interfaz.md` y `docs/estado/dominio.md`. Vigentes aquí solo
+> los **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 

@@ -98,11 +98,17 @@ ESLint impide escribir a consola fuera de ese módulo.
 Vitest, con cobertura v8 y suelo por *ratcheting* al 100% de líneas,
 sentencias y funciones en `domain/`, `data/` y `logging/`
 (`vite.config.ts`, bloque `test.coverage`). `ui/` y `main.tsx` quedan fuera
-del suelo: es la interfaz real del comparador, no andamiaje a punto de
-rehacerse, pero no tiene tests automatizados propios todavía —su
-verificación ha sido manual, contra un navegador real—. Si debe entrar en el
-suelo es una decisión pendiente, registrada como deuda en
-`docs/roadmap.md`.
+de ese suelo, pero sí tienen tests propios —un fichero por componente que
+lo justifica, con `renderToStaticMarkup`, sin jsdom ni *testing library*—:
+lo que falta no es cobertura de marcado, es la parte que ese método no
+alcanza por diseño. `renderToStaticMarkup` no calcula estilos, no dispara
+eventos y no tiene viewport, así que todo lo interactivo, lo visual y lo
+responsive —incluido el contraste, desde el ADR 0006— se verifica a mano
+contra un navegador real, sobre el build de producción. Si el marcado de
+`ui/` debe entrar en el suelo de cobertura numérica es una decisión
+pendiente, registrada como deuda en `docs/roadmap.md`; la parte interactiva
+seguiría siendo manual aunque entrara, porque el método de render no cambia
+por eso.
 
 ## Qué falta
 

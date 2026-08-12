@@ -324,9 +324,7 @@ coste 1 — reflejan una prioridad personal, no una fórmula del negocio.
 ## El catálogo
 
 `src/data/cars.json`: once candidatos reales, cada campo con su estructura
-de fuentes. La fila de referencia del Alfa Romeo Giulietta que aparece en la
-especificación original del proyecto **no está en el catálogo**: es dato de
-referencia, no un candidato a comparar, y ninguna spec la ha pedido todavía.
+de fuentes.
 
 Un catálogo **sin ningún coche** no es un catálogo válido: `loadCatalog` lo
 rechaza igual que rechaza un registro mal formado, así que el fallo se
@@ -338,6 +336,79 @@ catálogo vacío.
 Los valores numéricos **no declaran cota** todavía: un precio o una dimensión
 negativos validan sin error. Está registrado como deuda en
 `docs/roadmap.md`.
+
+## Referencias
+
+`src/data/references.json` (`Reference`, `src/domain/reference.ts`,
+`loadReferences.ts`): coches que **no son candidatos** — no se puntúan, no
+entran en el ranking—, sino puntos de comparación para la ficha
+(`product/0013`, requisitos 3 y 4). Comparten con `Car` la forma de un dato
+con fuente (`SourcedNumber`), pero no su lista de campos: una `Reference`
+solo declara identidad, tecnología, fotos y cinco magnitudes dimensionales
+—longitud, anchura, altura, altura libre al suelo y maletero—, nada de lo
+que solo sirve para puntuar. Una lista separada, no un campo en `Car`, hace
+que pasarle una `Reference` a `scoreCatalog` sea un error de tipos, no un
+olvido posible en tiempo de ejecución.
+
+`references.json` trae hoy al Alfa Romeo Giulietta de la especificación
+original del proyecto —la fila que `product/0001` dejó fuera a propósito
+por no ser un candidato—, con sus cinco magnitudes fuente por fuente.
+
+## Ficha
+
+`src/domain/ficha.ts` (product/0014, fundido con la antigua ficha técnica
+por product/0018): compara candidatos y referencias entre sí, magnitud por
+magnitud, sobre veinte campos de `Car`/`Reference` —diecinueve propios más
+`litersPerSquareMeter`, derivada—. No calcula puntuación: es lectura, no
+juicio agregado, así que vive fuera de `scoring/`.
+
+- **`litrosPorMetroCuadrado(trunkLiters, lengthMm, widthMm)`** — litros de
+  maletero por metro cuadrado de huella en el suelo: cuánto espacio da un
+  coche por el sitio que ocupa (`product/0013`, requisito 11).
+- **`FICHA_FIELDS`/`FichaField`** — las veinte claves, en el orden en que
+  se declaran; la interfaz decide etiqueta, unidad y agrupación por bloque
+  a partir de ahí, no aquí.
+- **`buildFicha(cars, references)`** — un `FichaEntity` por candidato y por
+  referencia, en el orden del catálogo, sin ordenar y sin Δ todavía: eso
+  son pasos aparte, deliberadamente, porque el orden y el modelo de
+  comparación los elige quien mira la ficha. Una celda es `'sourced'`
+  (valor, unidad, estimado), `'rating'` (una nota de usuario, sobre 5) o
+  `'missing'` —el campo no existe en esa entidad, no un cero—: una
+  `Reference` solo declara cinco de las veinte, así que comparar contra
+  ella deja quince celdas `'missing'` por construcción, no por caso
+  especial.
+- **La tabla de polaridad** (`POLARITY`, `Record<FichaField,
+  DeltaPolarity>` — TypeScript exige las veinte claves en tiempo de
+  compilación, así que ninguna puede quedar sin dirección declarada por
+  descuido) fija si más es mejor, peor o si el dato no tiene una dirección
+  declarada, con su razón junto a cada una:
+  - **`moreIsWorse`** — `lengthMm`, `widthMm` (el problema que el proyecto
+    resuelve es que los sustitutos son más grandes), `weightKg` (penaliza
+    consumo, frenada y agilidad), `acceleration0to100` (son segundos: más
+    es más lento), `consumption`, `priceEur`, `maintenanceEurYear`.
+  - **`moreIsBetter`** — `trunkLiters`, `litersPerSquareMeter` (mejor
+    aprovechado el espacio), `rearShoulderWidthMm` (la magnitud que
+    `product/0017` añadió porque mide si caben tres personas atrás),
+    `powerCv`, `residualPct5y` (lo que se recupera al vender),
+    `reliabilityOcu`, `warrantyYears`, `warrantyExtensionYears`,
+    `aestheticsExterior`, `aestheticsInterior` (notas de usuario sobre 5:
+    más nota es mejor en las dos).
+  - **`neutral`** — `heightMm`, `groundClearanceMm`, y `wheelbaseMm` —más
+    batalla da más espacio dentro y más coche fuera; el proyecto no ha
+    declarado cuál de las dos cosas le importa más, y ante la duda no se
+    inventa un juicio de color—.
+- **`withComparison(entities, comparisonId)`** — recalcula la Δ de cada
+  celda de cada entidad frente a la entidad `comparisonId`.
+  `comparisonId === null` —«Ninguno»— apaga todas las Δ: es la misma vía
+  que comparar contra una entidad que no existe, sin rama aparte. La propia
+  entidad de comparación nunca lleva Δ contra sí misma —sería siempre cero
+  y no dice nada—, y una celda `'missing'` en cualquiera de las dos partes
+  deja la Δ en `null`, nunca en un cero engañoso.
+- **`sortFicha(entities, criterion)`** — ordena por `catalog` (el orden del
+  propio catálogo), `lengthMm`, `widthMm` o `priceEur`, ascendente. Una
+  entidad sin la magnitud por la que se ordena va al final: no hay dato que
+  defender en esa posición, y el orden relativo entre dos entidades que
+  ambas carecen del dato no se declara.
 
 ## Qué queda fuera
 
