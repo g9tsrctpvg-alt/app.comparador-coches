@@ -1,22 +1,3 @@
-.app {
-  max-width: var(--size-column);
-  margin: 0 auto;
-  padding: var(--space-5) var(--space-4) var(--space-8);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-5);
-}
-
-.title {
-  font-family: var(--font-sans);
-  font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-bold);
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-  color: var(--color-ink);
-  margin: 0;
-}
-
 .error {
   composes: card from './primitives.module.css';
   max-width: var(--size-column);
@@ -25,16 +6,10 @@
   font-family: var(--font-sans);
 }
 
-.explainLink {
-  composes: mono from './primitives.module.css';
-  color: var(--color-accent);
-  align-self: flex-start;
-}
-
 /* Móvil primero: una columna. A partir de `--bp-ancho` los controles y la
- * clasificación pasan a dos columnas (product/0010, requisito 7), y la
- * página deja de estar acotada a `--size-column` para poder aprovechar el
- * ancho — el texto corrido sigue acotado por su propia medida de línea. */
+ * clasificación pasan a dos columnas (product/0010, requisito 7); el ancho
+ * de página en sí lo resuelve `AppShell.module.css`, el mismo contenedor
+ * para las tres vistas. */
 .columns {
   display: flex;
   flex-direction: column;
@@ -48,10 +23,6 @@
 }
 
 @media (min-width: 60rem) {
-  .app {
-    max-width: var(--size-page);
-  }
-
   .columns {
     display: grid;
     grid-template-columns: minmax(0, var(--size-column)) minmax(0, 1fr);

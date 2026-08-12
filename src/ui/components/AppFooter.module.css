@@ -1,0 +1,15 @@
+.footer {
+  border-top: var(--size-border-hairline) solid var(--color-rule);
+  margin-top: var(--space-7);
+}
+
+/* `.prose` ya acota el ancho de línea a `--size-line-measure` (75ch); esta
+ * regla solo centra ese bloque dentro del pie, de borde a borde de
+ * `--color-paper`, sin volver a tocar `max-width`. */
+.note {
+  composes: prose from '../primitives.module.css';
+  composes: secondaryText from '../primitives.module.css';
+  font-family: var(--font-sans);
+  margin: 0 auto;
+  padding: var(--space-5) var(--space-4);
+}

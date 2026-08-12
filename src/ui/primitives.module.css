@@ -24,6 +24,17 @@
   box-shadow: var(--shadow-card);
 }
 
+/* Segundo nivel de superficie (technical/0005, requisito 3.1): la misma
+ * tarjeta, sobre el fondo `card-raised` y con una sombra que de verdad
+ * separa —`.card` se apoya en el borde de 1px, ésta en la elevación—. Para
+ * cabeceras fijas, diálogos y cualquier superficie que deba leerse por
+ * encima de una tarjeta normal. */
+.surfaceRaised {
+  composes: card;
+  background: var(--color-card-raised);
+  box-shadow: var(--shadow-raised);
+}
+
 .invertedSurface {
   background: var(--color-ink);
   color: var(--color-paper);
@@ -35,8 +46,29 @@
   font-size: var(--font-size-2xs);
   font-weight: var(--font-weight-regular);
   text-transform: uppercase;
-  letter-spacing: 0.14em;
+  letter-spacing: var(--letter-spacing-widest);
   color: var(--color-mute);
+}
+
+/* Etiqueta corta sobre una fila o cabecera (technical/0005, requisito 3.1):
+ * absorbe `.referenceTag`, hasta ahora declarada por duplicado en
+ * `FichaTecnicaPage.module.css` y `FichaCompletaPage.module.css` con las
+ * mismas cinco reglas. */
+.tag {
+  composes: mono;
+  display: inline-block;
+  color: var(--color-accent);
+  font-size: var(--font-size-2xs);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wider);
+}
+
+/* Cifra de ancho constante (technical/0005, requisito 3.1): compone `.mono`
+ * y fija además el avance de cada dígito, para que una columna de números
+ * alinee sin depender de qué dígitos le toquen a cada fila. */
+.numeric {
+  composes: mono;
+  font-variant-numeric: tabular-nums;
 }
 
 .proportionBar {
@@ -64,7 +96,7 @@
   height: 100%;
   background: var(--color-accent);
   border-radius: var(--radius-sm);
-  transition: width 0.35s ease;
+  transition: width var(--duration-base) var(--ease-out);
 }
 
 .proportionBarFillDimmed {
@@ -110,6 +142,123 @@
   border: 0;
 }
 
+/* Envoltorio de tabla con desplazamiento propio (technical/0005, requisito
+ * 3.1): antes declarado por duplicado en `FichaTecnicaPage.module.css` y
+ * `FichaCompletaPage.module.css` con el mismo borde, el mismo radio y el
+ * mismo `overflow-x: auto` — el mecanismo que hace que la tabla no arrastre
+ * la página cuando no cabe (product/0010, requisito 13). */
+/* Sin opinión sobre `overflow-y` a propósito: `overflow-x: auto` ya hace de
+ * este envoltorio el ancestro de scroll de cualquier `position: sticky` de
+ * dentro, en cualquier eje —es cómo funciona `sticky`, no un matiz de este
+ * proyecto—, así que quien necesite un `<thead>` fijo en vertical (técnico
+ * / requisito 5.1) declara su propio `overflow-y` y su propio alto máximo;
+ * fijarlo aquí competiría con esa decisión sin que ninguno de los dos
+ * ganara de forma predecible entre ficheros. */
+.tableShell {
+  overflow-x: auto;
+  border: var(--size-border-hairline) solid var(--color-rule);
+  border-radius: var(--radius-md);
+  position: relative;
+}
+
+/* Reinicio puro de botón nativo (technical/0005, requisito 3.2): quita
+ * `background` y `border`, y nada de opinión de aspecto — layout, color,
+ * relleno y margen siguen siendo cosa de quien lo compone. Es lo que hoy
+ * reinventan por su cuenta el despliegue de una fila del ranking y el de un
+ * panel plegable, cada uno con las mismas propiedades.
+ *
+ * A propósito **no** fija `padding` ni `margin`: `composes: … from` de un
+ * fichero a otro añade la clase compuesta *antes* que las reglas propias del
+ * módulo que compone en el CSS final, así que cualquier valor que este
+ * primitivo fijase para esas dos propiedades ganaría siempre a lo que
+ * quisiera declarar quien lo usa. Quien lo compone declara los suyos. */
+.unstyledButton {
+  appearance: none;
+  background: none;
+  border: none;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  cursor: pointer;
+}
+
+/* Botón, en sus tres formas (technical/0005, requisitos 3.1 y 3.2): la base
+ * fija tamaño táctil, tipografía y comportamiento; cada forma solo añade
+ * color y borde, nunca los sustituye. Ningún componente anula
+ * `background`/`border`/`padding` para simular un botón propio — compone
+ * `.unstyledButton` o una de las tres formas de aquí. */
+.button {
+  composes: unstyledButton;
+  composes: mono;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--size-touch-min);
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
+}
+
+/* Sólido: la acción principal de una pantalla. No hay más de una a la vez. */
+.buttonSolid {
+  composes: button;
+  background: var(--color-accent);
+  color: var(--color-paper);
+  border: var(--size-border-hairline) solid var(--color-accent);
+}
+
+.buttonSolid:hover {
+  background: var(--color-ink);
+  border-color: var(--color-ink);
+}
+
+.buttonSolid:active {
+  background: var(--color-ink);
+  border-color: var(--color-ink);
+  opacity: 0.85;
+}
+
+/* Contorno: la acción secundaria de hoy —«Copiar enlace», «Restablecer»—,
+ * migrada de `ConfigActions.module.css` sin cambiar su aspecto. */
+.buttonOutline {
+  composes: button;
+  background: var(--color-card);
+  color: var(--color-ink);
+  border: var(--size-border-hairline) solid var(--color-rule);
+}
+
+.buttonOutline:hover {
+  background: var(--color-card-raised);
+  border-color: var(--color-rule-strong);
+}
+
+.buttonOutline:active {
+  background: var(--color-accent-tint-solid);
+  border-color: var(--color-accent);
+}
+
+/* Fantasma: sin superficie propia hasta que se interactúa con él — los
+ * «botones invisibles» de hoy (el despliegue de una fila, el cierre de un
+ * diálogo), pero con un estado de interacción que antes no tenían ninguno. */
+.buttonGhost {
+  composes: button;
+  background: transparent;
+  color: var(--color-ink);
+  border: var(--size-border-hairline) solid transparent;
+}
+
+.buttonGhost:hover {
+  background: var(--color-accent-tint);
+}
+
+.buttonGhost:active {
+  background: var(--color-accent-tint-strong);
+}
+
 /* Deslizador con objetivo táctil de 44×44 (product/0010, requisito 8): el
  * elemento mide `--size-touch-min` de alto, con el carril fino centrado y
  * el asa a tamaño táctil. Todo deslizador de la interfaz lo compone en vez
@@ -135,6 +284,15 @@
   border-radius: 50%;
   background: var(--color-accent);
   margin-top: calc((var(--size-touch-min) - var(--size-bar-axis)) / -2);
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.rangeInput:hover::-webkit-slider-thumb {
+  background: var(--color-ink);
+}
+
+.rangeInput:active::-webkit-slider-thumb {
+  background: var(--color-ink);
 }
 
 .rangeInput::-moz-range-track {
@@ -149,17 +307,41 @@
   border-radius: 50%;
   background: var(--color-accent);
   border: none;
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.rangeInput:hover::-moz-range-thumb {
+  background: var(--color-ink);
+}
+
+.rangeInput:active::-moz-range-thumb {
+  background: var(--color-ink);
 }
 
 /* Casilla y su etiqueta como un único objetivo táctil de al menos 44px de
  * alto (product/0010, requisito 8): los 16×16 px del artefacto no se
  * migran tal cual. La casilla en sí conserva su tamaño visual nativo; lo
- * que crece es el área accionable de la fila entera. */
+ * que crece es el área accionable de la fila entera, con el mismo recurso
+ * de relleno más margen negativo que `.toggle` para que el resaltado de
+ * `:hover` no desplace el texto vecino. */
 .checkboxRow {
   display: flex;
   align-items: center;
   gap: var(--space-2);
   min-height: var(--size-touch-min);
+  padding: 0 var(--space-2);
+  margin: 0 calc(var(--space-2) * -1);
+  border-radius: var(--radius-sm);
   font-family: var(--font-sans);
   color: var(--color-ink);
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.checkboxRow:hover {
+  background: var(--color-card-raised);
+}
+
+.checkboxRow:active {
+  background: var(--color-accent-tint);
 }

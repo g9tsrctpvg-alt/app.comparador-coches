@@ -1,7 +1,10 @@
+/* Sin `flex-wrap` a propósito: el contenedor de `AppHeader` ya resuelve un
+ * ancho insuficiente con su propio `overflow-x: auto` (technical/0005,
+ * requisito 4.4) — envolver aquí además rompería esa única barra fija. */
 .switcher {
   display: flex;
-  gap: var(--space-2);
-  border-bottom: var(--size-border-hairline) solid var(--color-rule);
+  gap: var(--space-4);
+  flex-shrink: 0;
 }
 
 .link,
@@ -13,6 +16,17 @@
   padding: 0 var(--space-1);
   color: var(--color-mute);
   border-bottom: calc(var(--size-border-hairline) * 2) solid transparent;
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
+}
+
+.link:hover {
+  color: var(--color-ink);
+}
+
+.link:active {
+  color: var(--color-accent);
 }
 
 .active {

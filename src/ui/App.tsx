@@ -10,14 +10,14 @@ import { AssumptionsPanel } from './components/AssumptionsPanel';
 import { WeightSliders } from './components/WeightSliders';
 import { RankingList } from './components/RankingList';
 import { LeaderCard } from './components/LeaderCard';
-import { ViewSwitcher } from './components/ViewSwitcher';
 import { ConfigActions } from './components/ConfigActions';
+import { AppShell } from './components/AppShell';
 import { rankVisible } from './components/ranking';
 import { ExplicacionPage } from './ExplicacionPage';
-import { FichaTecnicaPage } from './FichaTecnicaPage';
-import { FichaCompletaPage } from './FichaCompletaPage';
-import { EXPLICACION_HASH, useHashRoute } from './useHashRoute';
+import { FichaPage } from './FichaPage';
+import { useHashRoute } from './useHashRoute';
 import { useConfig } from './useConfig';
+import shellStyles from './components/AppShell.module.css';
 import styles from './App.module.css';
 
 interface AppProps {
@@ -84,43 +84,38 @@ export function App({
 
   if ('error' in catalogResult) {
     return (
-      <p role="alert" className={styles.error}>
-        No se ha podido cargar el catálogo: {catalogResult.error}
-      </p>
+      <AppShell route={route}>
+        <p role="alert" className={styles.error}>
+          No se ha podido cargar el catálogo: {catalogResult.error}
+        </p>
+      </AppShell>
     );
   }
 
   if (route === 'explicacion') {
-    return <ExplicacionPage cars={catalogResult.cars} />;
-  }
-
-  if (route === 'ficha-tecnica') {
     return (
-      <FichaTecnicaPage
-        cars={catalogResult.cars}
-        references={catalogResult.references}
-      />
+      <AppShell route={route}>
+        <ExplicacionPage cars={catalogResult.cars} />
+      </AppShell>
     );
   }
 
-  if (route === 'ficha-completa') {
+  if (route === 'ficha') {
     return (
-      <FichaCompletaPage
-        cars={catalogResult.cars}
-        references={catalogResult.references}
-      />
+      <AppShell route={route}>
+        <FichaPage
+          cars={catalogResult.cars}
+          references={catalogResult.references}
+        />
+      </AppShell>
     );
   }
 
   const leader = rankVisible(scored, hideOverBudget)[0];
 
   return (
-    <main className={styles.app}>
-      <h1 className={styles.title}>Comparador de coches</h1>
-      <ViewSwitcher route={route} />
-      <a href={EXPLICACION_HASH} className={styles.explainLink}>
-        Cómo se calcula todo →
-      </a>
+    <AppShell route={route}>
+      <h1 className={shellStyles.viewTitle}>Clasificación</h1>
 
       {leader && <LeaderCard car={leader} />}
 
@@ -144,6 +139,6 @@ export function App({
           onRatingChange={setOverride}
         />
       </div>
-    </main>
+    </AppShell>
   );
 }
