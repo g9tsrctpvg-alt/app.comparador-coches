@@ -1,7 +1,7 @@
 # 0004 — Fundamento de estilos: tokens y primitivos
 
 - **Id:** technical/0004
-- **Estado:** implemented
+- **Estado:** verified
 - **Tipo:** technical
 - **Fecha:** 2026-08-06
 - **Specs relacionadas:** product/0009, product/0010, product/0011, technical/0001
@@ -191,12 +191,12 @@ no de la fontanería.
 - [x] `npm run format:check`, `npm run lint`, `npm run typecheck`,
       `npm run arch:check`, `npm run test:coverage` y `npm run build` pasan
       en local antes de dar la spec por implementada.
-- [ ] El sitio desplegado en GitHub Pages carga sus hojas de estilo sin 404
-      bajo el subpath del repositorio. Comprobado por construcción —el `href`
-      del `<link>` generado por `vite build` ya lleva el subpath del
-      repositorio, igual que hace hoy el `<script>` que `technical/0001`
-      verificó— pero pendiente de comprobación real contra la URL pública
-      tras el próximo despliegue, que esta sesión no dispara.
+- [x] El sitio desplegado en GitHub Pages carga sus hojas de estilo sin 404
+      bajo el subpath del repositorio. Comprobado contra la URL pública tras
+      el despliegue real (PR #57 a `main`,
+      `https://g9tsrctpvg-alt.github.io/app.comparador-coches/`): el
+      `href` del `<link>` generado por `vite build` lleva el subpath del
+      repositorio y responde `200`.
 
 ## Dependencias y supuestos
 

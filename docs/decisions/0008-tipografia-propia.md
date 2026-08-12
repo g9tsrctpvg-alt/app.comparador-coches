@@ -38,7 +38,7 @@ La aplicación sirve **una familia tipográfica variable propia, alojada en el
 repositorio**, para el papel `--font-sans`.
 
 1. **Formato y ubicación.** Un único `.woff2` variable en
-   `src/assets/fonts/inter-variable-latin.woff2` (73.020 bytes),
+   `src/assets/fonts/inter-variable-latin.woff2` (72.920 bytes),
    referenciado con `url()` **desde `src/styles/global.css`**. Así lo procesa
    el pipeline de Vite: le pone huella de contenido y reescribe la ruta
    respetando `base: '/app.comparador-coches/'`, que es justo lo que un
