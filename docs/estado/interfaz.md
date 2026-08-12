@@ -270,15 +270,21 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     completa (`scroll-snap-type: x mandatory` con `scroll-padding-left`
     reservando el ancho de las columnas fijas, para que la primera columna
     desplazable no quede tapada detrás de ellas).
-  - **Anclaje de eje en gesto táctil** (technical/0007): el envoltorio
-    desplaza filas y columnas a la vez en el mismo contenedor, así que un
-    gesto táctil pensado como «hacia abajo» casi nunca es puramente
-    vertical. Desde el primer movimiento significativo del gesto (más de
-    10px), se fija el eje que domina y el otro pasa a `overflow: hidden`
-    —como propiedad de `style` en JavaScript, no un token de diseño— hasta
-    `touchend`/`touchcancel`; el eje dominante conserva su desplazamiento
+  - **Anclaje de eje en gesto táctil** (technical/0007, mecanismo corregido
+    por technical/0008): el envoltorio desplaza filas y columnas a la vez en
+    el mismo contenedor, así que un gesto táctil pensado como «hacia abajo»
+    casi nunca es puramente vertical. Desde el primer movimiento
+    significativo del gesto (más de 10px), se fija el eje que domina y se
+    guarda la posición de scroll del eje contrario en ese instante; mientras
+    dure el gesto, cada evento de scroll reimpone esa posición guardada en
+    el eje contrario, sin desactivarlo nunca —ninguno de los dos ejes pierde
+    nunca su `overflow: auto`—. El eje dominante conserva su desplazamiento
     nativo, inercia incluida. Solo afecta al tacto: ratón y trackpad
-    (`wheel`) no cambian.
+    (`wheel`) no cambian. La primera versión desactivaba el eje contrario
+    con `overflow: hidden`; se corrigió porque, combinado con
+    `scroll-snap-type: x mandatory`, podía perder la posición horizontal al
+    reactivarse —el scroll horizontal se reseteaba al hacer scroll
+    vertical—.
   - El contenedor desplazable es alcanzable con teclado
     (`tabindex="0"`, `role="group"`).
   - La leyenda al pie explica la Δ, la dirección de cada magnitud, los
