@@ -9,7 +9,7 @@
 /* Móvil primero: una columna. A partir de `--bp-ancho` los controles y la
  * clasificación pasan a dos columnas (product/0010, requisito 7); el ancho
  * de página en sí lo resuelve `AppShell.module.css`, el mismo contenedor
- * para las cuatro vistas. */
+ * para las tres vistas. */
 .columns {
   display: flex;
   flex-direction: column;

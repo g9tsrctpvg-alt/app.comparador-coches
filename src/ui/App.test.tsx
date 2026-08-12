@@ -39,6 +39,13 @@ describe('App', () => {
     expect(markup).toContain('Ranking');
   });
 
+  it('renders exactly one <h1>, the view title, not the app name (technical/0005, requisito 4.2)', () => {
+    const markup = renderToStaticMarkup(<App load={() => threeCarFixture} />);
+    const headings = markup.match(/<h1[^>]*>/g) ?? [];
+    expect(headings).toHaveLength(1);
+    expect(markup).toMatch(/<h1[^>]*>Clasificación<\/h1>/);
+  });
+
   it('links from the comparator to the explanation page, by fragment', () => {
     const markup = renderToStaticMarkup(<App load={() => threeCarFixture} />);
     expect(markup).toContain(`href="${EXPLICACION_HASH}"`);

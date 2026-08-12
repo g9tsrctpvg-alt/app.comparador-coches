@@ -267,6 +267,8 @@ describe('FichaPage', () => {
     const markup = renderToStaticMarkup(
       <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
     );
+    const headings = markup.match(/<h1[^>]*>/g) ?? [];
+    expect(headings).toHaveLength(1);
     expect(markup).toMatch(/<h1[^>]*>Ficha<\/h1>/);
     expect(markup).not.toContain('aria-label="Vista"');
   });

@@ -636,7 +636,9 @@ export function FichaPage({ cars, references }: FichaPageProps) {
               onClick={() => dialogRef.current?.close()}
               aria-label="Cerrar la foto ampliada"
             >
-              <span aria-hidden="true">×</span>
+              <span aria-hidden="true" className={styles.dialogCloseGlyph}>
+                ×
+              </span>
             </button>
           </>
         )}

@@ -13,7 +13,7 @@
 
 /* El fondo de `:hover`/`:active` se extiende con `padding` y se compensa
  * con `margin` negativo (mismo recurso que `.modelInfo` en
- * `FichaCompletaPage.module.css`), para que el resaltado respire sin mover
+ * `FichaPage.module.css`), para que el resaltado respire sin mover
  * el resto de la fila de sitio. */
 .toggle {
   composes: unstyledButton from '../primitives.module.css';

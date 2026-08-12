@@ -89,7 +89,7 @@ describe('ExplicacionPage', () => {
   it('renders its own view title as the only heading (technical/0005, requisito 4.2)', () => {
     // La vuelta a la comparativa ya no es un enlace propio de esta página:
     // la marca de `AppHeader`, montada por `AppShell`, cumple ese papel una
-    // sola vez para las cuatro vistas.
+    // sola vez para las tres vistas.
     const markup = render();
     expect(markup).toMatch(/<h1[^>]*>Cómo se calcula todo<\/h1>/);
   });

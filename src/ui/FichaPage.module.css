@@ -525,26 +525,18 @@ th.blockHeader {
 }
 
 .dialogClose {
-  composes: mono from './primitives.module.css';
+  composes: buttonOutline from './primitives.module.css';
   position: absolute;
   top: var(--space-3);
   right: var(--space-3);
   width: var(--size-touch-min);
   height: var(--size-touch-min);
-  border: var(--size-border-hairline) solid var(--color-rule);
-  border-radius: var(--radius-sm);
-  background: var(--color-card);
-  cursor: pointer;
+}
+
+/* El glifo, no el botón, fija su tamaño (technical/0005, requisito 3.2): la
+ * base de `.button` ya trae `font-size: var(--font-size-xs)`, y una regla
+ * cruzada de fichero pierde siempre frente a la del primitivo compuesto —
+ * poner aquí `font-size` no ganaría. */
+.dialogCloseGlyph {
   font-size: var(--font-size-md);
-  transition: background-color var(--duration-fast) var(--ease-out);
-}
-
-.dialogClose:hover {
-  background: var(--color-card-raised);
-  border-color: var(--color-rule-strong);
-}
-
-.dialogClose:active {
-  background: var(--color-accent-tint-solid);
-  border-color: var(--color-accent);
 }
