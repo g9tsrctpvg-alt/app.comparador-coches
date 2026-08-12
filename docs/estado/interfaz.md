@@ -233,8 +233,10 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   `#/ficha-tecnica` y `#/ficha-completa`—) — una tabla **transpuesta**: cada
   columna es un modelo, cada fila una magnitud del dominio
   (`docs/estado/dominio.md`, sección «Ficha»). Barra de tres controles:
-  - **Campos** — `Esenciales` (las seis magnitudes de tamaño: longitud,
-    anchura, altura, altura libre al suelo, maletero, litros por m²) o
+  - **Campos** — `Esenciales` (seis magnitudes, product/0020: longitud,
+    anchura, altura libre al suelo, maletero, potencia, precio —tamaño,
+    mecánica y coste, en ese orden— reutilizando el mismo `FieldDef` que
+    `Completa` para potencia y precio, sin una segunda declaración) o
     `Completa` (las veinte, agrupadas en cinco bloques con cabecera
     propia). Arranca en `Esenciales`.
   - **Comparar contra** — un radio por columna, con `name` compartido

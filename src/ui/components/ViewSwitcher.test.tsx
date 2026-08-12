@@ -29,4 +29,31 @@ describe('ViewSwitcher (technical/0005, requisito 4.3)', () => {
       expect(currentMatches[0]![1]).toBe(activeLabel);
     },
   );
+
+  describe('mobile select (technical/0006, requisito 2)', () => {
+    it('offers the three destinations as options, with an accessible name', () => {
+      const markup = renderToStaticMarkup(<ViewSwitcher route="comparativa" />);
+      expect(markup).toMatch(/<select[^>]*aria-label="Vista"/);
+      const options = [
+        ...markup.matchAll(/<option[^>]*>([^<]+)<\/option>/g),
+      ].map((m) => m[1]);
+      expect(options).toEqual(['Clasificación', 'Ficha', 'Cómo se calcula']);
+    });
+
+    it.each([
+      ['comparativa', 'Clasificación'],
+      ['ficha', 'Ficha'],
+      ['explicacion', 'Cómo se calcula'],
+    ] as const)(
+      'marks only %s as the selected option',
+      (route, activeLabel) => {
+        const markup = renderToStaticMarkup(<ViewSwitcher route={route} />);
+        const selectedMatches = [
+          ...markup.matchAll(/<option[^>]*selected=""[^>]*>([^<]+)<\/option>/g),
+        ];
+        expect(selectedMatches).toHaveLength(1);
+        expect(selectedMatches[0]![1]).toBe(activeLabel);
+      },
+    );
+  });
 });

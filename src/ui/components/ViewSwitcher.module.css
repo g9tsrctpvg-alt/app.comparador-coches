@@ -1,36 +1,76 @@
-/* Sin `flex-wrap` a propósito: el contenedor de `AppHeader` ya resuelve un
- * ancho insuficiente con su propio `overflow-x: auto` (technical/0005,
- * requisito 4.4) — envolver aquí además rompería esa única barra fija. */
+/* Dos marcados, uno visible cada vez, sin lógica de estado propia
+ * (technical/0006, requisito 3): por encima de `--bp-columna` se ve el
+ * grupo de pastillas; por debajo, el `<select>`. El mismo patrón que ya usa
+ * `FichaPage.module.css` para `.featureHeader`. */
 .switcher {
-  display: flex;
-  gap: var(--space-4);
+  display: none;
+  gap: var(--space-1);
   flex-shrink: 0;
+  padding: var(--space-1);
+  border: var(--size-border-hairline) solid var(--color-rule);
+  border-radius: var(--radius-md);
 }
 
+@media (min-width: 37rem) {
+  .switcher {
+    display: flex;
+  }
+}
+
+/* Pastilla (technical/0006, requisito 1): el destino activo lleva fondo de
+ * acento; los demás son texto plano que se resalta al pasar el ratón. */
 .link,
 .active {
   composes: mono from '../primitives.module.css';
   display: inline-flex;
   align-items: center;
   min-height: var(--size-touch-min);
-  padding: 0 var(--space-1);
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-sm);
   color: var(--color-mute);
-  border-bottom: calc(var(--size-border-hairline) * 2) solid transparent;
   transition:
     color var(--duration-fast) var(--ease-out),
-    border-color var(--duration-fast) var(--ease-out);
+    background-color var(--duration-fast) var(--ease-out);
 }
 
 .link:hover {
   color: var(--color-ink);
+  background: var(--color-card-raised);
 }
 
 .link:active {
   color: var(--color-accent);
+  background: var(--color-accent-tint);
 }
 
 .active {
   color: var(--color-accent);
   font-weight: var(--font-weight-semibold);
-  border-bottom-color: var(--color-accent);
+  background: var(--color-accent-tint);
+}
+
+/* El `<select>` de móvil (technical/0006, requisito 2): mismo tratamiento
+ * visual que los controles de la barra de herramientas de la ficha
+ * (`FichaPage.module.css:.toolbarSelect`), sin componerlo desde aquí — vive
+ * en otro componente y `AppHeader` no depende de `FichaPage`. */
+.mobileSelect {
+  composes: mono from '../primitives.module.css';
+  display: block;
+  min-height: var(--size-touch-min);
+  padding: var(--space-2) var(--space-3);
+  color: var(--color-ink);
+  background: var(--color-card);
+  border: var(--size-border-hairline) solid var(--color-rule);
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+.mobileSelect:hover {
+  border-color: var(--color-rule-strong);
+}
+
+@media (min-width: 37rem) {
+  .mobileSelect {
+    display: none;
+  }
 }

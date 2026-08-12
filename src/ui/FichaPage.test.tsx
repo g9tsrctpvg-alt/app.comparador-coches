@@ -88,13 +88,22 @@ describe('FichaPage', () => {
     expect(markup).toContain('Referencia');
   });
 
-  describe('field set (product/0018, requisito 4)', () => {
-    it('starts on "Esenciales": six rows, no block headers', () => {
+  describe('field set (product/0018, requisito 4; product/0020, requisito 1)', () => {
+    it('starts on "Esenciales": six rows, no block headers, in the fixed order', () => {
       const markup = renderToStaticMarkup(
         <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
       );
-      const dataRows = markup.match(/<th scope="row"/g) ?? [];
-      expect(dataRows).toHaveLength(6);
+      const rowLabels = [
+        ...markup.matchAll(/<th scope="row"[^>]*>([^<]+)<\/th>/g),
+      ].map((m) => m[1]);
+      expect(rowLabels).toEqual([
+        'Longitud',
+        'Anchura',
+        'Altura libre al suelo',
+        'Maletero',
+        'Potencia',
+        'Precio',
+      ]);
       for (const label of [
         'Tamaño y espacio',
         'Mecánica y prestaciones',
@@ -104,10 +113,6 @@ describe('FichaPage', () => {
       ]) {
         expect(markup).not.toContain(label);
       }
-      // Presente en Esenciales.
-      expect(markup).toContain('Litros por m²');
-      // Solo en Completa.
-      expect(markup).not.toContain('Batalla');
     });
 
     it('offers "Esenciales" and "Completa" as the only two options, Esenciales selected', () => {
