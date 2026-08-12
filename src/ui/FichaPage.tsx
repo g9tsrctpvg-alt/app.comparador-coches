@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useRef, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import type { Car } from '../domain/car';
 import type { Reference } from '../domain/reference';
 import {
@@ -352,6 +352,74 @@ function ModelHeaderCell({
   );
 }
 
+/** Por debajo de este movimiento acumulado, un gesto táctil no fija eje
+ * todavía (technical/0007): es el temblor natural del dedo al posarse, no
+ * una intención de desplazamiento. */
+const AXIS_LOCK_THRESHOLD_PX = 10;
+
+/**
+ * Ancla un gesto táctil al eje que domina su primer movimiento
+ * significativo (technical/0007, requisitos 2-4): `.tableWrapper` desplaza
+ * en los dos ejes a la vez —columnas de modelo con anclaje de scroll,
+ * filas cuando la tabla no cabe entera—, y un gesto pensado como «hacia
+ * abajo» casi nunca es puramente vertical. Sin este bloqueo, el componente
+ * horizontal mínimo de ese gesto podía bastar para saltar de una columna a
+ * la siguiente.
+ *
+ * El eje que domina conserva su `overflow: auto` de siempre —el navegador
+ * seguirá resolviendo su inercia él solo, esto no reimplementa el
+ * desplazamiento a mano—; solo el otro eje pasa a `overflow: hidden`,
+ * como propiedad de `style` en JavaScript, no como literal de diseño en
+ * CSS. `touchend`/`touchcancel` devuelven los dos ejes a su `overflow`
+ * normal, quitando el `style` en línea.
+ */
+function attachScrollAxisLock(el: HTMLDivElement): () => void {
+  let startX = 0;
+  let startY = 0;
+  let lockedAxis: 'x' | 'y' | null = null;
+
+  function unlock() {
+    lockedAxis = null;
+    el.style.overflowX = '';
+    el.style.overflowY = '';
+  }
+
+  function onTouchStart(event: TouchEvent) {
+    const touch = event.touches[0];
+    if (touch === undefined) return;
+    startX = touch.clientX;
+    startY = touch.clientY;
+    unlock();
+  }
+
+  function onTouchMove(event: TouchEvent) {
+    if (lockedAxis !== null) return;
+    const touch = event.touches[0];
+    if (touch === undefined) return;
+    const dx = Math.abs(touch.clientX - startX);
+    const dy = Math.abs(touch.clientY - startY);
+    if (Math.max(dx, dy) < AXIS_LOCK_THRESHOLD_PX) return;
+    lockedAxis = dx > dy ? 'x' : 'y';
+    if (lockedAxis === 'x') {
+      el.style.overflowY = 'hidden';
+    } else {
+      el.style.overflowX = 'hidden';
+    }
+  }
+
+  el.addEventListener('touchstart', onTouchStart, { passive: true });
+  el.addEventListener('touchmove', onTouchMove, { passive: true });
+  el.addEventListener('touchend', unlock, { passive: true });
+  el.addEventListener('touchcancel', unlock, { passive: true });
+
+  return () => {
+    el.removeEventListener('touchstart', onTouchStart);
+    el.removeEventListener('touchmove', onTouchMove);
+    el.removeEventListener('touchend', unlock);
+    el.removeEventListener('touchcancel', unlock);
+  };
+}
+
 /**
  * La ficha (product/0018): una columna por modelo, una fila por
  * característica, con la columna del modelo de comparación fija a la
@@ -380,6 +448,12 @@ export function FichaPage({ cars, references }: FichaPageProps) {
 
   const dialogRef = useRef<HTMLDialogElement>(null);
   const tableWrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = tableWrapperRef.current;
+    if (el === null) return;
+    return attachScrollAxisLock(el);
+  }, []);
 
   const entitiesWithDelta = useMemo(
     () => withComparison(baseEntities, comparisonId),
