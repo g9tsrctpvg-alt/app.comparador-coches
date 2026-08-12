@@ -1,18 +1,18 @@
 # 0018 — Una sola ficha, con diferencias contra el modelo elegido
 
 - **Id:** product/0018
-- **Estado:** implemented
+- **Estado:** consolidated
 - **Tipo:** product
 - **Fecha:** 2026-08-08
 - **Specs relacionadas:** product/0013, product/0014, product/0016, technical/0005
 - **ADRs relacionados:** 0006, 0007
 - **Doc de estado:** `docs/estado/interfaz.md`, `docs/estado/dominio.md`
 
-> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
-> implementado: su sección *Contexto* retrata el sistema **anterior** al
-> cambio y hoy no es cierta. **No es referencia del estado actual** — para
-> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
-> **criterios de aceptación**, como registro de verificación.
+> ⚠️ **Spec consolidada (2026-08-12).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/interfaz.md` y `docs/estado/dominio.md`. Vigentes aquí solo
+> los **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -295,11 +295,14 @@ existir; su contenido sobrevive dentro de esta ficha, y por eso los requisitos
       `<label>`, cada radio de «Comparar contra» su `aria-label`
       («Comparar contra Giulietta», «No comparar contra ningún modelo»…), y
       los tres se alcanzan con tabulador.
-- [ ] El sitio desplegado en GitHub Pages sirve `#/ficha` y los dos alias.
-      Mismo motivo que deja sin marcar el criterio equivalente de
-      `technical/0005`: `docs/estado/despliegue.md` fija que `deploy` solo
-      corre en `push` a `main`, nunca en un PR, así que esta sesión no puede
-      dispararlo ni comprobarlo contra la URL pública.
+- [x] El sitio desplegado en GitHub Pages sirve `#/ficha` y los dos alias.
+      El fragmento de una ruta con `#` nunca llega al servidor —lo resuelve
+      `routeFromHash` en el cliente—, así que lo único que el despliegue
+      real añade sobre lo ya comprobado en local es que se sirvan los
+      mismos bytes de JS: confirmado (`index-BZgluP2g.js` en la URL pública
+      es idéntico, por hash, al que produce `npm run build`), y esos bytes
+      exactos ya se verificaron a mano con Playwright resolviendo las tres
+      rutas a la misma vista.
 
 ## Dependencias y supuestos
 

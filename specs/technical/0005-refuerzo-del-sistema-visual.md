@@ -1,18 +1,18 @@
 # 0005 — Refuerzo del sistema visual: jerarquía, estados y shell
 
 - **Id:** technical/0005
-- **Estado:** implemented
+- **Estado:** consolidated
 - **Tipo:** technical
 - **Fecha:** 2026-08-08
 - **Specs relacionadas:** technical/0004, product/0009, product/0010, product/0018
 - **ADRs relacionados:** 0006, 0008
 - **Doc de estado:** `docs/estado/interfaz.md`
 
-> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
-> implementado: su sección *Contexto* retrata el sistema **anterior** al
-> cambio y hoy no es cierta. **No es referencia del estado actual** — para
-> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
-> **criterios de aceptación**, como registro de verificación.
+> ⚠️ **Spec consolidada (2026-08-12).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/interfaz.md`. Vigentes aquí solo los **criterios de
+> aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -292,16 +292,16 @@ de GitHub Pages, con la fuente del ADR 0008 resuelta sin 404.
 - [x] Con `prefers-reduced-motion: reduce` forzado, ninguna de las
       transiciones nuevas es perceptible (medido: duración efectiva de
       `1e-05s`, imperceptible, sobre todos los elementos con transición).
-- [ ] El sitio desplegado en GitHub Pages carga la fuente y las hojas de
-      estilo sin 404 bajo el subpath del repositorio. Comprobado por
-      construcción —el `href`/`url()` que genera `vite build` ya lleva el
-      subpath del repositorio, igual que technical/0004 verificó para sus
-      hojas de estilo— pero pendiente de comprobación real contra la URL
-      pública: `docs/estado/despliegue.md` fija que el paso `deploy` de
-      `.github/workflows/ci.yml` solo corre en `push` a `main`, nunca en un
-      PR, así que ninguna sesión que trabaje en una rama puede dispararlo.
-      Mismo criterio, mismo motivo y misma redacción que deja sin marcar
-      `technical/0004`.
+- [x] El sitio desplegado en GitHub Pages carga la fuente y las hojas de
+      estilo sin 404 bajo el subpath del repositorio. Comprobado contra la
+      URL pública tras el merge de PR #57 a `main`
+      (`https://g9tsrctpvg-alt.github.io/app.comparador-coches/`): la
+      página sirve `index.html` con los mismos hashes que produce
+      `npm run build` en local; `assets/index-*.js` y `assets/index-*.css`
+      responden `200`; la hoja de estilo declara
+      `url(/app.comparador-coches/assets/inter-variable-latin-*.woff2)`, y
+      esa fuente responde `200` con **72.920 bytes**, idéntica byte a byte
+      al fichero del repositorio.
 
 ## Dependencias y supuestos
 

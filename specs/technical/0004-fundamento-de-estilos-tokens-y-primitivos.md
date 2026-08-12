@@ -1,18 +1,18 @@
 # 0004 — Fundamento de estilos: tokens y primitivos
 
 - **Id:** technical/0004
-- **Estado:** implemented
+- **Estado:** consolidated
 - **Tipo:** technical
 - **Fecha:** 2026-08-06
 - **Specs relacionadas:** product/0009, product/0010, product/0011, technical/0001
 - **ADRs relacionados:** 0006
 - **Doc de estado:** `docs/estado/interfaz.md`, `docs/estado/arquitectura.md`
 
-> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
-> implementado: su sección *Contexto* retrata el sistema **anterior** al
-> cambio y hoy no es cierta. **No es referencia del estado actual** — para
-> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
-> **criterios de aceptación**, como registro de verificación.
+> ⚠️ **Spec consolidada (2026-08-12).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/interfaz.md` y `docs/estado/arquitectura.md`. Vigentes aquí
+> solo los **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -191,12 +191,12 @@ no de la fontanería.
 - [x] `npm run format:check`, `npm run lint`, `npm run typecheck`,
       `npm run arch:check`, `npm run test:coverage` y `npm run build` pasan
       en local antes de dar la spec por implementada.
-- [ ] El sitio desplegado en GitHub Pages carga sus hojas de estilo sin 404
-      bajo el subpath del repositorio. Comprobado por construcción —el `href`
-      del `<link>` generado por `vite build` ya lleva el subpath del
-      repositorio, igual que hace hoy el `<script>` que `technical/0001`
-      verificó— pero pendiente de comprobación real contra la URL pública
-      tras el próximo despliegue, que esta sesión no dispara.
+- [x] El sitio desplegado en GitHub Pages carga sus hojas de estilo sin 404
+      bajo el subpath del repositorio. Comprobado contra la URL pública tras
+      el despliegue real (PR #57 a `main`,
+      `https://g9tsrctpvg-alt.github.io/app.comparador-coches/`): el
+      `href` del `<link>` generado por `vite build` lleva el subpath del
+      repositorio y responde `200`.
 
 ## Dependencias y supuestos
 

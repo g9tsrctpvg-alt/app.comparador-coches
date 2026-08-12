@@ -415,9 +415,14 @@ Una tabla de doce columnas en 320px de ancho no cabe de ninguna manera.
       (test de render).
 - [x] Una vista sin foto renderiza el hueco rotulado y **ninguna** etiqueta
       `img` (test de render).
-- [ ] El hueco mide lo mismo con foto y sin ella, en los tres anchos de
-      `product/0010` (revisión visual: el CSS no lo comprueba la CI. Pendiente
-      de revisar en navegador).
+- [x] El hueco mide lo mismo con foto y sin ella, en los tres anchos de
+      `product/0010`. Verificado con Playwright a 320/592/960px: `.photo` y
+      `.photoPlaceholder` declaran el mismo `aspect-ratio: 4 / 3`
+      (`FichaPage.module.css`), así que la altura medida coincide para
+      cualquier columna del mismo ancho, con o sin foto —la variación
+      observada entre columnas distintas es proporcional al ancho de cada
+      una (los nombres de modelo largos ensanchan su columna, y con ella su
+      hueco de foto, por igual con foto y sin ella—.
 - [x] `scoreCatalog.snapshot.test.ts` pasa **sin tocarlo** tras cargar el
       catálogo con fotos.
 - [x] Los once candidatos y la Giulietta tienen las cinco vistas, o las que
@@ -443,19 +448,29 @@ Una tabla de doce columnas en 320px de ancho no cabe de ninguna manera.
       > laterales del Kona Eléctrico y del Civic no aparecieron.
 - [x] `npm run check:photos` responde 2xx en todas las URLs declaradas el día
       de la verificación. **49/49 en verde** el 2026-08-07.
-- [ ] La vista nueva existe en `#/ficha-completa`, está en el conmutador y
+- [x] La vista nueva existe en `#/ficha-completa`, está en el conmutador y
       recargar esa dirección la abre (no da 404 bajo el subpath de Pages).
-      Lo primero, hecho y probado; lo segundo exige el despliegue real, igual
-      que la misma deuda abierta para `product/0011` y `product/0013`.
+      **Desfasado por `product/0018`, que funde esta vista y
+      `#/ficha-tecnica` en `#/ficha`:** `#/ficha-completa` sigue existiendo,
+      pero como alias, ya no como destino propio del conmutador (que hoy
+      ofrece «Ficha», no «Ficha completa»). El fragmento nunca llega al
+      servidor —lo resuelve `routeFromHash` en el cliente—, así que no hay
+      404 posible por construcción; confirmado contra la URL pública tras
+      el despliegue real (PR #57 a `main`): sirve los mismos bytes de JS
+      que ya se verificaron a mano resolviendo este alias a la ficha
+      unificada.
 - [x] La tabla tiene una columna por candidato más la de referencia, y una
       fila por cada una de las dieciocho magnitudes, agrupadas por bloque
       (test de render: se cuentan filas y columnas).
-- [ ] En escritorio (≥`--bp-columna`), al desplazar en horizontal, la columna
+- [x] En escritorio (≥`--bp-columna`), al desplazar en horizontal, la columna
       de características y la del modelo fijado permanecen visibles; por
       debajo de `--bp-columna` la columna de características no existe pero
       la del modelo fijado sigue siendo visible (requisito 9, segunda
-      corrección 2026-08-07) (revisión visual en los tres anchos. Pendiente
-      de revisar en navegador).
+      corrección 2026-08-07). Verificado con Playwright, desplazando de
+      verdad el contenedor (no solo mirando el CSS): a 960px, la columna de
+      características (`display: table-cell`) y la fijada quedan dentro del
+      área visible tras desplazar 400px; a 500px, la de características
+      pasa a `display: none` y la fijada se mantiene visible.
 - [x] Cada celda de dato lleva su propio rótulo de característica, oculto por
       CSS en escritorio y visible por debajo de `--bp-columna` (requisito
       9.1, test de render: se cuenta un rótulo por columna en una magnitud;
@@ -475,17 +490,52 @@ Una tabla de doce columnas en 320px de ancho no cabe de ninguna manera.
 - [ ] A 320px se leen enteras **dos** columnas de modelo completas —la fijada
       y una desplazándose al lado—, sin columna de características aparte y
       sin que ninguna cifra se parta (requisito 9.1, segunda corrección
-      2026-08-07) (revisión visual. Pendiente de revisar en navegador).
+      2026-08-07).
+      **No se cumple tal como está escrito, y no es un defecto nuevo.**
+      Medido con Playwright: el envoltorio de la tabla mide 288px de ancho
+      útil a 320px de viewport (320 menos el relleno de página); la columna
+      fijada y cualquier columna de modelo miden `11rem` = 176px cada una
+      —el ancho que fija requisito 9.1 y que esta revisión confirma que
+      sigue así—. `176,75 + 176 = 352,75px` no cabe en 288px: **es
+      geométricamente imposible** que ambas se lean enteras a la vez con
+      estos anchos, con independencia del punto de desplazamiento. No hay
+      literal de diseño de por medio —los dos anchos son los que el
+      requisito 9.1 fijó a propósito—, así que no es un fallo de
+      implementación descuidada; es que nadie había hecho antes esta cuenta
+      con números reales al dejar el criterio pendiente de revisión visual.
+      **Encontrado un defecto real de paso, y corregido:** sin
+      `scroll-padding-left`, el punto de anclaje de la primera columna
+      desplazable se calculaba contra el borde real del contenedor, no
+      contra el borde visual que deja la columna fijada encima —así que esa
+      primera columna quedaba **completamente tapada** por la fijada en el
+      reposo natural (0% visible, confirmado por medición de rectángulos
+      superpuestos), no solo parcialmente. Añadir
+      `scroll-padding-left: var(--size-ficha-model-min)` (y, en escritorio,
+      sumando también el ancho de la columna de características) hace que
+      el anclaje reserve ese hueco: la columna adyacente pasa a mostrarse
+      hasta un ~63% de su ancho —el máximo que permite el espacio
+      sobrante, 111px de sus 176px—, nunca 0%. Sigue sin ser el 100% que
+      pide el texto literal del criterio, pero ya no oculta una columna
+      entera por accidente.
+      **Se deja sin marcar a propósito**: el 100% simultáneo exigiría
+      angostar la columna de modelo por debajo de `11rem` a este ancho, o
+      ampliar el contenido disponible reduciendo el relleno de página —un
+      cambio de diseño real, fuera del alcance de una verificación—.
+      Registrado como deuda en `docs/roadmap.md`.
 - [x] El selector cambia la foto de **todas** las columnas a la vez, y
       arranca en lateral (test de render sobre el estado inicial; el cambio
       es correcto por construcción — todas las cabeceras leen el mismo
       `photoView`).
-- [ ] La foto se abre ampliada con teclado, se cierra con `Escape` y el foco
-      vuelve al control que la abrió (revisión manual: los tests de `ui/`
-      usan `renderToStaticMarkup` y no hacen clic — deuda ya registrada).
-- [ ] La página no se desplaza en horizontal a 320, 768 ni 1440px; el
-      desplazamiento ocurre dentro del contenedor de la tabla (revisión
-      visual. Pendiente de revisar en navegador).
+- [x] La foto se abre ampliada con teclado, se cierra con `Escape` y el foco
+      vuelve al control que la abrió. Verificado con Playwright, solo con
+      teclado (`Tab` hasta el botón de foto, `Enter` abre — el foco pasa al
+      `<dialog>` nativo—, `Escape` cierra y el foco vuelve exactamente al
+      botón que lo abrió).
+- [x] La página no se desplaza en horizontal a 320, 768 ni 1440px; el
+      desplazamiento ocurre dentro del contenedor de la tabla. Verificado
+      con Playwright sobre el build de producción, en las tres vistas
+      (`scrollWidth` del documento igual a `clientWidth` en los tres
+      anchos).
 - [x] La configuración compartible de `product/0012` no cambia de forma: el
       enlace no lleva qué foto está elegida (test de `configUrl`, sin tocar:
       la foto y el modelo fijado viven en estado local de la página, no en

@@ -98,9 +98,17 @@
  * tabla se fija contra ÉL, no contra la página. Sin un alto acotado, ese
  * `sticky` no tiene contra qué desplazarse: el envoltorio crecería con el
  * contenido y nunca llegaría a haber nada que «bajar» dentro de él. */
+/* `scroll-padding-left` reserva, en el cálculo del anclaje, el ancho de las
+ * columnas fijas (verificación manual, technical/0005): sin esto, el punto
+ * de anclaje de la primera columna desplazable se calcula contra el borde
+ * real del contenedor de scroll, no contra el borde visual que dejan las
+ * columnas `sticky` encima — así que esa primera columna quedaba tapada por
+ * la fijada (y, en escritorio, también por la de características) en el
+ * reposo natural del desplazamiento, incumpliendo el requisito 9.2. */
 .tableWrapper {
   composes: tableShell from './primitives.module.css';
   scroll-snap-type: x mandatory;
+  scroll-padding-left: var(--size-ficha-model-min);
   max-height: var(--size-table-max-height);
   overflow-y: auto;
 }
@@ -331,6 +339,15 @@ th.blockHeader {
   .pinnedHeader,
   .pinnedCell {
     left: var(--size-ficha-feature-column);
+  }
+
+  /* El anclaje de arriba reserva solo el ancho de la fijada; en escritorio
+   * hay que sumarle el de la columna de características, que también es
+   * `sticky` aquí. */
+  .tableWrapper {
+    scroll-padding-left: calc(
+      var(--size-ficha-feature-column) + var(--size-ficha-model-desktop)
+    );
   }
 
   .modelHeader,

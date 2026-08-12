@@ -1,18 +1,18 @@
 # 0011 — La página que explica cómo se calcula todo
 
 - **Id:** product/0011
-- **Estado:** implemented
+- **Estado:** consolidated
 - **Tipo:** product
 - **Fecha:** 2026-08-06
 - **Specs relacionadas:** product/0001…0007, product/0009, technical/0004
 - **ADRs relacionados:** 0004, 0006, 0007
 - **Doc de estado:** `docs/estado/interfaz.md`
 
-> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
-> implementado: su sección *Contexto* retrata el sistema **anterior** al
-> cambio y hoy no es cierta. **No es referencia del estado actual** — para
-> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
-> **criterios de aceptación**, como registro de verificación.
+> ⚠️ **Spec consolidada (2026-08-12).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/interfaz.md`. Vigentes aquí solo los **criterios de
+> aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -172,8 +172,11 @@ aplicación, sin abrir el repositorio y sin tener un coche delante.
       posible por construcción; comprobado el mecanismo equivalente contra
       `npm run preview` (otro servidor de estáticos ciego al fragmento):
       cargar directamente `.../#/como-se-calcula` abre la explicación.
-      Pendiente de la comprobación final contra la URL pública, igual que
-      `technical/0004`, tras el próximo despliegue.
+      **Comprobación final contra la URL pública, hecha** tras el
+      despliegue real (PR #57 a `main`,
+      `https://g9tsrctpvg-alt.github.io/app.comparador-coches/`): sirve los
+      mismos bytes de JS que `npm run build` produce en local, ya
+      verificados a mano resolviendo este fragmento.
 - [x] `package.json` no tiene ninguna dependencia nueva respecto a la rama
       base. `git diff main -- package.json package-lock.json` no muestra
       cambios.
