@@ -367,21 +367,23 @@ const AXIS_LOCK_THRESHOLD_PX = 10;
  * la siguiente.
  *
  * El eje que domina conserva su `overflow: auto` de siempre —el navegador
- * seguirá resolviendo su inercia él solo, esto no reimplementa el
- * desplazamiento a mano—; solo el otro eje pasa a `overflow: hidden`,
- * como propiedad de `style` en JavaScript, no como literal de diseño en
- * CSS. `touchend`/`touchcancel` devuelven los dos ejes a su `overflow`
- * normal, quitando el `style` en línea.
+ * sigue resolviendo su inercia él solo—; el eje contrario nunca se
+ * desactiva (technical/0008: desactivarlo con `overflow: hidden` es lo que
+ * reseteaba el scroll horizontal al reactivarse, por su interacción con
+ * `scroll-snap-type: x mandatory`). En vez de eso, se guarda la posición
+ * del eje contrario al fijarse el gesto, y un listener de `scroll` la
+ * reimpone en cada evento mientras dure — el eje bloqueado se queda quieto
+ * porque se corrige a mano, no porque deje de ser desplazable.
  */
 function attachScrollAxisLock(el: HTMLDivElement): () => void {
   let startX = 0;
   let startY = 0;
   let lockedAxis: 'x' | 'y' | null = null;
+  let lockedScrollLeft = 0;
+  let lockedScrollTop = 0;
 
   function unlock() {
     lockedAxis = null;
-    el.style.overflowX = '';
-    el.style.overflowY = '';
   }
 
   function onTouchStart(event: TouchEvent) {
@@ -400,10 +402,15 @@ function attachScrollAxisLock(el: HTMLDivElement): () => void {
     const dy = Math.abs(touch.clientY - startY);
     if (Math.max(dx, dy) < AXIS_LOCK_THRESHOLD_PX) return;
     lockedAxis = dx > dy ? 'x' : 'y';
-    if (lockedAxis === 'x') {
-      el.style.overflowY = 'hidden';
-    } else {
-      el.style.overflowX = 'hidden';
+    lockedScrollLeft = el.scrollLeft;
+    lockedScrollTop = el.scrollTop;
+  }
+
+  function onScroll() {
+    if (lockedAxis === 'y') {
+      el.scrollLeft = lockedScrollLeft;
+    } else if (lockedAxis === 'x') {
+      el.scrollTop = lockedScrollTop;
     }
   }
 
@@ -411,12 +418,14 @@ function attachScrollAxisLock(el: HTMLDivElement): () => void {
   el.addEventListener('touchmove', onTouchMove, { passive: true });
   el.addEventListener('touchend', unlock, { passive: true });
   el.addEventListener('touchcancel', unlock, { passive: true });
+  el.addEventListener('scroll', onScroll, { passive: true });
 
   return () => {
     el.removeEventListener('touchstart', onTouchStart);
     el.removeEventListener('touchmove', onTouchMove);
     el.removeEventListener('touchend', unlock);
     el.removeEventListener('touchcancel', unlock);
+    el.removeEventListener('scroll', onScroll);
   };
 }
 
