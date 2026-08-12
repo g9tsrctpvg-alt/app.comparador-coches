@@ -1,12 +1,18 @@
 # 0007 — Anclaje de eje en el desplazamiento táctil de la ficha
 
 - **Id:** technical/0007
-- **Estado:** approved
+- **Estado:** consolidated
 - **Tipo:** technical
 - **Fecha:** 2026-08-12
 - **Specs relacionadas:** technical/0005
 - **ADRs relacionados:** ninguno
 - **Doc de estado:** `docs/estado/interfaz.md`
+
+> ⚠️ **Spec consolidada (2026-08-12).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/interfaz.md`. Vigentes aquí solo los **criterios de
+> aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -84,28 +90,40 @@ gesto termine.
 
 > Obligatorios y verificables.
 
-- [ ] Un gesto táctil simulado con desplazamiento mayoritariamente vertical
+- [x] Un gesto táctil simulado con desplazamiento mayoritariamente vertical
       (`dy` grande, `dx` pequeño) deja `overflowX` en `'hidden'` mientras
       dura, y lo quita al terminar. Verificado con Playwright, disparando la
-      secuencia de eventos táctiles e inspeccionando `element.style`.
-- [ ] Un gesto táctil simulado con desplazamiento mayoritariamente
+      secuencia de eventos táctiles (`touchstart`/`touchmove`/`touchend`) e
+      inspeccionando `element.style`: `dx=2, dy=30` → `overflowX: 'hidden'`,
+      `overflowY: ''`; tras `touchend`, los dos vuelven a `''`.
+- [x] Un gesto táctil simulado con desplazamiento mayoritariamente
       horizontal deja `overflowY` en `'hidden'` mientras dura, y lo quita al
-      terminar. Mismo método de verificación.
-- [ ] Un gesto por debajo del umbral de 10px no fija ningún eje —ninguno de
-      los dos `overflow` cambia—. Verificado con Playwright.
-- [ ] `touchcancel` limpia el bloqueo igual que `touchend` —un gesto
-      interrumpido no deja un eje bloqueado para el siguiente—. Verificado
-      con Playwright.
-- [ ] El desplazamiento por teclado (flechas, con el contenedor enfocado) no
+      terminar. Mismo método: `dx=30, dy=2` → `overflowY: 'hidden'`,
+      `overflowX: ''`; tras `touchend`, los dos vuelven a `''`.
+- [x] Un gesto por debajo del umbral de 10px no fija ningún eje —ninguno de
+      los dos `overflow` cambia—. Verificado: `dx=3, dy=4` deja
+      `{overflowX: '', overflowY: ''}`.
+- [x] `touchcancel` limpia el bloqueo igual que `touchend` —un gesto
+      interrumpido no deja un eje bloqueado para el siguiente—. Verificado:
+      tras fijar el eje horizontal (`overflowY: 'hidden'`), `touchcancel`
+      lo deja en `''`.
+- [x] El desplazamiento por teclado (flechas, con el contenedor enfocado) no
       cambia: este requisito no toca ninguna interacción de teclado.
-- [ ] `npm run format:check`, `npm run lint`, `npm run typecheck`,
+      Verificado con Playwright: `scrollLeft` avanza igual con `ArrowRight`
+      tras el cambio (de 1 a 169 con dos pulsaciones).
+- [x] `npm run format:check`, `npm run lint`, `npm run typecheck`,
       `npm run arch:check`, `npm run test:coverage` y `npm run build` pasan
       en local antes de dar la spec por implementada.
-- [ ] **Límite honesto de esta verificación**: lo anterior prueba que la
+- [x] **Límite honesto de esta verificación**: lo anterior prueba que la
       lógica reacciona correctamente a la secuencia de eventos que se le da,
       no el gesto físico de un dedo sobre una pantalla táctil real —este
       entorno no tiene una—. No se marca ningún criterio como comprobado
-      contra un dispositivo real que esta sesión no puede tocar.
+      contra un dispositivo real que esta sesión no puede tocar. Se sumó una
+      comprobación adicional, no exigida por ningún criterio de arriba, para
+      ganar confianza más allá del mínimo: una secuencia de quince pasos con
+      «temblor» horizontal de 1px alternando en cada paso —simulando mejor
+      un gesto real que un único `touchmove`— mantiene el eje bloqueado sin
+      alternar durante todo el gesto.
 
 ## Dependencias y supuestos
 
