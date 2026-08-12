@@ -1,7 +1,7 @@
 # 0007 — Anclaje de eje en el desplazamiento táctil de la ficha
 
 - **Id:** technical/0007
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** technical
 - **Fecha:** 2026-08-12
 - **Specs relacionadas:** technical/0005
