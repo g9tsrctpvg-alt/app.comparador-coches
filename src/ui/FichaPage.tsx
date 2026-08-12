@@ -139,10 +139,15 @@ const COMPLETE_BLOCKS: BlockDef[] = [
 ];
 
 /**
- * El conjunto «Esenciales» (product/0018, requisito 4.1): las seis
- * magnitudes de la extinta ficha técnica —longitud, anchura, altura, altura
- * libre al suelo, maletero y litros por m²—, sin cabecera de bloque porque
- * aquí solo hay un grupo.
+ * El conjunto «Esenciales» (product/0020, requisito 1): tamaño —longitud,
+ * anchura, altura libre al suelo, maletero—, potencia y precio, sin
+ * cabecera de bloque porque aquí solo hay un grupo. Altura y litros por m²
+ * —las dos de la extinta ficha técnica que no sobrevivieron aquí— siguen en
+ * «Completa»: la primera no tiene dirección declarada
+ * (`docs/estado/dominio.md`, tabla de polaridad: `neutral`) y la segunda es
+ * una métrica derivada, no una medida directa. Potencia y precio reutilizan
+ * tal cual el `FieldDef` de «Completa» (requisito 3): mismo `key`, misma
+ * etiqueta, mismo formato.
  */
 const ESSENTIAL_BLOCKS: BlockDef[] = [
   {
@@ -151,19 +156,14 @@ const ESSENTIAL_BLOCKS: BlockDef[] = [
     fields: [
       { key: 'lengthMm', label: 'Longitud', unitFallback: 'mm' },
       { key: 'widthMm', label: 'Anchura', unitFallback: 'mm' },
-      { key: 'heightMm', label: 'Altura', unitFallback: 'mm' },
       {
         key: 'groundClearanceMm',
         label: 'Altura libre al suelo',
         unitFallback: 'mm',
       },
       { key: 'trunkLiters', label: 'Maletero', unitFallback: 'L' },
-      {
-        key: 'litersPerSquareMeter',
-        label: 'Litros por m²',
-        unitFallback: 'L/m²',
-        decimals: 1,
-      },
+      { key: 'powerCv', label: 'Potencia', unitFallback: 'CV' },
+      { key: 'priceEur', label: 'Precio', isEuro: true },
     ],
   },
 ];
