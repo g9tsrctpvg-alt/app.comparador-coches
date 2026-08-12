@@ -1,7 +1,7 @@
 # 0008 — El anclaje de eje no desactiva el scroll del eje bloqueado
 
 - **Id:** technical/0008
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** technical
 - **Fecha:** 2026-08-12
 - **Specs relacionadas:** technical/0007
