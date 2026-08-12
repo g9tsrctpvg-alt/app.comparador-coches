@@ -1,7 +1,7 @@
 # 0020 — Los campos esenciales destacan precio y potencia
 
 - **Id:** product/0020
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-08-12
 - **Specs relacionadas:** product/0018

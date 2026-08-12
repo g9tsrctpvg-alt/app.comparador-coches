@@ -1,7 +1,7 @@
 # 0006 — Menú de navegación: pastillas y selector en móvil
 
 - **Id:** technical/0006
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** technical
 - **Fecha:** 2026-08-12
 - **Specs relacionadas:** technical/0005
