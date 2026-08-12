@@ -238,6 +238,19 @@ entera verde en local y cobertura al 100 %.
 | Implementar y verificar las dos specs | Hecha — CI entera en verde en local, cobertura 100 % en `domain/`+`data/`+`logging/`, verificación manual en navegador a 320/592/960/1440px, despliegue real confirmado tras el merge de PR #57 |
 | Consolidar `docs/estado/interfaz.md` y `dominio.md`, y las specs (`technical/0005`, `product/0018`, `technical/0004`, `product/0011`) | Hecha — 2026-08-12. `product/0014` se queda fuera: sigue `implemented`, no `verified` (ver deudas abiertas), pero su comportamiento vigente —fotos, columna fijada, diálogo— ya se lee en `docs/estado/interfaz.md` y `dominio.md`, escrito como parte de esta misma consolidación porque `product/0018` la enmienda sin sustituirla |
 | `product/0019` — la portada enseña el coche | Sin redactar |
+| `product/0020` — los campos esenciales destacan precio y potencia | `draft` |
+| `technical/0006` — menú de navegación: pastillas y selector en móvil | `draft` |
+
+**`product/0020` y `technical/0006` nacen de revisar el despliegue real**
+(2026-08-12): con el rediseño ya visible en producción, el vistazo inicial
+de la ficha resultó corto en precio y potencia, y el menú de navegación —el
+elemento más plano de la cabecera— quedó pendiente de un tratamiento visual
+a la altura del resto, además de arrastrar un `overflow-x: auto` que ningún
+otro punto de la interfaz necesita en móvil. Ninguna de las dos toca
+`product/0018` ni `technical/0005` directamente —están `consolidated`, y
+`docs/proceso/consolidacion.md` prohíbe editarlas—: son specs nuevas que las
+amplían, con el mismo precedente que `product/0016` sentó al ampliar
+`product/0014` sin tocar su fichero.
 
 **Qué motiva la fase.** Dos cosas independientes que se hacen juntas porque
 tocan los mismos ficheros:
