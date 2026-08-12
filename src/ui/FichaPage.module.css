@@ -141,8 +141,12 @@
   background: var(--color-card-raised);
 }
 
+/* `-solid`, no `--color-accent-tint` a secas: la fijada va encima de
+ * columnas que han quedado debajo al desplazar (comentario de más abajo), y
+ * la variante sin `-solid` lleva alfa — un 7% transparente que dejaba ver
+ * el contenido de debajo al pasar el ratón por la fila (hallazgo manual). */
 .table tbody tr:hover .pinnedCell {
-  background: var(--color-accent-tint);
+  background: var(--color-accent-tint-solid);
 }
 
 /* Cabecera de bloque (requisito 8.2): una fila que abarca todas las
