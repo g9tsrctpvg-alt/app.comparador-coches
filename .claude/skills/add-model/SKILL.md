@@ -89,6 +89,18 @@ hasta el techo frente a medición independiente VDA), declara las dos
 fuentes, marca `current: true` solo en la que uses de verdad, y explica en
 `discardedReason` por qué se descarta la otra — no elijas en silencio.
 
+**`priceEur` es siempre el PVP de catálogo, sin descuentos.** El proyecto
+no modela descuentos todavía —es trabajo futuro—, así que un precio con un
+descuento de fábrica o de concesionario ya restado rompe la comparación
+con el resto del catálogo sin que nada lo avise: pasa la validación de Zod
+igual que un PVP limpio. Si la fuente que encuentras da el precio ya
+rebajado (por ejemplo, km77 declarando un «descuento oficial» aparte del
+PVP), busca o reconstruye el PVP sin descontar y ponlo como `current:
+true`; el precio con descuento va como fuente descartada, con el
+`discardedReason` explicando que incluía un descuento. Es el error que
+tuvo el alta del Kia EV5: quedó con el precio ya rebajado (51.437 €) en
+vez del PVP de catálogo (53.071 €).
+
 Si de verdad no encuentras una cifra fiable para algún dato, no la
 estimes a ojo y la marques `estimated: true` sin más: escribe en una nota
 del coche (`notes`, un array de strings) qué falta y por qué, igual que ya
@@ -108,6 +120,10 @@ siempre, no solo cuando "parezca" que puede haber ambigüedad:
   350h actual frente al NX 300h descatalogado que comparte gama de
   precios de segunda mano). Verifica que la ficha técnica que usas es de
   la generación que se vende hoy, no de la anterior.
+- Un **precio con el descuento oficial ya restado** en la fuente (el caso
+  del Kia EV5: km77 daba el PVP con un descuento de fábrica de 1.634 €
+  aplicado). Usa siempre el PVP de catálogo sin descontar; ver la nota
+  sobre `priceEur` más arriba.
 
 ## 3. Añadir el registro
 
