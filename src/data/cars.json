@@ -1876,6 +1876,11 @@
         "credit": "Wikimedia Commons — Tokumeigakarinoaoshima (CC BY-SA 4.0)",
         "shows": "Honda Civic e:HEV (FL4), gris"
       },
+      "side": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Honda_6AA-FL4_Civic_e%EF%BC%9AHEV_%2823091714345%29.jpg/1280px-Honda_6AA-FL4_Civic_e%EF%BC%9AHEV_%2823091714345%29.jpg",
+        "credit": "Wikimedia Commons — 先従隅始 (CC0)",
+        "shows": "Honda Civic e:HEV (FL4), gris — foto de calle de otro autor (Tokumeigakarinoaoshima no subió lateral de este coche), mismo chasis y motorización"
+      },
       "interior": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Honda_CIVIC_e%EF%BC%9AHEV_EX_%286AA-FL4%29_interior.jpg/1280px-Honda_CIVIC_e%EF%BC%9AHEV_EX_%286AA-FL4%29_interior.jpg",
         "credit": "Wikimedia Commons — Tokumeigakarinoaoshima (CC BY-SA 4.0)",
@@ -2137,6 +2142,11 @@
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Lexus_NX_350h_F_SPORT_2WD_%286AA-AAZH20-AWXLB%28F%29%29_rear.jpg/1280px-Lexus_NX_350h_F_SPORT_2WD_%286AA-AAZH20-AWXLB%28F%29%29_rear.jpg",
         "credit": "Wikimedia Commons — Tokumeigakarinoaoshima (CC BY-SA 4.0)",
         "shows": "Lexus NX 350h F Sport, negro"
+      },
+      "side": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/LEXUS_NX350h_AWD_F-SPORT_China%286%29.jpg/1280px-LEXUS_NX350h_AWD_F-SPORT_China%286%29.jpg",
+        "credit": "Wikimedia Commons — Dinkun Chen (CC BY-SA 4.0)",
+        "shows": "Lexus NX 350h F Sport AWD, blanco (salón del automóvil, China) — mismo acabado F Sport y generación AZ20 que frontal/trasera, pero fotógrafo y color distintos"
       },
       "interior": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Lexus_NX_350h_F_SPORT_2WD_%286AA-AAZH20-AWXLB%28F%29%29_interior.jpg/1280px-Lexus_NX_350h_F_SPORT_2WD_%286AA-AAZH20-AWXLB%28F%29%29_interior.jpg",
@@ -3156,6 +3166,11 @@
         "credit": "Wikimedia Commons — Alexander Migl (CC BY-SA 4.0)",
         "shows": "Kia EV5 GT-Line, gris oscuro, IAA Mobility 2025 (Múnich) — foto de salón, portón cerrado, rótulo «EV5 GT-Line» visible"
       },
+      "side": {
+        "url": "https://www.kia.com/content/dam/kwcms/kme/global/en/assets/vehicles/ev5/my26-presales/gallery/ev5-presales-6d-m.jpg",
+        "credit": "Kia — kia.com/eu (web comercial oficial, galería EV5 GT-Line)",
+        "shows": "Kia EV5 GT-Line, gris plata metalizado (más claro que el gris oscuro de front/rear), estudio — vista lateral estricta, foto oficial de la web comercial de Kia Europa"
+      },
       "interior": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Kia_EV5_GT-Line_IAA_2025_DSC_2420.jpg/1280px-Kia_EV5_GT-Line_IAA_2025_DSC_2420.jpg",
         "credit": "Wikimedia Commons — Alexander Migl (CC BY-SA 4.0)",
@@ -3384,6 +3399,11 @@
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Hyundai_IONIQ_5_Long_Range_Prestige_NE1_PE_Atlas_White_Matte_%2813%29.jpg/1280px-Hyundai_IONIQ_5_Long_Range_Prestige_NE1_PE_Atlas_White_Matte_%2813%29.jpg",
         "credit": "Wikimedia Commons — Damian B Oh (CC BY-SA 4.0)",
         "shows": "Hyundai IONIQ 5 Long Range Prestige (chasis NE1), blanco Atlas Matte, Hyundai Motorstudio Goyang — misma salvedad de acabado que la foto frontal"
+      },
+      "side": {
+        "url": "https://dmassets.hyundai.com/is/image/hyundaiautoever/hyundai-es-ioniq-5-exterior-04?wid=1280",
+        "credit": "Hyundai Newsroom España (hyundai.news, sala de prensa oficial de Hyundai)",
+        "shows": "Hyundai IONIQ 5 NE1 (retoque 2024/2025, mismo faro pixelado y parachoques que en front/rear), color plata/blanco perlado, matrícula española — coche de prensa; color y acabado exacto pueden no coincidir con el Atlas White Matte Long Range Prestige de front/rear"
       },
       "interior": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Hyundai_Ioniq_5_NE_Interior_%281%29.jpg/1280px-Hyundai_Ioniq_5_NE_Interior_%281%29.jpg",
@@ -3616,6 +3636,11 @@
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Hyundai_Tucson_NX4_1.6_GLS_HEV_-_interior_view.jpg/1280px-Hyundai_Tucson_NX4_1.6_GLS_HEV_-_interior_view.jpg",
         "credit": "Wikimedia Commons — Ethan Llamas (CC BY-SA 4.0)",
         "shows": "Hyundai Tucson NX4 1.6 GLS HEV, salpicadero, volante y pantallas — foto de salón"
+      },
+      "trunk": {
+        "url": "https://dmassets.hyundai.com/is/image/hyundaiautoever/hyundai-nuevo-tucson-n-line-0624-8580?wid=1280&bfc=off",
+        "credit": "Hyundai Newsroom (sala de prensa oficial de Hyundai) — press kit «Nuevo Tucson N-Line», junio 2024",
+        "shows": "Hyundai Tucson NX4 (retoque 2024), maletero con portón abierto y asientos traseros sin abatir; foto del press kit N-Line — motorización exacta del lote no confirmada por Hyundai, pero comparte chasis, maletero y tapicería con el resto de acabados del NX4 retocado 2024, HEV incluido; misma foto ya usada para el maletero de hyundai-tucson-phev"
       }
     }
   },
