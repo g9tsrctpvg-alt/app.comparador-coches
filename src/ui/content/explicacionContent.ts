@@ -29,8 +29,9 @@ export const AXIS_CONTENT: Record<AxisId, AxisContent> = {
       'piernas de quien va detrás.',
     data: 'Litros de maletero y batalla (la distancia entre ejes, que aproxima el espacio interior).',
     anchorReasoning: [
-      'El techo lo marca el Škoda Superb —690 L—, la referencia de «coche para viajar en familia»: a partir de ahí lo que hay son monovolúmenes y furgonetas, otra categoría. El suelo es un utilitario de ciudad, donde el equipaje de cuatro personas ya no cabe.',
-      'Mismas referencias de coche que el maletero. El maletero pesa más —0,6 frente a 0,4— porque es la restricción que se incumple: el equipaje cabe o no cabe. El espacio de atrás es gradual, y la batalla solo lo mide de forma indirecta.',
+      'El techo lo marca el Škoda Superb —620 L—, la referencia de «coche para viajar en familia»: a partir de ahí lo que hay son monovolúmenes y furgonetas, otra categoría. El suelo es un utilitario de ciudad, donde el equipaje de cuatro personas ya no cabe.',
+      'Mismas referencias de coche que el maletero: el Superb marca el techo y un utilitario de ciudad el suelo. El maletero pesa más —0,5 frente a 0,25 de la batalla y 0,25 de la anchura de hombros— porque es la restricción que se incumple: el equipaje cabe o no cabe. El espacio de atrás es gradual, y la batalla solo lo mide de forma indirecta, a lo largo.',
+      'El mismo Superb marca el techo —1.390 mm—. El suelo lo ponen el Dacia Sandero y la propia Alfa Romeo Giulietta, ambos en 1.310 mm: un recorrido corto a propósito, porque entre un utilitario y un familiar grande esta medida varía poco y aporta matiz, no decide (ADR 0004). Pesa lo mismo que la batalla —0,25 cada una— porque mide el mismo tipo de espacio de los que van atrás, a lo ancho en vez de a lo largo, y es igual de gradual.',
     ],
   },
   diario: {

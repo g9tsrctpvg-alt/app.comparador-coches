@@ -244,8 +244,12 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     izquierda (`position: sticky`) a cualquier ancho, y cada celda de las
     demás columnas muestra debajo su Δ frente a él, con el **signo siempre
     escrito** —el color (`--color-positive`/`--color-negative`) es un
-    refuerzo, nunca la única vía de leerlo—. «Ninguno» apaga toda Δ. Arranca
-    fijada la primera referencia del catálogo, si hay alguna.
+    refuerzo, nunca la única vía de leerlo—. «Ninguno» apaga toda Δ. Cuando
+    sí hay comparación pero una celda concreta no se puede comparar contra
+    ella —al modelo elegido le falta ese dato, o las dos celdas están en
+    unidades distintas—, la celda muestra la misma raya con texto accesible
+    que una celda sin dato, no un número que no diría nada. Arranca fijada
+    la primera referencia del catálogo, si hay alguna.
   - **Orden** — Catálogo, Longitud, Anchura o Precio, ascendente. Arranca
     en Longitud.
   - Un cuarto selector, fuera de esa barra, cambia la vista de foto
@@ -269,7 +273,10 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     desplazamiento horizontal ancla siempre en una columna de modelo
     completa (`scroll-snap-type: x mandatory` con `scroll-padding-left`
     reservando el ancho de las columnas fijas, para que la primera columna
-    desplazable no quede tapada detrás de ellas).
+    desplazable no quede tapada detrás de ellas). Esa reserva solo tiene
+    sentido mientras hay una columna fijada de verdad: con «Ninguno»
+    elegido —o sin referencias en el catálogo— no hay ningún hueco `sticky`
+    que proteger, así que `scroll-padding-left` vuelve a `0`.
   - **Anclaje de eje en gesto táctil** (technical/0007, mecanismo corregido
     por technical/0008): el envoltorio desplaza filas y columnas a la vez en
     el mismo contenedor, así que un gesto táctil pensado como «hacia abajo»

@@ -113,6 +113,15 @@
   overflow-y: auto;
 }
 
+/* Con «Ninguno» elegido (o sin referencias en el catálogo) no hay columna
+ * fijada de la que reservar hueco: mantener el `scroll-padding-left` de
+ * arriba dejaría un anclaje pensado para una columna que no está en la
+ * tabla, con el hueco en blanco que eso deja al reposar el desplazamiento
+ * horizontal. */
+.tableWrapperNoPin {
+  scroll-padding-left: 0;
+}
+
 .table {
   border-collapse: collapse;
   width: 100%;
@@ -352,6 +361,10 @@ th.blockHeader {
     scroll-padding-left: calc(
       var(--size-ficha-feature-column) + var(--size-ficha-model-desktop)
     );
+  }
+
+  .tableWrapperNoPin {
+    scroll-padding-left: 0;
   }
 
   .modelHeader,

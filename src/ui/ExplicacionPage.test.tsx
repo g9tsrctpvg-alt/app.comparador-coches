@@ -57,6 +57,38 @@ describe('ExplicacionPage', () => {
     expect((markup.match(/→ 0/g) ?? []).length).toBe(13);
   });
 
+  it('gives every anchor row its own non-empty reasoning text — none left blank by index', () => {
+    // `anchorRow` empareja `axis.subcomponents` con `anchorReasoning` por
+    // índice (AXIS_CONTENT, comentario de cabecera): un array más corto que
+    // el otro deja alguna fila con el hueco vacío. Regresión concreta:
+    // `viaje` ganó un tercer subcomponente (product/0017) sin que
+    // `anchorReasoning` ganara una tercera entrada.
+    const markup = render();
+    const reasoningCells =
+      markup.match(/<dd class="[^"]*reasoning[^"]*">([\s\S]*?)<\/dd>/g) ?? [];
+    expect(reasoningCells).toHaveLength(13);
+    for (const cell of reasoningCells) {
+      expect(cell.replace(/<[^>]*>/g, '').trim().length).toBeGreaterThan(0);
+    }
+  });
+
+  it("does not restate viaje's own weights with numbers stale against its live formula", () => {
+    // Regresión concreta: la prosa fija de `anchorReasoning` decía «0,6
+    // frente a 0,4» cuando la fórmula viva —la que ya renderiza esta misma
+    // página vía `scoreCatalog`, no un import aparte de `scoring/`
+    // (`ui-no-scoring-internals`)— ya llevaba 0,5/0,25/0,25 desde
+    // product/0017. La prosa fija no puede quedarse atrás de la fórmula que
+    // tiene al lado en la misma página.
+    const markup = render();
+    const formulaMatch = /<p class="[^"]*formula[^"]*">([^<]*)<\/p>/.exec(
+      markup,
+    );
+    const liveFormula = formulaMatch?.[1] ?? '';
+    expect(liveFormula).toContain('0,5');
+    expect(markup).not.toContain('0,6 frente a 0,4');
+    expect(markup).toContain('0,5 frente a 0,25');
+  });
+
   it('declares that estética is the only axis without an S-curve, and why', () => {
     const markup = render();
     expect(markup).toContain('único eje sin curva en S');

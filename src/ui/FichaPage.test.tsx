@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { FichaPage, TOTAL_FIELD_COUNT } from './FichaPage';
+import { COMPLETE_FIELD_DEFS, FichaPage, TOTAL_FIELD_COUNT } from './FichaPage';
 import { threeCarFixture } from '../domain/scoring/testFixtures';
+import { FICHA_FIELDS } from '../domain/ficha';
 import type { Reference } from '../domain/reference';
 import fichaCss from './FichaPage.module.css?raw';
 
@@ -129,6 +130,17 @@ describe('FichaPage', () => {
     it('declares TOTAL_FIELD_COUNT as the twenty magnitudes of "Completa"', () => {
       expect(TOTAL_FIELD_COUNT).toBe(20);
     });
+
+    it("matches FICHA_FIELDS exactly: no domain field silently missing from Completa's render", () => {
+      // `TOTAL_FIELD_COUNT` por sí solo es tautológico —sale de la misma
+      // lista que cuenta—: esto comprueba el conjunto real de claves contra
+      // la fuente del dominio. Un campo nuevo en `FICHA_FIELDS` sin su
+      // `FieldDef` en `COMPLETE_BLOCKS` haría fallar esto sin necesitar
+      // cambiar `fieldSet` a «Completa» a mano.
+      expect(new Set(COMPLETE_FIELD_DEFS.keys())).toEqual(
+        new Set(FICHA_FIELDS),
+      );
+    });
   });
 
   describe('comparison (product/0018, requisito 2)', () => {
@@ -171,6 +183,20 @@ describe('FichaPage', () => {
       expect(markup).toMatch(/cellDelta[^"]*">\+189\s*mm</);
     });
 
+    it('shows an accessible dash, not a blank cell, when the pinned reference lacks the field (requisito 2.5)', () => {
+      const markup = renderToStaticMarkup(
+        <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+      );
+      // La Giulietta (fixture) solo declara las cinco magnitudes
+      // dimensionales: Potencia y Precio, en «Esenciales», no tienen con
+      // qué compararse.
+      const dashMatches =
+        markup.match(
+          /<span class="[^"]*cellDelta[^"]*"><span class="[^"]*visuallyHidden[^"]*">Sin diferencia que mostrar\.<\/span><span aria-hidden="true">—<\/span><\/span>/g,
+        ) ?? [];
+      expect(dashMatches.length).toBeGreaterThan(0);
+    });
+
     it('leaves the pinned column without any delta: it is not compared to itself', () => {
       const markup = renderToStaticMarkup(
         <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
@@ -191,6 +217,17 @@ describe('FichaPage', () => {
       expect(markup).toMatch(
         /aria-label="No comparar contra ningún modelo"[^>]*checked=""/,
       );
+      // Sin columna fijada no hay hueco de sticky que reservar en el
+      // anclaje de scroll: `scroll-padding-left` no debe apuntar a una
+      // columna que no está en la tabla.
+      expect(markup).toMatch(/class="[^"]*tableWrapperNoPin[^"]*"/);
+    });
+
+    it('does not reserve sticky-column scroll padding while a model is pinned', () => {
+      const markup = renderToStaticMarkup(
+        <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+      );
+      expect(markup).not.toMatch(/class="[^"]*tableWrapperNoPin[^"]*"/);
     });
   });
 
@@ -302,5 +339,33 @@ describe('FichaPage', () => {
     );
     expect(markup).toContain('<dialog');
     expect(markup).not.toContain('<figure');
+  });
+
+  // El color de la Δ es refuerzo, nunca la única vía de leerla (el propio
+  // párrafo lo dice): un campo con dirección declarada en POLARITY que no
+  // aparezca aquí deja esa afirmación en falso para ese campo. Regresión
+  // concreta: rearShoulderWidthMm, residualPct5y y warrantyExtensionYears
+  // llegaron a POLARITY sin llegar nunca a este párrafo.
+  it('names every field the color reinforces as "más es mejor" in the legend', () => {
+    const markup = renderToStaticMarkup(
+      <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+    );
+    const legendMatch = /<p class="[^"]*legend[^"]*">([\s\S]*?)<\/p>/.exec(
+      markup,
+    );
+    const legend = legendMatch?.[1] ?? '';
+    for (const label of [
+      'maletero',
+      'litros por m²',
+      'potencia',
+      'fiabilidad',
+      'garantía',
+      'extensión de garantía',
+      'valor residual a 5 años',
+      'anchura de hombros atrás',
+      'estética',
+    ]) {
+      expect(legend.toLowerCase()).toContain(label);
+    }
   });
 });

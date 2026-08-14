@@ -138,6 +138,27 @@ const COMPLETE_BLOCKS: BlockDef[] = [
   },
 ];
 
+// Exportado para que el test de estructura pueda comprobar el conjunto real
+// de claves que «Completa» renderiza contra `FICHA_FIELDS`, no solo su
+// recuento (`TOTAL_FIELD_COUNT` por sí solo es tautológico: sale de esta
+// misma lista).
+export const COMPLETE_FIELD_DEFS = new Map<FichaField, FieldDef>(
+  COMPLETE_BLOCKS.flatMap((block) =>
+    block.fields.map((def) => [def.key, def] as const),
+  ),
+);
+
+/** Busca un `FieldDef` ya declarado en «Completa» — para que «Esenciales»
+ * no pueda tener una etiqueta, unidad o decimales distintos del mismo campo
+ * por una edición que solo toque uno de los dos sitios. */
+function completeFieldDef(key: FichaField): FieldDef {
+  const def = COMPLETE_FIELD_DEFS.get(key);
+  if (def === undefined) {
+    throw new Error(`FieldDef no declarado en COMPLETE_BLOCKS: ${key}`);
+  }
+  return def;
+}
+
 /**
  * El conjunto «Esenciales» (product/0020, requisito 1): tamaño —longitud,
  * anchura, altura libre al suelo, maletero—, potencia y precio, sin
@@ -145,26 +166,25 @@ const COMPLETE_BLOCKS: BlockDef[] = [
  * —las dos de la extinta ficha técnica que no sobrevivieron aquí— siguen en
  * «Completa»: la primera no tiene dirección declarada
  * (`docs/estado/dominio.md`, tabla de polaridad: `neutral`) y la segunda es
- * una métrica derivada, no una medida directa. Potencia y precio reutilizan
- * tal cual el `FieldDef` de «Completa» (requisito 3): mismo `key`, misma
- * etiqueta, mismo formato.
+ * una métrica derivada, no una medida directa. Las seis reutilizan tal cual
+ * el `FieldDef` de «Completa» (requisito 3): mismo `key`, misma etiqueta,
+ * mismo formato — `completeFieldDef` lo hace estructuralmente imposible de
+ * incumplir, no solo una convención a seguir a mano.
  */
 const ESSENTIAL_BLOCKS: BlockDef[] = [
   {
     id: 'esenciales',
     label: null,
-    fields: [
-      { key: 'lengthMm', label: 'Longitud', unitFallback: 'mm' },
-      { key: 'widthMm', label: 'Anchura', unitFallback: 'mm' },
-      {
-        key: 'groundClearanceMm',
-        label: 'Altura libre al suelo',
-        unitFallback: 'mm',
-      },
-      { key: 'trunkLiters', label: 'Maletero', unitFallback: 'L' },
-      { key: 'powerCv', label: 'Potencia', unitFallback: 'CV' },
-      { key: 'priceEur', label: 'Precio', isEuro: true },
-    ],
+    fields: (
+      [
+        'lengthMm',
+        'widthMm',
+        'groundClearanceMm',
+        'trunkLiters',
+        'powerCv',
+        'priceEur',
+      ] as const
+    ).map(completeFieldDef),
   },
 ];
 
@@ -196,17 +216,25 @@ const DIRECTION_CLASS: Record<DeltaDirection, string> = {
   neutral: styles.deltaNeutral ?? '',
 };
 
+// Ninguna de las dos depende de la entidad ni del campo: se calculan una
+// sola vez, no en cada celda de cada fila de cada columna.
+const PINNED_CELL_CLASS = `${primitives.numeric} ${styles.pinnedCell}`;
+const MODEL_CELL_CLASS = `${primitives.numeric} ${styles.modelCell}`;
+
 /** El signo va siempre escrito (product/0013, requisito 10, que esta fusión
  * no relaja): el color de `DIRECTION_CLASS` es refuerzo, nunca la única
- * vía de leer si una diferencia es favorable. */
-function formatDelta(value: number, def: FieldDef): string {
+ * vía de leer si una diferencia es favorable. `cellUnit` —la unidad real de
+ * la celda, no la unidad por defecto del campo— importa en `consumption`:
+ * es lo único que distingue litros de kWh cuando dos coches comparten
+ * unidad y sí llegan a tener una Δ numérica. */
+function formatDelta(value: number, def: FieldDef, cellUnit?: string): string {
   if (def.isEuro) {
     const magnitude = formatEur(Math.abs(value));
     if (value > 0) return `+${magnitude}`;
     if (value < 0) return `−${magnitude}`;
     return magnitude;
   }
-  const unit = def.unitFallback ?? '';
+  const unit = cellUnit ?? def.unitFallback ?? '';
   const formatted = formatSigned(value, def.decimals ?? 0);
   return unit ? `${formatted} ${unit}` : formatted;
 }
@@ -246,7 +274,15 @@ function CellContent({ cell, def }: { cell: FichaCell; def: FieldDef }) {
       <span className={styles.cellValue}>
         <CellValue cell={cell} def={def} />
       </span>
-      {cell.delta !== null && (
+      {cell.delta === 'unavailable' && (
+        <span className={styles.cellDelta}>
+          <span className={primitives.visuallyHidden}>
+            Sin diferencia que mostrar.
+          </span>
+          <span aria-hidden="true">—</span>
+        </span>
+      )}
+      {cell.delta !== null && cell.delta !== 'unavailable' && (
         <span
           className={[
             styles.cellDelta,
@@ -254,10 +290,35 @@ function CellContent({ cell, def }: { cell: FichaCell; def: FieldDef }) {
             def.key === 'widthMm' ? styles.deltaEmphasized : '',
           ].join(' ')}
         >
-          {formatDelta(cell.delta.value, def)}
+          {formatDelta(
+            cell.delta.value,
+            def,
+            cell.kind === 'sourced' ? cell.unit : undefined,
+          )}
         </span>
       )}
     </>
+  );
+}
+
+/** Una celda de dato, fijada o desplazable (mismo reparto que
+ * `ModelHeaderCell` hace en la cabecera): las dos difieren solo en la clase
+ * y en qué entidad leen, así que comparten esta única definición en vez de
+ * repetir el `<td>` una vez por cada una. */
+function DataCell({
+  entity,
+  def,
+  isPinned,
+}: {
+  entity: FichaEntity;
+  def: FieldDef;
+  isPinned: boolean;
+}) {
+  return (
+    <td className={isPinned ? PINNED_CELL_CLASS : MODEL_CELL_CLASS}>
+      <span className={styles.cellLabel}>{def.label}</span>
+      <CellContent cell={entity.cells[def.key]} def={def} />
+    </td>
   );
 }
 
@@ -469,10 +530,17 @@ export function FichaPage({ cars, references }: FichaPageProps) {
     [baseEntities, comparisonId],
   );
 
-  const pinnedEntity = entitiesWithDelta.find((e) => e.id === comparisonId);
-  const scrollableEntities = sortFicha(
-    entitiesWithDelta.filter((e) => e.id !== pinnedEntity?.id),
-    sortCriterion,
+  const pinnedEntity = useMemo(
+    () => entitiesWithDelta.find((e) => e.id === comparisonId),
+    [entitiesWithDelta, comparisonId],
+  );
+  const scrollableEntities = useMemo(
+    () =>
+      sortFicha(
+        entitiesWithDelta.filter((e) => e.id !== pinnedEntity?.id),
+        sortCriterion,
+      ),
+    [entitiesWithDelta, pinnedEntity, sortCriterion],
   );
   const columnCount = 1 + (pinnedEntity ? 1 : 0) + scrollableEntities.length;
   const blocks = fieldSet === 'esenciales' ? ESSENTIAL_BLOCKS : COMPLETE_BLOCKS;
@@ -570,7 +638,11 @@ export function FichaPage({ cars, references }: FichaPageProps) {
       </div>
 
       <div
-        className={styles.tableWrapper}
+        className={
+          pinnedEntity
+            ? styles.tableWrapper
+            : `${styles.tableWrapper} ${styles.tableWrapperNoPin}`
+        }
         ref={tableWrapperRef}
         tabIndex={0}
         role="group"
@@ -644,28 +716,15 @@ export function FichaPage({ cars, references }: FichaPageProps) {
                       {def.label}
                     </th>
                     {pinnedEntity && (
-                      <td
-                        className={[primitives.numeric, styles.pinnedCell].join(
-                          ' ',
-                        )}
-                      >
-                        <span className={styles.cellLabel}>{def.label}</span>
-                        <CellContent
-                          cell={pinnedEntity.cells[def.key]}
-                          def={def}
-                        />
-                      </td>
+                      <DataCell entity={pinnedEntity} def={def} isPinned />
                     )}
                     {scrollableEntities.map((entity) => (
-                      <td
+                      <DataCell
                         key={entity.id}
-                        className={[primitives.numeric, styles.modelCell].join(
-                          ' ',
-                        )}
-                      >
-                        <span className={styles.cellLabel}>{def.label}</span>
-                        <CellContent cell={entity.cells[def.key]} def={def} />
-                      </td>
+                        entity={entity}
+                        def={def}
+                        isPinned={false}
+                      />
                     ))}
                   </tr>
                 ))}
@@ -680,7 +739,8 @@ export function FichaPage({ cars, references }: FichaPageProps) {
         contra qué se comparan las demás. Cuando hay un modelo de comparación,
         cada celda muestra debajo su diferencia, con el signo siempre escrito:
         el color es un refuerzo, nunca la única vía de leerlo. En maletero,
-        litros por m², potencia, fiabilidad, garantía y las dos notas de
+        litros por m², potencia, fiabilidad, garantía, extensión de garantía,
+        valor residual a 5 años, anchura de hombros atrás y las dos notas de
         estética, más es mejor; en anchura, longitud, peso, aceleración,
         consumo, precio y mantenimiento, más es peor, porque el problema que
         resuelve el proyecto es que los sustitutos son más grandes y más caros.
