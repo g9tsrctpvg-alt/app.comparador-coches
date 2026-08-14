@@ -70,15 +70,25 @@ export interface FichaDelta {
   direction: DeltaDirection;
 }
 
+/**
+ * `null` — no hay comparación activa, o esta es la propia celda de
+ * referencia (product/0018, requisitos 2.3-2.4): no se muestra nada.
+ * `'unavailable'` — hay comparación, pero esta celda no se puede comparar
+ * contra ella: la referencia no declara el dato (requisito 2.5), o los dos
+ * valores están en unidades distintas y restarlos no diría nada (p. ej.
+ * `consumption` mezcla `l/100km` de combustión con `kWh/100km` eléctrico).
+ * Las dos se muestran igual —la raya con texto accesible—, porque las dos
+ * son la misma idea: no hay una Δ que decir, no que la Δ sea cero.
+ */
 export type FichaCell =
   | {
       kind: 'sourced';
       value: number;
       unit?: string;
       estimated: boolean;
-      delta: FichaDelta | null;
+      delta: FichaDelta | null | 'unavailable';
     }
-  | { kind: 'rating'; value: number; delta: FichaDelta | null }
+  | { kind: 'rating'; value: number; delta: FichaDelta | null | 'unavailable' }
   | { kind: 'missing' };
 
 export interface FichaEntity {
@@ -248,27 +258,18 @@ function cellsOf(entity: EntityLike): Record<FichaField, FichaCell> {
   };
 }
 
-function candidateEntity(car: Car): FichaEntity {
+function entityOf(
+  kind: FichaEntity['kind'],
+  source: Car | Reference,
+): FichaEntity {
   return {
-    kind: 'candidate',
-    id: car.id,
-    name: car.name,
-    brand: car.brand,
-    technology: car.technology,
-    photos: car.photos,
-    cells: cellsOf(car),
-  };
-}
-
-function referenceEntity(reference: Reference): FichaEntity {
-  return {
-    kind: 'reference',
-    id: reference.id,
-    name: reference.name,
-    brand: reference.brand,
-    technology: reference.technology,
-    photos: reference.photos,
-    cells: cellsOf(reference),
+    kind,
+    id: source.id,
+    name: source.name,
+    brand: source.brand,
+    technology: source.technology,
+    photos: source.photos,
+    cells: cellsOf(source),
   };
 }
 
@@ -283,7 +284,10 @@ export function buildFicha(
   cars: Car[],
   references: Reference[],
 ): FichaEntity[] {
-  return [...cars.map(candidateEntity), ...references.map(referenceEntity)];
+  return [
+    ...cars.map((car) => entityOf('candidate', car)),
+    ...references.map((reference) => entityOf('reference', reference)),
+  ];
 }
 
 /** Construye un `Record<FichaField, T>` recorriendo `FICHA_FIELDS` una sola
@@ -303,8 +307,18 @@ function cellWithDelta(
   field: FichaField,
 ): FichaCell {
   if (cell.kind === 'missing') return cell;
-  if (comparison === undefined || comparison.kind === 'missing') {
+  if (comparison === undefined) {
     return { ...cell, delta: null };
+  }
+  if (comparison.kind === 'missing') {
+    return { ...cell, delta: 'unavailable' };
+  }
+  if (
+    cell.kind === 'sourced' &&
+    comparison.kind === 'sourced' &&
+    cell.unit !== comparison.unit
+  ) {
+    return { ...cell, delta: 'unavailable' };
   }
   const diff = cell.value - comparison.value;
   return {

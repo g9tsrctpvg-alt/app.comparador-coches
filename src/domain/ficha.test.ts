@@ -272,14 +272,29 @@ describe('withComparison', () => {
     });
   });
 
-  it('leaves delta null when the comparison entity is missing that field', () => {
+  it('marks the delta unavailable, not null, when the comparison entity is missing that field', () => {
     const entities = withComparison(
       buildFicha([sportageFixture], [referenceFixture()]),
       'alfa-romeo-giulietta',
     );
     const sportage = entities.find((e) => e.kind === 'candidate')!;
-    // La Giulietta (referencia) no declara precio.
-    expect(sportage.cells.priceEur).toMatchObject({ delta: null });
+    // La Giulietta (referencia) no declara precio: hay comparación, pero no
+    // hay nada que restar, así que no es lo mismo que "sin comparación"
+    // (product/0018, requisito 2.5) — es una raya con texto accesible, no
+    // un hueco silencioso.
+    expect(sportage.cells.priceEur).toMatchObject({ delta: 'unavailable' });
+  });
+
+  it('marks the delta unavailable when the two entities report the field in different units', () => {
+    // Sportage HEV: consumo en l/100km. EV3: consumo en kWh/100km.
+    const entities = withComparison(
+      buildFicha([sportageFixture, ev3Fixture], []),
+      'kia-sportage-hev',
+    );
+    const ev3 = entities.find((e) => e.id === 'kia-ev3')!;
+    // Restar 16 kWh/100km menos 6,2 l/100km sería comparar magnitudes
+    // físicas distintas, no una Δ real.
+    expect(ev3.cells.consumption).toMatchObject({ delta: 'unavailable' });
   });
 
   it('leaves a missing cell missing, with no delta property at all', () => {

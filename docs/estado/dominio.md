@@ -398,12 +398,20 @@ juicio agregado, así que vive fuera de `scoring/`.
     declarado cuál de las dos cosas le importa más, y ante la duda no se
     inventa un juicio de color—.
 - **`withComparison(entities, comparisonId)`** — recalcula la Δ de cada
-  celda de cada entidad frente a la entidad `comparisonId`.
-  `comparisonId === null` —«Ninguno»— apaga todas las Δ: es la misma vía
-  que comparar contra una entidad que no existe, sin rama aparte. La propia
-  entidad de comparación nunca lleva Δ contra sí misma —sería siempre cero
-  y no dice nada—, y una celda `'missing'` en cualquiera de las dos partes
-  deja la Δ en `null`, nunca en un cero engañoso.
+  celda de cada entidad frente a la entidad `comparisonId`, en tres estados
+  posibles, no dos: `null` —sin comparación activa, o esta es la propia
+  celda de referencia— frente a `'unavailable'` —hay comparación, pero esta
+  celda concreta no se puede comparar contra ella—. `comparisonId === null`
+  —«Ninguno»— deja la Δ en `null` en todas las celdas: es la misma vía que
+  comparar contra una entidad que no existe, sin rama aparte. La propia
+  entidad de comparación tampoco lleva Δ contra sí misma —sería siempre
+  cero y no dice nada—, así que también queda en `null`. `'unavailable'` es
+  el estado distinto: una celda `'missing'` en la entidad de comparación
+  (le falta el dato), o las dos celdas en unidades distintas —`consumption`
+  mezcla `l/100km` de combustión con `kWh/100km` eléctrico, y restar esos
+  números no diría nada—. La interfaz muestra los dos como la misma raya
+  con texto accesible, nunca como un cero engañoso, pero el dominio los
+  distingue: apagar la Δ a propósito no es lo mismo que no poder calcularla.
 - **`sortFicha(entities, criterion)`** — ordena por `catalog` (el orden del
   propio catálogo), `lengthMm`, `widthMm` o `priceEur`, ascendente. Una
   entidad sin la magnitud por la que se ordena va al final: no hay dato que
