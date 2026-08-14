@@ -75,7 +75,7 @@
   display: block;
   width: 100%;
   background: var(--color-rule);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-pill);
   overflow: hidden;
 }
 
@@ -95,7 +95,7 @@
   display: block;
   height: 100%;
   background: var(--color-accent);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-pill);
   transition: width var(--duration-base) var(--ease-out);
 }
 
@@ -200,7 +200,8 @@
   font-size: var(--font-size-xs);
   transition:
     background-color var(--duration-fast) var(--ease-out),
-    border-color var(--duration-fast) var(--ease-out);
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
 }
 
 /* Sólido: la acción principal de una pantalla. No hay más de una a la vez. */
@@ -209,6 +210,7 @@
   background: var(--color-accent);
   color: var(--color-paper);
   border: var(--size-border-hairline) solid var(--color-accent);
+  box-shadow: var(--shadow-control);
 }
 
 .buttonSolid:hover {
@@ -229,6 +231,7 @@
   background: var(--color-card);
   color: var(--color-ink);
   border: var(--size-border-hairline) solid var(--color-rule);
+  box-shadow: var(--shadow-control);
 }
 
 .buttonOutline:hover {
@@ -259,6 +262,50 @@
   background: var(--color-accent-tint-strong);
 }
 
+/* Selector, en un solo sitio (technical/0009, requisito 5.1). Antes vivía
+ * por triplicado —`.toolbarSelect` y `.viewSelect` en `FichaPage.module.css`,
+ * `.mobileSelect` en `ViewSwitcher.module.css`—, con las mismas ocho
+ * propiedades copiadas y las tres pintando la flecha del sistema operativo,
+ * que es el único trozo de la interfaz que no elegía nadie.
+ *
+ * `appearance: none` quita esa flecha y la sustituye por `--icon-chevron`
+ * como imagen de fondo; el relleno derecho —`--space-7`, no `--space-3`— es
+ * el que le reserva sitio para que no se solape con el texto de la opción
+ * más larga.
+ *
+ * A propósito **no** fija `display`: los tres sitios que lo componen deciden
+ * el suyo —uno de ellos lo conmuta en una media query— y una clase compuesta
+ * entre ficheros se emite antes que las reglas del módulo que la compone, así
+ * que fijarlo aquí ganaría siempre. Es el mismo cuidado que ya documenta
+ * `.unstyledButton` para `padding` y `margin`. */
+.select {
+  composes: mono;
+  appearance: none;
+  min-height: var(--size-touch-min);
+  padding: var(--space-2) var(--space-7) var(--space-2) var(--space-3);
+  color: var(--color-ink);
+  background-color: var(--color-card);
+  background-image: var(--icon-chevron);
+  background-repeat: no-repeat;
+  background-position: right var(--space-3) center;
+  background-size: var(--size-chevron);
+  border: var(--size-border-hairline) solid var(--color-rule);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-control);
+  cursor: pointer;
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.select:hover {
+  border-color: var(--color-rule-strong);
+}
+
+.select:active {
+  border-color: var(--color-accent);
+}
+
 /* Deslizador con objetivo táctil de 44×44 (product/0010, requisito 8): el
  * elemento mide `--size-touch-min` de alto, con el carril fino centrado y
  * el asa a tamaño táctil. Todo deslizador de la interfaz lo compone en vez
@@ -271,50 +318,72 @@
   cursor: pointer;
 }
 
+/* La caja del pulgar mide 44×44 y **eso no cambia** —es el objetivo táctil
+ * del requisito 8 de `product/0010`—, pero pintarla entera daba un disco de
+ * acento macizo sobre un carril de 6px: el elemento más brusco de la
+ * interfaz. `technical/0009`, requisito 6.2, separa las dos medidas con un
+ * borde transparente más `background-clip: content-box`, de modo que solo se
+ * pinta la caja de contenido. El radio interior lo deriva el navegador del
+ * exterior menos el borde, así que un `50%` sobre la caja entera sigue dando
+ * un círculo perfecto en el círculo pequeño, con su antialiasing correcto —
+ * cosa que un degradado radial recortado a mano no consigue.
+ *
+ * El `:hover` y el `:active` adelgazan el borde en vez de engordar la caja
+ * (requisito 6.3): el pulgar crece y nada a su alrededor se mueve. */
 .rangeInput::-webkit-slider-runnable-track {
   height: var(--size-bar-axis);
   background: var(--color-rule);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-pill);
 }
 
 .rangeInput::-webkit-slider-thumb {
   appearance: none;
   width: var(--size-touch-min);
   height: var(--size-touch-min);
+  border: var(--size-thumb-inset) solid transparent;
   border-radius: 50%;
   background: var(--color-accent);
+  background-clip: content-box;
   margin-top: calc((var(--size-touch-min) - var(--size-bar-axis)) / -2);
-  transition: background-color var(--duration-fast) var(--ease-out);
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    border-width var(--duration-fast) var(--ease-out);
 }
 
 .rangeInput:hover::-webkit-slider-thumb {
-  background: var(--color-ink);
+  border-width: var(--size-thumb-inset-hover);
 }
 
 .rangeInput:active::-webkit-slider-thumb {
+  border-width: var(--size-thumb-inset-hover);
   background: var(--color-ink);
 }
 
 .rangeInput::-moz-range-track {
   height: var(--size-bar-axis);
   background: var(--color-rule);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-pill);
 }
 
 .rangeInput::-moz-range-thumb {
   width: var(--size-touch-min);
   height: var(--size-touch-min);
+  border: var(--size-thumb-inset) solid transparent;
   border-radius: 50%;
   background: var(--color-accent);
-  border: none;
-  transition: background-color var(--duration-fast) var(--ease-out);
+  background-clip: content-box;
+  box-sizing: border-box;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    border-width var(--duration-fast) var(--ease-out);
 }
 
 .rangeInput:hover::-moz-range-thumb {
-  background: var(--color-ink);
+  border-width: var(--size-thumb-inset-hover);
 }
 
 .rangeInput:active::-moz-range-thumb {
+  border-width: var(--size-thumb-inset-hover);
   background: var(--color-ink);
 }
 

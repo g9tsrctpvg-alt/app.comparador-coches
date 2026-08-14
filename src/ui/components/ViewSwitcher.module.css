@@ -43,30 +43,27 @@
   background: var(--color-accent-tint);
 }
 
+/* La pastilla activa se despega del grupo (technical/0009, requisito 6.1):
+ * con el tinte a solas, el conmutador se leía como tres etiquetas con una
+ * resaltada; con la sombra de control encima, se lee como lo que es, una
+ * pieza elegida dentro de un carril. */
 .active {
   color: var(--color-accent);
   font-weight: var(--font-weight-semibold);
   background: var(--color-accent-tint);
+  box-shadow: var(--shadow-control);
 }
 
-/* El `<select>` de móvil (technical/0006, requisito 2): mismo tratamiento
- * visual que los controles de la barra de herramientas de la ficha
- * (`FichaPage.module.css:.toolbarSelect`), sin componerlo desde aquí — vive
- * en otro componente y `AppHeader` no depende de `FichaPage`. */
+/* El `<select>` de móvil (technical/0006, requisito 2). Su aspecto era el
+ * mismo que el de los controles de la ficha, pero copiado a mano porque no
+ * había de dónde componerlo sin que `AppHeader` dependiera de `FichaPage`.
+ * Desde `technical/0009` (requisito 5.2) ese aspecto vive en el primitivo
+ * `.select`, así que aquí solo queda lo que es propio de esta cabecera: cómo
+ * se comporta dentro de su fila. */
 .mobileSelect {
-  composes: mono from '../primitives.module.css';
+  composes: select from '../primitives.module.css';
   display: block;
-  min-height: var(--size-touch-min);
-  padding: var(--space-2) var(--space-3);
-  color: var(--color-ink);
-  background: var(--color-card);
-  border: var(--size-border-hairline) solid var(--color-rule);
-  border-radius: var(--radius-sm);
   flex-shrink: 0;
-}
-
-.mobileSelect:hover {
-  border-color: var(--color-rule-strong);
 }
 
 @media (min-width: 37rem) {
