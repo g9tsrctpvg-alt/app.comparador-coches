@@ -1,7 +1,7 @@
 # 0009 — Afinado visual de superficies y controles
 
 - **Id:** technical/0009
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** technical
 - **Fecha:** 2026-08-14
 - **Specs relacionadas:** technical/0004, technical/0005, technical/0006,
