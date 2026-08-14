@@ -1,7 +1,7 @@
 # 0010 — La barra de la ficha: cuatro controles con la misma forma
 
 - **Id:** technical/0010
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** technical
 - **Fecha:** 2026-08-14
 - **Specs relacionadas:** product/0014, product/0018, product/0020,
