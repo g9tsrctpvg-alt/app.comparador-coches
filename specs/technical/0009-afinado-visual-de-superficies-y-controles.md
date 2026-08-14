@@ -1,13 +1,19 @@
 # 0009 — Afinado visual de superficies y controles
 
 - **Id:** technical/0009
-- **Estado:** approved
+- **Estado:** verified
 - **Tipo:** technical
 - **Fecha:** 2026-08-14
 - **Specs relacionadas:** technical/0004, technical/0005, technical/0006,
   product/0009, product/0010
 - **ADRs relacionados:** 0006
 - **Doc de estado:** `docs/estado/interfaz.md`
+
+> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
+> implementado: su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy no es cierta. **No es referencia del estado actual** — para
+> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
+> **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -209,37 +215,60 @@ el tamaño de la caja: el estado no desplaza nada, que es la regla que
 
 > Obligatorios y verificables.
 
-- [ ] Ningún `.module.css` declara un color, una longitud, un radio, una
+- [x] Ningún `.module.css` declara un color, una longitud, un radio, una
       sombra o una pila tipográfica como literal: todo valor nuevo está
       declarado como token en `src/styles/global.css`.
       `scripts/validateStyleTokensRepo.test.ts` en verde.
-- [ ] Los 14 pares de `DECLARED_PAIRS` siguen por encima de su umbral con los
+- [x] Los 14 pares de `DECLARED_PAIRS` siguen por encima de su umbral con los
       neutros nuevos, y **ninguno baja** respecto de los valores de hoy.
-      `scripts/validateContrastRepo.test.ts` en verde, más la comparación par
-      a par anotada en la verificación.
-- [ ] `--radius-lg` y `--shadow-overlay` dejan de ser tokens sin consumidor:
+      `scripts/validateContrastRepo.test.ts` en verde. Par a par, calculado
+      con la `contrastRatio` del propio repositorio: `ink` 13,28→13,65 sobre
+      `paper` y 14,53→14,96 sobre `card`; `mute` 4,68→4,81 y 5,13→5,28;
+      `accent` 5,74→5,90 y 6,28→6,47; `signal` 4,82→4,95 y 5,27→5,42;
+      `ink-tertiary` 3,49→3,59 y 3,82→3,93; `mute-on-ink` sobre `ink`, sin
+      cambio, porque ninguno de los dos se ha tocado.
+- [x] `--radius-lg` y `--shadow-overlay` dejan de ser tokens sin consumidor:
       ambos los usa el `<dialog>` de la foto ampliada.
-- [ ] Existe un único primitivo `.select` y **ninguna** de las tres reglas de
+- [x] Existe un único primitivo `.select` y **ninguna** de las tres reglas de
       selector declara ya `appearance`, `background`, `border`,
-      `border-radius` ni `padding` por su cuenta.
-- [ ] Los tres `<select>` pintan la misma flecha propia, no la del sistema
-      operativo, comprobado en un navegador real.
-- [ ] El pulgar del deslizador se ve como un botón de menos de la mitad del
-      ancho de su caja, y la caja sigue midiendo 44×44px —comprobado sobre el
-      elemento renderizado, no sobre el CSS—.
-- [ ] Las casillas y los radios nativos se pintan en el verde de acento, no en
-      el azul del sistema.
-- [ ] Ningún `.tsx` cambia, y la tanda de tests de `src/ui/` pasa sin
-      editar un solo test.
-- [ ] `npm run format:check`, `npm run lint`, `npm run typecheck`,
+      `border-radius` ni `padding` por su cuenta. `.toolbarSelect` y
+      `.viewSelect` quedan en una línea de `composes`; `.mobileSelect`
+      conserva solo `display` y `flex-shrink`, que son suyos y no del
+      primitivo.
+- [x] Los tres `<select>` pintan la misma flecha propia, no la del sistema
+      operativo. Verificado en Chromium sobre el build de producción, en los
+      dos de la ficha y en el de la cabecera por debajo de `--bp-columna`.
+- [x] El pulgar del deslizador se ve como un botón de menos de la mitad del
+      ancho de su caja, y la caja sigue midiendo 44×44px. Medido sobre el
+      elemento renderizado: `boundingBox()` da 44px de alto antes y después
+      de `:hover`, y en la captura el pulgar es el círculo pequeño, que crece
+      en `:hover` sin mover el carril ni la fila.
+- [x] Las casillas y los radios nativos se pintan en el verde de acento, no en
+      el azul del sistema. `getComputedStyle(document.body).accentColor` da
+      `rgb(20, 101, 92)`, y la casilla de «Ocultar los que superan el
+      presupuesto», marcada, se ve verde en la captura.
+- [x] Ningún `.tsx` cambia, y la tanda de tests de `src/ui/` pasa sin
+      editar un solo test. El diff de implementación toca cuatro `.css` y
+      ninguna otra cosa.
+- [x] `npm run format:check`, `npm run lint`, `npm run typecheck`,
       `npm run arch:check`, `npm run test:coverage` y `npm run build` pasan en
-      local antes de dar la spec por implementada.
-- [ ] Sobre el build de producción y en un navegador real, a 320, 592, 960 y
+      local antes de dar la spec por implementada. 369 tests en verde,
+      cobertura al 100 % en `domain/`+`data/`+`logging/`.
+- [x] Sobre el build de producción y en un navegador real, a 320, 592, 960 y
       1440px y en las tres vistas: no aparece desplazamiento horizontal del
-      documento que hoy no exista, el elemento con el foco lo sigue mostrando,
-      y la foto ampliada abre y cierra igual que antes.
-- [ ] Con `prefers-reduced-motion: reduce` activo, ninguna de las transiciones
-      nuevas se anima.
+      documento que hoy no exista —a 320px, `scrollWidth` y `clientWidth`
+      valen 320 en las tres—, el elemento con el foco lo sigue mostrando, y la
+      foto ampliada abre y cierra igual que antes: se abre al pulsarla,
+      `Escape` la cierra y el foco vuelve al botón que la abrió.
+      > **Con una salvedad de entorno, no de código:** las fotos del catálogo
+      > se enlazan por URL absoluta y este entorno no tiene red saliente hacia
+      > ellas, así que para probar el diálogo se sirvió un PNG local en lugar
+      > de cada imagen externa, interceptando la petición en el navegador. Lo
+      > verificado es el diálogo; de dónde sale la foto no lo toca esta spec.
+- [x] Con `prefers-reduced-motion: reduce` activo, ninguna de las transiciones
+      nuevas se anima: las tres —`box-shadow` en el botón y el selector,
+      `border-width` en el pulgar— caen bajo la regla global de `global.css`,
+      que no distingue por propiedad.
 
 ## Dependencias y supuestos
 
