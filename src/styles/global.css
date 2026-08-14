@@ -21,11 +21,18 @@
 
 :root {
   /* Color — los siete papeles del artefacto de referencia
-   * (product/0009, sección «La paleta»). */
-  --color-paper: #e9ebe6;
-  --color-card: #f3f5f1;
+   * (product/0009, sección «La paleta»).
+   *
+   * Los cuatro neutros los afina `technical/0009`, requisito 3: `paper`,
+   * `card` y `card-raised` se aclaran —lo que **sube** el contraste de los
+   * catorce pares de `scripts/validateContrast.ts`, porque en todos ellos el
+   * texto es el color oscuro— y `rule` se aclara para que la rejilla de pelo
+   * pese menos ahora que la elevación carga con parte de la jerarquía.
+   * `accent` y `signal` no se tocan. */
+  --color-paper: #eceee9;
+  --color-card: #f7f8f5;
   --color-ink: #1a2420;
-  --color-rule: #c8cfc6;
+  --color-rule: #d3d8d0;
   --color-accent: #14655c;
 
   /* `mute` y `signal` del artefacto —#6b7a72 y #b4551b— no llegan a 4.5:1
@@ -58,33 +65,43 @@
    * translúcido dejaría ver contenido desplazado por debajo —una celda
    * fijada (`position: sticky`) sobre una tabla con desplazamiento propio
    * (product/0013)—, porque ahí sí hay algo pintado detrás en el orden de
-   * apilamiento. */
-  --color-accent-tint-solid: #e2ebe7;
+   * apilamiento.
+   *
+   * Se recalcula con cada movimiento de `card` (`technical/0009`, requisito
+   * 3.4): es una función de él, no un color independiente. Con `card` en
+   * `#f7f8f5`, el 7 % de `accent` da este valor. */
+  --color-accent-tint-solid: #e7eeea;
 
   /* Segundo nivel de superficie (technical/0005, requisito 1.4): más claro
    * que `card` en la misma dirección en que `card` ya se aparta de `paper`,
    * para una tarjeta que se lee «por encima» de otra sin depender solo de
    * la sombra. La distancia es deliberadamente pequeña —la elevación la
-   * lleva `--shadow-raised`, no el color—. */
-  --color-card-raised: #fbfdfa;
+   * lleva `--shadow-raised`, no el color—. Con los neutros de
+   * `technical/0009` llega al blanco: es el techo de la escala de
+   * superficies, y quedarse a medio camino solo le restaba separación con
+   * `card`, que también se ha aclarado. */
+  --color-card-raised: #ffffff;
 
-  /* Separador estructural (technical/0005, requisito 1.4): el doble de
-   * contraste que el pelo de `--color-rule` (2,56:1 sobre `card` frente a
-   * 1,45:1), para límites de sección —cabecera, pie, bloque de tabla— que
+  /* Separador estructural (technical/0005, requisito 1.4): casi el doble de
+   * contraste que el pelo de `--color-rule` (2,64:1 sobre `card` frente a
+   * 1,36:1, con los neutros de `technical/0009`; antes 2,56:1 frente a
+   * 1,45:1 — el pelo se aclaró, este no), para límites de sección
+   * —cabecera, pie, bloque de tabla— que
    * necesitan leerse sin ser una línea de dato. No es texto, así que no se
    * mide contra el umbral de 4,5:1 de los tokens de tipografía. */
   --color-rule-strong: #929d94;
 
   /* Tercer nivel de texto (technical/0005, requisito 1.4). `mute` ya está en
-   * el límite de 4,5:1 con `paper` (4,68:1): no hay hueco para un tono más
+   * el límite de 4,5:1 con `paper` (4,81:1 con los neutros de
+   * `technical/0009`; 4,68:1 antes): no hay hueco para un tono más
    * claro que siga sirviendo texto de cuerpo. `ink-tertiary` renuncia a ese
-   * umbral a cambio de 3,49:1 sobre `paper` y 3,82:1 sobre `card` —el suelo
+   * umbral a cambio de 3,59:1 sobre `paper` y 3,93:1 sobre `card` —el suelo
    * de texto grande de WCAG AA (1.4.3)— y por eso solo se usa en texto de al
    * menos `--font-size-lg`, o en elementos no textuales. */
   --color-ink-tertiary: #727f76;
 
   /* Papeles de dirección (technical/0005, requisito 1.6): mismo tono que
-   * `accent` y `signal` —ya verificados a 6,28:1 y 5,27:1 sobre `card`—, con
+   * `accent` y `signal` —ya verificados a 6,47:1 y 5,42:1 sobre `card`—, con
    * el nombre que dice lo que significan en una Δ, no de qué color son. */
   --color-positive: #14655c;
   --color-negative: #a34d18;
@@ -146,18 +163,60 @@
   --letter-spacing-wider: 0.08em;
   --letter-spacing-widest: 0.14em;
 
-  /* Radios. */
-  --radius-sm: 0.125rem;
-  --radius-md: 0.25rem;
-  --radius-lg: 0.5rem;
+  /* Radios (escala revisada por `technical/0009`, requisito 1). Los valores
+   * anteriores —2, 4 y 8px— dejaban un radio dominante que a tamaño real no
+   * se distinguía de una esquina recta: 18 de las 24 declaraciones de
+   * `border-radius` del repositorio usan `--radius-sm`. Se sube la escala
+   * entera sin tocar una sola regla de componente, que es exactamente lo que
+   * el ADR 0006 compró al meter el diseño en tokens. */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 0.875rem;
+
+  /* Cápsula, para lo que es una barra y no una caja: las dos barras de
+   * proporción y el carril del deslizador. Un radio mayor que la mitad de la
+   * altura lo recorta el navegador por su cuenta, así que el mismo token
+   * sirve a la barra de 3px del ranking y a la de 6px del desglose sin un
+   * caso especial para cada una. */
+  --radius-pill: 9999px;
 
   /* Sombras. La de foco —`--shadow-focus`— se retira: no la consumía ningún
    * componente, porque el indicador de foco real usa `outline`, no
-   * `box-shadow` (ver más abajo). */
-  --shadow-card: 0 1px 2px rgb(0 0 0 / 8%);
+   * `box-shadow` (ver más abajo).
+   *
+   * Las tres se tiñen de `ink` en vez de negro puro (`technical/0009`,
+   * requisito 2): sobre una paleta cálida, una sombra neutra ensucia. Y las
+   * dos de superficie pasan a dos capas —un contacto corto que asienta el
+   * borde, y una difusión ancha y muy floja que da la altura—, porque una
+   * sola capa a 8% y 2px de desenfoque era invisible sobre `card`. */
+  --shadow-card:
+    0 0.0625rem 0.125rem rgb(26 36 32 / 5%), 0 0.375rem 1rem rgb(26 36 32 / 6%);
   --shadow-raised:
-    0 0.125rem 0.5rem rgb(0 0 0 / 10%), 0 0.0625rem 0.125rem rgb(0 0 0 / 6%);
+    0 0.125rem 0.25rem rgb(26 36 32 / 6%), 0 0.75rem 1.75rem rgb(26 36 32 / 10%);
   --shadow-overlay: 0 0.75rem 2rem rgb(0 0 0 / 18%);
+
+  /* La sombra de un objeto accionable —botón, selector, pastilla activa—,
+   * deliberadamente más floja que la de una superficie: un control no es una
+   * tarjeta, solo necesita despegarse lo justo para leerse como pieza y no
+   * como rectángulo contorneado (`technical/0009`, requisito 2.3). */
+  --shadow-control: 0 0.0625rem 0.125rem rgb(26 36 32 / 6%);
+
+  /* El fondo de página deja de ser un color plano (`technical/0009`,
+   * requisito 4.1): un degradado vertical de un tono apenas más claro que
+   * `paper` hacia `paper`, tan corto de recorrido que no se percibe como
+   * degradado, solo como que la página tiene aire arriba. Se aplica con
+   * `background-attachment: fixed` para que no se repita al desplazar. */
+  --gradient-paper: linear-gradient(
+    180deg,
+    #f3f5f0 0,
+    var(--color-paper) 45rem
+  );
+
+  /* La flecha de un `<select>`, dibujada aquí porque aquí es donde el
+   * proyecto admite un literal (`technical/0009`, requisito 5.1). El trazo va
+   * en `mute` —`#5c6b62`— escrito en su forma escapada, que es además la
+   * única que un `url()` acepta sin romperse. */
+  --icon-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%235c6b62' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6.5 8 10.5 12 6.5'/%3E%3C/svg%3E");
 
   /* Duración y curva de las transiciones (technical/0005, requisito 1.7):
    * antes un `0.35s ease` escrito a mano en `primitives.module.css`. */
@@ -173,6 +232,20 @@
   --size-border-hairline: 0.0625rem;
   --size-bar-row: 0.1875rem;
   --size-bar-axis: 0.375rem;
+
+  /* El lado de la flecha del `<select>` (`technical/0009`, requisito 5.1). */
+  --size-chevron: 0.75rem;
+
+  /* El pulgar del deslizador tiene dos medidas distintas y ese es el punto
+   * (`technical/0009`, requisito 6.2). La **caja** sigue midiendo
+   * `--size-touch-min`, porque el objetivo táctil de 44×44 de `product/0010`
+   * no se negocia; lo que se pinta es solo este círculo interior, recortado
+   * con un borde transparente y `background-clip: content-box`. Por eso son
+   * dos tokens y no uno: el segundo es el grosor de ese borde, la mitad de
+   * la diferencia entre los dos diámetros, y crece en `:hover` a costa del
+   * borde —nunca de la caja—, así que el estado no desplaza nada. */
+  --size-thumb-inset: 0.8125rem;
+  --size-thumb-inset-hover: 0.6875rem;
 
   /* Altura de la cabecera del shell (technical/0005, requisito 1.8). */
   --size-header-height: 3.5rem;
@@ -278,7 +351,19 @@ canvas {
 }
 
 body {
-  background: var(--color-paper);
+  /* El color plano queda de respaldo y el degradado va encima: si alguna vez
+   * `--gradient-paper` no se pudiera pintar, el fondo sigue siendo el de
+   * siempre en vez de quedarse en blanco (`technical/0009`, requisito 4.1). */
+  background-color: var(--color-paper);
+  background-image: var(--gradient-paper);
+  background-attachment: fixed;
+
+  /* Una línea que arregla todo control nativo de la aplicación
+   * (`technical/0009`, requisito 4.2): `accent-color` se hereda, así que las
+   * casillas de los supuestos y los radios de «Comparar contra» de la ficha
+   * dejan de salir en el azul del sistema sobre una paleta verde, sin tocar
+   * ninguno de los dos componentes. */
+  accent-color: var(--color-accent);
   color: var(--color-ink);
   font-family: var(--font-sans);
   font-optical-sizing: auto;

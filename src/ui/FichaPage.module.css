@@ -15,20 +15,10 @@
   gap: var(--space-2);
 }
 
+/* El aspecto entero —flecha propia incluida— lo trae el primitivo
+ * (technical/0009, requisito 5.2). Aquí no queda nada que declarar. */
 .toolbarSelect {
-  composes: mono from './primitives.module.css';
-  min-height: var(--size-touch-min);
-  padding: var(--space-2) var(--space-3);
-  color: var(--color-ink);
-  background: var(--color-card);
-  border: var(--size-border-hairline) solid var(--color-rule);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: border-color var(--duration-fast) var(--ease-out);
-}
-
-.toolbarSelect:hover {
-  border-color: var(--color-rule-strong);
+  composes: select from './primitives.module.css';
 }
 
 /* La opción «Ninguno» del control de comparación (requisito 2.3): mismo
@@ -47,8 +37,14 @@
   background: var(--color-card);
   border: var(--size-border-hairline) solid var(--color-rule);
   border-radius: var(--radius-sm);
+  /* No compone `.select` —no es un `<select>`, es una etiqueta con un radio
+   * dentro—, pero sí lleva su misma sombra para que la barra se lea
+   * homogénea (technical/0009, requisito 5.3). */
+  box-shadow: var(--shadow-control);
   cursor: pointer;
-  transition: border-color var(--duration-fast) var(--ease-out);
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
 }
 
 .noneOption:hover {
@@ -71,19 +67,7 @@
 }
 
 .viewSelect {
-  composes: mono from './primitives.module.css';
-  min-height: var(--size-touch-min);
-  padding: var(--space-2) var(--space-3);
-  color: var(--color-ink);
-  background: var(--color-card);
-  border: var(--size-border-hairline) solid var(--color-rule);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: border-color var(--duration-fast) var(--ease-out);
-}
-
-.viewSelect:hover {
-  border-color: var(--color-rule-strong);
+  composes: select from './primitives.module.css';
 }
 
 /* La tabla no arrastra la página cuando no cabe (requisito 8.2, que reaplica
@@ -527,13 +511,18 @@ th.blockHeader {
 /* La foto ampliada (requisito 8.4): `<dialog>` nativo, sin dependencia
  * nueva. Centrado por el navegador vía el pseudo-elemento `::backdrop`
  * estándar; aquí solo se acota el ancho y se compone con los tokens. */
+/* La superficie más grande y más «encima» de la aplicación es la que estrena
+ * los dos tokens que nadie consumía (technical/0009, requisitos 1.2 y 2.4):
+ * el radio mayor de la escala y la sombra de superposición, que hasta ahora
+ * dejaban la foto ampliada flotando sin peso sobre el `::backdrop`. */
 .dialog {
   border: 0;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   padding: var(--space-5);
   max-width: min(90vw, var(--size-column));
   background: var(--color-paper);
   color: var(--color-ink);
+  box-shadow: var(--shadow-overlay);
 }
 
 .dialog::backdrop {
