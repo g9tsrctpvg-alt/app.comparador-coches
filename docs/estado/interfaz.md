@@ -47,7 +47,13 @@ de colores por debajo de su umbral de contraste hace fallar
   (`:focus-visible`, un único sitio para toda la aplicación) y la
   neutralización de transiciones bajo `prefers-reduced-motion: reduce`
   (duración efectiva de `1e-05s`, no `0s`, para que un `transitionend` que
-  algo espere siga disparándose).
+  algo espere siga disparándose). El `body` fija además dos cosas que se
+  heredan y por eso no las declara nadie más: `accent-color`
+  (`--color-accent`), que es lo que pinta en verde toda casilla y todo radio
+  nativo de la aplicación, y el fondo, que no es un color plano sino
+  `--gradient-paper` —un degradado vertical muy corto, con
+  `background-attachment: fixed` para que no se repita al desplazar— sobre
+  `--color-paper` como respaldo.
 - **Tipografía propia auto-hospedada** (ADR 0008): un único `.woff2`
   variable, `src/assets/fonts/inter-variable-latin.woff2` (Inter, subset
   `latin`, 72.920 bytes), referenciado con `url()` desde `global.css` y
@@ -79,12 +85,21 @@ de colores por debajo de su umbral de contraste hace fallar
   (las tres formas de un botón real —acción principal, secundaria y
   fantasma— sobre la misma base de tamaño táctil y tipografía; ningún
   componente reinventa `background`/`border`/`padding` propios, compone
-  una de estas cuatro clases), `proportionBar`/`proportionBarRow`/`proportionBarAxis`
+  una de estas cuatro clases), `select` (el aspecto único de todo `<select>`
+  de la aplicación: `appearance: none` y flecha propia —`--icon-chevron`, un
+  SVG en la hoja de tokens— en vez de la del sistema operativo; lo componen
+  los dos selectores de la barra de la ficha y el de la cabecera en móvil, y
+  a propósito no fija `display`, que es lo único que cada sitio decide por su
+  cuenta), `proportionBar`/`proportionBarRow`/`proportionBarAxis`
   con su relleno normal o apagado, `statusMark` y `estimatedMark`,
   `secondaryText`, `prose` (medida de línea acotada a `--size-line-measure`
   y partición de palabras largas), `visuallyHidden` (texto solo para
   lectores de pantalla), `rangeInput` (deslizador con objetivo táctil de
-  44×44) y `checkboxRow` (casilla más etiqueta como un único objetivo
+  44×44: la **caja** del pulgar mide eso, pero lo que se pinta es solo un
+  círculo interior de 18px, recortado con un borde transparente más
+  `background-clip: content-box`; el `:hover` adelgaza ese borde, así que el
+  pulgar crece sin que la caja ni el carril se muevan) y `checkboxRow`
+  (casilla más etiqueta como un único objetivo
   táctil de 44×44). Todo elemento accionable de la aplicación tiene
   `:hover` y `:active`, sobre `--duration-fast`/`--duration-base` y
   `--ease-out`; ningún estado mueve `width`, `height`, `padding`, `margin`,
@@ -106,6 +121,28 @@ de colores por debajo de su umbral de contraste hace fallar
   vez de `#6b7a72` y `#b4551b`— porque los tonos originales no llegaban a
   4,5:1 de contraste sobre `card` ni `paper`; el ajuste vive como
   comentario junto a la declaración en `global.css`.
+- **Los cuatro neutros están afinados** frente a los valores con que
+  `product/0009` trajo el artefacto: `paper` `#eceee9`, `card` `#f7f8f5`,
+  `card-raised` blanco y `rule` `#d3d8d0`. Los tres primeros se aclararon, lo
+  que **sube** los catorce pares de contraste declarados en vez de bajar
+  ninguno —el texto es siempre el color oscuro—; el cuarto se aclaró para que
+  la rejilla de pelo pese menos ahora que la elevación carga con parte de la
+  jerarquía. `--color-accent-tint-solid` no es un color independiente sino el
+  7 % de `accent` sobre `card` en opaco, así que se recalcula cada vez que
+  `card` se mueve. El acento y la señal no se han tocado.
+- **La escala de radios** es `--radius-sm` 6px, `--radius-md` 10px y
+  `--radius-lg` 14px, más `--radius-pill` para lo que es una barra y no una
+  caja —las dos barras de proporción y el carril del deslizador—. Los tres
+  primeros valían 2, 4 y 8px hasta `technical/0009`: el dominante, con 18 de
+  las 24 declaraciones de `border-radius` del repositorio, no se distinguía
+  de una esquina recta.
+- **Las sombras** son cuatro y se tiñen de `ink`, no de negro:
+  `--shadow-card` y `--shadow-raised` (dos capas cada una —un contacto corto
+  que asienta el borde y una difusión ancha y muy floja que da la altura—),
+  `--shadow-control` (más floja que ninguna superficie: la de un botón, un
+  selector o la pastilla activa del conmutador, que necesitan leerse como
+  pieza y no como rectángulo contorneado) y `--shadow-overlay`, que usa el
+  `<dialog>` de la foto ampliada.
 - **Los puntos de ruptura** son dos, `--bp-columna` (592px) y `--bp-ancho`
   (960px), cada uno con su motivo escrito junto a la declaración. Una media
   query no puede leer una custom property, así que cada `@media` de

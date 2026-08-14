@@ -1,7 +1,7 @@
 # 0009 — Afinado visual de superficies y controles
 
 - **Id:** technical/0009
-- **Estado:** verified
+- **Estado:** consolidated
 - **Tipo:** technical
 - **Fecha:** 2026-08-14
 - **Specs relacionadas:** technical/0004, technical/0005, technical/0006,
@@ -9,11 +9,11 @@
 - **ADRs relacionados:** 0006
 - **Doc de estado:** `docs/estado/interfaz.md`
 
-> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
-> implementado: su sección *Contexto* retrata el sistema **anterior** al
-> cambio y hoy no es cierta. **No es referencia del estado actual** — para
-> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
-> **criterios de aceptación**, como registro de verificación.
+> ⚠️ **Spec consolidada (2026-08-14).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/interfaz.md`. Vigentes aquí solo los **criterios de
+> aceptación**, como registro de verificación.
 
 ## Contexto
 

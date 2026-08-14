@@ -4,7 +4,7 @@
 > tareas y deudas abiertas. `CLAUDE.md` resume y no duplica: al cerrar una
 > fase se actualiza este documento, no el índice.
 
-**Última actualización:** 2026-08-12
+**Última actualización:** 2026-08-14
 
 ## Fases
 
@@ -251,6 +251,10 @@ entera verde en local y cobertura al 100 %.
 | Gate humano: aprobar `technical/0008` | Hecha — 2026-08-12, en commit propio sin implementación, tras confirmación explícita del usuario en el chat |
 | Implementar y verificar la spec | Hecha — CI entera en verde en local, verificación manual con Playwright: control frente al propio scroll-snap del navegador (un `scrollLeft += 500` sin gesto activo se reencaja solo a `529`; con el eje anclado, el mismo `+= 500` vuelve exacto a `1`, no al punto de anclaje más cercano), más los casos de `technical/0007` repetidos sobre el nuevo mecanismo |
 | Consolidar `technical/0008` en `docs/estado/interfaz.md` | Hecha — 2026-08-12 |
+| `technical/0009` — afinado visual de superficies y controles | `consolidated` |
+| Gate humano: aprobar `technical/0009` | Hecha — 2026-08-14, en commit propio sin implementación, tras confirmación explícita del usuario en modo plan |
+| Implementar y verificar la spec | Hecha — CI entera en verde en local (369 tests, cobertura 100 %), y los once criterios cerrados contra una medición: los catorce pares de contraste par a par, la caja del pulgar medida sobre el elemento renderizado, `accentColor` leído del estilo calculado y el diálogo de la foto ejercitado de punta a punta con las imágenes externas sustituidas en la capa de red, que es lo único que este entorno no alcanza |
+| Consolidar `technical/0009` en `docs/estado/interfaz.md` | Hecha — 2026-08-14 |
 
 **`technical/0007` nace de otra revisión del despliegue** (2026-08-12): en
 un gesto táctil diagonal —pensado como «hacia abajo», con un componente
@@ -419,6 +423,7 @@ una sorpresa esperando fecha.
 | Alta de `hyundai-tucson-hev`: **mantenimiento anual** (media de revisiones oficiales M1/M2, no un coste anual desglosado del fabricante) y **valor residual a 5 años** (comparación con el Kia Sportage HEV del catálogo, no una fuente de reventa española del Tucson) estimados sin fuente firme | 2026-08-08 | Encontrar el coste de mantenimiento anual oficial del fabricante; una fuente de valor residual española específica del Tucson HEV |
 | Alta de `hyundai-tucson-phev`: faltan las fotos de **lateral** y **maletero** (`check:photos` en verde con 3 de las 5 vistas), y las de **frontal**/**trasera** son del acabado N-Line (no del Klass que puntúa la ficha, aunque sí de la misma generación retocada 2024) — Wikimedia Commons no tiene un perfil cercano a 90º ni una vista con el portón abierto para este modelo | 2026-08-08 | Buscar en un concesionario o importador oficial español (origen 4 de `photo-sourcing.md`); sustituir frontal/trasera por el acabado Klass si aparece |
 | Alta de `hyundai-tucson-phev`: **mantenimiento anual** (rango genérico de revisión de Hyundai, no desglosado) y **valor residual a 5 años** (comparación con el BMW X1 xDrive25e del catálogo, no una fuente de reventa española del Tucson PHEV) estimados sin fuente firme | 2026-08-08 | Encontrar el coste de mantenimiento anual oficial del fabricante; una fuente de valor residual española específica del Tucson PHEV |
+| La escala tipográfica tiene dos escalones que no consume nadie: `--font-size-2xl` (28px) y `--font-size-lg` (18px). Los `<h2>` saltan de los 40px del título de vista a los 16px del cuerpo, así que un titular de sección no tiene tamaño propio y se distingue solo por el peso. `technical/0009` lo dejó **fuera de alcance a propósito** —afinó forma y controles, no jerarquía de texto—, y lo registra aquí en vez de resolverlo de paso | 2026-08-14 | Una spec propia que decida qué elementos ocupan los dos escalones vacíos, o que retire los tokens si se concluye que la jerarquía actual basta |
 
 ## Aplazamientos con disparador
 
