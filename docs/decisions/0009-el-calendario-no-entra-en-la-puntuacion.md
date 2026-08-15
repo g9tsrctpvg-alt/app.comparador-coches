@@ -1,6 +1,6 @@
 # 0009 — El calendario no entra en la puntuación
 
-- **Estado:** draft
+- **Estado:** approved
 - **Fecha:** 2026-08-15
 - **Nivel:** 🟡
 

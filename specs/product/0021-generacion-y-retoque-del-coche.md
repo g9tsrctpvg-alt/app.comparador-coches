@@ -1,7 +1,7 @@
 # 0021 — En qué punto tecnológico está el coche: generación y retoque
 
 - **Id:** product/0021
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-08-15
 - **Specs relacionadas:** product/0013, product/0014, product/0017,
