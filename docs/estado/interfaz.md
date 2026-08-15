@@ -382,7 +382,7 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     anchura, altura libre al suelo, maletero, potencia, precio —tamaño,
     mecánica y coste, en ese orden— reutilizando el mismo `FieldDef` que
     `Completa` para potencia y precio, sin una segunda declaración) o
-    `Completa` (las veinte, agrupadas en cinco bloques con cabecera
+    `Completa` (las veintidós, agrupadas en seis bloques con cabecera
     propia). Arranca en `Esenciales`.
   - **Comparar** — **dos controles para el mismo estado**, sincronizados por
     construcción porque los dos escriben `comparisonId`: un radio por columna,
