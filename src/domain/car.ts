@@ -83,6 +83,35 @@ export const TechnologySchema = z.enum(['ICE', 'MHEV', 'HEV', 'PHEV', 'EV']);
 export type Technology = z.infer<typeof TechnologySchema>;
 
 /**
+ * En qué punto tecnológico está el coche (product/0021): el año de
+ * presentación de la generación a la que pertenece, el del retoque de
+ * mitad de ciclo si la versión comparada lo lleva, y el código de
+ * generación del fabricante cuando lo publica. No entra en ninguna nota —
+ * lo decide el ADR 0009: ningún eje puede leer el calendario, así que este
+ * dato se declara y se muestra, y ninguna fórmula lo usa.
+ */
+export const GenerationSchema = z
+  .object({
+    launchYear: SourcedNumberSchema,
+    faceliftYear: SourcedNumberSchema.optional(),
+    code: z.string().min(1).optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (
+      data.faceliftYear !== undefined &&
+      data.faceliftYear.value < data.launchYear.value
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          'el retoque no puede ser anterior al lanzamiento de la generación',
+        path: ['faceliftYear'],
+      });
+    }
+  });
+export type Generation = z.infer<typeof GenerationSchema>;
+
+/**
  * Extensión de garantía condicionada a mantenimiento en red oficial. Se
  * declara aparte de `warrantyYears` a propósito: `product/0007` puntúa solo
  * los años incondicionales, porque una extensión que se renueva servicio a
@@ -105,6 +134,7 @@ export const CarSchema = z.object({
   name: z.string().min(1),
   brand: z.string().min(1),
   technology: TechnologySchema,
+  generation: GenerationSchema,
   notes: z.array(z.string()).default([]),
   published: z.boolean().default(true),
   lengthMm: SourcedNumberSchema,

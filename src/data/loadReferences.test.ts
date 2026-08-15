@@ -26,6 +26,7 @@ function minimalReference(overrides: Record<string, unknown> = {}) {
     name: 'Giulietta',
     brand: 'Alfa Romeo',
     technology: 'ICE',
+    generation: { launchYear: sourced(2010), code: '940' },
     lengthMm: sourced(4351, 'mm'),
     widthMm: sourced(1798, 'mm'),
     heightMm: sourced(1465, 'mm'),

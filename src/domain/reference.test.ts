@@ -21,6 +21,7 @@ const validReference = {
   name: 'Giulietta',
   brand: 'Alfa Romeo',
   technology: 'ICE',
+  generation: { launchYear: sourced(2010), code: '940' },
   lengthMm: sourced(4351, 'mm'),
   widthMm: sourced(1798, 'mm'),
   heightMm: sourced(1465, 'mm'),
@@ -61,6 +62,24 @@ describe('ReferenceSchema', () => {
         sources: [
           { label: 'Fuente', value: 350, estimated: false, current: false },
         ],
+      },
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it('requires a generation, unlike the rest of the score-only fields it omits (product/0021)', () => {
+    const withoutGeneration: Record<string, unknown> = { ...validReference };
+    delete withoutGeneration.generation;
+    const result = ReferenceSchema.safeParse(withoutGeneration);
+    expect(result.success).toBe(false);
+  });
+
+  it('rejects a facelift year earlier than the launch year, same invariant as CarSchema', () => {
+    const result = ReferenceSchema.safeParse({
+      ...validReference,
+      generation: {
+        launchYear: sourced(2010),
+        faceliftYear: sourced(2005),
       },
     });
     expect(result.success).toBe(false);

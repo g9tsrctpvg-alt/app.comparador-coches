@@ -4,6 +4,19 @@
     "name": "EV3",
     "brand": "Kia",
     "technology": "EV",
+    "generation": {
+      "launchYear": {
+        "value": 2024,
+        "sources": [
+          {
+            "label": "Wikipedia (agosto 2026), «Kia EV3»: versión de producción presentada el 23 de mayo de 2024, https://en.wikipedia.org/wiki/Kia_EV3",
+            "value": 2024,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      }
+    },
     "notes": [
       "Doblemente penalizado por la configuración del usuario: viajes largos y sin carga en casa."
     ],
@@ -233,6 +246,20 @@
     "name": "Kona HEV",
     "brand": "Hyundai",
     "technology": "HEV",
+    "generation": {
+      "launchYear": {
+        "value": 2022,
+        "sources": [
+          {
+            "label": "Wikipedia (agosto 2026), «Hyundai Kona»: segunda generación (SX2) revelada en diciembre de 2022, a la venta desde 2023, https://en.wikipedia.org/wiki/Hyundai_Kona",
+            "value": 2022,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "code": "SX2"
+    },
     "notes": [],
     "lengthMm": {
       "value": 4350,
@@ -460,6 +487,20 @@
     "name": "Kona Eléctrico",
     "brand": "Hyundai",
     "technology": "EV",
+    "generation": {
+      "launchYear": {
+        "value": 2022,
+        "sources": [
+          {
+            "label": "Wikipedia (agosto 2026), «Hyundai Kona»: segunda generación (SX2) revelada en diciembre de 2022, a la venta desde 2023, https://en.wikipedia.org/wiki/Hyundai_Kona",
+            "value": 2022,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "code": "SX2"
+    },
     "notes": [
       "Doblemente penalizado por la configuración del usuario: viajes largos y sin carga en casa."
     ],
@@ -694,6 +735,19 @@
     "name": "Corolla Cross",
     "brand": "Toyota",
     "technology": "HEV",
+    "generation": {
+      "launchYear": {
+        "value": 2020,
+        "sources": [
+          {
+            "label": "Wikipedia (agosto 2026), «Toyota Corolla Cross»: primera generación presentada en Tailandia en julio de 2020, a la venta en Europa desde 2022, https://en.wikipedia.org/wiki/Toyota_Corolla_Cross",
+            "value": 2020,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      }
+    },
     "notes": [
       "Evitar la versión Hybrid 200 AWD-i: baja el maletero a 390-425 L y queda fuera de los requisitos.",
       "La garantía de 10 años exige mantenimiento en red oficial; sin él, baja a 3."
@@ -963,6 +1017,20 @@
     "name": "X1 xDrive25e",
     "brand": "BMW",
     "technology": "PHEV",
+    "generation": {
+      "launchYear": {
+        "value": 2022,
+        "sources": [
+          {
+            "label": "Wikipedia (agosto 2026), «BMW X1 (U11)»: tercera generación revelada el 1 de junio de 2022, https://en.wikipedia.org/wiki/BMW_X1_(U11)",
+            "value": 2022,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "code": "U11"
+    },
     "published": false,
     "notes": [
       "Es PHEV y el usuario no tiene carga en casa: no puede aprovechar el enchufe.",
@@ -1195,6 +1263,20 @@
     "name": "Tonale",
     "brand": "Alfa Romeo",
     "technology": "MHEV",
+    "generation": {
+      "launchYear": {
+        "value": 2022,
+        "sources": [
+          {
+            "label": "Wikipedia (agosto 2026), «Alfa Romeo Tonale»: presentación de la versión de producción en febrero de 2022, plataforma código 965, https://en.wikipedia.org/wiki/Alfa_Romeo_Tonale",
+            "value": 2022,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "code": "965"
+    },
     "notes": [
       "MHEV, no HEV: sin híbrido completo anunciado.",
       "Último de los candidatos en fiabilidad y garantía."
@@ -1432,6 +1514,20 @@
     "name": "Sportage HEV",
     "brand": "Kia",
     "technology": "HEV",
+    "generation": {
+      "launchYear": {
+        "value": 2021,
+        "sources": [
+          {
+            "label": "Wikipedia (agosto 2026), «Kia Sportage»: quinta generación (NQ5) revelada el 8 de junio de 2021, https://en.wikipedia.org/wiki/Kia_Sportage",
+            "value": 2021,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "code": "NQ5"
+    },
     "notes": [],
     "lengthMm": {
       "value": 4540,
@@ -1659,6 +1755,19 @@
     "name": "Civic e:HEV",
     "brand": "Honda",
     "technology": "HEV",
+    "generation": {
+      "launchYear": {
+        "value": 2021,
+        "sources": [
+          {
+            "label": "Wikipedia (agosto 2026), «Honda Civic (eleventh generation)»: versión de producción revelada en junio de 2021 (prototipo en noviembre de 2020), https://en.wikipedia.org/wiki/Honda_Civic_(eleventh_generation)",
+            "value": 2021,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      }
+    },
     "notes": [],
     "lengthMm": {
       "value": 4560,
@@ -1893,6 +2002,20 @@
     "name": "NX 350h",
     "brand": "Lexus",
     "technology": "HEV",
+    "generation": {
+      "launchYear": {
+        "value": 2021,
+        "sources": [
+          {
+            "label": "Wikipedia (agosto 2026), «Lexus NX»: segunda generación (AZ20) revelada el 11 de junio de 2021, https://en.wikipedia.org/wiki/Lexus_NX",
+            "value": 2021,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "code": "AZ20"
+    },
     "published": false,
     "notes": [
       "Solo disponible como seminuevo, y aun así ~51.900 €: por encima del presupuesto.",
@@ -2160,6 +2283,20 @@
     "name": "CX-5",
     "brand": "Mazda",
     "technology": "MHEV",
+    "generation": {
+      "launchYear": {
+        "value": 2016,
+        "sources": [
+          {
+            "label": "Wikipedia (agosto 2026), «Mazda CX-5»: segunda generación (KF) presentada el 15 de noviembre de 2016 en el Salón de Los Ángeles, https://en.wikipedia.org/wiki/Mazda_CX-5",
+            "value": 2016,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "code": "KF"
+    },
     "notes": [
       "Doble aviso: excede la longitud original y hoy solo es MHEV.",
       "El híbrido real (e-Skyactiv-Z) no llega hasta 2027.",
@@ -2423,6 +2560,19 @@
     "name": "CR-V e:HEV",
     "brand": "Honda",
     "technology": "HEV",
+    "generation": {
+      "launchYear": {
+        "value": 2022,
+        "sources": [
+          {
+            "label": "Wikipedia (agosto 2026), «Honda CR-V»: sexta generación revelada el 12 de julio de 2022, https://en.wikipedia.org/wiki/Honda_CR-V",
+            "value": 2022,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      }
+    },
     "published": false,
     "notes": [
       "Roza el presupuesto (46.645 €) y es el más largo de los candidatos.",
@@ -2669,6 +2819,30 @@
     "name": "ID.4",
     "brand": "Volkswagen",
     "technology": "EV",
+    "generation": {
+      "launchYear": {
+        "value": 2020,
+        "sources": [
+          {
+            "label": "Wikipedia (agosto 2026), «Volkswagen ID.4»: versión de producción presentada globalmente el 23 de septiembre de 2020, https://en.wikipedia.org/wiki/Volkswagen_ID.4",
+            "value": 2020,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "faceliftYear": {
+        "value": 2023,
+        "sources": [
+          {
+            "label": "EV Database, «Volkswagen ID.4 Pro (MY24-25)» (agosto 2026): actualización de motor a 286 CV desde el año modelo 2024, en producción desde 2023 — coincide con la versión Pro RWD 286 CV que puntúa la ficha, https://ev-database.org/car/2028/Volkswagen-ID4-Pro",
+            "value": 2023,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      }
+    },
     "notes": [
       "Versión Pro (210 kW / 286 CV, batería de 77 kWh, tracción trasera), la de acceso a la gama 2026 tras la retirada de las versiones Pure y Pro Más — motor.es, agosto 2026.",
       "Altura libre al suelo con fuentes muy dispares entre sí (116-210 mm según la fuente): se usa 152 mm (CarsGuide, ficha ID.4 Pro) marcado como estimado; ninguna ficha oficial en español lo publica.",
@@ -2944,6 +3118,19 @@
     "name": "EV5",
     "brand": "Kia",
     "technology": "EV",
+    "generation": {
+      "launchYear": {
+        "value": 2023,
+        "sources": [
+          {
+            "label": "Wikipedia (agosto 2026), «Kia EV5»: versión de producción presentada en agosto de 2023 en el Salón de Chengdu, https://en.wikipedia.org/wiki/Kia_EV5",
+            "value": 2023,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      }
+    },
     "notes": [
       "Versión GT-Line (81,4 kWh, 217 CV, tracción delantera), el acabado superior de la gama — motor.es y km77, agosto 2026. El precio es el PVP de catálogo sin descuentos, para no mezclarlo con precios ya rebajados de otros modelos: km77 declara aparte un descuento oficial de fábrica de 1.634 €, que llevaría el precio a 51.437 €. Supera el presupuesto de referencia (47.000 €).",
       "Sin foto de lateral estricto ni de maletero: no se ha encontrado en Wikimedia Commons un perfil cercano a 90º ni una vista con el portón abierto para este modelo.",
@@ -3183,6 +3370,31 @@
     "name": "IONIQ 5",
     "brand": "Hyundai",
     "technology": "EV",
+    "generation": {
+      "launchYear": {
+        "value": 2021,
+        "sources": [
+          {
+            "label": "Wikipedia (agosto 2026), «Hyundai Ioniq 5»: presentado globalmente el 23 de febrero de 2021, https://en.wikipedia.org/wiki/Hyundai_Ioniq_5",
+            "value": 2021,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "faceliftYear": {
+        "value": 2024,
+        "sources": [
+          {
+            "label": "Wikipedia (agosto 2026), «Hyundai Ioniq 5»: restyling revelado el 3 de marzo de 2024, con batería ampliada a 84 kWh — coincide con los 84 kWh / 228 CV que puntúa la ficha, https://en.wikipedia.org/wiki/Hyundai_Ioniq_5",
+            "value": 2024,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "code": "NE1"
+    },
     "notes": [
       "Versión Light (84 kWh, 228 CV, tracción trasera), la de acceso a la batería grande de la gama 2025 — motor.es y km77, agosto 2026. Roza el presupuesto de referencia (48.070 €).",
       "Sin foto de lateral estricto ni de maletero: no se ha encontrado en Wikimedia Commons un perfil cercano a 90º ni una vista con el portón abierto para este modelo.",
@@ -3417,6 +3629,31 @@
     "name": "Tucson HEV",
     "brand": "Hyundai",
     "technology": "HEV",
+    "generation": {
+      "launchYear": {
+        "value": 2020,
+        "sources": [
+          {
+            "label": "Wikipedia (agosto 2026), «Hyundai Tucson»: cuarta generación (NX4) revelada el 15 de septiembre de 2020, https://en.wikipedia.org/wiki/Hyundai_Tucson",
+            "value": 2020,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "faceliftYear": {
+        "value": 2024,
+        "sources": [
+          {
+            "label": "Hyundai España, press kit «Nuevo Hyundai Tucson» (junio 2024): retoque de mitad de ciclo de la NX4 — coincide con la versión Klass que puntúa la ficha, https://www.hyundai.news/es/modelos/suv/tucson/press-kit/nuevo-hyundai-tucson-junio-2024.html",
+            "value": 2024,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "code": "NX4"
+    },
     "notes": [
       "Versión Klass (1.6 T-GDi HEV, 215 CV, tracción delantera), la de acceso a la gama HEV — motor.es y km77, agosto 2026.",
       "Mantenimiento anual estimado a partir de la media de las dos primeras revisiones oficiales (M1 ~168 €, M2 ~250 € a los 2 años), no de un coste anual desglosado del fabricante.",
@@ -3654,6 +3891,31 @@
     "name": "Tucson PHEV",
     "brand": "Hyundai",
     "technology": "PHEV",
+    "generation": {
+      "launchYear": {
+        "value": 2020,
+        "sources": [
+          {
+            "label": "Wikipedia (agosto 2026), «Hyundai Tucson»: cuarta generación (NX4) revelada el 15 de septiembre de 2020, https://en.wikipedia.org/wiki/Hyundai_Tucson",
+            "value": 2020,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "faceliftYear": {
+        "value": 2024,
+        "sources": [
+          {
+            "label": "Hyundai España, press kit «Nuevo Hyundai Tucson» (junio 2024): retoque de mitad de ciclo de la NX4 — coincide con la versión Klass que puntúa la ficha, https://www.hyundai.news/es/modelos/suv/tucson/press-kit/nuevo-hyundai-tucson-junio-2024.html",
+            "value": 2024,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "code": "NX4"
+    },
     "notes": [
       "Versión Klass (1.6 T-GDi PHEV, 288 CV, tracción delantera, batería de 13,8 kWh, 71 km de autonomía eléctrica WLTP) — motor.es y km77, agosto 2026.",
       "Maletero menor que el HEV del catálogo (558 L frente a 616 L) por el hueco que ocupa la batería, igual que ya señala el catálogo para el BMW X1 xDrive25e frente a otras motorizaciones.",

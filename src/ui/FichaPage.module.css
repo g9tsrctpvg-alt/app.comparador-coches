@@ -161,7 +161,7 @@ th.blockHeader {
 }
 
 /* Cabecera fija en vertical (technical/0005, requisito 5.1): al bajar por
- * las veinte filas de la ficha, se pierde qué modelo es cada columna. Fija
+ * las veintidós filas de la ficha, se pierde qué modelo es cada columna. Fija
  * contra `.tableWrapper` —su propio ancestro de scroll, no la página; ver
  * el comentario de `.tableWrapper` más arriba—, con `top: 0` porque no hay
  * ninguna otra cabecera que despejar dentro de ese contenedor. Fondo

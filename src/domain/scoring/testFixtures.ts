@@ -42,6 +42,7 @@ function buildCar(input: FixtureInput): Car {
     name: input.name,
     brand: input.brand,
     technology: input.technology,
+    generation: { launchYear: sourced(2022) },
     notes: [],
     published: true,
     lengthMm: sourced(input.lengthMm, 'mm'),

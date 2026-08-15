@@ -21,6 +21,15 @@ function referenceFixture(overrides: Partial<Reference> = {}): Reference {
     name: 'Giulietta',
     brand: 'Alfa Romeo',
     technology: 'ICE',
+    generation: {
+      launchYear: {
+        value: 2010,
+        sources: [
+          { label: 'Fixture', value: 2010, estimated: false, current: true },
+        ],
+      },
+      code: '940',
+    },
     photos: {
       side: {
         url: 'https://example.com/giulietta-lateral.jpg',
@@ -106,6 +115,7 @@ describe('FichaPage', () => {
         'Precio',
       ]);
       for (const label of [
+        'Generación',
         'Tamaño y espacio',
         'Mecánica y prestaciones',
         'Coste',
@@ -127,8 +137,8 @@ describe('FichaPage', () => {
       expect(markup).toContain('<option value="completa">Completa</option>');
     });
 
-    it('declares TOTAL_FIELD_COUNT as the twenty magnitudes of "Completa"', () => {
-      expect(TOTAL_FIELD_COUNT).toBe(20);
+    it('declares TOTAL_FIELD_COUNT as the twenty-two magnitudes of "Completa"', () => {
+      expect(TOTAL_FIELD_COUNT).toBe(22);
     });
 
     it("matches FICHA_FIELDS exactly: no domain field silently missing from Completa's render", () => {
