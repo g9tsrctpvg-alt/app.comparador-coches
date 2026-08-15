@@ -1,7 +1,7 @@
 # 0010 — La barra de la ficha: cuatro controles con la misma forma
 
 - **Id:** technical/0010
-- **Estado:** verified
+- **Estado:** consolidated
 - **Tipo:** technical
 - **Fecha:** 2026-08-14
 - **Specs relacionadas:** product/0014, product/0018, product/0020,
@@ -9,11 +9,11 @@
 - **ADRs relacionados:** 0006
 - **Doc de estado:** `docs/estado/interfaz.md`
 
-> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
-> implementado: su sección *Contexto* retrata el sistema **anterior** al
-> cambio y hoy no es cierta. **No es referencia del estado actual** — para
-> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
-> **criterios de aceptación**, como registro de verificación.
+> ⚠️ **Spec consolidada (2026-08-14).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/interfaz.md`. Vigentes aquí solo los **criterios de
+> aceptación**, como registro de verificación.
 
 ## Contexto
 

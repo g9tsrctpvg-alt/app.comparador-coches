@@ -255,6 +255,10 @@ entera verde en local y cobertura al 100 %.
 | Gate humano: aprobar `technical/0009` | Hecha — 2026-08-14, en commit propio sin implementación, tras confirmación explícita del usuario en modo plan |
 | Implementar y verificar la spec | Hecha — CI entera en verde en local (369 tests, cobertura 100 %), y los once criterios cerrados contra una medición: los catorce pares de contraste par a par, la caja del pulgar medida sobre el elemento renderizado, `accentColor` leído del estilo calculado y el diálogo de la foto ejercitado de punta a punta con las imágenes externas sustituidas en la capa de red, que es lo único que este entorno no alcanza |
 | Consolidar `technical/0009` en `docs/estado/interfaz.md` | Hecha — 2026-08-14 |
+| `technical/0010` — la barra de la ficha: cuatro controles con la misma forma | `consolidated` |
+| Gate humano: aprobar `technical/0010` | Hecha — 2026-08-14, en commit propio sin implementación, tras confirmación explícita del usuario en modo plan, con la duplicación del control de comparación puesta sobre la mesa antes de elegir |
+| Implementar y verificar la spec | Hecha — CI entera en verde en local (376 tests, cobertura 100 %), y los trece criterios cerrados contra una medición sobre el build: la barra pasa de 3 filas y 221px a 2 filas y 120px a 390px, y de 1 fila y 69px a 1 fila y 54px en escritorio, con las cuatro pastillas del mismo ancho y la misma altura a los siete anchos probados; sincronía comprobada en las dos direcciones entre el `<select>` y los radios de cabecera |
+| Consolidar `technical/0010` en `docs/estado/interfaz.md` | Hecha — 2026-08-14 |
 
 **`technical/0007` nace de otra revisión del despliegue** (2026-08-12): en
 un gesto táctil diagonal —pensado como «hacia abajo», con un componente
