@@ -1,6 +1,8 @@
 import type { AxisBreakdown } from '../../domain/scoring/breakdown';
+import { AXIS_THEME_CLASS } from '../axisTheme';
 import { formatEur, formatNumber, formatSigned } from '../format';
 import primitives from '../primitives.module.css';
+import { AxisIcon } from './AxisIcon';
 import styles from './AxisBreakdownView.module.css';
 import { EstimatedMark } from './EstimatedMark';
 
@@ -19,9 +21,12 @@ export function AxisBreakdownView({ breakdown }: AxisBreakdownViewProps) {
   const dimmed = breakdown.weight === 0;
 
   return (
-    <div className={styles.axis}>
+    <div className={`${styles.axis} ${AXIS_THEME_CLASS[breakdown.axisId]}`}>
       <header className={styles.header}>
-        <span className={styles.name}>{breakdown.label}</span>
+        <span className={styles.name}>
+          <AxisIcon axisId={breakdown.axisId} />
+          {breakdown.label}
+        </span>
         <span className={styles.meta}>
           peso <span className={styles.metaValue}>{breakdown.weight}</span>
         </span>

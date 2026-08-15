@@ -3,6 +3,8 @@ import {
   AXIS_ORDER,
   type AxisWeights,
 } from '../../domain/scoring/weights';
+import { AXIS_THEME_CLASS } from '../axisTheme';
+import { AxisIcon } from './AxisIcon';
 import { CollapsiblePanel } from './CollapsiblePanel';
 import styles from './WeightSliders.module.css';
 
@@ -28,9 +30,15 @@ export function WeightSliders({ weights, onChange }: WeightSlidersProps) {
         {AXIS_ORDER.map((axisId) => {
           const value = weights[axisId];
           return (
-            <label key={axisId} className={styles.row}>
+            <label
+              key={axisId}
+              className={`${styles.row} ${AXIS_THEME_CLASS[axisId]}`}
+            >
               <span className={styles.top}>
-                <span className={styles.axisName}>{AXIS_LABELS[axisId]}</span>
+                <span className={styles.axisName}>
+                  <AxisIcon axisId={axisId} />
+                  {AXIS_LABELS[axisId]}
+                </span>
                 <span
                   className={value === 0 ? styles.valueDimmed : styles.value}
                 >

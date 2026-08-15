@@ -41,15 +41,39 @@
   margin: 0;
 }
 
+/* Filete de color del eje (technical/0011, requisito 4.1): seis tarjetas
+ * seguidas con la misma forma necesitan algo que las separe antes de leerlas.
+ *
+ * Va en un `::before` y no en `border-left` por la trampa de composición que
+ * ya documenta `primitives.module.css`: el primitivo `card` se emite
+ * **después** que este módulo, así que su `border` gana siempre a cualquier
+ * borde que se declare aquí. Medido: el filete salía a 1px y en gris. Un
+ * pseudo-elemento no compite con esa cascada, y de paso no mueve el relleno
+ * de la tarjeta. */
 .axisBlock {
   composes: card from './primitives.module.css';
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
   scroll-margin-top: var(--space-4);
 }
 
+.axisBlock::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: var(--size-rule-axis);
+  background: var(--axis-color, var(--color-rule));
+  border-start-start-radius: var(--radius-md);
+  border-end-start-radius: var(--radius-md);
+}
+
 .axisTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
   font-family: var(--font-sans);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-semibold);
@@ -132,13 +156,16 @@
 }
 
 .weightName {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
   font-family: var(--font-sans);
   color: var(--color-ink);
 }
 
 .weightValue {
   composes: mono from './primitives.module.css';
-  color: var(--color-accent);
+  color: var(--axis-color, var(--color-accent));
   font-weight: var(--font-weight-semibold);
 }
 

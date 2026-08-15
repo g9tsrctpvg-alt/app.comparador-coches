@@ -1,0 +1,39 @@
+/* Tema de color por eje (technical/0011, requisito 3.1).
+ *
+ * Cada clase declara **una sola** custom property local y no pinta nada. Quien
+ * la lleva puesta decide qué hace con ella: un filete, un relleno de barra, el
+ * color heredado de un icono, una cifra. Esa separación es lo que permite que
+ * los tres sitios que pintan ejes compartan un único mapa de color sin
+ * compartir su forma.
+ *
+ * Ninguna clase toca `color` ni `background` directamente a propósito. No es
+ * pulcritud: el primitivo `card` de `primitives.module.css` se emite en el CSS
+ * final **después** que los módulos que lo componen, así que su `background` y
+ * su `border` ganan a cualquier cosa que se declare desde aquí. Medido, no
+ * supuesto — el primer intento pintaba el filete con `border-left` y salía a
+ * 1px y en gris.
+ */
+
+.viaje {
+  --axis-color: var(--color-axis-viaje);
+}
+
+.diario {
+  --axis-color: var(--color-axis-diario);
+}
+
+.prestaciones {
+  --axis-color: var(--color-axis-prestaciones);
+}
+
+.fiabilidad {
+  --axis-color: var(--color-axis-fiabilidad);
+}
+
+.estetica {
+  --axis-color: var(--color-axis-estetica);
+}
+
+.coste {
+  --axis-color: var(--color-axis-coste);
+}

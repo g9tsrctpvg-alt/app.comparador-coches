@@ -106,6 +106,58 @@
   --color-positive: #14655c;
   --color-negative: #a34d18;
 
+  /* Color por eje (technical/0011). Los seis ejes se pintaban todos con el
+   * acento: qué eje se estaba mirando lo decía solo el texto. Aquí la paleta
+   * pasa de los siete papeles de `product/0009` a trece, y esa ampliación es
+   * una enmienda deliberada a esa spec —consolidada, así que no se edita: la
+   * enmienda vive en `technical/0011` y en `docs/estado/interfaz.md`—. Lo que
+   * no se amplía es la libertad: todo literal de color sigue viviendo aquí.
+   *
+   * Los valores salen de medir, no de elegir. Tres decisiones que no son
+   * estéticas:
+   *
+   * 1. `diario` repite el valor exacto de `accent`. Es el eje del uso de
+   *    todos los días y gastar un tono nuevo en él no compraba nada. Token
+   *    propio y no alias, por la misma razón que `--color-positive`.
+   * 2. La luminosidad se separa a propósito —L* de 29 a 44 en vez de 35-39—.
+   *    Con los seis a la misma luminosidad el peor par bajo protanopia caía a
+   *    ΔE 5,2; abriendo el rango sube a 10,1. La separación de luminosidad es
+   *    lo único que sobrevive a una deficiencia de visión del color.
+   * 3. `prestaciones` es carmín y no el rojo tierra que pedía el tema. El
+   *    candidato natural, `#8f3a34`, quedaba a ΔE 24,5 de `signal`, con el
+   *    que comparte pantalla en las celdas Δ: un rojo de eje confundible con
+   *    «este coche empeora». `#8e2f45` lo aleja a ΔE 38,7 y encima sube el
+   *    contraste a 7,45:1.
+   *
+   * Contraste sobre `card` y sobre `paper`, en ese orden: 5,23 y 4,77 azul;
+   * 6,47 y 5,90 teal; 7,45 y 6,80 carmín; 9,09 y 8,29 índigo; 5,85 y 5,34
+   * ciruela; 5,31 y 4,85 ocre. Los doce pasan el umbral de texto normal y los
+   * doce los comprueba `scripts/validateContrast.ts`, así que estas cifras no
+   * dependen de que este comentario esté al día. */
+  --color-axis-viaje: #2a6f8f;
+  --color-axis-diario: #14655c;
+  --color-axis-prestaciones: #8e2f45;
+  --color-axis-fiabilidad: #31417a;
+  --color-axis-estetica: #8d4784;
+  --color-axis-coste: #7d6417;
+
+  /* **No hay tinte por eje**, y no es un olvido. La versión inicial de
+   * `technical/0011` declaraba los seis al 8 % para teñir el fondo de la
+   * tarjeta de cada eje. Al implementarlo se quedó sin sitio por dos razones,
+   * y se retiró en vez de dejarlo declarado sin consumidor:
+   *
+   * 1. Los catorce pares de `scripts/validateContrast.ts` miden el texto
+   *    contra `card`. Teñir esa tarjeta cambia el fondo real de todo el texto
+   *    que lleva encima —`mute` sobre `card` va a 4,81:1, con poco margen—,
+   *    así que el tinte no es decorativo: obliga a recalcular los pares.
+   * 2. Seis tarjetas seguidas con el fondo teñido era más color del que este
+   *    cambio pretende, con el filete, el icono, la barra y la nota ya
+   *    llevándolo.
+   *
+   * Si algún día se quiere un tinte —un `:hover`, una superficie de eje—, el
+   * trabajo incluye declarar sus pares de contraste contra el resultado
+   * compuesto, no contra `card`. */
+
   /* Espaciado — una sola escala, en incrementos de 4px. */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -233,8 +285,26 @@
   --size-bar-row: 0.1875rem;
   --size-bar-axis: 0.375rem;
 
+  /* El filete de color que identifica un eje (`technical/0011`, requisito
+   * 4.1). Más grueso que el pelo de `--size-border-hairline`, porque no es un
+   * borde: es el dato. */
+  --size-rule-axis: 0.1875rem;
+
   /* El lado de la flecha del `<select>` (`technical/0009`, requisito 5.1). */
   --size-chevron: 0.75rem;
+
+  /* El lado de un icono de eje (`technical/0011`, requisito 5). Uno solo:
+   * seis iconos que aparecen en tres sitios distintos y se dibujan todos
+   * sobre el mismo `viewBox` de 24, así que un segundo tamaño solo serviría
+   * para que dejaran de parecer la misma familia. */
+  --size-icon: 1.25rem;
+
+  /* Grosor del trazo de un icono de eje. **Sin unidad a propósito**: en un
+   * SVG, `stroke-width` se mide en unidades del `viewBox` —aquí, veinticuatro
+   * a lo ancho—, no en píxeles de pantalla. Escribirlo en `rem` diría otra
+   * cosa: el trazo dejaría de escalar con el icono. Está aquí y no en el
+   * módulo por la misma razón que todo lo demás — es un literal de diseño. */
+  --size-icon-stroke: 1.75;
 
   /* Ancho mínimo de una pastilla de la barra de la ficha (`technical/0010`,
    * requisito 2.3). Es lo que decide, con `repeat(auto-fit, minmax(…, 1fr))`,

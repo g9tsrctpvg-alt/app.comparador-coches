@@ -91,13 +91,20 @@
   height: var(--size-bar-axis);
 }
 
+/* El relleno se tiñe del color del eje cuando hay uno (technical/0011,
+ * requisito 3.4). El respaldo al acento no es cortesía: es lo que deja la
+ * barra del ranking exactamente como estaba sin tocar su fichero, porque esa
+ * barra es la puntuación **total** y no un eje. */
 .proportionBarFill {
   display: block;
   height: 100%;
-  background: var(--color-accent);
+  background: var(--axis-color, var(--color-accent));
   border-radius: var(--radius-pill);
   transition: width var(--duration-base) var(--ease-out);
 }
+
+/* Sigue ganando al color de eje por venir después en el fichero: que un eje
+ * no cuente pesa más que de qué color es (technical/0011, requisito 4.5). */
 
 .proportionBarFillDimmed {
   composes: proportionBarFill;
@@ -431,7 +438,7 @@
   height: var(--size-touch-min);
   border: var(--size-thumb-inset) solid transparent;
   border-radius: 50%;
-  background: var(--color-accent);
+  background: var(--axis-color, var(--color-accent));
   background-clip: content-box;
   margin-top: calc((var(--size-touch-min) - var(--size-bar-axis)) / -2);
   transition:
@@ -459,7 +466,7 @@
   height: var(--size-touch-min);
   border: var(--size-thumb-inset) solid transparent;
   border-radius: 50%;
-  background: var(--color-accent);
+  background: var(--axis-color, var(--color-accent));
   background-clip: content-box;
   box-sizing: border-box;
   transition:

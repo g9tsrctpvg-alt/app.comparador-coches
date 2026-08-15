@@ -32,6 +32,12 @@ describe('validateContrast', () => {
         --color-positive: #14655c;
         --color-negative: #a34d18;
         --color-mute-on-ink: #8fa69b;
+        --color-axis-viaje: #2a6f8f;
+        --color-axis-diario: #14655c;
+        --color-axis-prestaciones: #8e2f45;
+        --color-axis-fiabilidad: #31417a;
+        --color-axis-estetica: #8d4784;
+        --color-axis-coste: #7d6417;
       }
     `;
     const result = validateContrast({ globalStylesheet });
@@ -55,6 +61,12 @@ describe('validateContrast', () => {
         --color-positive: #14655c;
         --color-negative: #a34d18;
         --color-mute-on-ink: #8fa69b;
+        --color-axis-viaje: #2a6f8f;
+        --color-axis-diario: #14655c;
+        --color-axis-prestaciones: #8e2f45;
+        --color-axis-fiabilidad: #31417a;
+        --color-axis-estetica: #8d4784;
+        --color-axis-coste: #7d6417;
       }
     `;
     const result = validateContrast({ globalStylesheet });
@@ -77,6 +89,12 @@ describe('validateContrast', () => {
         --color-positive: #14655c;
         --color-negative: #a34d18;
         --color-mute-on-ink: #8fa69b;
+        --color-axis-viaje: #2a6f8f;
+        --color-axis-diario: #14655c;
+        --color-axis-prestaciones: #8e2f45;
+        --color-axis-fiabilidad: #31417a;
+        --color-axis-estetica: #8d4784;
+        --color-axis-coste: #7d6417;
       }
     `;
     const result = validateContrast({ globalStylesheet });

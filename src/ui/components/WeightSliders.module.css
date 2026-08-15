@@ -18,13 +18,18 @@
 }
 
 .axisName {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
   font-family: var(--font-sans);
   color: var(--color-ink);
 }
 
+/* El valor toma el color de su eje (technical/0011, requisito 4.2), que es lo
+ * que empareja la cifra con el pulgar que la mueve. */
 .value {
   composes: mono from '../primitives.module.css';
-  color: var(--color-accent);
+  color: var(--axis-color, var(--color-accent));
   font-weight: var(--font-weight-semibold);
 }
 

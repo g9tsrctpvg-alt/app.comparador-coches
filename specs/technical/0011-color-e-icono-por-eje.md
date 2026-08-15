@@ -1,13 +1,17 @@
 # 0011 — Color e icono por eje
 
 - **Id:** technical/0011
-- **Estado:** approved
+- **Estado:** implemented
 - **Tipo:** technical
 - **Fecha:** 2026-08-15
 - **Specs relacionadas:** product/0009, product/0010, product/0011,
   technical/0004, technical/0005, technical/0009
 - **ADRs relacionados:** 0006
 - **Doc de estado:** `docs/estado/interfaz.md`
+
+> ⚠️ **Spec histórica — implementada, sin consolidar.** Su *Contexto* retrata
+> el sistema anterior al cambio. Para el estado actual, ver
+> `docs/estado/interfaz.md`.
 
 ## Contexto
 
@@ -99,10 +103,20 @@ un rojo de eje confundible con «este coche empeora» es un bug de diseño.
 `#8e2f45` lo aleja a **ΔE 38,7** sin perder contraste — de hecho sube a
 7,45:1.
 
-1.5. Cada tono lleva su tinte al 8 %: `--color-axis-viaje-tint` y sus cinco
-hermanos, escritos como `rgb(r g b / 8%)`. Llevan canal alfa, así que **no
-entran en el gate de contraste** — un color translúcido no tiene contraste
-fijo, depende de qué haya debajo, como ya documenta `scripts/validateContrast.ts`.
+1.5. **No hay tinte por eje.** Este requisito declaraba seis tintes al 8 %
+para teñir el fondo de la tarjeta de cada eje. Al implementarlo se retiraron,
+en vez de dejarlos declarados sin consumidor, por dos razones que solo se ven
+con el diseño delante:
+
+- Los pares de `scripts/validateContrast.ts` miden el texto contra `card`.
+  Teñir esa tarjeta cambia el fondo real de todo el texto que lleva encima
+  —`mute` sobre `card` está a 4,81:1, con poco margen—, así que un tinte no es
+  decorativo: obliga a recalcular los pares contra el resultado compuesto.
+- Con el filete, el icono, la barra y la nota ya llevando color, seis tarjetas
+  seguidas con el fondo teñido era más color del que este cambio pretende.
+
+La razón queda escrita en `global.css`, donde estaban los tokens, para que el
+próximo que quiera un tinte sepa qué trabajo trae de la mano.
 
 ### 2. El color nunca sustituye al texto
 
@@ -118,9 +132,9 @@ en superficies contiguas y no para jugárselo todo a ellos.
 ### 3. El mecanismo, sin literales y sin tocar el dominio
 
 3.1. `src/ui/axisTheme.module.css` declara una clase por eje, y cada clase
-declara **solo dos custom properties locales**: `--axis-color` y `--axis-tint`,
-cada una apuntando a su token global. Ningún literal, así que
-`scripts/validateStyleTokens.ts` sigue pasando sin excepciones.
+declara **una sola custom property local**: `--axis-color`, apuntando a su
+token global. Ningún literal, así que `scripts/validateStyleTokens.ts` sigue
+pasando sin excepciones.
 
 3.2. `src/ui/axisTheme.ts` expone un `Record<AxisId, string>` de `axisId` al
 nombre de clase. Es el mismo patrón que `src/ui/technologyLabels.ts`: un mapa
@@ -134,20 +148,39 @@ sigue pasando sin modificar.
 
 3.4. Los consumidores leen `var(--axis-color)`. El relleno de barra de
 `primitives.module.css` pasa a `background: var(--axis-color, var(--color-accent))`:
-**con respaldo**, para que los sitios sin eje —la barra del ranking— sigan
-exactamente igual sin tocar su fichero.
+**con respaldo**, para que los sitios sin eje —la barra del ranking, los seis
+deslizadores de supuestos— sigan exactamente igual sin tocar su fichero.
+
+3.5. **El color de eje no se puede pintar con un borde sobre un `card`.** El
+primitivo `card` se emite en el CSS final **después** que los módulos que lo
+componen, así que su `border` y su `background` ganan a lo que declare quien lo
+compone — es la misma trampa que `primitives.module.css` ya documenta para
+`padding` y `margin`. Medido: la primera versión pintaba el filete con
+`border-left` y salía a 1px y en gris, con `--axis-color` correctamente
+resuelto en el mismo elemento. El filete va en un `::before` posicionado, que
+no compite en esa cascada y además no mueve el relleno de la tarjeta.
 
 ### 4. Dónde aterriza el color
 
 4.1. **`ExplicacionPage`**: cada una de las seis `.axisBlock` recibe su clase
-de tema, un filete izquierdo en `--axis-color` y el icono junto al `<h3>`. El
-índice de ejes y las filas de la lista de pesos reciben el mismo tema.
+de tema, un filete izquierdo en `--axis-color` y el icono junto al `<h3>`. Las
+seis filas de la lista de pesos reciben el mismo tema, con su icono y su cifra
+en el color del eje.
+
+Este requisito decía también «el índice de ejes». **No existe tal índice**: el
+`<nav>` de la página es su tabla de contenidos, con una entrada por sección
+—`Los seis ejes`, `Los pesos`, `Supuestos globales`…— y ninguna por eje.
+Teñir una entrada que dice «Los seis ejes» de uno de los seis colores diría
+algo falso, así que el índice se queda como está.
 
 4.2. **`WeightSliders`**: cada fila recibe su clase de tema, con el icono junto
-al nombre del eje y el pulgar del deslizador en `--axis-color`.
+al nombre del eje, la cifra del peso y el pulgar del deslizador en
+`--axis-color`.
 
-4.3. **`AxisBreakdownView`**: cada bloque recibe su clase de tema; la barra de
-proporción se rellena con `--axis-color` y el icono acompaña al nombre.
+4.3. **`AxisBreakdownView`**: cada bloque recibe su clase de tema; el filete,
+la barra de proporción, la nota del eje y el icono van en `--axis-color`. La
+nota entra aquí y no estaba en la versión aprobada: es la cifra de la que va
+el bloque entero y dejarla en acento la desemparejaba de su propia barra.
 
 4.4. **`RankingRow` no cambia.** Requisito de no hacer, no de hacer.
 
@@ -202,25 +235,37 @@ paleta, no la libertad de saltársela.
 
 > Obligatorios y verificables.
 
-- [ ] Los seis tokens existen en `src/styles/global.css` con los valores del
-      requisito 1.1, y `npm run test:coverage` los verifica contra el umbral de
-      4,5:1 mediante los doce pares nuevos de `DECLARED_PAIRS`.
-- [ ] `scripts/validateStyleTokens.ts` sigue pasando: ningún `.module.css` de
-      `src/ui/` contiene un literal de color, incluidos los ficheros nuevos.
-- [ ] Los seis ejes rinden su clase de tema en los tres sitios del requisito 4,
-      comprobado con `renderToStaticMarkup` en los tests de `ExplicacionPage`,
-      `WeightSliders` y `AxisBreakdownView`.
-- [ ] `AxisIcon` rinde un `<svg>` para cada uno de los seis ejes y **todos**
-      llevan `aria-hidden="true"`, comprobado en `AxisIcon.test.tsx`.
-- [ ] El mapa de `axisTheme.ts` cubre `AXIS_ORDER` entero y no tiene claves de
-      más, comprobado en `axisTheme.test.ts`.
-- [ ] La barra de `RankingRow` sigue pintándose en acento: su fichero no
-      aparece en el diff.
-- [ ] La cobertura sigue al 100 % en líneas, sentencias, funciones y ramas.
-- [ ] Medido en navegador real sobre el build a 320, 390 y 1440px: ningún
-      objetivo táctil baja de 44px, el documento no se desplaza en horizontal a
-      ninguna de las tres anchuras, y los seis tonos se distinguen en pantalla.
-- [ ] La CI entera pasa en local: `format:check`, `lint`, `typecheck`,
+- [x] Los seis tokens existen en `src/styles/global.css` con los valores del
+      requisito 1.1, y la suite los verifica contra el umbral de 4,5:1 mediante
+      los doce pares nuevos de `DECLARED_PAIRS`. Un par cuyo token no exista es
+      un error del validador, no un salto silencioso, así que que pase prueba
+      además que los seis tokens están.
+- [x] `scripts/validateStyleTokens.ts` sigue pasando: ningún `.module.css` de
+      `src/ui/` contiene un literal de color, incluidos los tres ficheros
+      nuevos.
+- [x] Los seis ejes rinden su clase de tema en los tres sitios del requisito 4,
+      con `renderToStaticMarkup`: `ExplicacionPage.test.tsx` (dos apariciones
+      por eje: tarjeta y fila de peso), `WeightSliders.test.tsx` (una por eje) y
+      `AxisBreakdownView.test.tsx`, que además comprueba que **ningún otro eje
+      se cuela** en el marcado de un bloque.
+- [x] `AxisIcon` rinde un `<svg>` para cada uno de los seis ejes, todos con
+      `aria-hidden="true"`, ninguno con `aria-label` ni `<title>`, y los seis
+      con dibujo distinto. `AxisIcon.test.tsx` recorre `AXIS_ORDER`, no una
+      lista propia.
+- [x] El mapa de `axisTheme.ts` cubre `AXIS_ORDER` entero, no tiene claves de
+      más y da a cada eje una clase distinta (`axisTheme.test.ts`).
+- [x] La barra de `RankingRow` sigue pintándose en acento: su fichero no
+      aparece en el diff. Medido además en pantalla: los seis deslizadores de
+      supuestos, que tampoco son ejes, siguen en `rgb(20, 101, 92)`.
+- [x] La cobertura sigue al 100 % en líneas, sentencias, funciones y ramas
+      (394 sentencias, 184 ramas, 71 funciones), con 387 tests en verde.
+- [x] Medido en navegador real sobre el build a 320, 390, 768 y 1440px: los
+      seis filetes y los seis iconos salen con **seis colores distintos** y
+      coincidentes entre sí, las seis barras del desglose también, el
+      desbordamiento horizontal del documento es **0px** en las cuatro
+      anchuras, y el objetivo táctil de los deslizadores se queda en **44px**
+      —el mínimo de `product/0010`, requisito 8— con los iconos a 20px.
+- [x] La CI entera pasa en local: `format:check`, `lint`, `typecheck`,
       `arch:check`, `test:coverage`, `build`.
 
 ## Dependencias y supuestos
