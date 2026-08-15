@@ -1,7 +1,7 @@
 # 0011 — Color e icono por eje
 
 - **Id:** technical/0011
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** technical
 - **Fecha:** 2026-08-15
 - **Specs relacionadas:** product/0009, product/0010, product/0011,
