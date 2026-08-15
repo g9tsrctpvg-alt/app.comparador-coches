@@ -1,7 +1,7 @@
 # 0021 — En qué punto tecnológico está el coche: generación y retoque
 
 - **Id:** product/0021
-- **Estado:** implemented
+- **Estado:** verified
 - **Tipo:** product
 - **Fecha:** 2026-08-15
 - **Specs relacionadas:** product/0013, product/0014, product/0017,
@@ -152,27 +152,27 @@ sin entrar en ninguna nota.
 
 > Obligatorios y verificables.
 
-- [ ] `CarSchema` rechaza un registro sin `generation.launchYear`, nombrando
+- [x] `CarSchema` rechaza un registro sin `generation.launchYear`, nombrando
       el campo y el registro.
-- [ ] `CarSchema` rechaza un registro con `faceliftYear` anterior a
+- [x] `CarSchema` rechaza un registro con `faceliftYear` anterior a
       `launchYear`, nombrando el campo; con `faceliftYear` igual o posterior,
       valida.
-- [ ] Un registro sin `faceliftYear` y sin `code` valida sin error.
-- [ ] `ReferenceSchema` exige `generation.launchYear` con las mismas reglas.
-- [ ] El snapshot de `scoreCatalog` es **idéntico** antes y después del
+- [x] Un registro sin `faceliftYear` y sin `code` valida sin error.
+- [x] `ReferenceSchema` exige `generation.launchYear` con las mismas reglas.
+- [x] El snapshot de `scoreCatalog` es **idéntico** antes y después del
       cambio, y ningún `AxisBreakdown` menciona el año.
-- [ ] La ficha completa muestra el bloque «Generación» con sus dos filas para
+- [x] La ficha completa muestra el bloque «Generación» con sus dos filas para
       cada candidato y para la referencia.
-- [ ] Comparando contra una entidad que no declara retoque, la celda de
+- [x] Comparando contra una entidad que no declara retoque, la celda de
       retoque de las demás se muestra como raya con texto accesible, no como
       `0`.
-- [ ] La ficha ordenada y comparada sigue funcionando igual: los criterios de
+- [x] La ficha ordenada y comparada sigue funcionando igual: los criterios de
       orden (`catalog`, `lengthMm`, `widthMm`, `priceEur`) no cambian.
-- [ ] Los dieciséis registros de `cars.json` y la referencia declaran
+- [x] Los dieciséis registros de `cars.json` y la referencia declaran
       `generation.launchYear` con una fuente citada y verificable por URL.
-- [ ] El conjunto «Esenciales» sigue mostrando exactamente sus seis campos.
-- [ ] La skill `add-model` pide el dato al dar de alta un coche.
-- [ ] `npm run test:coverage` sigue en 100% tras el cambio.
+- [x] El conjunto «Esenciales» sigue mostrando exactamente sus seis campos.
+- [x] La skill `add-model` pide el dato al dar de alta un coche.
+- [x] `npm run test:coverage` sigue en 100% tras el cambio.
 
 ## Dependencias y supuestos
 
