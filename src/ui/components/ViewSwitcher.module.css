@@ -33,24 +33,31 @@
     background-color var(--duration-fast) var(--ease-out);
 }
 
+/* Los tres estados se invirtieron con la cabecera tintada (technical/0012,
+ * requisito 1.3): sobre un carril que ya es acento al 10 %, un tinte de
+ * acento al 7 % no se distingue de su fondo, y el conmutador volvía a leerse
+ * como tres etiquetas planas. Ahora el `:hover` tiñe y la pastilla activa se
+ * levanta en blanco. */
 .link:hover {
   color: var(--color-ink);
-  background: var(--color-card-raised);
+  background: var(--color-accent-tint);
 }
 
 .link:active {
   color: var(--color-accent);
-  background: var(--color-accent-tint);
+  background: var(--color-accent-tint-strong);
 }
 
 /* La pastilla activa se despega del grupo (technical/0009, requisito 6.1):
  * con el tinte a solas, el conmutador se leía como tres etiquetas con una
  * resaltada; con la sombra de control encima, se lee como lo que es, una
- * pieza elegida dentro de un carril. */
+ * pieza elegida dentro de un carril. Desde `technical/0012` esa metáfora es
+ * literal: sobre el carril tintado de la cabecera, la pastilla activa **se
+ * levanta** en blanco en vez de teñirse sobre blanco. */
 .active {
   color: var(--color-accent);
   font-weight: var(--font-weight-semibold);
-  background: var(--color-accent-tint);
+  background: var(--color-card-raised);
   box-shadow: var(--shadow-control);
 }
 

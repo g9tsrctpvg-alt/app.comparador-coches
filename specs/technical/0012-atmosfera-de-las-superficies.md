@@ -1,7 +1,7 @@
 # 0012 — Atmósfera de las superficies
 
 - **Id:** technical/0012
-- **Estado:** approved
+- **Estado:** consolidated
 - **Tipo:** technical
 - **Fecha:** 2026-08-15
 - **Specs relacionadas:** product/0009, product/0010, technical/0005,
@@ -9,13 +9,19 @@
 - **ADRs relacionados:** 0006
 - **Doc de estado:** `docs/estado/interfaz.md`
 
+> ⚠️ **Spec consolidada (2026-08-15).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/interfaz.md`. Vigentes aquí solo los **criterios de
+> aceptación**, como registro de verificación.
+
 ## Contexto
 
 `technical/0011` le dio color a los seis ejes, que es donde el color podía
 significar algo. Pero **las superficies siguen siendo grises**: la cabecera es
 blanco puro con un pelo gris, el degradado de página va de un neutro casi
 imperceptible a otro, la tarjeta del líder es una caja `ink` sin ningún borde
-que la despegue, y los siete titulares de sección de `#/como-se-calcula` son
+que la despegue, y los seis titulares de sección de `#/como-se-calcula` son
 texto en `ink` sin nada más — que es además donde más se nota que `<h2>` no
 tiene tamaño propio.
 
@@ -110,7 +116,9 @@ final después que los módulos que lo componen, así que su `border` gana.
 
 ### 4. Los titulares de sección tienen filete
 
-4.1. Los siete `<h2>` de `#/como-se-calcula` (`.sectionTitle`) reciben un
+4.1. Los seis `<h2>` de `#/como-se-calcula` (`.sectionTitle`) —esta spec decía
+siete al redactarse; contados sobre el marcado renderizado son **seis**—
+reciben un
 filete corto de acento encima. `.sectionTitle` no compone ningún primitivo, así
 que aquí un borde sí funciona.
 
@@ -128,23 +136,32 @@ exactamente lo que las distingue del color de eje de `technical/0011`.
 
 > Obligatorios y verificables.
 
-- [ ] `--color-chrome` existe en `src/styles/global.css` y sus tres pares
+- [x] `--color-chrome` existe en `src/styles/global.css` y sus tres pares
       —`ink`, `accent` y `mute` sobre él— están en `DECLARED_PAIRS`, pasando el
-      umbral de 4,5:1.
-- [ ] El arranque del degradado da a `mute` **al menos** los 4,81:1 que ya da
-      `--color-paper`, comprobado con la misma fórmula del validador.
-- [ ] Los tres estados del conmutador de vista son visualmente distintos entre
-      sí sobre la cabecera tintada, medido como tres colores de fondo
-      calculados distintos.
-- [ ] `scripts/validateStyleTokens.ts` sigue pasando: ningún literal nuevo
+      umbral de 4,5:1 (13,77, 5,96 y 4,86). El validador da error si un par
+      declara un token que no existe, así que que pase también prueba que el
+      token está.
+- [x] El arranque del degradado da a `mute` **4,93:1**, por encima de los
+      4,81:1 que da `--color-paper`. Medido en pantalla: el `background-image`
+      calculado del `body` arranca en `rgb(233, 242, 238)` y llega a
+      `rgb(236, 238, 233)`.
+- [x] Los tres estados del conmutador de vista son distintos entre sí **y del
+      fondo de la cabecera**, medido sobre el build con el `:hover` simulado:
+      cabecera `rgb(232, 240, 239)`, reposo transparente, `:hover`
+      `rgba(20, 101, 92, 0.07)`, activa `rgb(255, 255, 255)` con su sombra.
+- [x] `scripts/validateStyleTokens.ts` sigue pasando: ningún literal nuevo
       fuera de la hoja global.
-- [ ] La cobertura sigue al 100 % en líneas, sentencias, funciones y ramas, y
-      la CI entera pasa en local.
-- [ ] Medido en navegador real sobre el build a 320, 390 y 1440px: el
-      desbordamiento horizontal del documento sigue siendo 0px, la cabecera
-      conserva su altura y ningún objetivo táctil del conmutador baja de 44px.
-- [ ] El color de eje de `technical/0011` no se mueve: los seis filetes, los
-      seis iconos y las seis barras siguen dando los mismos seis colores.
+- [x] La cobertura sigue al 100 % en líneas, sentencias, funciones y ramas
+      (394 sentencias, 184 ramas, 71 funciones, 387 tests), y la CI entera pasa
+      en local.
+- [x] Medido en navegador real sobre el build a 320, 390 y 1440px: el
+      desbordamiento horizontal del documento sigue siendo **0px** en las tres
+      anchuras y en las dos vistas medidas, la cabecera conserva sus **57px** y
+      la pastilla activa del conmutador mide **44px** en escritorio. En móvil
+      el conmutador es un `<select>`, no pastillas, como ya fijaba
+      `technical/0006`.
+- [x] El color de eje de `technical/0011` no se mueve: los seis filetes siguen
+      dando **6 colores distintos de 6** a las tres anchuras.
 
 ## Dependencias y supuestos
 

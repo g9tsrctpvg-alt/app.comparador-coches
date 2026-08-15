@@ -1,10 +1,28 @@
+/* Canto de acento a la izquierda (technical/0012, requisito 3): una caja `ink`
+ * sobre `paper` no tenía nada que marcara su borde.
+ *
+ * En `::before` y no en `border-left`, por la trampa que `technical/0011`
+ * midió: el primitivo `card` se emite en el CSS final después que los módulos
+ * que lo componen, así que su `border` gana. */
 .card {
   composes: card from '../primitives.module.css';
   composes: invertedSurface from '../primitives.module.css';
+  position: relative;
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: var(--space-3);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: var(--size-rule-axis);
+  background: var(--color-accent);
+  border-start-start-radius: var(--radius-md);
+  border-end-start-radius: var(--radius-md);
 }
 
 .label {

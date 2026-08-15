@@ -2,12 +2,16 @@
  * degrada de forma distinta en cada motor (technical/0005, requisito 4.4)—
  * y por encima de cualquier cabecera de tabla fija, que se desplaza por
  * `--size-header-height` para no quedar debajo de ésta. */
+/* El fondo es `--color-chrome` y no blanco (technical/0012, requisito 1.1), y
+ * el pelo de abajo va en tinte de acento: no es una línea de dato, separa el
+ * cromo del contenido. */
 .header {
   position: sticky;
   top: 0;
   z-index: 3;
-  background: var(--color-card-raised);
-  border-bottom: var(--size-border-hairline) solid var(--color-rule);
+  background: var(--color-chrome);
+  border-bottom: var(--size-border-hairline) solid
+    var(--color-accent-tint-strong);
 }
 
 .inner {

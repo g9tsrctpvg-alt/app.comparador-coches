@@ -53,7 +53,12 @@ de colores por debajo de su umbral de contraste hace fallar
   nativo de la aplicación, y el fondo, que no es un color plano sino
   `--gradient-paper` —un degradado vertical muy corto, con
   `background-attachment: fixed` para que no se repita al desplazar— sobre
-  `--color-paper` como respaldo.
+  `--color-paper` como respaldo. Desde `technical/0012` ese degradado arranca
+  en un verde muy pálido (`#e9f2ee`) y no en un neutro: su arranque tiene un
+  **suelo que no es estético**, porque el fondo de página lleva texto de cuerpo
+  encima y `mute` sobre `paper` está a 4,81:1 con poco margen — el acento al
+  5 % sobre `paper` ya deja ese par en 4,48:1, por debajo del umbral. El valor
+  elegido da 4,93:1, así que añade color y deja el texto mejor que antes.
 - **Tipografía propia auto-hospedada** (ADR 0008): un único `.woff2`
   variable, `src/assets/fonts/inter-variable-latin.woff2` (Inter, subset
   `latin`, 72.920 bytes), referenciado con `url()` desde `global.css` y
@@ -126,6 +131,13 @@ de colores por debajo de su umbral de contraste hace fallar
   vez de `#6b7a72` y `#b4551b`— porque los tonos originales no llegaban a
   4,5:1 de contraste sobre `card` ni `paper`; el ajuste vive como
   comentario junto a la declaración en `global.css`.
+- **El cromo de la aplicación tiene su papel** (`technical/0012`):
+  `--color-chrome` `#e8f0ef`, el fondo de la cabecera fija, que era blanco puro
+  con un pelo gris — lo primero que se veía de la aplicación y sin un solo
+  tono. Es el acento al 10 % sobre blanco, así que es **función del acento**,
+  igual que `--color-accent-tint-solid` lo es de `card`: si el acento se mueve,
+  se recalcula. Contrastes sobre él, los tres declarados: `ink` 13,77:1,
+  `accent` 5,96:1 y `mute` 4,86:1.
 - **Cada eje tiene su color** (`technical/0011`): `--color-axis-viaje`
   `#2a6f8f` azul, `--color-axis-diario` `#14655c` teal, `--color-axis-prestaciones`
   `#8e2f45` carmín, `--color-axis-fiabilidad` `#31417a` índigo,
@@ -198,11 +210,20 @@ antes de esto, las tres páginas repetían literalmente
 
 - **`AppHeader`** — la marca (enlace a la clasificación) y `ViewSwitcher`,
   `position: sticky` contra la parte de arriba con fondo opaco —nunca
-  `backdrop-filter`, que se degrada de forma distinta en cada motor—.
+  `backdrop-filter`, que se degrada de forma distinta en cada motor—. El fondo
+  es `--color-chrome` desde `technical/0012`, con el pelo de abajo en tinte de
+  acento: no es una línea de dato, separa el cromo del contenido.
 - **`ViewSwitcher`** — la navegación única de la aplicación, tres destinos:
   Clasificación (`#`), Ficha (`#/ficha`) y Cómo se calcula
   (`#/como-se-calcula`). La vista activa lleva `aria-current="page"`, y
-  ninguna otra.
+  ninguna otra. Sus tres estados **se invirtieron con la cabecera tintada**
+  (`technical/0012`): la pastilla activa era un tinte de acento al 7 % sobre
+  blanco, y sobre un carril que ya es acento al 10 % dejaba de distinguirse —
+  el conmutador volvía a leerse como tres etiquetas planas, la regresión que
+  `technical/0009` había arreglado. Ahora la activa **se levanta en blanco**
+  con su sombra de control, el `:hover` tiñe y el `:active` tiñe más fuerte.
+  Medido sobre el build: los tres se distinguen entre sí y del fondo de la
+  cabecera.
 - **`AppFooter`** — la procedencia y fecha de los datos («Los precios del
   catálogo son de julio de 2026…») y la leyenda de la marca de estimado
   (`<EstimatedMark />`), antes repetidas al pie de cada tabla de la ficha.
@@ -231,7 +252,9 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   controles a un lado, la clasificación al otro.
 - **`LeaderCard`** — la única superficie invertida de la interfaz: nombra
   al coche mejor situado con los pesos vigentes y su `percentage`. Si el
-  filtro de presupuesto deja la lista vacía, no se renderiza.
+  filtro de presupuesto deja la lista vacía, no se renderiza. Desde
+  `technical/0012` lleva un canto de acento a la izquierda, en un `::before`
+  por la misma trampa de composición del primitivo `card`.
 - **`CollapsiblePanel`** — el envoltorio que comparten `WeightSliders` y
   `AssumptionsPanel`: una tarjeta con un control de despliegue real
   (`aria-expanded`), plegada por defecto con un resumen de una línea. Por
@@ -335,7 +358,10 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   lista de pesos llevan el icono y el filete de color de su eje
   (`technical/0011`); **la tabla de contenidos no**, porque sus entradas son
   secciones y no ejes — teñir «Los seis ejes» de uno de los seis colores
-  diría algo falso.
+  diría algo falso. Sus seis `<h2>` de sección llevan un filete corto de acento
+  encima (`technical/0012`), que los hace **localizables, no jerárquicos**: un
+  `<h2>` sigue sin tamaño propio entre los 40px del título de vista y los 16px
+  del cuerpo, y esa deuda sigue anotada en `docs/roadmap.md`.
 - **`FichaPage`** (product/0018, funde lo que antes eran dos vistas —
   `#/ficha-tecnica` y `#/ficha-completa`—) — una tabla **transpuesta**: cada
   columna es un modelo, cada fila una magnitud del dominio

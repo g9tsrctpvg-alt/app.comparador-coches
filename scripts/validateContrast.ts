@@ -92,6 +92,13 @@ export const DECLARED_PAIRS: readonly ContrastPair[] = [
   { foreground: 'axis-estetica', background: 'paper', level: 'normal' },
   { foreground: 'axis-coste', background: 'card', level: 'normal' },
   { foreground: 'axis-coste', background: 'paper', level: 'normal' },
+
+  /* La cabecera tintada (technical/0012, requisito 1.2). Los tres colores que
+   * de verdad se pintan sobre ella: la marca en `ink`, el destino activo del
+   * conmutador en `accent` y los otros dos destinos en `mute`. */
+  { foreground: 'ink', background: 'chrome', level: 'normal' },
+  { foreground: 'accent', background: 'chrome', level: 'normal' },
+  { foreground: 'mute', background: 'chrome', level: 'normal' },
 ];
 
 const HEX_TOKEN_RE = /--color-([a-z0-9-]+):\s*(#[0-9a-fA-F]{6})\b/g;

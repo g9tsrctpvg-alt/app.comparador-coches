@@ -263,6 +263,10 @@ entera verde en local y cobertura al 100 %.
 | Gate humano: aprobar `technical/0011` | Hecha — 2026-08-15, en commit propio sin implementación, tras aprobación explícita del usuario en modo plan de un plan que llevaba dentro la paleta ya medida y la enmienda a `product/0009` |
 | Implementar y verificar la spec | Hecha — CI entera en verde en local (387 tests, cobertura 100 %), y los nueve criterios cerrados contra una medición sobre el build: los seis filetes y los seis iconos salen con seis colores distintos y coincidentes entre sí a 320/390/768/1440px, las seis barras del desglose también, el desbordamiento horizontal del documento es 0px en las cuatro anchuras y el objetivo táctil de los deslizadores se queda en 44px |
 | Consolidar `technical/0011` en `docs/estado/interfaz.md` | Hecha — 2026-08-15 |
+| `technical/0012` — atmósfera de las superficies | `consolidated` |
+| Gate humano: aprobar `technical/0012` | Hecha — 2026-08-15, en commit propio sin implementación, dentro del mismo plan aprobado que `technical/0011` |
+| Implementar y verificar la spec | Hecha — CI entera en verde en local (387 tests, cobertura 100 %), y los siete criterios cerrados contra una medición sobre el build: la cabecera pasa de blanco puro a `#e8f0ef` conservando sus 57px, el arranque del degradado sube el contraste del texto apagado de 4,81 a 4,93:1, los tres estados del conmutador se distinguen entre sí y del fondo con el `:hover` simulado, y los seis colores de eje de `technical/0011` no se mueven |
+| Consolidar `technical/0012` en `docs/estado/interfaz.md` | Hecha — 2026-08-15 |
 
 **`technical/0007` nace de otra revisión del despliegue** (2026-08-12): en
 un gesto táctil diagonal —pensado como «hacia abajo», con un componente
