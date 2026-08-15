@@ -278,32 +278,121 @@
  * entre ficheros se emite antes que las reglas del módulo que la compone, así
  * que fijarlo aquí ganaría siempre. Es el mismo cuidado que ya documenta
  * `.unstyledButton` para `padding` y `margin`. */
-.select {
-  composes: mono;
-  appearance: none;
-  min-height: var(--size-touch-min);
-  padding: var(--space-2) var(--space-7) var(--space-2) var(--space-3);
-  color: var(--color-ink);
+/* La superficie de un control, sin decir qué control es (technical/0010,
+ * requisito 4.1): fondo, borde de pelo, radio, sombra y sus dos estados. Se
+ * extrae de `.select` porque la pastilla de la barra de la ficha necesita
+ * exactamente esta caja con otra cosa dentro, y copiarla habría sido volver a
+ * la duplicación que `technical/0009` acababa de quitar. */
+.controlSurface {
   background-color: var(--color-card);
-  background-image: var(--icon-chevron);
-  background-repeat: no-repeat;
-  background-position: right var(--space-3) center;
-  background-size: var(--size-chevron);
   border: var(--size-border-hairline) solid var(--color-rule);
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-control);
-  cursor: pointer;
   transition:
     border-color var(--duration-fast) var(--ease-out),
     box-shadow var(--duration-fast) var(--ease-out);
 }
 
-.select:hover {
+.controlSurface:hover {
   border-color: var(--color-rule-strong);
 }
 
-.select:active {
+.controlSurface:active {
   border-color: var(--color-accent);
+}
+
+.select {
+  composes: mono;
+  composes: controlSurface;
+  appearance: none;
+  min-height: var(--size-touch-min);
+  padding: var(--space-2) var(--space-7) var(--space-2) var(--space-3);
+  color: var(--color-ink);
+  background-image: var(--icon-chevron);
+  background-repeat: no-repeat;
+  background-position: right var(--space-3) center;
+  background-size: var(--size-chevron);
+  cursor: pointer;
+}
+
+/* Pastilla de control (technical/0010, requisitos 1.1 y 4.2): la misma
+ * superficie que `.select`, pero con el rótulo **dentro** de la caja y el
+ * `<select>` pegado a la derecha. Es lo que hace que un control de la barra
+ * de la ficha cueste 44px de alto en vez de 69 — antes el rótulo iba fuera,
+ * encima, y se pagaba su altura más el hueco.
+ *
+ * El relleno solo es por la izquierda: el de la derecha lo pone el `<select>`
+ * de dentro, que es quien tiene que reservar sitio para su propia flecha. */
+/* El rótulo va **encima** del valor, no a su lado, y siempre — no solo cuando
+ * no cabe (technical/0010, requisito 1.4). Ponerlo al lado se probó primero y
+ * se descartó con medidas: el peor caso de esta barra es «Comparar» más el
+ * nombre de modelo más largo del catálogo —«Kona Eléctrico»—, que pide unos
+ * 240px de pastilla y por tanto no cabe en una línea en ningún ancho por
+ * debajo de 1200px. Dejar que cada pastilla se partiera sola cuando le hiciera
+ * falta daba una barra con pastillas de dos alturas distintas según la fila, y
+ * forzar que no se partieran recortaba el valor a media palabra. Dos líneas
+ * siempre es la única de las tres que es uniforme a cualquier anchura.
+ *
+ * A cambio, el conjunto sigue costando menos que antes: la barra pasa de tres
+ * filas a dos en móvil, y las cuatro pastillas miden exactamente lo mismo. */
+.field {
+  composes: controlSurface;
+  position: relative;
+  display: flex;
+  min-height: var(--size-touch-min);
+}
+
+/* El rótulo de dentro. **No** compone `.label`: aquél va en versalitas con
+ * `--letter-spacing-widest`, que es justo lo que hacía que «VISTA DE LA FOTO»
+ * midiera 145px para rotular un valor que dice «Lateral» (technical/0010,
+ * requisito 1.2). Aquí basta con que se distinga del valor, y de eso ya se
+ * encarga el color apagado. */
+/* El rótulo va **encima** del `<select>`, no antes que él en el flujo: así el
+ * control ocupa la pastilla entera y todo el rectángulo es área accionable de
+ * 44px o más (product/0010, requisito 8). Con el rótulo en el flujo, el
+ * `<select>` se quedaba en 24px de alto y solo esa franja abría el
+ * desplegable. `pointer-events: none` deja que la pulsación lo atraviese
+ * hasta el control; el rótulo sigue siendo un `<label>` asociado, así que
+ * para un lector de pantalla nada de esto cambia. */
+.fieldLabel {
+  composes: mono;
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-3);
+  pointer-events: none;
+  font-size: var(--font-size-2xs);
+  letter-spacing: var(--letter-spacing-wide);
+  line-height: var(--line-height-tight);
+  color: var(--color-mute);
+}
+
+/* El `<select>` que vive dentro de una pastilla: sin superficie propia —ya la
+ * pone `.field`— ocupando el ancho entero de la caja, bajo su rótulo.
+ *
+ * `min-width: 0` es deliberado: sin él, un `<select>` se niega a encogerse por
+ * debajo del ancho de su opción **más larga** —no de la elegida—, y a 320px
+ * eso empujaba la pastilla fuera de su columna de rejilla hasta desbordar el
+ * documento en horizontal, que es justo lo que `product/0010` prohíbe. Con él,
+ * el precio es que a los anchos más estrechos el nombre de modelo más largo
+ * puede quedar cortado; el desbordamiento del documento no es negociable y un
+ * nombre cortado sí. */
+.fieldSelect {
+  composes: mono;
+  appearance: none;
+  width: 100%;
+  min-width: 0;
+  min-height: var(--size-touch-min);
+  /* El relleno superior es el hueco que ocupa el rótulo flotante; el inferior
+   * lo compensa para que el valor quede centrado en lo que queda de caja. */
+  padding: var(--space-5) var(--space-7) var(--space-2) var(--space-3);
+  color: var(--color-ink);
+  background-color: transparent;
+  background-image: var(--icon-chevron);
+  background-repeat: no-repeat;
+  background-position: right var(--space-3) center;
+  background-size: var(--size-chevron);
+  border: none;
+  cursor: pointer;
 }
 
 /* Deslizador con objetivo táctil de 44×44 (product/0010, requisito 8): el

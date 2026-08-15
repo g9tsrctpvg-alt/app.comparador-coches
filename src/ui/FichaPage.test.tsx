@@ -156,9 +156,15 @@ describe('FichaPage', () => {
       expect(markup).toMatch(
         /aria-label="Comparar contra Giulietta"[^>]*checked=""/,
       );
-      // «Ninguno» no está marcado cuando hay una comparación activa.
+      // «Ninguno» no está elegido cuando hay una comparación activa. Desde
+      // `technical/0010` esa opción vive en el `<select>` de la barra, no en
+      // un radio suelto: lo que se comprueba es lo mismo, sobre el control
+      // que la ofrece hoy.
+      expect(markup).toMatch(/<option value=""(?![^>]*selected)>Ninguno</);
+      // Y el modelo fijado sí lo está, en ese mismo `<select>`: es la mitad
+      // que demuestra que los dos controles miran el mismo estado.
       expect(markup).toMatch(
-        /aria-label="No comparar contra ningún modelo"(?![^>]*checked)/,
+        /<option value="alfa-romeo-giulietta"[^>]*selected=""/,
       );
     });
 
@@ -214,9 +220,9 @@ describe('FichaPage', () => {
       expect(markup).not.toContain('Referencia');
       expect(markup).not.toContain('pinnedHeader');
       expect(markup).not.toContain('cellDelta');
-      expect(markup).toMatch(
-        /aria-label="No comparar contra ningún modelo"[^>]*checked=""/,
-      );
+      // Sin referencia, el `<select>` de comparación arranca en «Ninguno»
+      // (technical/0010: la opción se mudó del radio suelto a este control).
+      expect(markup).toMatch(/<option value="" selected="">Ninguno</);
       // Sin columna fijada no hay hueco de sticky que reservar en el
       // anclaje de scroll: `scroll-padding-left` no debe apuntar a una
       // columna que no está en la tabla.

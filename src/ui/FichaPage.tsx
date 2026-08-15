@@ -542,6 +542,15 @@ export function FichaPage({ cars, references }: FichaPageProps) {
       ),
     [entitiesWithDelta, pinnedEntity, sortCriterion],
   );
+  /* Las opciones del selector de comparación (technical/0010, requisito 3.2):
+     todos los modelos, incluido el fijado, ordenados por el criterio vigente.
+     No sirve `scrollableEntities` —excluye al fijado, así que la opción
+     elegida se borraría de la lista justo al elegirla— ni el orden real de
+     columna, que lo pone el primero por el mismo motivo. */
+  const comparisonOptions = useMemo(
+    () => sortFicha(entitiesWithDelta, sortCriterion),
+    [entitiesWithDelta, sortCriterion],
+  );
   const columnCount = 1 + (pinnedEntity ? 1 : 0) + scrollableEntities.length;
   const blocks = fieldSet === 'esenciales' ? ESSENTIAL_BLOCKS : COMPLETE_BLOCKS;
 
@@ -565,9 +574,16 @@ export function FichaPage({ cars, references }: FichaPageProps) {
     <>
       <h1 className={shellStyles.viewTitle}>Ficha</h1>
 
+      {/* Cuatro pastillas iguales (technical/0010, requisito 1.1): el rótulo
+          vive dentro de la caja, y sigue siendo un `<label>` de verdad
+          asociado a su `<select>` — se mueve de sitio, no se sustituye por
+          texto decorativo (requisito 5.1). */}
       <div className={styles.toolbar}>
-        <div className={styles.toolbarControl}>
-          <label className={primitives.label} htmlFor="field-set-select">
+        <div className={styles.toolbarField}>
+          <label
+            className={styles.toolbarFieldLabel}
+            htmlFor="field-set-select"
+          >
             Campos
           </label>
           <select
@@ -581,24 +597,41 @@ export function FichaPage({ cars, references }: FichaPageProps) {
           </select>
         </div>
 
-        <div className={styles.toolbarControl}>
-          <span className={primitives.label} id="comparison-label">
-            Comparar contra
-          </span>
-          <label className={styles.noneOption}>
-            <input
-              type="radio"
-              name="pinned-model"
-              checked={comparisonId === null}
-              onChange={() => handleComparisonChange(null)}
-              aria-label="No comparar contra ningún modelo"
-            />
-            Ninguno
+        {/* El control de comparación es un `<select>`, no el radio suelto de
+            una sola opción que había aquí (requisito 3.1). Escribe el mismo
+            `comparisonId` que los radios de las cabeceras de columna, así que
+            los dos están sincronizados por construcción (requisito 3.3), y
+            «Ninguno» sigue siendo la única forma de apagar las Δ
+            (product/0018, requisito 2.3). Las opciones van en el orden que
+            fija el criterio vigente y no en el de columna —donde el fijado va
+            primero—, para que el elegido no salte al primer puesto justo al
+            elegirlo (requisito 3.2). */}
+        <div className={styles.toolbarField}>
+          <label
+            className={styles.toolbarFieldLabel}
+            htmlFor="comparison-select"
+          >
+            Comparar
           </label>
+          <select
+            id="comparison-select"
+            className={styles.toolbarSelect}
+            value={comparisonId ?? ''}
+            onChange={(event) =>
+              handleComparisonChange(event.target.value || null)
+            }
+          >
+            <option value="">Ninguno</option>
+            {comparisonOptions.map((entity) => (
+              <option key={entity.id} value={entity.id}>
+                {entity.name}
+              </option>
+            ))}
+          </select>
         </div>
 
-        <div className={styles.toolbarControl}>
-          <label className={primitives.label} htmlFor="sort-select">
+        <div className={styles.toolbarField}>
+          <label className={styles.toolbarFieldLabel} htmlFor="sort-select">
             Orden
           </label>
           <select
@@ -617,14 +650,17 @@ export function FichaPage({ cars, references }: FichaPageProps) {
           </select>
         </div>
 
-        <div className={styles.viewSelector}>
-          <label className={primitives.label} htmlFor="photo-view-select">
-            Vista de la foto
+        <div className={styles.toolbarField}>
+          <label
+            className={styles.toolbarFieldLabel}
+            htmlFor="photo-view-select"
+          >
+            Foto
           </label>
           <select
             id="photo-view-select"
             name="photo-view"
-            className={styles.viewSelect}
+            className={styles.toolbarSelect}
             value={photoView}
             onChange={(event) => setPhotoView(event.target.value as PhotoView)}
           >

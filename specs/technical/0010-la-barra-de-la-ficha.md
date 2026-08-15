@@ -1,13 +1,19 @@
 # 0010 — La barra de la ficha: cuatro controles con la misma forma
 
 - **Id:** technical/0010
-- **Estado:** approved
+- **Estado:** verified
 - **Tipo:** technical
 - **Fecha:** 2026-08-14
 - **Specs relacionadas:** product/0014, product/0018, product/0020,
   technical/0005, technical/0009
 - **ADRs relacionados:** 0006
 - **Doc de estado:** `docs/estado/interfaz.md`
+
+> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
+> implementado: su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy no es cierta. **No es referencia del estado actual** — para
+> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
+> **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -98,6 +104,32 @@ casi el doble de lo que mide su propio texto.
 1.3. Los rótulos se acortan donde sobra palabra: **«Vista de la foto» → «Foto»**
 y **«Comparar contra» → «Comparar»**. «Campos» y «Orden» ya son mínimos.
 
+1.4. **El rótulo va encima del valor dentro de la pastilla, y siempre**, no al
+lado. Es la conclusión de medir el peor caso: «Comparar» más el nombre de
+modelo más largo del catálogo —«Kona Eléctrico»— pide unos 240px de pastilla en
+una sola línea, y por debajo de 1200px de ventana no hay ancho de columna que
+lo dé. Las otras dos salidas se probaron y se descartan por escrito:
+
+- Dejar que **cada pastilla se parta sola** cuando su contenido no cabe
+  —`min-width: min-content` en el `<select>`— daba una barra con pastillas de
+  dos alturas distintas según la fila, y además empujaba la columna de la
+  rejilla hasta **desbordar el documento en horizontal** a 320px, que es lo que
+  `product/0010`, requisito 13, prohíbe.
+- **Forzar una sola línea** recortaba el valor a media palabra —«Esencial» en
+  vez de «Esenciales»— de forma distinta en cada control, porque lo que cada
+  uno necesita depende de su propio texto.
+
+Dos líneas siempre es la única de las tres que da la misma altura a las cuatro
+pastillas a **cualquier** anchura, que es lo que hace que la barra se lea como
+un conjunto.
+
+1.5. **La pastilla entera es área accionable.** El `<select>` ocupa el
+rectángulo completo y el rótulo va flotando encima con `pointer-events: none`;
+si el rótulo ocupara sitio en el flujo, el control se quedaría en 24px de alto
+y solo esa franja abriría el desplegable, por debajo del mínimo de 44px que
+exige `product/0010`, requisito 8. El rótulo sigue siendo un `<label>`
+asociado, así que para un lector de pantalla nada de esto cambia.
+
 ### 2. La barra es una rejilla, no una fila que envuelve
 
 2.1. La barra pasa de `flex-wrap` a `display: grid` con columnas de ancho
@@ -174,34 +206,51 @@ requisito 8).
 
 > Obligatorios y verificables.
 
-- [ ] A 390px la barra ocupa **como mucho 2 filas** y **no más de 120px** de
+- [x] A 390px la barra ocupa **como mucho 2 filas** y **no más de 120px** de
       alto, frente a las 3 filas y 221px de hoy. Medido sobre el build de
-      producción, no estimado.
-- [ ] A 960 y 1440px la barra ocupa **una sola fila**, y las cuatro pastillas
-      tienen el mismo ancho y la misma altura.
-- [ ] Los cuatro controles son `<select>`: no queda en la barra ningún radio
+      producción, no estimado: **2 filas y 120px**, el mismo resultado de 320 a
+      768px —donde antes eran 3 filas y 221px por debajo de 592, y 2 filas y
+      133px por encima—.
+- [x] A 960 y 1440px la barra ocupa **una sola fila**, y las cuatro pastillas
+      tienen el mismo ancho y la misma altura. Medido: **1 fila y 54px**,
+      frente a los 69px de hoy; anchos idénticos (223px a 960, 283px a 1440) y
+      alturas idénticas (54px) a los siete anchos probados.
+- [x] Los cuatro controles son `<select>`: no queda en la barra ningún radio
       ni ninguna caja que no sea una pastilla.
-- [ ] El `<select>` de comparación lista «Ninguno» más todos los modelos, en el
+- [x] El `<select>` de comparación lista «Ninguno» más todos los modelos, en el
       orden que fija el criterio de orden vigente.
-- [ ] Elegir un modelo en el `<select>` marca el radio de esa columna, y marcar
+- [x] Elegir un modelo en el `<select>` marca el radio de esa columna, y marcar
       un radio de cabecera actualiza el `<select>`. Comprobado en las **dos**
-      direcciones sobre un navegador real.
-- [ ] Elegir por el `<select>` devuelve la tabla al principio de su
-      desplazamiento horizontal, igual que hacía el radio.
-- [ ] Con «Ninguno» elegido no se muestra ninguna Δ, y la columna fijada
+      direcciones sobre un navegador real, y repetido tras el cambio de
+      maquetación de la pastilla.
+- [x] Elegir por el `<select>` devuelve la tabla al principio de su
+      desplazamiento horizontal, igual que hacía el radio. Comprobado:
+      `scrollLeft` a 0 tras elegir.
+- [x] Con «Ninguno» elegido no se muestra ninguna Δ, y la columna fijada
       desaparece — el comportamiento que `product/0018` fija, intacto.
-- [ ] Cada `<select>` tiene su `<label>` asociado y nombre accesible, los
-      cuatro se alcanzan con tabulador y el anillo de foco se ve entero, sin
-      recortar, dentro de la pastilla.
-- [ ] `.select` mantiene su aspecto: el `<select>` de la cabecera en móvil se
-      ve exactamente igual que antes de este cambio.
-- [ ] Ningún `.module.css` declara un literal de diseño: el ancho mínimo de
+      Comprobado sobre el DOM: cero celdas con Δ y cero cabeceras fijadas.
+- [x] Cada `<select>` tiene su `<label>` asociado y nombre accesible, los
+      cuatro se alcanzan con tabulador —en el orden campos → comparación →
+      orden → foto— y el anillo de foco se ve entero, sin recortar: rodea la
+      pastilla completa, porque el control ocupa la pastilla completa.
+- [x] **La pastilla entera es un objetivo táctil de al menos 44px** (requisito
+      1.5). Medido sobre el elemento renderizado: la pastilla mide 54px y el
+      `<select>` de dentro 52px, a 320 y a 1440px. Antes de mover el rótulo
+      fuera del flujo, el `<select>` medía 24px.
+- [x] **Ninguna pastilla recorta su valor a ninguna anchura** (requisito 1.4),
+      y el documento no se desplaza en horizontal a ninguna de las siete
+      probadas —incluida la de 320px con «Kona Eléctrico», el nombre más largo
+      del catálogo, elegido—.
+- [x] `.select` mantiene su aspecto: el `<select>` de la cabecera en móvil se
+      ve exactamente igual que antes de este cambio — sigue componiendo la
+      misma superficie, que es lo único que se ha factorizado.
+- [x] Ningún `.module.css` declara un literal de diseño: el ancho mínimo de
       columna de la rejilla es un token.
       `scripts/validateStyleTokensRepo.test.ts` en verde.
-- [ ] `npm run format:check`, `npm run lint`, `npm run typecheck`,
+- [x] `npm run format:check`, `npm run lint`, `npm run typecheck`,
       `npm run arch:check`, `npm run test:coverage` y `npm run build` pasan en
-      local antes de dar la spec por implementada.
-- [ ] Las únicas aserciones de `FichaPage.test.tsx` que cambian son las dos que
+      local antes de dar la spec por implementada. 376 tests, cobertura 100 %.
+- [x] Las únicas aserciones de `FichaPage.test.tsx` que cambian son las dos que
       miran el radio «Ninguno» de la barra, que pasan a mirar la opción
       equivalente del `<select>`. Las que comprueban el grupo `pinned-model` de
       las cabeceras siguen intactas y en verde.
