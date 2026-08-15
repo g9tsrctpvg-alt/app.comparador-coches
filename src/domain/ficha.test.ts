@@ -28,6 +28,7 @@ function referenceFixture(overrides: Partial<Reference> = {}): Reference {
     name: 'Giulietta',
     brand: 'Alfa Romeo',
     technology: 'ICE',
+    generation: { launchYear: sourced(2010), code: '940' },
     photos: {},
     lengthMm: sourced(4351, 'mm'),
     widthMm: sourced(1798, 'mm'),
@@ -133,6 +134,58 @@ describe('buildFicha', () => {
       estimated: false,
       delta: null,
     });
+  });
+
+  it('extracts generationLaunchYear as a sourced cell (product/0021)', () => {
+    const [entity] = buildFicha([sportageFixture], []);
+    expect(entity?.cells.generationLaunchYear).toEqual({
+      kind: 'sourced',
+      value: 2022,
+      unit: undefined,
+      estimated: false,
+      delta: null,
+    });
+  });
+
+  it('marks generationFaceliftYear as missing when the car has no facelift declared', () => {
+    const [entity] = buildFicha([sportageFixture], []);
+    expect(entity?.cells.generationFaceliftYear).toEqual({ kind: 'missing' });
+  });
+
+  it('extracts generationFaceliftYear when the car declares one', () => {
+    const withFacelift = {
+      ...sportageFixture,
+      generation: {
+        ...sportageFixture.generation,
+        faceliftYear: sourced(2025),
+      },
+    };
+    const [entity] = buildFicha([withFacelift], []);
+    expect(entity?.cells.generationFaceliftYear).toEqual({
+      kind: 'sourced',
+      value: 2025,
+      unit: undefined,
+      estimated: false,
+      delta: null,
+    });
+  });
+
+  it('extracts generationLaunchYear on a reference too, unlike the score-only fields it omits', () => {
+    const [, reference] = buildFicha([sportageFixture], [referenceFixture()]);
+    expect(reference?.cells.generationLaunchYear).toEqual({
+      kind: 'sourced',
+      value: 2010,
+      unit: undefined,
+      estimated: false,
+      delta: null,
+    });
+  });
+
+  it('surfaces the generation code on the entity, as support text and not a cell', () => {
+    const [entity] = buildFicha([sportageFixture], []);
+    expect(entity?.generationCode).toBeUndefined();
+    const [, reference] = buildFicha([sportageFixture], [referenceFixture()]);
+    expect(reference?.generationCode).toBe('940');
   });
 
   it('carries the photos block through unchanged', () => {

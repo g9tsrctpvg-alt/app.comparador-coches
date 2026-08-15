@@ -28,6 +28,7 @@ const validCar = {
   name: 'Sportage HEV',
   brand: 'Kia',
   technology: 'HEV',
+  generation: { launchYear: sourced(2021), code: 'NQ5' },
   notes: [],
   lengthMm: sourced(4540),
   widthMm: sourced(1865),
@@ -235,6 +236,43 @@ describe('CarSchema', () => {
     if (result.success) {
       expect(result.data.published).toBe(false);
     }
+  });
+
+  it('rejects a car with no generation declared (product/0021)', () => {
+    const withoutGeneration: Record<string, unknown> = { ...validCar };
+    delete withoutGeneration.generation;
+    const result = CarSchema.safeParse(withoutGeneration);
+    expect(result.success).toBe(false);
+  });
+
+  it('accepts a generation with only the launch year, no facelift or code', () => {
+    const result = CarSchema.safeParse({
+      ...validCar,
+      generation: { launchYear: sourced(2021) },
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it('accepts a facelift year equal to the launch year', () => {
+    const result = CarSchema.safeParse({
+      ...validCar,
+      generation: {
+        launchYear: sourced(2021),
+        faceliftYear: sourced(2021),
+      },
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it('rejects a facelift year earlier than the launch year', () => {
+    const result = CarSchema.safeParse({
+      ...validCar,
+      generation: {
+        launchYear: sourced(2021),
+        faceliftYear: sourced(2020),
+      },
+    });
+    expect(result.success).toBe(false);
   });
 });
 

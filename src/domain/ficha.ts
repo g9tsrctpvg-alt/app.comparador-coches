@@ -1,4 +1,10 @@
-import type { Car, SourcedNumber, Technology, UserRating } from './car';
+import type {
+  Car,
+  Generation,
+  SourcedNumber,
+  Technology,
+  UserRating,
+} from './car';
 import type { Reference } from './reference';
 import type { Photos } from './photo';
 
@@ -33,13 +39,15 @@ export function currentSourceOf(sourced: SourcedNumber) {
 }
 
 /**
- * Las diecinueve magnitudes de `Car` que no son identidad, más la métrica
+ * Las veintiuna magnitudes de `Car` que no son identidad, más la métrica
  * derivada de litros por metro cuadrado (product/0014, requisito 1;
- * product/0018 les añade Δ y polaridad): el inventario completo de «la
- * ficha». El orden y las etiquetas son cosa de la interfaz; aquí solo se
- * declaran las claves.
+ * product/0018 les añade Δ y polaridad; product/0021 añade las dos de
+ * generación): el inventario completo de «la ficha». El orden y las
+ * etiquetas son cosa de la interfaz; aquí solo se declaran las claves.
  */
 export const FICHA_FIELDS = [
+  'generationLaunchYear',
+  'generationFaceliftYear',
   'lengthMm',
   'widthMm',
   'heightMm',
@@ -97,6 +105,10 @@ export interface FichaEntity {
   name: string;
   brand: string;
   technology: Technology;
+  /** Código de generación del fabricante, si el registro lo declara
+   * (product/0021, requisito 2.5): texto de apoyo de la fila de
+   * `generationLaunchYear`, no una celda comparable propia. */
+  generationCode?: string;
   photos: Photos;
   cells: Record<FichaField, FichaCell>;
 }
@@ -112,6 +124,12 @@ type DeltaPolarity = 'moreIsBetter' | 'moreIsWorse' | 'neutral';
  * Altura y altura libre al suelo no tienen dirección declarada.
  */
 const POLARITY: Record<FichaField, DeltaPolarity> = {
+  // El ADR 0009 decide que el calendario no entra en la puntuación: más
+  // nuevo no está declarado como mejor, igual que la batalla o la altura
+  // libre al suelo (product/0021, requisito 2.2).
+  generationLaunchYear: 'neutral',
+  generationFaceliftYear: 'neutral',
+
   lengthMm: 'moreIsWorse',
   widthMm: 'moreIsWorse',
   heightMm: 'neutral',
@@ -173,6 +191,7 @@ function deltaDirection(
  * propia forma, sin ningún `if` que lo distinga aquí.
  */
 interface EntityLike {
+  generation: Generation;
   lengthMm: SourcedNumber;
   widthMm: SourcedNumber;
   heightMm?: SourcedNumber;
@@ -235,6 +254,8 @@ function litersPerSquareMeterCell(entity: EntityLike): FichaCell {
 
 function cellsOf(entity: EntityLike): Record<FichaField, FichaCell> {
   return {
+    generationLaunchYear: sourcedCell(entity.generation.launchYear),
+    generationFaceliftYear: sourcedCell(entity.generation.faceliftYear),
     lengthMm: sourcedCell(entity.lengthMm),
     widthMm: sourcedCell(entity.widthMm),
     heightMm: sourcedCell(entity.heightMm),
@@ -268,6 +289,7 @@ function entityOf(
     name: source.name,
     brand: source.brand,
     technology: source.technology,
+    generationCode: source.generation.code,
     photos: source.photos,
     cells: cellsOf(source),
   };

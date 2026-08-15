@@ -30,6 +30,7 @@ function minimalCar(overrides: Record<string, unknown> = {}) {
     name: 'Sportage HEV',
     brand: 'Kia',
     technology: 'HEV',
+    generation: { launchYear: sourced(2021), code: 'NQ5' },
     notes: [],
     published: true,
     lengthMm: sourced(4540, 'mm'),

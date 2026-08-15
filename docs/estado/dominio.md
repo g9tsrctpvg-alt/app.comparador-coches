@@ -34,6 +34,30 @@ Un dato sin exactamente una fuente vigente no es un dato con la fuente
 vacía: es un error de carga del catálogo, y `loadCatalog` lo rechaza
 nombrando el campo y el registro.
 
+## Generación: en qué punto tecnológico está el coche
+
+Un `Car` declara además `generation` (product/0021), obligatoria y aparte de
+las dieciocho magnitudes que puntúan: `launchYear` (`SourcedNumber`,
+obligatorio) es el año en que el fabricante presentó la generación —manda la
+presentación, no la comercialización en España si son distintas—;
+`faceliftYear` (`SourcedNumber`, opcional) es el año del retoque de mitad de
+ciclo, solo si la versión que el catálogo compara es la posterior a él;
+`code` (texto, opcional) es el código de generación del fabricante
+(`NX4`, `U11`, `AZ20`…). Zod rechaza un `faceliftYear` anterior a
+`launchYear`, nombrando el campo.
+
+**Ningún eje la usa.** El ADR 0009 decide que el calendario no entra en la
+puntuación: una escala anclada en un año movería la nota de un coche sin que
+cambiara ningún dato suyo, sin más que pasar el tiempo. `generation` se
+declara y se muestra —en la ficha, con Δ— pero no produce ninguna nota,
+mismo trato que ya recibe `warrantyExtension`: informativa por diseño, no un
+descuido de puntuación.
+
+`Reference` declara `generation` también, con las mismas reglas —única
+excepción a su regla de «solo magnitudes dimensionales»: la referencia
+existe para dar contexto, y de cuándo es el coche contra el que se compara
+todo es precisamente eso.
+
 ## Puntuación explicable
 
 El núcleo de puntuación (`src/domain/scoring/`) no expone una función que
@@ -357,28 +381,32 @@ por no ser un candidato—, con sus cinco magnitudes fuente por fuente.
 ## Ficha
 
 `src/domain/ficha.ts` (product/0014, fundido con la antigua ficha técnica
-por product/0018): compara candidatos y referencias entre sí, magnitud por
-magnitud, sobre veinte campos de `Car`/`Reference` —diecinueve propios más
-`litersPerSquareMeter`, derivada—. No calcula puntuación: es lectura, no
-juicio agregado, así que vive fuera de `scoring/`.
+por product/0018; product/0021 añade las dos de generación): compara
+candidatos y referencias entre sí, magnitud por magnitud, sobre veintidós
+campos de `Car`/`Reference` —veintiuno propios más `litersPerSquareMeter`,
+derivada—. No calcula puntuación: es lectura, no juicio agregado, así que
+vive fuera de `scoring/`.
 
 - **`litrosPorMetroCuadrado(trunkLiters, lengthMm, widthMm)`** — litros de
   maletero por metro cuadrado de huella en el suelo: cuánto espacio da un
   coche por el sitio que ocupa (`product/0013`, requisito 11).
-- **`FICHA_FIELDS`/`FichaField`** — las veinte claves, en el orden en que
-  se declaran; la interfaz decide etiqueta, unidad y agrupación por bloque
-  a partir de ahí, no aquí.
+- **`FICHA_FIELDS`/`FichaField`** — las veintidós claves, en el orden en
+  que se declaran; la interfaz decide etiqueta, unidad y agrupación por
+  bloque a partir de ahí, no aquí.
 - **`buildFicha(cars, references)`** — un `FichaEntity` por candidato y por
   referencia, en el orden del catálogo, sin ordenar y sin Δ todavía: eso
   son pasos aparte, deliberadamente, porque el orden y el modelo de
   comparación los elige quien mira la ficha. Una celda es `'sourced'`
   (valor, unidad, estimado), `'rating'` (una nota de usuario, sobre 5) o
   `'missing'` —el campo no existe en esa entidad, no un cero—: una
-  `Reference` solo declara cinco de las veinte, así que comparar contra
-  ella deja quince celdas `'missing'` por construcción, no por caso
-  especial.
+  `Reference` declara siempre siete de las veintidós —las cinco
+  dimensionales, `litersPerSquareMeter` derivada y el año de lanzamiento de
+  su generación, obligatorio—, así que comparar contra ella deja catorce
+  celdas `'missing'` por construcción, no por caso especial; una
+  decimoquinta, el año de retoque, depende de si esa referencia concreta lo
+  declara.
 - **La tabla de polaridad** (`POLARITY`, `Record<FichaField,
-  DeltaPolarity>` — TypeScript exige las veinte claves en tiempo de
+  DeltaPolarity>` — TypeScript exige las veintidós claves en tiempo de
   compilación, así que ninguna puede quedar sin dirección declarada por
   descuido) fija si más es mejor, peor o si el dato no tiene una dirección
   declarada, con su razón junto a cada una:
@@ -393,10 +421,13 @@ juicio agregado, así que vive fuera de `scoring/`.
     `reliabilityOcu`, `warrantyYears`, `warrantyExtensionYears`,
     `aestheticsExterior`, `aestheticsInterior` (notas de usuario sobre 5:
     más nota es mejor en las dos).
-  - **`neutral`** — `heightMm`, `groundClearanceMm`, y `wheelbaseMm` —más
+  - **`neutral`** — `heightMm`, `groundClearanceMm`, `wheelbaseMm` —más
     batalla da más espacio dentro y más coche fuera; el proyecto no ha
     declarado cuál de las dos cosas le importa más, y ante la duda no se
-    inventa un juicio de color—.
+    inventa un juicio de color—; `generationLaunchYear` y
+    `generationFaceliftYear` —el ADR 0009 decide que el calendario no
+    entra en la puntuación, y sin nota que juzgar no hay dirección que
+    declarar: más nuevo no está dicho que sea mejor—.
 - **`withComparison(entities, comparisonId)`** — recalcula la Δ de cada
   celda de cada entidad frente a la entidad `comparisonId`, en tres estados
   posibles, no dos: `null` —sin comparación activa, o esta es la propia

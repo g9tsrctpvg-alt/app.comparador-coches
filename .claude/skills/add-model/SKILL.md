@@ -1,6 +1,6 @@
 ---
 name: add-model
-description: Añade un coche nuevo al catálogo de comparador-coches (src/data/cars.json) — investiga en la web sus 19 magnitudes con fuente real, busca y verifica sus 5 fotos (frontal, lateral, trasera, maletero, interior), y deja el repositorio en verde antes de comitear. Úsala en cuanto el usuario pida "añadir un coche", "meter un modelo nuevo en la comparativa", "comparar también el/la <marca modelo>", o describa un coche que quiere ver en el ranking o en la ficha completa — aunque no mencione explícitamente "catálogo" ni "cars.json". No la uses para corregir un dato de un coche que ya está en el catálogo (eso es una edición puntual, no un alta) ni para cambiar la referencia (`references.json`, hoy solo el Alfa Romeo Giulietta).
+description: Añade un coche nuevo al catálogo de comparador-coches (src/data/cars.json) — investiga en la web sus 20 magnitudes con fuente real (incluida su generación), busca y verifica sus 5 fotos (frontal, lateral, trasera, maletero, interior), y deja el repositorio en verde antes de comitear. Úsala en cuanto el usuario pida "añadir un coche", "meter un modelo nuevo en la comparativa", "comparar también el/la <marca modelo>", o describa un coche que quiere ver en el ranking o en la ficha completa — aunque no mencione explícitamente "catálogo" ni "cars.json". No la uses para corregir un dato de un coche que ya está en el catálogo (eso es una edición puntual, no un alta) ni para cambiar la referencia (`references.json`, hoy solo el Alfa Romeo Giulietta).
 ---
 
 # Añadir un modelo al catálogo
@@ -22,8 +22,8 @@ relleno de formulario.
 ## Resumen del flujo
 
 1. Rama nueva para esta unidad de trabajo (`docs/proceso/trazabilidad.md`).
-2. Identidad: `id`, `name`, `brand`, `technology`.
-3. Las 19 magnitudes, cada una con una fuente real — la sección más larga.
+2. Identidad: `id`, `name`, `brand`, `technology`, `generation`.
+3. Las 20 magnitudes, cada una con una fuente real — la sección más larga.
 4. Las 5 fotos — flujo completo en `references/photo-sourcing.md`.
 5. Las valoraciones subjetivas, **enseñándole las fotos del paso 4 al
    usuario** para que las puntúe. Es interactivo por diseño: van después de
@@ -47,16 +47,39 @@ motorización/acabado— pregúntaselo antes de investigar nada: `technology`
 buscar la genérica cuando hay varias en el mercado es la forma más directa
 de acabar mezclando datos de dos coches distintos.
 
-## 2. Las 19 magnitudes
+## 2. Las 20 magnitudes
 
-`CarSchema` tiene dos formatos, y no son intercambiables:
+**La generación va aparte y no puntúa.** `generation` (product/0021, ADR
+0009) es obligatoria y no es una de las magnitudes con las que se puntúa:
+declara en qué punto tecnológico está el coche, para que se pueda leer en
+la ficha, y ningún eje la usa nunca — el ADR 0009 decide que el calendario
+no entra en la puntuación. Tiene tres campos:
+
+- `launchYear` (`SourcedNumber`, obligatorio): el año en que el
+  fabricante **presentó** la generación —no el de comercialización en
+  España si son distintos—. Busca la fecha de la revelación mundial de esa
+  generación (Wikipedia en inglés suele tenerla precisa, por modelo:
+  «revealed on», «unveiled on»); no vale una estimación a partir del año
+  de matriculación de la unidad que se compara.
+- `faceliftYear` (`SourcedNumber`, opcional): el año del retoque de mitad
+  de ciclo, **solo si la versión concreta que vas a puntuar es la
+  retocada**. Si no puedes confirmar con la fuente que la versión que
+  puntúas es la posterior al retoque (y no la anterior), omite el campo en
+  vez de adivinar — es exactamente el mismo criterio que ya aplicas al
+  resto de magnitudes: mejor un dato ausente que uno inventado.
+- `code` (texto, opcional): el código de generación del fabricante
+  (`NX4`, `U11`, `AZ20`…) cuando lo publica. Si no lo encuentras, omítelo.
+
+`CarSchema` tiene además dos formatos para el resto de magnitudes, y no son
+intercambiables:
 
 - **`SourcedNumber`** — `{ value, unit?, sources: [{ label, value,
   estimated, current, discardedReason? }] }`.
   Es el formato de todo lo que viene de fuera: `lengthMm`, `widthMm`,
-  `heightMm`, `wheelbaseMm`, `groundClearanceMm`, `trunkLiters`, `powerCv`,
-  `weightKg`, `acceleration0to100`, `consumption`, `maintenanceEurYear`,
-  `priceEur`, `reliabilityOcu`, `warrantyYears`, `residualPct5y` (opcional),
+  `heightMm`, `wheelbaseMm`, `rearShoulderWidthMm`, `groundClearanceMm`,
+  `trunkLiters`, `powerCv`, `weightKg`, `acceleration0to100`, `consumption`,
+  `maintenanceEurYear`, `priceEur`, `reliabilityOcu`, `warrantyYears`,
+  `residualPct5y` (opcional),
   y el objeto opcional `warrantyExtension` (`{ years: SourcedNumber,
   kmLimit?: SourcedNumber, condition }`). Zod exige **exactamente una**
   fuente con `current: true`, y su `value` tiene que coincidir con el

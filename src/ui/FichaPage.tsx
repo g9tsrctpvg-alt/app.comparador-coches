@@ -54,12 +54,25 @@ interface BlockDef {
 }
 
 /**
- * Las veinte magnitudes de la ficha (product/0014, requisito 1; product/0018
- * las reparte en dos conjuntos), agrupadas y rotuladas — el dominio
- * (`ficha.ts`) solo declara las claves y extrae los valores; etiquetas,
- * unidades de respaldo y decimales son decisión de la interfaz.
+ * Las veintidós magnitudes de la ficha (product/0014, requisito 1;
+ * product/0018 las reparte en dos conjuntos; product/0021 añade el bloque
+ * de generación), agrupadas y rotuladas — el dominio (`ficha.ts`) solo
+ * declara las claves y extrae los valores; etiquetas, unidades de respaldo
+ * y decimales son decisión de la interfaz.
  */
 const COMPLETE_BLOCKS: BlockDef[] = [
+  {
+    // Primer bloque, antes de «Tamaño y espacio» (product/0021, requisito
+    // 2.1): en qué punto tecnológico está el coche es contexto para leer
+    // todo lo demás. Sin nota propia, sin dirección declarada —el ADR 0009
+    // decide que el calendario no puntúa—, solo comparable.
+    id: 'generacion',
+    label: 'Generación',
+    fields: [
+      { key: 'generationLaunchYear', label: 'Generación' },
+      { key: 'generationFaceliftYear', label: 'Retoque' },
+    ],
+  },
   {
     id: 'tamano',
     label: 'Tamaño y espacio',
@@ -242,9 +255,13 @@ function formatDelta(value: number, def: FieldDef, cellUnit?: string): string {
 function CellValue({
   cell,
   def,
+  code,
 }: {
   cell: Exclude<FichaCell, { kind: 'missing' }>;
   def: FieldDef;
+  /** Código de generación del fabricante (product/0021, requisito 2.5):
+   * texto de apoyo tras el valor, no una celda ni una Δ propia. */
+  code?: string;
 }) {
   if (cell.kind === 'rating') {
     return <>{formatNumber(cell.value, 0)} / 5</>;
@@ -255,12 +272,21 @@ function CellValue({
       {def.isEuro
         ? formatEur(cell.value)
         : `${formatNumber(cell.value, def.decimals ?? 0)}${unit ? ` ${unit}` : ''}`}
+      {code && ` (${code})`}
       {cell.estimated && <EstimatedMark />}
     </>
   );
 }
 
-function CellContent({ cell, def }: { cell: FichaCell; def: FieldDef }) {
+function CellContent({
+  cell,
+  def,
+  code,
+}: {
+  cell: FichaCell;
+  def: FieldDef;
+  code?: string;
+}) {
   if (cell.kind === 'missing') {
     return (
       <>
@@ -272,7 +298,7 @@ function CellContent({ cell, def }: { cell: FichaCell; def: FieldDef }) {
   return (
     <>
       <span className={styles.cellValue}>
-        <CellValue cell={cell} def={def} />
+        <CellValue cell={cell} def={def} code={code} />
       </span>
       {cell.delta === 'unavailable' && (
         <span className={styles.cellDelta}>
@@ -314,10 +340,12 @@ function DataCell({
   def: FieldDef;
   isPinned: boolean;
 }) {
+  const code =
+    def.key === 'generationLaunchYear' ? entity.generationCode : undefined;
   return (
     <td className={isPinned ? PINNED_CELL_CLASS : MODEL_CELL_CLASS}>
       <span className={styles.cellLabel}>{def.label}</span>
-      <CellContent cell={entity.cells[def.key]} def={def} />
+      <CellContent cell={entity.cells[def.key]} def={def} code={code} />
     </td>
   );
 }
@@ -498,7 +526,7 @@ function attachScrollAxisLock(el: HTMLDivElement): () => void {
  * Δ que antes solo existía contra el Alfa Romeo Giulietta ahora se calcula
  * contra cualquier modelo que se elija, y un conmutador de campos recupera
  * la lectura «de un vistazo» de seis magnitudes cuando no hace falta ver
- * las veinte. No calcula nada por su cuenta: `ficha.ts` ya entrega cada
+ * las veintidós. No calcula nada por su cuenta: `ficha.ts` ya entrega cada
  * celda lista para formatear (`ui-no-scoring-internals`).
  */
 export function FichaPage({ cars, references }: FichaPageProps) {
@@ -780,11 +808,12 @@ export function FichaPage({ cars, references }: FichaPageProps) {
         estética, más es mejor; en anchura, longitud, peso, aceleración,
         consumo, precio y mantenimiento, más es peor, porque el problema que
         resuelve el proyecto es que los sustitutos son más grandes y más caros.
-        Altura, altura libre al suelo y batalla no tienen una dirección
-        declarada. La columna de anchura va en negrita: es la prioridad
-        declarada del proyecto. El selector de vista de foto cambia qué vista
-        enseñan todas las columnas a la vez. La marca <EstimatedMark /> señala
-        un dato estimado, sin fuente publicada verificada directamente.
+        Altura, altura libre al suelo, batalla, generación y retoque no tienen
+        una dirección declarada. La columna de anchura va en negrita: es la
+        prioridad declarada del proyecto. El selector de vista de foto cambia
+        qué vista enseñan todas las columnas a la vez. La marca{' '}
+        <EstimatedMark /> señala un dato estimado, sin fuente publicada
+        verificada directamente.
       </p>
 
       <dialog

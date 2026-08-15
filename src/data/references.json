@@ -4,6 +4,31 @@
     "name": "Giulietta",
     "brand": "Alfa Romeo",
     "technology": "ICE",
+    "generation": {
+      "launchYear": {
+        "value": 2010,
+        "sources": [
+          {
+            "label": "Wikipedia (agosto 2026), «Alfa Romeo Giulietta (2010)»: presentada en el Salón de Ginebra de marzo de 2010, tipo 940 (auto-data.net), https://en.wikipedia.org/wiki/Alfa_Romeo_Giulietta_(2010)",
+            "value": 2010,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "faceliftYear": {
+        "value": 2016,
+        "sources": [
+          {
+            "label": "Wikipedia (agosto 2026), «Alfa Romeo Giulietta (2010)»: restyling principal presentado en el Salón de Ginebra de 2016, https://en.wikipedia.org/wiki/Alfa_Romeo_Giulietta_(2010)",
+            "value": 2016,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "code": "940"
+    },
     "lengthMm": {
       "value": 4351,
       "unit": "mm",
