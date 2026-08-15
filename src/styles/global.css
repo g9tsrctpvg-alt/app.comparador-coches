@@ -25,7 +25,8 @@
    *
    * Los cuatro neutros los afina `technical/0009`, requisito 3: `paper`,
    * `card` y `card-raised` se aclaran —lo que **sube** el contraste de los
-   * catorce pares de `scripts/validateContrast.ts`, porque en todos ellos el
+   * catorce pares que entonces declaraba `scripts/validateContrast.ts` —hoy
+   * son veintiséis, con los doce de eje—, porque en todos ellos el
    * texto es el color oscuro— y `rule` se aclara para que la rejilla de pelo
    * pese menos ahora que la elevación carga con parte de la jerarquía.
    * `accent` y `signal` no se tocan. */
@@ -146,7 +147,7 @@
    * tarjeta de cada eje. Al implementarlo se quedó sin sitio por dos razones,
    * y se retiró en vez de dejarlo declarado sin consumidor:
    *
-   * 1. Los catorce pares de `scripts/validateContrast.ts` miden el texto
+   * 1. Los pares de `scripts/validateContrast.ts` miden el texto
    *    contra `card`. Teñir esa tarjeta cambia el fondo real de todo el texto
    *    que lleva encima —`mute` sobre `card` va a 4,81:1, con poco margen—,
    *    así que el tinte no es decorativo: obliga a recalcular los pares.

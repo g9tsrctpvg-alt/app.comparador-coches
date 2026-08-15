@@ -111,7 +111,8 @@ de colores por debajo de su umbral de contraste hace fallar
   espacio que el estado necesita ya lo reserva la regla base.
 - **La paleta** son siete papeles con nombre por función, no por tono
   (`--color-paper`, `--color-card`, `--color-ink`, `--color-mute`,
-  `--color-rule`, `--color-accent`, `--color-signal`), con derivados para
+  `--color-rule`, `--color-accent`, `--color-signal`) **más seis colores de
+  eje** (ver el punto siguiente), con derivados para
   superficie elevada (`--color-card-raised`), regla estructural
   (`--color-rule-strong`, frente al pelo de 1px de `--color-rule`), un
   tercer nivel de texto apagado (`--color-ink-tertiary`), texto apagado
@@ -125,10 +126,40 @@ de colores por debajo de su umbral de contraste hace fallar
   vez de `#6b7a72` y `#b4551b`— porque los tonos originales no llegaban a
   4,5:1 de contraste sobre `card` ni `paper`; el ajuste vive como
   comentario junto a la declaración en `global.css`.
+- **Cada eje tiene su color** (`technical/0011`): `--color-axis-viaje`
+  `#2a6f8f` azul, `--color-axis-diario` `#14655c` teal, `--color-axis-prestaciones`
+  `#8e2f45` carmín, `--color-axis-fiabilidad` `#31417a` índigo,
+  `--color-axis-estetica` `#8d4784` ciruela y `--color-axis-coste` `#7d6417`
+  ocre. Los doce pares que forman con `card` y `paper` están declarados en
+  `scripts/validateContrast.ts` y van del 4,77:1 —`viaje` sobre `paper`, el
+  más justo— al 9,09:1. Tres cosas de esta paleta no son estéticas y por eso
+  se leen aquí:
+  - **`diario` repite el valor exacto del acento.** Es el eje del uso de
+    todos los días; un tono nuevo para él no compraba nada. Token propio y no
+    alias, igual que `--color-positive`.
+  - **La luminosidad está separada a propósito**, L\* de 29 a 44 en vez de
+    35-39. Con los seis a la misma luminosidad el peor par bajo protanopia
+    caía a ΔE 5,2; abriendo el rango sube a 10,1, porque la luminosidad es lo
+    único que sobrevive a una deficiencia de visión del color.
+  - **`prestaciones` es carmín y no rojo tierra.** El candidato natural
+    quedaba a ΔE 24,5 de `signal`, con el que comparte pantalla en las celdas
+    Δ: un rojo de eje confundible con «este coche empeora».
+
+  **El color nunca sustituye al texto.** El nombre del eje va siempre escrito
+  al lado de su color y de su icono, así que quien no distinga dos de los seis
+  tonos no pierde ningún dato. **No hay tinte por eje**: teñir el fondo de una
+  tarjeta cambiaría el fondo real de todo el texto que lleva encima y obligaría
+  a recalcular los pares de contraste contra el resultado compuesto, no contra
+  `card`. La razón está escrita en `global.css`, donde estarían los tokens.
+
+  Esto **amplía la paleta de siete papeles** que fija `product/0009`, que está
+  consolidada y no se edita: la enmienda vive en `technical/0011` y aquí. Lo
+  que no se amplía es la libertad — todo literal de color sigue viviendo en
+  `global.css` y nada más.
 - **Los cuatro neutros están afinados** frente a los valores con que
   `product/0009` trajo el artefacto: `paper` `#eceee9`, `card` `#f7f8f5`,
   `card-raised` blanco y `rule` `#d3d8d0`. Los tres primeros se aclararon, lo
-  que **sube** los catorce pares de contraste declarados en vez de bajar
+  que **sube** los catorce pares de contraste que había entonces en vez de bajar
   ninguno —el texto es siempre el color oscuro—; el cuarto se aclaró para que
   la rejilla de pelo pese menos ahora que la elevación carga con parte de la
   jerarquía. `--color-accent-tint-solid` no es un color independiente sino el
@@ -208,8 +239,10 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   fuerza el contenido a visible pase lo que pase el estado de React, y
   esconde el resumen porque en ese caso ya no aporta nada.
 - **`WeightSliders`** — un control 0-10 por eje, en el orden de
-  `AXIS_ORDER`, uno por línea siempre. El valor se apaga a `--color-mute`
-  cuando vale 0.
+  `AXIS_ORDER`, uno por línea siempre. Cada fila lleva el icono y el color de
+  su eje: la cifra del peso y el pulgar del deslizador van en `--axis-color`.
+  El valor se apaga a `--color-mute` cuando vale 0, y ese apagado gana al
+  color del eje — que un eje no cuente pesa más que de qué color es.
 - **`AssumptionsPanel`** — el único punto de edición de los supuestos
   globales y del presupuesto. Ningún otro componente ofrece un control para
   ellos.
@@ -237,8 +270,11 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   marca con `editableRating`; la fila no sabe de antemano cuáles son ni
   cuántos) y después el desglose completo de los seis ejes.
 - **`AxisBreakdownView`** — renderiza un `AxisBreakdown` completo como un
-  bloque delimitado: cabecera (nombre, peso, puntuación sobre 10,
-  aportación) con su barra de proporción —apagada cuando el peso es 0—,
+  bloque delimitado, **con el color y el icono de su eje** (`technical/0011`)
+  en el filete izquierdo, el icono de la cabecera, la nota y el relleno de la
+  barra: cabecera (nombre, peso, puntuación sobre 10,
+  aportación) con su barra de proporción —apagada cuando el peso es 0, y ese
+  apagado gana al color del eje—,
   descripción de la fórmula, datos de entrada (valor, unidad, estimado o
   verificado con `EstimatedMark`, fuente vigente y fuentes descartadas con
   su motivo cuando las hay), supuestos aplicados como texto de solo
@@ -254,6 +290,32 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   perciba visualmente. La usan `RankingRow` (línea de apoyo),
   `AxisBreakdownView` (datos de entrada), `AppFooter` (leyenda) y
   `FichaPage` (leyenda y celdas).
+- **`AxisIcon`** (technical/0011) — el dibujo de cada eje: maleta `viaje`,
+  volante `diario`, cuentarrevoluciones `prestaciones`, escudo `fiabilidad`,
+  gema `estetica` y etiqueta `coste`. SVG en línea sobre un `viewBox` común de
+  24×24, `fill="none"`, `stroke="currentColor"` y un solo grosor de trazo
+  (`--size-icon-stroke`, **sin unidad**: en un SVG `stroke-width` se mide en
+  unidades del `viewBox`, no en píxeles). Las formas son un mapa de datos y no
+  un `switch`. **Siempre `aria-hidden`**: el nombre del eje está al lado en
+  texto real en los tres sitios donde aparece, así que anunciarlo lo diría dos
+  veces. Lo usan `ExplicacionPage`, `WeightSliders` y `AxisBreakdownView`.
+- **`axisTheme`** (technical/0011) — cómo llega el color del eje al CSS.
+  `axisTheme.module.css` declara una clase por eje que **solo** pone
+  `--axis-color`, y `axisTheme.ts` mapea `axisId` a esa clase — un mapa de
+  interfaz sobre un id de dominio, igual que `TECHNOLOGY_LABELS`. Quien la
+  lleva puesta decide qué pinta con ella: el filete de la tarjeta, el relleno
+  de la barra, la nota del eje, el pulgar del deslizador o el color heredado
+  del icono. Todos los consumidores leen `var(--axis-color, var(--color-accent))`,
+  **con respaldo**, y ese respaldo es lo que deja intactos sin tocarlos los
+  sitios que no son un eje: la barra de puntuación total de `RankingRow` y los
+  seis deslizadores de `AssumptionsPanel`.
+
+  El filete de color va en un `::before`, no en `border-left`, y no es
+  capricho: el primitivo `card` se emite en el CSS final **después** que los
+  módulos que lo componen, así que su `border` gana. Medido, el borde salía a
+  1px y en gris con `--axis-color` correctamente resuelto en el mismo
+  elemento. Es la misma trampa que `unstyledButton` documenta para `padding`
+  y `margin`.
 - **`ConfigActions`** (product/0012) — dos botones sobre la clasificación:
   «Copiar enlace» —genera la URL compartible con `useConfig().shareUrl()` y
   la copia con la Clipboard API; si falla (contexto no seguro, permiso
@@ -269,7 +331,11 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   propia tabla de contenidos (los seis ejes, los pesos, los supuestos
   globales, las penalizaciones condicionales, las limitaciones conocidas y
   la procedencia de los datos) y comparte `SCurveChart` y `AXIS_CONTENT`
-  con `AxisBreakdownView`.
+  con `AxisBreakdownView`. Las seis tarjetas de eje y las seis filas de la
+  lista de pesos llevan el icono y el filete de color de su eje
+  (`technical/0011`); **la tabla de contenidos no**, porque sus entradas son
+  secciones y no ejes — teñir «Los seis ejes» de uno de los seis colores
+  diría algo falso.
 - **`FichaPage`** (product/0018, funde lo que antes eran dos vistas —
   `#/ficha-tecnica` y `#/ficha-completa`—) — una tabla **transpuesta**: cada
   columna es un modelo, cada fila una magnitud del dominio
@@ -449,7 +515,8 @@ la unidad del campo y antepone el signo con `formatSigned`.
 
 `src/ui/` tiene un fichero de test por componente que lo justifica —entre
 otros, `App.test.tsx`, `RankingList.test.tsx`, `AxisBreakdownView.test.tsx`,
-`ConfigActions.test.tsx`, `ViewSwitcher.test.tsx`, `ExplicacionPage.test.tsx`
+`ConfigActions.test.tsx`, `ViewSwitcher.test.tsx`, `ExplicacionPage.test.tsx`,
+`WeightSliders.test.tsx`, `AxisIcon.test.tsx`, `axisTheme.test.ts`
 y `FichaPage.test.tsx`—, pero **no cubren la interfaz entera**: cubren los
 fallos concretos que `technical/0002` corrigió y las invariantes que
 protegen (que el aviso de error se renderice de verdad, que renombrar una

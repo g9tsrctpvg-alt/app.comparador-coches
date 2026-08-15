@@ -259,6 +259,10 @@ entera verde en local y cobertura al 100 %.
 | Gate humano: aprobar `technical/0010` | Hecha — 2026-08-14, en commit propio sin implementación, tras confirmación explícita del usuario en modo plan, con la duplicación del control de comparación puesta sobre la mesa antes de elegir |
 | Implementar y verificar la spec | Hecha — CI entera en verde en local (376 tests, cobertura 100 %), y los trece criterios cerrados contra una medición sobre el build: la barra pasa de 3 filas y 221px a 2 filas y 120px a 390px, y de 1 fila y 69px a 1 fila y 54px en escritorio, con las cuatro pastillas del mismo ancho y la misma altura a los siete anchos probados; sincronía comprobada en las dos direcciones entre el `<select>` y los radios de cabecera |
 | Consolidar `technical/0010` en `docs/estado/interfaz.md` | Hecha — 2026-08-14 |
+| `technical/0011` — color e icono por eje | `consolidated` |
+| Gate humano: aprobar `technical/0011` | Hecha — 2026-08-15, en commit propio sin implementación, tras aprobación explícita del usuario en modo plan de un plan que llevaba dentro la paleta ya medida y la enmienda a `product/0009` |
+| Implementar y verificar la spec | Hecha — CI entera en verde en local (387 tests, cobertura 100 %), y los nueve criterios cerrados contra una medición sobre el build: los seis filetes y los seis iconos salen con seis colores distintos y coincidentes entre sí a 320/390/768/1440px, las seis barras del desglose también, el desbordamiento horizontal del documento es 0px en las cuatro anchuras y el objetivo táctil de los deslizadores se queda en 44px |
+| Consolidar `technical/0011` en `docs/estado/interfaz.md` | Hecha — 2026-08-15 |
 
 **`technical/0007` nace de otra revisión del despliegue** (2026-08-12): en
 un gesto táctil diagonal —pensado como «hacia abajo», con un componente

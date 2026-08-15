@@ -1,7 +1,7 @@
 # 0011 — Color e icono por eje
 
 - **Id:** technical/0011
-- **Estado:** implemented
+- **Estado:** consolidated
 - **Tipo:** technical
 - **Fecha:** 2026-08-15
 - **Specs relacionadas:** product/0009, product/0010, product/0011,
@@ -9,9 +9,11 @@
 - **ADRs relacionados:** 0006
 - **Doc de estado:** `docs/estado/interfaz.md`
 
-> ⚠️ **Spec histórica — implementada, sin consolidar.** Su *Contexto* retrata
-> el sistema anterior al cambio. Para el estado actual, ver
-> `docs/estado/interfaz.md`.
+> ⚠️ **Spec consolidada (2026-08-15).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/interfaz.md`. Vigentes aquí solo los **criterios de
+> aceptación**, como registro de verificación.
 
 ## Contexto
 
