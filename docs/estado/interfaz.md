@@ -85,12 +85,16 @@ de colores por debajo de su umbral de contraste hace fallar
   (las tres formas de un botón real —acción principal, secundaria y
   fantasma— sobre la misma base de tamaño táctil y tipografía; ningún
   componente reinventa `background`/`border`/`padding` propios, compone
-  una de estas cuatro clases), `select` (el aspecto único de todo `<select>`
-  de la aplicación: `appearance: none` y flecha propia —`--icon-chevron`, un
-  SVG en la hoja de tokens— en vez de la del sistema operativo; lo componen
-  los dos selectores de la barra de la ficha y el de la cabecera en móvil, y
-  a propósito no fija `display`, que es lo único que cada sitio decide por su
-  cuenta), `proportionBar`/`proportionBarRow`/`proportionBarAxis`
+  una de estas cuatro clases), `controlSurface` (la caja de un control, sin
+  decir qué control es: fondo, borde de pelo, radio, `--shadow-control` y sus
+  estados; la componen las dos clases siguientes), `select` (un `<select>` con
+  superficie propia: `appearance: none` y flecha propia —`--icon-chevron`, un
+  SVG en la hoja de tokens— en vez de la del sistema operativo; hoy lo compone
+  solo el de la cabecera en móvil, y a propósito no fija `display`, que es lo
+  único que cada sitio decide por su cuenta), `field`/`fieldLabel`/`fieldSelect`
+  (la pastilla de la barra de la ficha: la misma superficie con el rótulo
+  flotando sobre un `<select>` que ocupa el rectángulo entero, para que todo él
+  sea objetivo táctil), `proportionBar`/`proportionBarRow`/`proportionBarAxis`
   con su relleno normal o apagado, `statusMark` y `estimatedMark`,
   `secondaryText`, `prose` (medida de línea acotada a `--size-line-measure`
   y partición de palabras largas), `visuallyHidden` (texto solo para
@@ -269,15 +273,35 @@ independientemente del fragmento, así que ningún alias puede dar 404.
 - **`FichaPage`** (product/0018, funde lo que antes eran dos vistas —
   `#/ficha-tecnica` y `#/ficha-completa`—) — una tabla **transpuesta**: cada
   columna es un modelo, cada fila una magnitud del dominio
-  (`docs/estado/dominio.md`, sección «Ficha»). Barra de tres controles:
+  (`docs/estado/dominio.md`, sección «Ficha»). **Barra de cuatro controles
+  iguales** (technical/0010): cada uno es una pastilla —el primitivo `field`—
+  con su rótulo encima de su valor dentro de la misma caja, y las cuatro viven
+  en una rejilla `auto-fit` que pasa sola de 2×2 en pantalla estrecha a una
+  fila cuando cabe, sin ninguna media query. El rótulo va encima y no al lado
+  porque el peor caso —«Comparar» más el nombre de modelo más largo del
+  catálogo— pide unos 240px en una línea, que ningún ancho de columna por
+  debajo de 1200px da; las alternativas (que cada pastilla se parta sola, o
+  forzar una línea) daban alturas distintas por fila o recortaban el valor a
+  media palabra. En cada pastilla el `<select>` ocupa el rectángulo entero y el
+  rótulo flota encima con `pointer-events: none`, de modo que todo el
+  rectángulo es objetivo táctil; el rótulo sigue siendo un `<label>` asociado.
+  Los cuatro controles son:
   - **Campos** — `Esenciales` (seis magnitudes, product/0020: longitud,
     anchura, altura libre al suelo, maletero, potencia, precio —tamaño,
     mecánica y coste, en ese orden— reutilizando el mismo `FieldDef` que
     `Completa` para potencia y precio, sin una segunda declaración) o
     `Completa` (las veinte, agrupadas en cinco bloques con cabecera
     propia). Arranca en `Esenciales`.
-  - **Comparar contra** — un radio por columna, con `name` compartido
-    (`pinned-model`) más «Ninguno». El modelo elegido queda fijado a la
+  - **Comparar** — **dos controles para el mismo estado**, sincronizados por
+    construcción porque los dos escriben `comparisonId`: un radio por columna,
+    con `name` compartido (`pinned-model`), y el `<select>` de la barra, que
+    lista «Ninguno» más todos los modelos ordenados por el criterio de orden
+    vigente. El de cabecera es directo sobre la columna que se está mirando; el
+    de la barra se alcanza sin desplazar la tabla en horizontal para encontrar
+    la columna. Esto **enmienda `product/0018`, requisito 2.2**, que declaraba
+    el radio de cabecera como el único control de la comparación; la spec no se
+    edita —está `consolidated`— y la enmienda vive aquí y en `technical/0010`.
+    El modelo elegido queda fijado a la
     izquierda (`position: sticky`) a cualquier ancho, y cada celda de las
     demás columnas muestra debajo su Δ frente a él, con el **signo siempre
     escrito** —el color (`--color-positive`/`--color-negative`) es un
@@ -289,9 +313,11 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     la primera referencia del catálogo, si hay alguna.
   - **Orden** — Catálogo, Longitud, Anchura o Precio, ascendente. Arranca
     en Longitud.
-  - Un cuarto selector, fuera de esa barra, cambia la vista de foto
+  - **Foto** — cambia la vista de foto
     (Frontal/Lateral/Trasera/Maletero/Interior) de todas las columnas a la
-    vez; arranca en Lateral.
+    vez; arranca en Lateral. Es el cuarto control de la barra, no un mando
+    aparte: hasta `technical/0010` vivía fuera de ella y con el rótulo al
+    lado, y era lo que hacía que la barra ocupara tres filas en un móvil.
   - **Fotos**: `PhotoBox` degrada al mismo hueco rotulado —sin `<img>`— si
     el modelo no declara foto de esa vista o si la `src` declarada falla al
     cargar; el hueco mide lo mismo con foto y sin ella (`.photo` y

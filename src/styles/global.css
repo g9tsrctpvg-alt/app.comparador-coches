@@ -236,6 +236,19 @@
   /* El lado de la flecha del `<select>` (`technical/0009`, requisito 5.1). */
   --size-chevron: 0.75rem;
 
+  /* Ancho mínimo de una pastilla de la barra de la ficha (`technical/0010`,
+   * requisito 2.3). Es lo que decide, con `repeat(auto-fit, minmax(…, 1fr))`,
+   * cuántas caben por fila: a 320px entran dos y la barra queda en 2×2; en
+   * escritorio entran las cuatro. Vive aquí y no en el módulo porque una
+   * longitud suelta en un `.module.css` la tumba `validateStyleTokens`.
+   *
+   * El valor lo fija el ancho más estrecho que el proyecto atiende, no el
+   * gusto: a 320px de viewport quedan 288px útiles tras el relleno de página,
+   * y dos columnas con su hueco de `--space-3` piden 2×136+12 = 284. A
+   * `9.5rem` (152px) la cuenta da 316 y la barra se desplomaba a una sola
+   * columna —cuatro filas—, peor que antes de esta spec. */
+  --size-toolbar-control: 8.5rem;
+
   /* El pulgar del deslizador tiene dos medidas distintas y ese es el punto
    * (`technical/0009`, requisito 6.2). La **caja** sigue midiendo
    * `--size-touch-min`, porque el objetivo táctil de 44×44 de `product/0010`

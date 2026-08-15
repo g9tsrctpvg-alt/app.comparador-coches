@@ -1,73 +1,33 @@
-/* La barra de herramientas (product/0018, requisito 4): tres controles —
- * campos, comparación y orden— más el selector de vista de foto de
- * `product/0014`, que no es uno de los tres: es un mando aparte para las
- * fotos, no para la tabla. */
+/* La barra de herramientas (product/0018, requisito 4, rehecha por
+ * technical/0010): cuatro controles —campos, comparación, orden y vista de
+ * foto— que ahora son el mismo objeto, la pastilla `.field` del fichero de
+ * primitivos.
+ *
+ * Rejilla, no `flex-wrap`: con `auto-fit` y columnas de reparto igual, la
+ * barra pasa sola de 2×2 en pantalla estrecha a una fila cuando cabe, **sin
+ * una media query** (requisito 2.2), y las cuatro pastillas miden lo mismo en
+ * vez de quedar escalonadas. Antes eran tres filas y 221px de alto a 390px,
+ * porque el selector de foto se maquetaba de lado mientras los otros tres
+ * apilaban su rótulo encima. */
 .toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  gap: var(--space-5);
-}
-
-.toolbarControl {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-/* El aspecto entero —flecha propia incluida— lo trae el primitivo
- * (technical/0009, requisito 5.2). Aquí no queda nada que declarar. */
-.toolbarSelect {
-  composes: select from './primitives.module.css';
-}
-
-/* La opción «Ninguno» del control de comparación (requisito 2.3): mismo
- * grupo de radios que las cabeceras de columna —comparte `name` con
- * `.pinInput`—, así que no es un cuarto control, solo una forma más de
- * responder a la misma pregunta. Vive en la barra porque no hay una
- * columna propia donde ponerla. */
-.noneOption {
-  composes: mono from './primitives.module.css';
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  min-height: var(--size-touch-min);
-  padding: 0 var(--space-3);
-  color: var(--color-ink);
-  background: var(--color-card);
-  border: var(--size-border-hairline) solid var(--color-rule);
-  border-radius: var(--radius-sm);
-  /* No compone `.select` —no es un `<select>`, es una etiqueta con un radio
-   * dentro—, pero sí lleva su misma sombra para que la barra se lea
-   * homogénea (technical/0009, requisito 5.3). */
-  box-shadow: var(--shadow-control);
-  cursor: pointer;
-  transition:
-    border-color var(--duration-fast) var(--ease-out),
-    box-shadow var(--duration-fast) var(--ease-out);
-}
-
-.noneOption:hover {
-  border-color: var(--color-rule-strong);
-}
-
-.noneOption:has(:checked) {
-  border-color: var(--color-accent);
-  background: var(--color-accent-tint);
-}
-
-/* Selector de vista de foto (requisito 8.5, corrección 2026-08-07): un
- * `<select>` nativo en vez de un grupo de radios — la misma elección
- * excluyente con menos superficie táctil en pantallas estrechas. */
-.viewSelector {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(var(--size-toolbar-control), 1fr)
+  );
   gap: var(--space-3);
 }
 
-.viewSelect {
-  composes: select from './primitives.module.css';
+.toolbarField {
+  composes: field from './primitives.module.css';
+}
+
+.toolbarFieldLabel {
+  composes: fieldLabel from './primitives.module.css';
+}
+
+.toolbarSelect {
+  composes: fieldSelect from './primitives.module.css';
 }
 
 /* La tabla no arrastra la página cuando no cabe (requisito 8.2, que reaplica
