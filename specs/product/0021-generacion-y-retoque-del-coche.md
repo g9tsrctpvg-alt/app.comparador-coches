@@ -1,13 +1,19 @@
 # 0021 — En qué punto tecnológico está el coche: generación y retoque
 
 - **Id:** product/0021
-- **Estado:** approved
+- **Estado:** implemented
 - **Tipo:** product
 - **Fecha:** 2026-08-15
 - **Specs relacionadas:** product/0013, product/0014, product/0017,
   product/0018, product/0020
 - **ADRs relacionados:** 0009
 - **Doc de estado:** `docs/estado/dominio.md`, `docs/estado/interfaz.md`
+
+> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
+> implementado: su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy no es cierta. **No es referencia del estado actual** — para
+> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
+> **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
