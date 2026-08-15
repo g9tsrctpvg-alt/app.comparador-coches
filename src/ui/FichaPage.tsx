@@ -63,7 +63,7 @@ interface BlockDef {
 const COMPLETE_BLOCKS: BlockDef[] = [
   {
     // Primer bloque, antes de «Tamaño y espacio» (product/0021, requisito
-    // 8): en qué punto tecnológico está el coche es contexto para leer
+    // 2.1): en qué punto tecnológico está el coche es contexto para leer
     // todo lo demás. Sin nota propia, sin dirección declarada —el ADR 0009
     // decide que el calendario no puntúa—, solo comparable.
     id: 'generacion',
@@ -259,7 +259,7 @@ function CellValue({
 }: {
   cell: Exclude<FichaCell, { kind: 'missing' }>;
   def: FieldDef;
-  /** Código de generación del fabricante (product/0021, requisito 12):
+  /** Código de generación del fabricante (product/0021, requisito 2.5):
    * texto de apoyo tras el valor, no una celda ni una Δ propia. */
   code?: string;
 }) {

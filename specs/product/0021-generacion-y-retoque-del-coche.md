@@ -92,61 +92,71 @@ sin entrar en ninguna nota.
 
 ## Requisitos / comportamiento esperado
 
-### El dato
+### 1. El dato
 
-1. `Car` declara `generation`, **obligatorio**, con esta forma:
-   `launchYear` (dato con fuente, obligatorio), `faceliftYear` (dato con
-   fuente, opcional) y `code` (texto, opcional).
-2. **`launchYear` es el año de la presentación oficial de la generación** a
-   la que pertenece el coche, por parte del fabricante. Cuando presentación y
-   comercialización caen en años distintos, manda la presentación: lo que el
-   dato quiere decir es cuándo se congeló la ingeniería, no cuándo llegó a
-   España. La etiqueta de la fuente puede mencionar la otra fecha.
-3. **`faceliftYear` es el año del retoque de mitad de ciclo que lleva la
-   versión que el catálogo compara**, no el de cualquier actualización de
-   equipamiento. Si esa versión es anterior al retoque, o la generación no
-   ha tenido ninguno, el campo se omite.
-4. **`code` es el código de generación del fabricante** cuando existe
-   (`NX4`, `NE1`, `AZ20`). Es el árbitro cuando hay duda entre «generación
-   nueva» y «retoque profundo»: si el fabricante mantiene el código, es
-   retoque; si lo cambia, es generación. Cuando no publica código, decide la
-   fuente citada y la duda se resuelve en la etiqueta de esa fuente.
-5. **El esquema rechaza un `faceliftYear` anterior a `launchYear`**,
-   nombrando el campo. Es una invariante del dato, no una convención que
-   alguien deba recordar.
-6. `Reference` declara `generation` con la misma forma y las mismas reglas.
-   Es una **excepción deliberada** a su regla de «solo identidad, tecnología,
-   fotos y cinco magnitudes dimensionales»: la referencia existe para dar
-   contexto, y de cuándo es el coche contra el que se compara todo es
-   precisamente contexto.
-7. Todos los registros de `cars.json` —publicados y despublicados por igual,
-   porque un coche oculto sigue siendo un dato real del catálogo— y la
-   referencia llevan el dato con **fuente real citada**, nunca de memoria.
+1.1. `Car` declara `generation`, **obligatorio**, con esta forma:
+`launchYear` (dato con fuente, obligatorio), `faceliftYear` (dato con
+fuente, opcional) y `code` (texto, opcional).
 
-### La ficha
+1.2. **`launchYear` es el año de la presentación oficial de la generación**
+a la que pertenece el coche, por parte del fabricante. Cuando presentación y
+comercialización caen en años distintos, manda la presentación: lo que el
+dato quiere decir es cuándo se congeló la ingeniería, no cuándo llegó a
+España. La etiqueta de la fuente puede mencionar la otra fecha.
 
-8. La ficha declara dos campos nuevos, `generationLaunchYear` y
-   `generationFaceliftYear`, en un **bloque propio** encabezado
-   «Generación», antes de «Tamaño y espacio».
-9. **Los dos tienen polaridad `neutral`.** Más nuevo no está declarado como
-   mejor: una plataforma recién estrenada no es mejor que una rodada, y este
-   proyecto no ha decidido cuál de las dos cosas prefiere. Ante la duda no se
-   inventa un juicio de color, igual que con la altura o la batalla.
-10. La Δ entre dos entidades es la diferencia en años, sin dirección de
-    color, y se muestra con el mismo formato que el resto de Δ.
-11. **Un coche sin retoque deja su celda de retoque `missing`**, que la ficha
-    ya muestra como raya con texto accesible. No es un cero ni un hueco: es
-    que no ha habido retoque. Si es la entidad de comparación la que no lo
-    tiene, la Δ de las demás en esa fila queda `'unavailable'`, por la vía
-    que `product/0018` ya definió.
-12. La ficha muestra el `code` junto al año de lanzamiento cuando el registro
-    lo declara, como texto de apoyo de la fila, no como columna propia ni
-    como dato comparable.
+1.3. **`faceliftYear` es el año del retoque de mitad de ciclo que lleva la
+versión que el catálogo compara**, no el de cualquier actualización de
+equipamiento. Si esa versión es anterior al retoque, o la generación no ha
+tenido ninguno, el campo se omite.
 
-### Lo que no cambia
+1.4. **`code` es el código de generación del fabricante** cuando existe
+(`NX4`, `NE1`, `AZ20`). Es el árbitro cuando hay duda entre «generación
+nueva» y «retoque profundo»: si el fabricante mantiene el código, es
+retoque; si lo cambia, es generación. Cuando no publica código, decide la
+fuente citada y la duda se resuelve en la etiqueta de esa fuente.
 
-13. **Ninguna nota de ningún coche cambia.** El desglose de los seis ejes no
-    menciona el año, ni como entrada, ni como supuesto, ni como `info`.
+1.5. **El esquema rechaza un `faceliftYear` anterior a `launchYear`**,
+nombrando el campo. Es una invariante del dato, no una convención que
+alguien deba recordar.
+
+1.6. `Reference` declara `generation` con la misma forma y las mismas
+reglas. Es una **excepción deliberada** a su regla de «solo identidad,
+tecnología, fotos y cinco magnitudes dimensionales»: la referencia existe
+para dar contexto, y de cuándo es el coche contra el que se compara todo es
+precisamente contexto.
+
+1.7. Todos los registros de `cars.json` —publicados y despublicados por
+igual, porque un coche oculto sigue siendo un dato real del catálogo— y la
+referencia llevan el dato con **fuente real citada**, nunca de memoria.
+
+### 2. La ficha
+
+2.1. La ficha declara dos campos nuevos, `generationLaunchYear` y
+`generationFaceliftYear`, en un **bloque propio** encabezado «Generación»,
+antes de «Tamaño y espacio».
+
+2.2. **Los dos tienen polaridad `neutral`.** Más nuevo no está declarado
+como mejor: una plataforma recién estrenada no es mejor que una rodada, y
+este proyecto no ha decidido cuál de las dos cosas prefiere. Ante la duda
+no se inventa un juicio de color, igual que con la altura o la batalla.
+
+2.3. La Δ entre dos entidades es la diferencia en años, sin dirección de
+color, y se muestra con el mismo formato que el resto de Δ.
+
+2.4. **Un coche sin retoque deja su celda de retoque `missing`**, que la
+ficha ya muestra como raya con texto accesible. No es un cero ni un hueco:
+es que no ha habido retoque. Si es la entidad de comparación la que no lo
+tiene, la Δ de las demás en esa fila queda `'unavailable'`, por la vía que
+`product/0018` ya definió.
+
+2.5. La ficha muestra el `code` junto al año de lanzamiento cuando el
+registro lo declara, como texto de apoyo de la fila, no como columna propia
+ni como dato comparable.
+
+### 3. Lo que no cambia
+
+3.1. **Ninguna nota de ningún coche cambia.** El desglose de los seis ejes
+no menciona el año, ni como entrada, ni como supuesto, ni como `info`.
 
 ## Criterios de aceptación
 
@@ -196,9 +206,10 @@ sin entrar en ninguna nota.
   sitio es el commit de implementación, con su fuente por registro.
 - **La resolución del dato es el año, no el mes.** Una generación presentada
   en noviembre y comercializada en marzo siguiente declara el año de
-  presentación (requisito 2); nadie debe leer el campo como una fecha exacta.
+  presentación (requisito 1.2); nadie debe leer el campo como una fecha
+  exacta.
 - **Frontera generación/retoque:** en algunos modelos la decide el marketing
-  del fabricante antes que la ingeniería. El requisito 4 la resuelve con el
+  del fabricante antes que la ingeniería. El requisito 1.4 la resuelve con el
   código de generación como árbitro; donde no hay código, el criterio queda
   escrito en la etiqueta de la fuente de ese registro, que es donde se podrá
   auditar después.

@@ -106,7 +106,7 @@ export interface FichaEntity {
   brand: string;
   technology: Technology;
   /** Código de generación del fabricante, si el registro lo declara
-   * (product/0021, requisito 12): texto de apoyo de la fila de
+   * (product/0021, requisito 2.5): texto de apoyo de la fila de
    * `generationLaunchYear`, no una celda comparable propia. */
   generationCode?: string;
   photos: Photos;
@@ -126,7 +126,7 @@ type DeltaPolarity = 'moreIsBetter' | 'moreIsWorse' | 'neutral';
 const POLARITY: Record<FichaField, DeltaPolarity> = {
   // El ADR 0009 decide que el calendario no entra en la puntuación: más
   // nuevo no está declarado como mejor, igual que la batalla o la altura
-  // libre al suelo (product/0021, requisito 9).
+  // libre al suelo (product/0021, requisito 2.2).
   generationLaunchYear: 'neutral',
   generationFaceliftYear: 'neutral',
 
