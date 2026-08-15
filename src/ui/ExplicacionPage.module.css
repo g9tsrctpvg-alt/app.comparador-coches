@@ -25,13 +25,23 @@
   gap: var(--space-4);
 }
 
+/* Filete corto de acento encima (technical/0012, requisito 4). `sectionTitle`
+ * no compone ningún primitivo, así que aquí un borde sí gana — al contrario
+ * que en `axisBlock`, unas líneas más abajo.
+ *
+ * Esto hace el titular **localizable**, no jerárquico: un `<h2>` sigue sin
+ * tamaño propio entre los 40px del título de vista y los 16px del cuerpo, y
+ * esa deuda sigue anotada en `docs/roadmap.md`. */
 .sectionTitle {
   font-family: var(--font-sans);
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-ink);
   margin: 0;
+  padding-top: var(--space-3);
+  border-top: var(--size-rule-axis) solid var(--color-accent);
   scroll-margin-top: var(--space-4);
+  align-self: flex-start;
 }
 
 .sectionIntro {

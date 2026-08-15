@@ -107,6 +107,18 @@
   --color-positive: #14655c;
   --color-negative: #a34d18;
 
+  /* El fondo del cromo de la aplicación (technical/0012, requisito 1.1): la
+   * cabecera fija. Era blanco puro —`card-raised`— con un pelo gris debajo, lo
+   * primero que se veía de la aplicación y sin un solo tono. Es el acento al
+   * 10 % sobre blanco, así que es **función del acento**, como
+   * `--color-accent-tint-solid` lo es de `card`: si el acento se mueve, este
+   * valor se recalcula.
+   *
+   * Contrastes sobre él: `ink` 13,77:1, `accent` 5,96:1 y `mute` 4,86:1. Los
+   * tres pasan el umbral de texto normal y los tres los comprueba
+   * `scripts/validateContrast.ts`. */
+  --color-chrome: #e8f0ef;
+
   /* Color por eje (technical/0011). Los seis ejes se pintaban todos con el
    * acento: qué eje se estaba mirando lo decía solo el texto. Aquí la paleta
    * pasa de los siete papeles de `product/0009` a trece, y esa ampliación es
@@ -258,10 +270,21 @@
    * requisito 4.1): un degradado vertical de un tono apenas más claro que
    * `paper` hacia `paper`, tan corto de recorrido que no se percibe como
    * degradado, solo como que la página tiene aire arriba. Se aplica con
-   * `background-attachment: fixed` para que no se repita al desplazar. */
+   * `background-attachment: fixed` para que no se repita al desplazar.
+   *
+   * El arranque tenía **croma cero** (`#f3f5f0`): sobre `paper` la diferencia
+   * era de luminosidad, no de tono. `technical/0012`, requisito 2, lo cambia
+   * por un verde muy pálido.
+   *
+   * El suelo de este valor no es estético. Este fondo lleva texto de cuerpo
+   * encima y `mute` sobre `paper` está a 4,81:1, con poco margen: el acento al
+   * 5 % sobre `paper` ya deja ese par en 4,48:1, por debajo del umbral.
+   * `#e9f2ee` da 4,93:1 — por encima del propio `paper`—, así que el degradado
+   * añade color y deja el texto mejor de lo que estaba. Cualquier retoque de
+   * este arranque se comprueba contra ese par antes de tocarlo. */
   --gradient-paper: linear-gradient(
     180deg,
-    #f3f5f0 0,
+    #e9f2ee 0,
     var(--color-paper) 45rem
   );
 

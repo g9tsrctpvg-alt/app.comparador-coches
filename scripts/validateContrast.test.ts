@@ -38,6 +38,7 @@ describe('validateContrast', () => {
         --color-axis-fiabilidad: #31417a;
         --color-axis-estetica: #8d4784;
         --color-axis-coste: #7d6417;
+        --color-chrome: #e8f0ef;
       }
     `;
     const result = validateContrast({ globalStylesheet });
@@ -67,6 +68,7 @@ describe('validateContrast', () => {
         --color-axis-fiabilidad: #31417a;
         --color-axis-estetica: #8d4784;
         --color-axis-coste: #7d6417;
+        --color-chrome: #e8f0ef;
       }
     `;
     const result = validateContrast({ globalStylesheet });
@@ -95,6 +97,7 @@ describe('validateContrast', () => {
         --color-axis-fiabilidad: #31417a;
         --color-axis-estetica: #8d4784;
         --color-axis-coste: #7d6417;
+        --color-chrome: #e8f0ef;
       }
     `;
     const result = validateContrast({ globalStylesheet });
