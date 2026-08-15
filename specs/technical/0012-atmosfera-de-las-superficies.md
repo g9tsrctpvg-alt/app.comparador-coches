@@ -1,7 +1,7 @@
 # 0012 — Atmósfera de las superficies
 
 - **Id:** technical/0012
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** technical
 - **Fecha:** 2026-08-15
 - **Specs relacionadas:** product/0009, product/0010, technical/0005,
