@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
 import type { Car } from '../domain/car';
+import { AXIS_THEME_CLASS } from './axisTheme';
+import { AxisIcon } from './components/AxisIcon';
 import {
   AXIS_LABELS,
   AXIS_ORDER,
@@ -120,9 +122,12 @@ export function ExplicacionPage({ cars }: ExplicacionPageProps) {
             <article
               key={axisId}
               id={`eje-${axisId}`}
-              className={styles.axisBlock}
+              className={`${styles.axisBlock} ${AXIS_THEME_CLASS[axisId]}`}
             >
-              <h3 className={styles.axisTitle}>{AXIS_LABELS[axisId]}</h3>
+              <h3 className={styles.axisTitle}>
+                <AxisIcon axisId={axisId} />
+                {AXIS_LABELS[axisId]}
+              </h3>
               <p className={styles.measures}>{content.measures}</p>
               <p className={styles.secondary}>{content.data}</p>
               <p className={styles.formula}>{axis.formulaDescription}</p>
@@ -168,8 +173,14 @@ export function ExplicacionPage({ cars }: ExplicacionPageProps) {
         </p>
         <div className={styles.weightList}>
           {AXIS_ORDER.map((axisId) => (
-            <div key={axisId} className={styles.weightRow}>
-              <span className={styles.weightName}>{AXIS_LABELS[axisId]}</span>
+            <div
+              key={axisId}
+              className={`${styles.weightRow} ${AXIS_THEME_CLASS[axisId]}`}
+            >
+              <span className={styles.weightName}>
+                <AxisIcon axisId={axisId} />
+                {AXIS_LABELS[axisId]}
+              </span>
               <span className={styles.weightValue}>
                 {DEFAULT_WEIGHTS[axisId]}
               </span>

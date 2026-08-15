@@ -73,6 +73,25 @@ export const DECLARED_PAIRS: readonly ContrastPair[] = [
   { foreground: 'mute-on-ink', background: 'ink', level: 'normal' },
   { foreground: 'ink-tertiary', background: 'paper', level: 'large' },
   { foreground: 'ink-tertiary', background: 'card', level: 'large' },
+
+  /* Los seis colores de eje (technical/0011, requisito 6.1), cada uno sobre
+   * las dos superficies donde se pinta. Entran al umbral estricto de 4,5:1
+   * aunque hoy ninguno sirva texto pequeño: declararlos como texto normal
+   * deja escrito el margen y hace que un retoque de tono que se lo coma
+   * falle aquí en vez de en pantalla. El más justo es `axis-viaje` sobre
+   * `paper`, a 4,77:1. */
+  { foreground: 'axis-viaje', background: 'card', level: 'normal' },
+  { foreground: 'axis-viaje', background: 'paper', level: 'normal' },
+  { foreground: 'axis-diario', background: 'card', level: 'normal' },
+  { foreground: 'axis-diario', background: 'paper', level: 'normal' },
+  { foreground: 'axis-prestaciones', background: 'card', level: 'normal' },
+  { foreground: 'axis-prestaciones', background: 'paper', level: 'normal' },
+  { foreground: 'axis-fiabilidad', background: 'card', level: 'normal' },
+  { foreground: 'axis-fiabilidad', background: 'paper', level: 'normal' },
+  { foreground: 'axis-estetica', background: 'card', level: 'normal' },
+  { foreground: 'axis-estetica', background: 'paper', level: 'normal' },
+  { foreground: 'axis-coste', background: 'card', level: 'normal' },
+  { foreground: 'axis-coste', background: 'paper', level: 'normal' },
 ];
 
 const HEX_TOKEN_RE = /--color-([a-z0-9-]+):\s*(#[0-9a-fA-F]{6})\b/g;

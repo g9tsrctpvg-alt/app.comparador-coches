@@ -8,6 +8,7 @@ import {
 } from '../domain/scoring/weights';
 import { DEFAULT_ASSUMPTIONS } from '../domain/scoring/assumptions';
 import { threeCarFixture } from '../domain/scoring/testFixtures';
+import { AXIS_THEME_CLASS } from './axisTheme';
 
 function render(): string {
   return renderToStaticMarkup(<ExplicacionPage cars={threeCarFixture} />);
@@ -124,6 +125,25 @@ describe('ExplicacionPage', () => {
     // sola vez para las tres vistas.
     const markup = render();
     expect(markup).toMatch(/<h1[^>]*>Cómo se calcula todo<\/h1>/);
+  });
+
+  it('themes every axis block and every weight row with its own axis color (technical/0011)', () => {
+    const markup = render();
+    for (const axisId of AXIS_ORDER) {
+      const themeClass = AXIS_THEME_CLASS[axisId];
+      // Dos sitios por eje: la tarjeta de la sección «Los seis ejes» y su
+      // fila en la lista de pesos.
+      expect(markup.split(themeClass).length - 1, axisId).toBe(2);
+    }
+  });
+
+  it('draws an icon beside every axis name, and none of them announces itself', () => {
+    const markup = render();
+    // Doce iconos: seis tarjetas más seis filas de peso. Si alguno se
+    // anunciara, el lector de pantalla diría el nombre del eje dos veces.
+    const icons = markup.match(/<svg[^>]*>/g) ?? [];
+    const axisIcons = icons.filter((tag) => tag.includes('aria-hidden="true"'));
+    expect(axisIcons.length).toBe(AXIS_ORDER.length * 2);
   });
 
   it('renders no score calculation of its own: only reads what scoreCatalog already computed', () => {

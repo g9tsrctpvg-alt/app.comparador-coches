@@ -1,0 +1,16 @@
+/* El icono de un eje (technical/0011, requisito 5).
+ *
+ * El color no se declara aquí: se hereda de `--axis-color`, que pone la clase
+ * de tema de `axisTheme.module.css` en algún ancestro. El respaldo al acento
+ * es lo que deja el icono utilizable en un sitio que todavía no tenga tema,
+ * en vez de dejarlo negro.
+ */
+.icon {
+  width: var(--size-icon);
+  height: var(--size-icon);
+  flex-shrink: 0;
+  color: var(--axis-color, var(--color-accent));
+  stroke-width: var(--size-icon-stroke);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

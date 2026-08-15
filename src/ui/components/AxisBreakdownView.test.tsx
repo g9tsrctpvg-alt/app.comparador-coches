@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { AxisBreakdownView } from './AxisBreakdownView';
 import type { AxisBreakdown } from '../../domain/scoring/breakdown';
+import { AXIS_ORDER } from '../../domain/scoring/weights';
+import { AXIS_THEME_CLASS } from '../axisTheme';
 
 function baseAxis(overrides: Partial<AxisBreakdown> = {}): AxisBreakdown {
   return {
@@ -150,5 +152,22 @@ describe('AxisBreakdownView', () => {
       <AxisBreakdownView breakdown={baseAxis()} />,
     );
     expect(markup).toContain('No aplican a este eje.');
+  });
+
+  it('wears the color and the icon of the axis it is showing (technical/0011)', () => {
+    for (const axisId of AXIS_ORDER) {
+      const markup = renderToStaticMarkup(
+        <AxisBreakdownView breakdown={baseAxis({ axisId })} />,
+      );
+      expect(markup, axisId).toContain(AXIS_THEME_CLASS[axisId]);
+      // Ningún otro eje se cuela: seis bloques que compartieran clase de tema
+      // serían seis bloques del mismo color, que es el estado anterior.
+      for (const other of AXIS_ORDER.filter((id) => id !== axisId)) {
+        expect(markup, `${axisId} vs ${other}`).not.toContain(
+          AXIS_THEME_CLASS[other],
+        );
+      }
+      expect(markup, axisId).toContain('aria-hidden="true"');
+    }
   });
 });

@@ -1,8 +1,27 @@
+/* El filete de la izquierda es el color del eje (technical/0011, requisito
+ * 4.3): en un desglose de seis bloques iguales es lo que deja saber cuál se
+ * está mirando sin volver a leer el rótulo.
+ *
+ * En `::before` y no en `border-left`, por la misma razón que en
+ * `ExplicacionPage.module.css`: el `border` del primitivo `card` se emite
+ * después y ganaría. */
 .axis {
   composes: card from '../primitives.module.css';
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
+}
+
+.axis::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: var(--size-rule-axis);
+  background: var(--axis-color, var(--color-rule));
+  border-start-start-radius: var(--radius-md);
+  border-end-start-radius: var(--radius-md);
 }
 
 .axis + .axis {
@@ -18,6 +37,9 @@
 }
 
 .name {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
   font-family: var(--font-sans);
   font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-md);
@@ -35,11 +57,13 @@
   composes: mono from '../primitives.module.css';
 }
 
+/* La nota del eje toma su color (technical/0011, requisito 4.3): es la cifra
+ * de la que va el bloque entero, y la que empareja con su barra. */
 .score {
   composes: mono from '../primitives.module.css';
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-md);
-  color: var(--color-accent);
+  color: var(--axis-color, var(--color-accent));
 }
 
 .formula {
