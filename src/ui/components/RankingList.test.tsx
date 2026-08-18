@@ -6,6 +6,9 @@ import { DEFAULT_WEIGHTS } from '../../domain/scoring/weights';
 import { DEFAULT_ASSUMPTIONS } from '../../domain/scoring/assumptions';
 import { threeCarFixture } from '../../domain/scoring/testFixtures';
 import type { CarScoreBreakdown } from '../../domain/scoring/breakdown';
+import { loadCatalog } from '../../data/loadCatalog';
+import { publishedCars } from '../../domain/car';
+import rowStyles from './RankingRow.module.css';
 
 function scored(): CarScoreBreakdown[] {
   return scoreCatalog(
@@ -98,6 +101,93 @@ describe('RankingList', () => {
     for (const car of overBudget) {
       expect(markup).not.toContain(car.carName);
     }
+  });
+
+  describe('the podium (product/0022)', () => {
+    function rowClassMarker(variant: 'podiumCard' | 'row' | 'rowLeader') {
+      return `class="${rowStyles[variant]}"`;
+    }
+
+    /** Comprueba que, dentro de la ventana de marcado que sigue al nombre
+     * del coche, los `tokens` aparecen en ese orden — sin asumir en qué
+     * parte de la lista cae la fila. */
+    function expectOrderedInRow(
+      markup: string,
+      carName: string,
+      tokens: string[],
+    ) {
+      const start = markup.indexOf(carName);
+      expect(start).toBeGreaterThan(-1);
+      const window = markup.slice(start, start + 600);
+      let last = -1;
+      for (const token of tokens) {
+        const index = window.indexOf(token);
+        expect(index).toBeGreaterThan(last);
+        last = index;
+      }
+    }
+
+    it('renders exactly the top three as podium cards and the rest as list rows, with the real catalog', () => {
+      const realCars = publishedCars(loadCatalog());
+      const realScored = scoreCatalog(
+        realCars,
+        DEFAULT_WEIGHTS,
+        DEFAULT_ASSUMPTIONS,
+        47000,
+      );
+      const markup = renderToStaticMarkup(
+        <RankingList
+          cars={realScored}
+          rawCars={realCars}
+          hideOverBudget={false}
+          onRatingChange={() => undefined}
+        />,
+      );
+      const podiumCount = markup.split(rowClassMarker('podiumCard')).length - 1;
+      expect(podiumCount).toBe(3);
+      const restCount =
+        markup.split(rowClassMarker('row')).length -
+        1 +
+        (markup.split(rowClassMarker('rowLeader')).length - 1);
+      expect(restCount).toBe(realScored.length - 3);
+    });
+
+    it('with three or fewer visible cars, renders only the podium — no empty "rest"', () => {
+      // `threeCarFixture` tiene exactamente tres coches: los tres son podio,
+      // y no debe quedar ni una fila del otro tratamiento.
+      const markup = renderExpanded(scored());
+      expect(markup.split(rowClassMarker('podiumCard')).length - 1).toBe(3);
+      expect(markup).not.toContain(rowClassMarker('row'));
+      expect(markup).not.toContain(rowClassMarker('rowLeader'));
+    });
+
+    it('the supporting line shows engine, acceleration, trunk and price, in that order, never power — on the podium and on the rest', () => {
+      const realCars = publishedCars(loadCatalog());
+      const realScored = scoreCatalog(
+        realCars,
+        DEFAULT_WEIGHTS,
+        DEFAULT_ASSUMPTIONS,
+        47000,
+      );
+      const markup = renderToStaticMarkup(
+        <RankingList
+          cars={realScored}
+          rawCars={realCars}
+          hideOverBudget={false}
+          onRatingChange={() => undefined}
+        />,
+      );
+      // Tucson HEV es el líder del podio; CX-5 es la primera fila del
+      // resto (posición 04) — cubre las dos variantes con datos reales.
+      expectOrderedInRow(markup, 'Tucson HEV', [
+        'Híbrido',
+        '8,2',
+        '616',
+        '40.325',
+      ]);
+      expectOrderedInRow(markup, 'CX-5', ['ligero', '10,5', '583', '35.200']);
+      expect(markup).not.toMatch(/\d\s*CV\b/);
+    });
   });
 });
 
