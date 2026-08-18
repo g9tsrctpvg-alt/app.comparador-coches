@@ -1,7 +1,7 @@
 # 0022 — El podio de la clasificación se distingue del resto
 
 - **Id:** product/0022
-- **Estado:** implemented
+- **Estado:** verified
 - **Tipo:** product
 - **Fecha:** 2026-08-18
 - **Specs relacionadas:** product/0008, product/0009, product/0020
@@ -146,49 +146,68 @@ en vez de la potencia, en las dos partes de la lista.
 
 > Obligatorios y verificables.
 
-- [ ] Con el catálogo real, pesos y presupuesto por defecto: los tres
+- [x] Con el catálogo real, pesos y presupuesto por defecto: los tres
       primeros coches de la clasificación (Tucson HEV, Tucson PHEV, Sportage
       HEV) se renderizan con el tratamiento de tarjeta de podio; los diez
       restantes, con el tratamiento de fila que ya existe hoy. Comprobado
-      con un test que cuenta cuántos nodos llevan cada tratamiento.
-- [ ] La puntuación de los trece candidatos publicados es **idéntica** antes
+      con un test que cuenta cuántos nodos llevan cada tratamiento:
+      `RankingList.test.tsx`, «renders exactly the top three as podium cards
+      and the rest as list rows, with the real catalog».
+- [x] La puntuación de los trece candidatos publicados es **idéntica** antes
       y después del cambio: `scoreCatalog.snapshot.test.ts` sigue en verde
       sin modificar sus valores esperados.
-- [ ] La línea de apoyo de cada coche —podio y resto— contiene, en este
+- [x] La línea de apoyo de cada coche —podio y resto— contiene, en este
       orden, el tipo de motor, la aceleración 0-100, el maletero en litros y
       el precio; no contiene la potencia. Comprobado recorriendo el marcado
-      de `RankingList` y afirmando el orden y la ausencia de «CV».
-- [ ] El maletero se lee de `rawCar.trunkLiters`, nunca calculado por la
+      de `RankingList` y afirmando el orden y la ausencia de «CV»:
+      `RankingList.test.tsx`, «the supporting line shows engine,
+      acceleration, trunk and price, in that order, never power».
+- [x] El maletero se lee de `rawCar.trunkLiters`, nunca calculado por la
       interfaz: `npm run arch:check` sigue en verde y `ui-no-scoring-internals`
       no reporta ninguna importación nueva hacia `domain/scoring/axes/`.
-- [ ] Un coche fuera de presupuesto se distingue con texto, no solo con
+- [x] Un coche fuera de presupuesto se distingue con texto, no solo con
       color, en el podio y en el resto. Verificación a mano con el navegador
-      en escala de grises, declarada como tal.
-- [ ] El control de despliegue conserva su nombre accesible —posición y
+      en escala de grises: el EV5 (rank 08, resto) muestra «Fuera de
+      presupuesto» en negrita, legible sin ningún canal de color.
+- [x] El control de despliegue conserva su nombre accesible —posición y
       nombre del coche, «ver desglose» / «ocultar desglose», sin puntuación
       ni marca de presupuesto embutidas— en las dos partes de la lista.
-      Verificado con Playwright.
-- [ ] Con tres coches o menos visibles (filtro de presupuesto activo con un
+      Verificado con Playwright contra el build de producción: la fila 01
+      (podio) da «01 Tucson HEV, ver desglose» / «…, ocultar desglose»; la
+      04 (resto, primera fuera del podio) se comporta igual, y el estado se
+      alterna correctamente al expandir una fila distinta de la abierta.
+- [x] Con tres coches o menos visibles (filtro de presupuesto activo con un
       presupuesto muy bajo sobre `threeCarFixture`), la clasificación
       renderiza solo el podio, con tantas tarjetas como coches haya, y no
       deja un hueco ni un rótulo vacío donde iría el resto.
-- [ ] Revisión de código: la lógica de `aria-expanded` y de nombre accesible
+      `RankingList.test.tsx`, «with three or fewer visible cars, renders
+      only the podium — no empty "rest"».
+- [x] Revisión de código: la lógica de `aria-expanded` y de nombre accesible
       vive en un único lugar; no hay una copia para el podio y otra para el
-      resto.
-- [ ] Ninguna puntuación, fórmula, peso o supuesto cambia:
+      resto. `RankingRow.tsx` construye el botón de despliegue (`toggle`) y
+      el contenido desplegado (`expandedContent`) una sola vez; el podio y
+      la fila del resto reutilizan esos mismos elementos, solo cambia el
+      marcado que los envuelve.
+- [x] Ninguna puntuación, fórmula, peso o supuesto cambia:
       `ui-no-scoring-internals` sigue pasando sin modificar
       `.dependency-cruiser.mjs`.
-- [ ] Ningún componente de `src/ui/` contiene un literal de color, espaciado
+- [x] Ningún componente de `src/ui/` contiene un literal de color, espaciado
       o tipografía nuevo: `scripts/validateStyleTokensRepo.test.ts` sigue en
       verde sin añadir tokens.
-- [ ] El contraste de todo texto de la tarjeta del podio —incluida la línea
+- [x] El contraste de todo texto de la tarjeta del podio —incluida la línea
       de apoyo sobre su fondo, igual en las tres tarjetas— cumple WCAG AA
       (≥4,5:1 texto normal, ≥3:1 texto grande y barras), medido igual que
-      `product/0009`.
-- [ ] Sobre el build de producción, en un navegador real, con las trece
+      `product/0009`. Medido (fórmula WCAG 2.x, sRGB) sobre `card-raised`
+      (`#ffffff`): `mute` (`#5c6b62`) 5,62:1; `ink` (`#1a2420`) 15,94:1;
+      `accent` (`#14655c`) 6,89:1; `signal` (`#a34d18`) 5,78:1. Los cuatro
+      superan el umbral sin ajuste — `card-raised` es más clara que `card`,
+      el fondo ya medido en `product/0009`.
+- [x] Sobre el build de producción, en un navegador real, con las trece
       filas del catálogo real: el podio y el resto de la lista se leen sin
       desplazamiento horizontal del documento a 320, 592, 960 y 1440px.
-- [ ] `npm run format:check`, `npm run lint`, `npm run typecheck`,
+      Verificado con Playwright: `scrollWidth - clientWidth` es `0` en los
+      cuatro anchos.
+- [x] `npm run format:check`, `npm run lint`, `npm run typecheck`,
       `npm run arch:check`, `npm run test:coverage` y `npm run build` pasan
       en local.
 
