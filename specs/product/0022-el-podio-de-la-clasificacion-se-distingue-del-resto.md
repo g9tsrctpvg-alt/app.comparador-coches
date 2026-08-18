@@ -208,8 +208,4 @@ en vez de la potencia, en las dos partes de la lista.
 
 ## Decisiones abiertas
 
-Ninguna. La única decisión pendiente en el primer borrador —si `LeaderCard`
-convivía con una tarjeta de primer clasificado con fondo invertido, o
-desaparecía en su favor— se resuelve por la opción B: `LeaderCard` se
-mantiene tal cual, y las tres tarjetas del podio llevan el mismo
-tratamiento, sin fondo propio para el primer clasificado (requisito 2).
+Ninguna.
