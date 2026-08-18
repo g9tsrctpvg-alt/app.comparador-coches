@@ -63,9 +63,9 @@ en vez de la potencia, en las dos partes de la lista.
 - **El contenido y el orden de la línea de apoyo**, en las dos partes:
   tipo de motor, aceleración 0-100, maletero, precio — en ese orden, de
   izquierda a derecha, con la puntuación fuera de ese grupo.
-- **Qué pasa con `LeaderCard`** frente a la tarjeta del primer clasificado
-  del podio: se resuelve como parte de esta spec — ver *Decisiones
-  abiertas*.
+- **`LeaderCard` se mantiene sin cambios.** La tarjeta del primer
+  clasificado del podio no la sustituye ni añade una segunda superficie
+  invertida — ver requisito 2.
 
 ## Fuera de alcance
 
@@ -78,10 +78,12 @@ en vez de la potencia, en las dos partes de la lista.
   ruptura, el conmutador de vista, los paneles plegables—, más allá de
   comprobar que el podio no rompe el ancho de la página.
 - **Nuevos tokens, primitivos o colores.** El podio se construye con lo que
-  ya existe: `card`, `surfaceRaised`, `invertedSurface`, `proportionBarRow`,
-  `mono`, `label`.
+  ya existe: `card`, `surfaceRaised`, `proportionBarRow`, `mono`, `label`.
 - **El filtro de presupuesto, `rankVisible` o la persistencia de la
   configuración.** Ninguno de los tres cambia.
+- **`LeaderCard`.** Se mantiene exactamente como está: sigue siendo la única
+  superficie invertida de la interfaz, y el podio no la duplica ni la
+  sustituye.
 - **Reducir la tipografía o quitar la barra de proporción del resto de la
   lista.** Ver *Contexto*: no se pidió y no se hace.
 - **Las otras dos variantes exploradas en el mismo lienzo de diseño** —una
@@ -100,7 +102,12 @@ en vez de la potencia, en las dos partes de la lista.
    línea: posición y nombre a la izquierda, con el mismo tratamiento
    tipográfico y el mismo hueco de posición de ancho fijo que hoy; a la
    derecha, la línea de apoyo seguida de la puntuación. Bajo esa línea, la
-   misma barra de proporción de 3px que ya existe.
+   misma barra de proporción de 3px que ya existe. **Las tres tarjetas del
+   podio llevan el mismo tratamiento**: el primer clasificado no lleva fondo
+   propio ni superficie invertida — se distingue del segundo y el tercero
+   solo por el acento en su posición y su puntuación, igual que ya distingue
+   hoy `.positionLeader`/`.scoreLeader` en la fila. `LeaderCard` sigue siendo
+   la única superficie invertida de la interfaz.
 3. El resto de coches se sigue renderizando con el marcado y el estilo que
    `RankingRow` ya tiene hoy —posición, nombre, línea de apoyo, marca de
    presupuesto, puntuación, barra de proporción—, sin cambios de tamaño ni
@@ -169,8 +176,7 @@ en vez de la potencia, en las dos partes de la lista.
       o tipografía nuevo: `scripts/validateStyleTokensRepo.test.ts` sigue en
       verde sin añadir tokens.
 - [ ] El contraste de todo texto de la tarjeta del podio —incluida la línea
-      de apoyo sobre su fondo, y el tratamiento del primer clasificado según
-      lo que resuelva la decisión abierta de esta spec— cumple WCAG AA
+      de apoyo sobre su fondo, igual en las tres tarjetas— cumple WCAG AA
       (≥4,5:1 texto normal, ≥3:1 texto grande y barras), medido igual que
       `product/0009`.
 - [ ] Sobre el build de producción, en un navegador real, con las trece
@@ -183,10 +189,9 @@ en vez de la potencia, en las dos partes de la lista.
 ## Dependencias y supuestos
 
 - **Depende de `product/0009`**, que define el marcado y el estilo de la
-  fila que el resto de la lista conserva, y la tarjeta del líder cuyo futuro
-  decide esta spec. Esta spec **amplía** ese requisito 6 (única superficie
-  invertida): lo deja vigente o lo sustituye, según la decisión abierta, pero
-  no lo deja ambiguo.
+  fila que el resto de la lista conserva. Su requisito 6 —`LeaderCard` como
+  única superficie invertida de la interfaz— sigue vigente **sin cambios**:
+  el podio no introduce una segunda.
 - **Depende de `product/0008`**, cuya etiqueta legible de tecnología sigue
   usándose sin cambios, en las dos partes de la lista.
 - **No toca `product/0020`**: la ficha sigue mostrando potencia en
@@ -203,24 +208,8 @@ en vez de la potencia, en las dos partes de la lista.
 
 ## Decisiones abiertas
 
-- **Qué pasa con `LeaderCard` frente a la tarjeta del primer clasificado del
-  podio.** El boceto explorado en el lienzo de diseño le da a esa tarjeta el
-  mismo fondo `ink`/texto `paper` que `LeaderCard`, lo que crearía una
-  segunda superficie invertida y rompería el requisito 6 de `product/0009`
-  («Es la **única** superficie invertida de la interfaz: si se usa dos
-  veces, deja de señalar nada»). Dos salidas, ninguna aplicada todavía:
-  - **A. `LeaderCard` desaparece** y la tarjeta del primer clasificado del
-    podio pasa a ser la única superficie invertida, ahora dentro de la
-    propia lista en vez de por encima de los controles. Quita una
-    repetición del mismo dato (el líder ya se ve, con más detalle, en el
-    podio) pero cambia una pieza con nombre propio desde `product/0009`.
-  - **B. `LeaderCard` se queda** y la tarjeta del primer clasificado del
-    podio usa el mismo tratamiento elevado que las otras dos —sin fondo
-    `ink`—, distinguida solo por el acento de su puntuación. Es el cambio
-    más pequeño y no toca `product/0009`, pero dos tarjetas que nombran al
-    mismo coche como «el primero», con tratamientos distintos, es la
-    redundancia que el requisito 6 quería evitar desde el principio.
-
-  Esta decisión la toma quien apruebe la spec; los requisitos 2 y el
-  criterio de contraste correspondiente se ajustan a lo que se decida antes
-  de pasar a `approved`.
+Ninguna. La única decisión pendiente en el primer borrador —si `LeaderCard`
+convivía con una tarjeta de primer clasificado con fondo invertido, o
+desaparecía en su favor— se resuelve por la opción B: `LeaderCard` se
+mantiene tal cual, y las tres tarjetas del podio llevan el mismo
+tratamiento, sin fondo propio para el primer clasificado (requisito 2).
