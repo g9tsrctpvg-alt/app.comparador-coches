@@ -98,6 +98,98 @@
   padding-top: var(--space-2);
 }
 
+/* El podio (product/0022): una tarjeta por coche, no una fila. Reutiliza
+ * `surfaceRaised` y el mismo filete de acento que `LeaderCard` y
+ * `AxisBreakdownView` — un `::before` y no un `border-left`, por la misma
+ * trampa de especificidad que ya documentan esos dos: el primitivo `card`
+ * se emite después que los módulos que lo componen, así que su `border`
+ * ganaría. Las tres tarjetas del podio llevan el mismo tratamiento: el
+ * primer clasificado no tiene fondo propio, solo se distingue por el
+ * acento en su posición y su puntuación (`.positionLeader`/`.scoreLeader`),
+ * igual que ya distinguía la fila líder de hoy. */
+.podiumCard {
+  composes: surfaceRaised from '../primitives.module.css';
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.podiumCard::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: var(--size-rule-axis);
+  background: var(--color-accent);
+  border-start-start-radius: var(--radius-md);
+  border-end-start-radius: var(--radius-md);
+}
+
+.podiumHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  column-gap: var(--space-4);
+  row-gap: var(--space-2);
+}
+
+.togglePodium {
+  composes: unstyledButton from '../primitives.module.css';
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  min-height: var(--size-touch-min);
+  padding: 0 var(--space-2);
+  margin: 0 calc(var(--space-2) * -1);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.togglePodium:hover {
+  background: var(--color-card-raised);
+}
+
+.togglePodium:active {
+  background: var(--color-accent-tint);
+}
+
+.podiumMeta {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  margin-left: auto;
+}
+
+.secondaryLinePodium {
+  composes: mono from '../primitives.module.css';
+  color: var(--color-mute);
+  font-size: var(--font-size-2xs);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+.scorePodium {
+  composes: mono from '../primitives.module.css';
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-lg);
+  color: var(--color-ink);
+}
+
+.scorePodiumLeader {
+  composes: scorePodium;
+  color: var(--color-accent);
+}
+
+.barPodium {
+  composes: proportionBarRow from '../primitives.module.css';
+}
+
 .ratings {
   composes: card from '../primitives.module.css';
   display: flex;

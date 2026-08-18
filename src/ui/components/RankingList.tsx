@@ -23,6 +23,11 @@ export interface EditableRating {
   value: number;
 }
 
+/** El podio (product/0022): los tres primeros de la lista visible llevan
+ * tratamiento de tarjeta; el resto, la fila de siempre. Si hay tres coches
+ * o menos, todos son podio y no hay «resto» — sin hueco ni relleno. */
+const PODIUM_SIZE = 3;
+
 function ratingLabel(sub: SubcomponentBreakdown): string {
   // La etiqueta del dominio lleva su propia coletilla «(editable)» porque
   // describe el paso de cálculo; aquí el control ya se ve editable.
@@ -74,6 +79,7 @@ export function RankingList({
             rawCar={rawById.get(car.carId)}
             rank={index + 1}
             isLeader={index === 0}
+            variant={index < PODIUM_SIZE ? 'podium' : 'list'}
             expanded={expanded}
             onToggle={() => setExpandedId(expanded ? null : car.carId)}
             editableRatings={editableRatingsOf(car)}

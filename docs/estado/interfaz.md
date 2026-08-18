@@ -272,26 +272,53 @@ independientemente del fragmento, así que ningún alias puede dar 404.
 - **`RankingList`** — ordena los coches por `total` descendente (con
   `rankVisible`, compartida con `App` para que la tarjeta del líder y la
   cabeza de la lista nunca se desincronicen), aplica el filtro de
-  presupuesto si está activo, y delega cada fila a `RankingRow`. Recibe
-  también el catálogo crudo (`rawCars`) para leer tecnología, potencia,
-  aceleración y precio: son campos de `Car`, no del desglose, y leerlos
-  directamente evita acoplar la interfaz al texto de una etiqueta del
-  dominio.
+  presupuesto si está activo, y delega cada fila a `RankingRow`, con
+  `variant="podium"` para las tres primeras posiciones y `variant="list"`
+  para el resto (`PODIUM_SIZE = 3`, product/0022). Si la lista visible tiene
+  tres coches o menos, no hay «resto»: todos son podio, sin hueco ni relleno
+  en su lugar. Recibe también el catálogo crudo (`rawCars`) para leer
+  tecnología, aceleración, maletero y precio: son campos de `Car`, no del
+  desglose, y leerlos directamente evita acoplar la interfaz al texto de una
+  etiqueta del dominio.
 - **`RankingRow`** — una fila de la clasificación con seis elementos
   independientes, ninguno construido concatenando texto de otro: la
   posición (monoespaciada, con cero a la izquierda, en un hueco de ancho
-  fijo), el nombre, una línea de apoyo monoespaciada (tecnología, potencia,
-  aceleración, precio, con la marca de estimado cuando aplica), la marca de
-  «Fuera de presupuesto» cuando corresponde, el `percentage` y una barra de
-  proporción. La tecnología se muestra con su etiqueta legible
-  (`src/ui/technologyLabels.ts`, product/0008: «Eléctrico», «Híbrido
-  enchufable»…), nunca con la sigla del modelo de datos. El control que
-  expande el desglose expone `aria-expanded` y
-  su nombre accesible es solo la posición y el nombre del coche —nunca la
-  puntuación ni la marca de presupuesto—. Expandida, muestra primero los
-  controles de valoración editables (los subcomponentes que el dominio
-  marca con `editableRating`; la fila no sabe de antemano cuáles son ni
-  cuántos) y después el desglose completo de los seis ejes.
+  fijo), el nombre, una línea de apoyo monoespaciada (tecnología,
+  aceleración, maletero, precio, con la marca de estimado cuando aplica), la
+  marca de «Fuera de presupuesto» cuando corresponde, el `percentage` y una
+  barra de proporción. El maletero sustituye a la potencia en esa línea
+  desde `product/0022`: es la magnitud de mayor peso dentro de la fórmula
+  del eje `viaje` —la mitad de su nota—, que es a su vez el eje de mayor
+  peso por defecto; la potencia, que solo pesaba dentro de `prestaciones`,
+  el eje de menor peso por defecto, sigue disponible en el desglose, como
+  dato de entrada de ese eje. La tecnología se muestra con su etiqueta
+  legible (`src/ui/technologyLabels.ts`, product/0008: «Eléctrico», «Híbrido
+  enchufable»…), nunca con la sigla del modelo de datos.
+
+  El marcado que envuelve esos elementos depende de `variant`
+  (`'podium' | 'list'`, product/0022), pero el control de despliegue, su
+  `aria-expanded` y el contenido expandido se construyen **una sola vez** y
+  los reutilizan las dos variantes — no hay una copia de esa lógica por
+  tratamiento visual. Su nombre accesible es solo la posición y el nombre
+  del coche —nunca la puntuación ni la marca de presupuesto—. Expandida,
+  muestra primero los controles de valoración editables (los subcomponentes
+  que el dominio marca con `editableRating`; la fila no sabe de antemano
+  cuáles son ni cuántos) y después el desglose completo de los seis ejes.
+
+  Con `variant="list"` la fila conserva el marcado y el tamaño que ya tenía
+  antes de `product/0022`: posición y nombre en una línea, la línea de apoyo
+  debajo, y la puntuación con su barra en una tercera línea. Con
+  `variant="podium"` la fila se renderiza como una tarjeta —fondo, sombra y
+  radio de `surfaceRaised`, con el mismo canto de acento a la izquierda que
+  `LeaderCard` y `AxisBreakdownView`— en una sola línea: posición y nombre a
+  la izquierda, línea de apoyo y puntuación (`--font-size-lg`, mayor que la
+  del resto) a la derecha, y la barra de proporción debajo. **Las tres
+  tarjetas del podio llevan el mismo tratamiento**: la primera no tiene
+  fondo propio ni superficie invertida — se distingue de la segunda y la
+  tercera solo por el acento en su posición y su puntuación
+  (`.positionLeader`/`.scoreLeader`, igual que ya distinguía la fila líder
+  antes de esta spec). `LeaderCard` sigue siendo, por eso, la única
+  superficie invertida de la interfaz.
 - **`AxisBreakdownView`** — renderiza un `AxisBreakdown` completo como un
   bloque delimitado, **con el color y el icono de su eje** (`technical/0011`)
   en el filete izquierdo, el icono de la cabecera, la nota y el relleno de la

@@ -9,11 +9,19 @@ import type { EditableRating } from './RankingList';
 import { TECHNOLOGY_LABELS } from '../technologyLabels';
 import styles from './RankingRow.module.css';
 
+/** El podio (product/0022, los tres primeros de la lista visible) y el
+ * resto comparten fila: mismos datos, mismo control de despliegue, mismo
+ * nombre accesible. Lo único que cambia entre `'podium'` y `'list'` es qué
+ * marcado envuelve esas piezas — nunca la lógica de `aria-expanded` ni de
+ * qué texto anuncia el control, que viven una sola vez más abajo. */
+type RankingRowVariant = 'podium' | 'list';
+
 interface RankingRowProps {
   car: CarScoreBreakdown;
   rawCar?: Car;
   rank: number;
   isLeader: boolean;
+  variant: RankingRowVariant;
   expanded: boolean;
   onToggle: () => void;
   editableRatings: EditableRating[];
@@ -29,6 +37,7 @@ export function RankingRow({
   rawCar,
   rank,
   isLeader,
+  variant,
   expanded,
   onToggle,
   editableRatings,
@@ -38,42 +47,115 @@ export function RankingRow({
   const accelEstimated = rawCar
     ? (currentSource(rawCar.acceleration0to100)?.estimated ?? false)
     : false;
+  const isPodium = variant === 'podium';
+
+  const toggle = (
+    <button
+      type="button"
+      className={isPodium ? styles.togglePodium : styles.toggle}
+      aria-expanded={expanded}
+      onClick={onToggle}
+    >
+      <span className={isLeader ? styles.positionLeader : styles.position}>
+        {position}
+      </span>{' '}
+      <span className={styles.name}>{car.carName}</span>
+      <span className={primitives.visuallyHidden}>
+        {expanded ? ', ocultar desglose' : ', ver desglose'}
+      </span>
+    </button>
+  );
+
+  // El maletero sustituye a la potencia (product/0022): es la magnitud de
+  // mayor peso del eje `viaje`, el que más pesa por defecto, y se lee tal
+  // cual del catálogo, igual que hoy se lee la potencia — la interfaz no
+  // calcula nada nuevo.
+  const secondaryLine = rawCar && (
+    <p className={isPodium ? styles.secondaryLinePodium : styles.secondaryLine}>
+      <span>{TECHNOLOGY_LABELS[rawCar.technology]}</span>
+      <span>·</span>
+      <span>
+        {formatNumber(rawCar.acceleration0to100.value, 1)}s
+        {accelEstimated && <EstimatedMark />}
+      </span>
+      <span>·</span>
+      <span>{formatNumber(rawCar.trunkLiters.value, 0)} L</span>
+      <span>·</span>
+      <span>{formatEur(rawCar.priceEur.value)}</span>
+      {car.overBudget && (
+        <span className={primitives.statusMark}>Fuera de presupuesto</span>
+      )}
+    </p>
+  );
+
+  const expandedContent = expanded && (
+    <div className={styles.expanded}>
+      {editableRatings.length > 0 && (
+        <div className={styles.ratings}>
+          <h3 className={styles.ratingsHeading}>Tus valoraciones</h3>
+          {editableRatings.map((rating) => (
+            <label key={rating.field} className={styles.ratingRow}>
+              <span className={styles.ratingTop}>
+                <span className={styles.ratingName}>{rating.label}</span>
+                <span className={styles.ratingValue}>
+                  {rating.value.toFixed(1)}
+                </span>
+              </span>
+              <input
+                className={styles.ratingSlider}
+                type="range"
+                min={1}
+                max={5}
+                step={0.5}
+                value={rating.value}
+                onChange={(event) =>
+                  onRatingChange({
+                    [rating.field]: Number(event.target.value),
+                  })
+                }
+              />
+            </label>
+          ))}
+        </div>
+      )}
+
+      {car.axes.map((axis) => (
+        <AxisBreakdownView key={axis.axisId} breakdown={axis} />
+      ))}
+    </div>
+  );
+
+  if (isPodium) {
+    return (
+      <li className={styles.podiumCard}>
+        <div className={styles.podiumHeader}>
+          {toggle}
+          <div className={styles.podiumMeta}>
+            {secondaryLine}
+            <span
+              className={
+                isLeader ? styles.scorePodiumLeader : styles.scorePodium
+              }
+            >
+              {formatNumber(car.percentage, 0)}%
+            </span>
+          </div>
+        </div>
+        <div className={styles.barPodium}>
+          <div
+            className={primitives.proportionBarFill}
+            style={{ width: `${Math.max(0, Math.min(100, car.percentage))}%` }}
+          />
+        </div>
+        {expandedContent}
+      </li>
+    );
+  }
 
   return (
     <li className={isLeader ? styles.rowLeader : styles.row}>
-      <button
-        type="button"
-        className={styles.toggle}
-        aria-expanded={expanded}
-        onClick={onToggle}
-      >
-        <span className={isLeader ? styles.positionLeader : styles.position}>
-          {position}
-        </span>{' '}
-        <span className={styles.name}>{car.carName}</span>
-        <span className={primitives.visuallyHidden}>
-          {expanded ? ', ocultar desglose' : ', ver desglose'}
-        </span>
-      </button>
-
-      {rawCar && (
-        <p className={styles.secondaryLine}>
-          <span>{TECHNOLOGY_LABELS[rawCar.technology]}</span>
-          <span>·</span>
-          <span>{formatNumber(rawCar.powerCv.value, 0)} CV</span>
-          <span>·</span>
-          <span>
-            {formatNumber(rawCar.acceleration0to100.value, 1)}s
-            {accelEstimated && <EstimatedMark />}
-          </span>
-          <span>·</span>
-          <span>{formatEur(rawCar.priceEur.value)}</span>
-          {car.overBudget && (
-            <span className={primitives.statusMark}>Fuera de presupuesto</span>
-          )}
-        </p>
-      )}
-
+      {toggle}
+      {secondaryLine}
       <div className={styles.scoreRow}>
         <div className={styles.bar}>
           <div
@@ -85,43 +167,7 @@ export function RankingRow({
           {formatNumber(car.percentage, 0)}%
         </span>
       </div>
-
-      {expanded && (
-        <div className={styles.expanded}>
-          {editableRatings.length > 0 && (
-            <div className={styles.ratings}>
-              <h3 className={styles.ratingsHeading}>Tus valoraciones</h3>
-              {editableRatings.map((rating) => (
-                <label key={rating.field} className={styles.ratingRow}>
-                  <span className={styles.ratingTop}>
-                    <span className={styles.ratingName}>{rating.label}</span>
-                    <span className={styles.ratingValue}>
-                      {rating.value.toFixed(1)}
-                    </span>
-                  </span>
-                  <input
-                    className={styles.ratingSlider}
-                    type="range"
-                    min={1}
-                    max={5}
-                    step={0.5}
-                    value={rating.value}
-                    onChange={(event) =>
-                      onRatingChange({
-                        [rating.field]: Number(event.target.value),
-                      })
-                    }
-                  />
-                </label>
-              ))}
-            </div>
-          )}
-
-          {car.axes.map((axis) => (
-            <AxisBreakdownView key={axis.axisId} breakdown={axis} />
-          ))}
-        </div>
-      )}
+      {expandedContent}
     </li>
   );
 }
