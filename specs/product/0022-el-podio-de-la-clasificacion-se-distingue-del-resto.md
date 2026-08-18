@@ -1,18 +1,18 @@
 # 0022 — El podio de la clasificación se distingue del resto
 
 - **Id:** product/0022
-- **Estado:** verified
+- **Estado:** consolidated
 - **Tipo:** product
 - **Fecha:** 2026-08-18
 - **Specs relacionadas:** product/0008, product/0009, product/0020
 - **ADRs relacionados:** ninguno
 - **Doc de estado:** `docs/estado/interfaz.md`
 
-> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
-> implementado: su sección *Contexto* retrata el sistema **anterior** al
-> cambio y hoy no es cierta. **No es referencia del estado actual** — para
-> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
-> **criterios de aceptación**, como registro de verificación.
+> ⚠️ **Spec consolidada (2026-08-18).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/interfaz.md`. Vigentes aquí solo los **criterios de
+> aceptación**, como registro de verificación.
 
 ## Contexto
 
