@@ -1,7 +1,7 @@
 # 0022 — El podio de la clasificación se distingue del resto
 
 - **Id:** product/0022
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-08-18
 - **Specs relacionadas:** product/0008, product/0009, product/0020
