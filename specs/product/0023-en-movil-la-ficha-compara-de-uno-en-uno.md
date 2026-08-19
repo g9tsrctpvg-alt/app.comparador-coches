@@ -1,7 +1,7 @@
 # 0023 — En móvil, la ficha compara de uno en uno
 
 - **Id:** product/0023
-- **Estado:** implemented
+- **Estado:** verified
 - **Tipo:** product
 - **Fecha:** 2026-08-19
 - **Specs relacionadas:** product/0010, product/0018, product/0020
@@ -153,47 +153,67 @@ una tira, no arrastrar una tabla a ciegas hasta encontrarlo.
 
 > Obligatorios y verificables.
 
-- [ ] Con el catálogo real y los valores por defecto (Comparar: Giulietta,
+- [x] Con el catálogo real y los valores por defecto (Comparar: Giulietta,
       Orden: Longitud, Campos: Esenciales), la tira contiene un candidato
       por cada entidad de las columnas desplazables de hoy, en el mismo
-      orden, y ninguno es la propia Giulietta. Comprobado recorriendo el
-      marcado de `FichaPage` con `renderToStaticMarkup`.
-- [ ] El candidato enfocado por defecto es el primero de la tira (EV3, con
-      los valores por defecto del catálogo real).
-- [ ] Para Longitud, la fila del candidato enfocado por defecto muestra el
+      orden, y ninguno es la propia Giulietta. `FichaPage.test.tsx`, «the
+      mobile duel view», «lists the same candidates as the scrollable table
+      columns, in the same order, never the reference».
+- [x] El candidato enfocado por defecto es el primero de la tira (EV3, con
+      los valores por defecto del catálogo real). `FichaPage.test.tsx`,
+      «focuses the first candidate of the strip by default, and only that
+      one»; confirmado también con Playwright contra el build de
+      producción.
+- [x] Para Longitud, la fila del candidato enfocado por defecto muestra el
       valor del candidato (4300 mm), la Δ firmada (−51 mm) y el valor de la
-      referencia con su nombre (Giulietta, 4351 mm).
-- [ ] Con «Comparar» en «Ninguno», ninguna fila de esta vista muestra Δ ni
-      línea de referencia.
-- [ ] Con «Completa» seleccionado, las filas se agrupan en los seis bloques
+      referencia con su nombre (Giulietta, 4351 mm). `FichaPage.test.tsx`,
+      «shows the focused candidate's value, its signed delta against the
+      reference, and the reference's own value».
+- [x] Con «Comparar» en «Ninguno», ninguna fila de esta vista muestra Δ ni
+      línea de referencia. `FichaPage.test.tsx`, «shows no delta and no
+      reference line anywhere when there is no comparison active».
+- [x] Con «Completa» seleccionado, las filas se agrupan en los seis bloques
       de `COMPLETE_BLOCKS`, con su rótulo, en el mismo orden que la tabla.
-- [ ] Cada candidato de la tira tiene un nombre accesible igual al nombre
+      Verificado con Playwright contra el build de producción a 375px: seis
+      cabeceras de bloque (Generación, Tamaño y espacio, Mecánica y
+      prestaciones, Coste, Fiabilidad y respaldo, Juicio propio) y las
+      veintidós filas, en ese orden.
+- [x] Cada candidato de la tira tiene un nombre accesible igual al nombre
       del modelo, y el enfocado —y solo el enfocado— lleva
-      `aria-current="true"`. Comprobado recorriendo el marcado.
-- [ ] Elegir un candidato de la tira lo enfoca: tras el clic, ese candidato
+      `aria-current="true"`. `FichaPage.test.tsx`, «focuses the first
+      candidate…» y «every candidate chip has an accessible name equal to
+      the model name».
+- [x] Elegir un candidato de la tira lo enfoca: tras el clic, ese candidato
       pasa a llevar `aria-current="true"` y la tarjeta pasa a mostrar sus
-      datos. Verificado con Playwright contra el build de producción.
-- [ ] Si el candidato enfocado se convierte en la referencia —se elige en
+      datos. Verificado con Playwright contra el build de producción: al
+      pulsar el segundo candidato de la tira (Kona HEV), pasa a ser el
+      único con `aria-current="true"` y el nombre de la tarjeta cambia a
+      «Kona HEV».
+- [x] Si el candidato enfocado se convierte en la referencia —se elige en
       «Comparar»—, el foco pasa a ser el nuevo primero de la tira, sin
       quedar apuntando a un candidato que ya no aparece. Verificado con
-      Playwright.
-- [ ] La tabla no cambia: los tests ya existentes de `FichaPage.test.tsx`
+      Playwright: con Kona HEV enfocado, al elegirlo en «Comparar» el foco
+      pasa a EV3 (nuevo primero de la tira) y Kona HEV deja de estar en
+      ella, sustituida por Giulietta.
+- [x] La tabla no cambia: los 25 tests ya existentes de `FichaPage.test.tsx`
       sobre su marcado y su comportamiento siguen en verde sin modificar
       ninguna de sus aserciones.
-- [ ] Sobre el build de producción, en un navegador real: a 320, 375 y
+- [x] Sobre el build de producción, en un navegador real: a 320, 375 y
       591px se ve la tira y la tarjeta, y no la tabla; a 592px y más se ve
       la tabla, y no la tira ni la tarjeta. Ningún ancho desde 320px produce
-      scroll horizontal del documento.
-- [ ] A 320px, cada candidato de la tira mide al menos 44×44px de área
-      accionable, medido con las herramientas del navegador.
-- [ ] Ninguna puntuación, Δ o campo del dominio cambia: `ficha.test.ts`
+      scroll horizontal del documento. Verificado con Playwright a 320, 375,
+      591, 592, 960 y 1440px: `display` alterna exactamente en el punto de
+      corte, y `scrollWidth - clientWidth` es `0` en los seis anchos.
+- [x] A 320px, cada candidato de la tira mide al menos 44×44px de área
+      accionable. Medido con Playwright: 176×154,5px.
+- [x] Ninguna puntuación, Δ o campo del dominio cambia: `ficha.test.ts`
       sigue en verde sin modificar ninguno de sus valores esperados, y
       `ui-no-scoring-internals` sigue pasando sin modificar
       `.dependency-cruiser.mjs`.
-- [ ] Ningún componente de `src/ui/` contiene un literal de color,
+- [x] Ningún componente de `src/ui/` contiene un literal de color,
       espaciado o tipografía nuevo: `scripts/validateStyleTokensRepo.test.ts`
       sigue en verde sin añadir tokens.
-- [ ] `npm run format:check`, `npm run lint`, `npm run typecheck`,
+- [x] `npm run format:check`, `npm run lint`, `npm run typecheck`,
       `npm run arch:check`, `npm run test:coverage` y `npm run build` pasan
       en local.
 
