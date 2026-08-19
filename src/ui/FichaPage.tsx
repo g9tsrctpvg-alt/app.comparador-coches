@@ -441,6 +441,236 @@ function ModelHeaderCell({
   );
 }
 
+/** Miniatura decorativa de un candidato en la tira de duelo (product/0023):
+ * misma degradación que `PhotoBox` —hueco rotulado si no hay foto de esa
+ * vista, o si la `src` falla al cargar—, pero sin su propio `<button>`: la
+ * tira entera ya es un `<button>` por candidato (`CandidateChip`), y anidar
+ * uno dentro de otro no es válido. `aria-hidden` porque el nombre real va
+ * al lado, como texto. */
+function ChipThumbnail({
+  entity,
+  photoView,
+}: {
+  entity: FichaEntity;
+  photoView: PhotoView;
+}) {
+  const [failedSrc, setFailedSrc] = useState<string | null>(null);
+  const photo = entity.photos[photoView];
+  if (photo === undefined || photoSrc(photo) === failedSrc) {
+    return (
+      <span className={styles.duelChipThumbPlaceholder} aria-hidden="true" />
+    );
+  }
+  const src = photoSrc(photo);
+  return (
+    <img
+      src={src}
+      alt=""
+      aria-hidden="true"
+      referrerPolicy="no-referrer"
+      className={styles.duelChipThumb}
+      onError={() => setFailedSrc(src)}
+    />
+  );
+}
+
+/** Un candidato de la tira (requisito 3): control real, con nombre
+ * accesible propio y el enfocado marcado con `aria-current` además de con
+ * su propio tratamiento visual — el estado no depende solo del color. */
+function CandidateChip({
+  entity,
+  isFocused,
+  photoView,
+  onFocus,
+}: {
+  entity: FichaEntity;
+  isFocused: boolean;
+  photoView: PhotoView;
+  onFocus: (id: string) => void;
+}) {
+  return (
+    <button
+      type="button"
+      className={isFocused ? styles.duelChipActive : styles.duelChip}
+      aria-current={isFocused ? 'true' : undefined}
+      onClick={() => onFocus(entity.id)}
+    >
+      <ChipThumbnail entity={entity} photoView={photoView} />
+      <span className={styles.duelChipName}>{entity.name}</span>
+    </button>
+  );
+}
+
+/** Una fila de magnitud en la tarjeta de duelo (requisito 6): el valor del
+ * candidato, su Δ firmada —reutilizando `formatDelta` y los mismos tres
+ * colores de dirección que la tabla, nunca la única vía de leerla— y,
+ * cuando hay referencia, su valor crudo con su nombre. Repetir ese valor
+ * aquí no es decorativo: al dejar de existir una columna fijada en esta
+ * vista, es la única forma de que no desaparezca (`product/0010`,
+ * requisito 14). */
+function DuelRow({
+  def,
+  candidate,
+  pinnedEntity,
+}: {
+  def: FieldDef;
+  candidate: FichaEntity;
+  pinnedEntity: FichaEntity | undefined;
+}) {
+  const cell = candidate.cells[def.key];
+  const code =
+    def.key === 'generationLaunchYear' ? candidate.generationCode : undefined;
+  const refCell = pinnedEntity?.cells[def.key];
+  const refCode =
+    def.key === 'generationLaunchYear'
+      ? pinnedEntity?.generationCode
+      : undefined;
+
+  return (
+    <div className={styles.duelRow}>
+      <span className={styles.duelRowLabel}>{def.label}</span>
+      <span className={styles.duelRowValue}>
+        {cell.kind === 'missing' ? (
+          <>
+            <span className={primitives.visuallyHidden}>
+              Dato no disponible.
+            </span>
+            <span aria-hidden="true">—</span>
+          </>
+        ) : (
+          <CellValue cell={cell} def={def} code={code} />
+        )}
+      </span>
+      {cell.kind !== 'missing' && cell.delta === 'unavailable' && (
+        <span className={styles.duelRowDelta}>
+          <span className={primitives.visuallyHidden}>
+            Sin diferencia que mostrar.
+          </span>
+          <span aria-hidden="true">—</span>
+        </span>
+      )}
+      {cell.kind !== 'missing' &&
+        cell.delta !== null &&
+        cell.delta !== 'unavailable' && (
+          <span
+            className={[
+              styles.duelRowDelta,
+              DIRECTION_CLASS[cell.delta.direction],
+              def.key === 'widthMm' ? styles.deltaEmphasized : '',
+            ].join(' ')}
+          >
+            {formatDelta(
+              cell.delta.value,
+              def,
+              cell.kind === 'sourced' ? cell.unit : undefined,
+            )}
+          </span>
+        )}
+      {pinnedEntity && refCell && refCell.kind !== 'missing' && (
+        <span className={styles.duelRowReference}>
+          {pinnedEntity.name}{' '}
+          <CellValue cell={refCell} def={def} code={refCode} />
+        </span>
+      )}
+    </div>
+  );
+}
+
+/** La tarjeta del candidato enfocado (requisitos 5 y 9): su foto, su
+ * identidad, y una fila por magnitud del conjunto de campos vigente,
+ * agrupada en bloques cuando ese conjunto los tiene («Completa») — los
+ * mismos `blocks` que ya recibe la tabla, sin una segunda declaración. */
+function DuelCard({
+  candidate,
+  pinnedEntity,
+  blocks,
+  photoView,
+  onOpenPhoto,
+}: {
+  candidate: FichaEntity;
+  pinnedEntity: FichaEntity | undefined;
+  blocks: BlockDef[];
+  photoView: PhotoView;
+  onOpenPhoto: (entity: FichaEntity, view: PhotoView, photo: Photo) => void;
+}) {
+  return (
+    <div className={styles.duelCard}>
+      <PhotoBox entity={candidate} photoView={photoView} onOpen={onOpenPhoto} />
+      <div className={styles.duelCardInfo}>
+        <span className={styles.duelCardName}>{candidate.name}</span>
+        <span className={primitives.secondaryText}>
+          {candidate.brand} · {TECHNOLOGY_LABELS[candidate.technology]}
+        </span>
+      </div>
+      {blocks.map((block) => (
+        <Fragment key={block.id}>
+          {block.label !== null && (
+            <span className={styles.duelBlockHeader}>{block.label}</span>
+          )}
+          {block.fields.map((def) => (
+            <DuelRow
+              key={def.key}
+              def={def}
+              candidate={candidate}
+              pinnedEntity={pinnedEntity}
+            />
+          ))}
+        </Fragment>
+      ))}
+    </div>
+  );
+}
+
+/** La vista de duelo entera (product/0023, requisitos 1-4): la tira, en el
+ * orden vigente de «Orden», con los mismos candidatos que hoy son columnas
+ * desplazables de la tabla —nunca la propia referencia—, y la tarjeta del
+ * enfocado. Sin `useEffect` que reponga el foco: `focusedCandidate` cae al
+ * primero de la tira por construcción en cuanto el id enfocado deja de
+ * estar en ella, sea porque nunca se eligió ninguno o porque el candidato
+ * enfocado acaba de convertirse en la propia referencia. */
+function DuelView({
+  scrollableEntities,
+  pinnedEntity,
+  focusedCandidate,
+  onFocus,
+  blocks,
+  photoView,
+  onOpenPhoto,
+}: {
+  scrollableEntities: FichaEntity[];
+  pinnedEntity: FichaEntity | undefined;
+  focusedCandidate: FichaEntity | undefined;
+  onFocus: (id: string) => void;
+  blocks: BlockDef[];
+  photoView: PhotoView;
+  onOpenPhoto: (entity: FichaEntity, view: PhotoView, photo: Photo) => void;
+}) {
+  return (
+    <div className={styles.duelView}>
+      <div className={styles.duelStrip} role="group" aria-label="Candidatos">
+        {scrollableEntities.map((entity) => (
+          <CandidateChip
+            key={entity.id}
+            entity={entity}
+            isFocused={entity.id === focusedCandidate?.id}
+            photoView={photoView}
+            onFocus={onFocus}
+          />
+        ))}
+      </div>
+      {focusedCandidate && (
+        <DuelCard
+          candidate={focusedCandidate}
+          pinnedEntity={pinnedEntity}
+          blocks={blocks}
+          photoView={photoView}
+          onOpenPhoto={onOpenPhoto}
+        />
+      )}
+    </div>
+  );
+}
+
 /** Por debajo de este movimiento acumulado, un gesto táctil no fija eje
  * todavía (technical/0007): es el temblor natural del dedo al posarse, no
  * una intención de desplazamiento. */
@@ -543,6 +773,9 @@ export function FichaPage({ cars, references }: FichaPageProps) {
     useState<FichaSortCriterion>('lengthMm');
   const [photoView, setPhotoView] = useState<PhotoView>('side');
   const [openPhoto, setOpenPhoto] = useState<OpenPhoto | null>(null);
+  // El candidato enfocado en la vista de duelo (product/0023): efímero,
+  // como el resto del estado de esta página — no vive en `AppConfig`.
+  const [focusedId, setFocusedId] = useState<string | null>(null);
 
   const dialogRef = useRef<HTMLDialogElement>(null);
   const tableWrapperRef = useRef<HTMLDivElement>(null);
@@ -581,6 +814,12 @@ export function FichaPage({ cars, references }: FichaPageProps) {
   );
   const columnCount = 1 + (pinnedEntity ? 1 : 0) + scrollableEntities.length;
   const blocks = fieldSet === 'esenciales' ? ESSENTIAL_BLOCKS : COMPLETE_BLOCKS;
+  // Cae al primero de la tira por construcción cuando `focusedId` es `null`
+  // (arranque) o ya no está en `scrollableEntities` (requisito 4): nunca
+  // apunta a un candidato que ha dejado de verse.
+  const focusedCandidate =
+    scrollableEntities.find((entity) => entity.id === focusedId) ??
+    scrollableEntities[0];
 
   function handleComparisonChange(id: string | null) {
     setComparisonId(id);
@@ -700,6 +939,19 @@ export function FichaPage({ cars, references }: FichaPageProps) {
           </select>
         </div>
       </div>
+
+      {/* Las dos vistas se generan siempre: cuál se ve la decide
+          `FichaPage.module.css` con `--bp-columna` (product/0023),
+          igual que ya hace `ViewSwitcher` con la navegación. */}
+      <DuelView
+        scrollableEntities={scrollableEntities}
+        pinnedEntity={pinnedEntity}
+        focusedCandidate={focusedCandidate}
+        onFocus={setFocusedId}
+        blocks={blocks}
+        photoView={photoView}
+        onOpenPhoto={handleOpenPhoto}
+      />
 
       <div
         className={
