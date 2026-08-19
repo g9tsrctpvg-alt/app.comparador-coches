@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { loadCatalog } from '../data/loadCatalog';
 import { loadReferences } from '../data/loadReferences';
 import { publishedCars, type Car } from '../domain/car';
@@ -6,6 +6,7 @@ import type { Reference } from '../domain/reference';
 import { scoreCatalog } from '../domain/scoring/score';
 import { applyOverride } from '../domain/scoring/overrides';
 import { logError } from '../logging/logger';
+import { clearViewState } from '../adapters/localStorageConfigPort';
 import { AssumptionsPanel } from './components/AssumptionsPanel';
 import { WeightSliders } from './components/WeightSliders';
 import { RankingList } from './components/RankingList';
@@ -71,6 +72,17 @@ export function App({
   } = useConfig(validCarIds);
   const { weights, assumptions, budgetEur, hideOverBudget, overrides } = config;
 
+  // «Restablecer» deja la aplicación como una primera visita en las dos
+  // claves de almacenamiento, no solo en `AppConfig` (product/0024,
+  // requisito 13). `clearViewState` es una llamada directa al puerto, no al
+  // hook `useViewState`: esta acción solo es alcanzable desde la vista de
+  // clasificación, con `FichaPage` desmontada, así que no hay estado de
+  // vista en memoria que resetear aquí — solo lo guardado.
+  const handleReset = useCallback(() => {
+    resetToDefaults();
+    clearViewState();
+  }, [resetToDefaults]);
+
   const scored = useMemo(() => {
     // Las reglas de los hooks obligan a que este `useMemo` corra también en
     // la rama de error, así que la guarda va dentro: puntuar un catálogo
@@ -121,7 +133,7 @@ export function App({
 
       <div className={styles.columns}>
         <div className={styles.controls}>
-          <ConfigActions shareUrl={shareUrl} onReset={resetToDefaults} />
+          <ConfigActions shareUrl={shareUrl} onReset={handleReset} />
           <WeightSliders weights={weights} onChange={setWeights} />
           <AssumptionsPanel
             assumptions={assumptions}

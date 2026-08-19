@@ -4,7 +4,7 @@
 > tareas y deudas abiertas. `CLAUDE.md` resume y no duplica: al cerrar una
 > fase se actualiza este documento, no el índice.
 
-**Última actualización:** 2026-08-14
+**Última actualización:** 2026-08-19
 
 ## Fases
 
@@ -372,6 +372,29 @@ fase abierta. Se lista para no perderlo, no para bloquear nada.
   2026-08-07: enmendó `product/0014` y reescribió la guía de fotos de la skill
   `add-model`. **Queda usarla**: los diez maleteros que faltan siguen ahí, y
   cerrarlos es ya trabajo de datos, no de proceso.
+- **La ficha recuerda cómo la dejaste — `product/0024`, `consolidated`.**
+  `product/0012` persiste la configuración —pesos, supuestos, presupuesto,
+  filtro y valoraciones— pero dejó fuera, a propósito, todo el estado de
+  interfaz (su requisito 13). El precio se pagaba entero en la ficha: sus
+  cinco elecciones —contra qué modelo se compara, Esenciales o Completa, el
+  orden, la vista de foto y el candidato enfocado en móvil— vivían en el
+  `useState` de `FichaPage` y se perdían al volver. La spec añade un
+  segundo objeto persistido, `ViewState` (`src/domain/viewState.ts`), con
+  clave y versión propias, que **no viaja en el enlace compartible** —el
+  enlace sigue reproduciendo solo `AppConfig`— y que se valida contra el
+  catálogo vigente, porque dos de sus campos son ids de coche o referencia.
+  Enmienda el requisito 13 de `product/0012` **solo** para esos cinco
+  campos, con el precedente de `product/0016` sobre `product/0014`: la fila
+  desplegada del ranking, los paneles plegables, la posición de scroll y el
+  diálogo de la foto siguen sin persistirse, por decisión y no por
+  descuido, verificado en vivo con Playwright. El scroll queda aplazado con
+  disparador: que alguien reporte haber perdido el sitio en la tabla al
+  volver. Recorrió `draft → approved → implemented → verified →
+  consolidated` en la misma sesión de trabajo, con la CI entera verde en
+  local (432 tests, cobertura 100 % en `domain/`+`data/`+`logging/`) y los
+  veintiún criterios de aceptación cerrados contra tests unitarios y
+  Playwright sobre `npm run preview`. Consolidada en
+  `docs/estado/interfaz.md`.
 - **Eje de autonomía y repostaje.** Es la mayor diferencia práctica entre los
   once candidatos en un viaje largo —los térmicos e híbridos hacen 640-950 km
   con un depósito, los eléctricos la mitad en autopista— y el modelo es hoy

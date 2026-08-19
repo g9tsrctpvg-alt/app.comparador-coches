@@ -10,6 +10,7 @@ import {
   type FichaEntity,
   type FichaField,
   type FichaSortCriterion,
+  type FieldSet,
 } from '../domain/ficha';
 import {
   PHOTO_VIEWS,
@@ -20,6 +21,7 @@ import {
 import { formatEur, formatNumber, formatSigned } from './format';
 import { TECHNOLOGY_LABELS } from './technologyLabels';
 import { EstimatedMark } from './components/EstimatedMark';
+import { useViewState } from './useViewState';
 import primitives from './primitives.module.css';
 import shellStyles from './components/AppShell.module.css';
 import styles from './FichaPage.module.css';
@@ -200,8 +202,6 @@ const ESSENTIAL_BLOCKS: BlockDef[] = [
     ).map(completeFieldDef),
   },
 ];
-
-type FieldSet = 'esenciales' | 'completa';
 
 const SORT_OPTIONS: { value: FichaSortCriterion; label: string }[] = [
   { value: 'catalog', label: 'Catálogo' },
@@ -765,17 +765,24 @@ export function FichaPage({ cars, references }: FichaPageProps) {
     [cars, references],
   );
 
-  const [comparisonId, setComparisonId] = useState<string | null>(
-    () => references[0]?.id ?? null,
+  // Las cinco elecciones de esta página, persistidas aparte de `AppConfig`
+  // (product/0024): quién se fija como referencia, requiere saber tanto
+  // el catálogo de coches como las referencias, ninguno de los dos algo
+  // que `domain/viewState.ts` pueda conocer por sí solo.
+  const validEntityIds = useMemo(
+    () => new Set([...cars, ...references].map((entity) => entity.id)),
+    [cars, references],
   );
-  const [fieldSet, setFieldSet] = useState<FieldSet>('esenciales');
-  const [sortCriterion, setSortCriterion] =
-    useState<FichaSortCriterion>('lengthMm');
-  const [photoView, setPhotoView] = useState<PhotoView>('side');
+  const defaultComparisonId = references[0]?.id ?? null;
+  const {
+    viewState: { comparisonId, fieldSet, sortCriterion, photoView, focusedId },
+    setComparisonId,
+    setFieldSet,
+    setSortCriterion,
+    setPhotoView,
+    setFocusedId,
+  } = useViewState(validEntityIds, defaultComparisonId);
   const [openPhoto, setOpenPhoto] = useState<OpenPhoto | null>(null);
-  // El candidato enfocado en la vista de duelo (product/0023): efímero,
-  // como el resto del estado de esta página — no vive en `AppConfig`.
-  const [focusedId, setFocusedId] = useState<string | null>(null);
 
   const dialogRef = useRef<HTMLDialogElement>(null);
   const tableWrapperRef = useRef<HTMLDivElement>(null);
