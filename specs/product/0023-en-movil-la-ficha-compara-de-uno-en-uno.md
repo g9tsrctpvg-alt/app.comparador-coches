@@ -1,7 +1,7 @@
 # 0023 — En móvil, la ficha compara de uno en uno
 
 - **Id:** product/0023
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-08-19
 - **Specs relacionadas:** product/0010, product/0018, product/0020
