@@ -4,7 +4,7 @@
 > tareas y deudas abiertas. `CLAUDE.md` resume y no duplica: al cerrar una
 > fase se actualiza este documento, no el índice.
 
-**Última actualización:** 2026-08-14
+**Última actualización:** 2026-08-19
 
 ## Fases
 
@@ -372,6 +372,23 @@ fase abierta. Se lista para no perderlo, no para bloquear nada.
   2026-08-07: enmendó `product/0014` y reescribió la guía de fotos de la skill
   `add-model`. **Queda usarla**: los diez maleteros que faltan siguen ahí, y
   cerrarlos es ya trabajo de datos, no de proceso.
+- **La ficha recuerda cómo la dejaste — `product/0024`, en `draft`.**
+  `product/0012` persiste la configuración —pesos, supuestos, presupuesto,
+  filtro y valoraciones— pero dejó fuera, a propósito, todo el estado de
+  interfaz (su requisito 13). El precio se paga entero en la ficha: sus
+  cinco elecciones —contra qué modelo se compara, Esenciales o Completa, el
+  orden, la vista de foto y el candidato enfocado en móvil— viven en el
+  `useState` de `FichaPage` y se pierden al volver, así que quien entra una
+  segunda vez rehace cuatro clics antes de mirar sus datos. La spec añade un
+  segundo objeto persistido, `ViewState`, con clave y versión propias, que
+  **no viaja en el enlace compartible** —el enlace sigue reproduciendo solo
+  `AppConfig`— y que se valida contra el catálogo vigente, porque dos de sus
+  campos son ids de coche. Enmienda el requisito 13 de `product/0012` **solo**
+  para esos cinco campos, con el precedente de `product/0016` sobre
+  `product/0014`: la fila desplegada del ranking, los paneles plegables, la
+  posición de scroll y el diálogo de la foto siguen sin persistirse, por
+  decisión y no por descuido. El scroll queda aplazado con disparador: que
+  alguien reporte haber perdido el sitio en la tabla al volver.
 - **Eje de autonomía y repostaje.** Es la mayor diferencia práctica entre los
   once candidatos en un viaje largo —los térmicos e híbridos hacen 640-950 km
   con un depósito, los eléctricos la mitad en autopista— y el modelo es hoy
