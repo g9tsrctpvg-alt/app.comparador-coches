@@ -553,15 +553,56 @@ directamente.
   con la versión, presente solo si hay algún otro parámetro. Con la
   configuración por defecto, el enlace generado es la URL limpia del sitio.
 - **El puerto de almacenamiento** es `src/adapters/localStorageConfigPort.ts`
-  (`loadRawConfig`, `saveConfig`, `clearConfig`): el único módulo que toca
-  `window.localStorage`. `src/domain/` no lo importa —lo comprueba la regla
+  (`loadRawConfig`, `saveConfig`, `clearConfig`, y las tres equivalentes del
+  estado de vista de abajo): el único módulo que toca `window.localStorage`.
+  `src/domain/` no lo importa —lo comprueba la regla
   `domain-no-storage-adapter` de `.dependency-cruiser.mjs`—, así que tampoco
   conoce `window` de forma transitiva. Si el almacenamiento no está
   disponible (modo privado, cuota agotada, permiso denegado), la aplicación
-  sigue funcionando sin persistencia; se registra una vez por carga de
-  página, no en cada intento de guardar.
-- **Lo efímero no se persiste**: qué fila del ranking está desplegada vive
-  en el `useState` local de `RankingList`, fuera de `AppConfig`.
+  sigue funcionando sin persistencia; se registra **una vez por carga de
+  página**, no una vez por clave ni una vez por intento de guardar —el
+  módulo lleva un único flag, compartido por las dos claves.
+
+### El estado de vista de la ficha
+
+product/0024. Cinco elecciones de `FichaPage` sobreviven a cerrar el
+navegador, aparte de `AppConfig` y sin viajar nunca en el enlace
+compartible: contra qué modelo se compara (`comparisonId`), el conjunto de
+campos (`fieldSet`), el criterio de orden (`sortCriterion`), la vista de
+foto (`photoView`) y el candidato enfocado en la tira móvil (`focusedId`).
+
+- **`ViewState`** (`src/domain/viewState.ts`) es un segundo objeto
+  persistido, no un campo más de `AppConfig`: clave de almacenamiento propia
+  (`comparador-coches:view`) y número de versión propio
+  (`VIEW_STATE_VERSION`), independiente de `CONFIG_VERSION`. Descartar uno
+  por versión desconocida o JSON corrupto no toca al otro.
+- **No hay URL de por medio**: la única precedencia es «lo guardado gana
+  sobre los valores por defecto» (`defaultViewState`). Un enlace compartido
+  sigue reproduciendo solo `AppConfig`; quien lo abre ve su propio estado de
+  vista, no el de quien lo mandó.
+- **`comparisonId` y `focusedId` se validan contra el catálogo vigente**
+  —coches publicados y referencias, no solo coches—, con el mismo criterio
+  que las valoraciones sobrescritas de `AppConfig`: un id que ya no existe
+  se descarta y cae al valor por defecto de ese campo. `null` es un valor
+  legítimo de `comparisonId` («Ninguno», elegido), distinto de que el campo
+  esté simplemente ausente en lo guardado.
+- **`useViewState`** (`src/ui/useViewState.ts`) es hermano de `useConfig` en
+  forma —restauración tolerante, guardado al cambiar, el mismo *wiring*
+  entre dominio y `localStorage`—, pero se instancia dentro de `FichaPage`,
+  no en `App.tsx`: es estado de esa vista, con el mismo criterio que
+  `expandedId` en `RankingList`. `App.tsx` no lo consume; solo llama a
+  `clearViewState` directamente desde «Restablecer», porque esa acción es
+  alcanzable desde la clasificación con `FichaPage` desmontada.
+- **«Restablecer» limpia las dos claves**, no solo `AppConfig`: deja la
+  aplicación como una primera visita en la ficha y en la clasificación por
+  igual.
+- **Lo que sigue efímero, por decisión y no por descuido** (`product/0012`,
+  requisito 13, sigue vigente fuera de los cinco campos de arriba): qué fila
+  del ranking está desplegada (`useState` local de `RankingList`), el estado
+  de los paneles plegables por debajo de `--bp-columna`
+  (`CollapsiblePanel`), el diálogo de una foto abierta (`openPhoto`, local a
+  `FichaPage`) y la posición de desplazamiento, tanto del documento como de
+  la tabla de la ficha.
 
 ## Responsive
 
