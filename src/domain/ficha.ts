@@ -374,8 +374,19 @@ export function withComparison(
   });
 }
 
-export type FichaSortCriterion =
-  'catalog' | 'lengthMm' | 'widthMm' | 'priceEur';
+export const FICHA_SORT_CRITERIA = [
+  'catalog',
+  'lengthMm',
+  'widthMm',
+  'priceEur',
+] as const;
+export type FichaSortCriterion = (typeof FICHA_SORT_CRITERIA)[number];
+
+/** Los dos conjuntos de campos de la ficha (product/0020): fuente única
+ * para el tipo, reutilizada por `viewState.ts` para validar el valor
+ * restaurado sin que `domain/` conozca `FichaPage.tsx`. */
+export const FIELD_SETS = ['esenciales', 'completa'] as const;
+export type FieldSet = (typeof FIELD_SETS)[number];
 
 function numericValueOf(cell: FichaCell): number | undefined {
   return cell.kind === 'missing' ? undefined : cell.value;
