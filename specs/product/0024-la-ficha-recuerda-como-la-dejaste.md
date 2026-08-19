@@ -1,7 +1,7 @@
 # 0024 — La ficha recuerda cómo la dejaste
 
 - **Id:** product/0024
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-08-19
 - **Specs relacionadas:** product/0012, product/0018, product/0020, product/0023
