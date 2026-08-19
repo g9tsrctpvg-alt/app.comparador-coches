@@ -384,4 +384,118 @@ describe('FichaPage', () => {
       expect(legend.toLowerCase()).toContain(label);
     }
   });
+
+  describe('the mobile duel view (product/0023)', () => {
+    // Las dos vistas se generan siempre en el marcado (requisito 2): la
+    // media query de `FichaPage.module.css` decide cuál se ve, no React.
+    // Así que se puede comprobar el contenido de la vista de duelo con
+    // `renderToStaticMarkup`, exactamente igual que la tabla.
+    function duelHtml(markup: string): string {
+      const match =
+        /<div class="[^"]*duelView[^"]*">([\s\S]*?)(?=<div class="[^"]*tableWrapper)/.exec(
+          markup,
+        );
+      return match?.[1] ?? '';
+    }
+
+    it('lists the same candidates as the scrollable table columns, in the same order, never the reference', () => {
+      const markup = renderToStaticMarkup(
+        <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+      );
+      const duel = duelHtml(markup);
+      const chips =
+        duel.match(/<button type="button" class="[^"]*duelChip/g) ?? [];
+      expect(chips).toHaveLength(3);
+      // EV3 4300mm < X1 xDrive25e 4500mm < Sportage HEV 4540mm — el mismo
+      // orden que ya comprueba la tabla por defecto.
+      const ev3At = duel.indexOf('EV3');
+      const x1At = duel.indexOf('X1 xDrive25e');
+      const sportageAt = duel.indexOf('Sportage HEV');
+      expect(ev3At).toBeGreaterThan(-1);
+      expect(ev3At).toBeLessThan(x1At);
+      expect(x1At).toBeLessThan(sportageAt);
+      // La propia referencia nunca es un candidato de la tira.
+      const stripMatch =
+        /<div class="[^"]*duelStrip[^"]*"[^>]*>([\s\S]*?)<\/div>\s*<div class="[^"]*duelCard/.exec(
+          duel,
+        );
+      expect(stripMatch?.[1] ?? '').not.toContain('Giulietta');
+    });
+
+    it('focuses the first candidate of the strip by default, and only that one', () => {
+      const markup = renderToStaticMarkup(
+        <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+      );
+      const duel = duelHtml(markup);
+      const currentMatches = duel.match(/aria-current="true"/g) ?? [];
+      expect(currentMatches).toHaveLength(1);
+      // El primer botón de la tira es el de EV3, y es el único con
+      // `aria-current`.
+      const firstChipEnd = duel.indexOf('</button>');
+      expect(duel.slice(0, firstChipEnd)).toContain('aria-current="true"');
+      expect(duel.slice(0, firstChipEnd)).toContain('EV3');
+      // Y la tarjeta de debajo es la suya.
+      expect(duel).toMatch(/duelCardName[^>]*>EV3</);
+    });
+
+    it("shows the focused candidate's value, its signed delta against the reference, and the reference's own value", () => {
+      const markup = renderToStaticMarkup(
+        <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+      );
+      const duel = duelHtml(markup);
+      // EV3: 4300mm frente a 4351mm de la Giulietta → −51 (mejor, longitud
+      // en dirección «más es peor»).
+      expect(duel).toMatch(/duelRowValue[^>]*>4300\s*mm</);
+      expect(duel).toMatch(/duelRowDelta[^"]*deltaBetter[^"]*">−51\s*mm</);
+      expect(duel).toMatch(/duelRowReference[^"]*">Giulietta 4351\s*mm</);
+    });
+
+    it('shows the accessible dash, not the reference line, when the reference lacks the field', () => {
+      const markup = renderToStaticMarkup(
+        <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+      );
+      const duel = duelHtml(markup);
+      // La Giulietta (fixture) no declara potencia: la fila de Potencia del
+      // candidato enfocado no puede compararse, y no repite un valor de
+      // referencia que no existe.
+      const powerRowMatch =
+        /<div class="[^"]*duelRow[^"]*">([\s\S]*?)<\/div>\s*<div class="[^"]*duelRow/.exec(
+          duel.slice(duel.indexOf('Potencia') - 200),
+        );
+      const powerRow = powerRowMatch?.[0] ?? duel;
+      expect(powerRow).toContain('Sin diferencia que mostrar.');
+      expect(powerRow).not.toContain('duelRowReference');
+    });
+
+    it('shows no delta and no reference line anywhere when there is no comparison active', () => {
+      const markup = renderToStaticMarkup(
+        <FichaPage cars={threeCarFixture} references={[]} />,
+      );
+      const duel = duelHtml(markup);
+      expect(duel).not.toContain('duelRowDelta');
+      expect(duel).not.toContain('duelRowReference');
+      // Sin referencia, la propia Giulietta no existe como entidad: la tira
+      // solo tiene los tres candidatos.
+      const chips =
+        duel.match(/<button type="button" class="[^"]*duelChip/g) ?? [];
+      expect(chips).toHaveLength(3);
+    });
+
+    it('every candidate chip has an accessible name equal to the model name', () => {
+      const markup = renderToStaticMarkup(
+        <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+      );
+      const duel = duelHtml(markup);
+      const stripMatch =
+        /<div class="[^"]*duelStrip[^"]*"[^>]*>([\s\S]*?)<\/div>\s*<div class="[^"]*duelCard/.exec(
+          duel,
+        );
+      const strip = stripMatch?.[1] ?? '';
+      for (const name of ['EV3', 'X1 xDrive25e', 'Sportage HEV']) {
+        expect(strip).toMatch(new RegExp(`duelChipName[^"]*">${name}<`));
+      }
+      // La miniatura es decorativa: el nombre real ya va al lado como texto.
+      expect(strip).toMatch(/aria-hidden="true"/);
+    });
+  });
 });

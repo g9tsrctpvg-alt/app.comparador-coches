@@ -449,16 +449,46 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     scroll de cualquier `position: sticky` de dentro, así que fijarlo
     contra la página nunca habría funcionado), y la columna elegida se fija
     en horizontal a cualquier ancho.
-  - **Por debajo de `--bp-columna`** no existe una columna de
-    características aparte —el rótulo de cada magnitud se funde dentro de
-    su propia celda—, pero la columna fijada sigue siendo sticky. El
-    desplazamiento horizontal ancla siempre en una columna de modelo
-    completa (`scroll-snap-type: x mandatory` con `scroll-padding-left`
-    reservando el ancho de las columnas fijas, para que la primera columna
-    desplazable no quede tapada detrás de ellas). Esa reserva solo tiene
-    sentido mientras hay una columna fijada de verdad: con «Ninguno»
-    elegido —o sin referencias en el catálogo— no hay ningún hueco `sticky`
-    que proteger, así que `scroll-padding-left` vuelve a `0`.
+  - **La tabla solo se renderiza visible a partir de `--bp-columna`**
+    (product/0023): por debajo, `FichaPage` muestra la vista de duelo en su
+    lugar — ver más abajo. La tabla entera sigue en el marcado a cualquier
+    ancho —las dos vistas se generan siempre, y una media query decide cuál
+    se ve, igual que `ViewSwitcher` con la navegación—, pero por debajo de
+    ese punto queda con `display: none`, así que las reglas que antes
+    describían su aspecto fundido —sin columna de características, con el
+    rótulo de cada magnitud dentro de su propia celda— siguen declaradas en
+    `FichaPage.module.css` sin que nadie llegue a verlas: son alcanzables
+    solo si `--bp-columna` cambiara de valor. A partir de ese ancho, la
+    columna fijada es sticky, con la columna de características también
+    fija a su izquierda. El desplazamiento horizontal ancla siempre en una
+    columna de modelo completa (`scroll-snap-type: x mandatory` con
+    `scroll-padding-left` reservando el ancho de las columnas fijas, para
+    que la primera columna desplazable no quede tapada detrás de ellas).
+    Esa reserva solo tiene sentido mientras hay una columna fijada de
+    verdad: con «Ninguno» elegido —o sin referencias en el catálogo— no hay
+    ningún hueco `sticky` que proteger, así que `scroll-padding-left` vuelve
+    a `0`.
+  - **Por debajo de `--bp-columna`, un candidato a la vez** (product/0023):
+    una tira horizontal de candidatos —los mismos que hoy son columnas
+    desplazables de la tabla, en el mismo orden de «Orden», nunca la propia
+    referencia— con desplazamiento propio, y debajo una tarjeta con el
+    candidato enfocado. Por defecto, el primero de la tira;
+    `scrollableEntities.find(…) ?? scrollableEntities[0]` hace que el foco
+    caiga solo si el candidato enfocado deja de estar en la tira —porque
+    acaba de fijarse como la propia referencia—, sin un `useEffect` que lo
+    reponga a mano. Cada fila de magnitud muestra tres datos, no dos: el
+    valor del candidato, su Δ firmada contra la referencia —mismos tres
+    colores de dirección que la tabla, nunca la única vía de leerla— y el
+    valor crudo de la propia referencia con su nombre. Repetirlo en cada
+    fila no es decorativo: al no existir aquí una columna fijada aparte, es
+    la única forma de que ese valor no desaparezca por efecto del ancho
+    (`product/0010`, requisito 14). Con «Completa» elegido, las filas se
+    agrupan en los mismos seis bloques que la tabla, con la misma cabecera.
+    Cada candidato de la tira es un `<button>` real, con una miniatura
+    decorativa (`aria-hidden`) y el nombre como texto; el enfocado lleva
+    `aria-current="true"` además de su propio tratamiento visual. El estado
+    del candidato enfocado es efímero, como `fieldSet`, `sortCriterion` o
+    `photoView`: no vive en `AppConfig`.
   - **Anclaje de eje en gesto táctil** (technical/0007, mecanismo corregido
     por technical/0008): el envoltorio desplaza filas y columnas a la vez en
     el mismo contenedor, así que un gesto táctil pensado como «hacia abajo»

@@ -49,12 +49,18 @@
  * columnas `sticky` encima — así que esa primera columna quedaba tapada por
  * la fijada (y, en escritorio, también por la de características) en el
  * reposo natural del desplazamiento, incumpliendo el requisito 9.2. */
+/* Por debajo de `--bp-columna` la tabla cede el sitio a la vista de duelo
+ * (product/0023): las dos se generan siempre en el marcado —igual que
+ * `ViewSwitcher` con la navegación y `CollapsiblePanel` con el contenido de
+ * los paneles del ranking—, y esta media query es quien decide cuál se ve.
+ * Ningún estado de React elige entre las dos. */
 .tableWrapper {
   composes: tableShell from './primitives.module.css';
   scroll-snap-type: x mandatory;
   scroll-padding-left: var(--size-ficha-model-min);
   max-height: var(--size-table-max-height);
   overflow-y: auto;
+  display: none;
 }
 
 /* Con «Ninguno» elegido (o sin referencias en el catálogo) no hay columna
@@ -64,6 +70,142 @@
  * horizontal. */
 .tableWrapperNoPin {
   scroll-padding-left: 0;
+}
+
+/* La vista de duelo (product/0023): un candidato a la vez, para el mismo
+ * ancho estrecho en que la tabla solo deja ver una columna arrastrando a
+ * ciegas. Visible por defecto —regla móvil-primero, como el resto de la
+ * hoja—; la media query de más abajo la esconde donde la tabla cabe
+ * entera. */
+.duelView {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* La tira se desplaza dentro de su propio contenedor (product/0010,
+ * requisito 13), nunca la página: un solo eje de scroll, así que no hace
+ * falta el bloqueo de eje que sí necesita `.tableWrapper` (technical/0007),
+ * pensado para un contenedor que desplaza en los dos ejes a la vez. */
+.duelStrip {
+  display: flex;
+  gap: var(--space-2);
+  overflow-x: auto;
+  padding-bottom: var(--space-1);
+}
+
+/* Cada candidato es un control real, no una miniatura suelta (requisito 3):
+ * `--size-ficha-model-min` de ancho, el mismo token que ya mide cuánto
+ * sitio ocupa un modelo en la tabla — reutilizado, no un tamaño nuevo. El
+ * marco transparente reserva ya el hueco del acento de `.duelChipActive`,
+ * para que marcar un candidato no mueva el resto de la tira. */
+.duelChip {
+  composes: unstyledButton from './primitives.module.css';
+  flex: 0 0 auto;
+  width: var(--size-ficha-model-min);
+  min-height: var(--size-touch-min);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  border: calc(var(--size-border-hairline) * 2) solid transparent;
+  border-radius: var(--radius-sm);
+  transition: border-color var(--duration-fast) var(--ease-out);
+}
+
+.duelChipActive {
+  composes: duelChip;
+  border-color: var(--color-accent);
+  background: var(--color-accent-tint);
+}
+
+/* Decorativas las dos (`aria-hidden`, ver `ChipThumbnail`): el nombre real
+ * ya vive en `.duelChipName`, al lado. */
+.duelChipThumb,
+.duelChipThumbPlaceholder {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  background: var(--color-card);
+}
+
+.duelChipName {
+  composes: mono from './primitives.module.css';
+  font-size: var(--font-size-2xs);
+  color: var(--color-mute);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.duelChipActive .duelChipName {
+  color: var(--color-accent);
+  font-weight: var(--font-weight-semibold);
+}
+
+.duelCard {
+  composes: surfaceRaised from './primitives.module.css';
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.duelCardInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.duelCardName {
+  font-family: var(--font-sans);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-lg);
+  color: var(--color-ink);
+}
+
+.duelBlockHeader {
+  composes: label from './primitives.module.css';
+  margin-top: var(--space-2);
+}
+
+.duelRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-2) 0;
+  border-bottom: var(--size-border-hairline) solid var(--color-rule);
+}
+
+.duelRowLabel {
+  composes: mono from './primitives.module.css';
+  font-size: var(--font-size-2xs);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  color: var(--color-mute);
+}
+
+.duelRowValue {
+  composes: mono from './primitives.module.css';
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-ink);
+}
+
+/* Mismos tres colores de Δ que la tabla —`.deltaBetter`/`-Worse`/`-Neutral`,
+ * declarados más abajo—, compuestos aquí porque esta línea es propia de la
+ * vista de duelo. */
+.duelRowDelta {
+  composes: mono from './primitives.module.css';
+  font-size: var(--font-size-2xs);
+}
+
+/* El valor crudo de la referencia (requisito 6): no es una Δ, así que va en
+ * `secondaryText` en vez de en uno de los tres colores de dirección. */
+.duelRowReference {
+  composes: mono from './primitives.module.css';
+  composes: secondaryText from './primitives.module.css';
+  font-size: var(--font-size-2xs);
 }
 
 .table {
@@ -260,6 +402,17 @@ th.blockHeader {
 }
 
 @media (min-width: 37rem) {
+  /* A partir de aquí la tabla cabe entera: vuelve a verse, y la vista de
+   * duelo —pensada para cuando solo cabe un candidato junto a la
+   * referencia— deja de hacer falta. */
+  .tableWrapper {
+    display: block;
+  }
+
+  .duelView {
+    display: none;
+  }
+
   .featureHeader,
   .featureCell {
     display: table-cell;
