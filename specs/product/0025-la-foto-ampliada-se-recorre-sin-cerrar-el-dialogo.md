@@ -1,13 +1,19 @@
 # 0025 — La foto ampliada se recorre sin cerrar el diálogo
 
 - **Id:** product/0025
-- **Estado:** approved
+- **Estado:** implemented
 - **Tipo:** product
 - **Fecha:** 2026-08-20
 - **Specs relacionadas:** product/0014, product/0016, product/0023,
   product/0024, technical/0009, technical/0010
 - **ADRs relacionados:** 0006
 - **Doc de estado:** `docs/estado/interfaz.md`
+
+> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
+> implementado: su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy no es cierta. **No es referencia del estado actual** — para
+> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
+> **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
