@@ -14,8 +14,8 @@ import {
 } from '../domain/ficha';
 import {
   PHOTO_VIEWS,
+  photoSequence,
   photoSrc,
-  type Photo,
   type PhotoView,
 } from '../domain/photo';
 import { formatEur, formatNumber, formatSigned } from './format';
@@ -217,10 +217,14 @@ export const TOTAL_FIELD_COUNT = COMPLETE_BLOCKS.reduce(
   0,
 );
 
+/** Qué enseña el diálogo (product/0025, requisito 1): el modelo pulsado y la
+ * vista por la que se entra, que a partir de ahí se mueve por la secuencia.
+ * La foto ya no viaja aquí —se deriva de las dos—, porque una tripleta
+ * cerrada era justo lo que impedía saber que hay más vistas del mismo
+ * coche. */
 interface OpenPhoto {
   entity: FichaEntity;
   view: PhotoView;
-  photo: Photo;
 }
 
 const DIRECTION_CLASS: Record<DeltaDirection, string> = {
@@ -357,7 +361,7 @@ function PhotoBox({
 }: {
   entity: FichaEntity;
   photoView: PhotoView;
-  onOpen: (entity: FichaEntity, view: PhotoView, photo: Photo) => void;
+  onOpen: (entity: FichaEntity, view: PhotoView) => void;
 }) {
   // Una `src` que no carga —foto declarada, host caído o bloqueada por la
   // red de quien mira— degrada al mismo hueco que «sin foto» (product/0014,
@@ -379,7 +383,7 @@ function PhotoBox({
     <button
       type="button"
       className={styles.photoButton}
-      onClick={() => onOpen(entity, photoView, photo)}
+      onClick={() => onOpen(entity, photoView)}
     >
       {/* Sin `decoding="async"`: era el último atributo que esta miniatura
           llevaba y la foto del diálogo —que sí se ve— no, y con una docena de
@@ -398,6 +402,129 @@ function PhotoBox({
   );
 }
 
+/**
+ * La foto ampliada y su recorrido (product/0025). El diálogo enseña la vista
+ * por la que se entró y desde ahí se mueve por las que ese modelo declara,
+ * en el orden canónico que resuelve `photoSequence` —el del fichero de datos
+ * no sirve: unos coches traen las claves `front,side,rear,…` y otros
+ * `front,rear,side,…`—.
+ *
+ * Componente propio, y no marcado suelto dentro de `FichaPage`, por el
+ * estado de las `src` fallidas: es suyo y de nadie más. Guarda **todas** las
+ * que han fallado, no la última como `PhotoBox`, porque aquí se cambia de
+ * foto sin desmontar nada.
+ *
+ * Exportado solo para el test: el diálogo se abre con `showModal()`, que
+ * `renderToStaticMarkup` no ejecuta, así que su marcado no es alcanzable
+ * desde `FichaPage` sin jsdom.
+ */
+export function PhotoCarousel({
+  entity,
+  view,
+  onSelectView,
+}: {
+  entity: FichaEntity;
+  view: PhotoView;
+  onSelectView: (view: PhotoView) => void;
+}) {
+  const [failedSrcs, setFailedSrcs] = useState<readonly string[]>([]);
+  const photo = entity.photos[view];
+  if (photo === undefined) return null;
+
+  const sequence = photoSequence(entity.photos);
+  const index = sequence.indexOf(view);
+  const label = PHOTO_VIEW_LABELS[view];
+  const src = photoSrc(photo);
+
+  function goTo(step: number) {
+    const next = sequence[index + step];
+    if (next !== undefined) onSelectView(next);
+  }
+
+  return (
+    <>
+      <figure className={styles.dialogFigure}>
+        {/* Una `src` que no carga degrada al mismo hueco rotulado que la
+            miniatura (requisito 11), conservando posición y controles: la
+            vista no desaparece de la secuencia a mitad de recorrido. */}
+        {failedSrcs.includes(src) ? (
+          <p className={styles.dialogPlaceholder}>
+            {entity.name}, {label} — sin foto
+          </p>
+        ) : (
+          <img
+            src={src}
+            alt={`${entity.name}, vista ${label.toLowerCase()}`}
+            className={styles.dialogImage}
+            onError={() => setFailedSrcs((failed) => [...failed, src])}
+          />
+        )}
+        <figcaption className={styles.dialogCaption}>
+          {photo.shows} — {photo.credit}
+        </figcaption>
+      </figure>
+
+      {/* Un modelo con una sola vista abre el diálogo exactamente como antes
+          de esta spec (requisito 10): un control deshabilitado para siempre
+          no es información, es ruido. */}
+      {sequence.length > 1 && (
+        <div className={styles.dialogNav}>
+          <button
+            type="button"
+            className={styles.dialogStep}
+            aria-label="Ver la foto anterior"
+            disabled={index === 0}
+            onClick={() => goTo(-1)}
+          >
+            <span aria-hidden="true" className={styles.dialogCloseGlyph}>
+              ‹
+            </span>
+          </button>
+          {/* La posición, escrita (requisito 9): con los rótulos leídos como
+              una lista de botones, es lo único que dice cuántas fotos hay y
+              por cuál se va. */}
+          <p className={styles.dialogPosition}>
+            {index + 1} de {sequence.length} · {label}
+          </p>
+          <button
+            type="button"
+            className={styles.dialogStep}
+            aria-label="Ver la foto siguiente"
+            disabled={index === sequence.length - 1}
+            onClick={() => goTo(1)}
+          >
+            <span aria-hidden="true" className={styles.dialogCloseGlyph}>
+              ›
+            </span>
+          </button>
+        </div>
+      )}
+
+      {/* Acceso directo por vista (requisito 5): rótulos de texto, nunca
+          miniaturas —se leen a 320px y no piden descargar las otras cuatro
+          fotos—. La vigente lleva `aria-current` además de su tratamiento
+          visual, con el mismo criterio que la tira de candidatos. */}
+      {sequence.length > 1 && (
+        <div className={styles.dialogViews} role="group" aria-label="Vistas">
+          {sequence.map((option) => (
+            <button
+              key={option}
+              type="button"
+              className={
+                option === view ? styles.dialogViewActive : styles.dialogView
+              }
+              aria-current={option === view ? 'true' : undefined}
+              onClick={() => onSelectView(option)}
+            >
+              {PHOTO_VIEW_LABELS[option]}
+            </button>
+          ))}
+        </div>
+      )}
+    </>
+  );
+}
+
 function ModelHeaderCell({
   entity,
   isPinned,
@@ -409,7 +536,7 @@ function ModelHeaderCell({
   isPinned: boolean;
   photoView: PhotoView;
   onPin: (id: string) => void;
-  onOpenPhoto: (entity: FichaEntity, view: PhotoView, photo: Photo) => void;
+  onOpenPhoto: (entity: FichaEntity, view: PhotoView) => void;
 }) {
   return (
     <th
@@ -591,7 +718,7 @@ function DuelCard({
   pinnedEntity: FichaEntity | undefined;
   blocks: BlockDef[];
   photoView: PhotoView;
-  onOpenPhoto: (entity: FichaEntity, view: PhotoView, photo: Photo) => void;
+  onOpenPhoto: (entity: FichaEntity, view: PhotoView) => void;
 }) {
   return (
     <div className={styles.duelCard}>
@@ -643,7 +770,7 @@ function DuelView({
   onFocus: (id: string) => void;
   blocks: BlockDef[];
   photoView: PhotoView;
-  onOpenPhoto: (entity: FichaEntity, view: PhotoView, photo: Photo) => void;
+  onOpenPhoto: (entity: FichaEntity, view: PhotoView) => void;
 }) {
   return (
     <div className={styles.duelView}>
@@ -835,9 +962,18 @@ export function FichaPage({ cars, references }: FichaPageProps) {
     tableWrapperRef.current?.scrollTo({ left: 0 });
   }
 
-  function handleOpenPhoto(entity: FichaEntity, view: PhotoView, photo: Photo) {
-    setOpenPhoto({ entity, view, photo });
+  /** Punto de entrada del diálogo (requisito 1): siempre por la vista
+   * pulsada, nunca por la última que se estuviera mirando (requisito 13). */
+  function handleOpenPhoto(entity: FichaEntity, view: PhotoView) {
+    setOpenPhoto({ entity, view });
     dialogRef.current?.showModal();
+  }
+
+  /** Moverse por el carrusel es cambiar la vista del mismo modelo, y nada
+   * más (requisito 12): no toca `photoView`, así que ni la tabla de detrás
+   * ni `localStorage` se enteran. */
+  function handleSelectPhotoView(view: PhotoView) {
+    setOpenPhoto((open) => (open === null ? null : { ...open, view }));
   }
 
   function handleDialogClose() {
@@ -1079,6 +1215,19 @@ export function FichaPage({ cars, references }: FichaPageProps) {
         ref={dialogRef}
         className={styles.dialog}
         onClose={handleDialogClose}
+        onKeyDown={(event) => {
+          if (openPhoto === null) return;
+          const step =
+            event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
+          if (step === 0) return;
+          const sequence = photoSequence(openPhoto.entity.photos);
+          const next = sequence[sequence.indexOf(openPhoto.view) + step];
+          // En los extremos no pasa nada, ni siquiera tragarse la tecla
+          // (requisito 6): la secuencia no da la vuelta.
+          if (next === undefined) return;
+          event.preventDefault();
+          handleSelectPhotoView(next);
+        }}
         onClick={(event) => {
           if (event.target === dialogRef.current) {
             dialogRef.current?.close();
@@ -1087,16 +1236,11 @@ export function FichaPage({ cars, references }: FichaPageProps) {
       >
         {openPhoto && (
           <>
-            <figure className={styles.dialogFigure}>
-              <img
-                src={photoSrc(openPhoto.photo)}
-                alt={`${openPhoto.entity.name}, vista ${PHOTO_VIEW_LABELS[openPhoto.view].toLowerCase()}`}
-                className={styles.dialogImage}
-              />
-              <figcaption className={styles.dialogCaption}>
-                {openPhoto.photo.shows} — {openPhoto.photo.credit}
-              </figcaption>
-            </figure>
+            <PhotoCarousel
+              entity={openPhoto.entity}
+              view={openPhoto.view}
+              onSelectView={handleSelectPhotoView}
+            />
             <button
               type="button"
               className={styles.dialogClose}

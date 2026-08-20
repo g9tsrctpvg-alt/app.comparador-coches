@@ -676,3 +676,107 @@ th.blockHeader {
 .dialogCloseGlyph {
   font-size: var(--font-size-md);
 }
+
+/* El carrusel de la foto ampliada (product/0025). Nada de esto estrena
+ * token: la caja del diálogo, su radio y su sombra siguen siendo los que
+ * dejó `technical/0009`, y aquí solo se añade lo que el recorrido necesita. */
+
+/* Hueco rotulado dentro del diálogo (requisito 11): mismo papel y misma
+ * relación de aspecto que `.photoPlaceholder` en la miniatura, para que una
+ * vista que no carga no encoja el diálogo a mitad de recorrido. */
+.dialogPlaceholder {
+  composes: mono from './primitives.module.css';
+  composes: secondaryText from './primitives.module.css';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: 0;
+  aspect-ratio: 4 / 3;
+  background: var(--color-card);
+  border-radius: var(--radius-sm);
+  white-space: normal;
+}
+
+.dialogNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+}
+
+/* Anterior y siguiente (requisito 4): cuadrados y del tamaño táctil mínimo,
+ * como el cierre del diálogo, del que solo se diferencian en el sitio. */
+.dialogStep {
+  composes: buttonOutline from './primitives.module.css';
+  flex: 0 0 auto;
+  width: var(--size-touch-min);
+  height: var(--size-touch-min);
+}
+
+/* En los extremos el control se apaga pero no desaparece: la caja se queda
+ * donde está y la fila no se recompone al llegar al final. */
+.dialogStep:disabled {
+  opacity: 0.4;
+  box-shadow: none;
+}
+
+.dialogPosition {
+  composes: mono from './primitives.module.css';
+  composes: secondaryText from './primitives.module.css';
+  margin: 0;
+  text-align: center;
+}
+
+.dialogViews {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+/* Los rótulos de vista (requisito 5) siguen el patrón de las pastillas de
+ * `ViewSwitcher`: componen `mono` y **nada más**, y declaran su propia caja.
+ * No componen `.unstyledButton` ni `.buttonGhost` a propósito, por el
+ * hallazgo de `technical/0006`: entre ficheros, la regla del primitivo gana,
+ * así que el `background: none` y el `border: none` de `.unstyledButton`
+ * —igual que el `transparent` de `.buttonGhost`— borrarían el borde y el
+ * fondo que el rótulo elegido necesita para distinguirse. Medido en el
+ * navegador, no supuesto. Las dos clases comparten aquí su base y la elegida
+ * gana por orden dentro de este mismo fichero. */
+.dialogView,
+.dialogViewActive {
+  composes: mono from './primitives.module.css';
+  appearance: none;
+  cursor: pointer;
+  background: var(--color-card);
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--size-touch-min);
+  padding: 0 var(--space-3);
+  border: var(--size-border-hairline) solid var(--color-rule);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  color: var(--color-mute);
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
+}
+
+.dialogView:hover {
+  color: var(--color-ink);
+  background: var(--color-accent-tint);
+}
+
+.dialogView:active {
+  background: var(--color-accent-tint-strong);
+}
+
+.dialogViewActive {
+  color: var(--color-accent);
+  font-weight: var(--font-weight-semibold);
+  border-color: var(--color-accent);
+  background: var(--color-accent-tint);
+}

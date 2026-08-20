@@ -44,3 +44,16 @@ export type Photos = z.infer<typeof PhotosSchema>;
 export function photoSrc(photo: Photo): string {
   return photo.url;
 }
+
+/**
+ * Las vistas que un modelo declara, en el orden canónico de `PHOTO_VIEWS`
+ * (product/0025, requisito 3). El orden de las claves en `cars.json` no
+ * sirve: unos coches las traen `front,side,rear,…` y otros
+ * `front,rear,side,…`, así que recorrer el objeto tal cual daría un carrusel
+ * distinto por coche. Vive en el dominio y no en el componente para que
+ * «qué vistas tiene este modelo, y en qué orden» se resuelva en un solo
+ * sitio.
+ */
+export function photoSequence(photos: Photos): PhotoView[] {
+  return PHOTO_VIEWS.filter((view) => photos[view] !== undefined);
+}
