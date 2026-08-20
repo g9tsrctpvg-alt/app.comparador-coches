@@ -443,6 +443,31 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     `.photoPlaceholder` comparten `aspect-ratio: 4 / 3`). Pulsar una foto
     la abre en un `<dialog>` nativo, manejable con teclado: `Escape` cierra
     y devuelve el foco al botón que la abrió.
+  - **La foto ampliada es un carrusel** (`PhotoCarousel`): abre por la vista
+    pulsada y desde ahí recorre **las vistas que ese modelo declara**, sin
+    cerrarse y sin tocar el selector «Foto». La secuencia sale de
+    `photoSequence` (`src/domain/photo.ts`) y va en el orden canónico de
+    `PHOTO_VIEWS`, no en el de las claves de `cars.json` —que alterna
+    `front,side,rear,…` y `front,rear,side,…` según el coche, así que
+    recorrer el objeto tal cual daría un carrusel distinto por coche—. El
+    diálogo lleva «Anterior» y «Siguiente» —deshabilitados en los extremos:
+    la secuencia **no da la vuelta**, para que la posición sea siempre
+    legible—, un rótulo de texto por vista disponible con la vigente en
+    `aria-current="true"`, la posición escrita (`2 de 4 · Lateral`) y las
+    teclas `←`/`→`. Con **una sola vista declarada** no aparece ninguno de
+    esos controles: un mando deshabilitado para siempre no es información.
+    Una `src` que falla degrada al mismo hueco rotulado conservando
+    posición y controles, así que una vista caída no expulsa a las demás de
+    la secuencia. Los rótulos de vista **declaran su propia caja y no
+    componen ningún primitivo de botón**: entre ficheros manda la regla del
+    primitivo, y el `background: none` de `.unstyledButton` borraba el fondo
+    y el borde del rótulo elegido —el mismo mecanismo que `technical/0006`
+    encontró con `.buttonGhost`—.
+  - **El carrusel no tiene efectos fuera del diálogo**: no mueve `photoView`,
+    ni la foto de las columnas de detrás, ni escribe en `localStorage`, y
+    cerrar y reabrir entra siempre por la vista de la miniatura pulsada. La
+    vista global sigue cambiándose solo desde el selector «Foto» de la
+    barra; el carrusel decide lo que ve el diálogo, no lo que ve la ficha.
   - **Cabecera fija en dos ejes**: el `<thead>` se fija en vertical dentro
     de su propio contenedor de scroll (`--size-table-max-height`, no la
     página — un envoltorio con `overflow-x: auto` ya es el ancestro de
@@ -600,9 +625,10 @@ foto (`photoView`) y el candidato enfocado en la tira móvil (`focusedId`).
   requisito 13, sigue vigente fuera de los cinco campos de arriba): qué fila
   del ranking está desplegada (`useState` local de `RankingList`), el estado
   de los paneles plegables por debajo de `--bp-columna`
-  (`CollapsiblePanel`), el diálogo de una foto abierta (`openPhoto`, local a
-  `FichaPage`) y la posición de desplazamiento, tanto del documento como de
-  la tabla de la ficha.
+  (`CollapsiblePanel`), el diálogo de una foto abierta —`openPhoto`, local a
+  `FichaPage`, que lleva dentro por qué vista va el carrusel, así que
+  tampoco esa posición sobrevive a cerrarlo— y la posición de
+  desplazamiento, tanto del documento como de la tabla de la ficha.
 
 ## Responsive
 

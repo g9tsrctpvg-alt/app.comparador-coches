@@ -395,22 +395,25 @@ fase abierta. Se lista para no perderlo, no para bloquear nada.
   veintiún criterios de aceptación cerrados contra tests unitarios y
   Playwright sobre `npm run preview`. Consolidada en
   `docs/estado/interfaz.md`.
-- **La foto ampliada se recorre sin cerrar el diálogo — `product/0025`, en
-  `draft`.** Las catorce entidades de la ficha declaran 61 fotos y la
-  aplicación las sirve de una en una: el diálogo de `product/0014` enseña la
-  vista pulsada y nada más, así
-  que ver los otros ángulos del mismo coche obliga a cerrar, mover el
-  selector «Foto» de la barra —que cambia la vista de las catorce columnas a
-  la vez y **persiste** esa elección (`product/0024`)— y volver a pulsar. La
-  spec convierte el diálogo en un carrusel de las vistas que ese modelo
-  declara, en el orden canónico de `PHOTO_VIEWS` y no en el del fichero de
-  datos, con anterior/siguiente, acceso directo por vista, `←`/`→` y el mismo
-  degradado a hueco rotulado si una `src` falla. No toca el selector de la
-  barra, no persiste nada y no encadena modelos. Amplía `product/0014` sin
-  editarla, con el precedente de `product/0016`. **Pendiente del gate
-  humano**, con dos decisiones abiertas: si recorrer el carrusel debe
-  arrastrar el selector de la barra (recomendación: no) y si la tira de
-  vistas lleva rótulos o miniaturas (recomendación: rótulos).
+- **La foto ampliada se recorre sin cerrar el diálogo — `product/0025`,
+  `consolidated`.** Las catorce entidades de la ficha declaran 61 fotos y la
+  aplicación las servía de una en una: el diálogo de `product/0014` enseñaba
+  la vista pulsada y nada más, así que ver los otros ángulos del mismo coche
+  obligaba a cerrar, mover el selector «Foto» de la barra —que cambia la
+  vista de las catorce columnas a la vez y **persiste** esa elección
+  (`product/0024`)— y volver a pulsar. La spec convierte el diálogo en un
+  carrusel de las vistas que ese modelo declara, en el orden canónico de
+  `PHOTO_VIEWS` y no en el del fichero de datos (`photoSequence`, en el
+  dominio), con anterior/siguiente, un rótulo de texto por vista, `←`/`→`,
+  la posición escrita y el mismo degradado a hueco rotulado si una `src`
+  falla. No toca el selector de la barra, no persiste nada y no encadena
+  modelos. Amplía `product/0014` sin editarla, con el precedente de
+  `product/0016`. Recorrió `draft → approved → implemented → verified →
+  consolidated` en la misma sesión de trabajo, con el gate humano en commit
+  propio sin implementación, la CI entera verde en local (443 tests,
+  cobertura 100 % en `domain/`+`data/`+`logging/`) y los diecisiete
+  criterios cerrados contra tests unitarios y Playwright sobre
+  `npm run preview`. Consolidada en `docs/estado/interfaz.md`.
 - **Eje de autonomía y repostaje.** Es la mayor diferencia práctica entre los
   once candidatos en un viaje largo —los térmicos e híbridos hacen 640-950 km
   con un depósito, los eléctricos la mitad en autopista— y el modelo es hoy
@@ -476,6 +479,7 @@ una sorpresa esperando fecha.
 | Alta de `hyundai-tucson-phev`: **mantenimiento anual** (rango genérico de revisión de Hyundai, no desglosado) y **valor residual a 5 años** (comparación con el BMW X1 xDrive25e del catálogo, no una fuente de reventa española del Tucson PHEV) estimados sin fuente firme | 2026-08-08 | Encontrar el coste de mantenimiento anual oficial del fabricante; una fuente de valor residual española específica del Tucson PHEV |
 | La escala tipográfica tiene dos escalones que no consume nadie: `--font-size-2xl` (28px) y `--font-size-lg` (18px). Los `<h2>` saltan de los 40px del título de vista a los 16px del cuerpo, así que un titular de sección no tiene tamaño propio y se distingue solo por el peso. `technical/0009` lo dejó **fuera de alcance a propósito** —afinó forma y controles, no jerarquía de texto—, y lo registra aquí en vez de resolverlo de paso | 2026-08-14 | Una spec propia que decida qué elementos ocupan los dos escalones vacíos, o que retire los tokens si se concluye que la jerarquía actual basta |
 | Alta del campo `generation` (`product/0021`) en tres candidatos sin `faceliftYear` pese a que su generación sí ha tenido retoque: **`kia-sportage-hev`** (NQ5 retocado desde 2025), **`honda-civic-e-hev`** (undécima generación retocada desde mayo/junio de 2024) y **`mazda-cx-5`** (KF retocado desde septiembre de 2021). En los tres, la potencia y el precio del catálogo llevan la etiqueta genérica «Especificación del proyecto (julio 2026)», sin fecha ni versión verificable, así que no se ha podido confirmar si la ficha puntuada es la anterior o la posterior al retoque — declarar `faceliftYear` sin esa certeza habría sido inventar sobre qué versión exacta se compara | 2026-08-15 | Verificar contra una fuente fechada y con versión (km77, motor.es, ficha oficial) si el Sportage HEV, el Civic e:HEV y el CX-5 del catálogo son la versión retocada; si lo son, añadir `generation.faceliftYear` con esa fuente |
+| El rótulo enfocado de la tira de candidatos en móvil (`.duelChipActive`, `product/0023`, requisito 3) **no tiene tratamiento visual**: compone `.unstyledButton`, y entre ficheros gana la regla del primitivo, así que su `background: none` y su `border: none` borran el borde de acento y el tinte que la clase declara. Medido en el navegador al implementar `product/0025` —fondo `rgba(0,0,0,0)` y borde `0px` en el chip activo—, no supuesto. El estado sigue siendo legible con lector de pantalla (`aria-current="true"` sí está), así que no es un fallo de accesibilidad total, pero **el candidato enfocado no se distingue a la vista**, que es justo lo que el requisito pedía. Mismo mecanismo que `technical/0006` ya encontró con `.buttonGhost` | 2026-08-20 | Que `.duelChip`/`.duelChipActive` declaren su propia caja en vez de componer `.unstyledButton`, como ya hacen `.dialogView`/`.dialogViewActive` desde `product/0025`. `product/0023` está `consolidated` y no se edita: va en una spec nueva |
 
 ## Aplazamientos con disparador
 
