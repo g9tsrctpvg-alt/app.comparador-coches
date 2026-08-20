@@ -1,8 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { COMPLETE_FIELD_DEFS, FichaPage, TOTAL_FIELD_COUNT } from './FichaPage';
+import {
+  COMPLETE_FIELD_DEFS,
+  FichaPage,
+  PhotoCarousel,
+  TOTAL_FIELD_COUNT,
+} from './FichaPage';
 import { threeCarFixture } from '../domain/scoring/testFixtures';
-import { FICHA_FIELDS } from '../domain/ficha';
+import { buildFicha, FICHA_FIELDS } from '../domain/ficha';
 import type { Reference } from '../domain/reference';
 import fichaCss from './FichaPage.module.css?raw';
 
@@ -497,5 +502,156 @@ describe('FichaPage', () => {
       // La miniatura es decorativa: el nombre real ya va al lado como texto.
       expect(strip).toMatch(/aria-hidden="true"/);
     });
+  });
+});
+
+/**
+ * El carrusel de la foto ampliada (product/0025). Se renderiza aparte porque
+ * el diálogo que lo contiene se abre con `showModal()`, y
+ * `renderToStaticMarkup` no lo ejecuta: lo interactivo —teclado, clic,
+ * `src` que falla— se verifica a mano y con Playwright, igual que el resto
+ * de `src/ui/`.
+ */
+describe('the enlarged photo carousel', () => {
+  const photo = (shows: string) => ({
+    url: `https://example.com/${shows}.jpg`,
+    credit: `Crédito de ${shows}`,
+    shows,
+  });
+
+  /** Las claves llegan desordenadas a propósito: es el orden que trae
+   * `honda-civic-e-hev` en el catálogo real. */
+  function fourViewEntity() {
+    const entity = buildFicha(
+      [],
+      [
+        referenceFixture({
+          photos: {
+            front: photo('frontal'),
+            rear: photo('trasera'),
+            side: photo('lateral'),
+            interior: photo('interior'),
+          },
+        }),
+      ],
+    )[0];
+    if (entity === undefined) throw new Error('Sin entidad de prueba');
+    return entity;
+  }
+
+  it('lists the declared views in the canonical order, not the data file order', () => {
+    const markup = renderToStaticMarkup(
+      <PhotoCarousel
+        entity={fourViewEntity()}
+        view="side"
+        onSelectView={() => {}}
+      />,
+    );
+    const order = ['Frontal', 'Lateral', 'Trasera', 'Interior'].map((label) =>
+      markup.indexOf(`>${label}<`),
+    );
+    expect(order.every((at) => at > -1)).toBe(true);
+    expect([...order].sort((a, b) => a - b)).toEqual(order);
+    expect(markup).not.toContain('>Maletero<');
+  });
+
+  it('marks the shown view, and only it, with aria-current', () => {
+    const markup = renderToStaticMarkup(
+      <PhotoCarousel
+        entity={fourViewEntity()}
+        view="side"
+        onSelectView={() => {}}
+      />,
+    );
+    expect(markup.match(/aria-current="true"/g)).toHaveLength(1);
+    expect(markup).toMatch(/aria-current="true"[^>]*>Lateral</);
+  });
+
+  it('writes the position in the sequence as text', () => {
+    const markup = renderToStaticMarkup(
+      <PhotoCarousel
+        entity={fourViewEntity()}
+        view="side"
+        onSelectView={() => {}}
+      />,
+    );
+    expect(markup).toContain('2 de 4 · Lateral');
+  });
+
+  it('disables the previous control on the first view and the next one on the last', () => {
+    const first = renderToStaticMarkup(
+      <PhotoCarousel
+        entity={fourViewEntity()}
+        view="front"
+        onSelectView={() => {}}
+      />,
+    );
+    expect(first).toMatch(/aria-label="Ver la foto anterior" disabled=""/);
+    expect(first).not.toMatch(/aria-label="Ver la foto siguiente" disabled=""/);
+
+    const last = renderToStaticMarkup(
+      <PhotoCarousel
+        entity={fourViewEntity()}
+        view="interior"
+        onSelectView={() => {}}
+      />,
+    );
+    expect(last).toMatch(/aria-label="Ver la foto siguiente" disabled=""/);
+    expect(last).not.toMatch(/aria-label="Ver la foto anterior" disabled=""/);
+
+    const middle = renderToStaticMarkup(
+      <PhotoCarousel
+        entity={fourViewEntity()}
+        view="rear"
+        onSelectView={() => {}}
+      />,
+    );
+    expect(middle).not.toContain('disabled=""');
+  });
+
+  it('lets the caption and the alt text follow the shown view', () => {
+    const markup = renderToStaticMarkup(
+      <PhotoCarousel
+        entity={fourViewEntity()}
+        view="rear"
+        onSelectView={() => {}}
+      />,
+    );
+    expect(markup).toContain('alt="Giulietta, vista trasera"');
+    expect(markup).toContain('trasera — Crédito de trasera');
+    expect(markup).not.toContain('Crédito de lateral');
+  });
+
+  // Regresión medida en el navegador, no supuesta: mientras estos dos
+  // rótulos compusieron `.unstyledButton`, su `background: none` y su
+  // `border: none` ganaban a las declaraciones de este fichero —entre
+  // ficheros manda el primitivo (hallazgo de `technical/0006`)— y el rótulo
+  // elegido salía sin fondo, sin borde y del mismo color que los demás.
+  it('declares its own box for the view labels, composing no button primitive', () => {
+    const base = ruleBody(fichaCss, 'dialogView,\\s*\\.dialogViewActive');
+    expect(base).not.toMatch(/composes:[^;]*unstyledButton/);
+    expect(base).not.toMatch(/composes:[^;]*button(Ghost|Outline|Solid)/);
+    expect(base).toMatch(/background:\s*var\(--color-card\)/);
+    // La última de las dos reglas que empiezan por `.dialogViewActive`: la
+    // primera es la base compartida con `.dialogView`, y es justo el orden
+    // dentro del fichero lo que hace que la elegida gane.
+    const active = [
+      ...fichaCss.matchAll(/^\.dialogViewActive\s*\{([^}]*)\}/gm),
+    ].at(-1)?.[1];
+    expect(active).toMatch(/border-color:\s*var\(--color-accent\)/);
+    expect(active).toMatch(/background:\s*var\(--color-accent-tint\)/);
+  });
+
+  it('renders no navigation at all for a model with a single declared view', () => {
+    const entity = buildFicha([], [referenceFixture()])[0];
+    if (entity === undefined) throw new Error('Sin entidad de prueba');
+    const markup = renderToStaticMarkup(
+      <PhotoCarousel entity={entity} view="side" onSelectView={() => {}} />,
+    );
+    expect(markup).toContain('alt="Giulietta, vista lateral"');
+    expect(markup).not.toContain('aria-label="Ver la foto siguiente"');
+    expect(markup).not.toContain('aria-label="Ver la foto anterior"');
+    expect(markup).not.toContain('aria-current');
+    expect(markup).not.toContain(' de 1');
   });
 });

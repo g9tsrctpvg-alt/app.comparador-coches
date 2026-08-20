@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { PhotoSchema, PhotosSchema, photoSrc } from './photo';
+import { PhotoSchema, PhotosSchema, photoSequence, photoSrc } from './photo';
 
 function validPhoto(overrides: Partial<Record<string, unknown>> = {}) {
   return {
@@ -71,5 +71,53 @@ describe('photoSrc', () => {
   it('resolves to the linked URL as-is', () => {
     const photo = validPhoto();
     expect(photoSrc(PhotoSchema.parse(photo))).toBe(photo.url);
+  });
+});
+
+describe('photoSequence', () => {
+  it('returns the declared views in the canonical order, not the key order', () => {
+    // El orden de entrada es el que trae `honda-civic-e-hev` en el catálogo
+    // real: front, rear, side, interior.
+    const photos = PhotosSchema.parse({
+      front: validPhoto(),
+      rear: validPhoto(),
+      side: validPhoto(),
+      interior: validPhoto(),
+    });
+    expect(photoSequence(photos)).toEqual([
+      'front',
+      'side',
+      'rear',
+      'interior',
+    ]);
+  });
+
+  it('leaves out the views the model does not declare', () => {
+    const photos = PhotosSchema.parse({
+      interior: validPhoto(),
+      front: validPhoto(),
+    });
+    expect(photoSequence(photos)).toEqual(['front', 'interior']);
+  });
+
+  it('returns the five views for a model that declares them all', () => {
+    const photos = PhotosSchema.parse({
+      trunk: validPhoto(),
+      interior: validPhoto(),
+      rear: validPhoto(),
+      side: validPhoto(),
+      front: validPhoto(),
+    });
+    expect(photoSequence(photos)).toEqual([
+      'front',
+      'side',
+      'rear',
+      'trunk',
+      'interior',
+    ]);
+  });
+
+  it('returns an empty sequence for a model with no photos', () => {
+    expect(photoSequence(PhotosSchema.parse(undefined))).toEqual([]);
   });
 });
