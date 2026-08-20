@@ -1,7 +1,7 @@
 # 0025 — La foto ampliada se recorre sin cerrar el diálogo
 
 - **Id:** product/0025
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-08-20
 - **Specs relacionadas:** product/0014, product/0016, product/0023,
