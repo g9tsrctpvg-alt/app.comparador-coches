@@ -78,7 +78,7 @@ demás columnas.
 - **El selector «Foto» de la barra.** No cambia de forma, ni de opciones, ni
   de comportamiento: sigue gobernando qué vista enseñan todas las columnas a
   la vez, y sigue siendo la única vía de cambiarlo. Recorrer el carrusel
-  **no** lo mueve — ver *Decisiones abiertas*, D1.
+  **no** lo mueve (requisito 12).
 - **`photoView` y su persistencia** (`product/0024`): el estado del diálogo
   sigue siendo efímero, y abrir, recorrer y cerrar el diálogo no deja rastro
   en `localStorage`.
@@ -95,8 +95,8 @@ demás columnas.
   única puerta de entrada al diálogo sigue siendo pulsar una foto, y sigue
   abriendo por la vista vigente.
 - **El catálogo y las fotos que faltan.** Esta spec no añade ni sustituye
-  ninguna foto; las once vistas ausentes siguen siendo la deuda de datos que
-  ya está registrada, y el carrusel las salta sin hueco muerto.
+  ninguna foto; las nueve vistas ausentes siguen siendo la deuda de datos
+  que ya está registrada, y el carrusel las salta sin hueco muerto.
 - **De dónde salen las fotos** (`product/0016`): sin cambios, ni en orígenes
   ni en crédito.
 - **Precarga de las fotos no vistas.** El diálogo pide la imagen de la vista
@@ -271,18 +271,11 @@ demás columnas.
 
 ## Decisiones abiertas
 
-> Deben quedar vacías antes de pasar a `approved`.
+> Las dos que esta spec abrió se cerraron el 2026-08-20, y su respuesta está
+> en los requisitos, no aquí: recorrer el carrusel **no** mueve el selector
+> «Foto» de la barra ni toca nada persistido (requisitos 12 y 13), y la tira
+> de vistas lleva **solo rótulos de texto**, nunca miniaturas (requisito 5).
+> Ninguna de las dos cambia un requisito: las dos confirman el redactado que
+> ya tenían.
 
-- **D1 — ¿Recorrer el carrusel arrastra el selector «Foto» de la barra?**
-  La spec está redactada con la respuesta **no** (requisito 12), y es la
-  recomendación: cambiar `photoView` desde el diálogo repintaría las catorce
-  columnas detrás del `::backdrop` —un cambio que no se ve mientras ocurre—
-  y **persistiría** una elección que el usuario hizo para mirar un coche, no
-  para dejar la ficha así. La alternativa —sincronizar— tiene a su favor que
-  al cerrar te quedas donde estabas mirando. Si se elige, el requisito 12 se
-  invierte y el 13 desaparece; el resto de la spec no se mueve.
-- **D2 — ¿La tira de vistas enseña rótulos o miniaturas?** La spec pide
-  rótulos de texto (requisito 5): son legibles a 320px, no piden una segunda
-  descarga de las cuatro fotos no vistas y no dependen de que la imagen
-  cargue. Miniaturas se ven mejor y contradicen el punto de *Fuera de
-  alcance* sobre precarga. Recomendación: rótulos.
+Ninguna.
