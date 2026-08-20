@@ -4,7 +4,7 @@
 > tareas y deudas abiertas. `CLAUDE.md` resume y no duplica: al cerrar una
 > fase se actualiza este documento, no el índice.
 
-**Última actualización:** 2026-08-19
+**Última actualización:** 2026-08-20
 
 ## Fases
 
@@ -395,6 +395,22 @@ fase abierta. Se lista para no perderlo, no para bloquear nada.
   veintiún criterios de aceptación cerrados contra tests unitarios y
   Playwright sobre `npm run preview`. Consolidada en
   `docs/estado/interfaz.md`.
+- **La foto ampliada se recorre sin cerrar el diálogo — `product/0025`, en
+  `draft`.** Las catorce entidades de la ficha declaran 61 fotos y la
+  aplicación las sirve de una en una: el diálogo de `product/0014` enseña la
+  vista pulsada y nada más, así
+  que ver los otros ángulos del mismo coche obliga a cerrar, mover el
+  selector «Foto» de la barra —que cambia la vista de las catorce columnas a
+  la vez y **persiste** esa elección (`product/0024`)— y volver a pulsar. La
+  spec convierte el diálogo en un carrusel de las vistas que ese modelo
+  declara, en el orden canónico de `PHOTO_VIEWS` y no en el del fichero de
+  datos, con anterior/siguiente, acceso directo por vista, `←`/`→` y el mismo
+  degradado a hueco rotulado si una `src` falla. No toca el selector de la
+  barra, no persiste nada y no encadena modelos. Amplía `product/0014` sin
+  editarla, con el precedente de `product/0016`. **Pendiente del gate
+  humano**, con dos decisiones abiertas: si recorrer el carrusel debe
+  arrastrar el selector de la barra (recomendación: no) y si la tira de
+  vistas lleva rótulos o miniaturas (recomendación: rótulos).
 - **Eje de autonomía y repostaje.** Es la mayor diferencia práctica entre los
   once candidatos en un viaje largo —los térmicos e híbridos hacen 640-950 km
   con un depósito, los eléctricos la mitad en autopista— y el modelo es hoy
