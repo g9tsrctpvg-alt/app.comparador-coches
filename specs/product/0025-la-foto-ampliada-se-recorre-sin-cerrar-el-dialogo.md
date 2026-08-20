@@ -1,7 +1,7 @@
 # 0025 — La foto ampliada se recorre sin cerrar el diálogo
 
 - **Id:** product/0025
-- **Estado:** implemented
+- **Estado:** verified
 - **Tipo:** product
 - **Fecha:** 2026-08-20
 - **Specs relacionadas:** product/0014, product/0016, product/0023,
@@ -181,63 +181,90 @@ demás columnas.
 
 > Obligatorios y verificables.
 
-- [ ] La función de dominio que ordena las vistas devuelve, para un `Photos`
+- [x] La función de dominio que ordena las vistas devuelve, para un `Photos`
       con las claves en cualquier orden, la secuencia canónica de
       `PHOTO_VIEWS` restringida a las declaradas: para
       `{front, rear, side, interior}` devuelve `[front, side, rear,
-      interior]`. Test unitario en `src/domain/photo.test.ts`, con cobertura
-      al 100 % del módulo.
-- [ ] Con el catálogo real, abrir la foto Lateral de `honda-civic-e-hev`
+      interior]`. `photoSequence`, en `src/domain/photo.test.ts`, cuatro
+      tests —orden canónico, vistas ausentes, las cinco, y ninguna—, con el
+      módulo al 100 % de cobertura.
+- [x] Con el catálogo real, abrir la foto Lateral de `honda-civic-e-hev`
       —cuyas claves en `cars.json` van `front,rear,side,interior`— muestra
-      Lateral, y «Siguiente» lleva a Trasera, no a Interior.
-- [ ] Abrir la foto de `toyota-corolla-cross` (cinco vistas) da una secuencia
+      Lateral, y «Siguiente» lleva a Trasera, no a Interior. Verificado con
+      Playwright sobre `npm run preview`: la tira sale
+      `Frontal,Lateral,Trasera,Interior` y el diálogo abre en Lateral.
+- [x] Abrir la foto de `toyota-corolla-cross` (cinco vistas) da una secuencia
       de cinco controles de vista, y la de `kia-ev3` (cuatro) da cuatro, sin
-      hueco para Maletero.
-- [ ] En la primera vista de la secuencia, «Anterior» está deshabilitado; en
+      hueco para Maletero. Medido en el navegador: Corolla Cross y Kona
+      Eléctrico, 5 (`Frontal,Lateral,Trasera,Maletero,Interior`); EV3, 4
+      (`Frontal,Lateral,Trasera,Interior`).
+- [x] En la primera vista de la secuencia, «Anterior» está deshabilitado; en
       la última, «Siguiente». En ninguna posición intermedia lo está ninguno
-      de los dos.
-- [ ] El control de la vista vigente —y solo ese— lleva
+      de los dos. Verificado en el navegador y en
+      `FichaPage.test.tsx`, «disables the previous control on the first view
+      and the next one on the last».
+- [x] El control de la vista vigente —y solo ese— lleva
       `aria-current="true"`; al pulsar otro, el atributo se mueve a él y la
-      `<img>` pasa a servir la `src` de esa vista.
-- [ ] Con el diálogo abierto, `→` avanza a la vista siguiente y `←` retrocede
+      `<img>` pasa a servir la `src` de esa vista. `FichaPage.test.tsx`,
+      «marks the shown view, and only it, with aria-current», y comprobado
+      en vivo pulsando «Frontal» desde «Interior».
+- [x] Con el diálogo abierto, `→` avanza a la vista siguiente y `←` retrocede
       a la anterior; en los extremos, la tecla correspondiente no hace nada.
-      Verificado con Playwright sobre el build de producción.
-- [ ] El pie del diálogo muestra el `shows` y el `credit` de la vista
-      mostrada, y cambian al cambiar de vista: verificado sobre un modelo
-      cuyas dos primeras vistas tienen créditos distintos.
-- [ ] El `alt` de la `<img>` nombra la vista mostrada y cambia con ella.
-- [ ] Un modelo con una sola vista declarada abre el diálogo sin controles de
-      recorrido, sin tira de vistas y sin indicador de posición. Comprobado
-      con la referencia `alfa-romeo-giulietta` de la fixture de tests, que
-      solo declara `side`.
-- [ ] Una vista cuya `src` falla al cargar muestra el hueco rotulado dentro
+      Verificado con Playwright sobre el build de producción: `→` Lateral →
+      Trasera, `←` Trasera → Lateral → Frontal, y un cuarto `←` en Frontal
+      deja la vista donde estaba.
+- [x] El pie del diálogo muestra el `shows` y el `credit` de la vista
+      mostrada, y cambian al cambiar de vista. `FichaPage.test.tsx`, «lets
+      the caption and the alt text follow the shown view», y comprobado en
+      vivo: al avanzar de vista, pie y `alt` dejan de ser los anteriores.
+- [x] El `alt` de la `<img>` nombra la vista mostrada y cambia con ella.
+      Medido en el navegador: `Civic e:HEV, vista lateral` en la vista
+      Lateral, y otro valor tras avanzar.
+- [x] Un modelo con una sola vista declarada abre el diálogo sin controles de
+      recorrido, sin tira de vistas y sin indicador de posición.
+      `FichaPage.test.tsx`, «renders no navigation at all for a model with a
+      single declared view», sobre la referencia `alfa-romeo-giulietta` de
+      la fixture, que solo declara `side`. Ninguna entidad del catálogo real
+      baja hoy de cuatro vistas, así que este caso solo es alcanzable ahí.
+- [x] Una vista cuya `src` falla al cargar muestra el hueco rotulado dentro
       del diálogo, conservando los controles y la posición; pulsar
       «Siguiente» desde ahí lleva a la vista siguiente con normalidad.
-      Verificado con Playwright interceptando la petición de imagen en la
-      capa de red, como ya hizo `technical/0009`.
-- [ ] Recorrer el carrusel entero y cerrar el diálogo deja el selector «Foto»
+      Verificado con Playwright cortando la red justo antes de pedir una
+      vista que la tabla nunca había cargado —el caso «host caído a mitad de
+      recorrido»—: el diálogo queda sin `<img>`, con «Civic e:HEV, Trasera —
+      sin foto», sus cuatro rótulos y su posición, y «Siguiente» lleva a
+      Interior.
+- [x] Recorrer el carrusel entero y cerrar el diálogo deja el selector «Foto»
       en el mismo valor que tenía al abrirlo, la tabla mostrando esa misma
       vista en todas sus columnas, y la clave
       `comparador-coches:view` de `localStorage` byte a byte idéntica a como
-      estaba. Verificado con Playwright sobre el build de producción.
-- [ ] Cerrar el diálogo tras recorrerlo y volver a pulsar la misma miniatura
+      estaba. Verificado con Playwright sobre el build de producción: el
+      selector sigue en `side`, el `alt` de la primera foto de la tabla
+      sigue nombrando la vista lateral y la clave guardada es idéntica.
+- [x] Cerrar el diálogo tras recorrerlo y volver a pulsar la misma miniatura
       lo reabre por la vista de la miniatura, no por la última mirada.
-- [ ] Con el diálogo cerrado, el marcado no contiene ninguna `<img>` del
+      Verificado en vivo: tras dejarlo en Trasera y cerrarlo, reabre en
+      Lateral.
+- [x] Con el diálogo cerrado, el marcado no contiene ninguna `<img>` del
       diálogo ni ningún control de recorrido: el test vigente «renders the
       closed photo dialog with no figure until a photo is opened» sigue en
       verde sin modificar sus aserciones.
-- [ ] A 320px, cada control del diálogo mide al menos 44×44px de área
+- [x] A 320px, cada control del diálogo mide al menos 44×44px de área
       accionable y el documento no se desplaza en horizontal. Medido con
-      Playwright a 320, 375, 592, 960 y 1440px.
-- [ ] Ningún componente de `src/ui/` estrena un literal de color, espaciado o
+      Playwright a 320, 375, 592, 960 y 1440px: los siete controles del
+      diálogo —dos de paso, cuatro de vista y el cierre— cumplen el mínimo
+      en los cinco anchos, y el desbordamiento horizontal del documento es
+      0px en los cinco.
+- [x] Ningún componente de `src/ui/` estrena un literal de color, espaciado o
       tipografía: `scripts/validateStyleTokensRepo.test.ts` sigue en verde
       sin añadir tokens.
-- [ ] `ficha.test.ts` sigue en verde sin modificar ningún valor esperado, y
+- [x] `ficha.test.ts` sigue en verde sin modificar ningún valor esperado, y
       `ui-no-scoring-internals` sigue pasando sin tocar
       `.dependency-cruiser.mjs`.
-- [ ] `npm run format:check`, `npm run lint`, `npm run typecheck`,
+- [x] `npm run format:check`, `npm run lint`, `npm run typecheck`,
       `npm run arch:check`, `npm run test:coverage`, `npm run check:photos` y
-      `npm run build` pasan en local.
+      `npm run build` pasan en local: 443 tests en verde, cobertura 100 % en
+      `domain/`+`data/`+`logging/`, y 73/73 fotos del catálogo en `2xx`.
 
 ## Dependencias y supuestos
 
