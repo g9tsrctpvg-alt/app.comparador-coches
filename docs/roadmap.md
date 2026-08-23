@@ -414,21 +414,26 @@ fase abierta. Se lista para no perderlo, no para bloquear nada.
   cobertura 100 % en `domain/`+`data/`+`logging/`) y los diecisiete
   criterios cerrados contra tests unitarios y Playwright sobre
   `npm run preview`. Consolidada en `docs/estado/interfaz.md`.
-- **Los anclajes de escala los fija el mercado — `product/0026`, `draft`;
-  ADR 0010, `draft`.** Los seis ejes puntúan contra escalas absolutas desde
-  la fase 3, pero los números de esos anclajes se eligieron mirando dónde
-  caían los candidatos —está escrito en `product/0002` y `product/0006`, que
-  movieron un anclaje para no dejar a los once entre 9,1 y 9,9—. El resultado
-  es una escala centrada en la gama comparada: un 10 en maletero son 620 L
-  cuando se venden 910, y el IONIQ 5 ya satura el 10 de anchura de hombros.
-  El ADR 0010 decide el criterio nuevo —los dos anclajes son los extremos del
-  turismo generalista de venta al público, sin deportivos ni ultralujo— y la
-  spec lo aplica a las siete magnitudes de `diario`, `viaje` y
-  `prestaciones`, con los modelos que fijan cada extremo y su fuente.
-  `coste` queda fuera —su 0 de precio es el presupuesto, no el mercado—,
-  `fiabilidad` ya cumplía el criterio y `estetica` no tiene mercado contra el
-  que anclarse. **Pendiente del gate humano:** ni la spec ni el ADR están
-  aprobados, así que no hay nada implementado.
+- **Los anclajes de escala los fija el mercado — `product/0026`,
+  `consolidated`; ADR 0010, `approved`.** Los seis ejes puntúan contra
+  escalas absolutas desde la fase 3, pero los números de esos anclajes se
+  habían elegido mirando dónde caían los candidatos —está escrito en
+  `product/0002` y `product/0006`, que movieron un anclaje para no dejar a
+  los once entre 9,1 y 9,9—. La escala había quedado centrada en la gama
+  comparada: un 10 en maletero eran 620 L cuando se venden 910, y el IONIQ 5
+  ya saturaba el 10 de anchura de hombros. El ADR 0010 fija el criterio
+  nuevo —los dos anclajes son los extremos del turismo generalista de venta
+  al público, sin deportivos ni ultralujo— y la spec lo aplica a las siete
+  magnitudes de `diario`, `viaje` y `prestaciones`, con los modelos que fijan
+  cada extremo y su fuente. `coste` queda fuera —su 0 de precio es el
+  presupuesto, no el mercado—, `fiabilidad` ya cumplía el criterio y
+  `estetica` no tiene mercado contra el que anclarse. Recorrió
+  `draft → approved → implemented → verified → consolidated` en la misma
+  sesión de trabajo, con el gate humano en commit propio sin implementación,
+  los trece criterios cerrados contra los tests de los tres ejes y una
+  ejecución directa sobre el catálogo real, y la CI entera verde en local
+  (444 tests, cobertura 100 % en `domain/`+`data/`+`logging/`). Consolidada
+  en `docs/estado/dominio.md` y `docs/proceso/calibracion-de-escalas.md`.
 - **Eje de autonomía y repostaje.** Es la mayor diferencia práctica entre los
   once candidatos en un viaje largo —los térmicos e híbridos hacen 640-950 km
   con un depósito, los eléctricos la mitad en autopista— y el modelo es hoy

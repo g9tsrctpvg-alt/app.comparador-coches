@@ -7,14 +7,15 @@ import {
   type PenaltyLine,
 } from '../breakdown';
 
-// Corsa/Polo: por debajo de esta anchura ya no hay problema de aparcar.
-const ANCHURA_BUENO_MM = 1765;
-// Techo práctico del mercado de turismos (Clase S, X7, Range Rover, Q7).
+// Kia Picanto (1.595 mm): el suelo del mercado, nada más estrecho se vende
+// como turismo (product/0026).
+const ANCHURA_BUENO_MM = 1600;
+// Techo real del mercado (Range Rover 2.003 mm, BMW X7 2.000 mm).
 const ANCHURA_MALO_MM = 2000;
-// Por debajo de esto el coche aparca en cualquier hueco.
-const LONGITUD_BUENO_MM = 4000;
-// El límite lo pone la plaza de aparcamiento, no el mercado.
-const LONGITUD_MALO_MM = 5200;
+// Kia Picanto (3.605 mm): el turismo más corto a la venta.
+const LONGITUD_BUENO_MM = 3600;
+// BMW i7 (5.391 mm): el techo real del mercado, no la plaza de aparcamiento.
+const LONGITUD_MALO_MM = 5400;
 
 export function diarioFormula(assumptions: GlobalAssumptions): string {
   const ancho = assumptions.ponderacionAnchoDiario;

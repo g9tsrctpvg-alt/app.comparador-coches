@@ -3,7 +3,8 @@
 > Este documento manda sobre **cómo se fija la escala de un eje de puntuación
 > y cómo se comprueba que el eje mide lo que dice medir**. El principio —por
 > qué las escalas son absolutas y no relativas al conjunto— lo decide el
-> ADR 0004; los anclajes concretos de cada eje viven en su spec y, una vez
+> ADR 0004; con qué criterio se eligen los dos números de cada escala, el
+> ADR 0010; los anclajes concretos de cada eje viven en su spec y, una vez
 > consolidados, en `docs/estado/dominio.md`.
 
 ## 1. La invariante que todo esto sirve
@@ -40,33 +41,51 @@ defendibles y discutibles. Los pasos, en orden:
    memoria. Si la fuente no publica el dato, se dice que no lo publica y se
    marca como estimado: un anclaje sobre un dato inventado contamina todas las
    notas de ese eje.
-4. **Presentar la tabla y pedir el juicio.** Los anclajes son subjetivos por
-   naturaleza —«a partir de aquí ya no mejora», «a partir de aquí es
-   inaceptable»— y los pone una persona que conoce esos coches. Lo que la
-   tabla aporta es que el juicio se emita sobre casos concretos y no sobre
-   números abstractos.
+4. **Presentar la tabla y pedir el juicio.** Sobre todo en el modelo que fija
+   cada extremo: dos personas razonables pueden discrepar sobre qué cuenta
+   como «mercado generalista» y qué queda fuera (ADR 0010). Lo que la tabla
+   aporta es que el juicio se emita sobre casos concretos, con marca, modelo
+   y fuente, y no sobre números abstractos.
 5. **Fijar los dos anclajes y escribir el razonamiento de cada uno.** Un
    anclaje sin razonamiento escrito es un número mágico, y el siguiente que lo
    lea no sabrá si moverlo.
-6. **Comprobar dónde caen los candidatos, y si eso es aceptable.** Aquí es
-   donde se detecta una escala mal puesta: si los once quedan entre 9,1 y 9,9,
-   el 0 está demasiado lejos; si medio catálogo saca 0,0, está demasiado
-   cerca.
+6. **Comprobar dónde caen los candidatos, y si el resultado es legible.**
+   Ya no es una comprobación que mueva el anclaje —eso es exactamente lo que
+   el ADR 0010 prohíbe: apretar la escala contra la gama comparada hace dos
+   veces el trabajo que ya hacen los pesos—, pero sigue siendo la tabla que
+   se presenta al aprobar. Si los candidatos se apiñan en una magnitud, es
+   información real sobre lo poco que varían en ella, y quien decide cuánto
+   pesa esa información es el peso del eje, nunca el anclaje.
 
 ### Elegir bien los extremos
 
-**El 10 es «a partir de aquí deja de mejorar», no «lo mejor que existe».** Un
-coche más estrecho que un Corsa no es más fácil de aparcar por estrecho.
+**Los dos anclajes son los extremos del mercado real de venta al público, no
+un umbral de utilidad elegido a ojo (ADR 0010).** El 10 es «no hay nada mejor
+a la venta»: el mejor valor de esa magnitud en un turismo generalista, con
+modelo y fuente publicada detrás. El 0 es «lo peor que se vende», con el
+mismo requisito. Ninguno de los dos se elige mirando dónde caen los
+candidatos del catálogo —eso fue el fallo que el ADR 0010 corrige: los
+anclajes de `diario`, `viaje` y `prestaciones` se habían ido apretando contra
+la gama que se estaba comparando, y un 10 en maletero llegó a significar 620
+litros cuando el mercado vende 910.
 
-**El 0 es «a partir de aquí es inaceptable», no «lo peor imaginable».** Se
-descartó anclar el 0 de anchura en una caravana precisamente por eso: habría
-dejado a los once candidatos entre 9,1 y 9,9, indistinguibles, y a un Range
-Rover con un 5,9 en facilidad de aparcamiento.
+**El universo que fija los extremos es el turismo generalista de venta al
+público**, sin deportivos ni versiones de prestaciones, sin ultralujo, sin
+comerciales ni cuadriciclos: anclar la aceleración en un superdeportivo no
+informa de nada sobre un SUV familiar. El universo lo declara el ADR 0010 una
+sola vez, y no se redecide eje a eje.
 
 **Cuando existe una distribución publicada, los extremos ya están dados.** El
 índice de fiabilidad de la OCU va de 64 a 93 sobre 39 marcas: anclar ahí no
 exige justificar por qué se recorta, porque no se recorta nada. Es el mejor
 caso posible y conviene buscarlo antes de inventar nada.
+
+**Una magnitud puede quedar fuera del criterio, con su razón declarada.** El
+precio de compra en `coste` ancla su 0 en el presupuesto del comprador, no en
+el coche más caro del mercado: es el techo duro de esta compra concreta, y
+re-anclarlo al mercado dejaría al eje sin nada que decir sobre lo que cuesta
+el coche. Una preferencia sin referente externo —la estética— tampoco tiene
+mercado contra el que anclarse, y el ADR 0010 no le aplica.
 
 ### Entre anclajes: la curva en S
 
