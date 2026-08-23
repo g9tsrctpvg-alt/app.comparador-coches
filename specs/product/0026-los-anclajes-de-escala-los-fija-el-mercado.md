@@ -1,7 +1,7 @@
 # 0026 — Los anclajes de escala los fija el mercado, no la gama comparada
 
 - **Id:** product/0026
-- **Estado:** implemented
+- **Estado:** verified
 - **Tipo:** product
 - **Fecha:** 2026-08-23
 - **Specs relacionadas:** product/0002, product/0003, product/0005,
@@ -184,19 +184,25 @@ Y la nota de cada eje afectado:
 
 | Coche | `diario` | `viaje` | `prestaciones` |
 | --- | --- | --- | --- |
-| EV3 | 7,6 → 4,6 | 5,5 → 3,2 | 7,4 → 4,9 |
+| EV3 | 6,1 → 3,1 | 5,5 → 3,2 | 7,4 → 4,9 |
 | Kona HEV | 8,2 → 4,9 | 7,1 → 3,9 | 1,9 → 2,5 |
-| Kona Eléctrico | 8,2 → 4,9 | 7,1 → 3,9 | 8,6 → 5,2 |
+| Kona Eléctrico | 6,7 → 3,4 | 7,1 → 3,9 | 8,6 → 5,2 |
 | Corolla Cross | 7,7 → 4,6 | 5,9 → 3,3 | 2,6 → 2,6 |
 | Tonale | 6,9 → 4,0 | 7,2 → 4,0 | 6,0 → 4,2 |
 | Sportage HEV | 6,0 → 3,5 | 9,1 → 5,4 | 9,4 → 5,9 |
 | Civic e:HEV | 7,8 → 4,8 | 6,6 → 4,3 | 8,4 → 5,1 |
 | CX-5 | 5,4 → 3,1 | 9,8 → 6,0 | 2,0 → 2,7 |
-| ID.4 | 6,2 → 3,6 | 8,8 → 5,0 | 9,6 → 5,9 |
-| EV5 | 5,2 → 3,0 | 9,4 → 5,7 | 5,9 → 4,3 |
-| IONIQ 5 | 4,5 → 2,6 | 9,1 → 6,8 | 7,3 → 4,9 |
+| ID.4 | 4,7 → 2,1 | 8,8 → 5,0 | 9,6 → 5,9 |
+| EV5 | 3,7 → 1,5 | 9,4 → 5,7 | 5,9 → 4,3 |
+| IONIQ 5 | 3,0 → 1,1 | 9,1 → 6,8 | 7,3 → 4,9 |
 | Tucson HEV | 6,1 → 3,6 | 9,2 → 5,7 | 8,6 → 5,2 |
 | Tucson PHEV | 6,1 → 3,6 | 8,8 → 5,1 | 9,7 → 6,5 |
+
+Las cinco filas con `diario` más bajo de lo que la sola escala de anchura y
+longitud daría a entender —EV3, Kona Eléctrico, ID.4, EV5, IONIQ 5— son las
+cinco eléctricas: la penalización de −1,5 puntos sin carga en casa
+(`product/0008`) se sigue aplicando después de combinar las dos escalas,
+igual que antes de esta spec.
 
 **Es aceptable, y esto es lo que hay que juzgar al aprobar la spec.** Tres
 lecturas:
@@ -204,39 +210,42 @@ lecturas:
 1. **Nadie satura ya un extremo**, salvo el IONIQ 5 en anchura de hombros, que
    marca un 10,0 legítimo: mide 1.460 mm y ese es el techo del mercado. Los
    cinco empates en 10,0 de hoy desaparecen.
-2. **Las notas bajan en bloque.** Ningún candidato pasa de 4,9 en `diario` ni
-   de 6,8 en `viaje`, y en CV por tonelada el mejor saca 4,6. Es la lectura
-   correcta: son SUV medios de 1.500-2.100 kg medidos contra todo lo que se
-   vende, y en uso diario un SUV medio no es bueno, es normal tirando a
-   estorbo. Hoy la escala decía que eran buenos porque los comparaba con el
-   resto de SUV medios.
+2. **Las notas bajan en bloque.** Ningún candidato pasa de 4,9 en `diario`
+   —lo saca el Kona HEV, la única no eléctrica que no arrastra la
+   penalización de carga— ni de 6,8 en `viaje`, y en CV por tonelada el mejor
+   saca 4,6. Es la lectura correcta: son SUV medios de 1.500-2.100 kg medidos
+   contra todo lo que se vende, y en uso diario un SUV medio no es bueno, es
+   normal tirando a estorbo. Hoy la escala decía que eran buenos porque los
+   comparaba con el resto de SUV medios.
 3. **Se pierde separación.** El recorrido de `diario` entre el mejor y el peor
-   candidato pasa de 3,7 puntos a 2,3; el de `prestaciones`, de 7,8 a 4,0. Es
-   el coste que el ADR 0010 asume, y quien decide cuánto importa cada eje son
-   los pesos.
+   candidato pasa de 5,2 puntos a 3,8; el de `viaje`, de 4,3 a 3,6; el de
+   `prestaciones`, de 7,7 a 4,0. Es el coste que el ADR 0010 asume, y quien
+   decide cuánto importa cada eje son los pesos.
 
 Con los pesos por defecto (viaje 4, diario 3, fiabilidad 2, estética 2,
 prestaciones 1, coste 1), la clasificación queda:
 
 | # | Hoy | % | Con los anclajes nuevos | % |
 | --- | --- | --- | --- | --- |
-| 1 | Tucson HEV | 78,1 | Tucson HEV | 58,8 |
+| 1 | Tucson HEV | 78,2 | Tucson HEV | 59,0 |
 | 2 | Tucson PHEV | 77,6 | Tucson PHEV | 57,8 |
-| 3 | Sportage HEV | 75,8 | EV3 | 57,2 |
-| 4 | EV5 | 73,8 | Sportage HEV | 56,1 |
-| 5 | Kona Eléctrico | 73,7 | EV5 | 56,0 |
-| 6 | EV3 | 73,3 | CX-5 | 54,8 |
-| 7 | ID.4 | 71,5 | Civic e:HEV | 54,4 |
-| 8 | CX-5 | 71,5 | Kona Eléctrico | 53,9 |
-| 9 | Civic e:HEV | 70,8 | IONIQ 5 | 53,7 |
-| 10 | Kona HEV | 69,2 | Kona HEV | 52,4 |
-| 11 | Tonale | 66,8 | ID.4 | 50,8 |
-| 12 | IONIQ 5 | 66,8 | Tonale | 48,8 |
-| 13 | Corolla Cross | 59,2 | Corolla Cross | 44,1 |
+| 3 | Sportage HEV | 75,4 | Sportage HEV | 55,6 |
+| 4 | CX-5 | 72,2 | CX-5 | 55,5 |
+| 5 | Civic e:HEV | 70,8 | EV3 | 54,5 |
+| 6 | EV3 | 70,5 | Civic e:HEV | 54,4 |
+| 7 | Kona Eléctrico | 70,2 | Kona HEV | 52,6 |
+| 8 | EV5 | 69,8 | EV5 | 52,0 |
+| 9 | Kona HEV | 69,4 | Kona Eléctrico | 50,4 |
+| 10 | ID.4 | 68,4 | IONIQ 5 | 49,8 |
+| 11 | Tonale | 67,2 | Tonale | 49,1 |
+| 12 | IONIQ 5 | 62,9 | ID.4 | 47,7 |
+| 13 | Corolla Cross | 59,4 | Corolla Cross | 44,3 |
 
-La cabeza no se mueve y el último tampoco. Lo que se reordena es la mitad de
-la tabla, que es donde estaban los empates que la escala estrecha fabricaba:
-el EV3 sube tres puestos y el ID.4 baja cuatro.
+La cabeza no se mueve —Tucson HEV y PHEV siguen primero y segundo— y el
+último tampoco: Corolla Cross cierra la tabla en los dos casos. Lo que se
+reordena es la zona media: el IONIQ 5 sube dos puestos —su `viaje` era el
+único eje donde ya destacaba, y ahora pesa más al comprimirse el resto— y el
+ID.4 baja dos.
 
 ## Requisitos / comportamiento esperado
 
@@ -268,30 +277,30 @@ el EV3 sube tres puestos y el ID.4 baja cuatro.
 
 > Obligatorios y verificables.
 
-- [ ] Un coche de 1.600 mm de ancho saca un 10 en anchura, y uno de 1.500 mm
+- [x] Un coche de 1.600 mm de ancho saca un 10 en anchura, y uno de 1.500 mm
       también; uno de 2.000 mm saca un 0, y uno de 2.100 mm también.
-- [ ] Un coche de 3.600 mm de largo saca un 10 en longitud, y uno de 5.400 mm
+- [x] Un coche de 3.600 mm de largo saca un 10 en longitud, y uno de 5.400 mm
       un 0.
-- [ ] Un coche con 910 L de maletero saca un 10, y uno con 1.000 L también;
+- [x] Un coche con 910 L de maletero saca un 10, y uno con 1.000 L también;
       uno con 185 L saca un 0, y uno con 150 L también.
-- [ ] Un coche con 3.200 mm de batalla saca un 10, y uno con 2.400 mm un 0.
-- [ ] Un coche con 1.460 mm de anchura de hombros saca un 10, y uno con
+- [x] Un coche con 3.200 mm de batalla saca un 10, y uno con 2.400 mm un 0.
+- [x] Un coche con 1.460 mm de anchura de hombros saca un 10, y uno con
       1.260 mm un 0.
-- [ ] Un coche de 260 CV/t saca un 10, y uno de 65 CV/t un 0.
-- [ ] Un coche que hace el 0-100 en 4,4 s saca un 10, y uno que lo hace en
+- [x] Un coche de 260 CV/t saca un 10, y uno de 65 CV/t un 0.
+- [x] Un coche que hace el 0-100 en 4,4 s saca un 10, y uno que lo hace en
       16,7 s un 0.
-- [ ] Un coche en el punto medio de cualquiera de esas siete escalas saca un 5
+- [x] Un coche en el punto medio de cualquiera de esas siete escalas saca un 5
       en esa magnitud: la curva sigue siendo la misma.
-- [ ] Ningún candidato del catálogo actual saca 10,0 en anchura de hombros
+- [x] Ningún candidato del catálogo actual saca 10,0 en anchura de hombros
       salvo el IONIQ 5, que lo saca por medir 1.460 mm.
-- [ ] Las notas de `coste`, `fiabilidad` y `estetica` de todos los candidatos
+- [x] Las notas de `coste`, `fiabilidad` y `estetica` de todos los candidatos
       del catálogo son idénticas antes y después del cambio.
-- [ ] La nota de cada eje de un coche es la misma con trece candidatos en el
+- [x] La nota de cada eje de un coche es la misma con trece candidatos en el
       catálogo que con uno solo.
-- [ ] La descripción de fórmula de `diario`, `viaje` y `prestaciones` cita los
+- [x] La descripción de fórmula de `diario`, `viaje` y `prestaciones` cita los
       anclajes nuevos, y no queda ningún anclaje antiguo escrito en el código
       ni en la interfaz.
-- [ ] La CI pasa entera en local, en la secuencia de
+- [x] La CI pasa entera en local, en la secuencia de
       `docs/proceso/ci-y-guardarrailes.md`.
 
 ## Dependencias y supuestos

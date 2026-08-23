@@ -74,6 +74,42 @@ describe('buildDiarioBreakdown', () => {
     expect(widthScale(breakdown, 'bmw-x1-xdrive25e').score).toBe(0);
   });
 
+  it('scores 10 on length at and below the good anchor, and 0 at and above the bad anchor', () => {
+    const breakdown = buildDiarioBreakdown(
+      [
+        {
+          ...threeCarFixture[0]!,
+          lengthMm: { ...threeCarFixture[0]!.lengthMm, value: 3600 },
+        },
+        {
+          ...threeCarFixture[1]!,
+          lengthMm: { ...threeCarFixture[1]!.lengthMm, value: 3500 },
+        },
+      ],
+      DEFAULT_ASSUMPTIONS,
+      3,
+    );
+    expect(lengthScale(breakdown, 'kia-sportage-hev').score).toBe(10);
+    expect(lengthScale(breakdown, 'bmw-x1-xdrive25e').score).toBe(10);
+
+    const atAndAboveBad = buildDiarioBreakdown(
+      [
+        {
+          ...threeCarFixture[0]!,
+          lengthMm: { ...threeCarFixture[0]!.lengthMm, value: 5400 },
+        },
+        {
+          ...threeCarFixture[1]!,
+          lengthMm: { ...threeCarFixture[1]!.lengthMm, value: 5500 },
+        },
+      ],
+      DEFAULT_ASSUMPTIONS,
+      3,
+    );
+    expect(lengthScale(atAndAboveBad, 'kia-sportage-hev').score).toBe(0);
+    expect(lengthScale(atAndAboveBad, 'bmw-x1-xdrive25e').score).toBe(0);
+  });
+
   it('scores width at the midpoint as 5, and 10% from the bad anchor as under 1: an S curve, not a line', () => {
     const midpoint = 1600 + 0.5 * (2000 - 1600);
     const near10PctFromBad = 2000 - 0.1 * (2000 - 1600);
