@@ -29,9 +29,9 @@ export const AXIS_CONTENT: Record<AxisId, AxisContent> = {
       'piernas de quien va detrás.',
     data: 'Litros de maletero y batalla (la distancia entre ejes, que aproxima el espacio interior).',
     anchorReasoning: [
-      'El techo lo marca el Škoda Superb —620 L—, la referencia de «coche para viajar en familia»: a partir de ahí lo que hay son monovolúmenes y furgonetas, otra categoría. El suelo es un utilitario de ciudad, donde el equipaje de cuatro personas ya no cabe.',
-      'Mismas referencias de coche que el maletero: el Superb marca el techo y un utilitario de ciudad el suelo. El maletero pesa más —0,5 frente a 0,25 de la batalla y 0,25 de la anchura de hombros— porque es la restricción que se incumple: el equipaje cabe o no cabe. El espacio de atrás es gradual, y la batalla solo lo mide de forma indirecta, a lo largo.',
-      'El mismo Superb marca el techo —1.390 mm—. El suelo lo ponen el Dacia Sandero y la propia Alfa Romeo Giulietta, ambos en 1.310 mm: un recorrido corto a propósito, porque entre un utilitario y un familiar grande esta medida varía poco y aporta matiz, no decide (ADR 0004). Pesa lo mismo que la batalla —0,25 cada una— porque mide el mismo tipo de espacio de los que van atrás, a lo ancho en vez de a lo largo, y es igual de gradual.',
+      'El techo lo marca el Škoda Kodiaq —910 L a cinco plazas—, el maletero generalista más grande del mercado. El suelo lo pone el Fiat 500 Hybrid —185 L—: los dos anclajes son extremos del mercado, no de la gama que se compara (ADR 0010).',
+      'Mismas referencias que el maletero, en otra magnitud: el BMW i7 marca el techo de batalla —3.215 mm— y el Kia Picanto el suelo —2.400 mm, la batalla más corta a la venta—. El maletero pesa más —0,5 frente a 0,25 de la batalla y 0,25 de la anchura de hombros— porque es la restricción que se incumple: el equipaje cabe o no cabe. El espacio de atrás es gradual, y la batalla solo lo mide de forma indirecta, a lo largo.',
+      'El Mercedes Clase E marca el techo —146 cm de hombros en la segunda fila, según las mediciones de km77—; el Kia Picanto el suelo —126 cm—. Pesa lo mismo que la batalla —0,25 cada una— porque mide el mismo tipo de espacio de los que van atrás, a lo ancho en vez de a lo largo, y es igual de gradual.',
     ],
   },
   diario: {
@@ -39,8 +39,8 @@ export const AXIS_CONTENT: Record<AxisId, AxisContent> = {
       'Qué tan fácil es usar el coche en el día a día: aparcarlo, moverlo por ciudad, meterlo en un hueco estrecho.',
     data: 'Anchura y longitud de carrocería, sin espejos.',
     anchorReasoning: [
-      'Con 1.765 mm aparcar deja de ser un problema —coches como el Corsa o el Polo—. 2.000 mm es el techo práctico del mercado de turismos: ahí ya están la Clase S, el X7, el Q7 o el Range Rover. Anclar el cero más arriba, en algo de verdad inmanejable, hundiría la escala y dejaría a todos los coches pegados cerca del 10.',
-      'Por debajo de 4.000 mm el coche aparca en cualquier hueco. Los 5.200 mm del cero los pone el tamaño de una plaza de aparcamiento con margen, no el mercado: 5.000 mm exactos resultaba severo con coches de 4,7 m que sí caben en una plaza normal.',
+      'El Kia Picanto —1.595 mm— marca el suelo del mercado: nada más estrecho se vende como turismo. 2.000 mm es el techo real —Range Rover y BMW X7 lo rozan por los dos lados—, así que ninguno de los dos anclajes es un umbral inventado (ADR 0010).',
+      'Mismo Picanto abajo —3.605 mm, el turismo más corto a la venta—. Arriba, el BMW i7 —5.391 mm— pone el techo real del mercado, no el tamaño de una plaza de aparcamiento.',
     ],
   },
   prestaciones: {
@@ -48,8 +48,8 @@ export const AXIS_CONTENT: Record<AxisId, AxisContent> = {
       'Cuánto empuje tiene el coche: potencia relativa al peso y aceleración.',
     data: 'CV por tonelada, y aceleración de 0 a 100 km/h.',
     anchorReasoning: [
-      'El suelo son coches reales que van justos: el Fiat Panda Hybrid (71,4 CV/t) y el Dacia Sandero TCe 90, coches que funcionan pero en los que incorporarse a una autovía cargado es un cálculo. El techo se pone con margen por encima del Alfa Romeo Giulietta 1.4 (125,5 CV/t) —la referencia de «esto ya no se puede pedir»—, para que un 10 signifique eso y no «lo que ya tengo».',
-      'Mismo criterio que los CV por tonelada: el suelo es el Dacia Sandero (13,4 s) y el techo se fija con margen sobre el Giulietta (7,7 s), en territorio de Golf GTI.',
+      'El suelo lo pone el Dacia Sandero SCe 65 (67 CV, 1.012 kg, 66,2 CV/t): el coche más barato del mercado. El techo lo pone el Tesla Model 3 Gran Autonomía 4WD (498 CV, 1.899 kg, 262,2 CV/t): una berlina de venta normal, no una versión de prestaciones — el universo de este eje excluye deportivos y superdeportivos (ADR 0010).',
+      'Los mismos dos coches por los dos extremos: 16,7 s el Sandero, 4,4 s el Model 3.',
     ],
   },
   fiabilidad: {

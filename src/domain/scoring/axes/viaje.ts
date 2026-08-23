@@ -2,21 +2,18 @@ import type { Car } from '../../car';
 import { scoreOnAbsoluteScale } from '../scale';
 import { inputDatumFrom, type AxisBreakdown } from '../breakdown';
 
-// Skoda Superb: referencia generalista de "coche para viajar en familia".
-// Por encima el problema deja de existir; por debajo hay un utilitario de
-// ciudad donde el equipaje de cuatro personas ya no cabe.
-const MALETERO_BUENO_L = 620;
-const MALETERO_MALO_L = 250;
-// Mismo Superb como techo; el suelo es donde el espacio para los de atrás
-// ya no da ni para un ocupante ocasional.
-const BATALLA_BUENA_MM = 2850;
+// Skoda Kodiaq (910 L a 5 plazas): techo generalista del mercado. Fiat 500
+// Hybrid (185 L): el suelo (product/0026).
+const MALETERO_BUENO_L = 910;
+const MALETERO_MALO_L = 185;
+// BMW i7 (3.215 mm) como techo real de mercado; el suelo es exactamente la
+// batalla del Kia Picanto (2.400 mm), que ya lo era.
+const BATALLA_BUENA_MM = 3200;
 const BATALLA_MALA_MM = 2400;
-// Mismo Superb arriba (1.390 mm); abajo, el utilitario de ciudad donde tres
-// atrás ya van agolpados —Sandero y Giulietta miden ambos 1.310 mm—. El
-// recorrido es corto a propósito: entre un utilitario y un familiar grande
-// esta medida varía poco, así que aporta matiz y no decide (ADR 0004).
-const ANCHURA_HOMBROS_BUENA_MM = 1390;
-const ANCHURA_HOMBROS_MALA_MM = 1310;
+// Mercedes Clase E (146 cm, km77) arriba; Kia Picanto (126 cm, km77) abajo:
+// los extremos del mercado, no de la gama comparada.
+const ANCHURA_HOMBROS_BUENA_MM = 1460;
+const ANCHURA_HOMBROS_MALA_MM = 1260;
 
 export const VIAJE_FORMULA =
   'nota = 0,5 × escala(maletero) + 0,25 × escala(batalla) + 0,25 × escala(anchura de hombros). ' +

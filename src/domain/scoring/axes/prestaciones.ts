@@ -2,16 +2,15 @@ import type { Car } from '../../car';
 import { scoreOnAbsoluteScale } from '../scale';
 import { inputDatumFrom, type AxisBreakdown } from '../breakdown';
 
-// Panda 1.0 Hybrid GSE (71,4 CV/t) y Sandero TCe 90 (13,4 s): el suelo
-// práctico del mercado, coches que funcionan pero donde incorporarse
-// cargado a una autovía es un cálculo.
-const CVT_BUENO = 145;
-const CVT_MALO = 75;
-// Giulietta 1.4 MultiAir 170 (125,5 CV/t, 7,7 s) es la referencia de
-// primera mano de "esto ya no se puede pedir"; el 10 se pone con margen por
-// encima, en territorio de Golf GTI.
-const ACCEL_BUENA_S = 6.5;
-const ACCEL_MALA_S = 13.0;
+// Tesla Model 3 Gran Autonomía 4WD (498 CV, 1.899 kg, 262,2 CV/t) arriba:
+// una berlina de venta normal, no una versión de prestaciones. Dacia Sandero
+// SCe 65 (67 CV, 1.012 kg, 66,2 CV/t) abajo: el coche más barato del mercado
+// (product/0026).
+const CVT_BUENO = 260;
+const CVT_MALO = 65;
+// Los mismos dos coches por los dos extremos de aceleración.
+const ACCEL_BUENA_S = 4.4;
+const ACCEL_MALA_S = 16.7;
 
 export const PRESTACIONES_FORMULA =
   'nota = 0,5 × escala(CV/t) + 0,5 × escala(aceleración 0-100, invertida). ' +

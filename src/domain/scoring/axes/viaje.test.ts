@@ -55,11 +55,11 @@ describe('buildViajeBreakdown', () => {
     );
   });
 
-  it('scores 10 on trunk at and above 620L, and 0 at and below 250L', () => {
-    const roomy = withTrunkAndWheelbase(700, 2700, 'roomy');
-    const atAnchor = withTrunkAndWheelbase(620, 2700, 'at-anchor');
-    const cramped = withTrunkAndWheelbase(180, 2700, 'cramped');
-    const atBad = withTrunkAndWheelbase(250, 2700, 'at-bad');
+  it('scores 10 on trunk at and above 910L, and 0 at and below 185L', () => {
+    const roomy = withTrunkAndWheelbase(950, 2700, 'roomy');
+    const atAnchor = withTrunkAndWheelbase(910, 2700, 'at-anchor');
+    const cramped = withTrunkAndWheelbase(150, 2700, 'cramped');
+    const atBad = withTrunkAndWheelbase(185, 2700, 'at-bad');
     const breakdown = buildViajeBreakdown([roomy, atAnchor, cramped, atBad], 4);
     expect(trunkScale(breakdown, 'roomy').score).toBe(10);
     expect(trunkScale(breakdown, 'at-anchor').score).toBe(10);
@@ -67,21 +67,21 @@ describe('buildViajeBreakdown', () => {
     expect(trunkScale(breakdown, 'at-bad').score).toBe(0);
   });
 
-  it('scores 10 on wheelbase at and above 2850mm, and 0 at and below 2400mm', () => {
-    const roomy = withTrunkAndWheelbase(500, 2850, 'roomy');
+  it('scores 10 on wheelbase at and above 3200mm, and 0 at and below 2400mm', () => {
+    const roomy = withTrunkAndWheelbase(500, 3200, 'roomy');
     const cramped = withTrunkAndWheelbase(500, 2400, 'cramped');
     const breakdown = buildViajeBreakdown([roomy, cramped], 4);
     expect(wheelbaseScale(breakdown, 'roomy').score).toBe(10);
     expect(wheelbaseScale(breakdown, 'cramped').score).toBe(0);
   });
 
-  it('scores 10 on rear shoulder width at and above 1390mm, and 0 at and below 1310mm', () => {
+  it('scores 10 on rear shoulder width at and above 1460mm, and 0 at and below 1260mm', () => {
     const breakdown = buildViajeBreakdown(
       [
-        withShoulderWidth(1420, 'wide'),
-        withShoulderWidth(1390, 'at-anchor'),
-        withShoulderWidth(1310, 'at-bad'),
-        withShoulderWidth(1280, 'narrow'),
+        withShoulderWidth(1480, 'wide'),
+        withShoulderWidth(1460, 'at-anchor'),
+        withShoulderWidth(1260, 'at-bad'),
+        withShoulderWidth(1240, 'narrow'),
       ],
       4,
     );
@@ -91,14 +91,14 @@ describe('buildViajeBreakdown', () => {
     expect(shoulderScale(breakdown, 'narrow').score).toBe(0);
   });
 
-  it('scores the rear shoulder width midpoint of 1350mm as 5', () => {
-    const breakdown = buildViajeBreakdown([withShoulderWidth(1350, 'mid')], 4);
+  it('scores the rear shoulder width midpoint of 1360mm as 5', () => {
+    const breakdown = buildViajeBreakdown([withShoulderWidth(1360, 'mid')], 4);
     expect(shoulderScale(breakdown, 'mid').score).toBeCloseTo(5, 9);
   });
 
   it('scores the trunk midpoint as 5, and 10% from the bad anchor as under 1: an S curve, not a line', () => {
-    const midpoint = 250 + 0.5 * (620 - 250);
-    const near10PctFromBad = 620 - 0.9 * (620 - 250);
+    const midpoint = 185 + 0.5 * (910 - 185);
+    const near10PctFromBad = 910 - 0.9 * (910 - 185);
     const breakdown = buildViajeBreakdown(
       [
         withTrunkAndWheelbase(midpoint, 2700, 'mid'),
@@ -114,8 +114,8 @@ describe('buildViajeBreakdown', () => {
     const base = threeCarFixture[0]!;
     const t1 = 0.2;
     const t2 = 0.6;
-    const trunkAt = (t: number) => 250 + t * (620 - 250);
-    const wheelbaseAt = (t: number) => 2400 + t * (2850 - 2400);
+    const trunkAt = (t: number) => 185 + t * (910 - 185);
+    const wheelbaseAt = (t: number) => 2400 + t * (3200 - 2400);
 
     const withTrunkPair = buildViajeBreakdown(
       [
@@ -154,8 +154,8 @@ describe('buildViajeBreakdown', () => {
     const base = threeCarFixture[0]!;
     const t1 = 0.2;
     const t2 = 0.6;
-    const wheelbaseAt = (t: number) => 2400 + t * (2850 - 2400);
-    const shoulderAt = (t: number) => 1310 + t * (1390 - 1310);
+    const wheelbaseAt = (t: number) => 2400 + t * (3200 - 2400);
+    const shoulderAt = (t: number) => 1260 + t * (1460 - 1260);
 
     const gapBetween = (pair: ReturnType<typeof buildViajeBreakdown>) =>
       pair.get(base.id)!.score - pair.get('other')!.score;
@@ -226,16 +226,16 @@ describe('buildViajeBreakdown', () => {
     const sportage = breakdown.get('kia-sportage-hev')!;
     expect(sportage.normalization).toBeUndefined();
     expect(trunkScale(breakdown, 'kia-sportage-hev')).toMatchObject({
-      goodAnchor: 620,
-      badAnchor: 250,
+      goodAnchor: 910,
+      badAnchor: 185,
     });
     expect(wheelbaseScale(breakdown, 'kia-sportage-hev')).toMatchObject({
-      goodAnchor: 2850,
+      goodAnchor: 3200,
       badAnchor: 2400,
     });
     expect(shoulderScale(breakdown, 'kia-sportage-hev')).toMatchObject({
-      goodAnchor: 1390,
-      badAnchor: 1310,
+      goodAnchor: 1460,
+      badAnchor: 1260,
     });
     expect(
       sportage.subcomponents!.every((s) => s.normalization === undefined),
