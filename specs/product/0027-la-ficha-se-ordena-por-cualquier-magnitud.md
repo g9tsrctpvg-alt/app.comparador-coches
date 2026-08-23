@@ -1,7 +1,7 @@
 # 0027 — La ficha se ordena por cualquiera de sus magnitudes
 
 - **Id:** product/0027
-- **Estado:** implemented
+- **Estado:** verified
 - **Tipo:** product
 - **Fecha:** 2026-08-23
 - **Specs relacionadas:** product/0018, product/0020, product/0021,
@@ -148,36 +148,61 @@ dominio ya declara.
 
 > Obligatorios y verificables.
 
-- [ ] El conjunto de criterios del dominio es exactamente `catalog` más
+- [x] El conjunto de criterios del dominio es exactamente `catalog` más
       `FICHA_FIELDS`, comprobado por test contra `FICHA_FIELDS` y no contra
       una lista repetida: si mañana se añade una magnitud a la ficha, la
-      opción de orden aparece sola o el test falla.
-- [ ] El `<select id="sort-select">` renderiza veintitrés `<option>` y seis
+      opción de orden aparece sola o el test falla. `ficha.test.ts`, «offers
+      the catalogue order plus every ficha field, and nothing else»;
+      `FICHA_SORT_CRITERIA` se declara como `['catalog', ...FICHA_FIELDS]`.
+- [x] El `<select id="sort-select">` renderiza veintitrés `<option>` y seis
       `<optgroup>`, con los rótulos de bloque de «Completa» en su orden, y
       cada rótulo de opción coincide con el `label` del `FieldDef` de esa
-      magnitud.
-- [ ] Ordenar por `powerCv` deja las columnas de mayor a menor potencia, y
+      magnitud. `FichaPage.test.tsx`, «offers the catalogue order plus every
+      field of "Completa", grouped by block, starting on length», y medido en
+      el navegador sobre el build de producción: 23 opciones y los seis
+      grupos `Generación, Tamaño y espacio, Mecánica y prestaciones, Coste,
+      Fiabilidad y respaldo, Juicio propio`.
+- [x] Ordenar por `powerCv` deja las columnas de mayor a menor potencia, y
       ordenar por `priceEur` de menor a mayor precio, con el catálogo real.
-- [ ] Ordenar por una magnitud `neutral` (`heightMm`) deja las columnas de
-      menor a mayor altura.
-- [ ] Ordenar por `Longitud`, `Anchura` y `Precio` produce exactamente el
-      mismo orden que antes de esta spec: los tests vigentes de `sortFicha`
-      siguen en verde sin cambiar ningún valor esperado.
-- [ ] Una entidad sin el dato queda la última tanto ordenando por una
+      Comprobado sobre `cars.json`: potencia `Tucson PHEV 288 → ID.4 286 →
+      X1 245 → Sportage 239 → … → Kona HEV 138`; precio `EV3 32.000 → …
+      → EV5 53.071`. En el navegador, con la potencia elegida, las columnas
+      salen `Tucson PHEV, ID.4, Sportage HEV, IONIQ 5, …` tras la fijada.
+- [x] Ordenar por una magnitud `neutral` (`heightMm`) deja las columnas de
+      menor a mayor altura. Sobre el catálogo real, `Civic e:HEV 1408 → …
+      → CX-5 1695`; en el navegador, `Civic e:HEV, EV3, Kona Eléctrico, …`
+      tras la fijada.
+- [x] Ordenar por `Longitud`, `Anchura` y `Precio` produce exactamente el
+      mismo orden que antes de esta spec: los tres tests vigentes de
+      `sortFicha` («sorts ascending by length/width/price») siguen en verde
+      sin cambiar ningún valor esperado, igual que los dos de la ficha que
+      comprueban el orden por defecto de columnas.
+- [x] Una entidad sin el dato queda la última tanto ordenando por una
       magnitud `moreIsBetter` como por una `moreIsWorse`, comprobado con las
-      dos.
-- [ ] El criterio vigente ordena igual la tabla, las opciones de «Comparar»
-      y la tira de candidatos de la vista de duelo.
-- [ ] Con `fieldSet` en `Esenciales`, elegir una magnitud que solo enseña
+      dos. `ficha.test.ts`, «sends an entity without the sort field to the
+      end» (`priceEur`) y «… when sorting descending too» (`powerCv`); con
+      el catálogo real, la Giulietta —sin precio ni potencia— cierra las dos
+      listas.
+- [x] El criterio vigente ordena igual la tabla, las opciones de «Comparar»
+      y la tira de candidatos de la vista de duelo. Medido en el navegador
+      con la potencia elegida: los tres dan `Tucson PHEV, ID.4, Sportage
+      HEV, IONIQ 5` en ese orden.
+- [x] Con `fieldSet` en `Esenciales`, elegir una magnitud que solo enseña
       «Completa» reordena las columnas y deja el conjunto de campos en
-      `Esenciales`.
-- [ ] `VIEW_STATE_VERSION` sigue en 1; un `sortCriterion` guardado con valor
+      `Esenciales`. `FichaPage.test.tsx`, «keeps every sort option available
+      while the essential field set is showing», y en el navegador: tras
+      ordenar por potencia el selector de campos sigue en `esenciales` y las
+      filas siguen siendo las seis de siempre.
+- [x] `VIEW_STATE_VERSION` sigue en 1; un `sortCriterion` guardado con valor
       `lengthMm` se restaura tal cual, y uno con un valor que no existe se
       descarta con su registro `view_state_field_discarded` y cae a
-      `lengthMm`.
-- [ ] `npm run format:check`, `npm run lint`, `npm run typecheck`,
+      `lengthMm`. `viewState.test.ts` sin modificar; en el navegador, la
+      clave guardada es `{"version":1,…,"sortCriterion":"heightMm",…}` y
+      recargar devuelve el selector a `heightMm`.
+- [x] `npm run format:check`, `npm run lint`, `npm run typecheck`,
       `npm run arch:check`, `npm run test:coverage` y `npm run build` pasan
-      en local, con cobertura al 100 % en `domain/`.
+      en local: 448 tests en verde y cobertura 100 % en
+      `domain/`+`data/`+`logging/`.
 
 ## Dependencias y supuestos
 
