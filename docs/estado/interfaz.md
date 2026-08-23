@@ -430,8 +430,20 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     unidades distintas—, la celda muestra la misma raya con texto accesible
     que una celda sin dato, no un número que no diría nada. Arranca fijada
     la primera referencia del catálogo, si hay alguna.
-  - **Orden** — Catálogo, Longitud, Anchura o Precio, ascendente. Arranca
-    en Longitud.
+  - **Orden** — `Catálogo` más **una opción por cada una de las veintidós
+    magnitudes** de «Completa» (product/0027), agrupadas en el `<select>` por
+    los mismos seis bloques y con el mismo rótulo que da a esa fila su
+    `FieldDef` —las opciones se generan de `COMPLETE_BLOCKS`, no de una
+    segunda lista—. Ordena **mejor primero**, con la dirección que fija la
+    tabla de polaridad del dominio (`docs/estado/dominio.md`): descendente
+    donde más es mejor (potencia, maletero, fiabilidad, valor residual,
+    estética…), ascendente donde más es peor (precio, longitud, anchura,
+    peso…) y ascendente en las neutras (altura, batalla, generación…).
+    Arranca en Longitud. El criterio vigente ordena a la vez las columnas
+    desplazables de la tabla, las opciones de «Comparar» y la tira de
+    candidatos de la vista de duelo. Es independiente de «Campos»: se puede
+    ordenar por una magnitud que «Esenciales» no enseña, y hacerlo no cambia
+    el conjunto vigente.
   - **Foto** — cambia la vista de foto
     (Frontal/Lateral/Trasera/Maletero/Interior) de todas las columnas a la
     vez; arranca en Lateral. Es el cuarto control de la barra, no un mando
