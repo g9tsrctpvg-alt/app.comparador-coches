@@ -292,12 +292,14 @@ precisamente el fallo que corrige — cuánto separa un eje lo deciden los
 pesos, no el ancho del recorrido entre sus dos anclajes.
 
 **La anchura de hombros se publica en centímetros enteros** (km77, ficha de
-mediciones propias, fila «Anchura» de la segunda fila). Se guarda en
-milímetros por coherencia con el resto de medidas, pero su resolución real
-es de 10 mm y no debe leerse como precisión milimétrica. km77 publica para
-unos modelos el mínimo de esa fila y para otros el máximo sin distinguirlo
-en la etiqueta, y el catálogo guarda el que publique cada ficha: es una
-deuda conocida, en `docs/roadmap.md`.
+mediciones propias, segunda fila). Se guarda en milímetros por coherencia
+con el resto de medidas, pero su resolución real es de 10 mm y no debe
+leerse como precisión milimétrica. km77 la publica en dos filas distintas
+—«Anchura hombros máxima» y «Anchura hombros mínima»— y casi nunca rellena
+las dos: da una u otra. El catálogo guarda la que publique cada ficha sin
+anotar cuál es, y los anclajes de esta magnitud mezclan las dos —el Clase E
+solo tiene máxima y el Picanto solo mínima—: es una deuda conocida, en
+`docs/roadmap.md`.
 
 ### Los anclajes de `prestaciones`
 
