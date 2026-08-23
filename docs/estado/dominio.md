@@ -466,10 +466,19 @@ vive fuera de `scoring/`.
   con texto accesible, nunca como un cero engañoso, pero el dominio los
   distingue: apagar la Δ a propósito no es lo mismo que no poder calcularla.
 - **`sortFicha(entities, criterion)`** — ordena por `catalog` (el orden del
-  propio catálogo), `lengthMm`, `widthMm` o `priceEur`, ascendente. Una
-  entidad sin la magnitud por la que se ordena va al final: no hay dato que
-  defender en esa posición, y el orden relativo entre dos entidades que
-  ambas carecen del dato no se declara.
+  propio catálogo) o por **cualquiera de las veintidós magnitudes**:
+  `FICHA_SORT_CRITERIA` se declara como `['catalog', ...FICHA_FIELDS]`, no
+  como una lista aparte, así que una magnitud nueva en la ficha es ordenable
+  el mismo día que existe. La **dirección la fija la tabla de polaridad**, no
+  el criterio: `moreIsBetter` ordena descendente y `moreIsWorse` ascendente
+  —las dos, mejor primero— y `neutral` ascendente, que es el orden natural de
+  leer un número y no afirma ningún mérito. Ordenar y colorear la Δ leen la
+  misma tabla porque son la misma afirmación aplicada a dos sitios: si una
+  magnitud cambiara de polaridad, cambiarían las dos a la vez. Una entidad
+  sin la magnitud por la que se ordena va al final **en las dos
+  direcciones** —la ausencia de dato no es un valor extremo que deba
+  encabezar un orden descendente—, y el orden relativo entre dos entidades
+  que ambas carecen del dato no se declara.
 
 ## Qué queda fuera
 

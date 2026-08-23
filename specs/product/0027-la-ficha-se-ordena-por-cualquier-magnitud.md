@@ -1,7 +1,7 @@
 # 0027 — La ficha se ordena por cualquiera de sus magnitudes
 
 - **Id:** product/0027
-- **Estado:** verified
+- **Estado:** consolidated
 - **Tipo:** product
 - **Fecha:** 2026-08-23
 - **Specs relacionadas:** product/0018, product/0020, product/0021,
@@ -9,11 +9,11 @@
 - **ADRs relacionados:** ninguno
 - **Doc de estado:** `docs/estado/interfaz.md`, `docs/estado/dominio.md`
 
-> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
-> implementado: su sección *Contexto* retrata el sistema **anterior** al
-> cambio y hoy no es cierta. **No es referencia del estado actual** — para
-> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
-> **criterios de aceptación**, como registro de verificación.
+> ⚠️ **Spec consolidada (2026-08-23).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/interfaz.md` y `docs/estado/dominio.md`. Vigentes aquí solo
+> los **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -201,7 +201,7 @@ dominio ya declara.
       recargar devuelve el selector a `heightMm`.
 - [x] `npm run format:check`, `npm run lint`, `npm run typecheck`,
       `npm run arch:check`, `npm run test:coverage` y `npm run build` pasan
-      en local: 448 tests en verde y cobertura 100 % en
+      en local: 449 tests en verde y cobertura 100 % en
       `domain/`+`data/`+`logging/`.
 
 ## Dependencias y supuestos

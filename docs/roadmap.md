@@ -434,6 +434,26 @@ fase abierta. Se lista para no perderlo, no para bloquear nada.
   ejecución directa sobre el catálogo real, y la CI entera verde en local
   (444 tests, cobertura 100 % en `domain/`+`data/`+`logging/`). Consolidada
   en `docs/estado/dominio.md` y `docs/proceso/calibracion-de-escalas.md`.
+- **La ficha se ordena por cualquiera de sus magnitudes — `product/0027`,
+  `consolidated`.** El selector «Orden» de la ficha ofrecía cuatro criterios
+  —catálogo, longitud, anchura y precio—, los que arrastraba de la extinta
+  ficha técnica, mientras la vista compara veintidós magnitudes con fuente.
+  Preguntas que la ficha ya tenía contestadas en sus celdas —cuál tiene más
+  maletero, cuál se deprecia menos, cuál es el más potente— obligaban a
+  recorrer catorce columnas a ojo. La spec deriva las opciones de orden de
+  `FICHA_FIELDS` en vez de repetirlas (`FICHA_SORT_CRITERIA = ['catalog',
+  ...FICHA_FIELDS]`), las rotula y agrupa en el `<select>` con los mismos
+  `FieldDef` y bloques que rotulan las filas, y da dirección al orden
+  leyendo la **tabla de polaridad** que ya usa el color de la Δ: mejor
+  primero, así que las tres opciones que existían —las tres «más es peor»—
+  no cambian de comportamiento. No toca el conjunto de campos, ni la Δ, ni
+  la versión de `ViewState`. Recorrió `draft → approved → implemented →
+  verified → consolidated` en la misma sesión de trabajo, con el gate humano
+  en commit propio sin implementación, la CI entera verde en local (449
+  tests, cobertura 100 % en `domain/`+`data/`+`logging/`) y los diez
+  criterios cerrados contra tests unitarios, el catálogo real y Playwright
+  sobre el build de producción. Consolidada en `docs/estado/interfaz.md` y
+  `docs/estado/dominio.md`.
 - **Eje de autonomía y repostaje.** Es la mayor diferencia práctica entre los
   once candidatos en un viaje largo —los térmicos e híbridos hacen 640-950 km
   con un depósito, los eléctricos la mitad en autopista— y el modelo es hoy
