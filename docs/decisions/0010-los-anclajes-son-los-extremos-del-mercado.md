@@ -1,6 +1,6 @@
 # 0010 — Los anclajes de escala son los extremos del mercado, no umbrales de utilidad
 
-- **Estado:** draft
+- **Estado:** approved
 - **Fecha:** 2026-08-23
 - **Nivel:** 🟡
 

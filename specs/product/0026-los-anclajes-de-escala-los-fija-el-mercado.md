@@ -1,7 +1,7 @@
 # 0026 — Los anclajes de escala los fija el mercado, no la gama comparada
 
 - **Id:** product/0026
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-08-23
 - **Specs relacionadas:** product/0002, product/0003, product/0005,
