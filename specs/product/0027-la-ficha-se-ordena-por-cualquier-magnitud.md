@@ -1,7 +1,7 @@
 # 0027 — La ficha se ordena por cualquiera de sus magnitudes
 
 - **Id:** product/0027
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-08-23
 - **Specs relacionadas:** product/0018, product/0020, product/0021,
