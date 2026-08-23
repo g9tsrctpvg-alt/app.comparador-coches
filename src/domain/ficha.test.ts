@@ -3,6 +3,8 @@ import type { Reference } from './reference';
 import {
   buildFicha,
   currentSourceOf,
+  FICHA_FIELDS,
+  FICHA_SORT_CRITERIA,
   litrosPorMetroCuadrado,
   sortFicha,
   withComparison,
@@ -363,6 +365,12 @@ describe('withComparison', () => {
 describe('sortFicha', () => {
   const cars = [sportageFixture, x1Fixture, ev3Fixture];
 
+  it('offers the catalogue order plus every ficha field, and nothing else (product/0027, requisito 1)', () => {
+    // Derivado de `FICHA_FIELDS`, no repetido: una magnitud nueva en la
+    // ficha es ordenable el mismo día que existe.
+    expect(FICHA_SORT_CRITERIA).toEqual(['catalog', ...FICHA_FIELDS]);
+  });
+
   it('"catalog" keeps the catalogue order untouched', () => {
     const entities = buildFicha(cars, []);
     const sorted = sortFicha(entities, 'catalog');
@@ -399,11 +407,49 @@ describe('sortFicha', () => {
     ]);
   });
 
+  it('sorts a "more is better" field descending, best first (product/0027, requisito 4.1)', () => {
+    const sorted = sortFicha(buildFicha(cars, []), 'powerCv');
+    // X1 245 > Sportage 239 > EV3 204: el más potente encabeza, al revés
+    // que la longitud, porque en potencia más es mejor.
+    expect(sorted.map((e) => e.id)).toEqual([
+      'bmw-x1-xdrive25e',
+      'kia-sportage-hev',
+      'kia-ev3',
+    ]);
+  });
+
+  it('sorts a field with no declared direction ascending (product/0027, requisito 4.3)', () => {
+    // Los tres coches del fixture miden lo mismo de alto, así que la altura
+    // solo discrimina entre referencias: 1465mm la Giulietta, 1700mm la otra.
+    const tall = referenceFixture({
+      id: 'ref-tall',
+      name: 'Alta',
+      heightMm: sourced(1700, 'mm'),
+    });
+    const sorted = sortFicha(
+      buildFicha([], [referenceFixture(), tall]),
+      'heightMm',
+    );
+    expect(sorted.map((e) => e.id)).toEqual([
+      'alfa-romeo-giulietta',
+      'ref-tall',
+    ]);
+  });
+
   it('sends an entity without the sort field to the end', () => {
     const entities = buildFicha([sportageFixture], [referenceFixture()]);
     const sorted = sortFicha(entities, 'priceEur');
     // La referencia no declara precio: va al final pese a no tener el
     // precio más alto ni el más bajo, porque no tiene ninguno.
+    expect(sorted[sorted.length - 1]?.kind).toBe('reference');
+  });
+
+  it('sends an entity without the sort field to the end when sorting descending too (product/0027, requisito 7)', () => {
+    const entities = buildFicha([sportageFixture], [referenceFixture()]);
+    const sorted = sortFicha(entities, 'powerCv');
+    // La referencia no declara potencia: la ausencia no es un valor alto,
+    // así que no encabeza el orden descendente — va al final igual que en
+    // el ascendente.
     expect(sorted[sorted.length - 1]?.kind).toBe('reference');
   });
 

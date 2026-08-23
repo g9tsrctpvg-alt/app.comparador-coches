@@ -55,6 +55,12 @@ interface BlockDef {
   fields: FieldDef[];
 }
 
+/** Un bloque de «Completa»: siempre rotulado. Ese `label: string` no es
+ * cosmético — es lo que deja que los mismos seis bloques den nombre a los
+ * `<optgroup>` del selector de orden (product/0027, requisito 3) sin
+ * inventar un rótulo de respaldo para un `null` que ahí no puede darse. */
+type CompleteBlockDef = BlockDef & { label: string };
+
 /**
  * Las veintidós magnitudes de la ficha (product/0014, requisito 1;
  * product/0018 las reparte en dos conjuntos; product/0021 añade el bloque
@@ -62,7 +68,7 @@ interface BlockDef {
  * declara las claves y extrae los valores; etiquetas, unidades de respaldo
  * y decimales son decisión de la interfaz.
  */
-const COMPLETE_BLOCKS: BlockDef[] = [
+const COMPLETE_BLOCKS: CompleteBlockDef[] = [
   {
     // Primer bloque, antes de «Tamaño y espacio» (product/0021, requisito
     // 2.1): en qué punto tecnológico está el coche es contexto para leer
@@ -203,12 +209,10 @@ const ESSENTIAL_BLOCKS: BlockDef[] = [
   },
 ];
 
-const SORT_OPTIONS: { value: FichaSortCriterion; label: string }[] = [
-  { value: 'catalog', label: 'Catálogo' },
-  { value: 'lengthMm', label: 'Longitud' },
-  { value: 'widthMm', label: 'Anchura' },
-  { value: 'priceEur', label: 'Precio' },
-];
+/** El orden del propio catálogo: la única opción del selector que no es una
+ * magnitud, y por eso la única que se rotula aquí a mano. Las otras
+ * veintidós salen de `COMPLETE_BLOCKS` (product/0027, requisitos 1-3). */
+const CATALOG_SORT_LABEL = 'Catálogo';
 
 // Exportado para que el test de estructura compruebe el número de filas de
 // datos sin repetir la cuenta a mano.
@@ -1052,10 +1056,23 @@ export function FichaPage({ cars, references }: FichaPageProps) {
               setSortCriterion(event.target.value as FichaSortCriterion)
             }
           >
-            {SORT_OPTIONS.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
+            <option value="catalog">{CATALOG_SORT_LABEL}</option>
+            {/* Una opción por magnitud de «Completa», agrupadas por sus
+                mismos seis bloques y rotuladas con el `label` del mismo
+                `FieldDef` que rotula su fila (product/0027, requisitos 1-3):
+                no hay una segunda lista que mantener al día, así que una
+                magnitud nueva en la ficha aparece aquí sola. Ordenar por una
+                magnitud que «Esenciales» no enseña es legítimo —los dos
+                controles son independientes (requisito 9)—, así que el grupo
+                se recorre siempre entero, no `blocks`. */}
+            {COMPLETE_BLOCKS.map((block) => (
+              <optgroup key={block.id} label={block.label}>
+                {block.fields.map((def) => (
+                  <option key={def.key} value={def.key}>
+                    {def.label}
+                  </option>
+                ))}
+              </optgroup>
             ))}
           </select>
         </div>

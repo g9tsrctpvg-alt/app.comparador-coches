@@ -119,6 +119,15 @@ describe('FichaPage', () => {
         'Potencia',
         'Precio',
       ]);
+      // Ninguna de las dos vistas estrena cabecera de bloque: ni la tabla ni
+      // la tarjeta de duelo. Se comprueba por su clase, y los rótulos solo
+      // dentro de la tabla, porque desde product/0027 esos mismos seis
+      // nombres rotulan los `<optgroup>` del selector de orden, que existe
+      // con cualquier conjunto de campos.
+      expect(markup).not.toContain('blockHeader');
+      expect(markup).not.toContain('duelBlockHeader');
+      const table = /<table[\s\S]*?<\/table>/.exec(markup)?.[0] ?? '';
+      expect(table).not.toBe('');
       for (const label of [
         'Generación',
         'Tamaño y espacio',
@@ -127,7 +136,7 @@ describe('FichaPage', () => {
         'Fiabilidad y respaldo',
         'Juicio propio',
       ]) {
-        expect(markup).not.toContain(label);
+        expect(table).not.toContain(label);
       }
     });
 
@@ -253,17 +262,61 @@ describe('FichaPage', () => {
   });
 
   describe('order (product/0018, requisito 5)', () => {
-    it('offers the four sort criteria, starting on ascending length', () => {
+    it('offers the catalogue order plus every field of "Completa", grouped by block, starting on length (product/0027)', () => {
       const markup = renderToStaticMarkup(
         <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
       );
-      expect(markup).toMatch(/<select[^>]*id="sort-select"/);
-      expect(markup).toMatch(
+      const select =
+        /<select[^>]*id="sort-select"[\s\S]*?<\/select>/.exec(markup)?.[0] ??
+        '';
+      expect(select).not.toBe('');
+      expect(select).toMatch(
         /<option value="lengthMm" selected="">Longitud<\/option>/,
       );
-      for (const label of ['Catálogo', 'Anchura', 'Precio']) {
-        expect(markup).toContain(`>${label}<`);
+      // «Catálogo» más una opción por magnitud de «Completa», ni una más.
+      expect([...select.matchAll(/<option /g)]).toHaveLength(
+        1 + TOTAL_FIELD_COUNT,
+      );
+      // Cada magnitud, bajo la cabecera de su bloque y en el orden de la
+      // tabla (requisito 3).
+      expect(
+        [...select.matchAll(/<optgroup label="([^"]*)"/g)].map((m) => m[1]),
+      ).toEqual([
+        'Generación',
+        'Tamaño y espacio',
+        'Mecánica y prestaciones',
+        'Coste',
+        'Fiabilidad y respaldo',
+        'Juicio propio',
+      ]);
+      // Rótulos idénticos a los de la fila de esa magnitud (requisito 2),
+      // incluidas las que antes no eran ordenables.
+      for (const label of [
+        'Catálogo',
+        'Anchura',
+        'Precio',
+        'Potencia',
+        'Anchura de hombros atrás',
+        'Valor residual a 5 años',
+        'Estética interior',
+      ]) {
+        expect(select).toContain(`>${label}<`);
       }
+    });
+
+    it('keeps every sort option available while the essential field set is showing (product/0027, requisito 9)', () => {
+      const markup = renderToStaticMarkup(
+        <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+      );
+      const select =
+        /<select[^>]*id="sort-select"[\s\S]*?<\/select>/.exec(markup)?.[0] ??
+        '';
+      const body = /<tbody>[\s\S]*?<\/tbody>/.exec(markup)?.[0] ?? '';
+      // Arranca en «Esenciales», que no enseña la fiabilidad: la tabla no
+      // tiene esa fila y el selector de orden sí tiene esa opción. Mostrar y
+      // ordenar son controles independientes.
+      expect(body).not.toContain('Fiabilidad OCU');
+      expect(select).toContain('<option value="reliabilityOcu">');
     });
 
     it('sorts the scrollable columns ascending by length by default', () => {
