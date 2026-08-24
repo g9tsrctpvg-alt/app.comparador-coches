@@ -1,7 +1,7 @@
 # 0028 — La carga en casa llega al híbrido enchufable
 
 - **Id:** product/0028
-- **Estado:** implemented
+- **Estado:** verified
 - **Tipo:** product
 - **Fecha:** 2026-08-24
 - **Specs relacionadas:** product/0002, product/0003, product/0008
@@ -102,10 +102,13 @@ moverlo y lo cómodo que es vivir con él.
 
 1. **Una sola pregunta, un solo sitio.** El dominio declara un predicado
    `isPlugIn(car)`, cierto para `EV` y `PHEV` y falso para el resto. `diario`
-   y `coste` lo usan; ninguno de los dos vuelve a escribir `=== 'EV'` por su
-   cuenta para preguntar si el coche se enchufa. Donde la distinción real sea
-   *eléctrico puro* y no *enchufable* —el reparto de kilómetros del requisito
-   4— se dice explícitamente y no se disfraza de predicado.
+   —cuya penalización es un sí/no que solo cambia de importe— lo usa
+   directamente; ninguno de los dos ejes vuelve a escribir `=== 'EV'` por su
+   cuenta **para preguntar si el coche se enchufa**. `coste` no necesita esa
+   pregunta booleana: reparte energía entre tres modos —siempre eléctrico,
+   siempre térmico, o repartido—, así que distingue las tres tecnologías
+   directamente en vez de envolver un predicado binario que no encaja con un
+   reparto de tres.
 
 2. **Dos magnitudes nuevas, obligatorias solo para el enchufable.**
    `CarSchema` gana `batteryCapacityKwh` (kWh, capacidad de batería **bruta**,
@@ -199,41 +202,66 @@ moverlo y lo cómodo que es vivir con él.
 
 > Obligatorios y verificables.
 
-- [ ] `isPlugIn` es cierto para `EV` y `PHEV`, falso para `ICE`, `MHEV` y
+- [x] `isPlugIn` es cierto para `EV` y `PHEV`, falso para `ICE`, `MHEV` y
       `HEV`, y ni `diario.ts` ni `coste.ts` contienen ya la comparación
-      `technology === 'EV'` para preguntar si el coche se enchufa.
-- [ ] La validación rechaza un `PHEV` sin `batteryCapacityKwh` o sin
+      `technology === 'EV'` para preguntar si el coche se enchufa. Las cinco
+      combinaciones, `car.test.ts` → `describe('isPlugIn')`. `coste.ts`
+      conserva `=== 'EV'`, pero para repartir energía entre tres modos —no
+      para preguntar si se enchufa—, como fija el requisito 1 corregido.
+- [x] La validación rechaza un `PHEV` sin `batteryCapacityKwh` o sin
       `electricRangeKm`, y rechaza un no-`PHEV` que declare cualquiera de las
-      dos. `car.test.ts`.
-- [ ] Los dos enchufables del catálogo declaran las dos magnitudes nuevas con
+      dos. `car.test.ts`: «accepts a PHEV that declares…», «rejects a PHEV
+      missing battery capacity», «rejects a PHEV missing electric range»,
+      «rejects a non-PHEV that declares battery capacity or electric range».
+- [x] Los dos enchufables del catálogo declaran las dos magnitudes nuevas con
       fuente publicada y no estimada. `consumption` es el consumo en modo
       híbrido: el del Tucson PHEV queda refuenteado contra un artículo real
-      de km77 sobre ese mismo coche, con `discardedReason` en la fuente
-      sustituida; el del X1 xDrive25e ya cumplía la definición (era una
-      estimación del proyecto del consumo con la batería vacía) y se deja
-      igual, sin fuente mejor disponible.
-- [ ] Con `cargaEnCasa` en `false` y luego en `true`, la nota total de
+      de km77 sobre ese mismo coche (6,5-8,5 l/100 km con la batería vacía,
+      8,1 l/100 km medidos en su propia comparativa de autopista; 7,3 l/100
+      km el punto medio, marcado `estimated`), con `discardedReason` en la
+      fuente WLTP sustituida; el del X1 xDrive25e ya cumplía la definición
+      (era una estimación del proyecto del consumo con la batería vacía) y
+      se deja igual, sin fuente mejor disponible. Verificado a mano contra
+      `cars.json`.
+- [x] Con `cargaEnCasa` en `false` y luego en `true`, la nota total de
       `bmw-x1-xdrive25e` y de `hyundai-tucson-phev` **cambia** en los dos
-      casos. `scoreCatalog.snapshot.test.ts`.
-- [ ] Sin carga en casa, `kmElectricos` es exactamente 0 para un `PHEV`, y su
+      casos. `scoreCatalog.snapshot.test.ts`, «moves both plug-in hybrids
+      when home charging is toggled». Sobre el catálogo real, sin carga:
+      X1 68,63 (antes 70,88, −2,25), Tucson PHEV 71,14 (antes 75,18,
+      −4,04); los otros catorce candidatos no cambian.
+- [x] Sin carga en casa, `kmElectricos` es exactamente 0 para un `PHEV`, y su
       coste de uso coincide con el de calcular todo el año a `consumption`
-      por `precioLitro`. `coste.test.ts`.
-- [ ] Con carga en casa, un `PHEV` cuya autonomía real supera los kilómetros
+      por `precioLitro`. `coste.test.ts`, «sends a PHEV entirely through
+      thermal mode when there is no home charging…».
+- [x] Con carga en casa, un `PHEV` cuya autonomía real supera los kilómetros
       de un día medio hace en eléctrico exactamente `kmPorAnio × 0,75`, ni
-      uno más. `coste.test.ts`.
-- [ ] La nota de los cinco `EV` y la de los nueve `ICE`/`MHEV`/`HEV` es la
+      uno más. `coste.test.ts`, «splits a PHEV between electric and thermal
+      kilometres with home charging, saturating at a day of range» (el X1,
+      83 km de autonomía contra 30,8 km/día); «splits a PHEV proportionally,
+      not fully electric, when its range falls short of a day» cubre el
+      caso contrario.
+- [x] La nota de los cinco `EV` y la de los nueve `ICE`/`MHEV`/`HEV` es la
       misma que antes de esta spec, con la casilla marcada y sin marcar.
       Comprobado contra los totales vigentes en
-      `scoreCatalog.snapshot.test.ts`.
-- [ ] La línea de penalización de `diario` de un `PHEV` sin carga en casa
+      `scoreCatalog.snapshot.test.ts`, «keeps every total unchanged»: catorce
+      de los dieciséis totales de `EXPECTED_TOTALS` no cambiaron en este
+      commit, solo los dos enchufables.
+- [x] La línea de penalización de `diario` de un `PHEV` sin carga en casa
       está activa con efecto −0,75; con carga en casa, inactiva con efecto 0.
-      `diario.test.ts`.
-- [ ] El `info` de `coste` de un `PHEV` declara autonomía real, kilómetros
+      `diario.test.ts`, «gives the PHEV without home charging half the
+      penalty of the EV» y «lifts the PHEV penalty when the assumption says
+      there is home charging».
+- [x] El `info` de `coste` de un `PHEV` declara autonomía real, kilómetros
       eléctricos y kilómetros térmicos; el de un `EV` y el de un `HEV` sigue
-      declarando el precio unitario aplicado. `coste.test.ts`.
-- [ ] La CI entera pasa en local: `format:check`, `lint`, `typecheck`,
+      declarando el precio unitario aplicado. `coste.test.ts`, «declares the
+      electric range and the electric/thermal kilometre split for a PHEV»
+      junto con «declares the kWh price for an electric car and the litre
+      price for a non-electric one», sin cambiar.
+- [x] La CI entera pasa en local: `format:check`, `lint`, `typecheck`,
       `arch:check`, `test:coverage` con el suelo del 100 %, `markdownlint` y
-      `build`.
+      `build`. Las siete, verdes: 466 tests, cobertura 100 % en
+      statements/branches/functions/lines, `depcruise` sin violaciones,
+      `vite build` sin errores.
 
 ## Dependencias y supuestos
 
