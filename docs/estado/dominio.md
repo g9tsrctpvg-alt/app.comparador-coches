@@ -10,11 +10,14 @@
 ## Coche y dato con fuente
 
 Un `Car` (`src/domain/car.ts`) tiene identidad (`id`, `name`, `brand`,
-`technology`) y dieciocho magnitudes, cada una en uno de dos formatos:
+`technology`) y veinte magnitudes, cada una en uno de dos formatos:
 
 - **`SourcedValue<T>`** — `{ value, unit?, sources }`. Es el formato de todo
   dato que viene de fuera: dimensiones, potencia, consumo, precio,
-  fiabilidad OCU, garantía, valor residual, mantenimiento, aceleración. Cada
+  fiabilidad OCU, garantía, valor residual, mantenimiento, aceleración. Dos
+  de las veinte, `batteryCapacityKwh` y `electricRangeKm`, solo las declara
+  un `PHEV` — la validación las exige ahí y las prohíbe en cualquier otra
+  tecnología (product/0028). Cada
   fuente (`SourceEntry`) lleva `label`, `value`, `estimated` y `current`;
   **exactamente una** fuente por dato está marcada `current`, y su valor es
   el que entra en el cálculo — lo impone Zod (`superRefine` en
@@ -84,11 +87,12 @@ escala absoluta, nunca las dos cosas — ver la siguiente sección. Un campo
 opcional más, `info`, muestra dato del propio coche que no entra en ninguna
 nota. Lo usan `fiabilidad`, para la extensión de garantía condicionada;
 `coste`, para declarar qué precio unitario de la energía se ha aplicado y
-que es la tecnología del coche quien lo decide (product/0008); y `diario`,
-para declarar que la penalización por carga en casa solo puede aplicar a un
-vehículo eléctrico, esté activa o no. Es distinto de `assumptionsUsed`: no
-es un supuesto global,
-es información del coche.
+que es la tecnología del coche quien lo decide (product/0008), y para un
+`PHEV` la autonomía eléctrica real y el reparto de kilómetros entre modo
+eléctrico y térmico (product/0028); y `diario`, para declarar que la
+penalización por carga en casa solo puede aplicar a un vehículo enchufable,
+esté activa o no. Es distinto de `assumptionsUsed`: no es un supuesto
+global, es información del coche.
 
 ## Cómo se puntúa un sumando
 
@@ -191,8 +195,13 @@ produjo la nota — describe los dos anclajes y el resultado, no la fórmula
 entre ambos — así que el mismo campo `scale` sirve para los tres ejes ya
 migrados sin necesitar un tipo nuevo.
 
-`diario` lleva una penalización condicional: `−1,5` puntos si el coche es
-eléctrico y el supuesto `cargaEnCasa` está desactivado. Se aplica después de
+`diario` lleva una penalización condicional que alcanza a todo vehículo
+enchufable (`isPlugIn`, `car.ts`: cierto para `EV` y `PHEV`) cuando el
+supuesto `cargaEnCasa` está desactivado: `−1,5` puntos para un `EV`, `−0,75`
+para un `PHEV` (product/0028). La mitad, porque a un eléctrico sin enchufe
+en casa le va la viabilidad —depende de la carga pública— y a un enchufable
+solo la comodidad: sigue moviéndose exactamente igual, sin cargarlo nunca.
+Con carga en casa, ninguno de los dos penaliza. Se aplica después de
 combinar las dos escalas, y el resultado se acota de nuevo a 0-10.
 
 **Los anclajes de `diario`, `viaje` y `prestaciones` son los extremos del
@@ -235,10 +244,28 @@ de una plaza de aparcamiento. Fuente de ambos modelos:
 | Precio de compra | 25.000 € | 47.000 € |
 | Coste de uso mensual | 100 €/mes | 250 €/mes |
 
-El coste de uso mensual sale de sumar la energía anual (consumo × km/año ×
-precio del litro o del kWh, según tecnología) y el mantenimiento anual, y
-dividir entre doce; no multiplica por ningún horizonte de tenencia porque ya
-es una cifra mensual. El anclaje de rechazo del precio son los 47.000 € ya
+El coste de uso mensual sale de sumar la energía anual y el mantenimiento
+anual, y dividir entre doce; no multiplica por ningún horizonte de tenencia
+porque ya es una cifra mensual. La energía anual reparte los kilómetros del
+año entre modo eléctrico (a `precioKwh`) y modo térmico (a `precioLitro`)
+según la tecnología (product/0028): un `EV` hace el año entero en eléctrico,
+un `ICE`/`MHEV`/`HEV` entero en térmico, y un `PHEV` reparte según haya o no
+carga en casa. Sin carga en casa, un `PHEV` hace el año entero en térmico —
+el mismo cálculo que un no enchufable—; con carga en casa, los kilómetros
+diarios (`kmPorAnio × 0,75`; el 0,25 restante son los trayectos largos que
+ninguna batería de enchufable cubre, `CUOTA_VIAJE` en `coste.ts`, una
+constante razonada y no un supuesto editable) se hacen en eléctrico hasta el
+límite de su autonomía eléctrica homologada WLTP (`electricRangeKm`,
+publicada), y el resto en térmico. El consumo eléctrico no lo publica km77
+de forma homogénea para un enchufable, así que se deriva de esa autonomía y
+de la capacidad de la batería (`batteryCapacityKwh`, la bruta: la útil no
+está publicada por igual para los dos enchufables del catálogo). Las dos
+magnitudes nuevas son obligatorias en `CarSchema` para un `PHEV` y prohibidas
+para el resto. `consumption` de un `PHEV` es el consumo en modo híbrido con
+la batería vacía —lo que km77 llama «consumo híbrido»—, no el WLTP combinado,
+que para un enchufable ya supone que se carga y por tanto respondería de
+antemano la pregunta que hace `cargaEnCasa`. El anclaje de rechazo del
+precio son los 47.000 € ya
 declarados como presupuesto — un techo duro, no se compra por encima —, y
 25.000 € es donde el precio deja de preocupar. **El peso 50/50 no es una
 preferencia, es una equivalencia:** el recorrido de la escala de precio son

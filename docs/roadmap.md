@@ -454,22 +454,39 @@ fase abierta. Se lista para no perderlo, no para bloquear nada.
   criterios cerrados contra tests unitarios, el catálogo real y Playwright
   sobre el build de producción. Consolidada en `docs/estado/interfaz.md` y
   `docs/estado/dominio.md`.
-- **La carga en casa llega al híbrido enchufable — `product/0028`, en
-  `draft`.** El supuesto «¿tienes carga en casa?» se lee en un único sitio
-  (`diario.ts`) detrás de la condición `technology === 'EV'`, y `coste.ts`
-  decide con esa misma condición si la energía se cobra a €/kWh o a €/l.
-  Marcar la casilla mueve solo a los cinco eléctricos, +4,50 puntos cada uno,
-  y deja intactos a los dos enchufables — que son justo los coches a los que
-  la pregunta más les cambia la vida. La spec mete un predicado único
-  `isPlugIn`, da al `PHEV` penalización propia en `diario` (−0,75, la mitad
-  que el eléctrico: sin enchufe pierde comodidad, no viabilidad) y reparte
-  los kilómetros del año entre modo eléctrico y modo térmico según haya o no
-  carga en casa, derivando la autonomía real de dos magnitudes nuevas del
-  catálogo —capacidad útil de batería y consumo eléctrico— en vez de añadir
-  otro deslizador. Redefine además qué guarda `consumption` en un enchufable:
-  el consumo con la batería vacía, no el WLTP combinado, que ya supone que
-  cargas. Deja fuera el precio del kWh, que sigue sin distinguir carga
-  doméstica de pública y queda como deuda aparte. Pendiente del gate humano.
+- **La carga en casa llega al híbrido enchufable — `product/0028`,
+  `consolidated`.** El supuesto «¿tienes carga en casa?» se leía en un único
+  sitio (`diario.ts`) detrás de la condición `technology === 'EV'`, y
+  `coste.ts` decidía con esa misma condición si la energía se cobraba a
+  €/kWh o a €/l: marcar la casilla movía solo a los cinco eléctricos y dejaba
+  intactos a los dos enchufables, justo los coches a los que la pregunta más
+  les cambia la vida. La spec mete el predicado `isPlugIn` (`car.ts`), da al
+  `PHEV` penalización propia en `diario` —−0,75, la mitad que el eléctrico:
+  sin enchufe pierde comodidad, no viabilidad— y reparte en `coste` los
+  kilómetros del año entre modo eléctrico y modo térmico según haya o no
+  carga en casa, con una cuarta parte del año reservada a trayectos largos
+  (`CUOTA_VIAJE`, constante razonada). El reparto deriva de dos magnitudes
+  nuevas en `CarSchema`, obligatorias solo para un `PHEV` —capacidad de
+  batería **bruta** y autonomía eléctrica homologada WLTP—, elegidas sobre lo
+  que km77 publica de forma consistente: la capacidad **útil** no lo está, el
+  Tucson PHEV la marca «No disponible», así que ese campo se cambió respecto
+  al planteado en la redacción inicial de la spec en vez de forzar una cifra
+  que la fuente no da. Redefine además qué guarda `consumption` en un
+  enchufable: el consumo en modo híbrido con la batería vacía, no el WLTP
+  combinado, que ya supone que se carga; el Tucson PHEV queda refuenteado
+  contra un artículo real de km77 sobre ese coche, con `discardedReason` en
+  la fuente sustituida. Deja fuera el precio del kWh, que sigue sin
+  distinguir carga doméstica de pública y queda como deuda aparte. Medido
+  sobre el catálogo real, sin carga en casa: `bmw-x1-xdrive25e` baja de 70,88
+  a 68,63 (−2,25, la penalización que antes nunca pagaba) y
+  `hyundai-tucson-phev` baja de 75,18 a 71,14 (−4,04 más, por dejar de
+  cobrarse al precio del WLTP con carga que nunca ocurre); los otros catorce
+  candidatos no se mueven. Recorrió `draft → approved → implemented →
+  verified → consolidated` en la misma sesión de trabajo, con el gate humano
+  en commit propio sin implementación, los diez criterios cerrados contra
+  tests con nombre y una medición directa sobre el catálogo real, y la CI
+  entera verde en local (466 tests, cobertura 100 %). Consolidada en
+  `docs/estado/dominio.md`.
 - **Eje de autonomía y repostaje.** Es la mayor diferencia práctica entre los
   once candidatos en un viaje largo —los térmicos e híbridos hacen 640-950 km
   con un depósito, los eléctricos la mitad en autopista— y el modelo es hoy
@@ -538,8 +555,8 @@ una sorpresa esperando fecha.
 | El rótulo enfocado de la tira de candidatos en móvil (`.duelChipActive`, `product/0023`, requisito 3) **no tiene tratamiento visual**: compone `.unstyledButton`, y entre ficheros gana la regla del primitivo, así que su `background: none` y su `border: none` borran el borde de acento y el tinte que la clase declara. Medido en el navegador al implementar `product/0025` —fondo `rgba(0,0,0,0)` y borde `0px` en el chip activo—, no supuesto. El estado sigue siendo legible con lector de pantalla (`aria-current="true"` sí está), así que no es un fallo de accesibilidad total, pero **el candidato enfocado no se distingue a la vista**, que es justo lo que el requisito pedía. Mismo mecanismo que `technical/0006` ya encontró con `.buttonGhost` | 2026-08-20 | Que `.duelChip`/`.duelChipActive` declaren su propia caja en vez de componer `.unstyledButton`, como ya hacen `.dialogView`/`.dialogViewActive` desde `product/0025`. `product/0023` está `consolidated` y no se edita: va en una spec nueva |
 | La anchura de hombros de la 2ª fila **no dice de qué medida es**: km77 publica dos filas distintas —«Anchura hombros máxima» y «Anchura hombros mínima»— pero solo en su vista `/detalle`; la vista resumen, que es la que citan las doce fichas más antiguas del catálogo («N cm a la altura de los hombros»), las colapsa en una sola fila «Anchura» y no deja rastro de cuál es. Revisado contra km77 el 2026-08-23: de las dieciséis fichas, doce son la **máxima**, dos la **mínima** (`kia-ev3` 134 cm, `volkswagen-id4` 137 cm) y dos no coinciden con ninguna (fila siguiente). **Homogeneizar no es posible**: de 69 modelos consultados en km77, 53 publican solo la máxima, 14 solo la mínima y 2 las dos —y en esos dos son iguales (MINI Countryman 136/136, Toyota Corolla Cross 135/135)—, así que la diferencia entre ambas etiquetas no es medible con los datos de la fuente. Los anclajes lo heredan y tampoco tienen alternativa: el Clase E (10, 146 cm) solo publica máxima y el Picanto (0, 126 cm) solo mínima | 2026-08-23 | Anotar en cada `SourcedNumber` qué fila de km77 es, de modo que el sesgo quede **declarado** en vez de resuelto —homogeneizarlo exige un dato que la fuente no da—, y volver a mirarlo si km77 llega a publicar las dos para un modelo con diferencia real |
 | Dos anchuras de hombros del catálogo **no coinciden con ninguna fila que km77 publique hoy** para ese modelo: `bmw-x1-xdrive25e` guarda 1.380 mm y km77 da 141 cm (máxima, sin mínima), y `alfa-romeo-tonale` guarda 1.370 mm y km77 da 135 cm (mínima, sin máxima). Las dos entraron en el alta masiva de `product/0017` desde la vista resumen de km77. No es el problema de máxima/mínima de la fila anterior: son cifras que la fuente citada no respalda. Con escala absoluta el valor va directo a la nota, y corregirlas mueve el podio —medido contra el dominio real, no estimado—: el X1 sube de 5.º a 3.º (+1,96 puntos) y el Tonale baja 1,49 puntos | 2026-08-23 | Una spec propia que corrija los dos valores en `cars.json` con `discardedReason` en la fuente que se sustituye, y actualice el test de totales de `scoreCatalog.snapshot.test.ts` |
-| **`cargaEnCasa` no llega a los híbridos enchufables.** El supuesto se lee en un único sitio, `diario.ts:34`, y la condición es `car.technology === 'EV'`, no «tiene enchufe»; en `coste.ts:41` la misma condición decide si la energía se cobra a €/kWh o a €/l. Medido sobre el catálogo: marcar la casilla mueve solo a los cinco eléctricos (+4,50 puntos = 1,5 × peso 3) y deja a `bmw-x1-xdrive25e` y `hyundai-tucson-phev` exactamente igual. Es el coche al que la pregunta más le cambia la vida —sin enchufe en casa un PHEV es un híbrido que arrastra batería, con enchufe hace los diarios en eléctrico— y es el único al que no le cambia nada. `product/0008` lo dejó así de forma deliberada, pero deliberado no es lo mismo que correcto. **Redactada:** `product/0028`, en `draft`, la ataca por los dos ejes | 2026-08-24 | Que `product/0028` pase el gate humano y llegue a `consolidated` |
-| **Los dos PHEV del catálogo no miden lo mismo en `consumption`.** `hyundai-tucson-phev` guarda 2,7 l/100 km, que es el WLTP combinado —una cifra que ya supone que cargas— y `bmw-x1-xdrive25e` guarda 7,5 l/100 km `estimated: true`, que es el consumo con la batería vacía. El eje `coste` los suma como si fueran la misma magnitud, y la diferencia no es menor: al Tucson le sale un uso de 71 €/mes y al X1 de 208 €/mes sobre una escala que satura a 100 y a 250. Además el catálogo no guarda ni autonomía eléctrica ni consumo eléctrico, así que hoy es imposible repartir los km entre modo térmico y eléctrico. **Recogida en `product/0028`**, que fija `consumption` de un enchufable como el consumo con la batería vacía y da de alta las dos magnitudes que faltan | 2026-08-24 | Que `product/0028` pase el gate humano y llegue a `consolidated` |
+| **Cerrada.** `cargaEnCasa` no llegaba a los híbridos enchufables: la condición era `car.technology === 'EV'`, no «tiene enchufe», en `diario.ts` y en `coste.ts`. `product/0028` mete el predicado `isPlugIn` y da al `PHEV` penalización propia en `diario` (−0,75, la mitad que un `EV`). Medido contra el catálogo real: sin carga en casa, `bmw-x1-xdrive25e` baja 2,25 puntos y `hyundai-tucson-phev` baja 4,04 más por la deuda siguiente; los otros catorce candidatos no se mueven | 2026-08-24, cerrada 2026-08-24 | Ninguna — cerrada |
+| **Cerrada.** Los dos PHEV del catálogo no medían lo mismo en `consumption`: uno guardaba el WLTP combinado, que ya supone carga, y el otro el consumo con la batería vacía. `product/0028` fija la definición —consumo híbrido con la batería vacía— y da de alta `batteryCapacityKwh` y `electricRangeKm` (capacidad bruta y autonomía WLTP, las dos que km77 publica de forma consistente; la capacidad **útil** no lo es, el Tucson PHEV la marca «No disponible»), de las que se deriva el consumo eléctrico. El Tucson PHEV queda refuenteado contra un artículo real de km77 sobre ese coche; el X1 ya cumplía la definición | 2026-08-24, cerrada 2026-08-24 | Ninguna — cerrada |
 
 ## Aplazamientos con disparador
 

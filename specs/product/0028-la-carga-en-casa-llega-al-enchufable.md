@@ -1,18 +1,18 @@
 # 0028 — La carga en casa llega al híbrido enchufable
 
 - **Id:** product/0028
-- **Estado:** verified
+- **Estado:** consolidated
 - **Tipo:** product
 - **Fecha:** 2026-08-24
 - **Specs relacionadas:** product/0002, product/0003, product/0008
 - **ADRs relacionados:** 0004
 - **Doc de estado:** `docs/estado/dominio.md`
 
-> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
-> implementado: su sección *Contexto* retrata el sistema **anterior** al
-> cambio y hoy no es cierta. **No es referencia del estado actual** — para
-> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
-> **criterios de aceptación**, como registro de verificación.
+> ⚠️ **Spec consolidada (2026-08-24).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/dominio.md`. Vigentes aquí solo los **criterios de
+> aceptación**, como registro de verificación.
 
 ## Contexto
 
