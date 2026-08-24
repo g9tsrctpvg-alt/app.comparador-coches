@@ -55,11 +55,11 @@ describe('buildPrestacionesBreakdown', () => {
     );
   });
 
-  it('scores 10 on CV/t at and above 145, and 0 at and below 75', () => {
-    const strong = withPowerWeightAccel(145, 1000, 8, 'strong');
-    const evenStronger = withPowerWeightAccel(180, 1000, 8, 'stronger');
-    const weak = withPowerWeightAccel(75, 1000, 8, 'weak');
-    const weaker = withPowerWeightAccel(60, 1000, 8, 'weaker');
+  it('scores 10 on CV/t at and above 260, and 0 at and below 65', () => {
+    const strong = withPowerWeightAccel(260, 1000, 8, 'strong');
+    const evenStronger = withPowerWeightAccel(300, 1000, 8, 'stronger');
+    const weak = withPowerWeightAccel(65, 1000, 8, 'weak');
+    const weaker = withPowerWeightAccel(55, 1000, 8, 'weaker');
     const breakdown = buildPrestacionesBreakdown(
       [strong, evenStronger, weak, weaker],
       1,
@@ -70,11 +70,11 @@ describe('buildPrestacionesBreakdown', () => {
     expect(cvtScale(breakdown, 'weaker').score).toBe(0);
   });
 
-  it('scores 10 on 0-100 at and below 6.5s, and 0 at and above 13.0s', () => {
-    const fast = withPowerWeightAccel(150, 1500, 6.5, 'fast');
-    const faster = withPowerWeightAccel(150, 1500, 5.0, 'faster');
-    const slow = withPowerWeightAccel(150, 1500, 13.0, 'slow');
-    const slower = withPowerWeightAccel(150, 1500, 15.0, 'slower');
+  it('scores 10 on 0-100 at and below 4.4s, and 0 at and above 16.7s', () => {
+    const fast = withPowerWeightAccel(150, 1500, 4.4, 'fast');
+    const faster = withPowerWeightAccel(150, 1500, 3.5, 'faster');
+    const slow = withPowerWeightAccel(150, 1500, 16.7, 'slow');
+    const slower = withPowerWeightAccel(150, 1500, 18.0, 'slower');
     const breakdown = buildPrestacionesBreakdown(
       [fast, faster, slow, slower],
       1,
@@ -86,8 +86,8 @@ describe('buildPrestacionesBreakdown', () => {
   });
 
   it('scores the CV/t midpoint as 5, and 10% from the bad anchor as under 1: an S curve, not a line', () => {
-    const midCvt = 75 + 0.5 * (145 - 75);
-    const near10PctFromBad = 145 - 0.9 * (145 - 75);
+    const midCvt = 65 + 0.5 * (260 - 65);
+    const near10PctFromBad = 260 - 0.9 * (260 - 65);
     const breakdown = buildPrestacionesBreakdown(
       [
         withPowerWeightAccel(midCvt * 1.5, 1500, 8, 'mid'),
@@ -121,12 +121,12 @@ describe('buildPrestacionesBreakdown', () => {
     const sportage = breakdown.get('kia-sportage-hev')!;
     expect(sportage.normalization).toBeUndefined();
     expect(cvtScale(breakdown, 'kia-sportage-hev')).toMatchObject({
-      goodAnchor: 145,
-      badAnchor: 75,
+      goodAnchor: 260,
+      badAnchor: 65,
     });
     expect(accelScale(breakdown, 'kia-sportage-hev')).toMatchObject({
-      goodAnchor: 6.5,
-      badAnchor: 13.0,
+      goodAnchor: 4.4,
+      badAnchor: 16.7,
     });
     expect(
       sportage.subcomponents!.every((s) => s.normalization === undefined),

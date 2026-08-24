@@ -195,22 +195,38 @@ migrados sin necesitar un tipo nuevo.
 eléctrico y el supuesto `cargaEnCasa` está desactivado. Se aplica después de
 combinar las dos escalas, y el resultado se acota de nuevo a 0-10.
 
+**Los anclajes de `diario`, `viaje` y `prestaciones` son los extremos del
+mercado, no de la gama comparada** (ADR 0010, `product/0026`). El ADR 0004
+ya exigía que cada escala se ancle contra algo externo al conjunto de
+candidatos, pero no fijaba con qué criterio se elige el número: los siete
+anclajes de estos tres ejes se habían ido apretando contra los candidatos
+que en cada momento se comparaban, hasta el punto de que un 10 en maletero
+llegaba a significar 620 litros con 910 ya a la venta. El criterio vigente
+es que el 10 es el mejor valor de esa magnitud en un turismo generalista de
+venta al público —sin deportivos, versiones de prestaciones, ultralujo,
+comerciales ni cuadriciclos— y el 0 el peor, cada uno con su modelo y su
+fuente publicada. `coste` queda fuera a propósito —su 0 de precio es el
+presupuesto declarado, no una cifra de mercado— y `fiabilidad` ya cumplía el
+criterio sin cambiar nada, porque sus extremos son los que la propia OCU
+publica.
+
 ### Los anclajes de `diario`
 
 | Magnitud | Nota 10 hasta | Nota 0 desde |
 | --- | --- | --- |
-| Anchura | 1.765 mm | 2.000 mm |
-| Longitud | 4.000 mm | 5.200 mm |
+| Anchura | 1.600 mm | 2.000 mm |
+| Longitud | 3.600 mm | 5.400 mm |
 
-Ambas medidas son de carrocería, sin espejos. **Anchura:** 1.765 mm es la
-referencia de «esto ya no es un problema» (Corsa, Polo); 2.000 mm es el techo
-práctico del mercado de turismos (Clase S, X7, Q7, Range Rover caben en
-56 mm). Anclar el 0 más arriba, en algo verdaderamente inmanejable, hundiría
-la escala y dejaría a todos los candidatos indistinguibles cerca del 10.
-**Longitud:** por debajo de 4.000 mm el coche aparca en cualquier hueco; el
-0 en 5.200 mm lo pone el tamaño de una plaza de aparcamiento con margen, no
-el mercado — 5.000 mm exactos resultaba severo con candidatos de 4,7 m que sí
-caben en una plaza normal.
+Ambas medidas son de carrocería, sin espejos. Los dos anclajes son los
+extremos del turismo generalista de venta al público, no un umbral de
+utilidad (ADR 0010): el 10 es el mejor valor a la venta, el 0 el peor.
+**Anchura:** el Kia Picanto —1.595 mm— marca el suelo del mercado, nada más
+estrecho se vende como turismo; 2.000 mm es el techo real —Range Rover
+(2.003 mm) y BMW X7 (2.000 mm) lo rozan por los dos lados—. **Longitud:** el
+mismo Picanto marca el suelo —3.605 mm, el turismo más corto a la venta—; el
+techo lo pone el BMW i7 —5.391 mm—, el techo real del mercado y no el tamaño
+de una plaza de aparcamiento. Fuente de ambos modelos:
+[motor.es](https://www.motor.es/).
 
 ### Los anclajes de `coste`
 
@@ -243,18 +259,21 @@ spec futura que analice la reventa con un horizonte explícito, no de esta.
 
 | Magnitud | Nota 10 desde | Nota 0 hasta |
 | --- | --- | --- |
-| Maletero | 620 L | 250 L |
-| Batalla | 2.850 mm | 2.400 mm |
-| Anchura de hombros (2ª fila) | 1.390 mm | 1.310 mm |
+| Maletero | 910 L | 185 L |
+| Batalla | 3.200 mm | 2.400 mm |
+| Anchura de hombros (2ª fila) | 1.460 mm | 1.260 mm |
 
-El techo de las tres escalas es el Skoda Superb —690 L de maletero, 2.841 mm
-de batalla, 1.390 mm de anchura de hombros—, la referencia generalista de
-«coche para viajar en familia»: a partir de ahí el problema deja de existir
-y lo que hay por encima son monovolúmenes y furgonetas, otra categoría. El
-suelo es un utilitario de ciudad, donde el equipaje de cuatro personas ya no
-cabe y tres atrás van agolpados: Dacia Sandero y Alfa Romeo Giulietta miden
-ambos 1.310 mm de hombros, y el Sandero da los 328 L que fijan el suelo de
-maletero.
+Los tres anclajes son los extremos del turismo generalista de venta al
+público (ADR 0010), no el mejor y el peor de la gama que se está comparando.
+**Maletero:** el techo lo pone el Škoda Kodiaq —910 L a cinco plazas—, el
+maletero generalista más grande del mercado; el suelo lo pone el Fiat 500
+Hybrid —185 L—. **Batalla:** el BMW i7 —3.215 mm— marca el techo real; el Kia
+Picanto —2.400 mm, la batalla más corta a la venta— marca el suelo.
+**Anchura de hombros:** el Mercedes Clase E —146 cm, según las mediciones
+propias de km77— marca el techo; el mismo Picanto —126 cm, km77— marca el
+suelo. Dimensiones y maleteros de [motor.es](https://www.motor.es/) salvo la
+anchura de hombros, que es de [km77](https://www.km77.com/) porque es la
+fuente que ya usa el catálogo para esa magnitud.
 
 **El maletero pesa 0,5 y las otras dos 0,25 cada una** porque el maletero es
 la restricción que se **incumple** —el equipaje cabe o no cabe, y si no cabe
@@ -265,39 +284,42 @@ otra: la batalla reparte entre habitáculo y vanos, así que dos coches con la
 misma batalla pueden dar distinto sitio a las piernas; la anchura de hombros
 se mide dentro del habitáculo pero solo a una altura.
 
-Las dos magnitudes de espacio trasero son **flojas entre los candidatos del
-catálogo** —recorren menos de su escala que el maletero—, y eso es
-comportamiento correcto según el ADR 0004: un eje en el que los candidatos
-apenas difieren debe influir poco, no fabricar diferencias. En anchura de
-hombros varios candidatos saturan el 10, y alguno supera al propio Superb:
-también es correcto. El anclaje bueno significa «a partir de aquí deja de
-mejorar», no «lo mejor que existe», y en una berlina grande o un SUV medio
-caber tres atrás dejó de ser el problema mucho antes de llegar al coche más
-ancho del mercado.
+Con anclajes de mercado, ningún candidato del catálogo satura ya un extremo
+salvo el Hyundai IONIQ 5 en anchura de hombros —mide exactamente 1.460 mm—.
+Es un techo legítimo, no una escala mal puesta: el ADR 0010 no comprueba una
+escala mirando si los candidatos se apiñan, porque esa comprobación es
+precisamente el fallo que corrige — cuánto separa un eje lo deciden los
+pesos, no el ancho del recorrido entre sus dos anclajes.
 
 **La anchura de hombros se publica en centímetros enteros** (km77, ficha de
 mediciones propias, fila «Anchura» de la segunda fila). Se guarda en
 milímetros por coherencia con el resto de medidas, pero su resolución real
-es de 10 mm y no debe leerse como precisión milimétrica.
+es de 10 mm y no debe leerse como precisión milimétrica. km77 publica para
+unos modelos el mínimo de esa fila y para otros el máximo sin distinguirlo
+en la etiqueta, y el catálogo guarda el que publique cada ficha: es una
+deuda conocida, en `docs/roadmap.md`.
 
 ### Los anclajes de `prestaciones`
 
 | Magnitud | Nota 10 desde | Nota 0 hasta |
 | --- | --- | --- |
-| CV por tonelada | 145 | 75 |
-| Aceleración 0-100 | 6,5 s | 13,0 s |
+| CV por tonelada | 260 | 65 |
+| Aceleración 0-100 | 4,4 s | 16,7 s |
 
-Los ceros están anclados en coches reales que van justos, no en un supuesto:
-el Fiat Panda 1.0 Hybrid GSE (71,4 CV/t) y el Dacia Sandero TCe 90 (13,4 s)
-son el suelo práctico del mercado — coches que funcionan, pero en los que
-incorporarse a una autovía cargado es un cálculo. Los dieces están donde el
-empuje deja de ser un tema: el Alfa Romeo Giulietta 1.4 MultiAir 170 CV
-(125,5 CV/t, 7,7 s) es la referencia de primera mano de «esto ya no se puede
-pedir», y el 10 se pone con margen por encima de él, en territorio de Golf
-GTI — 145 CV/t y 6,5 s —, para que un 10 signifique «esto ya no se puede
-pedir» y no «lo que ya tengo». El peso no entra dos veces: ya paga en
-`diario` por tamaño y en `coste` por consumo; aquí solo divide a los CV, que
-es justo lo que el eje mide.
+Los dos anclajes son los extremos del turismo generalista de venta al
+público (ADR 0010), no un supuesto ni el mejor y el peor de la gama que se
+está comparando. **El universo excluye deportivos, superdeportivos y
+versiones de prestaciones** —anclar la aceleración en un superdeportivo no
+informa de nada sobre un SUV híbrido—, así que los dos extremos los ponen los
+mismos dos coches: el suelo lo marca el Dacia Sandero SCe 65 —67 CV,
+1.012 kg, 66,2 CV/t, 16,7 s, el coche más barato del mercado
+([larevueautomobile](https://www.larevueautomobile.com/), fuente del
+fabricante para la aceleración)—, y el techo lo marca el Tesla Model 3 Gran
+Autonomía tracción integral —498 CV, 1.899 kg, 262,2 CV/t, 4,4 s
+([km77](https://www.km77.com/))—, una berlina de venta normal y no una
+versión de prestaciones. El peso no entra dos veces: ya paga en `diario` por
+tamaño y en `coste` por consumo; aquí solo divide a los CV, que es justo lo
+que el eje mide.
 
 ### Los anclajes de `fiabilidad`
 
@@ -444,10 +466,19 @@ vive fuera de `scoring/`.
   con texto accesible, nunca como un cero engañoso, pero el dominio los
   distingue: apagar la Δ a propósito no es lo mismo que no poder calcularla.
 - **`sortFicha(entities, criterion)`** — ordena por `catalog` (el orden del
-  propio catálogo), `lengthMm`, `widthMm` o `priceEur`, ascendente. Una
-  entidad sin la magnitud por la que se ordena va al final: no hay dato que
-  defender en esa posición, y el orden relativo entre dos entidades que
-  ambas carecen del dato no se declara.
+  propio catálogo) o por **cualquiera de las veintidós magnitudes**:
+  `FICHA_SORT_CRITERIA` se declara como `['catalog', ...FICHA_FIELDS]`, no
+  como una lista aparte, así que una magnitud nueva en la ficha es ordenable
+  el mismo día que existe. La **dirección la fija la tabla de polaridad**, no
+  el criterio: `moreIsBetter` ordena descendente y `moreIsWorse` ascendente
+  —las dos, mejor primero— y `neutral` ascendente, que es el orden natural de
+  leer un número y no afirma ningún mérito. Ordenar y colorear la Δ leen la
+  misma tabla porque son la misma afirmación aplicada a dos sitios: si una
+  magnitud cambiara de polaridad, cambiarían las dos a la vez. Una entidad
+  sin la magnitud por la que se ordena va al final **en las dos
+  direcciones** —la ausencia de dato no es un valor extremo que deba
+  encabezar un orden descendente—, y el orden relativo entre dos entidades
+  que ambas carecen del dato no se declara.
 
 ## Qué queda fuera
 

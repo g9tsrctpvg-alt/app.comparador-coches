@@ -41,11 +41,11 @@ describe('buildDiarioBreakdown', () => {
       [
         {
           ...threeCarFixture[0]!,
-          widthMm: { ...threeCarFixture[0]!.widthMm, value: 1765 },
+          widthMm: { ...threeCarFixture[0]!.widthMm, value: 1600 },
         },
         {
           ...threeCarFixture[1]!,
-          widthMm: { ...threeCarFixture[1]!.widthMm, value: 1663 },
+          widthMm: { ...threeCarFixture[1]!.widthMm, value: 1500 },
         },
       ],
       DEFAULT_ASSUMPTIONS,
@@ -74,9 +74,45 @@ describe('buildDiarioBreakdown', () => {
     expect(widthScale(breakdown, 'bmw-x1-xdrive25e').score).toBe(0);
   });
 
+  it('scores 10 on length at and below the good anchor, and 0 at and above the bad anchor', () => {
+    const breakdown = buildDiarioBreakdown(
+      [
+        {
+          ...threeCarFixture[0]!,
+          lengthMm: { ...threeCarFixture[0]!.lengthMm, value: 3600 },
+        },
+        {
+          ...threeCarFixture[1]!,
+          lengthMm: { ...threeCarFixture[1]!.lengthMm, value: 3500 },
+        },
+      ],
+      DEFAULT_ASSUMPTIONS,
+      3,
+    );
+    expect(lengthScale(breakdown, 'kia-sportage-hev').score).toBe(10);
+    expect(lengthScale(breakdown, 'bmw-x1-xdrive25e').score).toBe(10);
+
+    const atAndAboveBad = buildDiarioBreakdown(
+      [
+        {
+          ...threeCarFixture[0]!,
+          lengthMm: { ...threeCarFixture[0]!.lengthMm, value: 5400 },
+        },
+        {
+          ...threeCarFixture[1]!,
+          lengthMm: { ...threeCarFixture[1]!.lengthMm, value: 5500 },
+        },
+      ],
+      DEFAULT_ASSUMPTIONS,
+      3,
+    );
+    expect(lengthScale(atAndAboveBad, 'kia-sportage-hev').score).toBe(0);
+    expect(lengthScale(atAndAboveBad, 'bmw-x1-xdrive25e').score).toBe(0);
+  });
+
   it('scores width at the midpoint as 5, and 10% from the bad anchor as under 1: an S curve, not a line', () => {
-    const midpoint = 1765 + 0.5 * (2000 - 1765);
-    const near10PctFromBad = 2000 - 0.1 * (2000 - 1765);
+    const midpoint = 1600 + 0.5 * (2000 - 1600);
+    const near10PctFromBad = 2000 - 0.1 * (2000 - 1600);
     const breakdown = buildDiarioBreakdown(
       [
         {
@@ -102,8 +138,8 @@ describe('buildDiarioBreakdown', () => {
     // factor que puede cambiar el resultado es el peso 0,6/0,4.
     const t1 = 0.2;
     const t2 = 0.6;
-    const widthAt = (t: number) => 1765 + t * (2000 - 1765);
-    const lengthAt = (t: number) => 4000 + t * (5200 - 4000);
+    const widthAt = (t: number) => 1600 + t * (2000 - 1600);
+    const lengthAt = (t: number) => 3600 + t * (5400 - 3600);
 
     const withWidthPair = buildDiarioBreakdown(
       [
@@ -178,8 +214,8 @@ describe('buildDiarioBreakdown', () => {
     expect(sportage.normalization).toBeUndefined();
     const width = widthScale(breakdown, 'kia-sportage-hev');
     const length = lengthScale(breakdown, 'kia-sportage-hev');
-    expect(width).toMatchObject({ goodAnchor: 1765, badAnchor: 2000 });
-    expect(length).toMatchObject({ goodAnchor: 4000, badAnchor: 5200 });
+    expect(width).toMatchObject({ goodAnchor: 1600, badAnchor: 2000 });
+    expect(length).toMatchObject({ goodAnchor: 3600, badAnchor: 5400 });
     expect(
       sportage.subcomponents!.every((s) => s.normalization === undefined),
     ).toBe(true);

@@ -374,12 +374,14 @@ export function withComparison(
   });
 }
 
-export const FICHA_SORT_CRITERIA = [
-  'catalog',
-  'lengthMm',
-  'widthMm',
-  'priceEur',
-] as const;
+/**
+ * Por qué se puede ordenar la ficha (product/0027, requisito 1): el orden
+ * del propio catálogo, más **todas** las magnitudes de la ficha. Se deriva
+ * de `FICHA_FIELDS` en vez de repetir sus claves, así que una magnitud nueva
+ * es ordenable el mismo día que existe, sin una segunda lista que nadie
+ * recuerda actualizar.
+ */
+export const FICHA_SORT_CRITERIA = ['catalog', ...FICHA_FIELDS] as const;
 export type FichaSortCriterion = (typeof FICHA_SORT_CRITERIA)[number];
 
 /** Los dos conjuntos de campos de la ficha (product/0020): fuente única
@@ -393,23 +395,40 @@ function numericValueOf(cell: FichaCell): number | undefined {
 }
 
 /**
- * Ordena las entidades por el criterio elegido (product/0018, requisito 5).
+ * Hacia dónde ordena una magnitud (product/0027, requisito 4): el mejor
+ * primero, leyendo la misma tabla de polaridad con la que se colorea la Δ.
+ * Donde más es mejor se ordena descendente; donde más es peor, y donde no
+ * hay dirección declarada, ascendente — que es el orden natural de leer un
+ * número y no afirma ningún mérito. Las tres opciones que existían antes de
+ * esta spec —longitud, anchura y precio— son las tres `moreIsWorse`, así que
+ * siguen ordenando ascendente, exactamente igual que antes (requisito 5).
+ */
+function sortSign(field: FichaField): 1 | -1 {
+  return POLARITY[field] === 'moreIsBetter' ? -1 : 1;
+}
+
+/**
+ * Ordena las entidades por el criterio elegido (product/0018, requisito 5;
+ * product/0027 lo extiende a las veintidós magnitudes y le da dirección).
  * `catalog` conserva el orden de `buildFicha`, que es el del propio
- * catálogo. Una entidad sin la magnitud por la que se ordena va al final:
- * no hay dato que defender en esa posición, así que el orden relativo entre
- * dos entidades que ambas carecen del dato no se declara.
+ * catálogo. Una entidad sin la magnitud por la que se ordena va al final en
+ * las dos direcciones: no hay dato que defender en esa posición, y la
+ * ausencia no es un valor extremo que deba encabezar un orden descendente.
+ * El orden relativo entre dos entidades que ambas carecen del dato no se
+ * declara.
  */
 export function sortFicha(
   entities: FichaEntity[],
   criterion: FichaSortCriterion,
 ): FichaEntity[] {
   if (criterion === 'catalog') return entities;
+  const sign = sortSign(criterion);
   return [...entities].sort((a, b) => {
     const valueA = numericValueOf(a.cells[criterion]);
     const valueB = numericValueOf(b.cells[criterion]);
     if (valueA === undefined && valueB === undefined) return 0;
     if (valueA === undefined) return 1;
     if (valueB === undefined) return -1;
-    return valueA - valueB;
+    return sign * (valueA - valueB);
   });
 }

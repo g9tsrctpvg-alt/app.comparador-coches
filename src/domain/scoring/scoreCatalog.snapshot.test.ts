@@ -14,26 +14,31 @@ import { scoreCatalog } from './score';
  * Actualizados por `product/0017`, que cambia la fórmula del eje `viaje`
  * —el de mayor peso— y por tanto mueve los once totales a propósito. Que
  * este test fallara era la señal esperada, no una regresión.
+ *
+ * Vueltos a actualizar por `product/0026`, que re-ancla `diario`, `viaje` y
+ * `prestaciones` contra los extremos del mercado en vez de la gama
+ * comparada (ADR 0010): las notas bajan en bloque a propósito, y este test
+ * fallaba exactamente como se esperaba.
  */
 const EXPECTED_TOTALS: Record<string, number> = {
-  'hyundai-tucson-hev': 101.71240913329606,
-  'hyundai-tucson-phev': 100.89484697050804,
-  'kia-sportage-hev': 97.96663732897088,
-  'bmw-x1-xdrive25e': 96.8858574088462,
-  'mazda-cx-5': 93.85054990055077,
-  'honda-civic-e-hev': 92.09855690437826,
-  'lexus-nx-350h': 92.08250900913761,
-  'kia-ev3': 91.65061342363553,
-  'hyundai-kona-electrico': 91.24811252655694,
-  'kia-ev5': 90.78440773754107,
-  'hyundai-kona-hev': 90.18142374060288,
-  'volkswagen-id4': 88.96141434633013,
-  'alfa-romeo-tonale': 87.30712480928283,
-  'honda-cr-v-e-hev': 85.20253371896445,
-  'hyundai-ioniq-5': 81.73846287330642,
-  'toyota-corolla-cross': 77.19501728998509,
-  'citroen-c5-aircross': 76.67949224430582,
-  'jeep-compass': 77.19068739026713,
+  'hyundai-tucson-hev': 76.64029809397312,
+  'hyundai-tucson-phev': 75.18271166681497,
+  'kia-sportage-hev': 72.26178160694342,
+  'mazda-cx-5': 72.18308520232651,
+  'bmw-x1-xdrive25e': 70.88411621663906,
+  'kia-ev3': 70.83567451442254,
+  'honda-civic-e-hev': 70.71546082351648,
+  'hyundai-kona-hev': 68.36543758917576,
+  'lexus-nx-350h': 68.04468380080988,
+  'kia-ev5': 67.61789032129916,
+  'hyundai-kona-electrico': 65.52188849286392,
+  'hyundai-ioniq-5': 64.73871203560427,
+  'honda-cr-v-e-hev': 64.51370778367581,
+  'alfa-romeo-tonale': 63.8576959744103,
+  'volkswagen-id4': 62.00890434602242,
+  'toyota-corolla-cross': 57.629854422974326,
+  'citroen-c5-aircross': 56.5666128175826,
+  'jeep-compass': 58.84877038637088,
 };
 
 describe('scoreCatalog against the real catalogue (product/0009 regression)', () => {

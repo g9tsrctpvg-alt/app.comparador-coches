@@ -414,6 +414,46 @@ fase abierta. Se lista para no perderlo, no para bloquear nada.
   cobertura 100 % en `domain/`+`data/`+`logging/`) y los diecisiete
   criterios cerrados contra tests unitarios y Playwright sobre
   `npm run preview`. Consolidada en `docs/estado/interfaz.md`.
+- **Los anclajes de escala los fija el mercado — `product/0026`,
+  `consolidated`; ADR 0010, `approved`.** Los seis ejes puntúan contra
+  escalas absolutas desde la fase 3, pero los números de esos anclajes se
+  habían elegido mirando dónde caían los candidatos —está escrito en
+  `product/0002` y `product/0006`, que movieron un anclaje para no dejar a
+  los once entre 9,1 y 9,9—. La escala había quedado centrada en la gama
+  comparada: un 10 en maletero eran 620 L cuando se venden 910, y el IONIQ 5
+  ya saturaba el 10 de anchura de hombros. El ADR 0010 fija el criterio
+  nuevo —los dos anclajes son los extremos del turismo generalista de venta
+  al público, sin deportivos ni ultralujo— y la spec lo aplica a las siete
+  magnitudes de `diario`, `viaje` y `prestaciones`, con los modelos que fijan
+  cada extremo y su fuente. `coste` queda fuera —su 0 de precio es el
+  presupuesto, no el mercado—, `fiabilidad` ya cumplía el criterio y
+  `estetica` no tiene mercado contra el que anclarse. Recorrió
+  `draft → approved → implemented → verified → consolidated` en la misma
+  sesión de trabajo, con el gate humano en commit propio sin implementación,
+  los trece criterios cerrados contra los tests de los tres ejes y una
+  ejecución directa sobre el catálogo real, y la CI entera verde en local
+  (444 tests, cobertura 100 % en `domain/`+`data/`+`logging/`). Consolidada
+  en `docs/estado/dominio.md` y `docs/proceso/calibracion-de-escalas.md`.
+- **La ficha se ordena por cualquiera de sus magnitudes — `product/0027`,
+  `consolidated`.** El selector «Orden» de la ficha ofrecía cuatro criterios
+  —catálogo, longitud, anchura y precio—, los que arrastraba de la extinta
+  ficha técnica, mientras la vista compara veintidós magnitudes con fuente.
+  Preguntas que la ficha ya tenía contestadas en sus celdas —cuál tiene más
+  maletero, cuál se deprecia menos, cuál es el más potente— obligaban a
+  recorrer catorce columnas a ojo. La spec deriva las opciones de orden de
+  `FICHA_FIELDS` en vez de repetirlas (`FICHA_SORT_CRITERIA = ['catalog',
+  ...FICHA_FIELDS]`), las rotula y agrupa en el `<select>` con los mismos
+  `FieldDef` y bloques que rotulan las filas, y da dirección al orden
+  leyendo la **tabla de polaridad** que ya usa el color de la Δ: mejor
+  primero, así que las tres opciones que existían —las tres «más es peor»—
+  no cambian de comportamiento. No toca el conjunto de campos, ni la Δ, ni
+  la versión de `ViewState`. Recorrió `draft → approved → implemented →
+  verified → consolidated` en la misma sesión de trabajo, con el gate humano
+  en commit propio sin implementación, la CI entera verde en local (449
+  tests, cobertura 100 % en `domain/`+`data/`+`logging/`) y los diez
+  criterios cerrados contra tests unitarios, el catálogo real y Playwright
+  sobre el build de producción. Consolidada en `docs/estado/interfaz.md` y
+  `docs/estado/dominio.md`.
 - **Eje de autonomía y repostaje.** Es la mayor diferencia práctica entre los
   once candidatos en un viaje largo —los térmicos e híbridos hacen 640-950 km
   con un depósito, los eléctricos la mitad en autopista— y el modelo es hoy
@@ -485,6 +525,7 @@ una sorpresa esperando fecha.
 | Dos fotos del catálogo ya no viven en Wikimedia Commons sino en CDN de concesionario —`image-proxy.kws.kaavan.es` (perfil del C5 Aircross) y `cdn-datak.motork.net` (interior del Compass)—. `photo-sourcing.md` avisa de que esos enlaces caducan mucho antes que los de Commons, así que son las primeras sospechosas cuando `check:photos` se ponga rojo sin que nadie haya tocado el catálogo | 2026-08-24 | Sustituirlas por equivalentes en Commons o en sala de prensa si aparecen, o alojar las imágenes en el propio despliegue cambiando `photoSrc` |
 | Alta del campo `generation` (`product/0021`) en tres candidatos sin `faceliftYear` pese a que su generación sí ha tenido retoque: **`kia-sportage-hev`** (NQ5 retocado desde 2025), **`honda-civic-e-hev`** (undécima generación retocada desde mayo/junio de 2024) y **`mazda-cx-5`** (KF retocado desde septiembre de 2021). En los tres, la potencia y el precio del catálogo llevan la etiqueta genérica «Especificación del proyecto (julio 2026)», sin fecha ni versión verificable, así que no se ha podido confirmar si la ficha puntuada es la anterior o la posterior al retoque — declarar `faceliftYear` sin esa certeza habría sido inventar sobre qué versión exacta se compara | 2026-08-15 | Verificar contra una fuente fechada y con versión (km77, motor.es, ficha oficial) si el Sportage HEV, el Civic e:HEV y el CX-5 del catálogo son la versión retocada; si lo son, añadir `generation.faceliftYear` con esa fuente |
 | El rótulo enfocado de la tira de candidatos en móvil (`.duelChipActive`, `product/0023`, requisito 3) **no tiene tratamiento visual**: compone `.unstyledButton`, y entre ficheros gana la regla del primitivo, así que su `background: none` y su `border: none` borran el borde de acento y el tinte que la clase declara. Medido en el navegador al implementar `product/0025` —fondo `rgba(0,0,0,0)` y borde `0px` en el chip activo—, no supuesto. El estado sigue siendo legible con lector de pantalla (`aria-current="true"` sí está), así que no es un fallo de accesibilidad total, pero **el candidato enfocado no se distingue a la vista**, que es justo lo que el requisito pedía. Mismo mecanismo que `technical/0006` ya encontró con `.buttonGhost` | 2026-08-20 | Que `.duelChip`/`.duelChipActive` declaren su propia caja en vez de componer `.unstyledButton`, como ya hacen `.dialogView`/`.dialogViewActive` desde `product/0025`. `product/0023` está `consolidated` y no se edita: va en una spec nueva |
+| La anchura de hombros de la 2ª fila mezcla **mínimo y máximo**: km77 publica para unos modelos «anchura hombros mínima» y para otros «máxima», y `cars.json` guarda la cifra que dé cada ficha sin distinguir cuál es. Con normalización relativa apenas importaba; con escala absoluta el valor va directo a la nota, y `product/0026` propone anclar esa magnitud entre un máximo (146 cm, Mercedes Clase E) y un mínimo (126 cm, Kia Picanto), así que el sesgo entra también en los anclajes | 2026-08-23 | Decidir cuál de las dos medidas usa el proyecto, revisar las dieciséis fichas de `cars.json` contra km77 y dejar la elegida, con `discardedReason` en la que se sustituya |
 
 ## Aplazamientos con disparador
 
