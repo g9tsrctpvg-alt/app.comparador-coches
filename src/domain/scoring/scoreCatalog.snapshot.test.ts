@@ -67,4 +67,18 @@ describe('scoreCatalog against the real catalogue (product/0009 regression)', ()
       expect(car.total).toBeCloseTo(EXPECTED_TOTALS[car.carId]!, 9);
     }
   });
+
+  it('moves both plug-in hybrids when home charging is toggled (product/0028)', () => {
+    const withCharging = scoreCatalog(
+      cars,
+      DEFAULT_WEIGHTS,
+      { ...DEFAULT_ASSUMPTIONS, cargaEnCasa: true },
+      47000,
+    );
+    for (const id of ['bmw-x1-xdrive25e', 'hyundai-tucson-phev']) {
+      const before = result.find((car) => car.carId === id)!.total;
+      const after = withCharging.find((car) => car.carId === id)!.total;
+      expect(after).not.toBeCloseTo(before, 6);
+    }
+  });
 });

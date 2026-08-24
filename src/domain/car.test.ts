@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { CarSchema, publishedCars, type Car } from './car';
+import {
+  CarSchema,
+  isPlugIn,
+  publishedCars,
+  type Car,
+  type Technology,
+} from './car';
 import { sportageFixture } from './scoring/testFixtures';
 
 function sourced(
@@ -337,5 +343,17 @@ describe('publishedCars', () => {
   it('returns an empty list when every car is unpublished', () => {
     const cars = [carWith('a', false), carWith('b', false)];
     expect(publishedCars(cars)).toEqual([]);
+  });
+});
+
+describe('isPlugIn', () => {
+  it.each<[Technology, boolean]>([
+    ['EV', true],
+    ['PHEV', true],
+    ['ICE', false],
+    ['MHEV', false],
+    ['HEV', false],
+  ])('isPlugIn(%s) is %s (product/0028)', (technology, expected) => {
+    expect(isPlugIn({ technology })).toBe(expected);
   });
 });
