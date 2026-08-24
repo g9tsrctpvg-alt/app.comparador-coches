@@ -4149,5 +4149,482 @@
         "shows": "Portón abierto, maletero vacío, asientos traseros sin abatir — del press kit genérico \"Nuevo Tucson N-Line\" (junio 2024, misma generación retocada que front/rear). El kit no está segmentado por motorización y no hay metadato que confirme que esta unidad concreta es la PHEV y no otra versión del mismo lote (MHEV/HEV/T-GDI); la PHEV tiene 558 L/1.737 L homologados frente a 620 L/1.799 L de las no electrificadas, una diferencia consistente con un suelo algo más alto por la batería, aunque no se aprecia doble fondo o escalón visible en esta foto — excepción permitida por la skill solo para maletero e interior"
       }
     }
+  },
+  {
+    "id": "citroen-c5-aircross",
+    "name": "C5 Aircross",
+    "brand": "Citroën",
+    "technology": "MHEV",
+    "generation": {
+      "launchYear": {
+        "value": 2025,
+        "sources": [
+          {
+            "label": "Wikipedia (agosto 2026), «Citroën C5 Aircross»: la segunda generación se presentó el 29 de abril de 2025, https://en.wikipedia.org/wiki/Citroën_C5_Aircross",
+            "value": 2025,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "code": "CR3"
+    },
+    "notes": [
+      "Versión You Hybrid 145 CV, la de acceso a la gama con ese motor — km77, agosto 2026. Es mild hybrid de 48 V (gasolina 1.2 de 136 CV más motor eléctrico de 29 CV), no híbrido completo.",
+      "Precio: 33.990 € es el PVP de catálogo. km77 publica 28.990 € porque descuenta un descuento oficial de 5.000 €; el catálogo no modela descuentos, igual que se corrigió con el Kia EV5.",
+      "Maletero: km77 solo declara «volumen mínimo con dos filas de asientos disponibles: 565 litros», sin cifra máxima con la segunda fila en uso, así que no hay ambigüedad de banqueta deslizante. Los 651 L que circulan en prensa no coinciden con esa medición.",
+      "Mantenimiento anual estimado a partir del precio de la revisión oficial (250-350 € por revisión, anual o cada 15.000 km), no de un coste anual desglosado del fabricante.",
+      "Faltan las fotos de frontal, trasera y maletero: Wikimedia Commons solo tiene interiores de esta generación, la web de Citroën España responde 403 desde este entorno y los configuradores de concesionario solo publican vistas en 3/4, que las reglas de fotos no admiten para esas vistas.",
+      "La foto de interior es de una unidad enchufable (Plug-in Hybrid), no del You Hybrid 145 que puntúa la ficha: misma generación CR3 y mismo salpicadero, pero la tapicería del acabado puede no coincidir."
+    ],
+    "lengthMm": {
+      "value": 4652,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha C5 Aircross You Hybrid 145 CV (agosto 2026)",
+          "value": 4652,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "widthMm": {
+      "value": 1870,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha C5 Aircross You Hybrid 145 CV (agosto 2026)",
+          "value": 1870,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "heightMm": {
+      "value": 1691,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha C5 Aircross You Hybrid 145 CV (agosto 2026)",
+          "value": 1691,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "wheelbaseMm": {
+      "value": 2784,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha C5 Aircross You Hybrid 145 CV (agosto 2026)",
+          "value": 2784,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1420,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — C5 Aircross (2026) (agosto 2026): 142 cm a la altura de los hombros en la segunda fila, https://www.km77.com/coches/citroen/c5-aircross/2026/estandar/mediciones-propias/detalle",
+          "value": 1420,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "groundClearanceMm": {
+      "value": 201,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha C5 Aircross You Hybrid 145 CV (agosto 2026)",
+          "value": 201,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "trunkLiters": {
+      "value": 565,
+      "unit": "L",
+      "sources": [
+        {
+          "label": "km77, ficha C5 Aircross You Hybrid 145 CV (agosto 2026): «volumen mínimo con dos filas de asientos disponibles»",
+          "value": 565,
+          "estimated": false,
+          "current": true
+        },
+        {
+          "label": "Prensa española (agosto 2026), ficha del C5 Aircross 2025: 651 L",
+          "value": 651,
+          "estimated": false,
+          "current": false,
+          "discardedReason": "Cifra de catálogo que no coincide con la medición que km77 publica para la misma versión; no declara a qué configuración corresponde."
+        }
+      ]
+    },
+    "powerCv": {
+      "value": 145,
+      "unit": "CV",
+      "sources": [
+        {
+          "label": "km77, ficha C5 Aircross You Hybrid 145 CV (agosto 2026)",
+          "value": 145,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "weightKg": {
+      "value": 1629,
+      "unit": "kg",
+      "sources": [
+        {
+          "label": "km77, ficha C5 Aircross You Hybrid 145 CV (agosto 2026)",
+          "value": 1629,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "acceleration0to100": {
+      "value": 10.2,
+      "unit": "s",
+      "sources": [
+        {
+          "label": "km77, ficha C5 Aircross You Hybrid 145 CV (agosto 2026)",
+          "value": 10.2,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "consumption": {
+      "value": 5.3,
+      "unit": "l/100km",
+      "sources": [
+        {
+          "label": "km77, ficha C5 Aircross You Hybrid 145 CV (agosto 2026), consumo WLTP combinado",
+          "value": 5.3,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "maintenanceEurYear": {
+      "value": 300,
+      "unit": "€/año",
+      "sources": [
+        {
+          "label": "totalrenting.es y garajo.es, plan de mantenimiento del C5 Aircross (agosto 2026): revisión anual o cada 15.000 km, 250-350 € por revisión",
+          "value": 300,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "priceEur": {
+      "value": 33990,
+      "unit": "€",
+      "sources": [
+        {
+          "label": "km77, ficha C5 Aircross You Hybrid 145 CV (agosto 2026): 28.990 € de precio con descuento más 5.000 € de descuento oficial declarado aparte",
+          "value": 33990,
+          "estimated": false,
+          "current": true
+        },
+        {
+          "label": "km77 (agosto 2026): 28.990 € con el descuento oficial ya aplicado",
+          "value": 28990,
+          "estimated": false,
+          "current": false,
+          "discardedReason": "Lleva restado un descuento oficial de 5.000 €; el catálogo compara PVP de tarifa sin descuentos."
+        }
+      ]
+    },
+    "reliabilityOcu": {
+      "value": 76,
+      "sources": [
+        {
+          "label": "OCU, índice de fiabilidad 2026 — 85.590 encuestas, 39 marcas: Citroën, 76 sobre 100, puesto 35 (vía coches.com, agosto 2026)",
+          "value": 76,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyYears": {
+      "value": 3,
+      "unit": "años",
+      "sources": [
+        {
+          "label": "Garantía de fábrica Citroën España: 3 años sin límite de kilómetros (vía quecochemecompro.com, agosto 2026)",
+          "value": 3,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "aestheticsExterior": {
+      "value": 2,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "aestheticsInterior": {
+      "value": 2,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "photos": {
+      "side": {
+        "url": "https://image-proxy.kws.kaavan.es/i/1110-624/vehiculoscatalogosmodelos/db77dcc8-433f-4c53-b38e-d07b5af7e7f9/medias/17084.jpeg",
+        "credit": "Grupo Concesur (concesionario oficial Citroën)",
+        "shows": "Citroën C5 Aircross de la generación CR3, verde oliva, foto de estudio en perfil estricto; acabado no identificable"
+      },
+      "interior": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/2025_Citro%C3%ABn_C5_Aircross_Plug-in-Hybrid_Auto_Zuerich_2025_DSC_3741.jpg/1280px-2025_Citro%C3%ABn_C5_Aircross_Plug-in-Hybrid_Auto_Zuerich_2025_DSC_3741.jpg",
+        "credit": "Wikimedia Commons — Alexander Migl (CC BY-SA 4.0)",
+        "shows": "Citroën C5 Aircross Plug-in-Hybrid (generación CR3) en el Auto Zürich 2025: salpicadero, volante y consola central, tapicería oscura con inserciones claras — es la versión enchufable, no el You Hybrid 145 que puntúa la ficha"
+      }
+    }
+  },
+  {
+    "id": "jeep-compass",
+    "name": "Compass",
+    "brand": "Jeep",
+    "technology": "MHEV",
+    "generation": {
+      "launchYear": {
+        "value": 2025,
+        "sources": [
+          {
+            "label": "Wikipedia (agosto 2026), «Jeep Compass»: la tercera generación se presentó el 5 de mayo de 2025, https://en.wikipedia.org/wiki/Jeep_Compass",
+            "value": 2025,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "code": "J4U"
+    },
+    "notes": [
+      "Versión Altitude e-Hybrid 107 kW (145 CV), la de acceso a la gama — km77, agosto 2026. Es mild hybrid de 48 V (gasolina 1.2 de 136 CV más motor eléctrico de 29 CV con batería de 0,89 kWh), no híbrido completo.",
+      "Precio: 43.200 € es el PVP de catálogo, confirmado por Quadis («Nuevo JEEP Compass desde 43.200 euros»). km77 publica 32.541 € porque descuenta un descuento oficial de 10.659 €, el mayor del catálogo; el proyecto no modela descuentos.",
+      "Fiabilidad: Jeep NO aparece entre las 39 marcas del índice OCU 2026, ni como Jeep ni bajo ninguna otra denominación. Por decisión explícita del usuario se le asigna 64, el suelo de la escala —la nota de Land Rover, la peor medida—, tratando la ausencia de medición como señal mala y no como señal neutra. No es una medición de la OCU sobre Jeep: es una convención de este catálogo, y por eso va marcada como estimada.",
+      "Mantenimiento anual estimado a partir del pack Mopar de 3 años (~700 € IVA incluido), no de un coste anual desglosado por revisión.",
+      "Faltan las fotos de frontal, lateral, trasera y maletero: Wikimedia Commons solo tiene vistas en 3/4 de esta generación, la web de Jeep España responde 403, la galería del concesionario Quadis es de la generación anterior (MP) pese a anunciar el modelo nuevo, y el configurador oficial solo publica el Compass eléctrico, cuya parrilla cerrada no es la de esta motorización.",
+      "La foto de interior es del Compass eléctrico, no del e-Hybrid que puntúa la ficha: misma generación J4U y mismo salpicadero, pero es otra motorización."
+    ],
+    "lengthMm": {
+      "value": 4552,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha Compass Altitude e-Hybrid 107 kW (145 CV) (agosto 2026)",
+          "value": 4552,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "widthMm": {
+      "value": 1904,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha Compass Altitude e-Hybrid 107 kW (145 CV) (agosto 2026)",
+          "value": 1904,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "heightMm": {
+      "value": 1652,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha Compass Altitude e-Hybrid 107 kW (145 CV) (agosto 2026)",
+          "value": 1652,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "wheelbaseMm": {
+      "value": 2795,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha Compass Altitude e-Hybrid 107 kW (145 CV) (agosto 2026)",
+          "value": 2795,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1420,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — Jeep Compass (2025) (agosto 2026): 142 cm a la altura de los hombros en la segunda fila, https://www.km77.com/coches/jeep/compass/2025/estandar/mediciones-propias/detalle",
+          "value": 1420,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "groundClearanceMm": {
+      "value": 200,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha Compass Altitude e-Hybrid 107 kW (145 CV) (agosto 2026)",
+          "value": 200,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "trunkLiters": {
+      "value": 541,
+      "unit": "L",
+      "sources": [
+        {
+          "label": "km77, ficha Compass Altitude e-Hybrid 107 kW (145 CV) (agosto 2026): «volumen mínimo con dos filas de asientos disponibles»",
+          "value": 541,
+          "estimated": false,
+          "current": true
+        },
+        {
+          "label": "motor.es, ficha de medidas del Jeep Compass (agosto 2026): 550 L",
+          "value": 550,
+          "estimated": false,
+          "current": false,
+          "discardedReason": "Cifra de catálogo redondeada que no coincide con la medición publicada por km77 para la versión que puntúa la ficha."
+        }
+      ]
+    },
+    "powerCv": {
+      "value": 145,
+      "unit": "CV",
+      "sources": [
+        {
+          "label": "km77, ficha Compass Altitude e-Hybrid 107 kW (145 CV) (agosto 2026)",
+          "value": 145,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "weightKg": {
+      "value": 1635,
+      "unit": "kg",
+      "sources": [
+        {
+          "label": "km77, ficha Compass Altitude e-Hybrid 107 kW (145 CV) (agosto 2026)",
+          "value": 1635,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "acceleration0to100": {
+      "value": 10.3,
+      "unit": "s",
+      "sources": [
+        {
+          "label": "km77, ficha Compass Altitude e-Hybrid 107 kW (145 CV) (agosto 2026)",
+          "value": 10.3,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "consumption": {
+      "value": 5.6,
+      "unit": "l/100km",
+      "sources": [
+        {
+          "label": "km77, ficha Compass Altitude e-Hybrid 107 kW (145 CV) (agosto 2026), consumo WLTP combinado",
+          "value": 5.6,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "maintenanceEurYear": {
+      "value": 233,
+      "unit": "€/año",
+      "sources": [
+        {
+          "label": "Plan de mantenimiento Mopar de Jeep España: pack de 3 años por ~700 € IVA incluido (vía forojeep.com y jeep-especialistas.com, agosto 2026)",
+          "value": 233,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "priceEur": {
+      "value": 43200,
+      "unit": "€",
+      "sources": [
+        {
+          "label": "Quadis, concesionario oficial Jeep (agosto 2026): «Nuevo JEEP Compass desde 43.200 euros»; coincide con los 32.541 € de km77 más su descuento oficial de 10.659 €",
+          "value": 43200,
+          "estimated": false,
+          "current": true
+        },
+        {
+          "label": "km77 (agosto 2026): 32.541 € con el descuento oficial ya aplicado",
+          "value": 32541,
+          "estimated": false,
+          "current": false,
+          "discardedReason": "Lleva restado un descuento oficial de 10.659 €; el catálogo compara PVP de tarifa sin descuentos."
+        }
+      ]
+    },
+    "reliabilityOcu": {
+      "value": 64,
+      "sources": [
+        {
+          "label": "Jeep no figura entre las 39 marcas del índice de fiabilidad OCU 2026 (85.590 encuestas). Convención de este catálogo, decidida por el usuario: se le asigna el suelo de la escala, 64, que es la nota real de Land Rover, la peor marca medida",
+          "value": 64,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "warrantyYears": {
+      "value": 3,
+      "unit": "años",
+      "sources": [
+        {
+          "label": "Garantía contractual Jeep España: 36 meses desde la entrega (agosto 2026)",
+          "value": 3,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "aestheticsExterior": {
+      "value": 4,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "aestheticsInterior": {
+      "value": 5,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "photos": {
+      "interior": {
+        "url": "https://cdn-datak.motork.net/configurator-imgs/cars/es/800/JEEP/COMPASS/49394_SUV-5-DOORS/jeep-compass-bev-intern-1.jpg",
+        "credit": "Vian Automobile (concesionario oficial Jeep), imagen del configurador oficial",
+        "shows": "Jeep Compass eléctrico de la generación J4U: salpicadero, volante, cuadro digital y consola central, tapicería negra — es la versión eléctrica, no el e-Hybrid 145 que puntúa la ficha"
+      }
+    }
   }
 ]
