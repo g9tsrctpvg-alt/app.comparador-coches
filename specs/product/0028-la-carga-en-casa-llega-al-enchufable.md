@@ -1,7 +1,7 @@
 # 0028 — La carga en casa llega al híbrido enchufable
 
 - **Id:** product/0028
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-08-24
 - **Specs relacionadas:** product/0002, product/0003, product/0008
