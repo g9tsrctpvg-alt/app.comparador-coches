@@ -1,4 +1,4 @@
-import type { Car } from '../../car';
+import { isPlugIn, type Car } from '../../car';
 import type { GlobalAssumptions } from '../assumptions';
 import { scoreOnAbsoluteScale } from '../scale';
 import {
@@ -28,15 +28,26 @@ export function diarioFormula(assumptions: GlobalAssumptions): string {
   );
 }
 
-const CARGA_PENALTY_POINTS = -1.5;
+// El eléctrico pierde viabilidad sin enchufe en casa: la mitad de sus
+// recargas pasa a depender de un punto público. El enchufable solo pierde
+// comodidad —sigue moviéndose igual, sin gastar ni un euro más de gasolina
+// de la que ya gastaría— así que su penalización es la mitad (product/0028).
+const CARGA_PENALTY_POINTS_EV = -1.5;
+const CARGA_PENALTY_POINTS_PHEV = -0.75;
 
 function cargaPenalty(car: Car, assumptions: GlobalAssumptions): PenaltyLine {
-  const active = car.technology === 'EV' && !assumptions.cargaEnCasa;
+  const points =
+    car.technology === 'EV'
+      ? CARGA_PENALTY_POINTS_EV
+      : car.technology === 'PHEV'
+        ? CARGA_PENALTY_POINTS_PHEV
+        : 0;
+  const active = isPlugIn(car) && !assumptions.cargaEnCasa;
   return {
     label: 'Sin punto de carga en casa',
-    condition: 'Vehículo eléctrico y el usuario no tiene carga en casa',
+    condition: 'Vehículo enchufable y el usuario no tiene carga en casa',
     active,
-    effect: active ? CARGA_PENALTY_POINTS : 0,
+    effect: active ? points : 0,
   };
 }
 
@@ -86,10 +97,11 @@ export function buildDiarioBreakdown(
       info: [
         {
           label: 'Penalización por carga en casa',
-          value:
-            car.technology === 'EV'
-              ? 'Aplica: es un vehículo eléctrico.'
-              : 'No aplica: no es un vehículo eléctrico.',
+          value: isPlugIn(car)
+            ? car.technology === 'EV'
+              ? `Aplica: es un vehículo eléctrico, penalización ${CARGA_PENALTY_POINTS_EV.toFixed(2)}.`
+              : `Aplica: es un híbrido enchufable, penalización ${CARGA_PENALTY_POINTS_PHEV.toFixed(2)} — la mitad que un eléctrico, porque sin enchufe pierde comodidad, no viabilidad.`
+            : 'No aplica: no es un vehículo enchufable.',
         },
       ],
       subcomponents: [

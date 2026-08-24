@@ -1161,7 +1161,7 @@
       "value": 7.5,
       "sources": [
         {
-          "label": "Especificación del proyecto (julio 2026)",
+          "label": "Especificación del proyecto (julio 2026): consumo en modo híbrido con la batería vacía (product/0028), en línea con el rango 6,5-8,5 l/100 km que km77 reporta en su prueba real del Tucson PHEV para ese mismo escenario",
           "value": 7.5,
           "estimated": true,
           "current": true
@@ -1223,6 +1223,30 @@
           "label": "Especificación del proyecto (julio 2026)",
           "value": 0.4,
           "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "batteryCapacityKwh": {
+      "value": 16.3,
+      "unit": "kWh",
+      "sources": [
+        {
+          "label": "km77, ficha X1 xDrive25e, capacidad de batería (agosto 2026), https://www.km77.com/coches/bmw/x1/2023/estandar/e/x1-xdrive25e/datos",
+          "value": 16.3,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "electricRangeKm": {
+      "value": 83,
+      "unit": "km",
+      "sources": [
+        {
+          "label": "km77, ficha X1 xDrive25e, autonomía eléctrica WLTP (agosto 2026), https://www.km77.com/coches/bmw/x1/2023/estandar/e/x1-xdrive25e/datos",
+          "value": 83,
+          "estimated": false,
           "current": true
         }
       ]
@@ -4045,14 +4069,21 @@
       ]
     },
     "consumption": {
-      "value": 2.7,
+      "value": 7.3,
       "unit": "l/100km",
       "sources": [
+        {
+          "label": "km77, artículo «Consumo y recarga» del Tucson PHEV (agosto 2026): 6,5-7,0 l/100 km en ciudad y 7,5-8,5 l/100 km en autopista con la batería agotada (8,1 l/100 km medidos en su comparativa de autopista); 7,3 l/100 km es el punto medio de ese rango, https://www.km77.com/coches/hyundai/tucson/2024/estandar/phev/informacion/hyundai-tucson-2024-consumo-y-recarga",
+          "value": 7.3,
+          "estimated": true,
+          "current": true
+        },
         {
           "label": "km77, ficha Tucson Klass 1.6 T-GDi PHEV 288 CV, consumo WLTP combinado (agosto 2026)",
           "value": 2.7,
           "estimated": false,
-          "current": true
+          "current": false,
+          "discardedReason": "Era el WLTP combinado, que ya supone un patrón de carga; product/0028 redefine consumption de un PHEV como el consumo en modo híbrido con la batería vacía"
         }
       ]
     },
@@ -4110,6 +4141,30 @@
           "label": "Estimación por comparación con el BMW X1 xDrive25e del catálogo, mismo tipo PHEV (agosto 2026)",
           "value": 0.4,
           "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "batteryCapacityKwh": {
+      "value": 13.8,
+      "unit": "kWh",
+      "sources": [
+        {
+          "label": "km77, ficha Tucson Klass 1.6 T-GDi PHEV 288 CV, capacidad de batería (agosto 2026), https://www.km77.com/coches/hyundai/tucson/2024/estandar/phev/tucson-klass-16-t-gdi-phev-288-cv/datos",
+          "value": 13.8,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "electricRangeKm": {
+      "value": 70,
+      "unit": "km",
+      "sources": [
+        {
+          "label": "km77, ficha Tucson Klass 1.6 T-GDi PHEV 288 CV, autonomía eléctrica WLTP (agosto 2026), https://www.km77.com/coches/hyundai/tucson/2024/estandar/phev/tucson-klass-16-t-gdi-phev-288-cv/datos",
+          "value": 70,
+          "estimated": false,
           "current": true
         }
       ]

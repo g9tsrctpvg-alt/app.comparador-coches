@@ -83,6 +83,16 @@ export const TechnologySchema = z.enum(['ICE', 'MHEV', 'HEV', 'PHEV', 'EV']);
 export type Technology = z.infer<typeof TechnologySchema>;
 
 /**
+ * Si el coche se enchufa (product/0028). Es la pregunta que hace el
+ * supuesto `cargaEnCasa`, y hasta esta spec cada eje la contestaba a mano
+ * comparando `technology === 'EV'`, con lo que un `PHEV` quedaba fuera de
+ * las dos veces que la respuesta le afecta.
+ */
+export function isPlugIn(car: { technology: Technology }): boolean {
+  return car.technology === 'EV' || car.technology === 'PHEV';
+}
+
+/**
  * En qué punto tecnológico está el coche (product/0021): el año de
  * presentación de la generación a la que pertenece, el del retoque de
  * mitad de ciclo si la versión comparada lo lleva, y el código de
@@ -129,7 +139,7 @@ export type WarrantyExtension = {
   condition: string;
 };
 
-export const CarSchema = z.object({
+const CarObjectSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
   brand: z.string().min(1),
@@ -160,9 +170,43 @@ export const CarSchema = z.object({
   warrantyYears: SourcedNumberSchema,
   warrantyExtension: WarrantyExtensionSchema.optional(),
   residualPct5y: SourcedNumberSchema.optional(),
+  /**
+   * Capacidad de la batería y autonomía eléctrica homologada WLTP
+   * (product/0028), solo declaradas por un `PHEV`. Con estas dos, `coste`
+   * deriva cuánto del año hace en eléctrico sin necesitar un tercer dato
+   * —el consumo eléctrico— que km77 no publica de forma homogénea: la
+   * propia km77 lo advierte en su ficha del Tucson PHEV («no [hay datos]
+   * del consumo medio de energía eléctrica»). Es la capacidad **bruta**, no
+   * la útil: la útil tampoco la publica el fabricante para todos los
+   * modelos, y usar siempre la bruta mantiene comparables los dos
+   * enchufables del catálogo.
+   */
+  batteryCapacityKwh: SourcedNumberSchema.optional(),
+  electricRangeKm: SourcedNumberSchema.optional(),
   aestheticsExterior: UserRatingSchema,
   aestheticsInterior: UserRatingSchema,
   photos: PhotosSchema,
+});
+
+export const CarSchema = CarObjectSchema.superRefine((data, ctx) => {
+  const isPlugInHybrid = data.technology === 'PHEV';
+  for (const field of ['batteryCapacityKwh', 'electricRangeKm'] as const) {
+    const present = data[field] !== undefined;
+    if (isPlugInHybrid && !present) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `un PHEV debe declarar '${field}'`,
+        path: [field],
+      });
+    }
+    if (!isPlugInHybrid && present) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `'${field}' solo aplica a un PHEV`,
+        path: [field],
+      });
+    }
+  }
 });
 export type Car = z.infer<typeof CarSchema>;
 

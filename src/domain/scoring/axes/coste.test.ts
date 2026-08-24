@@ -183,4 +183,81 @@ describe('buildCosteBreakdown', () => {
       `${DEFAULT_ASSUMPTIONS.precioLitro.toFixed(2)} €/l`,
     );
   });
+
+  it('sends a PHEV entirely through thermal mode when there is no home charging, matching a non-electric car formula (product/0028)', () => {
+    const car = threeCarFixture[1]!; // X1 xDrive25e, PHEV
+    const components = costeComponents(car, DEFAULT_ASSUMPTIONS); // cargaEnCasa: false
+    const energiaAnual =
+      (car.consumption.value / 100) *
+      DEFAULT_ASSUMPTIONS.kmPorAnio *
+      DEFAULT_ASSUMPTIONS.precioLitro;
+    const expected = (energiaAnual + car.maintenanceEurYear.value) / 12;
+    expect(components.costeUsoMensual).toBeCloseTo(expected, 6);
+  });
+
+  it('splits a PHEV between electric and thermal kilometres with home charging, saturating at a day of range', () => {
+    const car = threeCarFixture[1]!; // X1 xDrive25e: 83 km de autonomía, satura el día
+    const assumptions = { ...DEFAULT_ASSUMPTIONS, cargaEnCasa: true };
+    const components = costeComponents(car, assumptions);
+
+    const autonomiaRealKm = car.electricRangeKm!.value;
+    const consumoElectrico =
+      (100 * car.batteryCapacityKwh!.value) / autonomiaRealKm;
+    const kmDiarios = assumptions.kmPorAnio * 0.75;
+    const fraccion = Math.min(1, autonomiaRealKm / (kmDiarios / 365));
+    const kmElectricos = kmDiarios * fraccion;
+    const kmTermicos = assumptions.kmPorAnio - kmElectricos;
+    const energiaAnual =
+      (kmElectricos / 100) * consumoElectrico * assumptions.precioKwh +
+      (kmTermicos / 100) * car.consumption.value * assumptions.precioLitro;
+    const expected = (energiaAnual + car.maintenanceEurYear.value) / 12;
+
+    expect(fraccion).toBe(1); // el día cabe entero en la autonomía real
+    expect(components.costeUsoMensual).toBeCloseTo(expected, 6);
+  });
+
+  it('splits a PHEV proportionally, not fully electric, when its range falls short of a day', () => {
+    const base = threeCarFixture[1]!;
+    const car = {
+      ...base,
+      electricRangeKm: { ...base.electricRangeKm!, value: 10 },
+    };
+    const assumptions = { ...DEFAULT_ASSUMPTIONS, cargaEnCasa: true };
+    const components = costeComponents(car, assumptions);
+
+    const consumoElectrico = (100 * car.batteryCapacityKwh!.value) / 10;
+    const kmDiarios = assumptions.kmPorAnio * 0.75;
+    const fraccion = 10 / (kmDiarios / 365);
+    const kmElectricos = kmDiarios * fraccion;
+    const kmTermicos = assumptions.kmPorAnio - kmElectricos;
+    const energiaAnual =
+      (kmElectricos / 100) * consumoElectrico * assumptions.precioKwh +
+      (kmTermicos / 100) * car.consumption.value * assumptions.precioLitro;
+    const expected = (energiaAnual + car.maintenanceEurYear.value) / 12;
+
+    expect(fraccion).toBeLessThan(1);
+    expect(components.costeUsoMensual).toBeCloseTo(expected, 6);
+  });
+
+  it('throws for a PHEV that reaches the axis without battery capacity or electric range', () => {
+    const base = threeCarFixture[1]!;
+    const car = { ...base, batteryCapacityKwh: undefined };
+    expect(() => costeComponents(car, DEFAULT_ASSUMPTIONS)).toThrow(
+      /no declara autonomía eléctrica o capacidad de batería/,
+    );
+  });
+
+  it('declares the electric range and the electric/thermal kilometre split for a PHEV (product/0028)', () => {
+    const breakdown = buildCosteBreakdown(
+      threeCarFixture,
+      { ...DEFAULT_ASSUMPTIONS, cargaEnCasa: true },
+      1,
+    );
+    const x1 = breakdown.get('bmw-x1-xdrive25e')!;
+    expect(x1.info).toHaveLength(3);
+    expect(x1.info![0]!.label).toBe('Autonomía eléctrica real aplicada');
+    expect(x1.info![0]!.value).toContain('83.0 km');
+    expect(x1.info![1]!.label).toBe('Kilómetros/año en modo eléctrico');
+    expect(x1.info![2]!.label).toBe('Kilómetros/año en modo térmico');
+  });
 });

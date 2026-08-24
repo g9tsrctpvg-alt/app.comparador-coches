@@ -183,6 +183,28 @@ describe('buildDiarioBreakdown', () => {
     expect(ev3.penalties[0]!.effect).toBe(-1.5);
   });
 
+  it('gives the PHEV without home charging half the penalty of the EV (product/0028)', () => {
+    const breakdown = buildDiarioBreakdown(
+      threeCarFixture,
+      DEFAULT_ASSUMPTIONS,
+      3,
+    );
+    const x1 = breakdown.get('bmw-x1-xdrive25e')!;
+    expect(x1.penalties[0]!.active).toBe(true);
+    expect(x1.penalties[0]!.effect).toBe(-0.75);
+  });
+
+  it('lifts the PHEV penalty when the assumption says there is home charging', () => {
+    const breakdown = buildDiarioBreakdown(
+      threeCarFixture,
+      { ...DEFAULT_ASSUMPTIONS, cargaEnCasa: true },
+      3,
+    );
+    const x1 = breakdown.get('bmw-x1-xdrive25e')!;
+    expect(x1.penalties[0]!.active).toBe(false);
+    expect(x1.penalties[0]!.effect).toBe(0);
+  });
+
   it('does not penalize a non-electric car regardless of home charging', () => {
     const breakdown = buildDiarioBreakdown(
       threeCarFixture,

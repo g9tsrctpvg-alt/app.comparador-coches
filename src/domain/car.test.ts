@@ -203,6 +203,47 @@ describe('CarSchema', () => {
     expect(result.success).toBe(false);
   });
 
+  it('accepts a PHEV that declares battery capacity and electric range (product/0028)', () => {
+    const result = CarSchema.safeParse({
+      ...validCar,
+      technology: 'PHEV',
+      batteryCapacityKwh: sourced(16.3),
+      electricRangeKm: sourced(83),
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it('rejects a PHEV missing battery capacity', () => {
+    const result = CarSchema.safeParse({
+      ...validCar,
+      technology: 'PHEV',
+      electricRangeKm: sourced(83),
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it('rejects a PHEV missing electric range', () => {
+    const result = CarSchema.safeParse({
+      ...validCar,
+      technology: 'PHEV',
+      batteryCapacityKwh: sourced(16.3),
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it('rejects a non-PHEV that declares battery capacity or electric range', () => {
+    const withBattery = CarSchema.safeParse({
+      ...validCar,
+      batteryCapacityKwh: sourced(16.3),
+    });
+    const withRange = CarSchema.safeParse({
+      ...validCar,
+      electricRangeKm: sourced(83),
+    });
+    expect(withBattery.success).toBe(false);
+    expect(withRange.success).toBe(false);
+  });
+
   it('rejects a missing required field', () => {
     const withoutId: Record<string, unknown> = { ...validCar };
     delete withoutId.id;

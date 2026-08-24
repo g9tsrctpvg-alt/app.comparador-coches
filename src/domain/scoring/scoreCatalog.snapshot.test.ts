@@ -19,15 +19,23 @@ import { scoreCatalog } from './score';
  * `prestaciones` contra los extremos del mercado en vez de la gama
  * comparada (ADR 0010): las notas bajan en bloque a propósito, y este test
  * fallaba exactamente como se esperaba.
+ *
+ * Vueltos a actualizar por `product/0028`, que hace que `cargaEnCasa`
+ * alcance también al `PHEV`: sin carga en casa (el supuesto por defecto),
+ * `bmw-x1-xdrive25e` baja 2,25 —la penalización de `diario` que antes solo
+ * pagaba un `EV`— y `hyundai-tucson-phev` baja 4,04 más, porque su
+ * `consumption` deja de ser el WLTP combinado (que ya suponía carga) y pasa
+ * a ser el consumo real en modo híbrido con la batería vacía. Los otros
+ * catorce candidatos no se mueven ni un céntimo de nota.
  */
 const EXPECTED_TOTALS: Record<string, number> = {
   'hyundai-tucson-hev': 76.64029809397312,
-  'hyundai-tucson-phev': 75.18271166681497,
   'kia-sportage-hev': 72.26178160694342,
   'mazda-cx-5': 72.18308520232651,
-  'bmw-x1-xdrive25e': 70.88411621663906,
+  'hyundai-tucson-phev': 71.14366365125962,
   'kia-ev3': 70.83567451442254,
   'honda-civic-e-hev': 70.71546082351648,
+  'bmw-x1-xdrive25e': 68.63411621663906,
   'hyundai-kona-hev': 68.36543758917576,
   'lexus-nx-350h': 68.04468380080988,
   'kia-ev5': 67.61789032129916,

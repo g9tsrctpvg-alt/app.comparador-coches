@@ -138,7 +138,7 @@ describe('scoreCatalog', () => {
     expect(diario.penalties).toEqual([
       {
         label: 'Sin punto de carga en casa',
-        condition: 'Vehículo eléctrico y el usuario no tiene carga en casa',
+        condition: 'Vehículo enchufable y el usuario no tiene carga en casa',
         active: true,
         effect: -1.5,
       },

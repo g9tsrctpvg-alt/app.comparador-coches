@@ -34,6 +34,8 @@ interface FixtureInput {
   residualPct5y: number;
   aestheticsExterior: number;
   aestheticsInterior: number;
+  batteryCapacityKwh?: number;
+  electricRangeKm?: number;
 }
 
 function buildCar(input: FixtureInput): Car {
@@ -64,6 +66,14 @@ function buildCar(input: FixtureInput): Car {
     reliabilityOcu: sourced(input.reliabilityOcu),
     warrantyYears: sourced(input.warrantyYears, 'años'),
     residualPct5y: sourced(input.residualPct5y),
+    batteryCapacityKwh:
+      input.batteryCapacityKwh !== undefined
+        ? sourced(input.batteryCapacityKwh, 'kWh')
+        : undefined,
+    electricRangeKm:
+      input.electricRangeKm !== undefined
+        ? sourced(input.electricRangeKm, 'km')
+        : undefined,
     aestheticsExterior: rating(input.aestheticsExterior),
     aestheticsInterior: rating(input.aestheticsInterior),
     photos: {},
@@ -115,6 +125,10 @@ export const x1Fixture = buildCar({
   residualPct5y: 0.4,
   aestheticsExterior: 5,
   aestheticsInterior: 5,
+  // km77, ficha de datos del X1 xDrive25e (agosto 2026): 16,3 kWh de
+  // capacidad de batería, 83 km de autonomía eléctrica homologada WLTP.
+  batteryCapacityKwh: 16.3,
+  electricRangeKm: 83,
 });
 
 export const ev3Fixture = buildCar({
