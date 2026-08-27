@@ -438,8 +438,9 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     que una celda sin dato, no un número que no diría nada. Arranca fijada
     la primera referencia del catálogo, si hay alguna.
   - **Orden** — `Catálogo` más **una opción por cada una de las
-    veinticuatro magnitudes** de «Completa» (product/0027), agrupadas en el `<select>` por
-    los mismos seis bloques y con el mismo rótulo que da a esa fila su
+    veinticuatro magnitudes** de «Completa» (product/0027), agrupadas en el
+    `<select>` por los mismos seis bloques y con el mismo rótulo que da a esa
+    fila su
     `FieldDef` —las opciones se generan de `COMPLETE_BLOCKS`, no de una
     segunda lista—. Ordena **mejor primero**, con la dirección que fija la
     tabla de polaridad del dominio (`docs/estado/dominio.md`): descendente
