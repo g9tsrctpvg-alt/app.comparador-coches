@@ -152,6 +152,30 @@
       ],
       "unit": "kWh/100km"
     },
+    "electricRangeKm": {
+      "value": 436,
+      "sources": [
+        {
+          "label": "km77, ficha EV3 Air Standard Range 204 CV 58,3 kWh (agosto 2026): «Autonomía eléctrica WLTP» 436 km, https://www.km77.com/coches/kia/ev3/2025/estandar/estandar/ev3/datos",
+          "value": 436,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "km"
+    },
+    "batteryKwh": {
+      "value": 58.3,
+      "sources": [
+        {
+          "label": "km77, ficha EV3 Air Standard Range 204 CV 58,3 kWh (agosto 2026): «Capacidad» 58,3 kWh; la versión es la Standard Range, no la Long Range, porque su tara de 1.800 kg es la que declara este registro, https://www.km77.com/coches/kia/ev3/2025/estandar/estandar/ev3/datos",
+          "value": 58.3,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kWh"
+    },
     "maintenanceEurYear": {
       "value": 250,
       "sources": [
@@ -392,6 +416,18 @@
         }
       ],
       "unit": "l/100km"
+    },
+    "batteryKwh": {
+      "value": 1.32,
+      "sources": [
+        {
+          "label": "km77, ficha Kona Híbrido N Line Style 1.6 GDi (agosto 2026): «Capacidad» 1,32 kWh, https://www.km77.com/coches/hyundai/kona/2023/estandar/hibrido/kona-n-line-style-hibrido-16-gdi-129-cv/datos",
+          "value": 1.32,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kWh"
     },
     "maintenanceEurYear": {
       "value": 400,
@@ -635,6 +671,30 @@
         }
       ],
       "unit": "kWh/100km"
+    },
+    "electricRangeKm": {
+      "value": 510,
+      "sources": [
+        {
+          "label": "km77, ficha Kona Eléctrico Tecno 204 CV 65 kWh (agosto 2026): «Autonomía eléctrica WLTP» 510 km, https://www.km77.com/coches/hyundai/kona/2023/estandar/electric/kona-electrico-204-cv-65-kwh-tecno/datos",
+          "value": 510,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "km"
+    },
+    "batteryKwh": {
+      "value": 65.4,
+      "sources": [
+        {
+          "label": "km77, ficha Kona Eléctrico Tecno 204 CV 65 kWh (agosto 2026): «Capacidad útil» 65,4 kWh; la capacidad total figura como «No disponible», y 65,4 kWh es la cifra que Hyundai publica como capacidad de la batería, https://www.km77.com/coches/hyundai/kona/2023/estandar/electric/kona-electrico-204-cv-65-kwh-tecno/datos",
+          "value": 65.4,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kWh"
     },
     "maintenanceEurYear": {
       "value": 250,
@@ -883,6 +943,18 @@
         }
       ],
       "unit": "l/100km"
+    },
+    "batteryKwh": {
+      "value": 0.85,
+      "sources": [
+        {
+          "label": "km77, ficha Corolla Cross Style 140H Hybrid (agosto 2026): «Capacidad» 0,85 kWh, https://www.km77.com/coches/toyota/corolla-cross/2023/estandar/estandar/corolla-cross-style-18-hybrid/datos",
+          "value": 0.85,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kWh"
     },
     "maintenanceEurYear": {
       "value": 350,
@@ -1169,6 +1241,30 @@
       ],
       "unit": "l/100km"
     },
+    "electricRangeKm": {
+      "value": 83,
+      "sources": [
+        {
+          "label": "km77, ficha X1 xDrive25e (agosto 2026): «Autonomía eléctrica WLTP» 83 km, https://www.km77.com/coches/bmw/x1/2023/estandar/e/x1-xdrive25e/datos",
+          "value": 83,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "km"
+    },
+    "batteryKwh": {
+      "value": 16.3,
+      "sources": [
+        {
+          "label": "km77, ficha X1 xDrive25e (agosto 2026): «Capacidad» 16,3 kWh, de los que 14,2 kWh son útiles, https://www.km77.com/coches/bmw/x1/2023/estandar/e/x1-xdrive25e/datos",
+          "value": 16.3,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kWh"
+    },
     "maintenanceEurYear": {
       "value": 750,
       "sources": [
@@ -1412,6 +1508,18 @@
         }
       ],
       "unit": "l/100km"
+    },
+    "batteryKwh": {
+      "value": 0.77,
+      "sources": [
+        {
+          "label": "km77, ficha Tonale Ibrida 175 CV TCT Sprint (agosto 2026): «Capacidad» 0,77 kWh, https://www.km77.com/coches/alfa-romeo/tonale/2026/estandar/estandar/tonale-ibrida-175-cv-tct-sprint/datos",
+          "value": 0.77,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kWh"
     },
     "maintenanceEurYear": {
       "value": 600,
@@ -1660,6 +1768,18 @@
         }
       ],
       "unit": "l/100km"
+    },
+    "batteryKwh": {
+      "value": 1.49,
+      "sources": [
+        {
+          "label": "km77, ficha Sportage Drive 1.6 HEV 4x2 239 CV (agosto 2026): «Capacidad» 1,49 kWh, https://www.km77.com/coches/kia/sportage/2026/estandar/hev/sportage-drive-16-hev-4x2-239-cv/datos",
+          "value": 1.49,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kWh"
     },
     "maintenanceEurYear": {
       "value": 400,
@@ -2990,6 +3110,30 @@
         }
       ]
     },
+    "electricRangeKm": {
+      "value": 550,
+      "sources": [
+        {
+          "label": "km77, ficha ID.4 Pro 210 kW 286 CV 77 kWh (agosto 2026): «Autonomía eléctrica WLTP» 550 km, https://www.km77.com/coches/volkswagen/id4/2021/estandar/estandar/id4-pro-performance-210-kw-286-cv-77-kwh/datos",
+          "value": 550,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "km"
+    },
+    "batteryKwh": {
+      "value": 82,
+      "sources": [
+        {
+          "label": "km77, ficha ID.4 Pro 210 kW 286 CV 77 kWh (agosto 2026): «Capacidad» 82 kWh (la útil, 77 kWh, es la que da nombre comercial a la versión), https://www.km77.com/coches/volkswagen/id4/2021/estandar/estandar/id4-pro-performance-210-kw-286-cv-77-kwh/datos",
+          "value": 82,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kWh"
+    },
     "maintenanceEurYear": {
       "value": 155,
       "unit": "€/año",
@@ -3269,6 +3413,30 @@
         }
       ]
     },
+    "electricRangeKm": {
+      "value": 505,
+      "sources": [
+        {
+          "label": "km77, ficha EV5 GT-Line 81 kWh Long Range 217 CV (agosto 2026): «Autonomía eléctrica WLTP» 505 km, https://www.km77.com/coches/kia/ev5/2025/estandar/estandar/ev5-gt-line-81-kwh-long-range-160-kw-217-cv/datos",
+          "value": 505,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "km"
+    },
+    "batteryKwh": {
+      "value": 81.4,
+      "sources": [
+        {
+          "label": "km77, ficha EV5 GT-Line 81 kWh Long Range 217 CV (agosto 2026): «Capacidad» 81,4 kWh, https://www.km77.com/coches/kia/ev5/2025/estandar/estandar/ev5-gt-line-81-kwh-long-range-160-kw-217-cv/datos",
+          "value": 81.4,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kWh"
+    },
     "maintenanceEurYear": {
       "value": 220,
       "unit": "€/año",
@@ -3535,6 +3703,30 @@
         }
       ]
     },
+    "electricRangeKm": {
+      "value": 570,
+      "sources": [
+        {
+          "label": "km77, ficha IONIQ 5 Light 84 kWh 228 CV RWD (agosto 2026): «Autonomía eléctrica WLTP» 570 km, https://www.km77.com/coches/hyundai/ioniq-5/2025/estandar/estandar/ioniq-5-168-kw-228-cv-84-kw-rwd/datos",
+          "value": 570,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "km"
+    },
+    "batteryKwh": {
+      "value": 84,
+      "sources": [
+        {
+          "label": "km77, ficha IONIQ 5 Light 84 kWh 228 CV RWD (agosto 2026): «Capacidad» 84 kWh, https://www.km77.com/coches/hyundai/ioniq-5/2025/estandar/estandar/ioniq-5-168-kw-228-cv-84-kw-rwd/datos",
+          "value": 84,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kWh"
+    },
     "maintenanceEurYear": {
       "value": 250,
       "unit": "€/año",
@@ -3791,6 +3983,18 @@
           "current": true
         }
       ]
+    },
+    "batteryKwh": {
+      "value": 1.49,
+      "sources": [
+        {
+          "label": "km77, ficha Tucson Klass 1.6 T-GDi HEV 215 CV (agosto 2026): «Capacidad» 1,49 kWh, https://www.km77.com/coches/hyundai/tucson/2024/estandar/hev/tucson-hybrid-16-t-gdi-158-kw-215-cv/datos",
+          "value": 1.49,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kWh"
     },
     "maintenanceEurYear": {
       "value": 170,
@@ -4056,6 +4260,30 @@
         }
       ]
     },
+    "electricRangeKm": {
+      "value": 70,
+      "sources": [
+        {
+          "label": "km77, ficha Tucson Klass 1.6 T-GDi PHEV 288 CV (agosto 2026): «Autonomía eléctrica WLTP» 70 km, en ciclo mixto, https://www.km77.com/coches/hyundai/tucson/2024/estandar/phev/tucson-klass-16-t-gdi-phev-288-cv/datos",
+          "value": 70,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "km"
+    },
+    "batteryKwh": {
+      "value": 13.8,
+      "sources": [
+        {
+          "label": "km77, ficha Tucson Klass 1.6 T-GDi PHEV 288 CV (agosto 2026): «Capacidad» 13,8 kWh, https://www.km77.com/coches/hyundai/tucson/2024/estandar/phev/tucson-klass-16-t-gdi-phev-288-cv/datos",
+          "value": 13.8,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kWh"
+    },
     "maintenanceEurYear": {
       "value": 230,
       "unit": "€/año",
@@ -4316,6 +4544,18 @@
         }
       ]
     },
+    "batteryKwh": {
+      "value": 0.89,
+      "sources": [
+        {
+          "label": "km77, ficha C5 Aircross You Hybrid 145 CV (agosto 2026): «Capacidad» 0,89 kWh, de los que 0,43 kWh son útiles, https://www.km77.com/coches/citroen/c5-aircross/2026/estandar/estandar/c5-aircross-you-hybrid-145-cv/datos",
+          "value": 0.89,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kWh"
+    },
     "maintenanceEurYear": {
       "value": 300,
       "unit": "€/año",
@@ -4556,6 +4796,18 @@
           "current": true
         }
       ]
+    },
+    "batteryKwh": {
+      "value": 0.89,
+      "sources": [
+        {
+          "label": "km77, ficha Compass Altitude e-Hybrid 107 kW 145 CV (agosto 2026): «Capacidad» 0,89 kWh, de los que 0,43 kWh son útiles, https://www.km77.com/coches/jeep/compass/2025/estandar/estandar/compass-altitude-e-hybrid-107-kw-145-cv/datos",
+          "value": 0.89,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kWh"
     },
     "maintenanceEurYear": {
       "value": 233,

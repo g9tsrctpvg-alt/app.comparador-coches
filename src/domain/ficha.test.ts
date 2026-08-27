@@ -477,3 +477,73 @@ describe('sortFicha', () => {
     ]);
   });
 });
+
+describe('magnitudes de electrificación (product/0028)', () => {
+  const cars = threeCarFixture;
+
+  it('sorts by electric range with the longest first: more is better', () => {
+    // EV3 436 km > X1 83 km; el Sportage, híbrido convencional, no declara
+    // autonomía eléctrica y por eso cierra la lista.
+    const sorted = sortFicha(buildFicha(cars, []), 'electricRangeKm');
+    expect(sorted.map((e) => e.id)).toEqual([
+      'kia-ev3',
+      'bmw-x1-xdrive25e',
+      'kia-sportage-hev',
+    ]);
+  });
+
+  it('sorts by battery capacity ascending: no direction is declared for it', () => {
+    // X1 16,3 kWh < EV3 58,3 kWh. Más batería no está dicho que sea mejor
+    // (requisito 3.3), así que se lee en el orden natural del número.
+    const sorted = sortFicha(buildFicha(cars, []), 'batteryKwh');
+    expect(sorted.map((e) => e.id)).toEqual([
+      'bmw-x1-xdrive25e',
+      'kia-ev3',
+      'kia-sportage-hev',
+    ]);
+  });
+
+  it('leaves the car without the magnitude at the end in both directions', () => {
+    // El Sportage no declara ninguna de las dos, y las dos ordenan hacia
+    // lados distintos: aun así cierra la lista en las dos.
+    for (const criterion of ['electricRangeKm', 'batteryKwh'] as const) {
+      const sorted = sortFicha(buildFicha(cars, []), criterion);
+      expect(sorted[sorted.length - 1]?.id).toBe('kia-sportage-hev');
+    }
+  });
+
+  it('computes the range delta between an EV and a PHEV: same unit, same cycle', () => {
+    const entities = withComparison(buildFicha(cars, []), 'bmw-x1-xdrive25e');
+    const ev3 = entities.find((e) => e.id === 'kia-ev3')!;
+    expect(ev3.cells.electricRangeKm).toMatchObject({
+      delta: { value: 436 - 83, direction: 'better' },
+    });
+  });
+
+  it('gives the battery delta no colour, only a number', () => {
+    const entities = withComparison(buildFicha(cars, []), 'bmw-x1-xdrive25e');
+    const ev3 = entities.find((e) => e.id === 'kia-ev3')!;
+    expect(ev3.cells.batteryKwh).toMatchObject({
+      delta: { value: 58.3 - 16.3, direction: 'neutral' },
+    });
+  });
+
+  it('marks the delta unavailable against a car that declares neither: not a zero', () => {
+    const entities = withComparison(buildFicha(cars, []), 'kia-sportage-hev');
+    const ev3 = entities.find((e) => e.id === 'kia-ev3')!;
+    expect(ev3.cells.electricRangeKm).toMatchObject({ delta: 'unavailable' });
+    expect(ev3.cells.batteryKwh).toMatchObject({ delta: 'unavailable' });
+  });
+
+  it('leaves the cell missing on a car that does not declare it', () => {
+    const sportage = buildFicha([sportageFixture], [])[0]!;
+    expect(sportage.cells.electricRangeKm).toEqual({ kind: 'missing' });
+    expect(sportage.cells.batteryKwh).toEqual({ kind: 'missing' });
+  });
+
+  it('leaves both cells missing on the reference, a pure combustion car', () => {
+    const reference = buildFicha([], [referenceFixture()])[0]!;
+    expect(reference.cells.electricRangeKm).toEqual({ kind: 'missing' });
+    expect(reference.cells.batteryKwh).toEqual({ kind: 'missing' });
+  });
+});

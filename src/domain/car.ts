@@ -129,7 +129,7 @@ export type WarrantyExtension = {
   condition: string;
 };
 
-export const CarSchema = z.object({
+const CarObjectSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
   brand: z.string().min(1),
@@ -154,6 +154,21 @@ export const CarSchema = z.object({
   weightKg: SourcedNumberSchema,
   acceleration0to100: SourcedNumberSchema,
   consumption: SourcedNumberSchema,
+  /**
+   * Autonomía eléctrica homologada WLTP en ciclo mixto (product/0028,
+   * requisito 1.2): la combinada en un `EV`, la equivalente (EAER) en un
+   * `PHEV`. Opcional en la forma; quién debe declararla lo decide
+   * `ELECTRIFICATION_RULES`, no quien edita el JSON.
+   */
+  electricRangeKm: SourcedNumberSchema.optional(),
+  /**
+   * Capacidad de la batería de tracción (product/0028, requisito 2.1),
+   * tal y como la publica la fuente. No la de servicio de 12 V: esa la
+   * llevan todos y no distingue a ninguno. Es la magnitud que compara un
+   * híbrido con otro, porque la autonomía eléctrica no existe homologada
+   * fuera de los enchufables.
+   */
+  batteryKwh: SourcedNumberSchema.optional(),
   maintenanceEurYear: SourcedNumberSchema,
   priceEur: SourcedNumberSchema,
   reliabilityOcu: SourcedNumberSchema,
@@ -163,6 +178,69 @@ export const CarSchema = z.object({
   aestheticsExterior: UserRatingSchema,
   aestheticsInterior: UserRatingSchema,
   photos: PhotosSchema,
+});
+
+/**
+ * Qué tecnologías pueden llevar cada magnitud de electrificación
+ * (product/0028, requisitos 1.3 y 2.3). `required` son las que **deben**
+ * declararla; `forbidden`, aquellas a las que la magnitud no les aplica.
+ * Las que no están en ninguna de las dos listas —`HEV` y `MHEV`— pueden
+ * declararla o no: son opcionales de verdad, no un olvido.
+ *
+ * Las dos reglas son distintas por un motivo real, no por simetría rota.
+ * La autonomía eléctrica no está homologada fuera de los enchufables, así
+ * que un híbrido convencional solo la declara si aparece fuente; la
+ * capacidad de la batería sí se publica para casi todos, y es la magnitud
+ * con la que un híbrido se compara con otro.
+ */
+interface ElectrificationRule {
+  field: 'electricRangeKm' | 'batteryKwh';
+  label: string;
+  required: readonly Technology[];
+  forbidden: readonly Technology[];
+}
+
+const ELECTRIFICATION_RULES: readonly ElectrificationRule[] = [
+  {
+    field: 'electricRangeKm',
+    label: 'la autonomía eléctrica',
+    required: ['EV', 'PHEV'],
+    forbidden: ['ICE'],
+  },
+  {
+    field: 'batteryKwh',
+    label: 'la capacidad de la batería',
+    required: ['EV', 'PHEV'],
+    forbidden: ['ICE'],
+  },
+];
+
+/**
+ * Las invariantes de electrificación son **cruzadas** —dependen de
+ * `technology` y del campo a la vez—, así que viven aquí y no en el
+ * esquema del campo: un `SourcedNumber` no puede saber qué tecnología lo
+ * rodea. Un enchufable sin autonomía es un registro incompleto, y un
+ * térmico puro con autonomía eléctrica es una magnitud inventada; las dos
+ * fallan nombrando el campo y la tecnología, no en silencio.
+ */
+export const CarSchema = CarObjectSchema.superRefine((data, ctx) => {
+  for (const rule of ELECTRIFICATION_RULES) {
+    const declared = data[rule.field] !== undefined;
+    if (rule.required.includes(data.technology) && !declared) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `un ${data.technology} debe declarar ${rule.label}`,
+        path: [rule.field],
+      });
+    }
+    if (rule.forbidden.includes(data.technology) && declared) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `un ${data.technology} no puede declarar ${rule.label}: no le aplica`,
+        path: [rule.field],
+      });
+    }
+  }
 });
 export type Car = z.infer<typeof CarSchema>;
 

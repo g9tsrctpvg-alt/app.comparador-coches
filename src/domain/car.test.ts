@@ -276,6 +276,112 @@ describe('CarSchema', () => {
   });
 });
 
+describe('CarSchema, magnitudes de electrificación (product/0028)', () => {
+  const range = sourced(510);
+  const battery = sourced(65.4);
+
+  const plugIn = {
+    ...validCar,
+    technology: 'EV',
+    electricRangeKm: range,
+    batteryKwh: battery,
+  };
+
+  it('accepts a plug-in that declares both magnitudes', () => {
+    expect(CarSchema.safeParse(plugIn).success).toBe(true);
+    expect(CarSchema.safeParse({ ...plugIn, technology: 'PHEV' }).success).toBe(
+      true,
+    );
+  });
+
+  it.each(['EV', 'PHEV'] as const)(
+    'rejects a %s that does not declare the electric range, naming the field',
+    (technology) => {
+      const { electricRangeKm: _range, ...withoutRange } = plugIn;
+      const result = CarSchema.safeParse({ ...withoutRange, technology });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        const issue = result.error.issues.find(
+          (candidate) => candidate.path[0] === 'electricRangeKm',
+        );
+        expect(issue?.message).toBe(
+          `un ${technology} debe declarar la autonomía eléctrica`,
+        );
+      }
+    },
+  );
+
+  it.each(['EV', 'PHEV'] as const)(
+    'rejects a %s that does not declare the battery capacity, naming the field',
+    (technology) => {
+      const { batteryKwh: _battery, ...withoutBattery } = plugIn;
+      const result = CarSchema.safeParse({ ...withoutBattery, technology });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        const issue = result.error.issues.find(
+          (candidate) => candidate.path[0] === 'batteryKwh',
+        );
+        expect(issue?.message).toBe(
+          `un ${technology} debe declarar la capacidad de la batería`,
+        );
+      }
+    },
+  );
+
+  it('rejects an ICE that declares either magnitude: no le aplica', () => {
+    const rangeResult = CarSchema.safeParse({
+      ...validCar,
+      technology: 'ICE',
+      electricRangeKm: range,
+    });
+    expect(rangeResult.success).toBe(false);
+    if (!rangeResult.success) {
+      expect(rangeResult.error.issues[0]?.message).toBe(
+        'un ICE no puede declarar la autonomía eléctrica: no le aplica',
+      );
+    }
+
+    const batteryResult = CarSchema.safeParse({
+      ...validCar,
+      technology: 'ICE',
+      batteryKwh: battery,
+    });
+    expect(batteryResult.success).toBe(false);
+    if (!batteryResult.success) {
+      expect(batteryResult.error.issues[0]?.message).toBe(
+        'un ICE no puede declarar la capacidad de la batería: no le aplica',
+      );
+    }
+  });
+
+  it('accepts an ICE that declares neither', () => {
+    expect(
+      CarSchema.safeParse({ ...validCar, technology: 'ICE' }).success,
+    ).toBe(true);
+  });
+
+  it.each(['HEV', 'MHEV'] as const)(
+    'leaves both magnitudes genuinely optional on a %s: with both, with one and with none',
+    (technology) => {
+      const base = { ...validCar, technology };
+      expect(CarSchema.safeParse(base).success).toBe(true);
+      expect(
+        CarSchema.safeParse({ ...base, batteryKwh: sourced(1.32) }).success,
+      ).toBe(true);
+      expect(
+        CarSchema.safeParse({ ...base, electricRangeKm: sourced(2) }).success,
+      ).toBe(true);
+      expect(
+        CarSchema.safeParse({
+          ...base,
+          electricRangeKm: sourced(2),
+          batteryKwh: sourced(1.32),
+        }).success,
+      ).toBe(true);
+    },
+  );
+});
+
 describe('publishedCars', () => {
   function carWith(id: string, published: boolean): Car {
     return { ...sportageFixture, id, published };

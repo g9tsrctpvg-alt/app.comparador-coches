@@ -39,11 +39,12 @@ export function currentSourceOf(sourced: SourcedNumber) {
 }
 
 /**
- * Las veintiuna magnitudes de `Car` que no son identidad, más la métrica
+ * Las veintitrés magnitudes de `Car` que no son identidad, más la métrica
  * derivada de litros por metro cuadrado (product/0014, requisito 1;
  * product/0018 les añade Δ y polaridad; product/0021 añade las dos de
- * generación): el inventario completo de «la ficha». El orden y las
- * etiquetas son cosa de la interfaz; aquí solo se declaran las claves.
+ * generación; product/0028 añade autonomía eléctrica y batería): el
+ * inventario completo de «la ficha». El orden y las etiquetas son cosa de
+ * la interfaz; aquí solo se declaran las claves.
  */
 export const FICHA_FIELDS = [
   'generationLaunchYear',
@@ -60,6 +61,8 @@ export const FICHA_FIELDS = [
   'weightKg',
   'acceleration0to100',
   'consumption',
+  'electricRangeKm',
+  'batteryKwh',
   'priceEur',
   'maintenanceEurYear',
   'residualPct5y',
@@ -117,7 +120,7 @@ type DeltaPolarity = 'moreIsBetter' | 'moreIsWorse' | 'neutral';
 
 /**
  * La dirección de «mejor» depende del dato (product/0013, requisito 8, y
- * product/0018, requisito 3, que la extiende de cinco magnitudes a veinte).
+ * product/0018, requisito 3, que la extiende de cinco magnitudes a todas).
  * Las cinco primeras son las que ya declaró `product/0013` y no cambian:
  * en maletero más es mejor; en anchura y longitud, más es peor, porque el
  * problema que el proyecto resuelve es que los sustitutos son más grandes.
@@ -155,6 +158,14 @@ const POLARITY: Record<FichaField, DeltaPolarity> = {
   acceleration0to100: 'moreIsWorse',
   // Dirección del eje de coste de tenencia.
   consumption: 'moreIsWorse',
+  // Kilómetros con la batería llena: aquí sí hay una dirección que el
+  // proyecto puede afirmar sin matices (product/0028, requisito 3.2).
+  electricRangeKm: 'moreIsBetter',
+  // Más batería es más alcance, pero también más peso, más precio y más
+  // tiempo de carga, y el proyecto no ha declarado cuál de las dos cosas le
+  // importa más — el mismo caso que la batalla (product/0028, requisito
+  // 3.3). Describe lo que el coche lleva, no si eso es bueno.
+  batteryKwh: 'neutral',
 
   // Dirección del eje de coste de compra.
   priceEur: 'moreIsWorse',
@@ -203,6 +214,8 @@ interface EntityLike {
   weightKg?: SourcedNumber;
   acceleration0to100?: SourcedNumber;
   consumption?: SourcedNumber;
+  electricRangeKm?: SourcedNumber;
+  batteryKwh?: SourcedNumber;
   priceEur?: SourcedNumber;
   maintenanceEurYear?: SourcedNumber;
   residualPct5y?: SourcedNumber;
@@ -268,6 +281,8 @@ function cellsOf(entity: EntityLike): Record<FichaField, FichaCell> {
     weightKg: sourcedCell(entity.weightKg),
     acceleration0to100: sourcedCell(entity.acceleration0to100),
     consumption: sourcedCell(entity.consumption),
+    electricRangeKm: sourcedCell(entity.electricRangeKm),
+    batteryKwh: sourcedCell(entity.batteryKwh),
     priceEur: sourcedCell(entity.priceEur),
     maintenanceEurYear: sourcedCell(entity.maintenanceEurYear),
     residualPct5y: sourcedCell(entity.residualPct5y),
@@ -313,8 +328,8 @@ export function buildFicha(
 }
 
 /** Construye un `Record<FichaField, T>` recorriendo `FICHA_FIELDS` una sola
- * vez: evita repetir las veinte claves cada vez que hace falta un registro
- * nuevo con esa forma. */
+ * vez: evita repetir las veinticuatro claves cada vez que hace falta un
+ * registro nuevo con esa forma. */
 function mapFields<T>(fn: (field: FichaField) => T): Record<FichaField, T> {
   const result = {} as Record<FichaField, T>;
   for (const field of FICHA_FIELDS) {
@@ -409,7 +424,7 @@ function sortSign(field: FichaField): 1 | -1 {
 
 /**
  * Ordena las entidades por el criterio elegido (product/0018, requisito 5;
- * product/0027 lo extiende a las veintidós magnitudes y le da dirección).
+ * product/0027 lo extiende a todas las magnitudes y le da dirección).
  * `catalog` conserva el orden de `buildFicha`, que es el del propio
  * catálogo. Una entidad sin la magnitud por la que se ordena va al final en
  * las dos direcciones: no hay dato que defender en esa posición, y la
