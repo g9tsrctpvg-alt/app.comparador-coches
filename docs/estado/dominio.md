@@ -58,6 +58,58 @@ excepción a su regla de «solo magnitudes dimensionales»: la referencia
 existe para dar contexto, y de cuándo es el coche contra el que se compara
 todo es precisamente eso.
 
+## Electrificación: cuánto anda con la batería y cuánta lleva
+
+Un `Car` declara además dos magnitudes de electrificación (product/0028),
+aparte de las dieciocho que puntúan y, como `generation`, **sin entrar en
+ninguna nota**:
+
+- **`electricRangeKm`** (`SourcedNumber`, km) — la autonomía eléctrica
+  homologada **WLTP en ciclo mixto**: la combinada en un `EV`, la
+  equivalente (EAER) en un `PHEV`. Nunca la de ciclo urbano, que es mayor y
+  no se compara con la mixta de un eléctrico.
+- **`batteryKwh`** (`SourcedNumber`, kWh) — la capacidad de la **batería de
+  tracción**, tal y como la publica la fuente. No la de servicio de 12 V:
+  esa la llevan todos y no distingue a ninguno.
+
+**Quién declara qué lo impone el esquema**, no una convención. Son
+invariantes cruzadas —dependen de `technology` y del campo a la vez—, así
+que viven en un `superRefine` del registro completo y no en el esquema del
+campo: un `SourcedNumber` no puede saber qué tecnología lo rodea.
+
+| Tecnología | `electricRangeKm` | `batteryKwh` |
+| --- | --- | --- |
+| `EV`, `PHEV` | Obligatoria | Obligatoria |
+| `HEV`, `MHEV` | Opcional | Opcional |
+| `ICE` | Prohibida | Prohibida |
+
+Las dos infracciones fallan nombrando el campo y la tecnología: un
+enchufable sin autonomía es un registro incompleto, y un térmico puro con
+autonomía eléctrica es una magnitud inventada.
+
+**Por qué las dos y no solo la autonomía.** La autonomía eléctrica **no
+existe homologada fuera de los enchufables**: el WLTP no publica ninguna
+para un híbrido no enchufable, y las cifras que circulan no comparten
+método. Eso deja a once de los dieciocho candidatos —siete `HEV` y cuatro
+`MHEV`— sin nada que comparar por ahí, y rellenar su columna exigiría
+inventar una magnitud. La capacidad de la batería sí se publica con el mismo
+significado para todos, así que es **la magnitud que compara un híbrido con
+otro**: 0,77 kWh el Tonale, 0,85 el Corolla Cross, 1,49 el Tucson HEV. Por
+eso `HEV` y `MHEV` la declaran cuando la fuente la publica —hoy siete de los
+once— y la omiten cuando no, que es ausencia de fuente y se registra como
+deuda, no un hueco que rellenar a ojo.
+
+El día que aparezca una autonomía de híbrido convencional que no venga de la
+homologación, entra con `estimated: true` y la ficha la marca con su tilde
+(`product/0009`): así se ve de un vistazo que esa celda no es lo mismo que
+la de la fila de al lado.
+
+**Ningún eje las lee.** El eje de autonomía y repostaje sigue siendo trabajo
+futuro con spec propia —registrado en `docs/roadmap.md`—, porque lo que
+molesta de un eléctrico en viaje no es solo el alcance sino el tiempo de
+repostaje, y el catálogo no declara ni potencia de carga ni curva. Estas dos
+magnitudes se declaran, se muestran y se comparan; no producen nota.
+
 ## Puntuación explicable
 
 El núcleo de puntuación (`src/domain/scoring/`) no expone una función que
@@ -403,16 +455,17 @@ por no ser un candidato—, con sus cinco magnitudes fuente por fuente.
 ## Ficha
 
 `src/domain/ficha.ts` (product/0014, fundido con la antigua ficha técnica
-por product/0018; product/0021 añade las dos de generación): compara
-candidatos y referencias entre sí, magnitud por magnitud, sobre veintidós
-campos de `Car`/`Reference` —veintiuno propios más `litersPerSquareMeter`,
+por product/0018; product/0021 añade las dos de generación; product/0028
+la autonomía eléctrica y la batería): compara candidatos y referencias
+entre sí, magnitud por magnitud, sobre veinticuatro campos de
+`Car`/`Reference` —veintitrés propios más `litersPerSquareMeter`,
 derivada—. No calcula puntuación: es lectura, no juicio agregado, así que
 vive fuera de `scoring/`.
 
 - **`litrosPorMetroCuadrado(trunkLiters, lengthMm, widthMm)`** — litros de
   maletero por metro cuadrado de huella en el suelo: cuánto espacio da un
   coche por el sitio que ocupa (`product/0013`, requisito 11).
-- **`FICHA_FIELDS`/`FichaField`** — las veintidós claves, en el orden en
+- **`FICHA_FIELDS`/`FichaField`** — las veinticuatro claves, en el orden en
   que se declaran; la interfaz decide etiqueta, unidad y agrupación por
   bloque a partir de ahí, no aquí.
 - **`buildFicha(cars, references)`** — un `FichaEntity` por candidato y por
@@ -421,14 +474,15 @@ vive fuera de `scoring/`.
   comparación los elige quien mira la ficha. Una celda es `'sourced'`
   (valor, unidad, estimado), `'rating'` (una nota de usuario, sobre 5) o
   `'missing'` —el campo no existe en esa entidad, no un cero—: una
-  `Reference` declara siempre siete de las veintidós —las cinco
+  `Reference` declara siempre siete de las veinticuatro —las cinco
   dimensionales, `litersPerSquareMeter` derivada y el año de lanzamiento de
-  su generación, obligatorio—, así que comparar contra ella deja catorce
+  su generación, obligatorio—, así que comparar contra ella deja dieciséis
   celdas `'missing'` por construcción, no por caso especial; una
-  decimoquinta, el año de retoque, depende de si esa referencia concreta lo
-  declara.
+  decimoséptima, el año de retoque, depende de si esa referencia concreta lo
+  declara. Entre las que faltan están siempre la autonomía eléctrica y la
+  batería: la referencia es un térmico puro y no le aplican.
 - **La tabla de polaridad** (`POLARITY`, `Record<FichaField,
-  DeltaPolarity>` — TypeScript exige las veintidós claves en tiempo de
+  DeltaPolarity>` — TypeScript exige las veinticuatro claves en tiempo de
   compilación, así que ninguna puede quedar sin dirección declarada por
   descuido) fija si más es mejor, peor o si el dato no tiene una dirección
   declarada, con su razón junto a cada una:
@@ -441,12 +495,16 @@ vive fuera de `scoring/`.
     `product/0017` añadió porque mide si caben tres personas atrás),
     `powerCv`, `residualPct5y` (lo que se recupera al vender),
     `reliabilityOcu`, `warrantyYears`, `warrantyExtensionYears`,
+    `electricRangeKm` (kilómetros con la batería llena: aquí sí hay una
+    dirección que el proyecto puede afirmar sin matices),
     `aestheticsExterior`, `aestheticsInterior` (notas de usuario sobre 5:
     más nota es mejor en las dos).
   - **`neutral`** — `heightMm`, `groundClearanceMm`, `wheelbaseMm` —más
     batalla da más espacio dentro y más coche fuera; el proyecto no ha
     declarado cuál de las dos cosas le importa más, y ante la duda no se
-    inventa un juicio de color—; `generationLaunchYear` y
+    inventa un juicio de color—; `batteryKwh` —más batería es más alcance,
+    pero también más peso, más precio y más tiempo de carga: el mismo caso
+    que la batalla, y por eso la misma respuesta—; `generationLaunchYear` y
     `generationFaceliftYear` —el ADR 0009 decide que el calendario no
     entra en la puntuación, y sin nota que juzgar no hay dirección que
     declarar: más nuevo no está dicho que sea mejor—.
@@ -466,7 +524,7 @@ vive fuera de `scoring/`.
   con texto accesible, nunca como un cero engañoso, pero el dominio los
   distingue: apagar la Δ a propósito no es lo mismo que no poder calcularla.
 - **`sortFicha(entities, criterion)`** — ordena por `catalog` (el orden del
-  propio catálogo) o por **cualquiera de las veintidós magnitudes**:
+  propio catálogo) o por **cualquiera de las veinticuatro magnitudes**:
   `FICHA_SORT_CRITERIA` se declara como `['catalog', ...FICHA_FIELDS]`, no
   como una lista aparte, así que una magnitud nueva en la ficha es ordenable
   el mismo día que existe. La **dirección la fija la tabla de polaridad**, no

@@ -4,7 +4,7 @@
 > tareas y deudas abiertas. `CLAUDE.md` resume y no duplica: al cerrar una
 > fase se actualiza este documento, no el índice.
 
-**Última actualización:** 2026-08-20
+**Última actualización:** 2026-08-26
 
 ## Fases
 
@@ -454,13 +454,44 @@ fase abierta. Se lista para no perderlo, no para bloquear nada.
   criterios cerrados contra tests unitarios, el catálogo real y Playwright
   sobre el build de producción. Consolidada en `docs/estado/interfaz.md` y
   `docs/estado/dominio.md`.
+- **Cuánto anda con la batería, y cuánta batería lleva — `product/0028`,
+  `consolidated`.** La ficha comparaba veintidós magnitudes y ninguna decía
+  hasta dónde llega un coche con la batería: lo único eléctrico del catálogo
+  era `consumption`, en `kWh/100km` para los eléctricos y `l/100km` para los
+  demás, así que su Δ quedaba `'unavailable'` por unidades y aun leyéndola no
+  decía cuántos kilómetros había dentro. La spec declara **dos** magnitudes,
+  no una, y el porqué es el hallazgo: el WLTP **no homologa autonomía
+  eléctrica para un híbrido no enchufable**, así que ese dato deja fuera a
+  once de los dieciocho candidatos y rellenar su columna exigiría inventar
+  una magnitud; la capacidad de la batería sí se publica con el mismo
+  significado para todos, y es la que compara un híbrido con otro.
+  `electricRangeKm` es obligatoria en `EV` y `PHEV`, prohibida en `ICE` y
+  admitida —hoy vacía— en `HEV` y `MHEV`; `batteryKwh` es obligatoria en los
+  enchufables y opcional en los demás, declarada en siete de los once. Las
+  dos invariantes son cruzadas con `technology` y viven en un `superRefine`
+  del registro. La autonomía es `moreIsBetter`; la capacidad, `neutral`, por
+  el mismo motivo que la batalla —más batería es también más peso, más precio
+  y más tiempo de carga—, y se muestra con dos decimales para que 0,77 y 0,85
+  kWh no se lean las dos como «0,8». Ningún eje las lee: el snapshot de
+  `scoreCatalog` es idéntico. Recorrió `draft → approved → implemented →
+  verified → consolidated` en la misma sesión de trabajo, con el gate humano
+  en commit propio sin implementación, la CI entera verde en local (471
+  tests, cobertura 100 % en `domain/`+`data/`+`logging/`) y los criterios
+  cerrados contra tests unitarios, el catálogo real y Playwright sobre el
+  build de producción. Consolidada en `docs/estado/dominio.md` y
+  `docs/estado/interfaz.md`.
 - **Eje de autonomía y repostaje.** Es la mayor diferencia práctica entre los
   once candidatos en un viaje largo —los térmicos e híbridos hacen 640-950 km
   con un depósito, los eléctricos la mitad en autopista— y el modelo es hoy
   ciego a ella. Queda fuera de `product/0005` a propósito: meter eléctricos y
   térmicos en una misma escala de alcance mezcla cosas distintas, porque lo
   que molesta no es solo el alcance sino el tiempo de repostaje. Necesita
-  spec propia y datos que el catálogo no trae.
+  spec propia. **Parte de los datos ya no faltan:** `product/0028` declara la
+  autonomía eléctrica WLTP de los siete enchufables y la capacidad de batería
+  de catorce registros, sin que ningún eje las lea. Lo que sigue sin estar en
+  el catálogo es el otro lado de la pregunta —potencia y curva de carga,
+  capacidad del depósito— y la decisión de fondo: cómo se puntúa en una misma
+  escala algo que se recupera en cinco minutos y algo que tarda horas.
 - **Eje subjetivo de conducción, tras probar los coches.** Es donde vuelve el
   juicio de primera mano que `product/0005` retira de `viaje`: butacas, ruido,
   suspensión — lo que una ficha técnica no recoge. No depende del proyecto
@@ -526,6 +557,8 @@ una sorpresa esperando fecha.
 | Alta del campo `generation` (`product/0021`) en tres candidatos sin `faceliftYear` pese a que su generación sí ha tenido retoque: **`kia-sportage-hev`** (NQ5 retocado desde 2025), **`honda-civic-e-hev`** (undécima generación retocada desde mayo/junio de 2024) y **`mazda-cx-5`** (KF retocado desde septiembre de 2021). En los tres, la potencia y el precio del catálogo llevan la etiqueta genérica «Especificación del proyecto (julio 2026)», sin fecha ni versión verificable, así que no se ha podido confirmar si la ficha puntuada es la anterior o la posterior al retoque — declarar `faceliftYear` sin esa certeza habría sido inventar sobre qué versión exacta se compara | 2026-08-15 | Verificar contra una fuente fechada y con versión (km77, motor.es, ficha oficial) si el Sportage HEV, el Civic e:HEV y el CX-5 del catálogo son la versión retocada; si lo son, añadir `generation.faceliftYear` con esa fuente |
 | El rótulo enfocado de la tira de candidatos en móvil (`.duelChipActive`, `product/0023`, requisito 3) **no tiene tratamiento visual**: compone `.unstyledButton`, y entre ficheros gana la regla del primitivo, así que su `background: none` y su `border: none` borran el borde de acento y el tinte que la clase declara. Medido en el navegador al implementar `product/0025` —fondo `rgba(0,0,0,0)` y borde `0px` en el chip activo—, no supuesto. El estado sigue siendo legible con lector de pantalla (`aria-current="true"` sí está), así que no es un fallo de accesibilidad total, pero **el candidato enfocado no se distingue a la vista**, que es justo lo que el requisito pedía. Mismo mecanismo que `technical/0006` ya encontró con `.buttonGhost` | 2026-08-20 | Que `.duelChip`/`.duelChipActive` declaren su propia caja en vez de componer `.unstyledButton`, como ya hacen `.dialogView`/`.dialogViewActive` desde `product/0025`. `product/0023` está `consolidated` y no se edita: va en una spec nueva |
 | La anchura de hombros de la 2ª fila mezcla **mínimo y máximo**: km77 publica para unos modelos «anchura hombros mínima» y para otros «máxima», y `cars.json` guarda la cifra que dé cada ficha sin distinguir cuál es. Con normalización relativa apenas importaba; con escala absoluta el valor va directo a la nota, y `product/0026` propone anclar esa magnitud entre un máximo (146 cm, Mercedes Clase E) y un mínimo (126 cm, Kia Picanto), así que el sesgo entra también en los anclajes | 2026-08-23 | Decidir cuál de las dos medidas usa el proyecto, revisar las dieciséis fichas de `cars.json` contra km77 y dejar la elegida, con `discardedReason` en la que se sustituya |
+| Alta de `product/0028`: **cuatro de los once híbridos y microhíbridos no declaran `batteryKwh`** —`honda-civic-e-hev`, `honda-cr-v-e-hev`, `lexus-nx-350h` y `mazda-cx-5`—, porque la ficha km77 de su versión responde «No disponible» en la sección «Batería». Es ausencia de fuente, no de dato: los cuatro llevan batería de tracción y su capacidad existe, solo que ni Honda ni Lexus ni Mazda la publican por versión en la fuente que este catálogo usa. Sus celdas quedan como raya, no como cero | 2026-08-26 | Encontrar la capacidad publicada por el fabricante o por otra fuente fechada y con versión, y declararla con esa fuente |
+| Alta de `product/0028`: la versión del `kia-ev3` se ha resuelto por su **tara**. El registro declara 1.800 kg, que es exactamente la del EV3 Air Standard Range de km77, así que la autonomía (436 km) y la batería (58,3 kWh) se han tomado de esa ficha; pero su aceleración declarada (7,7 s) es la del Long Range —el Standard hace 7,5 s— y su precio (32.000 €) tampoco coincide con los 37.020 € de la ficha. Las tres cifras discordantes llevan la etiqueta genérica «Especificación del proyecto (julio 2026)», sin versión verificable | 2026-08-26 | Verificar contra una fuente fechada y con versión qué EV3 compara el catálogo, y realinear aceleración, precio y peso con esa ficha |
 
 ## Aplazamientos con disparador
 
