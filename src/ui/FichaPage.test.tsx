@@ -9,6 +9,7 @@ import {
 import { threeCarFixture } from '../domain/scoring/testFixtures';
 import { buildFicha, FICHA_FIELDS } from '../domain/ficha';
 import type { Reference } from '../domain/reference';
+import { formatNumber } from './format';
 import fichaCss from './FichaPage.module.css?raw';
 
 /** El cuerpo de una regla CSS por su selector, para afirmar sobre ella. */
@@ -151,8 +152,8 @@ describe('FichaPage', () => {
       expect(markup).toContain('<option value="completa">Completa</option>');
     });
 
-    it('declares TOTAL_FIELD_COUNT as the twenty-two magnitudes of "Completa"', () => {
-      expect(TOTAL_FIELD_COUNT).toBe(22);
+    it('declares TOTAL_FIELD_COUNT as the twenty-four magnitudes of "Completa"', () => {
+      expect(TOTAL_FIELD_COUNT).toBe(24);
     });
 
     it("matches FICHA_FIELDS exactly: no domain field silently missing from Completa's render", () => {
@@ -706,5 +707,60 @@ describe('the enlarged photo carousel', () => {
     expect(markup).not.toContain('aria-label="Ver la foto anterior"');
     expect(markup).not.toContain('aria-current');
     expect(markup).not.toContain(' de 1');
+  });
+});
+
+describe('magnitudes de electrificación (product/0028)', () => {
+  it('puts the two new rows right after consumption, in that order (requisito 3.1)', () => {
+    const keys = [...COMPLETE_FIELD_DEFS.keys()];
+    const consumption = keys.indexOf('consumption');
+    expect(consumption).toBeGreaterThan(-1);
+    expect(keys.slice(consumption, consumption + 3)).toEqual([
+      'consumption',
+      'electricRangeKm',
+      'batteryKwh',
+    ]);
+  });
+
+  it('labels them as the ficha does, with their units', () => {
+    expect(COMPLETE_FIELD_DEFS.get('electricRangeKm')).toMatchObject({
+      label: 'Autonomía eléctrica',
+      unitFallback: 'km',
+    });
+    expect(COMPLETE_FIELD_DEFS.get('batteryKwh')).toMatchObject({
+      label: 'Batería',
+      unitFallback: 'kWh',
+    });
+  });
+
+  it('shows the battery with two decimals, so 0,77 and 0,85 kWh do not collapse (requisito 3.5)', () => {
+    // Con un solo decimal las dos se leerían «0,8» y la comparación entre
+    // híbridos —la razón de que esta magnitud exista— quedaría anulada por
+    // el formato.
+    const decimals = COMPLETE_FIELD_DEFS.get('batteryKwh')?.decimals;
+    expect(formatNumber(0.77, decimals)).toBe('0,77');
+    expect(formatNumber(0.85, decimals)).toBe('0,85');
+    expect(formatNumber(1.49, decimals)).toBe('1,49');
+  });
+
+  it('shows the range in whole kilometres', () => {
+    const decimals = COMPLETE_FIELD_DEFS.get('electricRangeKm')?.decimals ?? 0;
+    expect(formatNumber(436, decimals)).toBe('436');
+  });
+
+  it('offers both under "Mecánica y prestaciones" in the sort selector', () => {
+    const markup = renderToStaticMarkup(
+      <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+    );
+    const select =
+      /<select[^>]*id="sort-select"[\s\S]*?<\/select>/.exec(markup)?.[0] ?? '';
+    const mecanica =
+      /<optgroup label="Mecánica y prestaciones">[\s\S]*?<\/optgroup>/.exec(
+        select,
+      )?.[0] ?? '';
+    expect(mecanica).toContain(
+      '<option value="electricRangeKm">Autonomía eléctrica</option>',
+    );
+    expect(mecanica).toContain('<option value="batteryKwh">Batería</option>');
   });
 });

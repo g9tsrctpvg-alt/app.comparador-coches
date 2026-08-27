@@ -34,6 +34,10 @@ interface FixtureInput {
   residualPct5y: number;
   aestheticsExterior: number;
   aestheticsInterior: number;
+  /** Solo en los electrificados (product/0028): un fixture térmico o
+   * híbrido convencional los deja fuera, como hace el catálogo real. */
+  electricRangeKm?: number;
+  batteryKwh?: number;
 }
 
 function buildCar(input: FixtureInput): Car {
@@ -64,6 +68,12 @@ function buildCar(input: FixtureInput): Car {
     reliabilityOcu: sourced(input.reliabilityOcu),
     warrantyYears: sourced(input.warrantyYears, 'años'),
     residualPct5y: sourced(input.residualPct5y),
+    ...(input.electricRangeKm === undefined
+      ? {}
+      : { electricRangeKm: sourced(input.electricRangeKm, 'km') }),
+    ...(input.batteryKwh === undefined
+      ? {}
+      : { batteryKwh: sourced(input.batteryKwh, 'kWh') }),
     aestheticsExterior: rating(input.aestheticsExterior),
     aestheticsInterior: rating(input.aestheticsInterior),
     photos: {},
@@ -115,6 +125,8 @@ export const x1Fixture = buildCar({
   residualPct5y: 0.4,
   aestheticsExterior: 5,
   aestheticsInterior: 5,
+  electricRangeKm: 83,
+  batteryKwh: 16.3,
 });
 
 export const ev3Fixture = buildCar({
@@ -137,6 +149,8 @@ export const ev3Fixture = buildCar({
   residualPct5y: 0.4,
   aestheticsExterior: 5,
   aestheticsInterior: 3,
+  electricRangeKm: 436,
+  batteryKwh: 58.3,
 });
 
 export const threeCarFixture: Car[] = [sportageFixture, x1Fixture, ev3Fixture];

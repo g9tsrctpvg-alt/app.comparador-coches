@@ -62,9 +62,10 @@ interface BlockDef {
 type CompleteBlockDef = BlockDef & { label: string };
 
 /**
- * Las veintidós magnitudes de la ficha (product/0014, requisito 1;
+ * Las veinticuatro magnitudes de la ficha (product/0014, requisito 1;
  * product/0018 las reparte en dos conjuntos; product/0021 añade el bloque
- * de generación), agrupadas y rotuladas — el dominio (`ficha.ts`) solo
+ * de generación; product/0028 añade autonomía eléctrica y batería),
+ * agrupadas y rotuladas — el dominio (`ficha.ts`) solo
  * declara las claves y extrae los valores; etiquetas, unidades de respaldo
  * y decimales son decisión de la interfaz.
  */
@@ -121,6 +122,22 @@ const COMPLETE_BLOCKS: CompleteBlockDef[] = [
         decimals: 1,
       },
       { key: 'consumption', label: 'Consumo', decimals: 1 },
+      // Consumo, autonomía y batería son la misma pregunta contada por sus
+      // tres caras, y por eso van seguidas (product/0028, requisito 3.1).
+      {
+        key: 'electricRangeKm',
+        label: 'Autonomía eléctrica',
+        unitFallback: 'km',
+      },
+      // Dos decimales, y no por gusto: las capacidades de los híbridos y
+      // microhíbridos van de 0,77 a 1,49 kWh, y con uno solo 0,77 y 0,85 se
+      // leerían las dos como «0,8» (product/0028, requisito 3.5).
+      {
+        key: 'batteryKwh',
+        label: 'Batería',
+        unitFallback: 'kWh',
+        decimals: 2,
+      },
     ],
   },
   {
@@ -211,7 +228,7 @@ const ESSENTIAL_BLOCKS: BlockDef[] = [
 
 /** El orden del propio catálogo: la única opción del selector que no es una
  * magnitud, y por eso la única que se rotula aquí a mano. Las otras
- * veintidós salen de `COMPLETE_BLOCKS` (product/0027, requisitos 1-3). */
+ * veinticuatro salen de `COMPLETE_BLOCKS` (product/0027, requisitos 1-3). */
 const CATALOG_SORT_LABEL = 'Catálogo';
 
 // Exportado para que el test de estructura compruebe el número de filas de
