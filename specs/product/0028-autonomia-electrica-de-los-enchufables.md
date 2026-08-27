@@ -1,7 +1,7 @@
 # 0028 — Cuánto anda con la batería, y cuánta batería lleva
 
 - **Id:** product/0028
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-08-26
 - **Specs relacionadas:** product/0005, product/0008, product/0009,
