@@ -1,6 +1,6 @@
 ---
 name: add-model
-description: Añade un coche nuevo al catálogo de comparador-coches (src/data/cars.json) — investiga en la web sus 20 magnitudes con fuente real (incluida su generación), busca y verifica sus 5 fotos (frontal, lateral, trasera, maletero, interior), y deja el repositorio en verde antes de comitear. Úsala en cuanto el usuario pida "añadir un coche", "meter un modelo nuevo en la comparativa", "comparar también el/la <marca modelo>", o describa un coche que quiere ver en el ranking o en la ficha completa — aunque no mencione explícitamente "catálogo" ni "cars.json". No la uses para corregir un dato de un coche que ya está en el catálogo (eso es una edición puntual, no un alta) ni para cambiar la referencia (`references.json`, hoy solo el Alfa Romeo Giulietta).
+description: Añade un coche nuevo al catálogo de comparador-coches (src/data/cars.json) — investiga en la web sus 22 magnitudes con fuente real (incluidas su generación y, si es electrificado, su autonomía eléctrica y su batería), busca y verifica sus 5 fotos (frontal, lateral, trasera, maletero, interior), y deja el repositorio en verde antes de comitear. Úsala en cuanto el usuario pida "añadir un coche", "meter un modelo nuevo en la comparativa", "comparar también el/la <marca modelo>", o describa un coche que quiere ver en el ranking o en la ficha completa — aunque no mencione explícitamente "catálogo" ni "cars.json". No la uses para corregir un dato de un coche que ya está en el catálogo (eso es una edición puntual, no un alta) ni para cambiar la referencia (`references.json`, hoy solo el Alfa Romeo Giulietta).
 ---
 
 # Añadir un modelo al catálogo
@@ -23,7 +23,7 @@ relleno de formulario.
 
 1. Rama nueva para esta unidad de trabajo (`docs/proceso/trazabilidad.md`).
 2. Identidad: `id`, `name`, `brand`, `technology`, `generation`.
-3. Las 20 magnitudes, cada una con una fuente real — la sección más larga.
+3. Las 22 magnitudes, cada una con una fuente real — la sección más larga.
 4. Las 5 fotos — flujo completo en `references/photo-sourcing.md`.
 5. Las valoraciones subjetivas, **enseñándole las fotos del paso 4 al
    usuario** para que las puntúe. Es interactivo por diseño: van después de
@@ -47,7 +47,7 @@ motorización/acabado— pregúntaselo antes de investigar nada: `technology`
 buscar la genérica cuando hay varias en el mercado es la forma más directa
 de acabar mezclando datos de dos coches distintos.
 
-## 2. Las 20 magnitudes
+## 2. Las 22 magnitudes
 
 **La generación va aparte y no puntúa.** `generation` (product/0021, ADR
 0009) es obligatoria y no es una de las magnitudes con las que se puntúa:
@@ -100,6 +100,31 @@ intercambiables:
   pendiente de retirar y que `product/0017` retira; si al dar el alta ese
   campo todavía existe en el esquema, míralo en `car.ts` y trátalo como
   deuda de migración, no como algo que valore una persona.
+
+**La electrificación se declara según la tecnología** (product/0028). Son
+dos campos `SourcedNumber` y las reglas las hace cumplir `CarSchema`, así
+que equivocarse aquí es un error de validación, no un descuido silencioso:
+
+- `electricRangeKm` (km): la autonomía eléctrica homologada **WLTP en ciclo
+  mixto** — la combinada en un `EV`, la equivalente (EAER) en un `PHEV`, y
+  **nunca la de ciclo urbano**, que es mayor y no se compara con la mixta de
+  un eléctrico. **Obligatoria en `EV` y `PHEV`; prohibida en `ICE`.** En un
+  `HEV` o `MHEV` se admite, pero hoy no la tiene ninguno y **no la inventes**:
+  el WLTP no homologa autonomía eléctrica para un híbrido no enchufable, y
+  las cifras que circulan por los medios no comparten método. Si algún día
+  aparece una que no venga de la homologación, va con `estimated: true`, para
+  que la ficha la marque con su tilde y se vea que no es lo mismo que la de
+  la fila de al lado.
+- `batteryKwh` (kWh): la capacidad de la **batería de tracción**, no la de
+  servicio de 12 V. **Obligatoria en `EV` y `PHEV`; prohibida en `ICE`;
+  opcional en `HEV` y `MHEV`**, donde se declara si la fuente la publica y se
+  omite si no —km77 responde «No disponible» para varios híbridos, y esa
+  ausencia se registra como deuda, no se rellena a ojo—. Es la magnitud con
+  la que un híbrido se compara con otro, porque la autonomía eléctrica no
+  existe fuera de los enchufables.
+
+Las dos salen de la misma ficha km77 de la versión que estés dando de alta:
+«Autonomía eléctrica WLTP» y, en la sección «Batería», «Capacidad».
 
 **Cómo investigar cada magnitud**: busca la ficha técnica oficial del
 fabricante para el mercado español (o europeo si no la hay en español) y,

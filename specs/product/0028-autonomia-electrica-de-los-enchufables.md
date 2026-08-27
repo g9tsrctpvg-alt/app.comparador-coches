@@ -1,7 +1,7 @@
 # 0028 — Cuánto anda con la batería, y cuánta batería lleva
 
 - **Id:** product/0028
-- **Estado:** approved
+- **Estado:** consolidated
 - **Tipo:** product
 - **Fecha:** 2026-08-26
 - **Specs relacionadas:** product/0005, product/0008, product/0009,
@@ -9,6 +9,12 @@
   product/0027
 - **ADRs relacionados:** ninguno
 - **Doc de estado:** `docs/estado/dominio.md`, `docs/estado/interfaz.md`
+
+> ⚠️ **Spec consolidada (2026-08-26).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/dominio.md` y `docs/estado/interfaz.md`. Vigentes aquí solo
+> los **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -224,39 +230,39 @@ de cualquier térmico del catálogo, y por la misma razón.
 
 > Obligatorios y verificables.
 
-- [ ] `CarSchema` rechaza un registro `EV` o `PHEV` sin `electricRangeKm` o
+- [x] `CarSchema` rechaza un registro `EV` o `PHEV` sin `electricRangeKm` o
       sin `batteryKwh`, nombrando el campo y el registro.
-- [ ] `CarSchema` rechaza un registro `ICE` que declare cualquiera de los
+- [x] `CarSchema` rechaza un registro `ICE` que declare cualquiera de los
       dos campos, nombrando el campo y la tecnología.
-- [ ] `CarSchema` acepta un `HEV` o `MHEV` con los dos campos, con uno solo
+- [x] `CarSchema` acepta un `HEV` o `MHEV` con los dos campos, con uno solo
       y con ninguno: en esas dos tecnologías son opcionales de verdad.
-- [ ] Los siete registros enchufables de `cars.json` —los cinco `EV` y los
+- [x] Los siete registros enchufables de `cars.json` —los cinco `EV` y los
       dos `PHEV`, incluido el despublicado— declaran las dos magnitudes con
       fuente citada y verificable por URL.
-- [ ] Los siete híbridos y microhíbridos cuya fuente publica la capacidad la
+- [x] Los siete híbridos y microhíbridos cuya fuente publica la capacidad la
       declaran; los cuatro que no, no la declaran, y ninguno de los once
       declara autonomía eléctrica.
-- [ ] La ficha completa muestra las filas «Autonomía eléctrica» y «Batería»
+- [x] La ficha completa muestra las filas «Autonomía eléctrica» y «Batería»
       dentro de «Mecánica y prestaciones», en ese orden y justo detrás de
       «Consumo», y renderiza veinticuatro magnitudes.
-- [ ] La capacidad se muestra con dos decimales, de forma que 0,77 y 0,85
+- [x] La capacidad se muestra con dos decimales, de forma que 0,77 y 0,85
       kWh se distinguen en pantalla.
-- [ ] El selector de orden ofrece las dos magnitudes bajo el grupo «Mecánica
+- [x] El selector de orden ofrece las dos magnitudes bajo el grupo «Mecánica
       y prestaciones»; la autonomía ordena de mayor a menor y la capacidad
       de menor a mayor, y las entidades sin el dato quedan al final en las
       dos direcciones.
-- [ ] Comparando contra un térmico —la referencia incluida—, la celda de
+- [x] Comparando contra un térmico —la referencia incluida—, la celda de
       autonomía de los enchufables se muestra como raya con texto accesible,
       no como `0`.
-- [ ] Comparando un `EV` contra un `PHEV`, la Δ de autonomía es la
+- [x] Comparando un `EV` contra un `PHEV`, la Δ de autonomía es la
       diferencia en kilómetros, coloreada como mejor en el de más autonomía;
       la de capacidad no lleva color.
-- [ ] El snapshot de `scoreCatalog` es **idéntico** antes y después del
+- [x] El snapshot de `scoreCatalog` es **idéntico** antes y después del
       cambio, y ningún `AxisBreakdown` menciona la autonomía ni la batería.
-- [ ] El conjunto «Esenciales» sigue mostrando exactamente sus seis campos.
-- [ ] La skill `add-model` pide los dos datos con las reglas del requisito
+- [x] El conjunto «Esenciales» sigue mostrando exactamente sus seis campos.
+- [x] La skill `add-model` pide los dos datos con las reglas del requisito
       1.3 y del 2.3.
-- [ ] `npm run test:coverage` sigue en 100 % en `domain/`, `data/` y
+- [x] `npm run test:coverage` sigue en 100 % en `domain/`, `data/` y
       `logging/`.
 
 ## Dependencias y supuestos
