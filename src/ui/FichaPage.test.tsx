@@ -9,8 +9,21 @@ import {
 import { threeCarFixture } from '../domain/scoring/testFixtures';
 import { buildFicha, FICHA_FIELDS } from '../domain/ficha';
 import type { Reference } from '../domain/reference';
+import { DEFAULT_ASSUMPTIONS } from '../domain/scoring/assumptions';
+import { DEFAULT_WEIGHTS } from '../domain/scoring/weights';
+import { scoreCatalog } from '../domain/scoring/score';
 import { formatNumber } from './format';
 import fichaCss from './FichaPage.module.css?raw';
+
+// La puntuación de `threeCarFixture` con los pesos por defecto: los treinta
+// puntos de entrada de este fichero llaman a `FichaPage` con este mismo
+// catálogo, así que se calcula una vez (product/0029, requisito 3).
+const SCORED_FIXTURE = scoreCatalog(
+  threeCarFixture,
+  DEFAULT_WEIGHTS,
+  DEFAULT_ASSUMPTIONS,
+  47000,
+);
 
 /** El cuerpo de una regla CSS por su selector, para afirmar sobre ella. */
 function ruleBody(css: string, selector: string): string {
@@ -85,7 +98,12 @@ function referenceFixture(overrides: Partial<Reference> = {}): Reference {
 describe('FichaPage', () => {
   it('renders a real table, transposed with a scoped header per model column', () => {
     const markup = renderToStaticMarkup(
-      <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+      <FichaPage
+        cars={threeCarFixture}
+        references={[referenceFixture()]}
+        scoredCars={SCORED_FIXTURE}
+        weights={DEFAULT_WEIGHTS}
+      />,
     );
     expect(markup).toContain('<table');
     expect(markup).toContain('<thead');
@@ -95,7 +113,12 @@ describe('FichaPage', () => {
 
   it('shows one header column per candidate plus the reference', () => {
     const markup = renderToStaticMarkup(
-      <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+      <FichaPage
+        cars={threeCarFixture}
+        references={[referenceFixture()]}
+        scoredCars={SCORED_FIXTURE}
+        weights={DEFAULT_WEIGHTS}
+      />,
     );
     for (const car of threeCarFixture) {
       expect(markup).toContain(car.name);
@@ -107,7 +130,12 @@ describe('FichaPage', () => {
   describe('field set (product/0018, requisito 4; product/0020, requisito 1)', () => {
     it('starts on "Esenciales": six rows, no block headers, in the fixed order', () => {
       const markup = renderToStaticMarkup(
-        <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+        <FichaPage
+          cars={threeCarFixture}
+          references={[referenceFixture()]}
+          scoredCars={SCORED_FIXTURE}
+          weights={DEFAULT_WEIGHTS}
+        />,
       );
       const rowLabels = [
         ...markup.matchAll(/<th scope="row"[^>]*>([^<]+)<\/th>/g),
@@ -143,7 +171,12 @@ describe('FichaPage', () => {
 
     it('offers "Esenciales" and "Completa" as the only two options, Esenciales selected', () => {
       const markup = renderToStaticMarkup(
-        <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+        <FichaPage
+          cars={threeCarFixture}
+          references={[referenceFixture()]}
+          scoredCars={SCORED_FIXTURE}
+          weights={DEFAULT_WEIGHTS}
+        />,
       );
       expect(markup).toMatch(/<select[^>]*id="field-set-select"/);
       expect(markup).toMatch(
@@ -171,7 +204,12 @@ describe('FichaPage', () => {
   describe('comparison (product/0018, requisito 2)', () => {
     it('pins the reference by default, as a single-choice radio group', () => {
       const markup = renderToStaticMarkup(
-        <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+        <FichaPage
+          cars={threeCarFixture}
+          references={[referenceFixture()]}
+          scoredCars={SCORED_FIXTURE}
+          weights={DEFAULT_WEIGHTS}
+        />,
       );
       expect(markup).toMatch(/name="pinned-model"/);
       const pinInputs =
@@ -195,7 +233,12 @@ describe('FichaPage', () => {
 
     it('does not repeat the pinned model among the scrollable columns', () => {
       const markup = renderToStaticMarkup(
-        <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+        <FichaPage
+          cars={threeCarFixture}
+          references={[referenceFixture()]}
+          scoredCars={SCORED_FIXTURE}
+          weights={DEFAULT_WEIGHTS}
+        />,
       );
       const theadMatch = /<thead>([\s\S]*?)<\/thead>/.exec(markup);
       const thead = theadMatch?.[1] ?? '';
@@ -208,7 +251,12 @@ describe('FichaPage', () => {
 
     it('shows the signed delta of each candidate against the pinned reference', () => {
       const markup = renderToStaticMarkup(
-        <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+        <FichaPage
+          cars={threeCarFixture}
+          references={[referenceFixture()]}
+          scoredCars={SCORED_FIXTURE}
+          weights={DEFAULT_WEIGHTS}
+        />,
       );
       // Sportage: 4540mm frente a 4351mm de la Giulietta → +189.
       expect(markup).toMatch(/cellDelta[^"]*">\+189\s*mm</);
@@ -216,7 +264,12 @@ describe('FichaPage', () => {
 
     it('shows an accessible dash, not a blank cell, when the pinned reference lacks the field (requisito 2.5)', () => {
       const markup = renderToStaticMarkup(
-        <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+        <FichaPage
+          cars={threeCarFixture}
+          references={[referenceFixture()]}
+          scoredCars={SCORED_FIXTURE}
+          weights={DEFAULT_WEIGHTS}
+        />,
       );
       // La Giulietta (fixture) solo declara las cinco magnitudes
       // dimensionales: Potencia y Precio, en «Esenciales», no tienen con
@@ -230,7 +283,12 @@ describe('FichaPage', () => {
 
     it('leaves the pinned column without any delta: it is not compared to itself', () => {
       const markup = renderToStaticMarkup(
-        <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+        <FichaPage
+          cars={threeCarFixture}
+          references={[referenceFixture()]}
+          scoredCars={SCORED_FIXTURE}
+          weights={DEFAULT_WEIGHTS}
+        />,
       );
       const theadMatch = /<thead>([\s\S]*?)<\/thead>/.exec(markup);
       const thead = theadMatch?.[1] ?? '';
@@ -239,7 +297,12 @@ describe('FichaPage', () => {
 
     it('defaults to "Ninguno" — no pinned column, no delta anywhere — when there is no reference', () => {
       const markup = renderToStaticMarkup(
-        <FichaPage cars={threeCarFixture} references={[]} />,
+        <FichaPage
+          cars={threeCarFixture}
+          references={[]}
+          scoredCars={SCORED_FIXTURE}
+          weights={DEFAULT_WEIGHTS}
+        />,
       );
       expect(markup).toContain('<table');
       expect(markup).not.toContain('Referencia');
@@ -256,7 +319,12 @@ describe('FichaPage', () => {
 
     it('does not reserve sticky-column scroll padding while a model is pinned', () => {
       const markup = renderToStaticMarkup(
-        <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+        <FichaPage
+          cars={threeCarFixture}
+          references={[referenceFixture()]}
+          scoredCars={SCORED_FIXTURE}
+          weights={DEFAULT_WEIGHTS}
+        />,
       );
       expect(markup).not.toMatch(/class="[^"]*tableWrapperNoPin[^"]*"/);
     });
@@ -265,7 +333,12 @@ describe('FichaPage', () => {
   describe('order (product/0018, requisito 5)', () => {
     it('offers the catalogue order plus every field of "Completa", grouped by block, starting on length (product/0027)', () => {
       const markup = renderToStaticMarkup(
-        <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+        <FichaPage
+          cars={threeCarFixture}
+          references={[referenceFixture()]}
+          scoredCars={SCORED_FIXTURE}
+          weights={DEFAULT_WEIGHTS}
+        />,
       );
       const select =
         /<select[^>]*id="sort-select"[\s\S]*?<\/select>/.exec(markup)?.[0] ??
@@ -307,7 +380,12 @@ describe('FichaPage', () => {
 
     it('keeps every sort option available while the essential field set is showing (product/0027, requisito 9)', () => {
       const markup = renderToStaticMarkup(
-        <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+        <FichaPage
+          cars={threeCarFixture}
+          references={[referenceFixture()]}
+          scoredCars={SCORED_FIXTURE}
+          weights={DEFAULT_WEIGHTS}
+        />,
       );
       const select =
         /<select[^>]*id="sort-select"[\s\S]*?<\/select>/.exec(markup)?.[0] ??
@@ -322,7 +400,12 @@ describe('FichaPage', () => {
 
     it('sorts the scrollable columns ascending by length by default', () => {
       const markup = renderToStaticMarkup(
-        <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+        <FichaPage
+          cars={threeCarFixture}
+          references={[referenceFixture()]}
+          scoredCars={SCORED_FIXTURE}
+          weights={DEFAULT_WEIGHTS}
+        />,
       );
       const theadMatch = /<thead>([\s\S]*?)<\/thead>/.exec(markup);
       const thead = theadMatch?.[1] ?? '';
@@ -338,7 +421,12 @@ describe('FichaPage', () => {
 
   it('renders the corner header cell for screen readers only, with no visible label', () => {
     const markup = renderToStaticMarkup(
-      <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+      <FichaPage
+        cars={threeCarFixture}
+        references={[referenceFixture()]}
+        scoredCars={SCORED_FIXTURE}
+        weights={DEFAULT_WEIGHTS}
+      />,
     );
     expect(markup).toMatch(
       /<th scope="col" class="[^"]*featureHeader[^"]*"><span class="[^"]*visuallyHidden[^"]*">Característica<\/span><\/th>/,
@@ -347,7 +435,12 @@ describe('FichaPage', () => {
 
   it('starts the photo view selector on "Lateral"', () => {
     const markup = renderToStaticMarkup(
-      <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+      <FichaPage
+        cars={threeCarFixture}
+        references={[referenceFixture()]}
+        scoredCars={SCORED_FIXTURE}
+        weights={DEFAULT_WEIGHTS}
+      />,
     );
     expect(markup).toMatch(/<select[^>]*name="photo-view"/);
     expect(markup).toMatch(
@@ -357,7 +450,12 @@ describe('FichaPage', () => {
 
   it('renders the reference photo as a real img with a descriptive alt', () => {
     const markup = renderToStaticMarkup(
-      <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+      <FichaPage
+        cars={threeCarFixture}
+        references={[referenceFixture()]}
+        scoredCars={SCORED_FIXTURE}
+        weights={DEFAULT_WEIGHTS}
+      />,
     );
     expect(markup).toContain('alt="Giulietta, vista lateral"');
     expect(markup).not.toContain('loading=');
@@ -366,7 +464,12 @@ describe('FichaPage', () => {
 
   it('shows a labelled placeholder, no <img>, for a candidate with no photo of the selected view', () => {
     const markup = renderToStaticMarkup(
-      <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+      <FichaPage
+        cars={threeCarFixture}
+        references={[referenceFixture()]}
+        scoredCars={SCORED_FIXTURE}
+        weights={DEFAULT_WEIGHTS}
+      />,
     );
     // Ninguno de los tres candidatos del fixture declara fotos.
     expect(markup).toContain('Lateral — sin foto');
@@ -374,7 +477,12 @@ describe('FichaPage', () => {
 
   it('renders the horizontally scrolling container as a focusable group', () => {
     const markup = renderToStaticMarkup(
-      <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+      <FichaPage
+        cars={threeCarFixture}
+        references={[referenceFixture()]}
+        scoredCars={SCORED_FIXTURE}
+        weights={DEFAULT_WEIGHTS}
+      />,
     );
     expect(markup).toContain('role="group"');
     expect(markup).toContain('tabindex="0"');
@@ -382,7 +490,12 @@ describe('FichaPage', () => {
 
   it('renders its own view title as the only heading (technical/0005, requisito 4.2)', () => {
     const markup = renderToStaticMarkup(
-      <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+      <FichaPage
+        cars={threeCarFixture}
+        references={[referenceFixture()]}
+        scoredCars={SCORED_FIXTURE}
+        weights={DEFAULT_WEIGHTS}
+      />,
     );
     const headings = markup.match(/<h1[^>]*>/g) ?? [];
     expect(headings).toHaveLength(1);
@@ -410,7 +523,12 @@ describe('FichaPage', () => {
 
   it('renders the closed photo dialog with no figure until a photo is opened', () => {
     const markup = renderToStaticMarkup(
-      <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+      <FichaPage
+        cars={threeCarFixture}
+        references={[referenceFixture()]}
+        scoredCars={SCORED_FIXTURE}
+        weights={DEFAULT_WEIGHTS}
+      />,
     );
     expect(markup).toContain('<dialog');
     expect(markup).not.toContain('<figure');
@@ -423,7 +541,12 @@ describe('FichaPage', () => {
   // llegaron a POLARITY sin llegar nunca a este párrafo.
   it('names every field the color reinforces as "más es mejor" in the legend', () => {
     const markup = renderToStaticMarkup(
-      <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+      <FichaPage
+        cars={threeCarFixture}
+        references={[referenceFixture()]}
+        scoredCars={SCORED_FIXTURE}
+        weights={DEFAULT_WEIGHTS}
+      />,
     );
     const legendMatch = /<p class="[^"]*legend[^"]*">([\s\S]*?)<\/p>/.exec(
       markup,
@@ -459,7 +582,12 @@ describe('FichaPage', () => {
 
     it('lists the same candidates as the scrollable table columns, in the same order, never the reference', () => {
       const markup = renderToStaticMarkup(
-        <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+        <FichaPage
+          cars={threeCarFixture}
+          references={[referenceFixture()]}
+          scoredCars={SCORED_FIXTURE}
+          weights={DEFAULT_WEIGHTS}
+        />,
       );
       const duel = duelHtml(markup);
       const chips =
@@ -483,7 +611,12 @@ describe('FichaPage', () => {
 
     it('focuses the first candidate of the strip by default, and only that one', () => {
       const markup = renderToStaticMarkup(
-        <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+        <FichaPage
+          cars={threeCarFixture}
+          references={[referenceFixture()]}
+          scoredCars={SCORED_FIXTURE}
+          weights={DEFAULT_WEIGHTS}
+        />,
       );
       const duel = duelHtml(markup);
       const currentMatches = duel.match(/aria-current="true"/g) ?? [];
@@ -499,7 +632,12 @@ describe('FichaPage', () => {
 
     it("shows the focused candidate's value, its signed delta against the reference, and the reference's own value", () => {
       const markup = renderToStaticMarkup(
-        <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+        <FichaPage
+          cars={threeCarFixture}
+          references={[referenceFixture()]}
+          scoredCars={SCORED_FIXTURE}
+          weights={DEFAULT_WEIGHTS}
+        />,
       );
       const duel = duelHtml(markup);
       // EV3: 4300mm frente a 4351mm de la Giulietta → −51 (mejor, longitud
@@ -511,7 +649,12 @@ describe('FichaPage', () => {
 
     it('shows the accessible dash, not the reference line, when the reference lacks the field', () => {
       const markup = renderToStaticMarkup(
-        <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+        <FichaPage
+          cars={threeCarFixture}
+          references={[referenceFixture()]}
+          scoredCars={SCORED_FIXTURE}
+          weights={DEFAULT_WEIGHTS}
+        />,
       );
       const duel = duelHtml(markup);
       // La Giulietta (fixture) no declara potencia: la fila de Potencia del
@@ -528,7 +671,12 @@ describe('FichaPage', () => {
 
     it('shows no delta and no reference line anywhere when there is no comparison active', () => {
       const markup = renderToStaticMarkup(
-        <FichaPage cars={threeCarFixture} references={[]} />,
+        <FichaPage
+          cars={threeCarFixture}
+          references={[]}
+          scoredCars={SCORED_FIXTURE}
+          weights={DEFAULT_WEIGHTS}
+        />,
       );
       const duel = duelHtml(markup);
       expect(duel).not.toContain('duelRowDelta');
@@ -542,7 +690,12 @@ describe('FichaPage', () => {
 
     it('every candidate chip has an accessible name equal to the model name', () => {
       const markup = renderToStaticMarkup(
-        <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+        <FichaPage
+          cars={threeCarFixture}
+          references={[referenceFixture()]}
+          scoredCars={SCORED_FIXTURE}
+          weights={DEFAULT_WEIGHTS}
+        />,
       );
       const duel = duelHtml(markup);
       const stripMatch =
@@ -750,7 +903,12 @@ describe('magnitudes de electrificación (product/0028)', () => {
 
   it('offers both under "Mecánica y prestaciones" in the sort selector', () => {
     const markup = renderToStaticMarkup(
-      <FichaPage cars={threeCarFixture} references={[referenceFixture()]} />,
+      <FichaPage
+        cars={threeCarFixture}
+        references={[referenceFixture()]}
+        scoredCars={SCORED_FIXTURE}
+        weights={DEFAULT_WEIGHTS}
+      />,
     );
     const select =
       /<select[^>]*id="sort-select"[\s\S]*?<\/select>/.exec(markup)?.[0] ?? '';

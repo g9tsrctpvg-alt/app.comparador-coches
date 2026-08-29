@@ -1,0 +1,176 @@
+/* El bloque «Detalle ejes» (product/0029): mismo primitivo `card` que el
+ * resto de superficies de nivel uno de la aplicación, sin filete propio —a
+ * diferencia de `.axis` en `AxisBreakdownView.module.css`, este bloque no
+ * pertenece a un solo eje, así que no lleva su color. */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.title {
+  composes: mono from '../primitives.module.css';
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  color: var(--color-mute);
+}
+
+.emptyText {
+  color: var(--color-mute);
+}
+
+/* El titular es un botón que pliega el bloque entero (requisito 3.6): nace
+ * desplegado y no recuerda su estado —`ViewState` no lo lleva—, así que
+ * cada carga empieza igual. */
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: var(--space-3);
+  row-gap: var(--space-1);
+  width: 100%;
+  min-height: var(--size-touch-min);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.header:hover {
+  background: var(--color-accent-tint);
+}
+
+.headline {
+  font-weight: var(--font-weight-semibold);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* Una línea por eje (requisito 3.3): el rótulo, la barra divergente y el
+ * valor firmado reflotan como un solo grupo `flex-wrap` en vez de una
+ * rejilla de columnas fijas, igual que ya hace la cabecera de
+ * `AxisBreakdownView` — así ninguna combinación de ancho de viewport y
+ * longitud de etiqueta puede desbordar el documento (requisito 8). */
+.row {
+  composes: unstyledButton from '../primitives.module.css';
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: var(--space-3);
+  row-gap: var(--space-1);
+  width: 100%;
+  min-height: var(--size-touch-min);
+  padding: var(--space-1) var(--space-2);
+  margin: 0 calc(var(--space-2) * -1);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.row:hover {
+  background: var(--color-accent-tint);
+}
+
+.rowLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 1 1 var(--size-gap-label-basis);
+  color: var(--axis-color, var(--color-ink));
+}
+
+.rowLabel svg {
+  flex: none;
+  width: var(--space-5);
+  height: var(--space-5);
+}
+
+/* La pista es puramente decorativa —`aria-hidden`—: el rótulo y el valor de
+ * al lado ya dicen quién gana y por cuánto en texto real (requisito 7). */
+.track {
+  position: relative;
+  flex: 2 1 var(--size-gap-track-basis);
+  height: var(--size-bar-axis);
+  border-radius: var(--radius-pill);
+  background: var(--color-rule);
+}
+
+.track::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 50%;
+  width: var(--size-border-hairline);
+  background: var(--color-rule-strong);
+}
+
+.fill {
+  position: absolute;
+  inset-block: 0;
+  border-radius: var(--radius-pill);
+  background: var(--axis-color, var(--color-accent));
+}
+
+.fillRight {
+  inset-inline-start: 50%;
+}
+
+.fillLeft {
+  inset-inline-end: 50%;
+}
+
+.rowValue {
+  flex: 0 0 auto;
+  text-align: right;
+}
+
+.rowDetail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+  padding-block-start: var(--space-2);
+}
+
+.zeroLine {
+  composes: secondaryText from '../primitives.module.css';
+}
+
+.sensitivity {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-block-start: var(--space-2);
+  border-top: var(--size-border-hairline) solid var(--color-rule);
+}
+
+.crossingList {
+  margin: 0;
+  padding-inline-start: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-size: var(--font-size-sm);
+}
+
+.sensitivityText {
+  composes: secondaryText from '../primitives.module.css';
+}
+
+.stableDetails {
+  font-size: var(--font-size-sm);
+  color: var(--color-mute);
+}
+
+.stableSummary {
+  cursor: pointer;
+  min-height: var(--size-touch-min);
+  display: flex;
+  align-items: center;
+}
+
+.stableText {
+  margin: var(--space-1) 0 0;
+}

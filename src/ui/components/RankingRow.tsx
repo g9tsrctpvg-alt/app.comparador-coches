@@ -1,7 +1,10 @@
 import type { Car, SourcedNumber } from '../../domain/car';
 import type { CarScoreBreakdown } from '../../domain/scoring/breakdown';
 import type { RatingOverride } from '../../domain/scoring/overrides';
-import { formatEur, formatNumber } from '../format';
+import { percentageOf } from '../../domain/scoring/score';
+import { splitScoreGap, topGapLines } from '../../domain/scoring/scoreGap';
+import type { AxisWeights } from '../../domain/scoring/weights';
+import { formatEur, formatNumber, formatSigned } from '../format';
 import primitives from '../primitives.module.css';
 import { AxisBreakdownView } from './AxisBreakdownView';
 import { EstimatedMark } from './EstimatedMark';
@@ -26,6 +29,50 @@ interface RankingRowProps {
   onToggle: () => void;
   editableRatings: EditableRating[];
   onRatingChange: (override: RatingOverride) => void;
+  /** El líder para toda fila que no sea la suya, y el segundo para la del
+   * líder (product/0029, requisito 4). `undefined` cuando no hay con qué
+   * comparar —un único coche visible—, y entonces la fila no enseña
+   * resumen. */
+  compareTo?: CarScoreBreakdown;
+  weights: AxisWeights;
+}
+
+/** El resumen de una línea del duelo contra `compareTo` (requisito 4): la
+ * diferencia de nota y los dos ejes que más la explican, uno de cada
+ * signo cuando lo haya. No calcula nada por su cuenta
+ * (`ui-no-scoring-internals`): `splitScoreGap` y `topGapLines` ya entregan
+ * las líneas listas. */
+function GapSummaryLine({
+  car,
+  compareTo,
+  weights,
+}: {
+  car: CarScoreBreakdown;
+  compareTo: CarScoreBreakdown;
+  weights: AxisWeights;
+}) {
+  const gap = splitScoreGap(car, compareTo);
+  const top = topGapLines(gap);
+
+  return (
+    <p className={styles.gapSummary}>
+      Frente a {compareTo.carName}:{' '}
+      <span className={primitives.numeric}>
+        {formatSigned(gap.percentageDiff, 1)} pp
+      </span>
+      {top.length > 0 && (
+        <>
+          {' — '}
+          {top
+            .map(
+              (line) =>
+                `${line.label} ${formatSigned(percentageOf(line.value, weights), 1)}`,
+            )
+            .join(', ')}
+        </>
+      )}
+    </p>
+  );
 }
 
 function currentSource(sourced: SourcedNumber) {
@@ -42,6 +89,8 @@ export function RankingRow({
   onToggle,
   editableRatings,
   onRatingChange,
+  compareTo,
+  weights,
 }: RankingRowProps) {
   const position = String(rank).padStart(2, '0');
   const accelEstimated = rawCar
@@ -90,6 +139,10 @@ export function RankingRow({
 
   const expandedContent = expanded && (
     <div className={styles.expanded}>
+      {compareTo && (
+        <GapSummaryLine car={car} compareTo={compareTo} weights={weights} />
+      )}
+
       {editableRatings.length > 0 && (
         <div className={styles.ratings}>
           <h3 className={styles.ratingsHeading}>Tus valoraciones</h3>

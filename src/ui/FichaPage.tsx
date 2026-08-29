@@ -18,9 +18,12 @@ import {
   photoSrc,
   type PhotoView,
 } from '../domain/photo';
+import type { CarScoreBreakdown } from '../domain/scoring/breakdown';
+import type { AxisWeights } from '../domain/scoring/weights';
 import { formatEur, formatNumber, formatSigned } from './format';
 import { TECHNOLOGY_LABELS } from './technologyLabels';
 import { EstimatedMark } from './components/EstimatedMark';
+import { ScoreGapPanel } from './components/ScoreGapPanel';
 import { useViewState } from './useViewState';
 import primitives from './primitives.module.css';
 import shellStyles from './components/AppShell.module.css';
@@ -29,6 +32,8 @@ import styles from './FichaPage.module.css';
 interface FichaPageProps {
   cars: Car[];
   references: Reference[];
+  scoredCars: CarScoreBreakdown[];
+  weights: AxisWeights;
 }
 
 const PHOTO_VIEW_LABELS: Record<PhotoView, string> = {
@@ -907,10 +912,19 @@ function attachScrollAxisLock(el: HTMLDivElement): () => void {
  * las veintidós. No calcula nada por su cuenta: `ficha.ts` ya entrega cada
  * celda lista para formatear (`ui-no-scoring-internals`).
  */
-export function FichaPage({ cars, references }: FichaPageProps) {
+export function FichaPage({
+  cars,
+  references,
+  scoredCars,
+  weights,
+}: FichaPageProps) {
   const baseEntities = useMemo(
     () => buildFicha(cars, references),
     [cars, references],
+  );
+  const scoreById = useMemo(
+    () => new Map(scoredCars.map((car) => [car.carId, car])),
+    [scoredCars],
   );
 
   // Las cinco elecciones de esta página, persistidas aparte de `AppConfig`
@@ -975,6 +989,13 @@ export function FichaPage({ cars, references }: FichaPageProps) {
   const focusedCandidate =
     scrollableEntities.find((entity) => entity.id === focusedId) ??
     scrollableEntities[0];
+
+  // Una referencia —hoy solo el Alfa Romeo Giulietta— no se puntúa
+  // (product/0018, requisito 12), así que no está en `scoreById` (product/
+  // 0029, requisito 6): `ScoreGapPanel` decide qué enseñar a partir de qué
+  // de las dos puntuaciones falta, no de si la entidad es un `Car`.
+  const focusedScore = focusedCandidate && scoreById.get(focusedCandidate.id);
+  const pinnedScore = pinnedEntity && scoreById.get(pinnedEntity.id);
 
   function handleComparisonChange(id: string | null) {
     setComparisonId(id);
@@ -1116,6 +1137,15 @@ export function FichaPage({ cars, references }: FichaPageProps) {
           </select>
         </div>
       </div>
+
+      <ScoreGapPanel
+        focusedName={focusedCandidate?.name}
+        pinnedName={pinnedEntity?.name}
+        focusedScore={focusedScore}
+        pinnedScore={pinnedScore}
+        hasComparison={pinnedEntity !== undefined}
+        weights={weights}
+      />
 
       {/* Las dos vistas se generan siempre: cuál se ve la decide
           `FichaPage.module.css` con `--bp-columna` (product/0023),
