@@ -109,6 +109,9 @@ para que esa respuesta cambie.
 - **La barra de cuatro controles de la ficha** (`technical/0010`): no gana
   un quinto control, ni el bloque trae selector propio de rival.
 - **Los colores de eje** (`technical/0011`), que se reutilizan tal cual.
+- **Recordar si el bloque quedó plegado.** Ni en `localStorage` ni en la
+  URL: el estado de vista que se persiste (`product/0024`) no cambia, y su
+  versión tampoco.
 
 ## Requisitos / comportamiento esperado
 
@@ -128,7 +131,7 @@ para que esa respuesta cambie.
    distingue.
    1.5. Un eje con ventaja exactamente 0 **es una línea válida** con valor 0:
    que dos coches empaten en un eje es información, no ausencia de dato. La
-   interfaz decide si la dibuja (requisito 3.4), el dominio no.
+   interfaz decide si la dibuja (requisito 3.5), el dominio no.
 2. **Las unidades son las de la nota en pantalla.** El reparto se expresa en
    **puntos porcentuales del máximo alcanzable**, la misma magnitud que
    `percentage` (`percentageOf`), con **un decimal**. Con cero decimales
@@ -136,20 +139,30 @@ para que esa respuesta cambie.
    «0».
 3. **En la ficha (`#/ficha`), un bloque sobre la tabla.** Para el modelo
    enfocado frente al de comparación:
-   3.1. Un **titular** en una frase: quién gana y por cuánto.
-   3.2. Las **líneas del requisito 1**, cada una con el nombre del eje, su
+   3.1. El bloque se rotula **«Detalle ejes»**, y ese mismo rótulo es el que
+   usa la página que explica los cálculos (`product/0011`) cuando describe
+   el reparto: un nombre, en los dos sitios.
+   3.2. Un **titular** en una frase: quién gana y por cuánto.
+   3.3. Las **líneas del requisito 1**, cada una con el nombre del eje, su
    color e icono (`technical/0011`), una barra que sale hacia el lado de
    quien gana ese eje desde un eje central común, y su valor con signo.
-   3.3. Cada línea **lleva a su desglose**, que ya existe: el bloque es una
+   3.4. Cada línea **lleva a su desglose**, que ya existe: el bloque es una
    entrada, no un destino.
-   3.4. Los ejes con ventaja 0 se resumen en una línea de texto al final, en
+   3.5. Los ejes con ventaja 0 se resumen en una línea de texto al final, en
    vez de dibujar barras de longitud cero.
+   3.6. El bloque **se puede plegar**, y su estado **no se recuerda**: nace
+   desplegado en cada carga. `ViewState` (`product/0024`) no cambia de forma
+   ni sube de versión, y la URL compartible (`product/0012`) tampoco lo
+   lleva.
 4. **En la clasificación (`#/`), una línea en la fila desplegada.** La fila
    ya desplegable de `RankingRow` gana **una sola línea** que resume el
    reparto frente al **líder**: la diferencia de nota y los dos ejes de
    mayor valor absoluto, uno de cada signo cuando los haya. La fila del
-   líder lo resume **frente al segundo**. No se añade ningún control nuevo
-   ni se toca el desglose por ejes que ya se despliega debajo.
+   líder lo resume **frente al segundo**. Aparece en **todas las filas**,
+   las tres del podio (`product/0022`, variante `'podium'`) incluidas: el
+   podio y la lista comparten fila y comparten esta línea. No se añade
+   ningún control nuevo ni se toca el desglose por ejes que ya se despliega
+   debajo.
 5. **La sensibilidad, junto al reparto.** Para el mismo par:
    5.1. Por cada eje se calcula el **peso de cruce**: el valor de ese peso
    —con los otros cinco fijos— en el que la diferencia de nota cambia de
@@ -203,6 +216,10 @@ para que esa respuesta cambie.
 - [ ] Un test comprueba que la fila desplegada de la clasificación enseña la
       línea del requisito 4, que la del líder se compara con el segundo, y
       que el desglose por ejes sigue estando debajo.
+- [ ] Un test comprueba que esa línea aparece también en las tres filas del
+      podio, y que el podio conserva su composición.
+- [ ] Un test comprueba que `ViewState` no cambia de forma ni de versión, y
+      que una configuración guardada antes de esta spec se restaura igual.
 - [ ] Verificación manual en navegador: el bloque de la ficha y la línea de
       la clasificación se leen sin desbordamiento horizontal del documento a
       320, 390, 768 y 1440 px.
@@ -230,13 +247,4 @@ para que esa respuesta cambie.
 
 ## Decisiones abiertas
 
-- **Cómo se rotula el bloque en pantalla.** «Duelo» está tomado
-  (`product/0023`). Candidatos: «Por qué gana», «La diferencia, eje a eje»,
-  «Cara a cara». Hay que elegir uno y usarlo también en la página que
-  explica los cálculos (`product/0011`).
-- **Si el bloque de la ficha se pliega, y si ese estado se recuerda** junto
-  al resto del estado de la vista (`product/0024`, `ViewState`). Plegarlo
-  exige subir la versión de `ViewState` o no persistirlo.
-- **Si la línea de la clasificación aparece en las tres filas del podio**
-  (`product/0022`) o solo en las de la lista: el podio tiene otra
-  composición y la línea puede sobrar ahí.
+Ninguna.
