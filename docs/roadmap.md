@@ -59,6 +59,7 @@ que no vuelva sin argumento nuevo.
 
 | Asunto | Detalle en |
 | --- | --- |
+| `product/0029` — por qué gana un coche a otro: redactada en `draft`, esperando el gate humano | *Propuestas de evolución*, P1 y P2a |
 | `product/0019` — la portada enseña el coche: sin redactar, única entrega de la fase 5 sin spec | *Fase 5* |
 | `product/0014` se queda en `implemented`: su criterio de dos columnas a 320px no se puede cumplir con los anchos vigentes | *Deudas abiertas* |
 | `technical/0006` se queda en `implemented`: dos criterios incumplidos (`overflow-x`, composición de la pastilla activa) y el despliegue por verificar | *Deudas abiertas* |
@@ -67,7 +68,7 @@ que no vuelva sin argumento nuevo.
 | Datos del catálogo: fotos que faltan y acabados que no coinciden, magnitudes estimadas sin fuente firme, hombros mínimos mezclados con máximos, cuatro híbridos sin batería, la versión del EV3, tres `faceliftYear` sin confirmar, la fiabilidad de Jeep por convención, precios de julio de 2026, dos fotos en CDN de concesionario | *Deudas abiertas* |
 | Código: cotas de los campos numéricos en `CarSchema`, andamiaje repetido de los seis ejes y `normalizeAll` sin uso, `ui/` fuera del suelo de cobertura, `pensandoVender`/`residualPct5y` desconectados, dos escalones tipográficos sin consumidor, `.duelChipActive` sin tratamiento visual, `index.html` sin icono | *Deudas abiertas* |
 | Infraestructura y proceso: acciones de GitHub sin fijar a SHA, *smoke test* post-despliegue con el disparador ya cumplido, `docs/estado/observabilidad.md` sin declarar | *Deudas abiertas* |
-| Propuestas de evolución aceptadas: P1 a P7 | *Propuestas de evolución*, abajo |
+| Propuestas de evolución aceptadas y aún sin spec: P3 a P7 | *Propuestas de evolución*, abajo |
 | Ocho aplazamientos conscientes, cada uno con su disparador | *Aplazamientos con disparador* |
 
 ### Propuestas de evolución
@@ -77,13 +78,15 @@ Ideas nacidas de una revisión del producto el 2026-08-29, no de una spec:
 puntuar. Ninguna es todavía trabajo comprometido —una propuesta `aceptada`
 entra en la cola, pero sigue necesitando su spec y su gate humano—.
 
-Estados: `aceptada` · `en espera` (falta un dato antes de decidir) ·
-`descartada` (con motivo; no vuelve sin argumento nuevo).
+Estados: `aceptada` (en cola) · `en spec` (ya redactada, con su propio
+identificador) · `en espera` (falta un dato antes de decidir) · `descartada`
+(con motivo; no vuelve sin argumento nuevo).
 
 | Id | Propuesta | Estado | Motivo o condición |
 | --- | --- | --- | --- |
-| P1 | **Duelo explicado**: descomponer la diferencia de nota entre dos coches en la aportación de cada eje, `Σ peso × (score(A) − score(B))`, ordenada por magnitud | `aceptada` | Es la siguiente. No necesita ningún dato nuevo del catálogo: `AxisBreakdown.contribution` ya existe. Se redacta junto con P2 |
-| P2 | **Empate técnico y sensibilidad**: marcar cuándo una diferencia está dentro del ruido, y decir en qué rango de un peso el líder no cambia | `aceptada` | Va con P1: sin ella, la diferencia que P1 explica aparenta una precisión que los datos no tienen |
+| P1 | **El reparto de la diferencia**: descomponer la diferencia de nota entre dos coches en la aportación de cada eje, `Σ peso × (score(A) − score(B))`, ordenada por magnitud | `en spec` | Redactada como `product/0029` el 2026-08-29, en `draft`: espera el gate humano. Se lleva dentro la mitad de P2 que sobrevive —los rangos de peso— y deja fuera el empate técnico |
+| P2a | **Sensibilidad**: decir en qué rango de un peso el resultado de un par no cambia | `en spec` | Dentro de `product/0029`, requisito 5. El cruce es exacto —la diferencia es lineal en el peso desde que los seis ejes puntúan en absoluto— y no necesita ningún dato nuevo |
+| P2b | **Empate técnico**: marcar cuándo una diferencia entre dos coches está por debajo de un umbral | `descartada` | Decisión del usuario (2026-08-29): no hace falta que la aplicación avise de que una diferencia es pequeña, eso se ve; lo que faltaba era el reparto, no el aviso. Queda medido, por si vuelve a plantearse: un solo clic en la estética mueve `2,31 pp`, más que trece de las catorce distancias entre puestos consecutivos |
 | P3 | **Estado de decisión por coche** desde la interfaz: candidato, lista corta o descartado, con motivo y fecha | `aceptada` | Hoy solo existe `published`, que es todo o nada y lo cambia un agente por skill. Elegir es descartar, y el descarte no se registra en ninguna parte |
 | P4 | **Criterios eliminatorios** además del presupuesto: largo máximo, maletero mínimo, autonomía mínima, altura de acceso | `aceptada` | Un coche que incumple un imprescindible no debería ganar por puntos; el precio es hoy el único filtro duro |
 | P5 | **Pesos por preferencia revelada**: derivar los seis pesos de una tanda de duelos «¿cuál prefieres?», dejando los deslizadores como ajuste fino | `aceptada` | Nadie sabe si su `viaje` vale 4 o 5; seis deslizadores a ojo son un mal instrumento para lo que más manda en la nota |
