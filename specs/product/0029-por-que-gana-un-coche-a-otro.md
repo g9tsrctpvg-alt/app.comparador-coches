@@ -1,13 +1,19 @@
 # 0029 — Por qué gana un coche a otro
 
 - **Id:** product/0029
-- **Estado:** approved
+- **Estado:** consolidated
 - **Tipo:** product
 - **Fecha:** 2026-08-29
 - **Specs relacionadas:** product/0001, product/0009, product/0018,
   product/0022, product/0023, product/0024, technical/0010, technical/0011
 - **ADRs relacionados:** 0004
 - **Doc de estado:** `docs/estado/interfaz.md`, `docs/estado/dominio.md`
+
+> ⚠️ **Spec consolidada (2026-08-29).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/interfaz.md` y `docs/estado/dominio.md`. Vigentes aquí solo
+> los **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -194,39 +200,39 @@ para que esa respuesta cambie.
 
 > Obligatorios y verificables.
 
-- [ ] Un test comprueba, sobre el catálogo real y con los pesos por defecto,
+- [x] Un test comprueba, sobre el catálogo real y con los pesos por defecto,
       que para todo par de coches publicados la suma de las seis líneas
       iguala `total(A) − total(B)` dentro de la tolerancia de coma flotante.
-- [ ] Un test comprueba que las líneas salen ordenadas por valor absoluto
+- [x] Un test comprueba que las líneas salen ordenadas por valor absoluto
       descendente, y que el orden no depende del orden de `AXIS_ORDER`.
-- [ ] Un test comprueba el caso medido en *Contexto*: EV3 frente a Civic
+- [x] Un test comprueba el caso medido en *Contexto*: EV3 frente a Civic
       e:HEV da estética `+5,8`, uso diario `−3,9` y viaje `−3,5` puntos
       porcentuales, y la suma de las seis líneas es `+0,1`.
-- [ ] Un test comprueba que el peso de cruce es exacto: puesto el peso en
+- [x] Un test comprueba que el peso de cruce es exacto: puesto el peso en
       ese valor, la diferencia de nota es 0; a un lado gana A y al otro
       gana B.
-- [ ] Un test comprueba el caso medido en *Contexto*: para Tucson HEV
+- [x] Un test comprueba el caso medido en *Contexto*: para Tucson HEV
       frente a Tucson PHEV, los ejes con cruce dentro de `0-10` son
       exactamente `viaje` (1,5) y `prestaciones` (2,1).
-- [ ] Un test comprueba que un eje con ventaja 0 no aporta cruce y queda en
+- [x] Un test comprueba que un eje con ventaja 0 no aporta cruce y queda en
       el resumen de ejes que no cambian el resultado.
-- [ ] Un test comprueba que con el modelo de comparación puesto en la
+- [x] Un test comprueba que con el modelo de comparación puesto en la
       referencia, y con «Ninguno», la ficha enseña el texto del requisito 6
       y ninguna barra.
-- [ ] Un test comprueba que la fila desplegada de la clasificación enseña la
+- [x] Un test comprueba que la fila desplegada de la clasificación enseña la
       línea del requisito 4, que la del líder se compara con el segundo, y
       que el desglose por ejes sigue estando debajo.
-- [ ] Un test comprueba que esa línea aparece también en las tres filas del
+- [x] Un test comprueba que esa línea aparece también en las tres filas del
       podio, y que el podio conserva su composición.
-- [ ] Un test comprueba que `ViewState` no cambia de forma ni de versión, y
+- [x] Un test comprueba que `ViewState` no cambia de forma ni de versión, y
       que una configuración guardada antes de esta spec se restaura igual.
-- [ ] Verificación manual en navegador: el bloque de la ficha y la línea de
+- [x] Verificación manual en navegador: el bloque de la ficha y la línea de
       la clasificación se leen sin desbordamiento horizontal del documento a
       320, 390, 768 y 1440 px.
-- [ ] Verificación manual en navegador: cada línea del reparto lleva rótulo
+- [x] Verificación manual en navegador: cada línea del reparto lleva rótulo
       y valor legibles sin recurrir al color, y el enlace al desglose del eje
       funciona.
-- [ ] La CI entera pasa en local, con la cobertura de `domain/` al 100 %.
+- [x] La CI entera pasa en local, con la cobertura de `domain/` al 100 %.
 
 ## Dependencias y supuestos
 
