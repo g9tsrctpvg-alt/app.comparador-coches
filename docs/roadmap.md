@@ -4,7 +4,7 @@
 > tareas y deudas abiertas. `CLAUDE.md` resume y no duplica: al cerrar una
 > fase se actualiza este documento, no el índice.
 
-**Última actualización:** 2026-08-26
+**Última actualización:** 2026-08-29
 
 ## Fases
 
@@ -355,7 +355,7 @@ fase abierta. Se lista para no perderlo, no para bloquear nada.
   cobertura al 100 %. Queda pendiente ejecutar de verdad una de las dos
   skills sobre un coche real del catálogo, como primera verificación fuera
   de los tests.
-- **De dónde pueden salir las fotos — `product/0016`, en `draft`.** Tras dos
+- **De dónde pueden salir las fotos — `product/0016`, `implemented`.** Tras dos
   tandas de búsqueda faltan trece de las sesenta vistas, y **diez son de
   maletero**: Wikimedia Commons es fotografía de aficionado en salones, donde
   nadie abre el portón, y el hueco no se cierra insistiendo en esa fuente. La
@@ -506,7 +506,7 @@ que no acabe archivado en la fase que resulte estar abierta.
 | Tarea | Estado |
 | --- | --- |
 | ADR 0005 — los ADR son documentos de estado, no deltas | `approved` |
-| ADR 0007 — el reparto de áreas de estado de este proyecto | `draft` |
+| ADR 0007 — el reparto de áreas de estado de este proyecto | `approved` |
 | Apuntar `docs/proceso/consolidacion.md` §4 al ADR 0007 en vez de repetir la tabla | Hecha — y §4 pasa a mandar sobre *cuándo* se crea un doc, no sobre cuáles hay |
 | Cambiar la regla de corrección en `docs/proceso/adrs.md` | Hecha |
 | Añadir `Historial` a `docs/decisions/TEMPLATE.md` y exigirlo en el validador | Hecha — condición de error 16, ahora cinco secciones |

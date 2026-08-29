@@ -4,8 +4,9 @@ Punto de entrada del repositorio. Define principios, niveles de autonomía y
 dónde vive cada cosa. **Es un índice, no un manual:** el detalle vive en los
 satélites de `docs/proceso/` y, en caso de duda, manda el satélite.
 
-> **Estado del proyecto:** base documental montada. Sin stack decidido y sin
-> código de producción. Fase y deudas abiertas en `docs/roadmap.md`.
+> **Estado del proyecto:** aplicación en producción sobre GitHub Pages, con el
+> catálogo, la clasificación y la ficha comparada implementados. Fase y deudas
+> abiertas en `docs/roadmap.md`.
 
 ## 1. Parámetros del proyecto
 
@@ -15,12 +16,14 @@ satélites de `docs/proceso/` y, en caso de duda, manda el satélite.
 | Idioma de documentación | Español | Definido |
 | Idioma de código y commits | Inglés | Definido |
 | Stack | Vite · React · TypeScript · npm | Definido |
-| Comandos de CI | Ver `docs/proceso/ci-y-guardarrailes.md` | Base |
+| Comandos de CI | Ver `docs/proceso/ci-y-guardarrailes.md` | Activo |
 | Nombre de servicio en logs | `comparador-coches-web` | Definido |
 
 El stack está decidido en `docs/decisions/0003-stack.md`: aplicación única,
-SPA estática sin backend. Los gates de código de CI siguen pendientes de
-implementar; su estado vive en `docs/roadmap.md`.
+SPA estática sin backend. El suelo de CI está completo y activo desde
+`technical/0001` —los pasos, su orden y la secuencia exacta en local viven en
+`docs/proceso/ci-y-guardarrailes.md` §4—; las deudas que quedan abiertas sobre
+él están en `docs/roadmap.md`.
 
 ## 2. Principios rectores
 
@@ -79,9 +82,10 @@ Estados, criterios de aprobación y verificación:
 | `docs/proceso/enrutado-de-modelos.md` | Qué modelo de IA hace qué tarea | Activo |
 | `docs/proceso/calibracion-de-escalas.md` | Cómo se fija la escala de un eje y cómo se comprueba que mide lo que dice | Activo |
 | `docs/proceso/anti-patrones.md` | Fallos que este proceso existe para evitar | Activo |
-| `docs/estado/arquitectura.md` | Cómo está construido el sistema hoy | Pendiente |
-| `docs/estado/dominio.md` | Qué modela el negocio hoy | Pendiente |
-| `docs/estado/despliegue.md` | Cómo se construye y despliega hoy | Pendiente |
+| `docs/estado/arquitectura.md` | Cómo está construido el sistema hoy | Activo |
+| `docs/estado/dominio.md` | Qué modela el negocio hoy | Activo |
+| `docs/estado/interfaz.md` | Cómo se ve y se usa la aplicación hoy | Activo |
+| `docs/estado/despliegue.md` | Cómo se construye y despliega hoy | Activo |
 | `docs/decisions/` | ADRs: el porqué de cada decisión estructural | Activo |
 | `docs/roadmap.md` | Fases, tareas y deudas abiertas | Activo |
 | `specs/product/` | Qué hace el negocio | Base |
