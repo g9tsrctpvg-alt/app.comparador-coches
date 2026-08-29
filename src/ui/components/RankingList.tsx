@@ -6,6 +6,7 @@ import type {
   SubcomponentBreakdown,
 } from '../../domain/scoring/breakdown';
 import type { RatingOverride } from '../../domain/scoring/overrides';
+import type { AxisWeights } from '../../domain/scoring/weights';
 import { rankVisible } from './ranking';
 import { RankingRow } from './RankingRow';
 import styles from './RankingList.module.css';
@@ -14,6 +15,7 @@ interface RankingListProps {
   cars: CarScoreBreakdown[];
   rawCars: Car[];
   hideOverBudget: boolean;
+  weights: AxisWeights;
   onRatingChange: (carId: string, override: RatingOverride) => void;
 }
 
@@ -60,12 +62,18 @@ export function RankingList({
   cars,
   rawCars,
   hideOverBudget,
+  weights,
   onRatingChange,
 }: RankingListProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const ranked = rankVisible(cars, hideOverBudget);
   const rawById = new Map(rawCars.map((car) => [car.id, car]));
+  // La fila del líder se compara con el segundo; todas las demás, con el
+  // líder (product/0029, requisito 4). `undefined` con un único candidato
+  // visible: no hay con qué comparar, y la fila no enseña resumen.
+  const leader = ranked[0];
+  const second = ranked[1];
 
   return (
     <ol aria-label="Ranking" className={styles.list}>
@@ -84,6 +92,8 @@ export function RankingList({
             onToggle={() => setExpandedId(expanded ? null : car.carId)}
             editableRatings={editableRatingsOf(car)}
             onRatingChange={(override) => onRatingChange(car.carId, override)}
+            compareTo={index === 0 ? second : leader}
+            weights={weights}
           />
         );
       })}

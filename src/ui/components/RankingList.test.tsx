@@ -43,6 +43,7 @@ function renderExpanded(cars: CarScoreBreakdown[]): string {
     <RankingList
       cars={cars}
       rawCars={threeCarFixture}
+      weights={DEFAULT_WEIGHTS}
       hideOverBudget={false}
       onRatingChange={() => undefined}
     />,
@@ -94,6 +95,7 @@ describe('RankingList', () => {
       <RankingList
         cars={cars}
         rawCars={threeCarFixture}
+        weights={DEFAULT_WEIGHTS}
         hideOverBudget
         onRatingChange={() => undefined}
       />,
@@ -139,6 +141,7 @@ describe('RankingList', () => {
         <RankingList
           cars={realScored}
           rawCars={realCars}
+          weights={DEFAULT_WEIGHTS}
           hideOverBudget={false}
           onRatingChange={() => undefined}
         />,
@@ -173,6 +176,7 @@ describe('RankingList', () => {
         <RankingList
           cars={realScored}
           rawCars={realCars}
+          weights={DEFAULT_WEIGHTS}
           hideOverBudget={false}
           onRatingChange={() => undefined}
         />,

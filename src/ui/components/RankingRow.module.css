@@ -190,6 +190,16 @@
   composes: proportionBarRow from '../primitives.module.css';
 }
 
+/* El resumen del duelo (product/0029, requisito 4): una sola línea, sin
+ * caja propia — es la primera cosa que se lee al desplegar, antes de las
+ * valoraciones y del desglose por eje, así que no compite en peso visual
+ * con ninguno de los dos. */
+.gapSummary {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-mute);
+}
+
 .ratings {
   composes: card from '../primitives.module.css';
   display: flex;

@@ -407,6 +407,16 @@
   --size-ficha-feature-column: 6.5rem;
   --size-ficha-model-min: 11rem;
   --size-ficha-model-desktop: 11rem;
+
+  /* «Detalle ejes» (product/0029): las tres piezas de una línea —rótulo,
+   * barra divergente, valor— reflotan con `flex-wrap` en vez de una
+   * rejilla de columnas fijas, así que ninguna necesita coincidir con
+   * ningún ancho de la ficha. `--size-gap-label-basis` es el nombre de eje
+   * más largo, «Espacio y confort en viaje», sin partirse en dos líneas
+   * mientras quede sitio; `--size-gap-track-basis` es el mínimo en el que
+   * la pista todavía se lee como una barra y no como una raya. */
+  --size-gap-label-basis: 11rem;
+  --size-gap-track-basis: 8rem;
 }
 
 /* Reset mínimo (technical/0004, requisito 7). */

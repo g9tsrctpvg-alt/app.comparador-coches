@@ -118,6 +118,8 @@ export function App({
         <FichaPage
           cars={catalogResult.cars}
           references={catalogResult.references}
+          scoredCars={scored}
+          weights={weights}
         />
       </AppShell>
     );
@@ -148,6 +150,7 @@ export function App({
           cars={scored}
           rawCars={catalogResult.cars}
           hideOverBudget={hideOverBudget}
+          weights={weights}
           onRatingChange={setOverride}
         />
       </div>
