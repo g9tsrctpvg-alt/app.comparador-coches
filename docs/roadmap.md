@@ -59,7 +59,6 @@ que no vuelva sin argumento nuevo.
 
 | Asunto | Detalle en |
 | --- | --- |
-| `product/0029` — por qué gana un coche a otro: `approved`, pendiente de implementar | *Propuestas de evolución*, P1 y P2a |
 | `product/0019` — la portada enseña el coche: sin redactar, única entrega de la fase 5 sin spec | *Fase 5* |
 | `product/0014` se queda en `implemented`: su criterio de dos columnas a 320px no se puede cumplir con los anchos vigentes | *Deudas abiertas* |
 | `technical/0006` se queda en `implemented`: dos criterios incumplidos (`overflow-x`, composición de la pastilla activa) y el despliegue por verificar | *Deudas abiertas* |
@@ -79,13 +78,14 @@ puntuar. Ninguna es todavía trabajo comprometido —una propuesta `aceptada`
 entra en la cola, pero sigue necesitando su spec y su gate humano—.
 
 Estados: `aceptada` (en cola) · `en spec` (ya redactada, con su propio
-identificador) · `en espera` (falta un dato antes de decidir) · `descartada`
-(con motivo; no vuelve sin argumento nuevo).
+identificador) · `consolidada` (implementada, verificada y consolidada) ·
+`en espera` (falta un dato antes de decidir) · `descartada` (con motivo; no
+vuelve sin argumento nuevo).
 
 | Id | Propuesta | Estado | Motivo o condición |
 | --- | --- | --- | --- |
-| P1 | **El reparto de la diferencia**: descomponer la diferencia de nota entre dos coches en la aportación de cada eje, `Σ peso × (score(A) − score(B))`, ordenada por magnitud | `en spec` | `product/0029`, aprobada el 2026-08-29 tras cerrar sus tres decisiones abiertas por decisión del usuario: el bloque se rotula «Detalle ejes», el plegado no se recuerda y la línea de la clasificación aparece en todas las filas, podio incluido. Se lleva dentro la mitad de P2 que sobrevive —los rangos de peso— y deja fuera el empate técnico |
-| P2a | **Sensibilidad**: decir en qué rango de un peso el resultado de un par no cambia | `en spec` | Dentro de `product/0029`, requisito 5. El cruce es exacto —la diferencia es lineal en el peso desde que los seis ejes puntúan en absoluto— y no necesita ningún dato nuevo |
+| P1 | **El reparto de la diferencia**: descomponer la diferencia de nota entre dos coches en la aportación de cada eje, `Σ peso × (score(A) − score(B))`, ordenada por magnitud | `consolidada` | `product/0029`, consolidada el 2026-08-29: bloque «Detalle ejes» en la ficha, línea de resumen en cada fila desplegada del ranking. Se lleva dentro la mitad de P2 que sobrevive —los rangos de peso— y deja fuera el empate técnico |
+| P2a | **Sensibilidad**: decir en qué rango de un peso el resultado de un par no cambia | `consolidada` | Dentro de `product/0029`, requisito 5, consolidada el 2026-08-29. El cruce es exacto —la diferencia es lineal en el peso desde que los seis ejes puntúan en absoluto— y no necesita ningún dato nuevo |
 | P2b | **Empate técnico**: marcar cuándo una diferencia entre dos coches está por debajo de un umbral | `descartada` | Decisión del usuario (2026-08-29): no hace falta que la aplicación avise de que una diferencia es pequeña, eso se ve; lo que faltaba era el reparto, no el aviso. Queda medido, por si vuelve a plantearse: un solo clic en la estética mueve `2,31 pp`, más que trece de las catorce distancias entre puestos consecutivos |
 | P3 | **Estado de decisión por coche** desde la interfaz: candidato, lista corta o descartado, con motivo y fecha | `aceptada` | Hoy solo existe `published`, que es todo o nada y lo cambia un agente por skill. Elegir es descartar, y el descarte no se registra en ninguna parte |
 | P4 | **Criterios eliminatorios** además del presupuesto: largo máximo, maletero mínimo, autonomía mínima, altura de acceso | `aceptada` | Un coche que incumple un imprescindible no debería ganar por puntos; el precio es hoy el único filtro duro |
@@ -538,6 +538,32 @@ fase abierta. Se lista para no perderlo, no para bloquear nada.
   tests, cobertura 100 % en `domain/`+`data/`+`logging/`) y los criterios
   cerrados contra tests unitarios, el catálogo real y Playwright sobre el
   build de producción. Consolidada en `docs/estado/dominio.md` y
+  `docs/estado/interfaz.md`.
+- **Por qué gana un coche a otro — `product/0029`, `consolidated`.** El
+  ranking sabía explicar una nota pero no una diferencia: con dos decimales
+  de menos, el Sportage HEV y el CX-5 se pintaban los dos como «56 %» en
+  puestos distintos, y el EV3 y el Civic e:HEV —a 0,09 puntos porcentuales—
+  resultaban ser coches opuestos por dentro sin que nada lo dijera.
+  `splitScoreGap` reparte la diferencia de nota entre dos `CarScoreBreakdown`
+  en la aportación de cada eje —exacto por construcción, no aproximado—, y
+  `crossingsInRange`/`stableAxes` dicen qué peso, movido solo, puede darle la
+  vuelta al resultado: una división exacta y no una búsqueda, porque desde
+  el ADR 0004 la nota de un eje no depende de los pesos. Nace del repaso de
+  producto del 2026-08-29 (propuestas P1 y P2a de la tabla de abajo), no de
+  una carencia hallada al desplegar, y por eso es la primera spec de esta
+  fase sin ninguna decisión abierta al redactarla: las cinco quedaron
+  cerradas antes de la aprobación, con ejemplos y mockups. Declara a
+  propósito que no hay empate técnico —P2b, descartada por decisión del
+  usuario— y deja el bloque «Detalle ejes» en la ficha y una línea de
+  resumen en cada fila desplegada del ranking, podio incluido. Recorrió
+  `draft → approved → implemented → verified → consolidated` en la misma
+  sesión, con el gate humano en dos commits propios sin implementación —uno
+  para cerrar las decisiones, otro para aprobar—, la CI entera verde en
+  local (498 tests, cobertura 100 % en `domain/`+`data/`+`logging/`) y los
+  trece criterios cerrados contra tests unitarios —incluida la identidad de
+  suma sobre **todos** los pares del catálogo publicado, no solo los dos
+  medidos en la spec— y Playwright sobre el build de producción a
+  320/390/768/1440px. Consolidada en `docs/estado/dominio.md` y
   `docs/estado/interfaz.md`.
 - **Eje de autonomía y repostaje.** Es la mayor diferencia práctica entre los
   once candidatos en un viaje largo —los térmicos e híbridos hacen 640-950 km

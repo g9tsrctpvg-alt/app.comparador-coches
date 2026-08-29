@@ -301,9 +301,17 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   los reutilizan las dos variantes — no hay una copia de esa lógica por
   tratamiento visual. Su nombre accesible es solo la posición y el nombre
   del coche —nunca la puntuación ni la marca de presupuesto—. Expandida,
-  muestra primero los controles de valoración editables (los subcomponentes
-  que el dominio marca con `editableRating`; la fila no sabe de antemano
-  cuáles son ni cuántos) y después el desglose completo de los seis ejes.
+  muestra primero, si hay con qué comparar, el resumen del reparto
+  (`splitScoreGap` + `topGapLines`, product/0029): «Frente a», el nombre del
+  rival, la diferencia de nota en puntos porcentuales, y los dos ejes que
+  más la explican, uno de cada signo cuando lo hay. La fila del líder se
+  compara con el segundo clasificado; todas las demás, con el líder — así
+  que la fila del líder es la única cuyo resumen no dice «Frente al líder».
+  Con un único coche visible no hay resumen: no hay nada que decir. Después
+  van los controles de valoración editables (los subcomponentes que el
+  dominio marca con `editableRating`; la fila no sabe
+  de antemano cuáles son ni cuántos) y por último el desglose completo de
+  los seis ejes.
 
   Con `variant="list"` la fila conserva el marcado y el tamaño que ya tenía
   antes de `product/0022`: posición y nombre en una línea, la línea de apoyo
@@ -458,6 +466,36 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     vez; arranca en Lateral. Es el cuarto control de la barra, no un mando
     aparte: hasta `technical/0010` vivía fuera de ella y con el rótulo al
     lado, y era lo que hacía que la barra ocupara tres filas en un móvil.
+  - **`ScoreGapPanel`, «Detalle ejes»** (product/0029), justo debajo de la
+    barra y sobre las dos vistas —tabla y duelo—, así que es el mismo bloque
+    con cualquier ancho. Reparte la diferencia de nota entre el modelo
+    enfocado —`focusedCandidate`, el primero de la tira en escritorio— y el
+    modelo de comparación en la aportación de cada eje (`splitScoreGap`), en
+    una barra divergente por eje con dos mitades desde un cero común, el
+    rótulo, el icono y el color del eje (`technical/0011`) y el valor
+    firmado en puntos porcentuales del máximo alcanzable —la misma unidad
+    que `percentage`—, siempre en texto junto a la barra: el color nunca es
+    la única codificación, porque los seis colores de eje no se separan lo
+    bastante como paleta categórica (deuda registrada el 2026-08-29 en
+    `docs/roadmap.md`) para ser la única vía de leer seis series a la vez.
+    Un eje en el que empatáis no dibuja una barra de longitud cero: se
+    resume en una frase aparte. Cada línea es un botón que despliega, para
+    ese eje, el `AxisBreakdownView` del modelo enfocado y el del modelo de
+    comparación —es la entrada al desglose que ya existe, no un destino
+    propio—. Debajo, la sensibilidad (`crossingsInRange` + `stableAxes`):
+    por cada eje cuyo peso de cruce cae dentro de `0-10` —el recorrido real
+    del deslizador—, una frase con la dirección («por debajo de»/«por
+    encima de») y el valor; los demás ejes se resumen en un `<details>`
+    plegado, o en una frase si ninguno cruza. El titular del bloque es un
+    botón que lo pliega entero; nace desplegado y ese estado no se
+    recuerda —ni en `ViewState` ni en la URL—, así que cada carga empieza
+    igual. Cuando el modelo de comparación es «Ninguno» o es una
+    referencia —no se puntúa—, el bloque no desaparece: explica por qué no
+    hay nota que comparar, con el mismo criterio si es la referencia quien
+    está enfocada. No calcula nada por su cuenta
+    (`ui-no-scoring-internals`): `splitScoreGap`, `crossingsInRange`,
+    `stableAxes` y `topGapLines` (`src/domain/scoring/scoreGap.ts`) ya
+    entregan cada línea lista.
   - **Fotos**: `PhotoBox` degrada al mismo hueco rotulado —sin `<img>`— si
     el modelo no declara foto de esa vista o si la `src` declarada falla al
     cargar; el hueco mide lo mismo con foto y sin ella (`.photo` y
