@@ -1,7 +1,7 @@
 # 0029 — Por qué gana un coche a otro
 
 - **Id:** product/0029
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-08-29
 - **Specs relacionadas:** product/0001, product/0009, product/0018,
