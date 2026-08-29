@@ -59,7 +59,7 @@ que no vuelva sin argumento nuevo.
 
 | Asunto | Detalle en |
 | --- | --- |
-| `product/0029` — por qué gana un coche a otro: redactada en `draft`, esperando el gate humano | *Propuestas de evolución*, P1 y P2a |
+| `product/0029` — por qué gana un coche a otro: `approved`, pendiente de implementar | *Propuestas de evolución*, P1 y P2a |
 | `product/0019` — la portada enseña el coche: sin redactar, única entrega de la fase 5 sin spec | *Fase 5* |
 | `product/0014` se queda en `implemented`: su criterio de dos columnas a 320px no se puede cumplir con los anchos vigentes | *Deudas abiertas* |
 | `technical/0006` se queda en `implemented`: dos criterios incumplidos (`overflow-x`, composición de la pastilla activa) y el despliegue por verificar | *Deudas abiertas* |
@@ -84,7 +84,7 @@ identificador) · `en espera` (falta un dato antes de decidir) · `descartada`
 
 | Id | Propuesta | Estado | Motivo o condición |
 | --- | --- | --- | --- |
-| P1 | **El reparto de la diferencia**: descomponer la diferencia de nota entre dos coches en la aportación de cada eje, `Σ peso × (score(A) − score(B))`, ordenada por magnitud | `en spec` | Redactada como `product/0029` el 2026-08-29, en `draft`: espera el gate humano. Se lleva dentro la mitad de P2 que sobrevive —los rangos de peso— y deja fuera el empate técnico |
+| P1 | **El reparto de la diferencia**: descomponer la diferencia de nota entre dos coches en la aportación de cada eje, `Σ peso × (score(A) − score(B))`, ordenada por magnitud | `en spec` | `product/0029`, aprobada el 2026-08-29 tras cerrar sus tres decisiones abiertas por decisión del usuario: el bloque se rotula «Detalle ejes», el plegado no se recuerda y la línea de la clasificación aparece en todas las filas, podio incluido. Se lleva dentro la mitad de P2 que sobrevive —los rangos de peso— y deja fuera el empate técnico |
 | P2a | **Sensibilidad**: decir en qué rango de un peso el resultado de un par no cambia | `en spec` | Dentro de `product/0029`, requisito 5. El cruce es exacto —la diferencia es lineal en el peso desde que los seis ejes puntúan en absoluto— y no necesita ningún dato nuevo |
 | P2b | **Empate técnico**: marcar cuándo una diferencia entre dos coches está por debajo de un umbral | `descartada` | Decisión del usuario (2026-08-29): no hace falta que la aplicación avise de que una diferencia es pequeña, eso se ve; lo que faltaba era el reparto, no el aviso. Queda medido, por si vuelve a plantearse: un solo clic en la estética mueve `2,31 pp`, más que trece de las catorce distancias entre puestos consecutivos |
 | P3 | **Estado de decisión por coche** desde la interfaz: candidato, lista corta o descartado, con motivo y fecha | `aceptada` | Hoy solo existe `published`, que es todo o nada y lo cambia un agente por skill. Elegir es descartar, y el descarte no se registra en ninguna parte |
