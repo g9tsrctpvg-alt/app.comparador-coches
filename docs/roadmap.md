@@ -1,8 +1,9 @@
 # Roadmap y deuda
 
 > Este documento es la **fuente de verdad del estado del proyecto**: fases,
-> tareas y deudas abiertas. `CLAUDE.md` resume y no duplica: al cerrar una
-> fase se actualiza este documento, no el índice.
+> tareas, deudas abiertas y propuestas de evolución. La sección *Seguimiento*
+> las indexa todas en una sola tabla. `CLAUDE.md` resume y no duplica: al
+> cerrar una fase se actualiza este documento, no el índice.
 
 **Última actualización:** 2026-08-29
 
@@ -39,7 +40,62 @@ en ese punto. Se deja escrito porque un número de fase que cambia de
 significado sin aviso es una trampa para quien lea esto después.
 
 Trabajo conocido que **no pertenece a ninguna fase** —alcance nuevo, no tareas
-pendientes de una fase abierta— vive en *Más adelante*.
+pendientes de una fase abierta— vive en *Más adelante*. La sección
+*Seguimiento*, justo debajo, indexa todo lo abierto en una sola tabla.
+
+## Seguimiento
+
+Índice único de **todo lo que queda abierto**, con una línea por asunto y un
+puntero a la sección de este documento donde está su detalle. No duplica ese
+detalle: si una fila y su sección se contradicen, manda la sección.
+
+Existe porque el trabajo pendiente estaba repartido en cuatro sitios —fases,
+*Más adelante*, *Deudas abiertas* y *Aplazamientos con disparador*— y no había
+ningún punto desde el que verlo entero. **Nada pendiente vive fuera de este
+documento:** una idea que se descarta también se anota, con su motivo, para
+que no vuelva sin argumento nuevo.
+
+### Abierto hoy
+
+| Asunto | Detalle en |
+| --- | --- |
+| `product/0019` — la portada enseña el coche: sin redactar, única entrega de la fase 5 sin spec | *Fase 5* |
+| `product/0014` se queda en `implemented`: su criterio de dos columnas a 320px no se puede cumplir con los anchos vigentes | *Deudas abiertas* |
+| `technical/0006` se queda en `implemented`: dos criterios incumplidos (`overflow-x`, composición de la pastilla activa) y el despliegue por verificar | *Deudas abiertas* |
+| `product/0015` — falta ejecutar de verdad `unpublish-model` o `republish-model` sobre un coche real | *Más adelante* |
+| `product/0016` — `implemented`, sin consolidar | *Más adelante* |
+| Datos del catálogo: fotos que faltan y acabados que no coinciden, magnitudes estimadas sin fuente firme, hombros mínimos mezclados con máximos, cuatro híbridos sin batería, la versión del EV3, tres `faceliftYear` sin confirmar, la fiabilidad de Jeep por convención, precios de julio de 2026, dos fotos en CDN de concesionario | *Deudas abiertas* |
+| Código: cotas de los campos numéricos en `CarSchema`, andamiaje repetido de los seis ejes y `normalizeAll` sin uso, `ui/` fuera del suelo de cobertura, `pensandoVender`/`residualPct5y` desconectados, dos escalones tipográficos sin consumidor, `.duelChipActive` sin tratamiento visual, `index.html` sin icono | *Deudas abiertas* |
+| Infraestructura y proceso: acciones de GitHub sin fijar a SHA, *smoke test* post-despliegue con el disparador ya cumplido, `docs/estado/observabilidad.md` sin declarar | *Deudas abiertas* |
+| Propuestas de evolución aceptadas: P1 a P7 | *Propuestas de evolución*, abajo |
+| Ocho aplazamientos conscientes, cada uno con su disparador | *Aplazamientos con disparador* |
+
+### Propuestas de evolución
+
+Ideas nacidas de una revisión del producto el 2026-08-29, no de una spec:
+**qué le falta a la aplicación para ayudar a decidir**, y no solo para
+puntuar. Ninguna es todavía trabajo comprometido —una propuesta `aceptada`
+entra en la cola, pero sigue necesitando su spec y su gate humano—.
+
+Estados: `aceptada` · `en espera` (falta un dato antes de decidir) ·
+`descartada` (con motivo; no vuelve sin argumento nuevo).
+
+| Id | Propuesta | Estado | Motivo o condición |
+| --- | --- | --- | --- |
+| P1 | **Duelo explicado**: descomponer la diferencia de nota entre dos coches en la aportación de cada eje, `Σ peso × (score(A) − score(B))`, ordenada por magnitud | `aceptada` | Es la siguiente. No necesita ningún dato nuevo del catálogo: `AxisBreakdown.contribution` ya existe. Se redacta junto con P2 |
+| P2 | **Empate técnico y sensibilidad**: marcar cuándo una diferencia está dentro del ruido, y decir en qué rango de un peso el líder no cambia | `aceptada` | Va con P1: sin ella, la diferencia que P1 explica aparenta una precisión que los datos no tienen |
+| P3 | **Estado de decisión por coche** desde la interfaz: candidato, lista corta o descartado, con motivo y fecha | `aceptada` | Hoy solo existe `published`, que es todo o nada y lo cambia un agente por skill. Elegir es descartar, y el descarte no se registra en ninguna parte |
+| P4 | **Criterios eliminatorios** además del presupuesto: largo máximo, maletero mínimo, autonomía mínima, altura de acceso | `aceptada` | Un coche que incumple un imprescindible no debería ganar por puntos; el precio es hoy el único filtro duro |
+| P5 | **Pesos por preferencia revelada**: derivar los seis pesos de una tanda de duelos «¿cuál prefieres?», dejando los deslizadores como ajuste fino | `aceptada` | Nadie sabe si su `viaje` vale 4 o 5; seis deslizadores a ojo son un mal instrumento para lo que más manda en la nota |
+| P6 | **Registro de la prueba real**: anotar por coche y con fecha lo que solo se sabe sentado dentro —postura, ruido, visibilidad, plazas traseras, maletero— y que pese en la nota | `aceptada` | Es la parte del «eje subjetivo de conducción» de *Más adelante* que **sí** depende del proyecto: tener el sitio donde anotarlo. Hoy lo único subjetivo editable es la estética |
+| P7 | **Checklist de visita al concesionario**, generada por coche desde su ficha, que vuelve como entrada de P6 | `aceptada` | Barata y encadenada con P6: sin qué mirar, la prueba se olvida a mitad |
+| P8 | Dos perfiles de pesos, para comparar el ranking de dos personas | `descartada` | Demasiado complejo para lo que aporta (decisión del usuario, 2026-08-29) |
+| P9 | **Coste en euros a cinco años** en vez de solo una nota de 0 a 10: seguro, impuesto de circulación, ayudas, financiación y depreciación | `en espera` | Antes de comprometer trabajo, hacer un estimado a mano con dos o tres candidatos y ver si la diferencia entre ellos es sustancial. Si lo es, spec propia; y entonces `pensandoVender`/`residualPct5y` dejan de estar desconectados |
+| P10 | **Viaje real con paradas**: tiempo puerta a puerta en una ruta tipo, no solo autonomía | `en espera` | Sospecha razonada de que los candidatos apenas se diferencian en esto. Comprobarlo primero con los datos que ya hay antes de pedir curva de carga y capacidad de depósito |
+| P11 | **Incertidumbre visible en la nota**: banda de nota según cuántas magnitudes son estimadas | `en espera` | Se estima que la diferencia sería mínima. Condición para retomarla: que se encuentre un caso real en que corregir un dato estimado cambie el líder |
+| P12 | **Fiabilidad con una segunda fuente**, para no depender solo del índice OCU —que no cubre a todas las marcas— | `en espera` | Antes de nada, averiguar si esa fuente existe y es accesible, probablemente fuera de España (informes de ITV alemana o de clubes de automovilistas). Sin fuente no hay spec que redactar |
+| P13 | «Qué renuncias si eliges el líder»: la magnitud en la que el segundo ganaba | `descartada` | La ficha comparada ya lo da entre dos coches, que es donde importa (decisión del usuario, 2026-08-29) |
+| P14 | Instantánea fechada de la decisión | `descartada` | Sin valor sustancial: la configuración ya viaja en la URL (decisión del usuario, 2026-08-29) |
 
 ## Fase 0 — Base documental
 
