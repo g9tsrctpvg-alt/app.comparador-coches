@@ -87,7 +87,7 @@ Estados, criterios de aprobación y verificación:
 | `docs/estado/interfaz.md` | Cómo se ve y se usa la aplicación hoy | Activo |
 | `docs/estado/despliegue.md` | Cómo se construye y despliega hoy | Activo |
 | `docs/decisions/` | ADRs: el porqué de cada decisión estructural | Activo |
-| `docs/roadmap.md` | Fases, tareas y deudas abiertas | Activo |
+| `docs/roadmap.md` | Seguimiento único: fases, tareas, deudas y propuestas | Activo |
 | `specs/product/` | Qué hace el negocio | Base |
 | `specs/technical/` | Cómo se implementa | Base |
 | `specs/TEMPLATE.md` | Plantilla única de spec | Activo |
