@@ -4,8 +4,9 @@
 - **Estado:** draft
 - **Tipo:** product
 - **Fecha:** 2026-08-30
-- **Specs relacionadas:** product/0012, product/0015, product/0018,
-  product/0022, product/0024, product/0029
+- **Specs relacionadas:** product/0012, product/0014, product/0015,
+  product/0018, product/0022, product/0024, product/0025, product/0029,
+  technical/0010
 - **ADRs relacionados:** 0004
 - **Doc de estado:** `docs/estado/dominio.md`, `docs/estado/interfaz.md`
 
@@ -21,8 +22,7 @@ por *skill* y que se comitea al repositorio. Saca al coche de todas las
 vistas conservando sus datos, y eso está bien para lo que es —una decisión
 de catálogo—, pero no sirve para decidir:
 
-- Es todo o nada. No distingue «no lo he mirado» de «lo he mirado y sigue en
-  juego», ni «me gusta mucho» de «me vale».
+- Es todo o nada. No distingue «sigue en juego» de «me da igual».
 - No guarda **por qué**. Dos semanas después, un coche fuera de la lista es
   indistinguible de un coche que nunca estuvo.
 - No guarda **cuándo**. Un descarte por precio de julio y uno por maletero
@@ -41,20 +41,22 @@ anotación que **no** toque la nota.
 ## Objetivo
 
 Que la aplicación registre, por coche y desde la interfaz, en qué punto de la
-decisión está cada candidato —sin decidir, candidato, lista corta,
-descartado—, con su motivo y su fecha, y que ese registro sirva para filtrar
-la clasificación y la ficha sin tocar la puntuación.
+decisión está cada candidato —sin decidir, lista corta, descartado—, con su
+motivo y su fecha, y que ese registro sirva para filtrar la clasificación y
+la ficha sin tocar la puntuación.
 
 ## Alcance
 
-- Un estado de decisión por coche, de un conjunto cerrado de cuatro valores,
+- Un estado de decisión por coche, de un conjunto cerrado de tres valores,
   con motivo en texto libre y fecha.
 - Un tercer objeto persistido, con clave y versión propias, hermano de
   `AppConfig` (`product/0012`) y de `ViewState` (`product/0024`).
 - La marca del estado en la clasificación y en la cabecera de columna de la
   ficha; el motivo y la fecha en la fila desplegada.
-- La edición del estado y del motivo desde la fila desplegada de la
-  clasificación.
+- La edición del estado y del motivo desde las dos vistas: la fila desplegada
+  de la clasificación y la cabecera de columna de la ficha.
+- Una acción propia para borrar el registro entero, separada de
+  «Restablecer».
 - Un filtro de tres posiciones sobre el estado, aplicado a la clasificación y
   a la ficha a la vez.
 - La degradación de lo guardado —entrada a entrada— y su registro.
@@ -85,9 +87,8 @@ la clasificación y la ficha sin tocar la puntuación.
 ### 1. El estado
 
 1.1. Cada coche del catálogo tiene **exactamente un** estado de decisión, de
-un conjunto cerrado de cuatro: `undecided`, `candidate`, `shortlist`,
-`discarded`. Sus rótulos en la interfaz son «Sin decidir», «Candidato»,
-«Lista corta» y «Descartado».
+un conjunto cerrado de tres: `undecided`, `shortlist` y `discarded`. Sus
+rótulos en la interfaz son «Sin decidir», «Lista corta» y «Descartado».
 
 1.2. Los identificadores van **en inglés**, como manda `CLAUDE.md` §2 para
 todo identificador nuevo. Los ejes (`viaje`, `diario`…) y los conjuntos de
@@ -99,9 +100,17 @@ entrada en el registro está sin decidir. Así, añadir un coche al catálogo no
 obliga a migrar nada, y el registro solo pesa lo que se ha decidido de
 verdad.
 
-1.4. Los cuatro valores **no son una escala**. No hay orden entre ellos, no
-se promedian y no se suman. `shortlist` no es «más candidato que
-`candidate`»: es otra casilla.
+1.4. Los tres valores **no son una escala**. No hay orden entre ellos, no se
+promedian y no se suman. `shortlist` y `discarded` son dos casillas
+distintas, no dos puntos de un mismo eje, y `undecided` es la ausencia de
+casilla, no el punto medio.
+
+1.5. **No hay un estado intermedio de «candidato».** Un coche o está en la
+lista corta, o está descartado, o todavía no se ha decidido nada sobre él.
+Se anota porque la propuesta P3 del roadmap lo mencionaba y se ha dejado
+fuera a propósito: distinguir «lo he mirado y me vale» de «no lo he mirado»
+añadía una casilla que hay que mantener a cambio de un matiz que quien
+decide ya lleva en la cabeza.
 
 ### 2. Motivo y fecha
 
@@ -118,11 +127,11 @@ el reloj global.
 redacción del motivo. Lo que interesa recordar es cuándo se decidió, no
 cuándo se arregló una errata.
 
-2.4. Al descartar, el motivo es **obligatorio**: `discarded` con motivo vacío
-no es una decisión válida y la interfaz no la deja guardar. En los otros
-tres estados el motivo es opcional. Es fricción a propósito y es justo el
-valor de la funcionalidad: un descarte sin motivo es exactamente el agujero
-que esta spec existe para tapar. *(Ver decisiones abiertas.)*
+2.4. El motivo es **opcional en los tres estados**, descarte incluido.
+Descartar es un clic y no pide nada más. Se asume a cambio que habrá
+descartes sin explicación: el registro sirve igual para saber **qué** se
+decidió y **cuándo**, y quien quiera dejar escrito el porqué tiene el campo
+ahí mismo sin que nadie se lo exija.
 
 2.5. Volver un coche a `undecided` **borra su entrada entera**, motivo y
 fecha incluidos. No se conserva un motivo huérfano de un estado que ya no
@@ -155,12 +164,20 @@ comparte. Además, los motivos son texto libre de longitud arbitraria y no
 caben en una URL sin volverla ilegible, que es justo lo contrario de lo que
 `product/0012` buscaba con sus nombres cortos de parámetro.
 
-3.5. **«Restablecer» limpia también esta clave**, para que siga significando
-lo que dice desde `product/0024`: la aplicación queda como una primera
-visita, en las tres claves. Pero como aquí sí se pierde contenido escrito a
-mano, **pide confirmación cuando hay al menos una decisión registrada**,
-diciendo cuántas se van a perder. Sin decisiones registradas, se comporta
-como hoy y no pregunta nada. *(Ver decisiones abiertas.)*
+3.5. **«Restablecer» no toca las decisiones.** Sigue limpiando `AppConfig` y
+`ViewState` —pesos, supuestos, presupuesto, filtro de presupuesto,
+valoraciones y las cinco elecciones de la ficha—, y deja el registro de
+decisiones intacto. Esto **enmienda a propósito** la promesa de
+`product/0024`, que decía que ese botón deja la aplicación «como una primera
+visita»: pesos y elecciones de vista se vuelven a poner en un minuto, y un
+motivo escrito a mano no. El botón pasa a significar lo que su rótulo dice,
+restablecer la configuración, y su texto de ayuda lo aclara.
+
+3.6. **Borrar las decisiones es una acción propia**, «Borrar decisiones»,
+junto a «Restablecer» en el mismo bloque de acciones. Es destructiva, así que
+pide confirmación diciendo cuántas decisiones se van a perder, y **solo
+aparece cuando hay al menos una registrada**: sin nada que borrar no hay
+botón que estorbe.
 
 ### 4. El filtro
 
@@ -199,7 +216,8 @@ vistazo.
 
 5.2. En la **fila desplegada**, el estado, el motivo y la fecha en texto
 corrido, por delante del resumen del duelo de `product/0029`: «Descartado el
-30/08/2026 — el maletero se queda corto para lo que cuesta».
+30/08/2026 — el maletero se queda corto para lo que cuesta». Sin motivo
+escrito, la línea es solo el estado y la fecha.
 
 5.3. En la **cabecera de columna de la ficha**, la misma marca que en 5.1.
 
@@ -212,12 +230,21 @@ color, así que ningún significado nuevo se cuelga solo del tono.
 ### 6. Dónde se edita
 
 6.1. Desde la **fila desplegada de la clasificación**: un control con los
-cuatro estados y un campo de motivo. Es la única superficie de edición.
+tres estados y un campo de motivo, en línea.
 
-6.2. La ficha **enseña pero no edita** (5.3). Se concentra el cambio en un
-sitio: la ficha ya persiste cinco elecciones propias (`product/0024`) y su
-barra ya tiene cuatro controles (`technical/0010`). *(Ver decisiones
-abiertas.)*
+6.2. Desde la **cabecera de columna de la ficha**: la marca de 5.3 es además
+un control que abre un **diálogo** con los tres estados y el campo de motivo,
+sobre el modelo de esa columna. Es donde de verdad se decide —comparando en
+paralelo—, y no toca la barra de la ficha: los cuatro controles que
+`technical/0010` igualó gobiernan la vista entera, y este es de una columna.
+
+6.3. Es un diálogo y no un control en línea porque una columna de la ficha es
+estrecha por diseño —una por modelo— y no hay sitio para un campo de texto.
+La ficha ya tiene ese patrón desde `product/0014` y `product/0025`, así que
+no se inventa un mecanismo nuevo.
+
+6.4. Las dos superficies editan **el mismo registro**: fijar un estado en la
+ficha se ve en la clasificación al volver, sin recargar, y al revés.
 
 ### 7. Registro
 
@@ -231,13 +258,13 @@ registro.
 
 > Obligatorios y verificables.
 
-- [ ] Un test comprueba que el conjunto de estados es cerrado y de cuatro
+- [ ] Un test comprueba que el conjunto de estados es cerrado y de tres
       valores, y que un coche sin entrada en el registro se lee como
       `undecided`.
 - [ ] Un test comprueba que fijar un estado guarda la fecha que se le pasa
       desde fuera, y que corregir solo el motivo **no** la mueve.
-- [ ] Un test comprueba que `discarded` con motivo vacío se rechaza, y que
-      los otros tres estados se aceptan sin motivo.
+- [ ] Un test comprueba que los tres estados se aceptan **con motivo y sin
+      motivo**, descarte incluido.
 - [ ] Un test comprueba que volver a `undecided` deja el registro sin entrada
       para ese coche.
 - [ ] Un test comprueba que la puntuación de un coche es **idéntica** antes y
@@ -259,16 +286,22 @@ registro.
       filtro en la ficha aunque su estado lo excluyera.
 - [ ] Un test comprueba que, con la lista visible vacía por el filtro, la
       clasificación renderiza su mensaje y no la lista.
-- [ ] Un test comprueba que la fila del ranking lleva marca para los tres
+- [ ] Un test comprueba que la fila del ranking lleva marca para los dos
       estados decididos y **no** la lleva para `undecided`, y que la marca
       incluye su rótulo de texto y no solo una clase de color.
 - [ ] Un test comprueba que la fila desplegada muestra estado, motivo y fecha
-      por delante del resumen de `product/0029`.
-- [ ] Verificación manual sobre el *build* de producción: fijar los cuatro
-      estados desde la clasificación, recargar y comprobar que sobreviven;
-      comprobar que el enlace compartible **no** los lleva; comprobar que
-      «Restablecer» pide confirmación con decisiones registradas y no la pide
-      sin ellas.
+      por delante del resumen de `product/0029`, y que sin motivo escrito
+      muestra solo estado y fecha.
+- [ ] Un test comprueba que la cabecera de columna de la ficha lleva la marca
+      y que su control abre el diálogo de decisión para ese modelo.
+- [ ] Un test comprueba que «Restablecer» deja el registro de decisiones
+      **intacto**, que «Borrar decisiones» lo vacía, y que ese botón no se
+      renderiza cuando no hay ninguna decisión registrada.
+- [ ] Verificación manual sobre el *build* de producción: fijar los tres
+      estados desde la clasificación **y desde la ficha**, recargar y
+      comprobar que sobreviven; comprobar que el enlace compartible **no** los
+      lleva; comprobar que «Restablecer» no los borra y que «Borrar
+      decisiones» pide confirmación antes de hacerlo.
 - [ ] La secuencia de CI pasa entera en local
       (`docs/proceso/ci-y-guardarrailes.md`, §4), con cobertura al 100 % en
       `src/domain/`, `src/data/` y `src/logging/`.
@@ -278,8 +311,11 @@ registro.
 - **No depende de ninguna spec sin implementar.** Se apoya en piezas ya
   consolidadas: el puerto de almacenamiento y la restauración tolerante de
   `product/0012`, el precedente de segunda clave de `product/0024`, la fila
-  desplegable de `product/0022` y `product/0029`, y la cabecera de columna de
-  `product/0018`.
+  desplegable de `product/0022` y `product/0029`, la cabecera de columna de
+  `product/0018` y el patrón de diálogo de `product/0014` y `product/0025`.
+- **Enmienda `product/0024`** en un punto y solo en uno: qué significa
+  «Restablecer» (requisito 3.5). No la edita —está `consolidated`—, con el
+  mismo precedente con que `product/0016` amplió a `product/0014`.
 - **Supone que decidir es de una sola persona en un solo navegador.** No hay
   cuentas ni sincronización entre dispositivos —eso sigue aplazado con su
   disparador en el roadmap—, así que las decisiones son locales a donde se
@@ -294,19 +330,12 @@ registro.
 
 ## Decisiones abiertas
 
-1. **¿El motivo es obligatorio al descartar (2.4)?** Recomiendo **sí**: un
-   descarte sin motivo es el agujero que la spec quiere tapar, y es una
-   frase. La alternativa es dejarlo opcional y aceptar que dentro de un mes
-   haya descartes mudos.
-2. **¿Se edita también desde la ficha (6.2)?** Recomiendo **no** en esta
-   spec: una sola superficie de edición. La alternativa —editar desde la
-   cabecera de columna— es donde de verdad se decide, comparando en paralelo,
-   pero engorda una barra que `technical/0010` acaba de ordenar.
-3. **¿«Restablecer» borra las decisiones tras confirmar (3.5)?** Recomiendo
-   **sí, con confirmación**: mantiene la promesa de «como una primera visita»
-   y protege el texto escrito. La alternativa es separar en dos acciones
-   —«Restablecer» y «Borrar decisiones»— a cambio de un control más.
-4. **¿Hace falta un cuarto estado, o tres decididos bastan?** Recomiendo
-   **los cuatro tal cual**. Se anota porque «Candidato» y «Sin decidir»
-   pueden parecer lo mismo a primera vista, y no lo son: uno es «lo he mirado
-   y sigue en juego», el otro «no lo he mirado».
+Ninguna. Las cuatro que el borrador dejó abiertas las cerró el usuario el
+2026-08-30, las cuatro en contra de la recomendación que la spec traía:
+
+1. **El motivo es opcional al descartar**, no obligatorio (requisito 2.4).
+2. **Se edita también desde la ficha**, no solo desde la clasificación
+   (requisitos 6.2 y 6.3).
+3. **«Restablecer» no borra las decisiones**; se separa en una acción propia
+   (requisitos 3.5 y 3.6).
+4. **Tres estados, no cuatro**: «Candidato» se queda fuera (requisito 1.5).
