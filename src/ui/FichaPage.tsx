@@ -83,12 +83,12 @@ interface BlockDef {
 type CompleteBlockDef = BlockDef & { label: string };
 
 /**
- * Las veinticuatro magnitudes de la ficha (product/0014, requisito 1;
+ * Las veinticinco magnitudes de la ficha (product/0014, requisito 1;
  * product/0018 las reparte en dos conjuntos; product/0021 añade el bloque
- * de generación; product/0028 añade autonomía eléctrica y batería),
- * agrupadas y rotuladas — el dominio (`ficha.ts`) solo
- * declara las claves y extrae los valores; etiquetas, unidades de respaldo
- * y decimales son decisión de la interfaz.
+ * de generación; product/0028 añade autonomía eléctrica y batería;
+ * product/0031 añade el diámetro de giro), agrupadas y rotuladas — el
+ * dominio (`ficha.ts`) solo declara las claves y extrae los valores;
+ * etiquetas, unidades de respaldo y decimales son decisión de la interfaz.
  */
 const COMPLETE_BLOCKS: CompleteBlockDef[] = [
   {
@@ -111,6 +111,15 @@ const COMPLETE_BLOCKS: CompleteBlockDef[] = [
       { key: 'widthMm', label: 'Anchura', unitFallback: 'mm' },
       { key: 'heightMm', label: 'Altura', unitFallback: 'mm' },
       { key: 'wheelbaseMm', label: 'Batalla', unitFallback: 'mm' },
+      // Justo detrás de la batalla, que es el factor que más manda en el
+      // giro (product/0031, requisito 3.1): ponerlas seguidas hace visible
+      // cuándo un coche gira corto o largo *para* su batalla.
+      {
+        key: 'turningCircleM',
+        label: 'Diámetro de giro',
+        unitFallback: 'm',
+        decimals: 1,
+      },
       {
         key: 'rearShoulderWidthMm',
         label: 'Anchura de hombros atrás',
@@ -967,7 +976,7 @@ function attachScrollAxisLock(el: HTMLDivElement): () => void {
  * Δ que antes solo existía contra el Alfa Romeo Giulietta ahora se calcula
  * contra cualquier modelo que se elija, y un conmutador de campos recupera
  * la lectura «de un vistazo» de seis magnitudes cuando no hace falta ver
- * las veintidós. No calcula nada por su cuenta: `ficha.ts` ya entrega cada
+ * las veinticinco. No calcula nada por su cuenta: `ficha.ts` ya entrega cada
  * celda lista para formatear (`ui-no-scoring-internals`).
  */
 export function FichaPage({

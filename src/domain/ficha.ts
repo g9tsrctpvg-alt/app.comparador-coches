@@ -39,12 +39,12 @@ export function currentSourceOf(sourced: SourcedNumber) {
 }
 
 /**
- * Las veintitrés magnitudes de `Car` que no son identidad, más la métrica
+ * Las veinticuatro magnitudes de `Car` que no son identidad, más la métrica
  * derivada de litros por metro cuadrado (product/0014, requisito 1;
  * product/0018 les añade Δ y polaridad; product/0021 añade las dos de
- * generación; product/0028 añade autonomía eléctrica y batería): el
- * inventario completo de «la ficha». El orden y las etiquetas son cosa de
- * la interfaz; aquí solo se declaran las claves.
+ * generación; product/0028 añade autonomía eléctrica y batería; product/0031
+ * añade el diámetro de giro): el inventario completo de «la ficha». El orden
+ * y las etiquetas son cosa de la interfaz; aquí solo se declaran las claves.
  */
 export const FICHA_FIELDS = [
   'generationLaunchYear',
@@ -53,6 +53,7 @@ export const FICHA_FIELDS = [
   'widthMm',
   'heightMm',
   'wheelbaseMm',
+  'turningCircleM',
   'rearShoulderWidthMm',
   'groundClearanceMm',
   'trunkLiters',
@@ -143,6 +144,10 @@ const POLARITY: Record<FichaField, DeltaPolarity> = {
   // declarado cuál de las dos cosas le importa más, y ante la duda no se
   // inventa un juicio de color (product/0018, requisito 3.3).
   wheelbaseMm: 'neutral',
+  // A diferencia de la batalla, aquí sí hay una dirección afirmable sin
+  // matices (product/0031, requisito 3.3): a igualdad de todo lo demás,
+  // nadie prefiere necesitar más sitio para dar la vuelta.
+  turningCircleM: 'moreIsWorse',
   // La magnitud que product/0017 añadió al eje de viaje precisamente porque
   // mide si caben tres personas atrás.
   rearShoulderWidthMm: 'moreIsBetter',
@@ -207,6 +212,7 @@ interface EntityLike {
   widthMm: SourcedNumber;
   heightMm?: SourcedNumber;
   wheelbaseMm?: SourcedNumber;
+  turningCircleM?: SourcedNumber;
   rearShoulderWidthMm?: SourcedNumber;
   groundClearanceMm?: SourcedNumber;
   trunkLiters: SourcedNumber;
@@ -273,6 +279,7 @@ function cellsOf(entity: EntityLike): Record<FichaField, FichaCell> {
     widthMm: sourcedCell(entity.widthMm),
     heightMm: sourcedCell(entity.heightMm),
     wheelbaseMm: sourcedCell(entity.wheelbaseMm),
+    turningCircleM: sourcedCell(entity.turningCircleM),
     rearShoulderWidthMm: sourcedCell(entity.rearShoulderWidthMm),
     groundClearanceMm: sourcedCell(entity.groundClearanceMm),
     trunkLiters: sourcedCell(entity.trunkLiters),

@@ -142,6 +142,15 @@ const CarObjectSchema = z.object({
   heightMm: SourcedNumberSchema,
   wheelbaseMm: SourcedNumberSchema,
   /**
+   * Diámetro de giro entre bordillos, en metros (product/0031). No el
+   * radio, y no el diámetro entre paredes: km77 publica a veces solo esa
+   * segunda medida, y no sirve para esta celda —es opcional justamente por
+   * eso—. Cualquier tecnología puede declararlo: a diferencia de la
+   * electrificación (product/0028), no hay invariante cruzada con
+   * `technology`, porque todo coche gira.
+   */
+  turningCircleM: SourcedNumberSchema.optional(),
+  /**
    * Anchura interior de la segunda fila medida a la altura de los hombros
    * (product/0017). km77 la publica en centímetros enteros, así que la
    * resolución real es de 10 mm aunque se guarde en milímetros como el

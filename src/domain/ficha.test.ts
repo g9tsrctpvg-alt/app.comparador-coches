@@ -360,6 +360,50 @@ describe('withComparison', () => {
     const reference = entities.find((e) => e.kind === 'reference')!;
     expect(reference.cells.priceEur).toEqual({ kind: 'missing' });
   });
+
+  describe('turning circle (product/0031)', () => {
+    it('marks a shorter turning circle as better and a longer one as worse: moreIsWorse', () => {
+      const shorter = {
+        ...sportageFixture,
+        turningCircleM: sourced(10.4, 'm'),
+      };
+      const longer = { ...x1Fixture, turningCircleM: sourced(11.7, 'm') };
+      const entities = withComparison(
+        buildFicha([shorter, longer], []),
+        'kia-sportage-hev',
+      );
+      const x1 = entities.find((e) => e.id === 'bmw-x1-xdrive25e')!;
+      // El X1 gira más ancho (11,7 m > 10,4 m): empeora.
+      expect(x1.cells.turningCircleM).toMatchObject({
+        value: 11.7,
+        unit: 'm',
+        delta: { value: 11.7 - 10.4, direction: 'worse' },
+      });
+    });
+
+    it('marks the delta unavailable when the comparison entity does not declare it', () => {
+      // La Giulietta de fixture no declara diámetro de giro, igual que
+      // priceEur: es la ausencia real de `ReferenceSchema`, no un caso
+      // fabricado para el test.
+      const withCircle = {
+        ...sportageFixture,
+        turningCircleM: sourced(10.9, 'm'),
+      };
+      const entities = withComparison(
+        buildFicha([withCircle], [referenceFixture()]),
+        'alfa-romeo-giulietta',
+      );
+      const sportage = entities.find((e) => e.kind === 'candidate')!;
+      expect(sportage.cells.turningCircleM).toMatchObject({
+        delta: 'unavailable',
+      });
+    });
+
+    it('leaves the cell missing for a car that does not declare it, not zero', () => {
+      const entities = buildFicha([sportageFixture], []);
+      expect(entities[0]?.cells.turningCircleM).toEqual({ kind: 'missing' });
+    });
+  });
 });
 
 describe('sortFicha', () => {

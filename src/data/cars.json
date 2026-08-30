@@ -68,6 +68,18 @@
         }
       ]
     },
+    "turningCircleM": {
+      "value": 10.4,
+      "unit": "m",
+      "sources": [
+        {
+          "label": "km77, ficha EV3 Air Standard Range 204 CV 58,3 kWh (agosto 2026): «Diámetro de giro entre bordillos» 10,4 m, https://www.km77.com/coches/kia/ev3/2025/estandar/estandar/ev3/datos",
+          "value": 10.4,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "rearShoulderWidthMm": {
       "value": 1340,
       "unit": "mm",
@@ -333,6 +345,18 @@
         }
       ]
     },
+    "turningCircleM": {
+      "value": 10.6,
+      "unit": "m",
+      "sources": [
+        {
+          "label": "km77, ficha Kona Híbrido N Line Style 1.6 GDi (agosto 2026): «Diámetro de giro entre bordillos» 10,6 m, https://www.km77.com/coches/hyundai/kona/2023/estandar/hibrido/kona-n-line-style-hibrido-16-gdi-129-cv/datos",
+          "value": 10.6,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "rearShoulderWidthMm": {
       "value": 1380,
       "unit": "mm",
@@ -583,6 +607,18 @@
         {
           "label": "motor.es, ficha de medidas (agosto 2026)",
           "value": 2660,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "turningCircleM": {
+      "value": 10.6,
+      "unit": "m",
+      "sources": [
+        {
+          "label": "km77, ficha Kona Eléctrico Tecno 204 CV 65 kWh (agosto 2026): «Diámetro de giro entre bordillos» 10,6 m, https://www.km77.com/coches/hyundai/kona/2023/estandar/electric/kona-electrico-204-cv-65-kwh-tecno/datos",
+          "value": 10.6,
           "estimated": false,
           "current": true
         }
@@ -855,6 +891,18 @@
         {
           "label": "motor.es, ficha de medidas (agosto 2026)",
           "value": 2640,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "turningCircleM": {
+      "value": 10.4,
+      "unit": "m",
+      "sources": [
+        {
+          "label": "km77, ficha Corolla Cross Style 140H Hybrid (agosto 2026): «Diámetro de giro entre bordillos» 10,4 m, https://www.km77.com/coches/toyota/corolla-cross/2023/estandar/estandar/corolla-cross-style-18-hybrid/datos",
+          "value": 10.4,
           "estimated": false,
           "current": true
         }
@@ -1425,6 +1473,18 @@
         }
       ]
     },
+    "turningCircleM": {
+      "value": 11.6,
+      "unit": "m",
+      "sources": [
+        {
+          "label": "km77, ficha Tonale Ibrida 175 CV TCT Sprint (agosto 2026): «Diámetro de giro entre bordillos» 11,6 m, https://www.km77.com/coches/alfa-romeo/tonale/2026/estandar/estandar/tonale-ibrida-175-cv-tct-sprint/datos",
+          "value": 11.6,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "rearShoulderWidthMm": {
       "value": 1370,
       "unit": "mm",
@@ -1685,6 +1745,18 @@
         }
       ]
     },
+    "turningCircleM": {
+      "value": 10.92,
+      "unit": "m",
+      "sources": [
+        {
+          "label": "km77, ficha Sportage Drive 1.6 HEV 4x2 239 CV (agosto 2026): «Diámetro de giro entre bordillos» 10,92 m, https://www.km77.com/coches/kia/sportage/2026/estandar/hev/sportage-drive-16-hev-4x2-239-cv/datos",
+          "value": 10.92,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "rearShoulderWidthMm": {
       "value": 1390,
       "unit": "mm",
@@ -1932,6 +2004,18 @@
         {
           "label": "motor.es, ficha de medidas (agosto 2026)",
           "value": 2734,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "turningCircleM": {
+      "value": 11.6,
+      "unit": "m",
+      "sources": [
+        {
+          "label": "km77, ficha Civic e:HEV Advance (agosto 2026): «Diámetro de giro entre bordillos» 11,6 m, https://www.km77.com/coches/honda/civic/2023/5-puertas/hev/civic-ehev-advance/datos",
+          "value": 11.6,
           "estimated": false,
           "current": true
         }
@@ -2186,6 +2270,18 @@
         {
           "label": "motor.es, ficha de medidas (agosto 2026)",
           "value": 2690,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "turningCircleM": {
+      "value": 11.6,
+      "unit": "m",
+      "sources": [
+        {
+          "label": "km77, ficha NX 350h 4WD Business (agosto 2026): «Diámetro de giro entre bordillos» 11,6 m, https://www.km77.com/coches/lexus/nx/2022/estandar/hev/nx-350h-4wd-business/datos",
+          "value": 11.6,
           "estimated": false,
           "current": true
         }
@@ -2742,6 +2838,18 @@
         {
           "label": "motor.es, ficha de medidas (agosto 2026)",
           "value": 2701,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "turningCircleM": {
+      "value": 11,
+      "unit": "m",
+      "sources": [
+        {
+          "label": "km77, ficha CR-V Advance Full Hybrid 4x4 (agosto 2026): «Diámetro de giro entre bordillos» 11 m, https://www.km77.com/coches/honda/cr-v/2024/estandar/hev/cr-v-elegance-full-hybrid-4x4/datos",
+          "value": 11,
           "estimated": false,
           "current": true
         }
@@ -3329,6 +3437,18 @@
         }
       ]
     },
+    "turningCircleM": {
+      "value": 11.72,
+      "unit": "m",
+      "sources": [
+        {
+          "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV (agosto 2026): «Diámetro de giro entre bordillos» 11,72 m, https://www.km77.com/coches/kia/ev5/2025/estandar/estandar/ev5-gt-line-81-kwh-long-range-160-kw-217-cv/datos",
+          "value": 11.72,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "rearShoulderWidthMm": {
       "value": 1400,
       "unit": "mm",
@@ -3619,6 +3739,18 @@
         }
       ]
     },
+    "turningCircleM": {
+      "value": 11.8,
+      "unit": "m",
+      "sources": [
+        {
+          "label": "km77, ficha IONIQ 5 Light 84 kWh 228 CV RWD (agosto 2026): «Diámetro de giro entre bordillos» 11,8 m, https://www.km77.com/coches/hyundai/ioniq-5/2025/estandar/estandar/ioniq-5-168-kw-228-cv-84-kw-rwd/datos",
+          "value": 11.8,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "rearShoulderWidthMm": {
       "value": 1460,
       "unit": "mm",
@@ -3900,6 +4032,18 @@
         }
       ]
     },
+    "turningCircleM": {
+      "value": 11,
+      "unit": "m",
+      "sources": [
+        {
+          "label": "km77, ficha Tucson Klass 1.6 T-GDi HEV 215 CV (agosto 2026): «Diámetro de giro entre bordillos» 11 m, https://www.km77.com/coches/hyundai/tucson/2024/estandar/hev/tucson-hybrid-16-t-gdi-158-kw-215-cv/datos",
+          "value": 11,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "rearShoulderWidthMm": {
       "value": 1390,
       "unit": "mm",
@@ -4171,6 +4315,18 @@
         {
           "label": "motor.es, ficha de medidas (agosto 2026)",
           "value": 2680,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "turningCircleM": {
+      "value": 11,
+      "unit": "m",
+      "sources": [
+        {
+          "label": "km77, ficha Tucson Klass 1.6 T-GDi PHEV 288 CV (agosto 2026): «Diámetro de giro entre bordillos» 11 m, https://www.km77.com/coches/hyundai/tucson/2024/estandar/phev/tucson-klass-16-t-gdi-phev-288-cv/datos",
+          "value": 11,
           "estimated": false,
           "current": true
         }
@@ -4453,6 +4609,18 @@
         }
       ]
     },
+    "turningCircleM": {
+      "value": 10.9,
+      "unit": "m",
+      "sources": [
+        {
+          "label": "km77, ficha C5 Aircross You Hybrid 145 CV (agosto 2026): «Diámetro de giro entre bordillos» 10,9 m, https://www.km77.com/coches/citroen/c5-aircross/2026/estandar/estandar/c5-aircross-you-hybrid-145-cv/datos",
+          "value": 10.9,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "rearShoulderWidthMm": {
       "value": 1420,
       "unit": "mm",
@@ -4701,6 +4869,18 @@
         {
           "label": "km77, ficha Compass Altitude e-Hybrid 107 kW (145 CV) (agosto 2026)",
           "value": 2795,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "turningCircleM": {
+      "value": 10.8,
+      "unit": "m",
+      "sources": [
+        {
+          "label": "km77, ficha Compass Altitude e-Hybrid 107 kW (145 CV) (agosto 2026): «Diámetro de giro entre bordillos» 10,8 m, https://www.km77.com/coches/jeep/compass/2025/estandar/estandar/compass-altitude-e-hybrid-107-kw-145-cv/datos",
+          "value": 10.8,
           "estimated": false,
           "current": true
         }
