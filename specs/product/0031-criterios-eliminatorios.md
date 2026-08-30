@@ -290,12 +290,13 @@ como incumplimiento.
 - **Supone que una persona construye sus propios umbrales.** No hay reglas
   sugeridas ni un catálogo de imprescindibles típicos; el panel nace vacío,
   como los pesos no nacían en cero.
+- **El alcance recortado frente a la propuesta original de UX** —el hint de
+  a quién excluye una regla, el mensaje que nombra la regla más
+  restrictiva, las marcas a nivel de celda y de fila de duelo, el puente
+  con `product/0030`, la regla categórica sobre tecnología— fue aprobado
+  explícitamente por el propietario del proyecto en la conversación que
+  originó esta spec, junto con el resto del diseño, el 2026-08-30.
 
 ## Decisiones abiertas
 
-Ninguna. El alcance recortado frente a la propuesta original de UX —el hint
-de a quién excluye una regla, el mensaje que nombra la regla más
-restrictiva, las marcas a nivel de celda y de fila de duelo, el puente con
-`product/0030`, la regla categórica sobre tecnología— fue aprobado
-explícitamente por el propietario del proyecto en la conversación que
-originó esta spec, junto con el resto del diseño, el 2026-08-30.
+Ninguna.
