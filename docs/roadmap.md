@@ -68,6 +68,7 @@ que no vuelva sin argumento nuevo.
 | Código: cotas de los campos numéricos en `CarSchema`, andamiaje repetido de los seis ejes y `normalizeAll` sin uso, `ui/` fuera del suelo de cobertura, `pensandoVender`/`residualPct5y` desconectados, dos escalones tipográficos sin consumidor, `.duelChipActive` sin tratamiento visual, `index.html` sin icono | *Deudas abiertas* |
 | Infraestructura y proceso: acciones de GitHub sin fijar a SHA, *smoke test* post-despliegue con el disparador ya cumplido, `docs/estado/observabilidad.md` sin declarar | *Deudas abiertas* |
 | Propuestas de evolución aceptadas y aún sin spec: P4 a P7 | *Propuestas de evolución*, abajo |
+| `product/0031` — el diámetro de giro en la ficha: redactada y en `draft`, pendiente del gate humano | *Propuestas de evolución*, abajo (P15) |
 | Ocho aplazamientos conscientes, cada uno con su disparador | *Aplazamientos con disparador* |
 
 ### Propuestas de evolución
@@ -99,6 +100,7 @@ vuelve sin argumento nuevo).
 | P12 | **Fiabilidad con una segunda fuente**, para no depender solo del índice OCU —que no cubre a todas las marcas— | `en espera` | Antes de nada, averiguar si esa fuente existe y es accesible, probablemente fuera de España (informes de ITV alemana o de clubes de automovilistas). Sin fuente no hay spec que redactar |
 | P13 | «Qué renuncias si eliges el líder»: la magnitud en la que el segundo ganaba | `descartada` | La ficha comparada ya lo da entre dos coches, que es donde importa (decisión del usuario, 2026-08-29) |
 | P14 | Instantánea fechada de la decisión | `descartada` | Sin valor sustancial: la configuración ya viaja en la URL (decisión del usuario, 2026-08-29) |
+| P15 | **Cuánto sitio necesita para dar la vuelta**: declarar el diámetro de giro entre bordillos de cada coche y mostrarlo en la ficha completa, con Δ y orden | `en spec` | `product/0031`, redactada en `draft` el 2026-08-30 a partir de una petición del usuario, no del repaso de producto del 2026-08-29. La ficha compara veinticuatro magnitudes y ninguna dice si un coche entra en un garaje o se da la vuelta en una calle estrecha: lo más cerca que llega son longitud y anchura, que el eje `diario` usa como proxies, y la batalla, que es `neutral`. **Que el giro puntúe queda fuera de la spec y aplazado con disparador:** que un candidato quede descartado de verdad por no maniobrar donde tiene que maniobrar — entonces es spec de eje, con sus dos anclajes fijados por el criterio del ADR 0010. El coste está en los datos, no en el código: diecinueve registros a documentar con una sola definición de la medida, fijada **antes** de recolectar para no repetir la deuda de la anchura de hombros |
 
 ## Fase 0 — Base documental
 
