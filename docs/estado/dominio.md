@@ -90,13 +90,13 @@ autonomía eléctrica es una magnitud inventada.
 **Por qué las dos y no solo la autonomía.** La autonomía eléctrica **no
 existe homologada fuera de los enchufables**: el WLTP no publica ninguna
 para un híbrido no enchufable, y las cifras que circulan no comparten
-método. Eso deja a once de los dieciocho candidatos —siete `HEV` y cuatro
+método. Eso deja a trece de los veinte candidatos —nueve `HEV` y cuatro
 `MHEV`— sin nada que comparar por ahí, y rellenar su columna exigiría
 inventar una magnitud. La capacidad de la batería sí se publica con el mismo
 significado para todos, así que es **la magnitud que compara un híbrido con
 otro**: 0,77 kWh el Tonale, 0,85 el Corolla Cross, 1,49 el Tucson HEV. Por
-eso `HEV` y `MHEV` la declaran cuando la fuente la publica —hoy siete de los
-once— y la omiten cuando no, que es ausencia de fuente y se registra como
+eso `HEV` y `MHEV` la declaran cuando la fuente la publica —hoy nueve de los
+trece— y la omiten cuando no, que es ausencia de fuente y se registra como
 deuda, no un hueco que rellenar a ojo.
 
 El día que aparezca una autonomía de híbrido convencional que no venga de la

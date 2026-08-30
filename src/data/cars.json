@@ -5154,6 +5154,18 @@
       ],
       "unit": "mm"
     },
+    "turningCircleM": {
+      "value": 11.1,
+      "unit": "m",
+      "sources": [
+        {
+          "label": "km77, ficha Qashqai e-POWER Gen 3 151 kW (205 CV) N-Connecta (agosto 2026): «Diámetro de giro entre bordillos» 11,1 m, https://www.km77.com/coches/nissan/qashqai/2024/estandar/hev/qashqai-e-power-gen-3-151-kw-205-cv-n-connecta/datos",
+          "value": 11.1,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "rearShoulderWidthMm": {
       "value": 1380,
       "sources": [
@@ -5450,6 +5462,18 @@
         }
       ],
       "unit": "mm"
+    },
+    "turningCircleM": {
+      "value": 11.1,
+      "unit": "m",
+      "sources": [
+        {
+          "label": "km77, ficha X-Trail e-POWER 204 CV N-Connecta 2026 (agosto 2026): «Diámetro de giro entre bordillos» 11,1 m; la misma ficha da 11,6 m entre paredes, que es otra medida y no se usa, https://www.km77.com/coches/nissan/x-trail/2026/estandar/estandar/x-trail-e-power-204-cv-n-connecta/datos",
+          "value": 11.1,
+          "estimated": false,
+          "current": true
+        }
+      ]
     },
     "rearShoulderWidthMm": {
       "value": 1390,
