@@ -1,7 +1,7 @@
 # 0030 — El estado de decisión de cada coche
 
 - **Id:** product/0030
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-08-30
 - **Specs relacionadas:** product/0012, product/0014, product/0015,
