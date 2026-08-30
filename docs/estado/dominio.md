@@ -455,8 +455,8 @@ remite a ese panel, sin ofrecer edición propia.
 ## Pesos
 
 `AxisWeights` (`src/domain/scoring/weights.ts`), uno por eje, 0-10. Por
-defecto: viaje 4, diario 3, fiabilidad 2, estética 2, prestaciones 1,
-coste 1 — reflejan una prioridad personal, no una fórmula del negocio.
+defecto: viaje 10, diario 7, fiabilidad 7, estética 6, prestaciones 5,
+coste 5 — reflejan una prioridad personal, no una fórmula del negocio.
 
 ## El catálogo
 
