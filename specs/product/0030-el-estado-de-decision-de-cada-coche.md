@@ -1,7 +1,7 @@
 # 0030 — El estado de decisión de cada coche
 
 - **Id:** product/0030
-- **Estado:** approved
+- **Estado:** consolidated
 - **Tipo:** product
 - **Fecha:** 2026-08-30
 - **Specs relacionadas:** product/0012, product/0014, product/0015,
@@ -9,6 +9,12 @@
   technical/0010
 - **ADRs relacionados:** 0004
 - **Doc de estado:** `docs/estado/dominio.md`, `docs/estado/interfaz.md`
+
+> ⚠️ **Spec consolidada (2026-08-30).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/dominio.md` y `docs/estado/interfaz.md`. Vigentes aquí solo
+> los **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -258,51 +264,51 @@ registro.
 
 > Obligatorios y verificables.
 
-- [ ] Un test comprueba que el conjunto de estados es cerrado y de tres
+- [x] Un test comprueba que el conjunto de estados es cerrado y de tres
       valores, y que un coche sin entrada en el registro se lee como
       `undecided`.
-- [ ] Un test comprueba que fijar un estado guarda la fecha que se le pasa
+- [x] Un test comprueba que fijar un estado guarda la fecha que se le pasa
       desde fuera, y que corregir solo el motivo **no** la mueve.
-- [ ] Un test comprueba que los tres estados se aceptan **con motivo y sin
+- [x] Un test comprueba que los tres estados se aceptan **con motivo y sin
       motivo**, descarte incluido.
-- [ ] Un test comprueba que volver a `undecided` deja el registro sin entrada
+- [x] Un test comprueba que volver a `undecided` deja el registro sin entrada
       para ese coche.
-- [ ] Un test comprueba que la puntuación de un coche es **idéntica** antes y
+- [x] Un test comprueba que la puntuación de un coche es **idéntica** antes y
       después de descartarlo, para todos los coches publicados del catálogo
       real y con los pesos y supuestos por defecto.
-- [ ] Un test comprueba la degradación por partes: una entrada con estado
+- [x] Un test comprueba la degradación por partes: una entrada con estado
       desconocido se descarta sola y las demás sobreviven; un `car.id` que no
       está en el catálogo descarta su entrada; una versión desconocida
       descarta el objeto entero; un campo ausente no genera registro.
-- [ ] Un test comprueba que restaurar un registro descartado emite
+- [x] Un test comprueba que restaurar un registro descartado emite
       `decision_log_discarded` o `decision_entry_discarded` según el caso, y
       que **el motivo escrito por el usuario no aparece** en ningún atributo
       registrado.
-- [ ] Un test comprueba las tres posiciones del filtro sobre una lista
+- [x] Un test comprueba las tres posiciones del filtro sobre una lista
       conocida: «Todos» las devuelve todas, «Sin descartados» quita solo los
       `discarded` y «Solo lista corta» deja solo los `shortlist`.
-- [ ] Un test comprueba que el filtro y «Ocultar fuera de presupuesto» se
+- [x] Un test comprueba que el filtro y «Ocultar fuera de presupuesto» se
       aplican a la vez, y que el modelo elegido como comparación sobrevive al
       filtro en la ficha aunque su estado lo excluyera.
-- [ ] Un test comprueba que, con la lista visible vacía por el filtro, la
+- [x] Un test comprueba que, con la lista visible vacía por el filtro, la
       clasificación renderiza su mensaje y no la lista.
-- [ ] Un test comprueba que la fila del ranking lleva marca para los dos
+- [x] Un test comprueba que la fila del ranking lleva marca para los dos
       estados decididos y **no** la lleva para `undecided`, y que la marca
       incluye su rótulo de texto y no solo una clase de color.
-- [ ] Un test comprueba que la fila desplegada muestra estado, motivo y fecha
+- [x] Un test comprueba que la fila desplegada muestra estado, motivo y fecha
       por delante del resumen de `product/0029`, y que sin motivo escrito
       muestra solo estado y fecha.
-- [ ] Un test comprueba que la cabecera de columna de la ficha lleva la marca
+- [x] Un test comprueba que la cabecera de columna de la ficha lleva la marca
       y que su control abre el diálogo de decisión para ese modelo.
-- [ ] Un test comprueba que «Restablecer» deja el registro de decisiones
+- [x] Un test comprueba que «Restablecer» deja el registro de decisiones
       **intacto**, que «Borrar decisiones» lo vacía, y que ese botón no se
       renderiza cuando no hay ninguna decisión registrada.
-- [ ] Verificación manual sobre el *build* de producción: fijar los tres
+- [x] Verificación manual sobre el *build* de producción: fijar los tres
       estados desde la clasificación **y desde la ficha**, recargar y
       comprobar que sobreviven; comprobar que el enlace compartible **no** los
       lleva; comprobar que «Restablecer» no los borra y que «Borrar
       decisiones» pide confirmación antes de hacerlo.
-- [ ] La secuencia de CI pasa entera en local
+- [x] La secuencia de CI pasa entera en local
       (`docs/proceso/ci-y-guardarrailes.md`, §4), con cobertura al 100 % en
       `src/domain/`, `src/data/` y `src/logging/`.
 
@@ -330,12 +336,4 @@ registro.
 
 ## Decisiones abiertas
 
-Ninguna. Las cuatro que el borrador dejó abiertas las cerró el usuario el
-2026-08-30, las cuatro en contra de la recomendación que la spec traía:
-
-1. **El motivo es opcional al descartar**, no obligatorio (requisito 2.4).
-2. **Se edita también desde la ficha**, no solo desde la clasificación
-   (requisitos 6.2 y 6.3).
-3. **«Restablecer» no borra las decisiones**; se separa en una acción propia
-   (requisitos 3.5 y 3.6).
-4. **Tres estados, no cuatro**: «Candidato» se queda fuera (requisito 1.5).
+Ninguna.

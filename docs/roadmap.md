@@ -67,7 +67,6 @@ que no vuelva sin argumento nuevo.
 | Datos del catálogo: fotos que faltan y acabados que no coinciden, magnitudes estimadas sin fuente firme, hombros mínimos mezclados con máximos, cuatro híbridos sin batería, la versión del EV3, tres `faceliftYear` sin confirmar, la fiabilidad de Jeep por convención, precios de julio de 2026, dos fotos en CDN de concesionario | *Deudas abiertas* |
 | Código: cotas de los campos numéricos en `CarSchema`, andamiaje repetido de los seis ejes y `normalizeAll` sin uso, `ui/` fuera del suelo de cobertura, `pensandoVender`/`residualPct5y` desconectados, dos escalones tipográficos sin consumidor, `.duelChipActive` sin tratamiento visual, `index.html` sin icono | *Deudas abiertas* |
 | Infraestructura y proceso: acciones de GitHub sin fijar a SHA, *smoke test* post-despliegue con el disparador ya cumplido, `docs/estado/observabilidad.md` sin declarar | *Deudas abiertas* |
-| `product/0030` — el estado de decisión de cada coche: en `draft`, sin decisiones abiertas, esperando el gate humano | *Propuestas de evolución*, abajo (P3) |
 | Propuestas de evolución aceptadas y aún sin spec: P4 a P7 | *Propuestas de evolución*, abajo |
 | Ocho aplazamientos conscientes, cada uno con su disparador | *Aplazamientos con disparador* |
 
@@ -88,7 +87,7 @@ vuelve sin argumento nuevo).
 | P1 | **El reparto de la diferencia**: descomponer la diferencia de nota entre dos coches en la aportación de cada eje, `Σ peso × (score(A) − score(B))`, ordenada por magnitud | `consolidada` | `product/0029`, consolidada el 2026-08-29: bloque «Detalle ejes» en la ficha, línea de resumen en cada fila desplegada del ranking. Se lleva dentro la mitad de P2 que sobrevive —los rangos de peso— y deja fuera el empate técnico |
 | P2a | **Sensibilidad**: decir en qué rango de un peso el resultado de un par no cambia | `consolidada` | Dentro de `product/0029`, requisito 5, consolidada el 2026-08-29. El cruce es exacto —la diferencia es lineal en el peso desde que los seis ejes puntúan en absoluto— y no necesita ningún dato nuevo |
 | P2b | **Empate técnico**: marcar cuándo una diferencia entre dos coches está por debajo de un umbral | `descartada` | Decisión del usuario (2026-08-29): no hace falta que la aplicación avise de que una diferencia es pequeña, eso se ve; lo que faltaba era el reparto, no el aviso. Queda medido, por si vuelve a plantearse: un solo clic en la estética mueve `2,31 pp`, más que trece de las catorce distancias entre puestos consecutivos |
-| P3 | **Estado de decisión por coche** desde la interfaz: lista corta o descartado, con motivo y fecha | `en spec` | `product/0030`, en `draft` desde el 2026-08-30, con sus cuatro decisiones abiertas ya cerradas: motivo opcional, edición también desde la ficha, «Restablecer» que no borra decisiones y tres estados en vez de cuatro. Espera el gate humano. Hoy solo existe `published`, que es todo o nada y lo cambia un agente por skill. Elegir es descartar, y el descarte no se registra en ninguna parte |
+| P3 | **Estado de decisión por coche** desde la interfaz: lista corta o descartado, con motivo y fecha | `consolidada` | `product/0030`, consolidada el 2026-08-30: marca en el ranking y en la cabecera de columna de la ficha, edición en línea y por diálogo, filtro de tres posiciones, «Borrar decisiones» separado de «Restablecer». Sin el cuarto estado de «candidato» que la propuesta original mencionaba |
 | P4 | **Criterios eliminatorios** además del presupuesto: largo máximo, maletero mínimo, autonomía mínima, altura de acceso | `aceptada` | Un coche que incumple un imprescindible no debería ganar por puntos; el precio es hoy el único filtro duro |
 | P5 | **Pesos por preferencia revelada**: derivar los seis pesos de una tanda de duelos «¿cuál prefieres?», dejando los deslizadores como ajuste fino | `aceptada` | Nadie sabe si su `viaje` vale 4 o 5; seis deslizadores a ojo son un mal instrumento para lo que más manda en la nota |
 | P6 | **Registro de la prueba real**: anotar por coche y con fecha lo que solo se sabe sentado dentro —postura, ruido, visibilidad, plazas traseras, maletero— y que pese en la nota | `aceptada` | Es la parte del «eje subjetivo de conducción» de *Más adelante* que **sí** depende del proyecto: tener el sitio donde anotarlo. Hoy lo único subjetivo editable es la estética |
@@ -565,6 +564,38 @@ fase abierta. Se lista para no perderlo, no para bloquear nada.
   suma sobre **todos** los pares del catálogo publicado, no solo los dos
   medidos en la spec— y Playwright sobre el build de producción a
   320/390/768/1440px. Consolidada en `docs/estado/dominio.md` y
+  `docs/estado/interfaz.md`.
+- **El estado de decisión de cada coche — `product/0030`, `consolidated`.**
+  La aplicación puntuaba y ordenaba, pero elegir es descartar y el descarte
+  no se registraba en ninguna parte: lo único parecido, `published`
+  (`product/0015`), es todo o nada, sin motivo ni fecha, y solo lo cambia un
+  agente por *skill*. La spec da a cada coche uno de tres estados —
+  `undecided` por defecto y sin guardar, `shortlist`, `discarded`—, con un
+  motivo opcional y una fecha que solo se mueve cuando el estado cambia de
+  verdad, en un tercer objeto persistido (`DecisionLog`) hermano de
+  `AppConfig` y `ViewState`, que tampoco viaja en el enlace compartible. Un
+  filtro de tres posiciones se aplica a la vez al ranking y a la ficha,
+  siempre después de puntuar —un criterio de aceptación lo comprueba contra
+  el catálogo real, descartando todos los coches publicados a la vez y
+  verificando que la nota no se mueve—, y nunca esconde el modelo fijado
+  como comparación ni a una referencia, que no tiene decisión propia. Se
+  edita desde dos superficies sobre el mismo registro: en línea en la fila
+  desplegada del ranking, y por un diálogo que abre la marca de la cabecera
+  de columna de la ficha. Nace del repaso de producto del 2026-08-29
+  (propuesta P3), con sus cuatro decisiones abiertas cerradas por el usuario
+  las cuatro en contra de la recomendación del borrador: motivo opcional
+  también al descartar, edición también desde la ficha, «Restablecer» que
+  **no** toca las decisiones —enmienda deliberada a la promesa de «primera
+  visita» de `product/0024`, con «Borrar decisiones» como acción propia y
+  separada— y tres estados en vez de cuatro, sin «Candidato». Recorrió
+  `draft → approved → implemented → verified → consolidated` en la misma
+  sesión, con el gate humano en dos commits propios sin implementación, la
+  CI entera verde en local (555 tests, cobertura 100 % en
+  `domain/`+`data/`+`logging/`) y los dieciséis criterios cerrados contra
+  tests unitarios y Playwright sobre el build de producción: fijar los tres
+  estados desde las dos superficies, supervivencia a recargar, el mensaje de
+  lista vacía por filtro, la forma del enlace compartible y las dos
+  confirmaciones destructivas. Consolidada en `docs/estado/dominio.md` y
   `docs/estado/interfaz.md`.
 - **Eje de autonomía y repostaje.** Es la mayor diferencia práctica entre los
   once candidatos en un viaje largo —los térmicos e híbridos hacen 640-950 km
