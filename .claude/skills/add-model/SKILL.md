@@ -1,6 +1,6 @@
 ---
 name: add-model
-description: Añade un coche nuevo al catálogo de comparador-coches (src/data/cars.json) — investiga en la web sus 22 magnitudes con fuente real (incluidas su generación y, si es electrificado, su autonomía eléctrica y su batería), busca y verifica sus 5 fotos (frontal, lateral, trasera, maletero, interior), y deja el repositorio en verde antes de comitear. Úsala en cuanto el usuario pida "añadir un coche", "meter un modelo nuevo en la comparativa", "comparar también el/la <marca modelo>", o describa un coche que quiere ver en el ranking o en la ficha completa — aunque no mencione explícitamente "catálogo" ni "cars.json". No la uses para corregir un dato de un coche que ya está en el catálogo (eso es una edición puntual, no un alta) ni para cambiar la referencia (`references.json`, hoy solo el Alfa Romeo Giulietta).
+description: Añade un coche nuevo al catálogo de comparador-coches (src/data/cars.json) — investiga en la web sus 23 magnitudes con fuente real (incluidas su generación y, si es electrificado, su autonomía eléctrica y su batería), busca y verifica sus 5 fotos (frontal, lateral, trasera, maletero, interior), y deja el repositorio en verde antes de comitear. Úsala en cuanto el usuario pida "añadir un coche", "meter un modelo nuevo en la comparativa", "comparar también el/la <marca modelo>", o describa un coche que quiere ver en el ranking o en la ficha completa — aunque no mencione explícitamente "catálogo" ni "cars.json". No la uses para corregir un dato de un coche que ya está en el catálogo (eso es una edición puntual, no un alta) ni para cambiar la referencia (`references.json`, hoy solo el Alfa Romeo Giulietta).
 ---
 
 # Añadir un modelo al catálogo
@@ -47,7 +47,7 @@ motorización/acabado— pregúntaselo antes de investigar nada: `technology`
 buscar la genérica cuando hay varias en el mercado es la forma más directa
 de acabar mezclando datos de dos coches distintos.
 
-## 2. Las 22 magnitudes
+## 2. Las 23 magnitudes
 
 **La generación va aparte y no puntúa.** `generation` (product/0021, ADR
 0009) es obligatoria y no es una de las magnitudes con las que se puntúa:
@@ -76,10 +76,10 @@ intercambiables:
 - **`SourcedNumber`** — `{ value, unit?, sources: [{ label, value,
   estimated, current, discardedReason? }] }`.
   Es el formato de todo lo que viene de fuera: `lengthMm`, `widthMm`,
-  `heightMm`, `wheelbaseMm`, `rearShoulderWidthMm`, `groundClearanceMm`,
-  `trunkLiters`, `powerCv`, `weightKg`, `acceleration0to100`, `consumption`,
-  `maintenanceEurYear`, `priceEur`, `reliabilityOcu`, `warrantyYears`,
-  `residualPct5y` (opcional),
+  `heightMm`, `wheelbaseMm`, `turningCircleM` (opcional), `rearShoulderWidthMm`,
+  `groundClearanceMm`, `trunkLiters`, `powerCv`, `weightKg`,
+  `acceleration0to100`, `consumption`, `maintenanceEurYear`, `priceEur`,
+  `reliabilityOcu`, `warrantyYears`, `residualPct5y` (opcional),
   y el objeto opcional `warrantyExtension` (`{ years: SourcedNumber,
   kmLimit?: SourcedNumber, condition }`). Zod exige **exactamente una**
   fuente con `current: true`, y su `value` tiene que coincidir con el
@@ -125,6 +125,27 @@ que equivocarse aquí es un error de validación, no un descuido silencioso:
 
 Las dos salen de la misma ficha km77 de la versión que estés dando de alta:
 «Autonomía eléctrica WLTP» y, en la sección «Batería», «Capacidad».
+
+**`turningCircleM` es el diámetro de giro entre bordillos, en metros**
+(product/0032). Es opcional para cualquier tecnología —no hay regla cruzada
+con `technology`, porque todo coche gira— y la definición es más estricta de
+lo que parece:
+
+- Vale una fuente que publique **«Diámetro de giro entre bordillos»**. km77
+  lo da así, en la pestaña «Datos» de la ficha de la versión, en la sección
+  de dirección/chasis.
+- Vale también un **radio** entre bordillos: multiplícalo por dos y dilo en
+  el `label` («radio de 5,2 m convertido a diámetro»), para que la cuenta
+  quede auditable.
+- **No vale** una fuente que solo dé el diámetro **entre paredes** (el
+  barrido de la carrocería, no el de las ruedas): es una medida distinta,
+  siempre mayor, y no se estima una a partir de la otra. Si es lo único que
+  encuentras, omite el campo — no lo rellenes con esa cifra ni con una
+  estimación. Algunas marcas (BMW, Mazda, Volkswagen en varios modelos) solo
+  publican esa medida, y sus fichas se quedan sin este dato: es una ausencia
+  de fuente, no de dato, y se registra como deuda como cualquier otra.
+- La versión importa tanto como en el resto de magnitudes: llanta y
+  dirección al eje trasero mueven el número dentro del mismo modelo.
 
 **Cómo investigar cada magnitud**: busca la ficha técnica oficial del
 fabricante para el mercado español (o europeo si no la hay en español) y,

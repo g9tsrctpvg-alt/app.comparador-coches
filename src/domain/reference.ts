@@ -24,6 +24,13 @@ export const ReferenceSchema = z.object({
   generation: GenerationSchema,
   lengthMm: SourcedNumberSchema,
   widthMm: SourcedNumberSchema,
+  /**
+   * Diámetro de giro entre bordillos (product/0032): la primera excepción
+   * a «solo dimensiones» desde `generation`, y por el mismo motivo — sin
+   * ella, la Δ de esta magnitud quedaría `'unavailable'` para los
+   * dieciocho candidatos siempre que se comparen contra esta referencia.
+   */
+  turningCircleM: SourcedNumberSchema.optional(),
   heightMm: SourcedNumberSchema,
   groundClearanceMm: SourcedNumberSchema,
   trunkLiters: SourcedNumberSchema,

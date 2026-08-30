@@ -274,7 +274,7 @@ independientemente del fragmento, así que ningún alias puede dar 404.
 - **`EliminatoryRulesPanel`** (product/0031) — el panel «Imprescindibles»:
   una fila fija y no eliminable con el presupuesto, y una lista de reglas
   eliminatorias, cada una magnitud + operador + umbral, sobre cualquiera de
-  las veinticuatro claves de `FICHA_FIELDS`. El `<select>` de magnitud
+  las veinticinco claves de `FICHA_FIELDS`. El `<select>` de magnitud
   agrupa por los mismos seis bloques que «Orden» en la ficha
   (`COMPLETE_BLOCKS`, exportado de `FichaPage.tsx` para esto), y oculta las
   magnitudes que ya tienen regla —a lo sumo una por magnitud—. El operador
@@ -488,7 +488,7 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     anchura, altura libre al suelo, maletero, potencia, precio —tamaño,
     mecánica y coste, en ese orden— reutilizando el mismo `FieldDef` que
     `Completa` para potencia y precio, sin una segunda declaración) o
-    `Completa` (las veinticuatro, agrupadas en seis bloques con cabecera
+    `Completa` (las veinticinco, agrupadas en seis bloques con cabecera
     propia). Arranca en `Esenciales`. En «Mecánica y prestaciones», detrás
     de «Consumo», van **«Autonomía eléctrica»** y **«Batería»**
     (product/0028): consumo, autonomía y batería son la misma pregunta
@@ -496,7 +496,11 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     **dos decimales**, y no por gusto: las capacidades de los híbridos y
     microhíbridos van de 0,77 a 1,49 kWh, y con un solo decimal 0,77 y 0,85
     se leerían las dos como «0,8» — la comparación entre híbridos, que es la
-    razón de que esa magnitud exista, quedaría anulada por el formato.
+    razón de que esa magnitud exista, quedaría anulada por el formato. En
+    «Tamaño y espacio», detrás de «Batalla», va **«Diámetro de giro»**
+    (product/0032, un decimal): las dos se leen juntas porque la batalla es
+    el factor que más manda en el giro. A diferencia de la batalla —neutra—,
+    aquí sí hay una dirección afirmable: menos es mejor.
   - **Comparar** — **dos controles para el mismo estado**, sincronizados por
     construcción porque los dos escriben `comparisonId`: un radio por columna,
     con `name` compartido (`pinned-model`), y el `<select>` de la barra, que
@@ -517,7 +521,7 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     que una celda sin dato, no un número que no diría nada. Arranca fijada
     la primera referencia del catálogo, si hay alguna.
   - **Orden** — `Catálogo` más **una opción por cada una de las
-    veinticuatro magnitudes** de «Completa» (product/0027), agrupadas en el
+    veinticinco magnitudes** de «Completa» (product/0027), agrupadas en el
     `<select>` por los mismos seis bloques y con el mismo rótulo que da a esa
     fila su
     `FieldDef` —las opciones se generan de `COMPLETE_BLOCKS`, no de una
@@ -525,8 +529,8 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     tabla de polaridad del dominio (`docs/estado/dominio.md`): descendente
     donde más es mejor (potencia, maletero, fiabilidad, valor residual,
     estética…, y la autonomía eléctrica), ascendente donde más es peor
-    (precio, longitud, anchura, peso…) y ascendente en las neutras (altura,
-    batalla, generación, capacidad de la batería…).
+    (precio, longitud, anchura, peso, diámetro de giro…) y ascendente en las
+    neutras (altura, batalla, generación, capacidad de la batería…).
     Arranca en Longitud. El criterio vigente ordena a la vez las columnas
     desplazables de la tabla, las opciones de «Comparar» y la tira de
     candidatos de la vista de duelo. Es independiente de «Campos»: se puede

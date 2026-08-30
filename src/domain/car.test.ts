@@ -382,6 +382,66 @@ describe('CarSchema, magnitudes de electrificación (product/0028)', () => {
   );
 });
 
+describe('CarSchema, diámetro de giro (product/0032)', () => {
+  it('accepts a car that declares the turning circle', () => {
+    expect(
+      CarSchema.safeParse({
+        ...validCar,
+        turningCircleM: sourced(10.92),
+      }).success,
+    ).toBe(true);
+  });
+
+  it('accepts a car without the optional turning circle', () => {
+    const result = CarSchema.safeParse(validCar);
+    expect(result.success).toBe(true);
+  });
+
+  it('rejects a malformed turning circle, same as any other sourced value', () => {
+    const result = CarSchema.safeParse({
+      ...validCar,
+      turningCircleM: sourced(10.9, {
+        sources: [
+          {
+            label: 'km77',
+            value: 11.1,
+            estimated: false,
+            current: true,
+          },
+        ],
+      }),
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(
+        result.error.issues.some((issue) => issue.path[0] === 'turningCircleM'),
+      ).toBe(true);
+    }
+  });
+
+  it.each(['ICE', 'MHEV', 'HEV', 'PHEV', 'EV'] as const)(
+    'is genuinely optional on a %s: no cross-field rule with technology',
+    (technology) => {
+      const range = sourced(510);
+      const battery = sourced(65.4);
+      const base =
+        technology === 'EV' || technology === 'PHEV'
+          ? {
+              ...validCar,
+              technology,
+              electricRangeKm: range,
+              batteryKwh: battery,
+            }
+          : { ...validCar, technology };
+
+      expect(CarSchema.safeParse(base).success).toBe(true);
+      expect(
+        CarSchema.safeParse({ ...base, turningCircleM: sourced(10.9) }).success,
+      ).toBe(true);
+    },
+  );
+});
+
 describe('publishedCars', () => {
   function carWith(id: string, published: boolean): Car {
     return { ...sportageFixture, id, published };

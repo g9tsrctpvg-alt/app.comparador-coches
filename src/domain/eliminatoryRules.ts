@@ -9,7 +9,7 @@ export type RuleOperator = (typeof RULE_OPERATORS)[number];
  * Un imprescindible: magnitud, operador y umbral (requisito 1.1). El
  * presupuesto no es una `EliminatoryRule` — sigue siendo `budgetEur` y
  * `car.overBudget`, ver `docs/estado/dominio.md` — así que esta forma solo
- * cubre las veinticuatro magnitudes de `FICHA_FIELDS`.
+ * cubre las veinticinco magnitudes de `FICHA_FIELDS`.
  */
 export interface EliminatoryRule {
   field: FichaField;

@@ -25,7 +25,7 @@ const OPERATOR_LABELS: Record<RuleOperator, string> = {
 
 /** Busca la etiqueta de `field` en los mismos seis bloques que «Orden» ya
  * agrupa (`COMPLETE_BLOCKS`, `src/ui/FichaPage.tsx`), sin una segunda
- * declaración de las veinticuatro etiquetas. Exportada para que
+ * declaración de las veinticinco etiquetas. Exportada para que
  * `IneligibleRow` (product/0031) nombre la magnitud de una regla
  * incumplida sin repetir esta búsqueda. */
 export function fieldLabel(field: FichaField): string {

@@ -53,6 +53,18 @@
         }
       ]
     },
+    "turningCircleM": {
+      "value": 10.9,
+      "unit": "m",
+      "sources": [
+        {
+          "label": "km77, ficha Giulietta 2.0 JTD 175 CV TCT Super (agosto 2026): «Diámetro de giro entre bordillos» 10,9 m — misma longitud (4.351 mm) y anchura (1.798 mm) que declara esta referencia, confirmando la versión, https://www.km77.com/coches/alfa-romeo/giulietta/2016/estandar/super/giulietta-20-jtdm-175-cv-ss-tct/datos",
+          "value": 10.9,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "heightMm": {
       "value": 1465,
       "unit": "mm",
