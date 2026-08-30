@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { RankingList, editableRatingsOf } from './RankingList';
+import { defaultDecisionLog, setDecisionFilter } from '../../domain/decisions';
 import { scoreCatalog } from '../../domain/scoring/score';
 import { DEFAULT_WEIGHTS } from '../../domain/scoring/weights';
 import { DEFAULT_ASSUMPTIONS } from '../../domain/scoring/assumptions';
@@ -9,6 +10,8 @@ import type { CarScoreBreakdown } from '../../domain/scoring/breakdown';
 import { loadCatalog } from '../../data/loadCatalog';
 import { publishedCars } from '../../domain/car';
 import rowStyles from './RankingRow.module.css';
+
+const EMPTY_DECISIONS = defaultDecisionLog();
 
 function scored(): CarScoreBreakdown[] {
   return scoreCatalog(
@@ -44,6 +47,10 @@ function renderExpanded(cars: CarScoreBreakdown[]): string {
       cars={cars}
       rawCars={threeCarFixture}
       weights={DEFAULT_WEIGHTS}
+      decisionLog={EMPTY_DECISIONS}
+      onSetDecision={() => undefined}
+      onClearDecision={() => undefined}
+      onDecisionFilterChange={() => undefined}
       hideOverBudget={false}
       onRatingChange={() => undefined}
     />,
@@ -96,6 +103,10 @@ describe('RankingList', () => {
         cars={cars}
         rawCars={threeCarFixture}
         weights={DEFAULT_WEIGHTS}
+        decisionLog={EMPTY_DECISIONS}
+        onSetDecision={() => undefined}
+        onClearDecision={() => undefined}
+        onDecisionFilterChange={() => undefined}
         hideOverBudget
         onRatingChange={() => undefined}
       />,
@@ -103,6 +114,54 @@ describe('RankingList', () => {
     for (const car of overBudget) {
       expect(markup).not.toContain(car.carName);
     }
+  });
+
+  describe('the decision filter, empty (product/0030, requisito 4.6)', () => {
+    it('renders a message naming the active filter, not an empty list, when it hides everything', () => {
+      const cars = scored();
+      const log = setDecisionFilter(defaultDecisionLog(), 'shortlist-only');
+      const markup = renderToStaticMarkup(
+        <RankingList
+          cars={cars}
+          rawCars={threeCarFixture}
+          weights={DEFAULT_WEIGHTS}
+          decisionLog={log}
+          onSetDecision={() => undefined}
+          onClearDecision={() => undefined}
+          onDecisionFilterChange={() => undefined}
+          hideOverBudget={false}
+          onRatingChange={() => undefined}
+        />,
+      );
+      expect(markup).toContain('Solo lista corta');
+      expect(markup).not.toContain('<ol');
+      expect(markup).toContain('Volver a Todos');
+    });
+
+    it('does not show the empty message just because hideOverBudget alone empties the list', () => {
+      // Con `filter: 'all'`, una lista vacía por presupuesto no es el caso
+      // que este requisito cubre — no se distingue de él a propósito.
+      const tinyBudgetCars = scoreCatalog(
+        threeCarFixture,
+        DEFAULT_WEIGHTS,
+        DEFAULT_ASSUMPTIONS,
+        1,
+      );
+      const markup = renderToStaticMarkup(
+        <RankingList
+          cars={tinyBudgetCars}
+          rawCars={threeCarFixture}
+          weights={DEFAULT_WEIGHTS}
+          decisionLog={EMPTY_DECISIONS}
+          onSetDecision={() => undefined}
+          onClearDecision={() => undefined}
+          onDecisionFilterChange={() => undefined}
+          hideOverBudget
+          onRatingChange={() => undefined}
+        />,
+      );
+      expect(markup).not.toContain('Volver a Todos');
+    });
   });
 
   describe('the podium (product/0022)', () => {
@@ -142,6 +201,10 @@ describe('RankingList', () => {
           cars={realScored}
           rawCars={realCars}
           weights={DEFAULT_WEIGHTS}
+          decisionLog={EMPTY_DECISIONS}
+          onSetDecision={() => undefined}
+          onClearDecision={() => undefined}
+          onDecisionFilterChange={() => undefined}
           hideOverBudget={false}
           onRatingChange={() => undefined}
         />,
@@ -177,6 +240,10 @@ describe('RankingList', () => {
           cars={realScored}
           rawCars={realCars}
           weights={DEFAULT_WEIGHTS}
+          decisionLog={EMPTY_DECISIONS}
+          onSetDecision={() => undefined}
+          onClearDecision={() => undefined}
+          onDecisionFilterChange={() => undefined}
           hideOverBudget={false}
           onRatingChange={() => undefined}
         />,

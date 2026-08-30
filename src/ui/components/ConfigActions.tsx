@@ -5,6 +5,11 @@ import styles from './ConfigActions.module.css';
 interface ConfigActionsProps {
   shareUrl: () => string;
   onReset: () => void;
+  /** «Borrar decisiones» (product/0030, requisito 3.6): acción propia,
+   * separada de «Restablecer», que ya no las toca (requisito 3.5). Solo
+   * aparece cuando hay al menos una decisión registrada. */
+  decisionCount: number;
+  onClearDecisions: () => void;
 }
 
 const COPIED_LABEL_MS = 2000;
@@ -13,13 +18,27 @@ const COPIED_LABEL_MS = 2000;
  * El enlace no se genera solo (product/0012, requisito 6): se copia con
  * una acción explícita, aquí, nunca reescribiendo la URL en cada cambio.
  */
-export function ConfigActions({ shareUrl, onReset }: ConfigActionsProps) {
+export function ConfigActions({
+  shareUrl,
+  onReset,
+  decisionCount,
+  onClearDecisions,
+}: ConfigActionsProps) {
   const [copied, setCopied] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined,
   );
 
   useEffect(() => () => clearTimeout(timeoutRef.current), []);
+
+  function handleClearDecisions() {
+    const noun =
+      decisionCount === 1 ? 'decisión registrada' : 'decisiones registradas';
+    const confirmed = window.confirm(
+      `Se van a borrar ${decisionCount} ${noun}. Esta acción no se puede deshacer. ¿Continuar?`,
+    );
+    if (confirmed) onClearDecisions();
+  }
 
   async function handleCopy() {
     const url = shareUrl();
@@ -50,6 +69,15 @@ export function ConfigActions({ shareUrl, onReset }: ConfigActionsProps) {
       >
         Restablecer valores por defecto
       </button>
+      {decisionCount > 0 && (
+        <button
+          type="button"
+          className={styles.button}
+          onClick={handleClearDecisions}
+        >
+          Borrar decisiones
+        </button>
+      )}
       {copied && (
         <span role="status" className={primitives.visuallyHidden}>
           Enlace copiado al portapapeles

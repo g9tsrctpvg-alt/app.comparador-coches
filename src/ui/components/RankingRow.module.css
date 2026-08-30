@@ -200,6 +200,16 @@
   color: var(--color-mute);
 }
 
+/* El estado, el motivo y la fecha de la decisión (product/0030, requisito
+ * 5.2): por delante del resumen del duelo, con más peso que `.gapSummary`
+ * —color de texto normal, no apagado— porque es lo primero que se lee al
+ * desplegar una fila que ya se ha decidido. */
+.decisionSummary {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-ink);
+}
+
 .ratings {
   composes: card from '../primitives.module.css';
   display: flex;

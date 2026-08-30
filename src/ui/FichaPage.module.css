@@ -516,6 +516,17 @@ th.blockHeader {
  * modelo puede estar fijado a la vez—, así que el foco de teclado y el lector
  * de pantalla lo tratan como tal; el marco de abajo es solo la señal visual
  * de cuál está marcado. */
+/* La marca de decisión, cuando la hay, dobla como control (product/0030,
+ * requisito 6.2): entre la foto y el nombre, sin objetivo táctil forzado a
+ * 44px —la marca es una etiqueta corta, no una fila de lista— pero con
+ * relleno propio para no quedar pegada a sus vecinos. */
+.decisionButton {
+  composes: unstyledButton from './primitives.module.css';
+  display: block;
+  padding: var(--space-1) 0;
+  cursor: pointer;
+}
+
 .pinLabel {
   position: relative;
   display: block;
@@ -640,6 +651,16 @@ th.blockHeader {
 
 .dialog::backdrop {
   background: var(--color-backdrop);
+}
+
+/* Título del diálogo de decisión (product/0030, requisito 6.2): mismo
+ * diálogo genérico que la foto ampliada, con su propia cabecera de texto en
+ * vez de una figura. */
+.decisionDialogTitle {
+  composes: mono from './primitives.module.css';
+  margin: 0 0 var(--space-3);
+  font-size: var(--font-size-md);
+  color: var(--color-ink);
 }
 
 .dialogFigure {
