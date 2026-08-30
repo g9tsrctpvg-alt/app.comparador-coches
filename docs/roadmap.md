@@ -5,7 +5,7 @@
 > las indexa todas en una sola tabla. `CLAUDE.md` resume y no duplica: al
 > cerrar una fase se actualiza este documento, no el índice.
 
-**Última actualización:** 2026-08-29
+**Última actualización:** 2026-08-30
 
 ## Fases
 
@@ -67,7 +67,8 @@ que no vuelva sin argumento nuevo.
 | Datos del catálogo: fotos que faltan y acabados que no coinciden, magnitudes estimadas sin fuente firme, hombros mínimos mezclados con máximos, cuatro híbridos sin batería, la versión del EV3, tres `faceliftYear` sin confirmar, la fiabilidad de Jeep por convención, precios de julio de 2026, dos fotos en CDN de concesionario | *Deudas abiertas* |
 | Código: cotas de los campos numéricos en `CarSchema`, andamiaje repetido de los seis ejes y `normalizeAll` sin uso, `ui/` fuera del suelo de cobertura, `pensandoVender`/`residualPct5y` desconectados, dos escalones tipográficos sin consumidor, `.duelChipActive` sin tratamiento visual, `index.html` sin icono | *Deudas abiertas* |
 | Infraestructura y proceso: acciones de GitHub sin fijar a SHA, *smoke test* post-despliegue con el disparador ya cumplido, `docs/estado/observabilidad.md` sin declarar | *Deudas abiertas* |
-| Propuestas de evolución aceptadas y aún sin spec: P3 a P7 | *Propuestas de evolución*, abajo |
+| `product/0030` — el estado de decisión de cada coche: en `draft`, con cuatro decisiones abiertas, esperando el gate humano | *Propuestas de evolución*, abajo (P3) |
+| Propuestas de evolución aceptadas y aún sin spec: P4 a P7 | *Propuestas de evolución*, abajo |
 | Ocho aplazamientos conscientes, cada uno con su disparador | *Aplazamientos con disparador* |
 
 ### Propuestas de evolución
@@ -87,7 +88,7 @@ vuelve sin argumento nuevo).
 | P1 | **El reparto de la diferencia**: descomponer la diferencia de nota entre dos coches en la aportación de cada eje, `Σ peso × (score(A) − score(B))`, ordenada por magnitud | `consolidada` | `product/0029`, consolidada el 2026-08-29: bloque «Detalle ejes» en la ficha, línea de resumen en cada fila desplegada del ranking. Se lleva dentro la mitad de P2 que sobrevive —los rangos de peso— y deja fuera el empate técnico |
 | P2a | **Sensibilidad**: decir en qué rango de un peso el resultado de un par no cambia | `consolidada` | Dentro de `product/0029`, requisito 5, consolidada el 2026-08-29. El cruce es exacto —la diferencia es lineal en el peso desde que los seis ejes puntúan en absoluto— y no necesita ningún dato nuevo |
 | P2b | **Empate técnico**: marcar cuándo una diferencia entre dos coches está por debajo de un umbral | `descartada` | Decisión del usuario (2026-08-29): no hace falta que la aplicación avise de que una diferencia es pequeña, eso se ve; lo que faltaba era el reparto, no el aviso. Queda medido, por si vuelve a plantearse: un solo clic en la estética mueve `2,31 pp`, más que trece de las catorce distancias entre puestos consecutivos |
-| P3 | **Estado de decisión por coche** desde la interfaz: candidato, lista corta o descartado, con motivo y fecha | `aceptada` | Hoy solo existe `published`, que es todo o nada y lo cambia un agente por skill. Elegir es descartar, y el descarte no se registra en ninguna parte |
+| P3 | **Estado de decisión por coche** desde la interfaz: candidato, lista corta o descartado, con motivo y fecha | `en spec` | `product/0030`, en `draft` desde el 2026-08-30, con cuatro decisiones abiertas. Hoy solo existe `published`, que es todo o nada y lo cambia un agente por skill. Elegir es descartar, y el descarte no se registra en ninguna parte |
 | P4 | **Criterios eliminatorios** además del presupuesto: largo máximo, maletero mínimo, autonomía mínima, altura de acceso | `aceptada` | Un coche que incumple un imprescindible no debería ganar por puntos; el precio es hoy el único filtro duro |
 | P5 | **Pesos por preferencia revelada**: derivar los seis pesos de una tanda de duelos «¿cuál prefieres?», dejando los deslizadores como ajuste fino | `aceptada` | Nadie sabe si su `viaje` vale 4 o 5; seis deslizadores a ojo son un mal instrumento para lo que más manda en la nota |
 | P6 | **Registro de la prueba real**: anotar por coche y con fecha lo que solo se sabe sentado dentro —postura, ruido, visibilidad, plazas traseras, maletero— y que pese en la nota | `aceptada` | Es la parte del «eje subjetivo de conducción» de *Más adelante* que **sí** depende del proyecto: tener el sitio donde anotarlo. Hoy lo único subjetivo editable es la estética |
