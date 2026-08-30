@@ -508,6 +508,44 @@ y sigue en juego» de «no lo he mirado todavía» se dejó fuera a propósito
 casilla que mantener a cambio de un matiz que quien decide ya lleva en la
 cabeza.
 
+## Los imprescindibles
+
+`src/domain/eliminatoryRules.ts` (product/0031): un umbral sobre una de las
+veinticuatro magnitudes de la ficha (`FICHA_FIELDS`), `{ field, operator,
+value }`, con `operator` en `'min'` o `'max'`. `evaluateRules` los evalúa
+contra los valores numéricos ya extraídos de un coche
+(`numericFieldValues`/`numericValuesFromCells`, `src/domain/ficha.ts`) y
+devuelve la lista de los que incumple, con el umbral pedido y el valor real
+de cada uno — nunca solo un booleano, porque el tramo no elegible de la
+clasificación (`docs/estado/interfaz.md`) necesita decir *cuánto* le falta o
+le sobra, no solo que falla.
+
+**El operador está forzado por la polaridad declarada del campo**
+(`forcedRuleOperator`, `polarityOf`, ambos en `ficha.ts`): en un campo
+`moreIsBetter` —maletero, potencia, autonomía eléctrica…— la única regla
+posible es un mínimo; en uno `moreIsWorse` —precio, longitud, peso…—, un
+máximo. Solo los seis campos `neutral` —generación, retoque, altura, altura
+libre al suelo, batalla y batería— admiten los dos: no hay una dirección que
+el dominio pueda afirmar sin inventar un juicio de color, así que aquí no lo
+hace.
+
+**Un coche que no declara la magnitud de una regla no cuenta como
+incumplimiento** (`actual === undefined` en `evaluateRules`): ni la cumple
+ni la incumple, con el mismo criterio que la Δ «no disponible» de la ficha
+—sin dato, no hay nada que afirmar—.
+
+**No entra en ninguna fórmula de puntuación**, la misma independencia que el
+ADR 0004 ya declara para el estado de decisión: `scoreCatalog` no recibe
+ninguna `EliminatoryRule`, así que un coche que incumple una se puntúa
+exactamente igual que si la regla no existiera. Lo que se deriva de ellas
+—qué tramo de la clasificación ocupa cada coche— decide **qué se ve**,
+siempre después de puntuar.
+
+**El presupuesto no es una `EliminatoryRule`.** Sigue siendo el mecanismo
+que ya existía —`budgetEur` y `car.overBudget`, calculado en
+`scoreCatalog`—; el panel que edita las reglas lo enseña como una fila más
+sobre el mismo dato, pero no lo duplica como una regla de esta lista.
+
 ## Referencias
 
 `src/data/references.json` (`Reference`, `src/domain/reference.ts`,

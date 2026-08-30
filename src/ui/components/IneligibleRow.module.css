@@ -1,0 +1,32 @@
+.row {
+  padding: var(--space-3) 0;
+  border-bottom: var(--size-border-hairline) solid var(--color-rule);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.name {
+  font-family: var(--font-sans);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-mute);
+  overflow-wrap: break-word;
+}
+
+.score {
+  composes: mono from '../primitives.module.css';
+  color: var(--color-mute);
+}
+
+.reasons {
+  composes: secondaryText from '../primitives.module.css';
+  composes: mono from '../primitives.module.css';
+  margin: 0;
+}

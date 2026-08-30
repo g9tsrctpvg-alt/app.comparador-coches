@@ -67,7 +67,7 @@ que no vuelva sin argumento nuevo.
 | Datos del catálogo: fotos que faltan y acabados que no coinciden, magnitudes estimadas sin fuente firme, hombros mínimos mezclados con máximos, cuatro híbridos sin batería, la versión del EV3, tres `faceliftYear` sin confirmar, la fiabilidad de Jeep por convención, precios de julio de 2026, dos fotos en CDN de concesionario | *Deudas abiertas* |
 | Código: cotas de los campos numéricos en `CarSchema`, andamiaje repetido de los seis ejes y `normalizeAll` sin uso, `ui/` fuera del suelo de cobertura, `pensandoVender`/`residualPct5y` desconectados, dos escalones tipográficos sin consumidor, `.duelChipActive` sin tratamiento visual, `index.html` sin icono | *Deudas abiertas* |
 | Infraestructura y proceso: acciones de GitHub sin fijar a SHA, *smoke test* post-despliegue con el disparador ya cumplido, `docs/estado/observabilidad.md` sin declarar | *Deudas abiertas* |
-| Propuestas de evolución aceptadas y aún sin spec: P4 a P7 | *Propuestas de evolución*, abajo |
+| Propuestas de evolución aceptadas y aún sin spec: P5 a P7 | *Propuestas de evolución*, abajo |
 | Ocho aplazamientos conscientes, cada uno con su disparador | *Aplazamientos con disparador* |
 
 ### Propuestas de evolución
@@ -88,7 +88,7 @@ vuelve sin argumento nuevo).
 | P2a | **Sensibilidad**: decir en qué rango de un peso el resultado de un par no cambia | `consolidada` | Dentro de `product/0029`, requisito 5, consolidada el 2026-08-29. El cruce es exacto —la diferencia es lineal en el peso desde que los seis ejes puntúan en absoluto— y no necesita ningún dato nuevo |
 | P2b | **Empate técnico**: marcar cuándo una diferencia entre dos coches está por debajo de un umbral | `descartada` | Decisión del usuario (2026-08-29): no hace falta que la aplicación avise de que una diferencia es pequeña, eso se ve; lo que faltaba era el reparto, no el aviso. Queda medido, por si vuelve a plantearse: un solo clic en la estética mueve `2,31 pp`, más que trece de las catorce distancias entre puestos consecutivos |
 | P3 | **Estado de decisión por coche** desde la interfaz: lista corta o descartado, con motivo y fecha | `consolidada` | `product/0030`, consolidada el 2026-08-30: marca en el ranking y en la cabecera de columna de la ficha, edición en línea y por diálogo, filtro de tres posiciones, «Borrar decisiones» separado de «Restablecer». Sin el cuarto estado de «candidato» que la propuesta original mencionaba |
-| P4 | **Criterios eliminatorios** además del presupuesto: largo máximo, maletero mínimo, autonomía mínima, altura de acceso | `aceptada` | Un coche que incumple un imprescindible no debería ganar por puntos; el precio es hoy el único filtro duro |
+| P4 | **Criterios eliminatorios** además del presupuesto: largo máximo, maletero mínimo, autonomía mínima, altura de acceso | `consolidada` | `product/0031`, consolidada el 2026-08-30: un umbral mínimo o máximo sobre cualquiera de las veinticuatro magnitudes de la ficha, operador forzado por la polaridad declarada del campo, clasificación partida en tramo elegible/no elegible, marca en la cabecera de columna y en la vista de duelo. Sin el hint de a quién excluiría una regla nueva ni el mensaje que nombra la regla más restrictiva, sin marca a nivel de celda ni de fila de duelo, sin puente con `product/0030` y sin regla categórica por tecnología — quedan anotados como trabajo futuro, no comprometido |
 | P5 | **Pesos por preferencia revelada**: derivar los seis pesos de una tanda de duelos «¿cuál prefieres?», dejando los deslizadores como ajuste fino | `aceptada` | Nadie sabe si su `viaje` vale 4 o 5; seis deslizadores a ojo son un mal instrumento para lo que más manda en la nota |
 | P6 | **Registro de la prueba real**: anotar por coche y con fecha lo que solo se sabe sentado dentro —postura, ruido, visibilidad, plazas traseras, maletero— y que pese en la nota | `aceptada` | Es la parte del «eje subjetivo de conducción» de *Más adelante* que **sí** depende del proyecto: tener el sitio donde anotarlo. Hoy lo único subjetivo editable es la estética |
 | P7 | **Checklist de visita al concesionario**, generada por coche desde su ficha, que vuelve como entrada de P6 | `aceptada` | Barata y encadenada con P6: sin qué mirar, la prueba se olvida a mitad |
@@ -597,6 +597,40 @@ fase abierta. Se lista para no perderlo, no para bloquear nada.
   lista vacía por filtro, la forma del enlace compartible y las dos
   confirmaciones destructivas. Consolidada en `docs/estado/dominio.md` y
   `docs/estado/interfaz.md`.
+- **Criterios eliminatorios — `product/0031`, `consolidated`.** El
+  presupuesto era el único filtro duro: un coche podía ganar por puntos
+  aunque incumpliera algo que quien compara considera innegociable —un
+  maletero corto, un largo que no entra en el garaje—, sin que ningún
+  mecanismo lo dijera. La spec da un umbral mínimo o máximo sobre
+  cualquiera de las veinticuatro magnitudes de la ficha
+  (`EliminatoryRule`), con el operador forzado por la polaridad declarada
+  del campo —solo los seis campos `neutral` ofrecen las dos opciones— y sin
+  tocar `scoreCatalog`: un coche que incumple puntúa exactamente igual que
+  si la regla no existiera (ADR 0004, con test contra el catálogo real). El
+  presupuesto no se duplica como regla: se enseña como la primera fila,
+  fija, del nuevo panel «Imprescindibles», sobre el mismo `budgetEur` que
+  ya editaba «Supuestos». La clasificación se parte en un tramo elegible
+  —mismo tratamiento de podio de siempre— y uno no elegible, plegado por
+  defecto, que nombra la regla y el valor exactos de cada incumplimiento;
+  `hideFailingRules` sustituye a `hideOverBudget` y oculta el tramo entero,
+  cambio de forma incompatible que sube `CONFIG_VERSION` a `2`. Un coche sin
+  la magnitud de una regla no cuenta como incumplimiento. Nace del repaso de
+  producto del 2026-08-29 (propuesta P4), con el alcance recortado frente a
+  la propuesta original de UX —el hint de a quién excluye una regla nueva,
+  el mensaje que nombra la regla más restrictiva, las marcas a nivel de
+  celda y de fila de duelo, el puente con `product/0030`, la regla
+  categórica por tecnología— aprobado explícitamente por el propietario del
+  proyecto en la misma conversación que la propuesta, sin decisiones
+  abiertas al pasar a `approved`. Recorrió
+  `draft → approved → implemented → verified → consolidated` en la misma
+  sesión, con el gate humano en un commit propio sin implementación, la CI
+  entera verde en local (601 tests, cobertura 100 % en
+  `domain/`+`data/`+`logging/`) y los doce criterios cerrados contra tests
+  unitarios y Playwright sobre el build de producción: crear una regla, ver
+  el reparto en dos tramos, ocultar el tramo no elegible, copiar el enlace y
+  reabrirlo con el mismo estado, ver la marca en la ficha y en la vista de
+  duelo a 375px. Consolidada en `docs/estado/dominio.md` y
+  `docs/estado/interfaz.md`.
 - **Eje de autonomía y repostaje.** Es la mayor diferencia práctica entre los
   once candidatos en un viaje largo —los térmicos e híbridos hacen 640-950 km
   con un depósito, los eléctricos la mitad en autopista— y el modelo es hoy
@@ -677,6 +711,7 @@ una sorpresa esperando fecha.
 | Alta de `product/0028`: **cuatro de los once híbridos y microhíbridos no declaran `batteryKwh`** —`honda-civic-e-hev`, `honda-cr-v-e-hev`, `lexus-nx-350h` y `mazda-cx-5`—, porque la ficha km77 de su versión responde «No disponible» en la sección «Batería». Es ausencia de fuente, no de dato: los cuatro llevan batería de tracción y su capacidad existe, solo que ni Honda ni Lexus ni Mazda la publican por versión en la fuente que este catálogo usa. Sus celdas quedan como raya, no como cero | 2026-08-26 | Encontrar la capacidad publicada por el fabricante o por otra fuente fechada y con versión, y declararla con esa fuente |
 | Alta de `product/0028`: la versión del `kia-ev3` se ha resuelto por su **tara**. El registro declara 1.800 kg, que es exactamente la del EV3 Air Standard Range de km77, así que la autonomía (436 km) y la batería (58,3 kWh) se han tomado de esa ficha; pero su aceleración declarada (7,7 s) es la del Long Range —el Standard hace 7,5 s— y su precio (32.000 €) tampoco coincide con los 37.020 € de la ficha. Las tres cifras discordantes llevan la etiqueta genérica «Especificación del proyecto (julio 2026)», sin versión verificable | 2026-08-26 | Verificar contra una fuente fechada y con versión qué EV3 compara el catálogo, y realinear aceleración, precio y peso con esa ficha |
 | Los seis colores de eje de `technical/0011` se distinguen entre sí a la vista, que es lo que aquella spec midió, pero **no como paleta categórica**: `viaje` (#2a6f8f) y `diario` (#14655c) quedan a ΔE 8,5 en visión normal —por debajo de 15, el suelo a partir del cual dos series se confunden— y `prestaciones` frente a `diario` caen a 4,4 con deuteranopía. Medido con un validador de paletas, no supuesto. Hoy no es un fallo: cada eje lleva siempre su nombre y su icono al lado, así que el color nunca es la única codificación. Pasaría a serlo en cuanto un gráfico ponga los seis juntos sin rótulo —justo lo que necesitaría el duelo de P1— | 2026-08-29 | Reescalonar los dos pares conflictivos manteniendo el contraste sobre `card`, o declarar que el color de eje nunca aparece sin rótulo ni icono |
+| `product/0031` recortó cinco piezas de la propuesta original de UX de los imprescindibles, aprobadas explícitamente por el usuario como alcance reducido, no como olvido: el texto de ayuda «esta regla dejaría fuera al líder actual» sobre cada regla nueva; el mensaje de vacío que nombra «la regla más restrictiva» en vez de limitarse a ofrecer quitarlas todas; la marca de incumplimiento a nivel de celda de la tabla y de fila del duelo, hoy solo en cabecera de columna y tarjeta; el puente con `product/0030` («Descartar por este motivo», con el motivo ya escrito a partir de la regla incumplida); y una regla categórica sobre `technology` («solo EV/PHEV»), que hoy solo puede expresarse como umbral numérico | 2026-08-30 | Que alguien quiera cualquiera de las cinco: cada una es una spec nueva sobre `product/0031`, `consolidated` y sin editar |
 
 ## Aplazamientos con disparador
 

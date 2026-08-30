@@ -1,0 +1,4 @@
+.mark {
+  composes: tag from '../primitives.module.css';
+  color: var(--color-negative);
+}

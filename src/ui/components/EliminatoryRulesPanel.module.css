@@ -1,0 +1,79 @@
+.intro {
+  composes: secondaryText from '../primitives.module.css';
+  composes: prose from '../primitives.module.css';
+  font-family: var(--font-sans);
+  margin: 0;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.ruleName {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+}
+
+.budgetInput {
+  composes: mono from '../primitives.module.css';
+  composes: controlSurface from '../primitives.module.css';
+  flex: 1 1 0;
+  padding: var(--space-1) var(--space-2);
+  border: none;
+  color: var(--color-ink);
+}
+
+.ruleFields {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.fieldSelect {
+  composes: select from '../primitives.module.css';
+}
+
+.operatorFixed {
+  composes: secondaryText from '../primitives.module.css';
+  font-family: var(--font-sans);
+}
+
+.operatorSelect {
+  composes: select from '../primitives.module.css';
+  flex: 1 1 0;
+}
+
+.valueInput {
+  composes: mono from '../primitives.module.css';
+  composes: controlSurface from '../primitives.module.css';
+  flex: 1 1 0;
+  padding: var(--space-1) var(--space-2);
+  border: none;
+  color: var(--color-ink);
+}
+
+.removeButton {
+  composes: buttonGhost from '../primitives.module.css';
+  padding: 0 var(--space-2);
+}
+
+.empty {
+  composes: secondaryText from '../primitives.module.css';
+  margin: 0;
+}

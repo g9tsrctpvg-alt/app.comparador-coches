@@ -4,11 +4,12 @@ import {
   setDecision,
   setDecisionFilter,
 } from '../../domain/decisions';
+import type { EliminatoryRule } from '../../domain/eliminatoryRules';
 import { scoreCatalog } from '../../domain/scoring/score';
 import { DEFAULT_WEIGHTS } from '../../domain/scoring/weights';
 import { DEFAULT_ASSUMPTIONS } from '../../domain/scoring/assumptions';
 import { threeCarFixture } from '../../domain/scoring/testFixtures';
-import { rankVisible } from './ranking';
+import { splitByEligibility } from './ranking';
 
 function scored() {
   return scoreCatalog(
@@ -19,14 +20,20 @@ function scored() {
   );
 }
 
-describe('rankVisible with the decision filter (product/0030, requisitos 4.1 y 4.5)', () => {
-  it('keeps every car when the filter is "all", same as before this spec', () => {
+describe('splitByEligibility with the decision filter (product/0030, requisitos 4.1 y 4.5)', () => {
+  it('puts every car in the eligible tramo when the filter is "all" and there are no rules', () => {
     const cars = scored();
-    const visible = rankVisible(cars, false, defaultDecisionLog());
-    expect(visible).toHaveLength(cars.length);
+    const { eligible, ineligible } = splitByEligibility(
+      cars,
+      threeCarFixture,
+      [],
+      defaultDecisionLog(),
+    );
+    expect(eligible).toHaveLength(cars.length);
+    expect(ineligible).toHaveLength(0);
   });
 
-  it('drops only the discarded car under "no-discarded"', () => {
+  it('drops only the discarded car under "no-discarded", from both tramos', () => {
     const cars = scored();
     const log = setDecisionFilter(
       setDecision(
@@ -38,9 +45,17 @@ describe('rankVisible with the decision filter (product/0030, requisitos 4.1 y 4
       ),
       'no-discarded',
     );
-    const visible = rankVisible(cars, false, log);
-    expect(visible.map((c) => c.carId)).not.toContain('kia-sportage-hev');
-    expect(visible).toHaveLength(cars.length - 1);
+    const { eligible, ineligible } = splitByEligibility(
+      cars,
+      threeCarFixture,
+      [],
+      log,
+    );
+    const ids = [...eligible, ...ineligible.map((e) => e.car)].map(
+      (c) => c.carId,
+    );
+    expect(ids).not.toContain('kia-sportage-hev');
+    expect(ids).toHaveLength(cars.length - 1);
   });
 
   it('keeps only the shortlisted cars under "shortlist-only"', () => {
@@ -55,52 +70,136 @@ describe('rankVisible with the decision filter (product/0030, requisitos 4.1 y 4
       ),
       'shortlist-only',
     );
-    const visible = rankVisible(cars, false, log);
-    expect(visible.map((c) => c.carId)).toEqual(['kia-sportage-hev']);
+    const { eligible, ineligible } = splitByEligibility(
+      cars,
+      threeCarFixture,
+      [],
+      log,
+    );
+    expect(eligible.map((c) => c.carId)).toEqual(['kia-sportage-hev']);
+    expect(ineligible).toHaveLength(0);
   });
+});
 
-  it('combines with hideOverBudget: both criteria must pass (requisito 4.5)', () => {
+describe('splitByEligibility with the budget (product/0031, requisito 2.2)', () => {
+  it('puts a car over budget in the ineligible tramo, marked overBudget', () => {
     const cheapCars = scoreCatalog(
       threeCarFixture,
       DEFAULT_WEIGHTS,
       DEFAULT_ASSUMPTIONS,
       40000,
     );
-    const overBudget = cheapCars.filter((car) => car.overBudget);
-    expect(overBudget.length).toBeGreaterThan(0);
-    // Se descarta un coche que sí está dentro de presupuesto: solo debería
-    // faltar por el filtro de presupuesto, no por el de decisión.
-    const withinBudget = cheapCars.find((car) => !car.overBudget)!;
-    const log = setDecision(
+    const { eligible, ineligible } = splitByEligibility(
+      cheapCars,
+      threeCarFixture,
+      [],
       defaultDecisionLog(),
-      withinBudget.carId,
-      'discarded',
-      undefined,
-      '2026-08-30',
     );
-    const filteredLog = setDecisionFilter(log, 'no-discarded');
-
-    const visible = rankVisible(cheapCars, true, filteredLog);
-    const visibleIds = visible.map((c) => c.carId);
-    for (const car of overBudget) {
-      expect(visibleIds).not.toContain(car.carId);
+    const overBudgetIds = cheapCars
+      .filter((car) => car.overBudget)
+      .map((car) => car.carId);
+    expect(overBudgetIds.length).toBeGreaterThan(0);
+    for (const id of overBudgetIds) {
+      expect(eligible.map((c) => c.carId)).not.toContain(id);
+      const entry = ineligible.find((e) => e.car.carId === id);
+      expect(entry?.overBudget).toBe(true);
+      expect(entry?.failures).toEqual([]);
     }
-    expect(visibleIds).not.toContain(withinBudget.carId);
+  });
+});
+
+describe('splitByEligibility with eliminatory rules (product/0031, requisitos 4.1-4.2)', () => {
+  it('puts a car that fails a rule in the ineligible tramo, with the failure reported', () => {
+    const cars = scored();
+    // El Sportage tiene 4540 mm de longitud; el X1 4500; el EV3 4300.
+    const rules: EliminatoryRule[] = [
+      { field: 'lengthMm', operator: 'max', value: 4400 },
+    ];
+    const { eligible, ineligible } = splitByEligibility(
+      cars,
+      threeCarFixture,
+      rules,
+      defaultDecisionLog(),
+    );
+    expect(eligible.map((c) => c.carId)).toEqual(['kia-ev3']);
+    const sportage = ineligible.find((e) => e.car.carId === 'kia-sportage-hev');
+    expect(sportage?.overBudget).toBe(false);
+    expect(sportage?.failures).toEqual([
+      { field: 'lengthMm', operator: 'max', threshold: 4400, actual: 4540 },
+    ]);
+  });
+
+  it('combines a rule and the budget on the same car: both reported', () => {
+    const cheapCars = scoreCatalog(
+      threeCarFixture,
+      DEFAULT_WEIGHTS,
+      DEFAULT_ASSUMPTIONS,
+      40000,
+    );
+    const rules: EliminatoryRule[] = [
+      { field: 'lengthMm', operator: 'max', value: 4400 },
+    ];
+    const { ineligible } = splitByEligibility(
+      cheapCars,
+      threeCarFixture,
+      rules,
+      defaultDecisionLog(),
+    );
+    // El X1 (44.000 €) está fuera de presupuesto a 40.000 y su longitud
+    // (4500 mm) también incumple la regla.
+    const x1 = ineligible.find((e) => e.car.carId === 'bmw-x1-xdrive25e');
+    expect(x1?.overBudget).toBe(true);
+    expect(x1?.failures).toHaveLength(1);
+  });
+
+  it('a car missing the ruled field is not affected by that rule', () => {
+    const cars = scored();
+    // El Sportage (HEV) no declara electricRangeKm.
+    const rules: EliminatoryRule[] = [
+      { field: 'electricRangeKm', operator: 'min', value: 100 },
+    ];
+    const { eligible, ineligible } = splitByEligibility(
+      cars,
+      threeCarFixture,
+      rules,
+      defaultDecisionLog(),
+    );
+    expect(eligible.map((c) => c.carId)).toContain('kia-sportage-hev');
+    // El X1 (83 km) sí declara el dato y sí incumple.
+    expect(ineligible.some((e) => e.car.carId === 'bmw-x1-xdrive25e')).toBe(
+      true,
+    );
   });
 
   it('never changes the total of any car it keeps — filters, does not score (ADR 0004)', () => {
     const cars = scored();
-    const log = setDecision(
+    const rules: EliminatoryRule[] = [
+      { field: 'lengthMm', operator: 'max', value: 4400 },
+    ];
+    const { eligible, ineligible } = splitByEligibility(
+      cars,
+      threeCarFixture,
+      rules,
       defaultDecisionLog(),
-      'kia-sportage-hev',
-      'discarded',
-      undefined,
-      '2026-08-30',
     );
-    const visible = rankVisible(cars, false, log);
-    for (const car of visible) {
+    for (const car of [...eligible, ...ineligible.map((e) => e.car)]) {
       const original = cars.find((c) => c.carId === car.carId)!;
       expect(car.total).toBe(original.total);
     }
+  });
+
+  it('sorts both tramos by total, best first', () => {
+    const cars = scored();
+    const rules: EliminatoryRule[] = [
+      { field: 'lengthMm', operator: 'max', value: 100 }, // nadie cumple
+    ];
+    const { ineligible } = splitByEligibility(
+      cars,
+      threeCarFixture,
+      rules,
+      defaultDecisionLog(),
+    );
+    const totals = ineligible.map((e) => e.car.total);
+    expect(totals).toEqual([...totals].sort((a, b) => b - a));
   });
 });

@@ -95,6 +95,15 @@ export const WEIGHT_TIE_WARNING =
   'multiplicar. Mover un deslizador y no ver que el orden cambie no es un ' +
   'fallo: es que ese eje ya no distingue a los coches que tienes delante.';
 
+export const ELIMINATORY_EXPLANATION =
+  'Un imprescindible —un mínimo o un máximo sobre una magnitud, en el ' +
+  'panel «Imprescindibles» de la clasificación— filtra quién se ve, nunca ' +
+  'cambia la nota: un coche que incumple uno se puntúa exactamente igual ' +
+  'que si no existiera, y solo deja de aparecer en el tramo principal de ' +
+  'la clasificación. El presupuesto es uno de ellos, con el mismo ' +
+  'mecanismo. Un coche que no declara la magnitud de un imprescindible no ' +
+  'cuenta como incumplimiento: sin dato, no hay nada que afirmar.';
+
 export const PROVENANCE_EXPLANATION =
   'Todo dato del catálogo declara su fuente. Cuando dos fuentes no ' +
   'coinciden en un valor, el comparador se queda con la vigente y muestra ' +

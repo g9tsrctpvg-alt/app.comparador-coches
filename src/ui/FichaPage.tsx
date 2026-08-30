@@ -10,6 +10,7 @@ import {
 import type { Reference } from '../domain/reference';
 import {
   buildFicha,
+  numericValuesFromCells,
   sortFicha,
   withComparison,
   type DeltaDirection,
@@ -27,10 +28,16 @@ import {
 } from '../domain/photo';
 import type { CarScoreBreakdown } from '../domain/scoring/breakdown';
 import type { AxisWeights } from '../domain/scoring/weights';
+import {
+  evaluateRules,
+  type EliminatoryRule,
+  type RuleFailure,
+} from '../domain/eliminatoryRules';
 import { formatEur, formatNumber, formatSigned } from './format';
 import { TECHNOLOGY_LABELS } from './technologyLabels';
 import { DecisionEditor } from './components/DecisionEditor';
 import { DecisionMark } from './components/DecisionMark';
+import { EligibilityMark } from './components/EligibilityMark';
 import { EstimatedMark } from './components/EstimatedMark';
 import { ScoreGapPanel } from './components/ScoreGapPanel';
 import { useViewState } from './useViewState';
@@ -43,6 +50,10 @@ interface FichaPageProps {
   references: Reference[];
   scoredCars: CarScoreBreakdown[];
   weights: AxisWeights;
+  /** Los imprescindibles vigentes (product/0031): opcional y por defecto
+   * vacío, para que los muchos sitios de `FichaPage.test.tsx` que no tocan
+   * este requisito no tengan que pasarlo. */
+  eliminatoryRules?: EliminatoryRule[];
   decisionLog: DecisionLog;
   onSetDecision: (
     carId: string,
@@ -60,7 +71,10 @@ const PHOTO_VIEW_LABELS: Record<PhotoView, string> = {
   interior: 'Interior',
 };
 
-interface FieldDef {
+// Exportado para que `EliminatoryRulesPanel` e `IneligibleRow` (product/0031)
+// puedan formatear un umbral con la misma unidad y los mismos decimales que
+// la propia celda de la ficha, sin declarar su propio `FieldDef`.
+export interface FieldDef {
   key: FichaField;
   label: string;
   unitFallback?: string;
@@ -90,7 +104,11 @@ type CompleteBlockDef = BlockDef & { label: string };
  * declara las claves y extrae los valores; etiquetas, unidades de respaldo
  * y decimales son decisión de la interfaz.
  */
-const COMPLETE_BLOCKS: CompleteBlockDef[] = [
+// Exportado además de `COMPLETE_FIELD_DEFS` (más abajo) para que
+// `EliminatoryRulesPanel` (product/0031) pueda agrupar el selector de
+// magnitud por los mismos seis bloques que ya agrupan «Orden»
+// (product/0027), sin una segunda declaración de la agrupación.
+export const COMPLETE_BLOCKS: CompleteBlockDef[] = [
   {
     // Primer bloque, antes de «Tamaño y espacio» (product/0021, requisito
     // 2.1): en qué punto tecnológico está el coche es contexto para leer
@@ -605,6 +623,8 @@ function ModelHeaderCell({
   isPinned,
   photoView,
   decisionLog,
+  overBudget,
+  failures,
   onPin,
   onOpenPhoto,
   onOpenDecision,
@@ -613,6 +633,8 @@ function ModelHeaderCell({
   isPinned: boolean;
   photoView: PhotoView;
   decisionLog: DecisionLog;
+  overBudget: boolean;
+  failures: RuleFailure[];
   onPin: (id: string) => void;
   onOpenPhoto: (entity: FichaEntity, view: PhotoView) => void;
   onOpenDecision: (entity: FichaEntity) => void;
@@ -628,6 +650,12 @@ function ModelHeaderCell({
         decisionLog={decisionLog}
         onOpen={onOpenDecision}
       />
+      {/* El presupuesto y las reglas eliminatorias nunca alcanzan a la
+       * referencia ni al modelo fijado como comparación (product/0031,
+       * requisito 5.2), mismo criterio que `ModelDecisionControl`. */}
+      {entity.kind === 'candidate' && !isPinned && (
+        <EligibilityMark overBudget={overBudget} failures={failures} />
+      )}
       <label className={styles.pinLabel}>
         <input
           type="radio"
@@ -794,12 +822,16 @@ function DuelRow({
 function DuelCard({
   candidate,
   pinnedEntity,
+  overBudget,
+  failures,
   blocks,
   photoView,
   onOpenPhoto,
 }: {
   candidate: FichaEntity;
   pinnedEntity: FichaEntity | undefined;
+  overBudget: boolean;
+  failures: RuleFailure[];
   blocks: BlockDef[];
   photoView: PhotoView;
   onOpenPhoto: (entity: FichaEntity, view: PhotoView) => void;
@@ -812,6 +844,10 @@ function DuelCard({
         <span className={primitives.secondaryText}>
           {candidate.brand} · {TECHNOLOGY_LABELS[candidate.technology]}
         </span>
+        {/* Nunca para la referencia (requisito 5.2): `DuelCard` solo recibe
+         * candidatos —`scrollableEntities` ya los excluye—, así que no
+         * hace falta comprobar `candidate.kind` aquí. */}
+        <EligibilityMark overBudget={overBudget} failures={failures} />
       </div>
       {blocks.map((block) => (
         <Fragment key={block.id}>
@@ -843,6 +879,8 @@ function DuelView({
   scrollableEntities,
   pinnedEntity,
   focusedCandidate,
+  focusedOverBudget,
+  focusedFailures,
   onFocus,
   blocks,
   photoView,
@@ -851,6 +889,8 @@ function DuelView({
   scrollableEntities: FichaEntity[];
   pinnedEntity: FichaEntity | undefined;
   focusedCandidate: FichaEntity | undefined;
+  focusedOverBudget: boolean;
+  focusedFailures: RuleFailure[];
   onFocus: (id: string) => void;
   blocks: BlockDef[];
   photoView: PhotoView;
@@ -873,6 +913,8 @@ function DuelView({
         <DuelCard
           candidate={focusedCandidate}
           pinnedEntity={pinnedEntity}
+          overBudget={focusedOverBudget}
+          failures={focusedFailures}
           blocks={blocks}
           photoView={photoView}
           onOpenPhoto={onOpenPhoto}
@@ -975,6 +1017,7 @@ export function FichaPage({
   references,
   scoredCars,
   weights,
+  eliminatoryRules = [],
   decisionLog,
   onSetDecision,
   onClearDecision,
@@ -987,6 +1030,22 @@ export function FichaPage({
     () => new Map(scoredCars.map((car) => [car.carId, car])),
     [scoredCars],
   );
+  // Los imprescindibles incumplidos por candidato (product/0031, requisito
+  // 5): a partir de las mismas celdas ya calculadas de la ficha, no de
+  // `Car` crudo — `numericValuesFromCells` es la misma vía de extracción
+  // que ya usa cada `CellValue`. Solo candidatos: una referencia no tiene
+  // presupuesto ni decisión propia, y esta spec sigue el mismo criterio.
+  const ruleFailuresById = useMemo(() => {
+    const map = new Map<string, RuleFailure[]>();
+    for (const entity of baseEntities) {
+      if (entity.kind !== 'candidate') continue;
+      map.set(
+        entity.id,
+        evaluateRules(numericValuesFromCells(entity.cells), eliminatoryRules),
+      );
+    }
+    return map;
+  }, [baseEntities, eliminatoryRules]);
 
   // Las cinco elecciones de esta página, persistidas aparte de `AppConfig`
   // (product/0024): quién se fija como referencia, requiere saber tanto
@@ -1239,6 +1298,10 @@ export function FichaPage({
         scrollableEntities={scrollableEntities}
         pinnedEntity={pinnedEntity}
         focusedCandidate={focusedCandidate}
+        focusedOverBudget={focusedScore?.overBudget ?? false}
+        focusedFailures={
+          (focusedCandidate && ruleFailuresById.get(focusedCandidate.id)) ?? []
+        }
         onFocus={setFocusedId}
         blocks={blocks}
         photoView={photoView}
@@ -1280,6 +1343,8 @@ export function FichaPage({
                   isPinned
                   photoView={photoView}
                   decisionLog={decisionLog}
+                  overBudget={false}
+                  failures={[]}
                   onPin={handleComparisonChange}
                   onOpenPhoto={handleOpenPhoto}
                   onOpenDecision={handleOpenDecision}
@@ -1292,6 +1357,8 @@ export function FichaPage({
                   isPinned={false}
                   photoView={photoView}
                   decisionLog={decisionLog}
+                  overBudget={scoreById.get(entity.id)?.overBudget ?? false}
+                  failures={ruleFailuresById.get(entity.id) ?? []}
                   onPin={handleComparisonChange}
                   onOpenPhoto={handleOpenPhoto}
                   onOpenDecision={handleOpenDecision}
