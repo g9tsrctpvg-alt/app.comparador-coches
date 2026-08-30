@@ -4,12 +4,12 @@ export type AxisId =
 export type AxisWeights = Record<AxisId, number>;
 
 export const DEFAULT_WEIGHTS: AxisWeights = {
-  viaje: 4,
-  diario: 3,
-  fiabilidad: 2,
-  estetica: 2,
-  prestaciones: 1,
-  coste: 1,
+  viaje: 10,
+  diario: 7,
+  fiabilidad: 7,
+  estetica: 6,
+  prestaciones: 5,
+  coste: 5,
 };
 
 export const AXIS_ORDER: AxisId[] = [

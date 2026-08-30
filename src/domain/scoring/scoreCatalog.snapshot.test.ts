@@ -19,28 +19,33 @@ import { scoreCatalog } from './score';
  * `prestaciones` contra los extremos del mercado en vez de la gama
  * comparada (ADR 0010): las notas bajan en bloque a propósito, y este test
  * fallaba exactamente como se esperaba.
+ *
+ * Vueltos a actualizar tras cambiar `DEFAULT_WEIGHTS` (viaje 10, diario 7,
+ * fiabilidad 7, estética 6, prestaciones 5, coste 5): es una prioridad
+ * personal, no una fórmula del negocio (`docs/estado/dominio.md`), y mover
+ * los seis pesos por defecto sube los totales en bloque a propósito.
  */
 const EXPECTED_TOTALS: Record<string, number> = {
-  'hyundai-tucson-hev': 76.64029809397312,
-  'hyundai-tucson-phev': 75.18271166681497,
-  'kia-sportage-hev': 72.26178160694342,
-  'mazda-cx-5': 72.18308520232651,
-  'bmw-x1-xdrive25e': 70.88411621663906,
-  'kia-ev3': 70.83567451442254,
-  'honda-civic-e-hev': 70.71546082351648,
-  'hyundai-kona-hev': 68.36543758917576,
-  'lexus-nx-350h': 68.04468380080988,
-  'kia-ev5': 67.61789032129916,
-  'hyundai-kona-electrico': 65.52188849286392,
-  'hyundai-ioniq-5': 64.73871203560427,
-  'honda-cr-v-e-hev': 64.51370778367581,
-  'alfa-romeo-tonale': 63.8576959744103,
-  'volkswagen-id4': 62.00890434602242,
-  'toyota-corolla-cross': 57.629854422974326,
-  'citroen-c5-aircross': 56.5666128175826,
-  'jeep-compass': 58.84877038637088,
-  'nissan-qashqai-e-power': 68.48564420209466,
-  'nissan-x-trail-e-power': 71.08848563538099,
+  'hyundai-tucson-hev': 241.86342157153587,
+  'hyundai-tucson-phev': 240.49144853205905,
+  'kia-sportage-hev': 232.68125998320298,
+  'mazda-cx-5': 222.1500051017747,
+  'bmw-x1-xdrive25e': 217.30430796428354,
+  'kia-ev3': 236.8658679126243,
+  'honda-civic-e-hev': 228.11517767231123,
+  'hyundai-kona-hev': 217.33337259474501,
+  'lexus-nx-350h': 212.3620228757981,
+  'kia-ev5': 216.28313700458864,
+  'hyundai-kona-electrico': 215.24537882786342,
+  'hyundai-ioniq-5': 206.6177184743785,
+  'honda-cr-v-e-hev': 199.6827626891658,
+  'alfa-romeo-tonale': 198.08606996874985,
+  'volkswagen-id4': 199.65102109590532,
+  'toyota-corolla-cross': 183.87060309758877,
+  'citroen-c5-aircross': 176.62035617260113,
+  'jeep-compass': 176.12611004352019,
+  'nissan-qashqai-e-power': 222.07922337385097,
+  'nissan-x-trail-e-power': 221.13874945494933,
 };
 
 describe('scoreCatalog against the real catalogue (product/0009 regression)', () => {
