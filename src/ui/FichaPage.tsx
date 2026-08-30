@@ -1,5 +1,12 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import type { Car } from '../domain/car';
+import {
+  decisionOf,
+  entryOf,
+  passesDecisionFilter,
+  type DecisionLog,
+  type StoredDecisionState,
+} from '../domain/decisions';
 import type { Reference } from '../domain/reference';
 import {
   buildFicha,
@@ -22,6 +29,8 @@ import type { CarScoreBreakdown } from '../domain/scoring/breakdown';
 import type { AxisWeights } from '../domain/scoring/weights';
 import { formatEur, formatNumber, formatSigned } from './format';
 import { TECHNOLOGY_LABELS } from './technologyLabels';
+import { DecisionEditor } from './components/DecisionEditor';
+import { DecisionMark } from './components/DecisionMark';
 import { EstimatedMark } from './components/EstimatedMark';
 import { ScoreGapPanel } from './components/ScoreGapPanel';
 import { useViewState } from './useViewState';
@@ -34,6 +43,13 @@ interface FichaPageProps {
   references: Reference[];
   scoredCars: CarScoreBreakdown[];
   weights: AxisWeights;
+  decisionLog: DecisionLog;
+  onSetDecision: (
+    carId: string,
+    state: StoredDecisionState,
+    reason: string | undefined,
+  ) => void;
+  onClearDecision: (carId: string) => void;
 }
 
 const PHOTO_VIEW_LABELS: Record<PhotoView, string> = {
@@ -551,18 +567,55 @@ export function PhotoCarousel({
   );
 }
 
+/** La marca de decisión, cuando la hay, dobla como control (product/0030,
+ * requisito 6.2): para `undecided` no hay marca (5.3) y por tanto tampoco
+ * botón — el primer estado se fija desde la fila del ranking, que siempre
+ * ofrece las tres opciones; la ficha entra en juego para revisar o cambiar
+ * una decisión ya tomada, comparando en paralelo. Solo los candidatos
+ * tienen decisión: una referencia es el patrón contra el que se compara,
+ * no algo que se elija (requisito, fuera de alcance). */
+function ModelDecisionControl({
+  entity,
+  decisionLog,
+  onOpen,
+}: {
+  entity: FichaEntity;
+  decisionLog: DecisionLog;
+  onOpen: (entity: FichaEntity) => void;
+}) {
+  if (entity.kind !== 'candidate') return null;
+  const state = decisionOf(decisionLog, entity.id);
+  if (state === 'undecided') return null;
+  return (
+    <button
+      type="button"
+      className={styles.decisionButton}
+      onClick={() => onOpen(entity)}
+    >
+      <DecisionMark state={state} />
+      <span className={primitives.visuallyHidden}>
+        , cambiar la decisión sobre {entity.name}
+      </span>
+    </button>
+  );
+}
+
 function ModelHeaderCell({
   entity,
   isPinned,
   photoView,
+  decisionLog,
   onPin,
   onOpenPhoto,
+  onOpenDecision,
 }: {
   entity: FichaEntity;
   isPinned: boolean;
   photoView: PhotoView;
+  decisionLog: DecisionLog;
   onPin: (id: string) => void;
   onOpenPhoto: (entity: FichaEntity, view: PhotoView) => void;
+  onOpenDecision: (entity: FichaEntity) => void;
 }) {
   return (
     <th
@@ -570,6 +623,11 @@ function ModelHeaderCell({
       className={isPinned ? styles.pinnedHeader : styles.modelHeader}
     >
       <PhotoBox entity={entity} photoView={photoView} onOpen={onOpenPhoto} />
+      <ModelDecisionControl
+        entity={entity}
+        decisionLog={decisionLog}
+        onOpen={onOpenDecision}
+      />
       <label className={styles.pinLabel}>
         <input
           type="radio"
@@ -917,6 +975,9 @@ export function FichaPage({
   references,
   scoredCars,
   weights,
+  decisionLog,
+  onSetDecision,
+  onClearDecision,
 }: FichaPageProps) {
   const baseEntities = useMemo(
     () => buildFicha(cars, references),
@@ -945,8 +1006,10 @@ export function FichaPage({
     setFocusedId,
   } = useViewState(validEntityIds, defaultComparisonId);
   const [openPhoto, setOpenPhoto] = useState<OpenPhoto | null>(null);
+  const [openDecision, setOpenDecision] = useState<FichaEntity | null>(null);
 
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const decisionDialogRef = useRef<HTMLDialogElement>(null);
   const tableWrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -964,13 +1027,26 @@ export function FichaPage({
     () => entitiesWithDelta.find((e) => e.id === comparisonId),
     [entitiesWithDelta, comparisonId],
   );
+  // El filtro de decisión (product/0030, requisito 4.3) alcanza solo a los
+  // candidatos: una referencia nunca tiene decisión propia, así que
+  // aplicarle el mismo filtro la escondería sin motivo bajo «Solo lista
+  // corta». El modelo fijado sobrevive siempre (requisito 4.4) porque se
+  // calcula aparte, sin pasar por este filtro.
   const scrollableEntities = useMemo(
     () =>
       sortFicha(
-        entitiesWithDelta.filter((e) => e.id !== pinnedEntity?.id),
+        entitiesWithDelta.filter(
+          (e) =>
+            e.id !== pinnedEntity?.id &&
+            (e.kind === 'reference' ||
+              passesDecisionFilter(
+                decisionOf(decisionLog, e.id),
+                decisionLog.filter,
+              )),
+        ),
         sortCriterion,
       ),
-    [entitiesWithDelta, pinnedEntity, sortCriterion],
+    [entitiesWithDelta, pinnedEntity, sortCriterion, decisionLog],
   );
   /* Las opciones del selector de comparación (technical/0010, requisito 3.2):
      todos los modelos, incluido el fijado, ordenados por el criterio vigente.
@@ -1020,6 +1096,15 @@ export function FichaPage({
 
   function handleDialogClose() {
     setOpenPhoto(null);
+  }
+
+  function handleOpenDecision(entity: FichaEntity) {
+    setOpenDecision(entity);
+    decisionDialogRef.current?.showModal();
+  }
+
+  function handleDecisionDialogClose() {
+    setOpenDecision(null);
   }
 
   return (
@@ -1194,8 +1279,10 @@ export function FichaPage({
                   entity={pinnedEntity}
                   isPinned
                   photoView={photoView}
+                  decisionLog={decisionLog}
                   onPin={handleComparisonChange}
                   onOpenPhoto={handleOpenPhoto}
+                  onOpenDecision={handleOpenDecision}
                 />
               )}
               {scrollableEntities.map((entity) => (
@@ -1204,8 +1291,10 @@ export function FichaPage({
                   entity={entity}
                   isPinned={false}
                   photoView={photoView}
+                  decisionLog={decisionLog}
                   onPin={handleComparisonChange}
                   onOpenPhoto={handleOpenPhoto}
+                  onOpenDecision={handleOpenDecision}
                 />
               ))}
             </tr>
@@ -1310,6 +1399,42 @@ export function FichaPage({
               className={styles.dialogClose}
               onClick={() => dialogRef.current?.close()}
               aria-label="Cerrar la foto ampliada"
+            >
+              <span aria-hidden="true" className={styles.dialogCloseGlyph}>
+                ×
+              </span>
+            </button>
+          </>
+        )}
+      </dialog>
+
+      {/* La decisión también se edita desde la ficha (product/0030,
+          requisitos 6.2-6.4): mismo `DecisionEditor` que la fila del
+          ranking, sobre el mismo registro. `key={openDecision.id}` reinicia
+          el motivo en edición al abrir el diálogo para un modelo distinto,
+          en vez de que un componente reutilizado arrastre el texto del
+          anterior. */}
+      <dialog
+        ref={decisionDialogRef}
+        className={styles.dialog}
+        onClose={handleDecisionDialogClose}
+      >
+        {openDecision && (
+          <>
+            <h2 className={styles.decisionDialogTitle}>{openDecision.name}</h2>
+            <DecisionEditor
+              key={openDecision.id}
+              entry={entryOf(decisionLog, openDecision.id)}
+              onSetDecision={(state, reason) =>
+                onSetDecision(openDecision.id, state, reason)
+              }
+              onClear={() => onClearDecision(openDecision.id)}
+            />
+            <button
+              type="button"
+              className={styles.dialogClose}
+              onClick={() => decisionDialogRef.current?.close()}
+              aria-label="Cerrar"
             >
               <span aria-hidden="true" className={styles.dialogCloseGlyph}>
                 ×

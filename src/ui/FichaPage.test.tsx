@@ -7,6 +7,11 @@ import {
   TOTAL_FIELD_COUNT,
 } from './FichaPage';
 import { threeCarFixture } from '../domain/scoring/testFixtures';
+import {
+  defaultDecisionLog,
+  setDecision,
+  setDecisionFilter,
+} from '../domain/decisions';
 import { buildFicha, FICHA_FIELDS } from '../domain/ficha';
 import type { Reference } from '../domain/reference';
 import { DEFAULT_ASSUMPTIONS } from '../domain/scoring/assumptions';
@@ -24,6 +29,10 @@ const SCORED_FIXTURE = scoreCatalog(
   DEFAULT_ASSUMPTIONS,
   47000,
 );
+
+// Sin decisiones registradas: el caso de siempre para los tests que no
+// versan sobre product/0030.
+const EMPTY_DECISIONS = defaultDecisionLog();
 
 /** El cuerpo de una regla CSS por su selector, para afirmar sobre ella. */
 function ruleBody(css: string, selector: string): string {
@@ -103,6 +112,9 @@ describe('FichaPage', () => {
         references={[referenceFixture()]}
         scoredCars={SCORED_FIXTURE}
         weights={DEFAULT_WEIGHTS}
+        decisionLog={EMPTY_DECISIONS}
+        onSetDecision={() => undefined}
+        onClearDecision={() => undefined}
       />,
     );
     expect(markup).toContain('<table');
@@ -118,6 +130,9 @@ describe('FichaPage', () => {
         references={[referenceFixture()]}
         scoredCars={SCORED_FIXTURE}
         weights={DEFAULT_WEIGHTS}
+        decisionLog={EMPTY_DECISIONS}
+        onSetDecision={() => undefined}
+        onClearDecision={() => undefined}
       />,
     );
     for (const car of threeCarFixture) {
@@ -135,6 +150,9 @@ describe('FichaPage', () => {
           references={[referenceFixture()]}
           scoredCars={SCORED_FIXTURE}
           weights={DEFAULT_WEIGHTS}
+          decisionLog={EMPTY_DECISIONS}
+          onSetDecision={() => undefined}
+          onClearDecision={() => undefined}
         />,
       );
       const rowLabels = [
@@ -176,6 +194,9 @@ describe('FichaPage', () => {
           references={[referenceFixture()]}
           scoredCars={SCORED_FIXTURE}
           weights={DEFAULT_WEIGHTS}
+          decisionLog={EMPTY_DECISIONS}
+          onSetDecision={() => undefined}
+          onClearDecision={() => undefined}
         />,
       );
       expect(markup).toMatch(/<select[^>]*id="field-set-select"/);
@@ -209,6 +230,9 @@ describe('FichaPage', () => {
           references={[referenceFixture()]}
           scoredCars={SCORED_FIXTURE}
           weights={DEFAULT_WEIGHTS}
+          decisionLog={EMPTY_DECISIONS}
+          onSetDecision={() => undefined}
+          onClearDecision={() => undefined}
         />,
       );
       expect(markup).toMatch(/name="pinned-model"/);
@@ -238,6 +262,9 @@ describe('FichaPage', () => {
           references={[referenceFixture()]}
           scoredCars={SCORED_FIXTURE}
           weights={DEFAULT_WEIGHTS}
+          decisionLog={EMPTY_DECISIONS}
+          onSetDecision={() => undefined}
+          onClearDecision={() => undefined}
         />,
       );
       const theadMatch = /<thead>([\s\S]*?)<\/thead>/.exec(markup);
@@ -256,6 +283,9 @@ describe('FichaPage', () => {
           references={[referenceFixture()]}
           scoredCars={SCORED_FIXTURE}
           weights={DEFAULT_WEIGHTS}
+          decisionLog={EMPTY_DECISIONS}
+          onSetDecision={() => undefined}
+          onClearDecision={() => undefined}
         />,
       );
       // Sportage: 4540mm frente a 4351mm de la Giulietta → +189.
@@ -269,6 +299,9 @@ describe('FichaPage', () => {
           references={[referenceFixture()]}
           scoredCars={SCORED_FIXTURE}
           weights={DEFAULT_WEIGHTS}
+          decisionLog={EMPTY_DECISIONS}
+          onSetDecision={() => undefined}
+          onClearDecision={() => undefined}
         />,
       );
       // La Giulietta (fixture) solo declara las cinco magnitudes
@@ -288,6 +321,9 @@ describe('FichaPage', () => {
           references={[referenceFixture()]}
           scoredCars={SCORED_FIXTURE}
           weights={DEFAULT_WEIGHTS}
+          decisionLog={EMPTY_DECISIONS}
+          onSetDecision={() => undefined}
+          onClearDecision={() => undefined}
         />,
       );
       const theadMatch = /<thead>([\s\S]*?)<\/thead>/.exec(markup);
@@ -302,6 +338,9 @@ describe('FichaPage', () => {
           references={[]}
           scoredCars={SCORED_FIXTURE}
           weights={DEFAULT_WEIGHTS}
+          decisionLog={EMPTY_DECISIONS}
+          onSetDecision={() => undefined}
+          onClearDecision={() => undefined}
         />,
       );
       expect(markup).toContain('<table');
@@ -324,6 +363,9 @@ describe('FichaPage', () => {
           references={[referenceFixture()]}
           scoredCars={SCORED_FIXTURE}
           weights={DEFAULT_WEIGHTS}
+          decisionLog={EMPTY_DECISIONS}
+          onSetDecision={() => undefined}
+          onClearDecision={() => undefined}
         />,
       );
       expect(markup).not.toMatch(/class="[^"]*tableWrapperNoPin[^"]*"/);
@@ -338,6 +380,9 @@ describe('FichaPage', () => {
           references={[referenceFixture()]}
           scoredCars={SCORED_FIXTURE}
           weights={DEFAULT_WEIGHTS}
+          decisionLog={EMPTY_DECISIONS}
+          onSetDecision={() => undefined}
+          onClearDecision={() => undefined}
         />,
       );
       const select =
@@ -385,6 +430,9 @@ describe('FichaPage', () => {
           references={[referenceFixture()]}
           scoredCars={SCORED_FIXTURE}
           weights={DEFAULT_WEIGHTS}
+          decisionLog={EMPTY_DECISIONS}
+          onSetDecision={() => undefined}
+          onClearDecision={() => undefined}
         />,
       );
       const select =
@@ -405,6 +453,9 @@ describe('FichaPage', () => {
           references={[referenceFixture()]}
           scoredCars={SCORED_FIXTURE}
           weights={DEFAULT_WEIGHTS}
+          decisionLog={EMPTY_DECISIONS}
+          onSetDecision={() => undefined}
+          onClearDecision={() => undefined}
         />,
       );
       const theadMatch = /<thead>([\s\S]*?)<\/thead>/.exec(markup);
@@ -426,6 +477,9 @@ describe('FichaPage', () => {
         references={[referenceFixture()]}
         scoredCars={SCORED_FIXTURE}
         weights={DEFAULT_WEIGHTS}
+        decisionLog={EMPTY_DECISIONS}
+        onSetDecision={() => undefined}
+        onClearDecision={() => undefined}
       />,
     );
     expect(markup).toMatch(
@@ -440,6 +494,9 @@ describe('FichaPage', () => {
         references={[referenceFixture()]}
         scoredCars={SCORED_FIXTURE}
         weights={DEFAULT_WEIGHTS}
+        decisionLog={EMPTY_DECISIONS}
+        onSetDecision={() => undefined}
+        onClearDecision={() => undefined}
       />,
     );
     expect(markup).toMatch(/<select[^>]*name="photo-view"/);
@@ -455,6 +512,9 @@ describe('FichaPage', () => {
         references={[referenceFixture()]}
         scoredCars={SCORED_FIXTURE}
         weights={DEFAULT_WEIGHTS}
+        decisionLog={EMPTY_DECISIONS}
+        onSetDecision={() => undefined}
+        onClearDecision={() => undefined}
       />,
     );
     expect(markup).toContain('alt="Giulietta, vista lateral"');
@@ -469,6 +529,9 @@ describe('FichaPage', () => {
         references={[referenceFixture()]}
         scoredCars={SCORED_FIXTURE}
         weights={DEFAULT_WEIGHTS}
+        decisionLog={EMPTY_DECISIONS}
+        onSetDecision={() => undefined}
+        onClearDecision={() => undefined}
       />,
     );
     // Ninguno de los tres candidatos del fixture declara fotos.
@@ -482,6 +545,9 @@ describe('FichaPage', () => {
         references={[referenceFixture()]}
         scoredCars={SCORED_FIXTURE}
         weights={DEFAULT_WEIGHTS}
+        decisionLog={EMPTY_DECISIONS}
+        onSetDecision={() => undefined}
+        onClearDecision={() => undefined}
       />,
     );
     expect(markup).toContain('role="group"');
@@ -495,6 +561,9 @@ describe('FichaPage', () => {
         references={[referenceFixture()]}
         scoredCars={SCORED_FIXTURE}
         weights={DEFAULT_WEIGHTS}
+        decisionLog={EMPTY_DECISIONS}
+        onSetDecision={() => undefined}
+        onClearDecision={() => undefined}
       />,
     );
     const headings = markup.match(/<h1[^>]*>/g) ?? [];
@@ -528,6 +597,9 @@ describe('FichaPage', () => {
         references={[referenceFixture()]}
         scoredCars={SCORED_FIXTURE}
         weights={DEFAULT_WEIGHTS}
+        decisionLog={EMPTY_DECISIONS}
+        onSetDecision={() => undefined}
+        onClearDecision={() => undefined}
       />,
     );
     expect(markup).toContain('<dialog');
@@ -546,6 +618,9 @@ describe('FichaPage', () => {
         references={[referenceFixture()]}
         scoredCars={SCORED_FIXTURE}
         weights={DEFAULT_WEIGHTS}
+        decisionLog={EMPTY_DECISIONS}
+        onSetDecision={() => undefined}
+        onClearDecision={() => undefined}
       />,
     );
     const legendMatch = /<p class="[^"]*legend[^"]*">([\s\S]*?)<\/p>/.exec(
@@ -587,6 +662,9 @@ describe('FichaPage', () => {
           references={[referenceFixture()]}
           scoredCars={SCORED_FIXTURE}
           weights={DEFAULT_WEIGHTS}
+          decisionLog={EMPTY_DECISIONS}
+          onSetDecision={() => undefined}
+          onClearDecision={() => undefined}
         />,
       );
       const duel = duelHtml(markup);
@@ -616,6 +694,9 @@ describe('FichaPage', () => {
           references={[referenceFixture()]}
           scoredCars={SCORED_FIXTURE}
           weights={DEFAULT_WEIGHTS}
+          decisionLog={EMPTY_DECISIONS}
+          onSetDecision={() => undefined}
+          onClearDecision={() => undefined}
         />,
       );
       const duel = duelHtml(markup);
@@ -637,6 +718,9 @@ describe('FichaPage', () => {
           references={[referenceFixture()]}
           scoredCars={SCORED_FIXTURE}
           weights={DEFAULT_WEIGHTS}
+          decisionLog={EMPTY_DECISIONS}
+          onSetDecision={() => undefined}
+          onClearDecision={() => undefined}
         />,
       );
       const duel = duelHtml(markup);
@@ -654,6 +738,9 @@ describe('FichaPage', () => {
           references={[referenceFixture()]}
           scoredCars={SCORED_FIXTURE}
           weights={DEFAULT_WEIGHTS}
+          decisionLog={EMPTY_DECISIONS}
+          onSetDecision={() => undefined}
+          onClearDecision={() => undefined}
         />,
       );
       const duel = duelHtml(markup);
@@ -676,6 +763,9 @@ describe('FichaPage', () => {
           references={[]}
           scoredCars={SCORED_FIXTURE}
           weights={DEFAULT_WEIGHTS}
+          decisionLog={EMPTY_DECISIONS}
+          onSetDecision={() => undefined}
+          onClearDecision={() => undefined}
         />,
       );
       const duel = duelHtml(markup);
@@ -695,6 +785,9 @@ describe('FichaPage', () => {
           references={[referenceFixture()]}
           scoredCars={SCORED_FIXTURE}
           weights={DEFAULT_WEIGHTS}
+          decisionLog={EMPTY_DECISIONS}
+          onSetDecision={() => undefined}
+          onClearDecision={() => undefined}
         />,
       );
       const duel = duelHtml(markup);
@@ -908,6 +1001,9 @@ describe('magnitudes de electrificación (product/0028)', () => {
         references={[referenceFixture()]}
         scoredCars={SCORED_FIXTURE}
         weights={DEFAULT_WEIGHTS}
+        decisionLog={EMPTY_DECISIONS}
+        onSetDecision={() => undefined}
+        onClearDecision={() => undefined}
       />,
     );
     const select =
@@ -920,5 +1016,120 @@ describe('magnitudes de electrificación (product/0028)', () => {
       '<option value="electricRangeKm">Autonomía eléctrica</option>',
     );
     expect(mecanica).toContain('<option value="batteryKwh">Batería</option>');
+  });
+});
+
+describe('decision status in the ficha (product/0030)', () => {
+  function decisionLogWith(carId: string) {
+    return setDecision(
+      defaultDecisionLog(),
+      carId,
+      'shortlist',
+      undefined,
+      '2026-08-30',
+    );
+  }
+
+  it('shows no decision control for an undecided candidate, nor for the reference (requisitos 5.3, 6.2)', () => {
+    const markup = renderToStaticMarkup(
+      <FichaPage
+        cars={threeCarFixture}
+        references={[referenceFixture()]}
+        scoredCars={SCORED_FIXTURE}
+        weights={DEFAULT_WEIGHTS}
+        decisionLog={EMPTY_DECISIONS}
+        onSetDecision={() => undefined}
+        onClearDecision={() => undefined}
+      />,
+    );
+    expect(markup).not.toContain('decisionButton');
+  });
+
+  it('shows the decision control, with its mark, for a candidate that has one', () => {
+    const markup = renderToStaticMarkup(
+      <FichaPage
+        cars={threeCarFixture}
+        references={[referenceFixture()]}
+        scoredCars={SCORED_FIXTURE}
+        weights={DEFAULT_WEIGHTS}
+        decisionLog={decisionLogWith('kia-ev3')}
+        onSetDecision={() => undefined}
+        onClearDecision={() => undefined}
+      />,
+    );
+    expect(markup).toContain('decisionButton');
+    expect(markup).toContain('markShortlist');
+  });
+
+  // El `<select>` «Comparar» sigue enseñando los quince candidatos sin
+  // filtrar a propósito (dependencias y supuestos, requisito 4.4): elegir
+  // comparación no debe verse limitado por la lista corta. Así que estos
+  // dos tests miran solo la tabla, no el marcado entero.
+  function tableMarkup(markup: string): string {
+    return /<table[\s\S]*?<\/table>/.exec(markup)?.[0] ?? '';
+  }
+
+  it('drops a candidate that fails the decision filter from the scrollable columns (requisito 4.3)', () => {
+    const markup = renderToStaticMarkup(
+      <FichaPage
+        cars={threeCarFixture}
+        references={[referenceFixture()]}
+        scoredCars={SCORED_FIXTURE}
+        weights={DEFAULT_WEIGHTS}
+        decisionLog={setDecisionFilter(defaultDecisionLog(), 'shortlist-only')}
+        onSetDecision={() => undefined}
+        onClearDecision={() => undefined}
+      />,
+    );
+    const table = tableMarkup(markup);
+    for (const car of threeCarFixture) {
+      expect(table).not.toContain(car.name);
+    }
+  });
+
+  it('keeps a shortlisted candidate under "shortlist-only", drops the other two', () => {
+    const sportage = threeCarFixture.find(
+      (car) => car.id === 'kia-sportage-hev',
+    )!;
+    const markup = renderToStaticMarkup(
+      <FichaPage
+        cars={threeCarFixture}
+        references={[referenceFixture()]}
+        scoredCars={SCORED_FIXTURE}
+        weights={DEFAULT_WEIGHTS}
+        decisionLog={setDecisionFilter(
+          decisionLogWith('kia-sportage-hev'),
+          'shortlist-only',
+        )}
+        onSetDecision={() => undefined}
+        onClearDecision={() => undefined}
+      />,
+    );
+    const table = tableMarkup(markup);
+    expect(table).toContain(sportage.name);
+    for (const car of threeCarFixture) {
+      if (car.id === 'kia-sportage-hev') continue;
+      expect(table).not.toContain(car.name);
+    }
+  });
+
+  it('never drops the reference — a decision filter never touches something that is not a candidate', () => {
+    // Sin ningún candidato en lista corta: los tres desaparecen de las
+    // columnas desplazables, pero la referencia sigue siendo la comparación
+    // fijada por defecto (requisito 4.4, extendido aquí a 4.3: el filtro no
+    // alcanza a lo que no es un candidato).
+    const markup = renderToStaticMarkup(
+      <FichaPage
+        cars={threeCarFixture}
+        references={[referenceFixture()]}
+        scoredCars={SCORED_FIXTURE}
+        weights={DEFAULT_WEIGHTS}
+        decisionLog={setDecisionFilter(defaultDecisionLog(), 'shortlist-only')}
+        onSetDecision={() => undefined}
+        onClearDecision={() => undefined}
+      />,
+    );
+    expect(markup).toContain('Giulietta');
+    expect(markup).toContain('Referencia');
   });
 });

@@ -2,3 +2,12 @@
   display: flex;
   flex-direction: column;
 }
+
+/* La lista visible vacía por el filtro de decisión (product/0030, requisito
+ * 4.6): compone `card`, mismo tratamiento que `.error` en `App.module.css`
+ * para un mensaje que sustituye al contenido normal. */
+.emptyFiltered {
+  composes: card from '../primitives.module.css';
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}

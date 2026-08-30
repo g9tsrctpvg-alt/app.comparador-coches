@@ -1,5 +1,12 @@
 import { useState } from 'react';
 import type { Car } from '../../domain/car';
+import {
+  decisionOf,
+  entryOf,
+  type DecisionFilter,
+  type DecisionLog,
+  type StoredDecisionState,
+} from '../../domain/decisions';
 import type {
   CarScoreBreakdown,
   EditableRatingField,
@@ -7,6 +14,8 @@ import type {
 } from '../../domain/scoring/breakdown';
 import type { RatingOverride } from '../../domain/scoring/overrides';
 import type { AxisWeights } from '../../domain/scoring/weights';
+import { DECISION_FILTER_LABELS } from '../decisionLabels';
+import primitives from '../primitives.module.css';
 import { rankVisible } from './ranking';
 import { RankingRow } from './RankingRow';
 import styles from './RankingList.module.css';
@@ -16,6 +25,14 @@ interface RankingListProps {
   rawCars: Car[];
   hideOverBudget: boolean;
   weights: AxisWeights;
+  decisionLog: DecisionLog;
+  onSetDecision: (
+    carId: string,
+    state: StoredDecisionState,
+    reason: string | undefined,
+  ) => void;
+  onClearDecision: (carId: string) => void;
+  onDecisionFilterChange: (filter: DecisionFilter) => void;
   onRatingChange: (carId: string, override: RatingOverride) => void;
 }
 
@@ -63,11 +80,37 @@ export function RankingList({
   rawCars,
   hideOverBudget,
   weights,
+  decisionLog,
+  onSetDecision,
+  onClearDecision,
+  onDecisionFilterChange,
   onRatingChange,
 }: RankingListProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
-  const ranked = rankVisible(cars, hideOverBudget);
+  const ranked = rankVisible(cars, hideOverBudget, decisionLog);
+
+  // Vacía por el filtro de decisión y no por falta de datos (requisito
+  // 4.6): un mensaje que nombra el filtro activo, nunca una lista en
+  // blanco ni el mensaje de catálogo no cargado, que es otra cosa. Con
+  // `filter: 'all'` una lista vacía solo puede venir del presupuesto —caso
+  // ya existente, fuera del alcance de esta spec— y no se distingue aquí.
+  if (ranked.length === 0 && decisionLog.filter !== 'all') {
+    return (
+      <p role="status" className={styles.emptyFiltered}>
+        El filtro «{DECISION_FILTER_LABELS[decisionLog.filter]}» no deja ningún
+        coche visible.{' '}
+        <button
+          type="button"
+          className={primitives.buttonGhost}
+          onClick={() => onDecisionFilterChange('all')}
+        >
+          Volver a Todos
+        </button>
+      </p>
+    );
+  }
+
   const rawById = new Map(rawCars.map((car) => [car.id, car]));
   // La fila del líder se compara con el segundo; todas las demás, con el
   // líder (product/0029, requisito 4). `undefined` con un único candidato
@@ -94,6 +137,12 @@ export function RankingList({
             onRatingChange={(override) => onRatingChange(car.carId, override)}
             compareTo={index === 0 ? second : leader}
             weights={weights}
+            decisionState={decisionOf(decisionLog, car.carId)}
+            decisionEntry={entryOf(decisionLog, car.carId)}
+            onSetDecision={(state, reason) =>
+              onSetDecision(car.carId, state, reason)
+            }
+            onClearDecision={() => onClearDecision(car.carId)}
           />
         );
       })}

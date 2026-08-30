@@ -1,12 +1,20 @@
 import type { Car, SourcedNumber } from '../../domain/car';
+import type {
+  DecisionEntry,
+  DecisionState,
+  StoredDecisionState,
+} from '../../domain/decisions';
 import type { CarScoreBreakdown } from '../../domain/scoring/breakdown';
 import type { RatingOverride } from '../../domain/scoring/overrides';
 import { percentageOf } from '../../domain/scoring/score';
 import { splitScoreGap, topGapLines } from '../../domain/scoring/scoreGap';
 import type { AxisWeights } from '../../domain/scoring/weights';
-import { formatEur, formatNumber, formatSigned } from '../format';
+import { DECISION_LABELS } from '../decisionLabels';
+import { formatDate, formatEur, formatNumber, formatSigned } from '../format';
 import primitives from '../primitives.module.css';
 import { AxisBreakdownView } from './AxisBreakdownView';
+import { DecisionEditor } from './DecisionEditor';
+import { DecisionMark } from './DecisionMark';
 import { EstimatedMark } from './EstimatedMark';
 import type { EditableRating } from './RankingList';
 import { TECHNOLOGY_LABELS } from '../technologyLabels';
@@ -35,6 +43,35 @@ interface RankingRowProps {
    * resumen. */
   compareTo?: CarScoreBreakdown;
   weights: AxisWeights;
+  /** El estado de decisión de este coche (product/0030): `undefined` de
+   * entrada no existe — siempre llega `'undecided'` cuando no hay entrada,
+   * lo resuelve `decisionOf` antes de llegar aquí. */
+  decisionState: DecisionState;
+  decisionEntry: DecisionEntry | undefined;
+  onSetDecision: (
+    state: StoredDecisionState,
+    reason: string | undefined,
+  ) => void;
+  onClearDecision: () => void;
+}
+
+/** El estado, el motivo y la fecha en texto corrido, por delante del
+ * resumen del duelo (requisito 5.2): nada para `undecided`. Sin motivo
+ * escrito, la línea es solo el estado y la fecha. */
+function DecisionSummaryLine({
+  state,
+  entry,
+}: {
+  state: DecisionState;
+  entry: DecisionEntry | undefined;
+}) {
+  if (state === 'undecided' || entry === undefined) return null;
+  return (
+    <p className={styles.decisionSummary}>
+      {DECISION_LABELS[state]} el {formatDate(entry.date)}
+      {entry.reason && ` — ${entry.reason}`}
+    </p>
+  );
 }
 
 /** El resumen de una línea del duelo contra `compareTo` (requisito 4): la
@@ -91,6 +128,10 @@ export function RankingRow({
   onRatingChange,
   compareTo,
   weights,
+  decisionState,
+  decisionEntry,
+  onSetDecision,
+  onClearDecision,
 }: RankingRowProps) {
   const position = String(rank).padStart(2, '0');
   const accelEstimated = rawCar
@@ -108,7 +149,8 @@ export function RankingRow({
       <span className={isLeader ? styles.positionLeader : styles.position}>
         {position}
       </span>{' '}
-      <span className={styles.name}>{car.carName}</span>
+      <span className={styles.name}>{car.carName}</span>{' '}
+      <DecisionMark state={decisionState} />
       <span className={primitives.visuallyHidden}>
         {expanded ? ', ocultar desglose' : ', ver desglose'}
       </span>
@@ -139,6 +181,13 @@ export function RankingRow({
 
   const expandedContent = expanded && (
     <div className={styles.expanded}>
+      <DecisionSummaryLine state={decisionState} entry={decisionEntry} />
+      <DecisionEditor
+        entry={decisionEntry}
+        onSetDecision={onSetDecision}
+        onClear={onClearDecision}
+      />
+
       {compareTo && (
         <GapSummaryLine car={car} compareTo={compareTo} weights={weights} />
       )}

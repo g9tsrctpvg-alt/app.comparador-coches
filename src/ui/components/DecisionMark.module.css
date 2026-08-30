@@ -1,0 +1,13 @@
+.mark {
+  composes: tag from '../primitives.module.css';
+}
+
+.markShortlist {
+  composes: mark;
+  color: var(--color-positive);
+}
+
+.markDiscarded {
+  composes: mark;
+  color: var(--color-negative);
+}
