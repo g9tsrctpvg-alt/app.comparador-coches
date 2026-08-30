@@ -266,37 +266,82 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   su eje: la cifra del peso y el pulgar del deslizador van en `--axis-color`.
   El valor se apaga a `--color-mute` cuando vale 0, y ese apagado gana al
   color del eje — que un eje no cuente pesa más que de qué color es.
-- **`AssumptionsPanel`** — el único punto de edición de los supuestos
-  globales y del presupuesto. Ningún otro componente ofrece un control para
-  ellos.
-- **`RankingList`** — ordena los coches por `total` descendente (con
-  `rankVisible`, compartida con `App` para que la tarjeta del líder y la
-  cabeza de la lista nunca se desincronicen), aplica el filtro de
-  presupuesto si está activo, aplica el filtro de decisión de tres
-  posiciones (`DecisionFilterControl`, product/0030: Todos / Sin
-  descartados / Solo lista corta — el propio `decisionLog.filter`, no un
-  segundo parámetro repetido), y delega cada fila a `RankingRow`, con
-  `variant="podium"` para las tres primeras posiciones y `variant="list"`
-  para el resto (`PODIUM_SIZE = 3`, product/0022). Si la lista visible tiene
-  tres coches o menos, no hay «resto»: todos son podio, sin hueco ni relleno
-  en su lugar. Recibe también el catálogo crudo (`rawCars`) para leer
-  tecnología, aceleración, maletero y precio: son campos de `Car`, no del
-  desglose, y leerlos directamente evita acoplar la interfaz al texto de una
-  etiqueta del dominio. Si el filtro de decisión deja la lista visible
-  vacía (con `filter` distinto de `'all'`), no renderiza la lista: un
-  mensaje que nombra el filtro activo y un botón para volver a «Todos»
-  (product/0030, requisito 4.6). Con `filter: 'all'` una lista vacía por
-  presupuesto sigue sin distinguirse de ese caso — no es lo que este
-  requisito cubre.
-- **`RankingRow`** — una fila de la clasificación con seis elementos
+- **`AssumptionsPanel`** — el punto de edición de los supuestos globales y
+  del presupuesto máximo. El presupuesto se edita también desde
+  `EliminatoryRulesPanel` —el mismo `budgetEur`, dos controles sobre el
+  mismo dato, precedente de «Comparar» en la ficha (`technical/0010`)—; los
+  demás supuestos solo se editan aquí.
+- **`EliminatoryRulesPanel`** (product/0031) — el panel «Imprescindibles»:
+  una fila fija y no eliminable con el presupuesto, y una lista de reglas
+  eliminatorias, cada una magnitud + operador + umbral, sobre cualquiera de
+  las veinticuatro claves de `FICHA_FIELDS`. El `<select>` de magnitud
+  agrupa por los mismos seis bloques que «Orden» en la ficha
+  (`COMPLETE_BLOCKS`, exportado de `FichaPage.tsx` para esto), y oculta las
+  magnitudes que ya tienen regla —a lo sumo una por magnitud—. El operador
+  es un texto fijo («mínimo»/«máximo») en los dieciocho campos con
+  polaridad declarada, y un `<select>` de dos opciones solo en los seis
+  campos `neutral` (`requiredOperatorFor`, `src/domain/eliminatoryRules.ts`):
+  la interfaz nunca deja construir una combinación que el dominio no
+  aceptaría. El botón «Añadir imprescindible» no se renderiza cuando ya hay
+  una regla por cada magnitud. El interruptor «Ocultar los que no cumplen»
+  gobierna `hideFailingRules` (ver «Configuración persistente y
+  compartible»), y sustituye a la antigua casilla «Ocultar los que superan
+  el presupuesto» de `AssumptionsPanel`.
+- **`RankingList`** — ordena los coches por `total` descendente
+  (`splitByEligibility`, `components/ranking.ts`, compartida con `App` para
+  que la tarjeta del líder y la cabeza de la lista nunca se desincronicen),
+  aplica el filtro de decisión de tres posiciones (`DecisionFilterControl`,
+  product/0030: Todos / Sin descartados / Solo lista corta — el propio
+  `decisionLog.filter`, no un segundo parámetro repetido) y reparte el
+  resultado en **dos tramos** (product/0031): el **elegible** —quien cumple
+  presupuesto y todas las reglas activas—, con el mismo tratamiento de
+  podio de siempre (`variant="podium"` para las tres primeras posiciones,
+  `variant="list"` para el resto, `PODIUM_SIZE = 3`, product/0022; con tres
+  coches o menos no hay «resto»), delegado a `RankingRow`; y el **no
+  elegible**, en una sección plegable de `CollapsiblePanel`, «No cumplen tus
+  imprescindibles (N)», plegada por defecto, con una `IneligibleRow` por
+  coche. `hideFailingRules` activo oculta la sección entera; apagado, existe
+  siempre que haya al menos un coche en ese tramo. Recibe también el
+  catálogo crudo (`rawCars`) para leer tecnología, aceleración, maletero y
+  precio: son campos de `Car`, no del desglose, y leerlos directamente evita
+  acoplar la interfaz al texto de una etiqueta del dominio. Dos mensajes de
+  lista vacía, mutuamente excluyentes: si el filtro de decisión deja la
+  lista visible vacía (con `filter` distinto de `'all'`), un mensaje que
+  nombra el filtro activo y un botón para volver a «Todos» (product/0030,
+  requisito 4.6); si el tramo elegible queda vacío habiendo al menos un
+  coche que pasa el filtro de decisión, un mensaje que dice que ningún coche
+  cumple los imprescindibles vigentes, con un botón «Quitar imprescindibles»
+  que solo aparece si hay alguna regla que de verdad quitar —si lo único que
+  vacía la lista es el presupuesto, no hay botón, porque no hay regla que
+  este botón pueda borrar (product/0031, requisito 4.4). El tramo no
+  elegible, si no está oculto, se sigue renderizando debajo de cualquiera de
+  los dos mensajes.
+- **`IneligibleRow`** (product/0031) — una fila del tramo no elegible: el
+  nombre del coche, su `percentage` y su barra —sin número de posición, no
+  está en una clasificación de la que este tramo está fuera—, y la razón
+  exacta del incumplimiento: «Fuera de presupuesto» cuando aplica, y por
+  cada regla incumplida «‹Magnitud›: pides ≥/≤ ‹umbral›, tiene ‹valor real›»
+  (`RuleFailure`, `src/domain/eliminatoryRules.ts`). Informativa, no
+  desplegable: no repite el desglose completo ni la edición de decisión que
+  sí tiene `RankingRow`.
+- **`EligibilityMark`** (product/0031) — la marca de incumplimiento,
+  compartida entre la cabecera de columna de la ficha y la tarjeta de duelo:
+  un texto que nombra qué falla —«No cumple presupuesto», «No cumple 2
+  imprescindibles», o los dos combinados—, nunca solo color. A diferencia de
+  `DecisionMark`, es puramente informativa: no abre ningún diálogo, porque
+  las reglas se editan solo desde `EliminatoryRulesPanel`.
+- **`RankingRow`** — una fila de la clasificación con cinco elementos
   independientes, ninguno construido concatenando texto de otro: la
   posición (monoespaciada, con cero a la izquierda, en un hueco de ancho
   fijo), el nombre —seguido de la marca de decisión (`DecisionMark`,
   product/0030) cuando el coche está en `shortlist` o `discarded`; nada para
   `undecided`—, una línea de apoyo monoespaciada (tecnología,
-  aceleración, maletero, precio, con la marca de estimado cuando aplica), la
-  marca de «Fuera de presupuesto» cuando corresponde, el `percentage` y una
-  barra de proporción. El maletero sustituye a la potencia en esa línea
+  aceleración, maletero, precio, con la marca de estimado cuando aplica), el
+  `percentage` y una barra de proporción. Ningún coche fuera de presupuesto
+  o que incumpla una regla llega a esta fila: vive en el tramo no elegible
+  de `RankingList`, con `IneligibleRow` (product/0031) — la marca «Fuera de
+  presupuesto» que esta fila llevaba antes de esa spec ya no hace falta
+  aquí. El maletero sustituye a la potencia en esa línea
   desde `product/0022`: es la magnitud de mayor peso dentro de la fórmula
   del eje `viaje` —la mitad de su nota—, que es a su vez el eje de mayor
   peso por defecto; la potencia, que solo pesaba dentro de `prestaciones`,
@@ -310,7 +355,7 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   `aria-expanded` y el contenido expandido se construyen **una sola vez** y
   los reutilizan las dos variantes — no hay una copia de esa lógica por
   tratamiento visual. Su nombre accesible es solo la posición y el nombre
-  del coche —nunca la puntuación ni la marca de presupuesto—. Expandida,
+  del coche —nunca la puntuación—. Expandida,
   muestra primero, si el coche está decidido, una línea de texto corrido con
   el estado, la fecha y el motivo si lo hay (`DecisionSummaryLine`,
   product/0030: «Descartado el 30/08/2026 — el maletero se queda corto»), y
@@ -411,8 +456,10 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   la misma vía (`scoreCatalog`) que usa el desglose por coche, así que no
   puede desincronizarse de lo que la aplicación realmente calcula. Tiene su
   propia tabla de contenidos (los seis ejes, los pesos, los supuestos
-  globales, las penalizaciones condicionales, las limitaciones conocidas y
-  la procedencia de los datos) y comparte `SCurveChart` y `AXIS_CONTENT`
+  globales, las penalizaciones condicionales, los criterios eliminatorios
+  —product/0031: que un imprescindible filtra y nunca puntúa, texto
+  estático, sin pasar por `scoreCatalog`—, las limitaciones conocidas y la
+  procedencia de los datos) y comparte `SCurveChart` y `AXIS_CONTENT`
   con `AxisBreakdownView`. Las seis tarjetas de eje y las seis filas de la
   lista de pesos llevan el icono y el filete de color de su eje
   (`technical/0011`); **la tabla de contenidos no**, porque sus entradas son
@@ -504,6 +551,13 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     columnas desplazables de candidatos: una referencia nunca se esconde por
     él, y el modelo fijado como comparación tampoco, sea cual sea su estado
     —se calcula aparte, sin pasar por el filtro (requisito 4.4)—.
+  - **La marca de incumplimiento, junto a la de decisión** (`EligibilityMark`,
+    product/0031): un candidato que no cumple presupuesto o alguna regla
+    eliminatoria activa la lleva en la cabecera de columna y en la tarjeta
+    de duelo. A diferencia de `DecisionMark`, no dobla como control —no abre
+    diálogo, las reglas se editan solo desde el panel «Imprescindibles» de
+    la clasificación—, y nunca aparece en la referencia ni en el modelo
+    fijado como comparación, mismo criterio que la marca de decisión.
   - **`ScoreGapPanel`, «Detalle ejes»** (product/0029), justo debajo de la
     barra y sobre las dos vistas —tabla y duelo—, así que es el mismo bloque
     con cualquier ancho. Reparte la diferencia de nota entre el modelo
@@ -610,7 +664,9 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     decorativa (`aria-hidden`) y el nombre como texto; el enfocado lleva
     `aria-current="true"` además de su propio tratamiento visual. El estado
     del candidato enfocado es efímero, como `fieldSet`, `sortCriterion` o
-    `photoView`: no vive en `AppConfig`.
+    `photoView`: no vive en `AppConfig`. La tarjeta del enfocado lleva la
+    misma `EligibilityMark` que la cabecera de columna (product/0031),
+    junto a su nombre y marca.
   - **Anclaje de eje en gesto táctil** (technical/0007, mecanismo corregido
     por technical/0008): el envoltorio desplaza filas y columnas a la vez en
     el mismo contenedor, así que un gesto táctil pensado como «hacia abajo»
@@ -640,11 +696,18 @@ dominio —esquema y restauración puros, sin `window`— y el navegador: URL y
 directamente.
 
 - **Un único objeto de configuración**, `AppConfig`
-  (`src/domain/config.ts`): pesos, supuestos, presupuesto, el filtro de
-  presupuesto y las valoraciones sobrescritas por coche. Es el único objeto
-  que se persiste y el único que se comparte. El filtro de presupuesto
-  viaja con la configuración a propósito: sin él, un enlace compartido no
-  reproduce la misma lista de coches.
+  (`src/domain/config.ts`): pesos, supuestos, presupuesto, las reglas
+  eliminatorias (`eliminatoryRules`, product/0031), el interruptor que
+  oculta a quien no cumple (`hideFailingRules`) y las valoraciones
+  sobrescritas por coche. Es el único objeto que se persiste y el único que
+  se comparte. `hideFailingRules` viaja con la configuración a propósito,
+  mismo motivo que su antecesor `hideOverBudget`: sin él, un enlace
+  compartido no reproduce la misma lista de coches.
+  **`CONFIG_VERSION` es `2` desde `product/0031`** — subió al renombrar
+  `hideOverBudget` a `hideFailingRules` y añadir `eliminatoryRules`, un
+  cambio de forma incompatible; una configuración guardada con la versión
+  anterior se descarta entera y cae a los valores por defecto, el mismo
+  criterio que cualquier otra versión desconocida.
 - **Precedencia**: lo que trae la URL gana sobre lo guardado en
   `localStorage`, que gana sobre los valores por defecto
   (`DEFAULT_CONFIG`). Una fuente que se descarta entera —versión
@@ -667,13 +730,20 @@ directamente.
   cambiado sin generar ruido en los registros—. Las valoraciones
   sobrescritas se restauran por coche y por campo: una nota fuera de rango
   descarta solo esa nota, no las demás del mismo coche; un coche que ya no
-  está en el catálogo descarta todas las suyas.
+  está en el catálogo descarta todas las suyas. Las reglas eliminatorias se
+  restauran **regla a regla** (product/0031): una magnitud desconocida, un
+  operador que no es `'min'`/`'max'`, un umbral no numérico, o un operador
+  que contradice la polaridad declarada del campo descartan solo esa regla;
+  un campo repetido conserva la primera aparición — a lo sumo una regla por
+  magnitud.
 - **El enlace compartible** (`src/domain/configUrl.ts`,
   `configToParams`/`paramsToRawConfig`) solo lleva lo que se aparta de los
   valores por defecto, un parámetro por dato con nombre corto —`w_<eje>`,
-  `a_<supuesto>`, `budget`, `hideOverBudget`, `o_<carId>_<campo>`—, más `v`
-  con la versión, presente solo si hay algún otro parámetro. Con la
-  configuración por defecto, el enlace generado es la URL limpia del sitio.
+  `a_<supuesto>`, `budget`, `r_<campo>` (`<operator>:<value>`, una regla
+  eliminatoria activa, product/0031), `hideFailingRules`,
+  `o_<carId>_<campo>`—, más `v` con la versión, presente solo si hay algún
+  otro parámetro. Con la configuración por defecto, el enlace generado es la
+  URL limpia del sitio.
 - **El puerto de almacenamiento** es `src/adapters/localStorageConfigPort.ts`
   (`loadRawConfig`, `saveConfig`, `clearConfig`, y las tres equivalentes del
   estado de vista de abajo): el único módulo que toca `window.localStorage`.

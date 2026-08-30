@@ -1,13 +1,19 @@
 # 0031 — Criterios eliminatorios
 
 - **Id:** product/0031
-- **Estado:** approved
+- **Estado:** consolidated
 - **Tipo:** product
 - **Fecha:** 2026-08-30
 - **Specs relacionadas:** product/0012, product/0018, product/0020, product/0022,
   product/0023, product/0027, product/0029, product/0030
 - **ADRs relacionados:** 0004
 - **Doc de estado:** `docs/estado/dominio.md`, `docs/estado/interfaz.md`
+
+> ⚠️ **Spec consolidada (2026-08-30).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/dominio.md` y `docs/estado/interfaz.md`. Vigentes aquí solo
+> los **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -230,41 +236,41 @@ como incumplimiento.
 
 > Obligatorios y verificables.
 
-- [ ] Un test comprueba que un coche que incumple una regla puntúa
+- [x] Un test comprueba que un coche que incumple una regla puntúa
       exactamente igual que si esa regla no existiera, para el catálogo real
       con pesos y supuestos por defecto (ADR 0004).
-- [ ] Un test comprueba que un coche sin la magnitud de una regla no cuenta
+- [x] Un test comprueba que un coche sin la magnitud de una regla no cuenta
       como fallo de esa regla (ni entra en sus «cumplen»).
-- [ ] Un test comprueba, para cada campo con polaridad `moreIsBetter` o
+- [x] Un test comprueba, para cada campo con polaridad `moreIsBetter` o
       `moreIsWorse`, que el operador forzado coincide con la dirección
       declarada en `POLARITY`.
-- [ ] Un test comprueba la degradación por regla: un `field` desconocido, un
+- [x] Un test comprueba la degradación por regla: un `field` desconocido, un
       `operator` inválido, un `value` no numérico y un operador que
       contradice la polaridad se descartan solos sin afectar a las demás
       reglas del mismo `AppConfig`; un `field` repetido conserva solo la
       primera regla.
-- [ ] Un test comprueba que una configuración guardada con `version: 1` se
+- [x] Un test comprueba que una configuración guardada con `version: 1` se
       descarta entera tras el cambio de `CONFIG_VERSION` a `2` y cae a los
       valores por defecto.
-- [ ] Un test comprueba el enlace compartible: cero reglas y
+- [x] Un test comprueba el enlace compartible: cero reglas y
       `hideFailingRules` apagado no añaden parámetros; una regla activa
       viaja como `r_<field>=<operator>:<value>` y se restaura idéntica.
-- [ ] Un test comprueba que el tramo elegible y el no elegible se reparten
+- [x] Un test comprueba que el tramo elegible y el no elegible se reparten
       correctamente sobre un catálogo conocido, combinando presupuesto y una
       regla a la vez, y que el filtro de decisión se aplica antes del
       reparto.
-- [ ] Un test comprueba que, con el tramo elegible vacío y al menos un coche
+- [x] Un test comprueba que, con el tramo elegible vacío y al menos un coche
       en el catálogo visible, se renderiza el mensaje y no una lista vacía.
-- [ ] Un test comprueba que `hideFailingRules` activo hace desaparecer el
+- [x] Un test comprueba que `hideFailingRules` activo hace desaparecer el
       tramo no elegible de la clasificación, y que apagado lo deja plegado
       pero presente.
-- [ ] Un test comprueba que la marca de incumplimiento en la ficha aparece
+- [x] Un test comprueba que la marca de incumplimiento en la ficha aparece
       en la cabecera de un candidato que no cumple y **no** aparece en la
       referencia ni en el modelo fijado como comparación.
-- [ ] La secuencia de CI pasa entera en local
+- [x] La secuencia de CI pasa entera en local
       (`docs/proceso/ci-y-guardarrailes.md`, §4), con cobertura al 100 % en
       `src/domain/`, `src/data/` y `src/logging/`.
-- [ ] Verificación manual sobre el *build* de producción: crear una regla,
+- [x] Verificación manual sobre el *build* de producción: crear una regla,
       ver el reparto en dos tramos, ocultar el tramo no elegible, copiar el
       enlace y comprobar que se abre igual, ver la marca en la ficha y en la
       vista de duelo por debajo de `--bp-columna`.
