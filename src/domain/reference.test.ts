@@ -85,7 +85,7 @@ describe('ReferenceSchema', () => {
     expect(result.success).toBe(false);
   });
 
-  it('accepts the turning circle, a second exception to "solo dimensiones" (product/0031)', () => {
+  it('accepts the turning circle, a second exception to "solo dimensiones" (product/0032)', () => {
     const result = ReferenceSchema.safeParse({
       ...validReference,
       turningCircleM: sourced(10.9, 'm'),

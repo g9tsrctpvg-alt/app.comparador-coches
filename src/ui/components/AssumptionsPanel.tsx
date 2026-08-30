@@ -8,8 +8,6 @@ interface AssumptionsPanelProps {
   onChange: (next: GlobalAssumptions) => void;
   budgetEur: number;
   onBudgetChange: (next: number) => void;
-  hideOverBudget: boolean;
-  onHideOverBudgetChange: (next: boolean) => void;
 }
 
 export function AssumptionsPanel({
@@ -17,8 +15,6 @@ export function AssumptionsPanel({
   onChange,
   budgetEur,
   onBudgetChange,
-  hideOverBudget,
-  onHideOverBudgetChange,
 }: AssumptionsPanelProps) {
   function set<K extends keyof GlobalAssumptions>(
     key: K,
@@ -58,15 +54,10 @@ export function AssumptionsPanel({
             onChange={(event) => onBudgetChange(Number(event.target.value))}
           />
         </label>
-
-        <label className={primitives.checkboxRow}>
-          <input
-            type="checkbox"
-            checked={hideOverBudget}
-            onChange={(event) => onHideOverBudgetChange(event.target.checked)}
-          />
-          Ocultar los que superan el presupuesto
-        </label>
+        <p className={primitives.secondaryText}>
+          El presupuesto es también un imprescindible: se edita aquí o en el
+          panel «Imprescindibles», sobre el mismo dato.
+        </p>
 
         <label className={styles.row}>
           <span className={styles.top}>

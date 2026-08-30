@@ -382,7 +382,7 @@ describe('CarSchema, magnitudes de electrificación (product/0028)', () => {
   );
 });
 
-describe('CarSchema, diámetro de giro (product/0031)', () => {
+describe('CarSchema, diámetro de giro (product/0032)', () => {
   it('accepts a car that declares the turning circle', () => {
     expect(
       CarSchema.safeParse({

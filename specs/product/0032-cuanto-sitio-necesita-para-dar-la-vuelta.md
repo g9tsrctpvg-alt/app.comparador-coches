@@ -1,6 +1,6 @@
-# 0031 — Cuánto sitio necesita para dar la vuelta
+# 0032 — Cuánto sitio necesita para dar la vuelta
 
-- **Id:** product/0031
+- **Id:** product/0032
 - **Estado:** consolidated
 - **Tipo:** product
 - **Fecha:** 2026-08-30

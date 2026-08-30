@@ -127,7 +127,7 @@ Las dos salen de la misma ficha km77 de la versión que estés dando de alta:
 «Autonomía eléctrica WLTP» y, en la sección «Batería», «Capacidad».
 
 **`turningCircleM` es el diámetro de giro entre bordillos, en metros**
-(product/0031). Es opcional para cualquier tecnología —no hay regla cruzada
+(product/0032). Es opcional para cualquier tecnología —no hay regla cruzada
 con `technology`, porque todo coche gira— y la definición es más estricta de
 lo que parece:
 

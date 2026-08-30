@@ -508,6 +508,44 @@ y sigue en juego» de «no lo he mirado todavía» se dejó fuera a propósito
 casilla que mantener a cambio de un matiz que quien decide ya lleva en la
 cabeza.
 
+## Los imprescindibles
+
+`src/domain/eliminatoryRules.ts` (product/0031): un umbral sobre una de las
+veinticinco magnitudes de la ficha (`FICHA_FIELDS`), `{ field, operator,
+value }`, con `operator` en `'min'` o `'max'`. `evaluateRules` los evalúa
+contra los valores numéricos ya extraídos de un coche
+(`numericFieldValues`/`numericValuesFromCells`, `src/domain/ficha.ts`) y
+devuelve la lista de los que incumple, con el umbral pedido y el valor real
+de cada uno — nunca solo un booleano, porque el tramo no elegible de la
+clasificación (`docs/estado/interfaz.md`) necesita decir *cuánto* le falta o
+le sobra, no solo que falla.
+
+**El operador está forzado por la polaridad declarada del campo**
+(`forcedRuleOperator`, `polarityOf`, ambos en `ficha.ts`): en un campo
+`moreIsBetter` —maletero, potencia, autonomía eléctrica…— la única regla
+posible es un mínimo; en uno `moreIsWorse` —precio, longitud, peso…—, un
+máximo. Solo los seis campos `neutral` —generación, retoque, altura, altura
+libre al suelo, batalla y batería— admiten los dos: no hay una dirección que
+el dominio pueda afirmar sin inventar un juicio de color, así que aquí no lo
+hace.
+
+**Un coche que no declara la magnitud de una regla no cuenta como
+incumplimiento** (`actual === undefined` en `evaluateRules`): ni la cumple
+ni la incumple, con el mismo criterio que la Δ «no disponible» de la ficha
+—sin dato, no hay nada que afirmar—.
+
+**No entra en ninguna fórmula de puntuación**, la misma independencia que el
+ADR 0004 ya declara para el estado de decisión: `scoreCatalog` no recibe
+ninguna `EliminatoryRule`, así que un coche que incumple una se puntúa
+exactamente igual que si la regla no existiera. Lo que se deriva de ellas
+—qué tramo de la clasificación ocupa cada coche— decide **qué se ve**,
+siempre después de puntuar.
+
+**El presupuesto no es una `EliminatoryRule`.** Sigue siendo el mecanismo
+que ya existía —`budgetEur` y `car.overBudget`, calculado en
+`scoreCatalog`—; el panel que edita las reglas lo enseña como una fila más
+sobre el mismo dato, pero no lo duplica como una regla de esta lista.
+
 ## Referencias
 
 `src/data/references.json` (`Reference`, `src/domain/reference.ts`,
@@ -529,7 +567,7 @@ por no ser un candidato—, con sus cinco magnitudes fuente por fuente.
 
 `src/domain/ficha.ts` (product/0014, fundido con la antigua ficha técnica
 por product/0018; product/0021 añade las dos de generación; product/0028
-la autonomía eléctrica y la batería; product/0031 el diámetro de giro):
+la autonomía eléctrica y la batería; product/0032 el diámetro de giro):
 compara candidatos y referencias entre sí, magnitud por magnitud, sobre
 veinticinco campos de `Car`/`Reference` —veinticuatro propios más
 `litersPerSquareMeter`, derivada—. No calcula puntuación: es lectura, no
@@ -551,7 +589,7 @@ juicio agregado, así que vive fuera de `scoring/`.
   dimensionales, `litersPerSquareMeter` derivada y el año de lanzamiento de
   su generación, obligatorio—, así que comparar contra ella deja dieciséis
   celdas `'missing'` por construcción, no por caso especial; dos más
-  —el año de retoque y el diámetro de giro (product/0031)— dependen de si
+  —el año de retoque y el diámetro de giro (product/0032)— dependen de si
   esa referencia concreta las declara. Entre las que faltan siempre están
   la autonomía eléctrica y la batería: la referencia es un térmico puro y
   no le aplican.
@@ -564,7 +602,7 @@ juicio agregado, así que vive fuera de `scoring/`.
     resuelve es que los sustitutos son más grandes), `weightKg` (penaliza
     consumo, frenada y agilidad), `acceleration0to100` (son segundos: más
     es más lento), `consumption`, `priceEur`, `maintenanceEurYear`,
-    `turningCircleM` (product/0031: a igualdad de todo lo demás, nadie
+    `turningCircleM` (product/0032: a igualdad de todo lo demás, nadie
     prefiere necesitar más sitio para dar la vuelta — a diferencia de la
     batalla, aquí sí hay una dirección afirmable sin matices).
   - **`moreIsBetter`** — `trunkLiters`, `litersPerSquareMeter` (mejor

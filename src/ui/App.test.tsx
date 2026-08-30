@@ -213,7 +213,7 @@ describe('App', () => {
     it('restores a weight saved in localStorage when the URL is clean', () => {
       const storage = fakeStorage({
         'comparador-coches:config': JSON.stringify({
-          version: 1,
+          version: 2,
           weights: {
             viaje: 7,
             diario: 3,
@@ -232,7 +232,8 @@ describe('App', () => {
             cargaEnCasa: false,
           },
           budgetEur: 47000,
-          hideOverBudget: false,
+          eliminatoryRules: [],
+          hideFailingRules: false,
           overrides: {},
         }),
       });
@@ -244,7 +245,7 @@ describe('App', () => {
     it('prefers the URL over a different configuration saved in localStorage (requisito 3)', () => {
       const storage = fakeStorage({
         'comparador-coches:config': JSON.stringify({
-          version: 1,
+          version: 2,
           weights: {
             viaje: 7,
             diario: 3,
@@ -263,11 +264,12 @@ describe('App', () => {
             cargaEnCasa: false,
           },
           budgetEur: 47000,
-          hideOverBudget: false,
+          eliminatoryRules: [],
+          hideFailingRules: false,
           overrides: {},
         }),
       });
-      stubBrowser({ search: '?budget=30000&v=1', storage });
+      stubBrowser({ search: '?budget=30000&v=2', storage });
       const markup = renderToStaticMarkup(<App load={() => threeCarFixture} />);
       // Gana el enlace (presupuesto 30.000), no lo guardado (peso de viaje a 7).
       expect(markup).toContain('Presupuesto 30.000 €');

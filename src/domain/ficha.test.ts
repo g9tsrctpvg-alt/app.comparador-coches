@@ -5,7 +5,11 @@ import {
   currentSourceOf,
   FICHA_FIELDS,
   FICHA_SORT_CRITERIA,
+  forcedRuleOperator,
   litrosPorMetroCuadrado,
+  numericFieldValues,
+  numericValuesFromCells,
+  polarityOf,
   sortFicha,
   withComparison,
 } from './ficha';
@@ -361,7 +365,7 @@ describe('withComparison', () => {
     expect(reference.cells.priceEur).toEqual({ kind: 'missing' });
   });
 
-  describe('turning circle (product/0031)', () => {
+  describe('turning circle (product/0032)', () => {
     it('marks a shorter turning circle as better and a longer one as worse: moreIsWorse', () => {
       const shorter = {
         ...sportageFixture,
@@ -589,5 +593,52 @@ describe('magnitudes de electrificación (product/0028)', () => {
     const reference = buildFicha([], [referenceFixture()])[0]!;
     expect(reference.cells.electricRangeKm).toEqual({ kind: 'missing' });
     expect(reference.cells.batteryKwh).toEqual({ kind: 'missing' });
+  });
+});
+
+describe('polarityOf and forcedRuleOperator (product/0031, requisito 1.2)', () => {
+  it('forces "min" on a moreIsBetter field like trunkLiters', () => {
+    expect(polarityOf('trunkLiters')).toBe('moreIsBetter');
+    expect(forcedRuleOperator('trunkLiters')).toBe('min');
+  });
+
+  it('forces "max" on a moreIsWorse field like lengthMm', () => {
+    expect(polarityOf('lengthMm')).toBe('moreIsWorse');
+    expect(forcedRuleOperator('lengthMm')).toBe('max');
+  });
+
+  it('leaves a neutral field like wheelbaseMm unforced', () => {
+    expect(polarityOf('wheelbaseMm')).toBe('neutral');
+    expect(forcedRuleOperator('wheelbaseMm')).toBeNull();
+  });
+});
+
+describe('numericValuesFromCells and numericFieldValues (product/0031, requisito 1.4)', () => {
+  it('reads the same numeric value the ficha cell already carries', () => {
+    const [sportage] = buildFicha([sportageFixture], []);
+    const values = numericValuesFromCells(sportage!.cells);
+    expect(values.trunkLiters).toBe(500);
+    expect(values.priceEur).toBe(36000);
+  });
+
+  it('leaves a missing field undefined, never NaN or a fallback', () => {
+    const [sportage] = buildFicha([sportageFixture], []);
+    const values = numericValuesFromCells(sportage!.cells);
+    expect(values.electricRangeKm).toBeUndefined();
+  });
+
+  it('numericFieldValues(car) matches numericValuesFromCells(cellsOf(car)) for every field', () => {
+    const [x1] = buildFicha([x1Fixture], []);
+    const fromCells = numericValuesFromCells(x1!.cells);
+    const direct = numericFieldValues(x1Fixture);
+    expect(direct).toEqual(fromCells);
+  });
+
+  it('works on a Reference too, with only the five dimensional fields present', () => {
+    const values = numericFieldValues(referenceFixture());
+    expect(values.lengthMm).toBeDefined();
+    expect(values.widthMm).toBeDefined();
+    expect(values.trunkLiters).toBeDefined();
+    expect(values.priceEur).toBeUndefined();
   });
 });

@@ -13,6 +13,7 @@ import {
 import type { AxisWeights } from '../domain/scoring/weights';
 import type { GlobalAssumptions } from '../domain/scoring/assumptions';
 import type { RatingOverride } from '../domain/scoring/overrides';
+import type { EliminatoryRule } from '../domain/eliminatoryRules';
 
 /** `renderToStaticMarkup` corre en Node, sin `window`; la app real siempre
  * lo tiene. Mismo patrón que `useHashRoute`. */
@@ -53,7 +54,8 @@ export interface UseConfigResult {
   setWeights: (weights: AxisWeights) => void;
   setAssumptions: (assumptions: GlobalAssumptions) => void;
   setBudgetEur: (budgetEur: number) => void;
-  setHideOverBudget: (hideOverBudget: boolean) => void;
+  setEliminatoryRules: (rules: EliminatoryRule[]) => void;
+  setHideFailingRules: (hideFailingRules: boolean) => void;
   setOverride: (carId: string, override: RatingOverride) => void;
   resetToDefaults: () => void;
   shareUrl: () => string;
@@ -99,9 +101,17 @@ export function useConfig(validCarIds: ReadonlySet<string>): UseConfigResult {
     setConfig((prev) => ({ ...prev, budgetEur }));
   }, []);
 
-  const setHideOverBudget = useCallback((hideOverBudget: boolean) => {
+  const setEliminatoryRules = useCallback(
+    (eliminatoryRules: EliminatoryRule[]) => {
+      persistPendingRef.current = true;
+      setConfig((prev) => ({ ...prev, eliminatoryRules }));
+    },
+    [],
+  );
+
+  const setHideFailingRules = useCallback((hideFailingRules: boolean) => {
     persistPendingRef.current = true;
-    setConfig((prev) => ({ ...prev, hideOverBudget }));
+    setConfig((prev) => ({ ...prev, hideFailingRules }));
   }, []);
 
   const setOverride = useCallback((carId: string, override: RatingOverride) => {
@@ -139,7 +149,8 @@ export function useConfig(validCarIds: ReadonlySet<string>): UseConfigResult {
     setWeights,
     setAssumptions,
     setBudgetEur,
-    setHideOverBudget,
+    setEliminatoryRules,
+    setHideFailingRules,
     setOverride,
     resetToDefaults,
     shareUrl,

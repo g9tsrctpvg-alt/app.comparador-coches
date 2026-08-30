@@ -42,7 +42,7 @@ export function currentSourceOf(sourced: SourcedNumber) {
  * Las veinticuatro magnitudes de `Car` que no son identidad, más la métrica
  * derivada de litros por metro cuadrado (product/0014, requisito 1;
  * product/0018 les añade Δ y polaridad; product/0021 añade las dos de
- * generación; product/0028 añade autonomía eléctrica y batería; product/0031
+ * generación; product/0028 añade autonomía eléctrica y batería; product/0032
  * añade el diámetro de giro): el inventario completo de «la ficha». El orden
  * y las etiquetas son cosa de la interfaz; aquí solo se declaran las claves.
  */
@@ -145,7 +145,7 @@ const POLARITY: Record<FichaField, DeltaPolarity> = {
   // inventa un juicio de color (product/0018, requisito 3.3).
   wheelbaseMm: 'neutral',
   // A diferencia de la batalla, aquí sí hay una dirección afirmable sin
-  // matices (product/0031, requisito 3.3): a igualdad de todo lo demás,
+  // matices (product/0032, requisito 3.3): a igualdad de todo lo demás,
   // nadie prefiere necesitar más sitio para dar la vuelta.
   turningCircleM: 'moreIsWorse',
   // La magnitud que product/0017 añadió al eje de viaje precisamente porque
@@ -190,6 +190,27 @@ const POLARITY: Record<FichaField, DeltaPolarity> = {
   aestheticsExterior: 'moreIsBetter',
   aestheticsInterior: 'moreIsBetter',
 };
+
+/** La polaridad declarada de `field` (product/0031, requisito 1.2): qué
+ * dirección de la magnitud cuenta como «mejor». Expuesta para que
+ * `eliminatoryRules.ts` pueda forzar el operador de un imprescindible sin
+ * que la tabla `POLARITY` se duplique fuera de este fichero. */
+export function polarityOf(field: FichaField): DeltaPolarity {
+  return POLARITY[field];
+}
+
+/** El único operador de imprescindible que la polaridad de `field` permite
+ * —`'min'` en los `moreIsBetter`, `'max'` en los `moreIsWorse`— o `null` en
+ * los `neutral`, donde las dos opciones son válidas (product/0031, requisito
+ * 1.2). El tipo de retorno es literal y no `RuleOperator`
+ * (`eliminatoryRules.ts`) a propósito: ese módulo importa de este, nunca al
+ * revés, así que este fichero no puede nombrar un tipo suyo. */
+export function forcedRuleOperator(field: FichaField): 'min' | 'max' | null {
+  const polarity = polarityOf(field);
+  if (polarity === 'moreIsBetter') return 'min';
+  if (polarity === 'moreIsWorse') return 'max';
+  return null;
+}
 
 function deltaDirection(
   delta: number,
@@ -335,7 +356,7 @@ export function buildFicha(
 }
 
 /** Construye un `Record<FichaField, T>` recorriendo `FICHA_FIELDS` una sola
- * vez: evita repetir las veinticuatro claves cada vez que hace falta un
+ * vez: evita repetir las veinticinco claves cada vez que hace falta un
  * registro nuevo con esa forma. */
 function mapFields<T>(fn: (field: FichaField) => T): Record<FichaField, T> {
   const result = {} as Record<FichaField, T>;
@@ -414,6 +435,27 @@ export type FieldSet = (typeof FIELD_SETS)[number];
 
 function numericValueOf(cell: FichaCell): number | undefined {
   return cell.kind === 'missing' ? undefined : cell.value;
+}
+
+/** El valor numérico de cada campo, para las veinticinco magnitudes que ya
+ * tiene calculadas un `FichaEntity` (product/0031, requisito 1.4): la misma
+ * vía que decide si una celda «no tiene dato» decide si un imprescindible
+ * cuenta o no cuenta para ese coche. `undefined` cuando la celda es
+ * `'missing'`, nunca `NaN` ni un valor inventado. */
+export function numericValuesFromCells(
+  cells: Record<FichaField, FichaCell>,
+): Partial<Record<FichaField, number>> {
+  return mapFields((field) => numericValueOf(cells[field]));
+}
+
+/** Atajo de `numericValuesFromCells(cellsOf(source))` para quien solo tiene
+ * el `Car` o la `Reference` crudos —la clasificación, que no construye un
+ * `FichaEntity` completo— y no quiere repetir la extracción de campo a
+ * campo que `cellsOf` ya hace. */
+export function numericFieldValues(
+  source: EntityLike,
+): Partial<Record<FichaField, number>> {
+  return numericValuesFromCells(cellsOf(source));
 }
 
 /**

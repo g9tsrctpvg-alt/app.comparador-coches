@@ -142,7 +142,7 @@ const CarObjectSchema = z.object({
   heightMm: SourcedNumberSchema,
   wheelbaseMm: SourcedNumberSchema,
   /**
-   * Diámetro de giro entre bordillos, en metros (product/0031). No el
+   * Diámetro de giro entre bordillos, en metros (product/0032). No el
    * radio, y no el diámetro entre paredes: km77 publica a veces solo esa
    * segunda medida, y no sirve para esta celda —es opcional justamente por
    * eso—. Cualquier tecnología puede declararlo: a diferencia de la

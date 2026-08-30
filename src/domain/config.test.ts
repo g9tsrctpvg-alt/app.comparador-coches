@@ -16,7 +16,8 @@ function validRaw(overrides: Record<string, unknown> = {}) {
     weights: DEFAULT_WEIGHTS,
     assumptions: DEFAULT_ASSUMPTIONS,
     budgetEur: DEFAULT_BUDGET_EUR,
-    hideOverBudget: false,
+    eliminatoryRules: [],
+    hideFailingRules: false,
     overrides: {},
     ...overrides,
   };
@@ -31,13 +32,13 @@ describe('restoreConfig', () => {
     const raw = validRaw({
       weights: { ...DEFAULT_WEIGHTS, viaje: 7 },
       budgetEur: 30000,
-      hideOverBudget: true,
+      hideFailingRules: true,
     });
     const result = restoreConfig(raw, CARS);
     expect(result.discardedEntirely).toBe(false);
     expect(result.config.weights.viaje).toBe(7);
     expect(result.config.budgetEur).toBe(30000);
-    expect(result.config.hideOverBudget).toBe(true);
+    expect(result.config.hideFailingRules).toBe(true);
   });
 
   it('discards a non-object entirely and logs the reason', () => {
@@ -108,11 +109,149 @@ describe('restoreConfig', () => {
     expect(errorSpy).toHaveBeenCalled();
   });
 
-  it('falls back to hideOverBudget=false and logs when not a boolean', () => {
+  it('falls back to hideFailingRules=false and logs when not a boolean', () => {
     const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    const result = restoreConfig(validRaw({ hideOverBudget: 'yes' }), CARS);
-    expect(result.config.hideOverBudget).toBe(false);
+    const result = restoreConfig(validRaw({ hideFailingRules: 'yes' }), CARS);
+    expect(result.config.hideFailingRules).toBe(false);
     expect(errorSpy).toHaveBeenCalled();
+  });
+
+  it('discards a version-1 config entirely: CONFIG_VERSION moved to 2 (product/0031)', () => {
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const result = restoreConfig(validRaw({ version: 1 }), CARS);
+    expect(result.discardedEntirely).toBe(true);
+    expect(result.config).toEqual(DEFAULT_CONFIG);
+    const logged = JSON.parse(errorSpy.mock.calls[0]?.[0] as string);
+    expect(logged.Attributes.reason).toBe('unknown_version');
+  });
+
+  describe('eliminatoryRules (product/0031, requisito 3.3)', () => {
+    it('keeps a valid rule whose operator matches the field polarity', () => {
+      const result = restoreConfig(
+        validRaw({
+          eliminatoryRules: [
+            { field: 'trunkLiters', operator: 'min', value: 500 },
+          ],
+        }),
+        CARS,
+      );
+      expect(result.config.eliminatoryRules).toEqual([
+        { field: 'trunkLiters', operator: 'min', value: 500 },
+      ]);
+    });
+
+    it('keeps either operator on a neutral field', () => {
+      const result = restoreConfig(
+        validRaw({
+          eliminatoryRules: [
+            { field: 'wheelbaseMm', operator: 'max', value: 2800 },
+          ],
+        }),
+        CARS,
+      );
+      expect(result.config.eliminatoryRules).toEqual([
+        { field: 'wheelbaseMm', operator: 'max', value: 2800 },
+      ]);
+    });
+
+    it('discards the whole field and logs when it is not an array', () => {
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const result = restoreConfig(
+        validRaw({ eliminatoryRules: 'not an array' }),
+        CARS,
+      );
+      expect(result.config.eliminatoryRules).toEqual([]);
+      const logged = JSON.parse(errorSpy.mock.calls[0]?.[0] as string);
+      expect(logged.Body).toBe('config_field_discarded');
+      expect(logged.Attributes.field).toBe('eliminatoryRules');
+    });
+
+    it('keeps an empty list silently when the field is simply absent', () => {
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const { eliminatoryRules: _rules, ...withoutRules } = validRaw();
+      const result = restoreConfig(withoutRules, CARS);
+      expect(result.config.eliminatoryRules).toEqual([]);
+      expect(errorSpy).not.toHaveBeenCalled();
+    });
+
+    it('discards a rule with an unknown field, keeping the others', () => {
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const result = restoreConfig(
+        validRaw({
+          eliminatoryRules: [
+            { field: 'notAField', operator: 'min', value: 1 },
+            { field: 'trunkLiters', operator: 'min', value: 500 },
+          ],
+        }),
+        CARS,
+      );
+      expect(result.config.eliminatoryRules).toEqual([
+        { field: 'trunkLiters', operator: 'min', value: 500 },
+      ]);
+      const logged = JSON.parse(errorSpy.mock.calls[0]?.[0] as string);
+      expect(logged.Body).toBe('config_rule_discarded');
+      expect(logged.Attributes.reason).toBe('invalid_shape');
+    });
+
+    it('discards a rule with an invalid operator', () => {
+      const result = restoreConfig(
+        validRaw({
+          eliminatoryRules: [
+            { field: 'trunkLiters', operator: 'equals', value: 500 },
+          ],
+        }),
+        CARS,
+      );
+      expect(result.config.eliminatoryRules).toEqual([]);
+    });
+
+    it('discards a rule with a non-numeric value', () => {
+      const result = restoreConfig(
+        validRaw({
+          eliminatoryRules: [
+            { field: 'trunkLiters', operator: 'min', value: 'lots' },
+          ],
+        }),
+        CARS,
+      );
+      expect(result.config.eliminatoryRules).toEqual([]);
+    });
+
+    it('discards a rule whose operator contradicts the field polarity', () => {
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const result = restoreConfig(
+        validRaw({
+          // trunkLiters es moreIsBetter: el operador forzado es 'min'.
+          eliminatoryRules: [
+            { field: 'trunkLiters', operator: 'max', value: 500 },
+          ],
+        }),
+        CARS,
+      );
+      expect(result.config.eliminatoryRules).toEqual([]);
+      const logged = JSON.parse(errorSpy.mock.calls[0]?.[0] as string);
+      expect(logged.Body).toBe('config_rule_discarded');
+      expect(logged.Attributes.reason).toBe('operator_contradicts_polarity');
+    });
+
+    it('keeps only the first rule when the same field repeats', () => {
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const result = restoreConfig(
+        validRaw({
+          eliminatoryRules: [
+            { field: 'trunkLiters', operator: 'min', value: 500 },
+            { field: 'trunkLiters', operator: 'min', value: 400 },
+          ],
+        }),
+        CARS,
+      );
+      expect(result.config.eliminatoryRules).toEqual([
+        { field: 'trunkLiters', operator: 'min', value: 500 },
+      ]);
+      const logged = JSON.parse(errorSpy.mock.calls[0]?.[0] as string);
+      expect(logged.Body).toBe('config_rule_discarded');
+      expect(logged.Attributes.reason).toBe('duplicate_field');
+    });
   });
 
   it('keeps a valid rating override', () => {

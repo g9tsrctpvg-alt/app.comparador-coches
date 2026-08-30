@@ -51,7 +51,9 @@ function renderExpanded(cars: CarScoreBreakdown[]): string {
       onSetDecision={() => undefined}
       onClearDecision={() => undefined}
       onDecisionFilterChange={() => undefined}
-      hideOverBudget={false}
+      eliminatoryRules={[]}
+      hideFailingRules={false}
+      onClearRules={() => undefined}
       onRatingChange={() => undefined}
     />,
   );
@@ -88,7 +90,7 @@ describe('RankingList', () => {
     }
   });
 
-  it('hides the cars over budget when asked to', () => {
+  it('hides the ineligible tramo entirely when hideFailingRules is on', () => {
     const cars = scoreCatalog(
       threeCarFixture,
       DEFAULT_WEIGHTS,
@@ -107,13 +109,33 @@ describe('RankingList', () => {
         onSetDecision={() => undefined}
         onClearDecision={() => undefined}
         onDecisionFilterChange={() => undefined}
-        hideOverBudget
+        eliminatoryRules={[]}
+        hideFailingRules
+        onClearRules={() => undefined}
         onRatingChange={() => undefined}
       />,
     );
     for (const car of overBudget) {
       expect(markup).not.toContain(car.carName);
     }
+  });
+
+  it('with hideFailingRules off, the car over budget still appears, inside the collapsed ineligible tramo', () => {
+    const cars = scoreCatalog(
+      threeCarFixture,
+      DEFAULT_WEIGHTS,
+      DEFAULT_ASSUMPTIONS,
+      40000,
+    );
+    const overBudget = cars.filter((car) => car.overBudget);
+    expect(overBudget.length).toBeGreaterThan(0);
+
+    const markup = renderExpanded(cars);
+    for (const car of overBudget) {
+      expect(markup).toContain(car.carName);
+    }
+    expect(markup).toContain('No cumplen tus imprescindibles');
+    expect(markup).toContain('Fuera de presupuesto');
   });
 
   describe('the decision filter, empty (product/0030, requisito 4.6)', () => {
@@ -129,7 +151,9 @@ describe('RankingList', () => {
           onSetDecision={() => undefined}
           onClearDecision={() => undefined}
           onDecisionFilterChange={() => undefined}
-          hideOverBudget={false}
+          eliminatoryRules={[]}
+          hideFailingRules={false}
+          onClearRules={() => undefined}
           onRatingChange={() => undefined}
         />,
       );
@@ -138,29 +162,83 @@ describe('RankingList', () => {
       expect(markup).toContain('Volver a Todos');
     });
 
-    it('does not show the empty message just because hideOverBudget alone empties the list', () => {
+    it('does not show the decision-filter message just because the budget alone empties the eligible tramo', () => {
       // Con `filter: 'all'`, una lista vacía por presupuesto no es el caso
-      // que este requisito cubre — no se distingue de él a propósito.
+      // que este requisito cubre — es el de abajo (product/0031, requisito
+      // 4.4).
       const tinyBudgetCars = scoreCatalog(
         threeCarFixture,
         DEFAULT_WEIGHTS,
         DEFAULT_ASSUMPTIONS,
         1,
       );
+      const markup = renderExpanded(tinyBudgetCars);
+      expect(markup).not.toContain('Volver a Todos');
+    });
+  });
+
+  describe('the eligible tramo, empty (product/0031, requisito 4.4)', () => {
+    it('renders a message when the budget alone empties it, without a clear-rules button', () => {
+      // Sustituye el límite conocido que documentaba `docs/estado/interfaz.md`:
+      // una lista vacía por presupuesto con el filtro de decisión en «Todos»
+      // no se distinguía de nada.
+      const tinyBudgetCars = scoreCatalog(
+        threeCarFixture,
+        DEFAULT_WEIGHTS,
+        DEFAULT_ASSUMPTIONS,
+        1,
+      );
+      const markup = renderExpanded(tinyBudgetCars);
+      expect(markup).toContain('Ningún coche cumple tus imprescindibles');
+      // Sin reglas que quitar, no hay botón: solo el presupuesto vacía la
+      // lista, y este botón no lo toca.
+      expect(markup).not.toContain('Quitar imprescindibles');
+    });
+
+    it('renders the clear-rules button when a rule empties it', () => {
+      const cars = scored();
       const markup = renderToStaticMarkup(
         <RankingList
-          cars={tinyBudgetCars}
+          cars={cars}
           rawCars={threeCarFixture}
           weights={DEFAULT_WEIGHTS}
           decisionLog={EMPTY_DECISIONS}
           onSetDecision={() => undefined}
           onClearDecision={() => undefined}
           onDecisionFilterChange={() => undefined}
-          hideOverBudget
+          eliminatoryRules={[
+            { field: 'lengthMm', operator: 'max', value: 100 },
+          ]}
+          hideFailingRules={false}
+          onClearRules={() => undefined}
           onRatingChange={() => undefined}
         />,
       );
-      expect(markup).not.toContain('Volver a Todos');
+      expect(markup).toContain('Ningún coche cumple tus imprescindibles');
+      expect(markup).toContain('Quitar imprescindibles');
+      expect(markup).not.toContain('<ol aria-label="Ranking"');
+    });
+
+    it('still shows the collapsed ineligible tramo below the empty message, unless hidden', () => {
+      const cars = scored();
+      const markup = renderToStaticMarkup(
+        <RankingList
+          cars={cars}
+          rawCars={threeCarFixture}
+          weights={DEFAULT_WEIGHTS}
+          decisionLog={EMPTY_DECISIONS}
+          onSetDecision={() => undefined}
+          onClearDecision={() => undefined}
+          onDecisionFilterChange={() => undefined}
+          eliminatoryRules={[
+            { field: 'lengthMm', operator: 'max', value: 100 },
+          ]}
+          hideFailingRules={false}
+          onClearRules={() => undefined}
+          onRatingChange={() => undefined}
+        />,
+      );
+      expect(markup).toContain('No cumplen tus imprescindibles');
     });
   });
 
@@ -205,7 +283,9 @@ describe('RankingList', () => {
           onSetDecision={() => undefined}
           onClearDecision={() => undefined}
           onDecisionFilterChange={() => undefined}
-          hideOverBudget={false}
+          eliminatoryRules={[]}
+          hideFailingRules={false}
+          onClearRules={() => undefined}
           onRatingChange={() => undefined}
         />,
       );
@@ -215,7 +295,11 @@ describe('RankingList', () => {
         markup.split(rowClassMarker('row')).length -
         1 +
         (markup.split(rowClassMarker('rowLeader')).length - 1);
-      expect(restCount).toBe(realScored.length - 3);
+      // Con el presupuesto por defecto, dos coches del catálogo real quedan
+      // fuera de presupuesto (product/0031) y caen al tramo no elegible, que
+      // no lleva las clases de `RankingRow` que cuenta este test.
+      const eligibleCount = realScored.filter((car) => !car.overBudget).length;
+      expect(restCount).toBe(eligibleCount - 3);
     });
 
     it('with three or fewer visible cars, renders only the podium — no empty "rest"', () => {
@@ -244,7 +328,9 @@ describe('RankingList', () => {
           onSetDecision={() => undefined}
           onClearDecision={() => undefined}
           onDecisionFilterChange={() => undefined}
-          hideOverBudget={false}
+          eliminatoryRules={[]}
+          hideFailingRules={false}
+          onClearRules={() => undefined}
           onRatingChange={() => undefined}
         />,
       );
