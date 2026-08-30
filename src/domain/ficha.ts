@@ -186,6 +186,27 @@ const POLARITY: Record<FichaField, DeltaPolarity> = {
   aestheticsInterior: 'moreIsBetter',
 };
 
+/** La polaridad declarada de `field` (product/0031, requisito 1.2): qué
+ * dirección de la magnitud cuenta como «mejor». Expuesta para que
+ * `eliminatoryRules.ts` pueda forzar el operador de un imprescindible sin
+ * que la tabla `POLARITY` se duplique fuera de este fichero. */
+export function polarityOf(field: FichaField): DeltaPolarity {
+  return POLARITY[field];
+}
+
+/** El único operador de imprescindible que la polaridad de `field` permite
+ * —`'min'` en los `moreIsBetter`, `'max'` en los `moreIsWorse`— o `null` en
+ * los `neutral`, donde las dos opciones son válidas (product/0031, requisito
+ * 1.2). El tipo de retorno es literal y no `RuleOperator`
+ * (`eliminatoryRules.ts`) a propósito: ese módulo importa de este, nunca al
+ * revés, así que este fichero no puede nombrar un tipo suyo. */
+export function forcedRuleOperator(field: FichaField): 'min' | 'max' | null {
+  const polarity = polarityOf(field);
+  if (polarity === 'moreIsBetter') return 'min';
+  if (polarity === 'moreIsWorse') return 'max';
+  return null;
+}
+
 function deltaDirection(
   delta: number,
   polarity: DeltaPolarity,
@@ -407,6 +428,27 @@ export type FieldSet = (typeof FIELD_SETS)[number];
 
 function numericValueOf(cell: FichaCell): number | undefined {
   return cell.kind === 'missing' ? undefined : cell.value;
+}
+
+/** El valor numérico de cada campo, para las veinticuatro magnitudes que ya
+ * tiene calculadas un `FichaEntity` (product/0031, requisito 1.4): la misma
+ * vía que decide si una celda «no tiene dato» decide si un imprescindible
+ * cuenta o no cuenta para ese coche. `undefined` cuando la celda es
+ * `'missing'`, nunca `NaN` ni un valor inventado. */
+export function numericValuesFromCells(
+  cells: Record<FichaField, FichaCell>,
+): Partial<Record<FichaField, number>> {
+  return mapFields((field) => numericValueOf(cells[field]));
+}
+
+/** Atajo de `numericValuesFromCells(cellsOf(source))` para quien solo tiene
+ * el `Car` o la `Reference` crudos —la clasificación, que no construye un
+ * `FichaEntity` completo— y no quiere repetir la extracción de campo a
+ * campo que `cellsOf` ya hace. */
+export function numericFieldValues(
+  source: EntityLike,
+): Partial<Record<FichaField, number>> {
+  return numericValuesFromCells(cellsOf(source));
 }
 
 /**

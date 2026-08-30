@@ -11,8 +11,9 @@ import {
 const WEIGHT_PREFIX = 'w_';
 const ASSUMPTION_PREFIX = 'a_';
 const OVERRIDE_PREFIX = 'o_';
+const RULE_PREFIX = 'r_';
 const BUDGET_PARAM = 'budget';
-const HIDE_OVER_BUDGET_PARAM = 'hideOverBudget';
+const HIDE_FAILING_RULES_PARAM = 'hideFailingRules';
 const VERSION_PARAM = 'v';
 
 /**
@@ -47,8 +48,16 @@ export function configToParams(config: AppConfig): URLSearchParams {
     params.set(BUDGET_PARAM, String(config.budgetEur));
   }
 
-  if (config.hideOverBudget) {
-    params.set(HIDE_OVER_BUDGET_PARAM, '1');
+  // Un parámetro por regla activa (product/0031, requisito 3.4), con el
+  // operador y el umbral juntos: a lo sumo una regla por magnitud
+  // (requisito 1.3), así que el nombre del campo ya es una clave única y no
+  // hace falta un índice.
+  for (const rule of config.eliminatoryRules) {
+    params.set(`${RULE_PREFIX}${rule.field}`, `${rule.operator}:${rule.value}`);
+  }
+
+  if (config.hideFailingRules) {
+    params.set(HIDE_FAILING_RULES_PARAM, '1');
   }
 
   for (const [carId, override] of Object.entries(config.overrides)) {
@@ -107,7 +116,25 @@ export function paramsToRawConfig(params: URLSearchParams): unknown {
   const budgetRaw = params.get(BUDGET_PARAM);
   const budgetEur = budgetRaw !== null ? Number(budgetRaw) : DEFAULT_BUDGET_EUR;
 
-  const hideOverBudget = params.get(HIDE_OVER_BUDGET_PARAM) === '1';
+  const hideFailingRules = params.get(HIDE_FAILING_RULES_PARAM) === '1';
+
+  // El reverso de la codificación `<operator>:<value>` (requisito 3.4): un
+  // valor sin `:` no produce ninguna regla — no hay nada aquí que
+  // `restoreConfig` pueda rechazar de forma más informativa, así que se
+  // descarta sin más, igual que `splitOverrideKey` hace con una clave de
+  // valoración mal formada.
+  const eliminatoryRules: unknown[] = [];
+  for (const [key, value] of params.entries()) {
+    if (!key.startsWith(RULE_PREFIX)) continue;
+    const field = key.slice(RULE_PREFIX.length);
+    const separator = value.indexOf(':');
+    if (separator === -1) continue;
+    eliminatoryRules.push({
+      field,
+      operator: value.slice(0, separator),
+      value: Number(value.slice(separator + 1)),
+    });
+  }
 
   const overrides: Record<string, Record<string, unknown>> = {};
   for (const [key, value] of params.entries()) {
@@ -125,7 +152,8 @@ export function paramsToRawConfig(params: URLSearchParams): unknown {
     weights,
     assumptions,
     budgetEur,
-    hideOverBudget,
+    eliminatoryRules,
+    hideFailingRules,
     overrides,
   };
 }

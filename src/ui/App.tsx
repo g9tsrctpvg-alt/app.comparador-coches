@@ -9,12 +9,13 @@ import { logError } from '../logging/logger';
 import { clearViewState } from '../adapters/localStorageConfigPort';
 import { AssumptionsPanel } from './components/AssumptionsPanel';
 import { WeightSliders } from './components/WeightSliders';
+import { EliminatoryRulesPanel } from './components/EliminatoryRulesPanel';
 import { RankingList } from './components/RankingList';
 import { LeaderCard } from './components/LeaderCard';
 import { ConfigActions } from './components/ConfigActions';
 import { DecisionFilterControl } from './components/DecisionFilterControl';
 import { AppShell } from './components/AppShell';
-import { rankVisible } from './components/ranking';
+import { splitByEligibility } from './components/ranking';
 import { ExplicacionPage } from './ExplicacionPage';
 import { FichaPage } from './FichaPage';
 import { useHashRoute } from './useHashRoute';
@@ -67,12 +68,20 @@ export function App({
     setWeights,
     setAssumptions,
     setBudgetEur,
-    setHideOverBudget,
+    setEliminatoryRules,
+    setHideFailingRules,
     setOverride,
     resetToDefaults,
     shareUrl,
   } = useConfig(validCarIds);
-  const { weights, assumptions, budgetEur, hideOverBudget, overrides } = config;
+  const {
+    weights,
+    assumptions,
+    budgetEur,
+    eliminatoryRules,
+    hideFailingRules,
+    overrides,
+  } = config;
 
   // El estado de decisión de cada coche (product/0030): tercera clave
   // persistida, hermana de `AppConfig` y `ViewState`, instanciada aquí
@@ -134,6 +143,7 @@ export function App({
           references={catalogResult.references}
           scoredCars={scored}
           weights={weights}
+          eliminatoryRules={eliminatoryRules}
           decisionLog={decisionLog}
           onSetDecision={setDecision}
           onClearDecision={clearDecision}
@@ -142,7 +152,12 @@ export function App({
     );
   }
 
-  const leader = rankVisible(scored, hideOverBudget, decisionLog)[0];
+  const leader = splitByEligibility(
+    scored,
+    catalogResult.cars,
+    eliminatoryRules,
+    decisionLog,
+  ).eligible[0];
 
   return (
     <AppShell route={route}>
@@ -168,14 +183,22 @@ export function App({
             onChange={setAssumptions}
             budgetEur={budgetEur}
             onBudgetChange={setBudgetEur}
-            hideOverBudget={hideOverBudget}
-            onHideOverBudgetChange={setHideOverBudget}
+          />
+          <EliminatoryRulesPanel
+            rules={eliminatoryRules}
+            onRulesChange={setEliminatoryRules}
+            budgetEur={budgetEur}
+            onBudgetChange={setBudgetEur}
+            hideFailingRules={hideFailingRules}
+            onHideFailingRulesChange={setHideFailingRules}
           />
         </div>
         <RankingList
           cars={scored}
           rawCars={catalogResult.cars}
-          hideOverBudget={hideOverBudget}
+          eliminatoryRules={eliminatoryRules}
+          hideFailingRules={hideFailingRules}
+          onClearRules={() => setEliminatoryRules([])}
           weights={weights}
           decisionLog={decisionLog}
           onSetDecision={setDecision}

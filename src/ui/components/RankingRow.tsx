@@ -173,9 +173,6 @@ export function RankingRow({
       <span>{formatNumber(rawCar.trunkLiters.value, 0)} L</span>
       <span>·</span>
       <span>{formatEur(rawCar.priceEur.value)}</span>
-      {car.overBudget && (
-        <span className={primitives.statusMark}>Fuera de presupuesto</span>
-      )}
     </p>
   );
 

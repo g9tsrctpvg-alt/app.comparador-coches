@@ -7,6 +7,7 @@ import {
   type DecisionLog,
   type StoredDecisionState,
 } from '../../domain/decisions';
+import type { EliminatoryRule } from '../../domain/eliminatoryRules';
 import type {
   CarScoreBreakdown,
   EditableRatingField,
@@ -16,14 +17,18 @@ import type { RatingOverride } from '../../domain/scoring/overrides';
 import type { AxisWeights } from '../../domain/scoring/weights';
 import { DECISION_FILTER_LABELS } from '../decisionLabels';
 import primitives from '../primitives.module.css';
-import { rankVisible } from './ranking';
+import { CollapsiblePanel } from './CollapsiblePanel';
+import { IneligibleRow } from './IneligibleRow';
+import { splitByEligibility } from './ranking';
 import { RankingRow } from './RankingRow';
 import styles from './RankingList.module.css';
 
 interface RankingListProps {
   cars: CarScoreBreakdown[];
   rawCars: Car[];
-  hideOverBudget: boolean;
+  eliminatoryRules: EliminatoryRule[];
+  hideFailingRules: boolean;
+  onClearRules: () => void;
   weights: AxisWeights;
   decisionLog: DecisionLog;
   onSetDecision: (
@@ -78,7 +83,9 @@ export function editableRatingsOf(car: CarScoreBreakdown): EditableRating[] {
 export function RankingList({
   cars,
   rawCars,
-  hideOverBudget,
+  eliminatoryRules,
+  hideFailingRules,
+  onClearRules,
   weights,
   decisionLog,
   onSetDecision,
@@ -88,14 +95,19 @@ export function RankingList({
 }: RankingListProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
-  const ranked = rankVisible(cars, hideOverBudget, decisionLog);
+  const { eligible, ineligible } = splitByEligibility(
+    cars,
+    rawCars,
+    eliminatoryRules,
+    decisionLog,
+  );
+  const decisionFilteredCount = eligible.length + ineligible.length;
 
   // Vacía por el filtro de decisión y no por falta de datos (requisito
-  // 4.6): un mensaje que nombra el filtro activo, nunca una lista en
-  // blanco ni el mensaje de catálogo no cargado, que es otra cosa. Con
-  // `filter: 'all'` una lista vacía solo puede venir del presupuesto —caso
-  // ya existente, fuera del alcance de esta spec— y no se distingue aquí.
-  if (ranked.length === 0 && decisionLog.filter !== 'all') {
+  // 4.6 de product/0030): un mensaje que nombra el filtro activo, nunca
+  // una lista en blanco ni el mensaje de catálogo no cargado, que es otra
+  // cosa.
+  if (decisionFilteredCount === 0 && decisionLog.filter !== 'all') {
     return (
       <p role="status" className={styles.emptyFiltered}>
         El filtro «{DECISION_FILTER_LABELS[decisionLog.filter]}» no deja ningún
@@ -115,37 +127,86 @@ export function RankingList({
   // La fila del líder se compara con el segundo; todas las demás, con el
   // líder (product/0029, requisito 4). `undefined` con un único candidato
   // visible: no hay con qué comparar, y la fila no enseña resumen.
-  const leader = ranked[0];
-  const second = ranked[1];
+  const leader = eligible[0];
+  const second = eligible[1];
+
+  const ineligibleSection = !hideFailingRules && ineligible.length > 0 && (
+    <div className={styles.ineligibleSection}>
+      <CollapsiblePanel
+        ariaLabel="Coches que no cumplen tus imprescindibles"
+        title={`No cumplen tus imprescindibles (${ineligible.length})`}
+        summary="Presupuesto o algún imprescindible"
+      >
+        <ol
+          aria-label="No cumplen tus imprescindibles"
+          className={styles.ineligibleList}
+        >
+          {ineligible.map((entry) => (
+            <IneligibleRow key={entry.car.carId} {...entry} />
+          ))}
+        </ol>
+      </CollapsiblePanel>
+    </div>
+  );
+
+  // Tramo elegible vacío habiendo al menos un coche visible (product/0031,
+  // requisito 4.4): sustituye el límite conocido que documentaba
+  // `docs/estado/interfaz.md` — una lista vacía por presupuesto con el
+  // filtro de decisión en «Todos» no se distinguía de nada. El botón solo
+  // aparece cuando hay una regla que de verdad quitar: si lo único que
+  // vacía la lista es el presupuesto, no hay imprescindible que este botón
+  // pueda borrar.
+  if (eligible.length === 0 && decisionFilteredCount > 0) {
+    return (
+      <>
+        <p role="status" className={styles.emptyFiltered}>
+          Ningún coche cumple tus imprescindibles vigentes.{' '}
+          {eliminatoryRules.length > 0 && (
+            <button
+              type="button"
+              className={primitives.buttonGhost}
+              onClick={onClearRules}
+            >
+              Quitar imprescindibles
+            </button>
+          )}
+        </p>
+        {ineligibleSection}
+      </>
+    );
+  }
 
   return (
-    <ol aria-label="Ranking" className={styles.list}>
-      {ranked.map((car, index) => {
-        const expanded = expandedId === car.carId;
+    <>
+      <ol aria-label="Ranking" className={styles.list}>
+        {eligible.map((car, index) => {
+          const expanded = expandedId === car.carId;
 
-        return (
-          <RankingRow
-            key={car.carId}
-            car={car}
-            rawCar={rawById.get(car.carId)}
-            rank={index + 1}
-            isLeader={index === 0}
-            variant={index < PODIUM_SIZE ? 'podium' : 'list'}
-            expanded={expanded}
-            onToggle={() => setExpandedId(expanded ? null : car.carId)}
-            editableRatings={editableRatingsOf(car)}
-            onRatingChange={(override) => onRatingChange(car.carId, override)}
-            compareTo={index === 0 ? second : leader}
-            weights={weights}
-            decisionState={decisionOf(decisionLog, car.carId)}
-            decisionEntry={entryOf(decisionLog, car.carId)}
-            onSetDecision={(state, reason) =>
-              onSetDecision(car.carId, state, reason)
-            }
-            onClearDecision={() => onClearDecision(car.carId)}
-          />
-        );
-      })}
-    </ol>
+          return (
+            <RankingRow
+              key={car.carId}
+              car={car}
+              rawCar={rawById.get(car.carId)}
+              rank={index + 1}
+              isLeader={index === 0}
+              variant={index < PODIUM_SIZE ? 'podium' : 'list'}
+              expanded={expanded}
+              onToggle={() => setExpandedId(expanded ? null : car.carId)}
+              editableRatings={editableRatingsOf(car)}
+              onRatingChange={(override) => onRatingChange(car.carId, override)}
+              compareTo={index === 0 ? second : leader}
+              weights={weights}
+              decisionState={decisionOf(decisionLog, car.carId)}
+              decisionEntry={entryOf(decisionLog, car.carId)}
+              onSetDecision={(state, reason) =>
+                onSetDecision(car.carId, state, reason)
+              }
+              onClearDecision={() => onClearDecision(car.carId)}
+            />
+          );
+        })}
+      </ol>
+      {ineligibleSection}
+    </>
   );
 }

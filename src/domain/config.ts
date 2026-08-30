@@ -13,26 +13,41 @@ import {
   EDITABLE_RATING_FIELDS,
   type RatingOverride,
 } from './scoring/overrides';
+import {
+  isOperatorAllowed,
+  RULE_OPERATORS,
+  type EliminatoryRule,
+} from './eliminatoryRules';
+import { FICHA_FIELDS } from './ficha';
 
 /** Sube cuando la forma de `AppConfig` cambia de manera incompatible
  * (product/0012, requisito 2). Una configuración guardada con otra versión
- * se descarta entera: no se intenta adivinar qué campos siguen valiendo. */
-export const CONFIG_VERSION = 1;
+ * se descarta entera: no se intenta adivinar qué campos siguen valiendo.
+ * `2` desde `product/0031`, requisito 3.2: `hideOverBudget` se renombra a
+ * `hideFailingRules` y `eliminatoryRules` es nuevo — una configuración
+ * guardada con `version: 1` cae a los valores por defecto, a propósito. */
+export const CONFIG_VERSION = 2;
 
 export const DEFAULT_BUDGET_EUR = 47000;
 
 /**
  * El único objeto de configuración del usuario (requisito 1): pesos,
- * supuestos, presupuesto, el filtro de presupuesto y las valoraciones
- * sobrescritas. Es el único objeto que se persiste y el único que se
- * comparte por enlace.
+ * supuestos, presupuesto, las reglas eliminatorias, el filtro de quién no
+ * cumple y las valoraciones sobrescritas. Es el único objeto que se
+ * persiste y el único que se comparte por enlace.
  */
 export interface AppConfig {
   version: number;
   weights: AxisWeights;
   assumptions: GlobalAssumptions;
   budgetEur: number;
-  hideOverBudget: boolean;
+  /** Los imprescindibles sobre cualquier magnitud de la ficha
+   * (product/0031). El presupuesto no vive aquí: sigue siendo `budgetEur` +
+   * `car.overBudget`, no una `EliminatoryRule` más. */
+  eliminatoryRules: EliminatoryRule[];
+  /** Oculta el tramo entero de quien no cumple presupuesto o alguna regla
+   * (product/0031, requisito 4.3). Sustituye a `hideOverBudget`. */
+  hideFailingRules: boolean;
   overrides: Record<string, RatingOverride>;
 }
 
@@ -41,7 +56,8 @@ export const DEFAULT_CONFIG: AppConfig = {
   weights: DEFAULT_WEIGHTS,
   assumptions: DEFAULT_ASSUMPTIONS,
   budgetEur: DEFAULT_BUDGET_EUR,
-  hideOverBudget: false,
+  eliminatoryRules: [],
+  hideFailingRules: false,
   overrides: {},
 };
 
@@ -65,8 +81,14 @@ const GlobalAssumptionsSchema = z.object({
 });
 
 const BudgetSchema = z.number().min(20000).max(100000);
-const HideOverBudgetSchema = z.boolean();
+const HideFailingRulesSchema = z.boolean();
 const RatingValueSchema = z.number().min(1).max(5);
+
+const EliminatoryRuleSchema = z.object({
+  field: z.enum(FICHA_FIELDS),
+  operator: z.enum(RULE_OPERATORS),
+  value: z.number(),
+});
 
 /** Ausente no es inválido: es que la URL o el guardado no lo tocaron y vale
  * el valor por defecto (requisito 8, enlaces cortos). Solo un valor
@@ -140,6 +162,50 @@ function restoreOverrides(
   return result;
 }
 
+/**
+ * Las reglas eliminatorias se restauran regla a regla (product/0031,
+ * requisito 3.3): una regla con `field` desconocido, `operator` que no es
+ * `'min'`/`'max'`, `value` no numérico, o un `operator` que contradice la
+ * polaridad declarada del campo (`isOperatorAllowed`) se descarta sola, sin
+ * llevarse las demás. Un `field` repetido conserva solo la primera
+ * aparición (requisito 1.3: a lo sumo una regla por magnitud).
+ */
+function restoreEliminatoryRules(value: unknown): EliminatoryRule[] {
+  if (value === undefined) return [];
+  if (!Array.isArray(value)) {
+    logError('config_field_discarded', { field: 'eliminatoryRules' });
+    return [];
+  }
+
+  const result: EliminatoryRule[] = [];
+  const seenFields = new Set<string>();
+  for (const rawRule of value) {
+    const parsed = EliminatoryRuleSchema.safeParse(rawRule);
+    if (!parsed.success) {
+      logError('config_rule_discarded', { reason: 'invalid_shape' });
+      continue;
+    }
+    const rule = parsed.data;
+    if (!isOperatorAllowed(rule.field, rule.operator)) {
+      logError('config_rule_discarded', {
+        field: rule.field,
+        reason: 'operator_contradicts_polarity',
+      });
+      continue;
+    }
+    if (seenFields.has(rule.field)) {
+      logError('config_rule_discarded', {
+        field: rule.field,
+        reason: 'duplicate_field',
+      });
+      continue;
+    }
+    seenFields.add(rule.field);
+    result.push(rule);
+  }
+  return result;
+}
+
 export interface RestoreResult {
   config: AppConfig;
   /** Verdadero cuando `raw` no era un objeto restaurable en absoluto —JSON
@@ -194,10 +260,11 @@ export function restoreConfig(
       BudgetSchema,
       DEFAULT_BUDGET_EUR,
     ),
-    hideOverBudget: restoreField(
-      'hideOverBudget',
-      record.hideOverBudget,
-      HideOverBudgetSchema,
+    eliminatoryRules: restoreEliminatoryRules(record.eliminatoryRules),
+    hideFailingRules: restoreField(
+      'hideFailingRules',
+      record.hideFailingRules,
+      HideFailingRulesSchema,
       false,
     ),
     overrides: restoreOverrides(record.overrides, validCarIds),

@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { configToParams, paramsToRawConfig } from './configUrl';
-import { CONFIG_VERSION, DEFAULT_CONFIG, restoreConfig } from './config';
+import {
+  CONFIG_VERSION,
+  DEFAULT_CONFIG,
+  restoreConfig,
+  type AppConfig,
+} from './config';
 import { DEFAULT_WEIGHTS } from './scoring/weights';
 
 const CARS = new Set(['kia-ev3']);
@@ -43,12 +48,27 @@ describe('configToParams', () => {
     expect(params.get('budget')).toBe('30000');
   });
 
-  it('encodes hideOverBudget only when true', () => {
+  it('encodes hideFailingRules only when true', () => {
     const params = configToParams({
       ...DEFAULT_CONFIG,
-      hideOverBudget: true,
+      hideFailingRules: true,
     });
-    expect(params.get('hideOverBudget')).toBe('1');
+    expect(params.get('hideFailingRules')).toBe('1');
+  });
+
+  it('encodes an eliminatory rule as field=operator:value', () => {
+    const params = configToParams({
+      ...DEFAULT_CONFIG,
+      eliminatoryRules: [{ field: 'trunkLiters', operator: 'min', value: 500 }],
+    });
+    expect(params.get('r_trunkLiters')).toBe('min:500');
+  });
+
+  it('produces no r_ parameter at all with an empty rule list', () => {
+    const params = configToParams(DEFAULT_CONFIG);
+    expect(Array.from(params.keys()).some((k) => k.startsWith('r_'))).toBe(
+      false,
+    );
   });
 
   it('encodes a rating override with car id and field in the parameter name', () => {
@@ -104,11 +124,44 @@ describe('paramsToRawConfig', () => {
     expect(config.budgetEur).toBe(60000);
   });
 
-  it('round-trips hideOverBudget', () => {
-    const original = { ...DEFAULT_CONFIG, hideOverBudget: true };
+  it('round-trips hideFailingRules', () => {
+    const original = { ...DEFAULT_CONFIG, hideFailingRules: true };
     const raw = paramsToRawConfig(configToParams(original));
     const { config } = restoreConfig(raw, CARS);
-    expect(config.hideOverBudget).toBe(true);
+    expect(config.hideFailingRules).toBe(true);
+  });
+
+  it('round-trips an eliminatory rule', () => {
+    const original: AppConfig = {
+      ...DEFAULT_CONFIG,
+      eliminatoryRules: [{ field: 'trunkLiters', operator: 'min', value: 500 }],
+    };
+    const raw = paramsToRawConfig(configToParams(original));
+    const { config } = restoreConfig(raw, CARS);
+    expect(config.eliminatoryRules).toEqual(original.eliminatoryRules);
+  });
+
+  it('round-trips two rules on different fields, each independently', () => {
+    const original: AppConfig = {
+      ...DEFAULT_CONFIG,
+      eliminatoryRules: [
+        { field: 'trunkLiters', operator: 'min', value: 500 },
+        { field: 'lengthMm', operator: 'max', value: 4600 },
+      ],
+    };
+    const raw = paramsToRawConfig(configToParams(original));
+    const { config } = restoreConfig(raw, CARS);
+    expect(config.eliminatoryRules).toHaveLength(2);
+    expect(config.eliminatoryRules).toEqual(
+      expect.arrayContaining([...original.eliminatoryRules]),
+    );
+  });
+
+  it('ignores a malformed rule parameter with no operator separator', () => {
+    const raw = paramsToRawConfig(
+      new URLSearchParams('r_trunkLiters=500&v=2'),
+    ) as { eliminatoryRules: unknown[] };
+    expect(raw.eliminatoryRules).toEqual([]);
   });
 
   it('round-trips an override', () => {

@@ -13,6 +13,7 @@ import { formatSigned } from './format';
 import {
   AXIS_CONTENT,
   CURVE_EXPLANATION,
+  ELIMINATORY_EXPLANATION,
   KNOWN_LIMITATIONS,
   PROVENANCE_EXPLANATION,
   WEIGHT_TIE_WARNING,
@@ -40,6 +41,7 @@ const TOC = [
   { id: 'pesos', label: 'Los pesos' },
   { id: 'supuestos', label: 'Supuestos globales' },
   { id: 'penalizaciones', label: 'Penalizaciones condicionales' },
+  { id: 'imprescindibles', label: 'Criterios eliminatorios' },
   { id: 'limitaciones', label: 'Limitaciones conocidas' },
   { id: 'procedencia', label: 'De dónde vienen los datos' },
 ];
@@ -264,6 +266,13 @@ export function ExplicacionPage({ cars }: ExplicacionPageProps) {
             </p>
           ))}
         </div>
+      </section>
+
+      <section aria-labelledby="imprescindibles" className={styles.section}>
+        <h2 id="imprescindibles" className={styles.sectionTitle}>
+          Criterios eliminatorios
+        </h2>
+        <p className={styles.sectionIntro}>{ELIMINATORY_EXPLANATION}</p>
       </section>
 
       <section aria-labelledby="limitaciones" className={styles.section}>
