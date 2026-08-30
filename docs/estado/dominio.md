@@ -474,6 +474,40 @@ Los valores numéricos **no declaran cota** todavía: un precio o una dimensión
 negativos validan sin error. Está registrado como deuda en
 `docs/roadmap.md`.
 
+## El estado de decisión de cada coche
+
+`src/domain/decisions.ts` (product/0030): cada coche tiene un estado de
+decisión, de un conjunto cerrado de tres —`undecided`, `shortlist`,
+`discarded`, rotulados «Sin decidir», «Lista corta» y «Descartado»— que no
+son una escala: no hay orden entre ellos, no se promedian y no se suman.
+`undecided` es el valor por defecto y **no se guarda**: un coche sin entrada
+en `DecisionLog.entries` está sin decidir, así que un alta nueva en el
+catálogo no obliga a migrar nada.
+
+Una entrada registrada (`DecisionEntry`) lleva tres campos: el estado, un
+motivo en texto libre —opcional en los tres, descarte incluido— y la fecha
+en que se fijó *ese* estado. La fecha la aporta quien llama, no este módulo:
+sigue el mismo criterio que `defaultViewState`, que recibe
+`defaultComparisonId` desde fuera en vez de leer `references.json`. Se mueve
+**solo cuando el estado cambia** —`setDecision` compara el estado nuevo
+contra el guardado y conserva la fecha si coinciden—, así que corregir la
+redacción de un motivo no toca cuándo se decidió. Volver un coche a
+`undecided` borra su entrada entera, motivo y fecha incluidos.
+
+**El estado de decisión no entra en ninguna fórmula de puntuación.** Es la
+misma independencia que el ADR 0004 ya declara entre la nota de un coche y
+qué otros coches haya en el catálogo, extendida aquí a qué se haya decidido
+sobre ellos: `scoreCatalog` no recibe ningún `DecisionLog`, así que un coche
+descartado se puntúa exactamente igual que antes de descartarlo. El filtro
+de tres posiciones que se deriva de él (`passesDecisionFilter`) decide **qué
+se ve**, siempre después de puntuar — nunca qué se calcula.
+
+No hay un cuarto estado intermedio de «candidato»: distinguir «lo he mirado
+y sigue en juego» de «no lo he mirado todavía» se dejó fuera a propósito
+—es la propuesta P3 del roadmap, aceptada solo en parte—, porque añadía una
+casilla que mantener a cambio de un matiz que quien decide ya lleva en la
+cabeza.
+
 ## Referencias
 
 `src/data/references.json` (`Reference`, `src/domain/reference.ts`,

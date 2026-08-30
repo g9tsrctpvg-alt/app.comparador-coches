@@ -272,18 +272,28 @@ independientemente del fragmento, así que ningún alias puede dar 404.
 - **`RankingList`** — ordena los coches por `total` descendente (con
   `rankVisible`, compartida con `App` para que la tarjeta del líder y la
   cabeza de la lista nunca se desincronicen), aplica el filtro de
-  presupuesto si está activo, y delega cada fila a `RankingRow`, con
+  presupuesto si está activo, aplica el filtro de decisión de tres
+  posiciones (`DecisionFilterControl`, product/0030: Todos / Sin
+  descartados / Solo lista corta — el propio `decisionLog.filter`, no un
+  segundo parámetro repetido), y delega cada fila a `RankingRow`, con
   `variant="podium"` para las tres primeras posiciones y `variant="list"`
   para el resto (`PODIUM_SIZE = 3`, product/0022). Si la lista visible tiene
   tres coches o menos, no hay «resto»: todos son podio, sin hueco ni relleno
   en su lugar. Recibe también el catálogo crudo (`rawCars`) para leer
   tecnología, aceleración, maletero y precio: son campos de `Car`, no del
   desglose, y leerlos directamente evita acoplar la interfaz al texto de una
-  etiqueta del dominio.
+  etiqueta del dominio. Si el filtro de decisión deja la lista visible
+  vacía (con `filter` distinto de `'all'`), no renderiza la lista: un
+  mensaje que nombra el filtro activo y un botón para volver a «Todos»
+  (product/0030, requisito 4.6). Con `filter: 'all'` una lista vacía por
+  presupuesto sigue sin distinguirse de ese caso — no es lo que este
+  requisito cubre.
 - **`RankingRow`** — una fila de la clasificación con seis elementos
   independientes, ninguno construido concatenando texto de otro: la
   posición (monoespaciada, con cero a la izquierda, en un hueco de ancho
-  fijo), el nombre, una línea de apoyo monoespaciada (tecnología,
+  fijo), el nombre —seguido de la marca de decisión (`DecisionMark`,
+  product/0030) cuando el coche está en `shortlist` o `discarded`; nada para
+  `undecided`—, una línea de apoyo monoespaciada (tecnología,
   aceleración, maletero, precio, con la marca de estimado cuando aplica), la
   marca de «Fuera de presupuesto» cuando corresponde, el `percentage` y una
   barra de proporción. El maletero sustituye a la potencia en esa línea
@@ -301,7 +311,14 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   los reutilizan las dos variantes — no hay una copia de esa lógica por
   tratamiento visual. Su nombre accesible es solo la posición y el nombre
   del coche —nunca la puntuación ni la marca de presupuesto—. Expandida,
-  muestra primero, si hay con qué comparar, el resumen del reparto
+  muestra primero, si el coche está decidido, una línea de texto corrido con
+  el estado, la fecha y el motivo si lo hay (`DecisionSummaryLine`,
+  product/0030: «Descartado el 30/08/2026 — el maletero se queda corto»), y
+  a continuación el control de edición (`DecisionEditor`, compartido con el
+  diálogo de decisión de la ficha): un `<select>` de tres estados y, salvo en
+  `undecided`, un campo de motivo que confirma al perder el foco, no en cada
+  pulsación. Elegir `undecided` borra la entrada entera. Después, si hay con
+  qué comparar, el resumen del reparto
   (`splitScoreGap` + `topGapLines`, product/0029): «Frente a», el nombre del
   rival, la diferencia de nota en puntos porcentuales, y los dos ejes que
   más la explican, uno de cada signo cuando lo hay. La fila del líder se
@@ -374,12 +391,19 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   1px y en gris con `--axis-color` correctamente resuelto en el mismo
   elemento. Es la misma trampa que `unstyledButton` documenta para `padding`
   y `margin`.
-- **`ConfigActions`** (product/0012) — dos botones sobre la clasificación:
-  «Copiar enlace» —genera la URL compartible con `useConfig().shareUrl()` y
-  la copia con la Clipboard API; si falla (contexto no seguro, permiso
-  denegado) no hace nada visible, el botón sigue disponible— y «Restablecer
-  valores por defecto», que llama a `resetToDefaults()`. El primero cambia
-  su propio rótulo a «Enlace copiado» durante dos segundos tras copiar.
+- **`ConfigActions`** (product/0012; ampliado por product/0030) — botones
+  sobre la clasificación: «Copiar enlace» —genera la URL compartible con
+  `useConfig().shareUrl()` y la copia con la Clipboard API; si falla
+  (contexto no seguro, permiso denegado) no hace nada visible, el botón
+  sigue disponible— y «Restablecer valores por defecto», que llama a
+  `resetToDefaults()` y **ya no toca las decisiones**: solo limpia
+  `AppConfig` y `ViewState` (requisito 3.5 de `product/0030`, que enmienda
+  la promesa de «primera visita» de `product/0024` a propósito). Un tercer
+  botón, «Borrar decisiones», solo se renderiza si hay al menos una
+  registrada; pide confirmación con `window.confirm`, nombrando cuántas se
+  van a perder, y solo entonces vacía el registro entero, filtro incluido.
+  El primero cambia su propio rótulo a «Enlace copiado» durante dos
+  segundos tras copiar.
 - **`ExplicacionPage`** (product/0011) — «Cómo se calcula todo»: el modelo
   entero, sin coche delante. Sus valores —nombres, etiquetas, fórmulas,
   pesos, supuestos y anclajes— se leen de `src/domain/scoring/`, puntuando
@@ -466,6 +490,20 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     vez; arranca en Lateral. Es el cuarto control de la barra, no un mando
     aparte: hasta `technical/0010` vivía fuera de ella y con el rótulo al
     lado, y era lo que hacía que la barra ocupara tres filas en un móvil.
+  - **La decisión, en la cabecera de columna** (product/0030): la marca de
+    estado (`DecisionMark`) dobla como control cuando el candidato de esa
+    columna está en `shortlist` o `discarded` —para `undecided` no hay
+    marca, así que tampoco hay botón: el primer estado se fija desde la
+    fila del ranking, que siempre ofrece las tres opciones; la ficha entra
+    en juego para revisar o cambiar una decisión ya tomada, comparando en
+    paralelo—. Pulsarla abre un diálogo nativo con el mismo `DecisionEditor`
+    de la fila del ranking, sobre el mismo registro: un cambio hecho aquí se
+    ve en la clasificación sin recargar, y al revés. Una referencia nunca
+    lleva esta marca —no tiene decisión propia (`docs/estado/dominio.md`)—.
+    El filtro de decisión (`DecisionFilterControl`) alcanza solo a las
+    columnas desplazables de candidatos: una referencia nunca se esconde por
+    él, y el modelo fijado como comparación tampoco, sea cual sea su estado
+    —se calcula aparte, sin pasar por el filtro (requisito 4.4)—.
   - **`ScoreGapPanel`, «Detalle ejes»** (product/0029), justo debajo de la
     barra y sobre las dos vistas —tabla y duelo—, así que es el mismo bloque
     con cualquier ancho. Reparte la diferencia de nota entre el modelo
@@ -679,7 +717,8 @@ foto (`photoView`) y el candidato enfocado en la tira móvil (`focusedId`).
   alcanzable desde la clasificación con `FichaPage` desmontada.
 - **«Restablecer» limpia las dos claves**, no solo `AppConfig`: deja la
   aplicación como una primera visita en la ficha y en la clasificación por
-  igual.
+  igual. **No limpia una tercera** —las decisiones, más abajo—: esa acción
+  es deliberadamente distinta, con su propio botón.
 - **Lo que sigue efímero, por decisión y no por descuido** (`product/0012`,
   requisito 13, sigue vigente fuera de los cinco campos de arriba): qué fila
   del ranking está desplegada (`useState` local de `RankingList`), el estado
@@ -688,6 +727,44 @@ foto (`photoView`) y el candidato enfocado en la tira móvil (`focusedId`).
   `FichaPage`, que lleva dentro por qué vista va el carrusel, así que
   tampoco esa posición sobrevive a cerrarlo— y la posición de
   desplazamiento, tanto del documento como de la tabla de la ficha.
+
+### El estado de decisión de cada coche
+
+product/0030. Un tercer objeto persistido, hermano de `AppConfig` y
+`ViewState`: `DecisionLog` (`src/domain/decisions.ts`), clave propia
+(`comparador-coches:decisions`), versión propia
+(`DECISION_LOG_VERSION`). Guarda, por coche, el estado de decisión, un
+motivo opcional y una fecha (`docs/estado/dominio.md`, sección «El estado de
+decisión de cada coche»), y guarda también el filtro de tres posiciones
+vigente — junto a las decisiones y no en `AppConfig`, porque un filtro que
+viajara en el enlace compartible sin las decisiones que filtra dejaría a
+quien lo abre una lista vacía sin ninguna manera de entender por qué.
+
+- **`useDecisions`** (`src/ui/useDecisions.ts`) es hermano de `useConfig` y
+  `useViewState` en forma —restauración tolerante con `restoreDecisionLog`,
+  guardado al cambiar, el mismo *wiring* entre dominio puro y
+  `localStorage` detrás de su puerto—, pero se instancia en `App.tsx`, no
+  dentro de una vista: tanto la clasificación como la ficha lo leen y lo
+  editan sobre el mismo registro, así que un cambio en una se ve en la otra
+  sin recargar. La fecha de una decisión la aporta el hook —`new
+  Date().toISOString()`—, nunca `src/domain/decisions.ts`, que no conoce el
+  reloj.
+- **No hay URL de por medio, igual que el estado de vista**: la única
+  precedencia es «lo guardado gana sobre los valores por defecto»
+  (`defaultDecisionLog`, filtro `'all'`, sin entradas). Un enlace compartido
+  nunca lleva las decisiones de quien lo genera.
+- **Se edita desde dos superficies, sobre el mismo registro**: en línea, en
+  la fila desplegada del ranking (`DecisionEditor`, ver `RankingRow` más
+  arriba), y desde un diálogo que abre la marca de la cabecera de columna de
+  la ficha (ver `FichaPage` más arriba). Ninguna otra superficie edita.
+- **«Restablecer» no la toca** (requisito 3.5, enmienda deliberada a la
+  promesa de `product/0024`): un motivo escrito a mano no se repone en un
+  minuto como un peso o una elección de vista, así que ese botón deja de
+  significar «como una primera visita» en las tres claves y pasa a
+  significar, con precisión, «restablecer la configuración». Vaciar el
+  registro de decisiones es una acción propia, «Borrar decisiones» (ver
+  `ConfigActions` más arriba): destructiva, con confirmación, y solo visible
+  cuando hay algo que borrar.
 
 ## Responsive
 
