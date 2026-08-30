@@ -1,7 +1,7 @@
 # 0031 — Cuánto sitio necesita para dar la vuelta
 
 - **Id:** product/0031
-- **Estado:** approved
+- **Estado:** consolidated
 - **Tipo:** product
 - **Fecha:** 2026-08-30
 - **Specs relacionadas:** product/0001, product/0002, product/0014,
@@ -11,6 +11,12 @@
   alcance*: puntuar esta magnitud exigiría anclar una escala con el criterio
   que fijan)
 - **Doc de estado:** `docs/estado/dominio.md`, `docs/estado/interfaz.md`
+
+> ⚠️ **Spec consolidada (2026-08-30).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/dominio.md` y `docs/estado/interfaz.md`. Vigentes aquí solo
+> los **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -212,39 +218,39 @@ toca ninguna magnitud de la ficha.
 
 > Obligatorios y verificables.
 
-- [ ] `CarSchema` acepta un registro con `turningCircleM` y otro sin él, en
+- [x] `CarSchema` acepta un registro con `turningCircleM` y otro sin él, en
       las cinco tecnologías: el campo es opcional de verdad y no tiene
       invariante cruzada con `technology`.
-- [ ] `CarSchema` valida `turningCircleM` como `SourcedNumber` —rechaza un
+- [x] `CarSchema` valida `turningCircleM` como `SourcedNumber` —rechaza un
       registro con dos fuentes vigentes, o con un `value` que no coincide con
       el de la fuente vigente—, igual que cualquier otra magnitud.
-- [ ] `ReferenceSchema` acepta la referencia con `turningCircleM` y sin él.
-- [ ] Todo registro de `cars.json` y `references.json` que declare el campo
+- [x] `ReferenceSchema` acepta la referencia con `turningCircleM` y sin él.
+- [x] Todo registro de `cars.json` y `references.json` que declare el campo
       cita una fuente verificable por URL, con fecha y versión, y esa fuente
       publica **diámetro entre bordillos** o un **radio** entre bordillos
       cuya conversión queda dicha en la etiqueta.
-- [ ] Ningún registro cuya única fuente publique el diámetro **entre
+- [x] Ningún registro cuya única fuente publique el diámetro **entre
       paredes** declara el campo.
-- [ ] La ficha completa muestra la fila «Diámetro de giro» dentro de «Tamaño
+- [x] La ficha completa muestra la fila «Diámetro de giro» dentro de «Tamaño
       y espacio», justo detrás de «Batalla», y renderiza veinticinco
       magnitudes.
-- [ ] El valor se muestra con un decimal y la unidad `m`.
-- [ ] El selector de orden ofrece la magnitud bajo el grupo «Tamaño y
+- [x] El valor se muestra con un decimal y la unidad `m`.
+- [x] El selector de orden ofrece la magnitud bajo el grupo «Tamaño y
       espacio» y renderiza veintiséis `<option>`; ordena de menor a mayor, y
       las entidades sin el dato quedan al final en las dos direcciones.
-- [ ] Comparando contra un modelo que declara el dato, la Δ es la diferencia
+- [x] Comparando contra un modelo que declara el dato, la Δ es la diferencia
       en metros, coloreada como mejor en el que gira más corto; comparando
       contra uno que no lo declara, la celda se muestra como raya con texto
       accesible, no como `0`.
-- [ ] El snapshot de `scoreCatalog` es **idéntico** antes y después del
+- [x] El snapshot de `scoreCatalog` es **idéntico** antes y después del
       cambio, y ningún `AxisBreakdown` menciona el diámetro de giro.
-- [ ] El conjunto «Esenciales» sigue mostrando exactamente sus seis campos.
-- [ ] Un `ViewState` guardado con la versión anterior se restaura sin
+- [x] El conjunto «Esenciales» sigue mostrando exactamente sus seis campos.
+- [x] Un `ViewState` guardado con la versión anterior se restaura sin
       migración, con su `sortCriterion` intacto, y `VIEW_STATE_VERSION` no
       cambia.
-- [ ] La skill `add-model` pide el dato con las reglas de los requisitos 1.2
+- [x] La skill `add-model` pide el dato con las reglas de los requisitos 1.2
       a 1.5, y su cuenta de magnitudes sube de 22 a 23.
-- [ ] `npm run test:coverage` sigue en 100 % en `domain/`, `data/` y
+- [x] `npm run test:coverage` sigue en 100 % en `domain/`, `data/` y
       `logging/`.
 
 ## Dependencias y supuestos

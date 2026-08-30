@@ -529,16 +529,16 @@ por no ser un candidato—, con sus cinco magnitudes fuente por fuente.
 
 `src/domain/ficha.ts` (product/0014, fundido con la antigua ficha técnica
 por product/0018; product/0021 añade las dos de generación; product/0028
-la autonomía eléctrica y la batería): compara candidatos y referencias
-entre sí, magnitud por magnitud, sobre veinticuatro campos de
-`Car`/`Reference` —veintitrés propios más `litersPerSquareMeter`,
-derivada—. No calcula puntuación: es lectura, no juicio agregado, así que
-vive fuera de `scoring/`.
+la autonomía eléctrica y la batería; product/0031 el diámetro de giro):
+compara candidatos y referencias entre sí, magnitud por magnitud, sobre
+veinticinco campos de `Car`/`Reference` —veinticuatro propios más
+`litersPerSquareMeter`, derivada—. No calcula puntuación: es lectura, no
+juicio agregado, así que vive fuera de `scoring/`.
 
 - **`litrosPorMetroCuadrado(trunkLiters, lengthMm, widthMm)`** — litros de
   maletero por metro cuadrado de huella en el suelo: cuánto espacio da un
   coche por el sitio que ocupa (`product/0013`, requisito 11).
-- **`FICHA_FIELDS`/`FichaField`** — las veinticuatro claves, en el orden en
+- **`FICHA_FIELDS`/`FichaField`** — las veinticinco claves, en el orden en
   que se declaran; la interfaz decide etiqueta, unidad y agrupación por
   bloque a partir de ahí, no aquí.
 - **`buildFicha(cars, references)`** — un `FichaEntity` por candidato y por
@@ -547,22 +547,26 @@ vive fuera de `scoring/`.
   comparación los elige quien mira la ficha. Una celda es `'sourced'`
   (valor, unidad, estimado), `'rating'` (una nota de usuario, sobre 5) o
   `'missing'` —el campo no existe en esa entidad, no un cero—: una
-  `Reference` declara siempre siete de las veinticuatro —las cinco
+  `Reference` declara siempre siete de las veinticinco —las cinco
   dimensionales, `litersPerSquareMeter` derivada y el año de lanzamiento de
   su generación, obligatorio—, así que comparar contra ella deja dieciséis
-  celdas `'missing'` por construcción, no por caso especial; una
-  decimoséptima, el año de retoque, depende de si esa referencia concreta lo
-  declara. Entre las que faltan están siempre la autonomía eléctrica y la
-  batería: la referencia es un térmico puro y no le aplican.
+  celdas `'missing'` por construcción, no por caso especial; dos más
+  —el año de retoque y el diámetro de giro (product/0031)— dependen de si
+  esa referencia concreta las declara. Entre las que faltan siempre están
+  la autonomía eléctrica y la batería: la referencia es un térmico puro y
+  no le aplican.
 - **La tabla de polaridad** (`POLARITY`, `Record<FichaField,
-  DeltaPolarity>` — TypeScript exige las veinticuatro claves en tiempo de
+  DeltaPolarity>` — TypeScript exige las veinticinco claves en tiempo de
   compilación, así que ninguna puede quedar sin dirección declarada por
   descuido) fija si más es mejor, peor o si el dato no tiene una dirección
   declarada, con su razón junto a cada una:
   - **`moreIsWorse`** — `lengthMm`, `widthMm` (el problema que el proyecto
     resuelve es que los sustitutos son más grandes), `weightKg` (penaliza
     consumo, frenada y agilidad), `acceleration0to100` (son segundos: más
-    es más lento), `consumption`, `priceEur`, `maintenanceEurYear`.
+    es más lento), `consumption`, `priceEur`, `maintenanceEurYear`,
+    `turningCircleM` (product/0031: a igualdad de todo lo demás, nadie
+    prefiere necesitar más sitio para dar la vuelta — a diferencia de la
+    batalla, aquí sí hay una dirección afirmable sin matices).
   - **`moreIsBetter`** — `trunkLiters`, `litersPerSquareMeter` (mejor
     aprovechado el espacio), `rearShoulderWidthMm` (la magnitud que
     `product/0017` añadió porque mide si caben tres personas atrás),
@@ -597,7 +601,7 @@ vive fuera de `scoring/`.
   con texto accesible, nunca como un cero engañoso, pero el dominio los
   distingue: apagar la Δ a propósito no es lo mismo que no poder calcularla.
 - **`sortFicha(entities, criterion)`** — ordena por `catalog` (el orden del
-  propio catálogo) o por **cualquiera de las veinticuatro magnitudes**:
+  propio catálogo) o por **cualquiera de las veinticinco magnitudes**:
   `FICHA_SORT_CRITERIA` se declara como `['catalog', ...FICHA_FIELDS]`, no
   como una lista aparte, así que una magnitud nueva en la ficha es ordenable
   el mismo día que existe. La **dirección la fija la tabla de polaridad**, no
