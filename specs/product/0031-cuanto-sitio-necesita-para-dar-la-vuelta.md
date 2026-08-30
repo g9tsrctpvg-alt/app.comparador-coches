@@ -1,7 +1,7 @@
 # 0031 — Cuánto sitio necesita para dar la vuelta
 
 - **Id:** product/0031
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-08-30
 - **Specs relacionadas:** product/0001, product/0002, product/0014,
@@ -288,18 +288,4 @@ toca ninguna magnitud de la ficha.
 
 ## Decisiones abiertas
 
-Ninguna. Las cinco que el borrador planteaba las cerró el usuario el
-2026-08-30, todas a favor de la recomendación razonada:
-
-1. **Qué magnitud es** — diámetro entre bordillos, en metros, campo
-   `turningCircleM` (requisito 1.2).
-2. **Polaridad** — `moreIsWorse`, no `neutral` (requisito 3.3).
-3. **Obligatorio u opcional** — opcional, sin invariante cruzada con
-   `technology` (requisito 1.3).
-4. **La referencia** — `Reference` también lo declara (requisito 2).
-5. **Dónde se muestra** — bloque «Tamaño y espacio», detrás de «Batalla», y
-   fuera de «Esenciales» (requisitos 3.1 y 3.7).
-
-Cerrar las decisiones **no es aprobar la spec**: el gate de
-`docs/proceso/ciclo-de-spec.md` §3 sigue pendiente y va en un commit propio
-sin implementación.
+Ninguna.
