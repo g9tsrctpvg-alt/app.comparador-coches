@@ -39,6 +39,8 @@ const EXPECTED_TOTALS: Record<string, number> = {
   'toyota-corolla-cross': 57.629854422974326,
   'citroen-c5-aircross': 56.5666128175826,
   'jeep-compass': 58.84877038637088,
+  'nissan-qashqai-e-power': 68.48564420209466,
+  'nissan-x-trail-e-power': 71.08848563538099,
 };
 
 describe('scoreCatalog against the real catalogue (product/0009 regression)', () => {

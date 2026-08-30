@@ -5058,5 +5058,612 @@
         "shows": "Jeep Compass eléctrico de la generación J4U: salpicadero, volante, cuadro digital y consola central, tapicería negra — es la versión eléctrica, no el e-Hybrid 145 que puntúa la ficha"
       }
     }
+  },
+  {
+    "id": "nissan-qashqai-e-power",
+    "name": "Qashqai e-Power",
+    "brand": "Nissan",
+    "technology": "HEV",
+    "generation": {
+      "launchYear": {
+        "value": 2021,
+        "sources": [
+          {
+            "label": "Wikipedia (agosto 2026), «Nissan Qashqai»: tercera generación (J12) anunciada y presentada el 18 de febrero de 2021, https://en.wikipedia.org/wiki/Nissan_Qashqai",
+            "value": 2021,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "faceliftYear": {
+        "value": 2024,
+        "sources": [
+          {
+            "label": "Wikipedia (agosto 2026), «Nissan Qashqai»: «The facelifted Qashqai was revealed on 17 April 2024». La versión puntuada es posterior al retoque: el e-POWER Gen 3 de 205 CV solo se vende sobre la carrocería retocada.",
+            "value": 2024,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "code": "J12"
+    },
+    "notes": [
+      "Versión e-POWER Gen 3 de 151 kW (205 CV), acabado N-Connecta, tracción delantera y cinco plazas — km77, tarifa de noviembre de 2025. Es el e-POWER de tercera generación, que sustituyó al de 190 CV: híbrido serie no enchufable (el motor de gasolina solo genera electricidad y nunca mueve las ruedas), por eso se clasifica como HEV.",
+      "Autonomía eléctrica: no se declara. El WLTP no homologa autonomía eléctrica fuera de los enchufables y km77 no publica ninguna para esta versión.",
+      "Anchura: se usan los 1.848 mm de km77. El catálogo oficial de Nissan España da 1.835 mm, pero midiendo «anchura total con retrovisores plegados», que es otro criterio; se declara como fuente descartada.",
+      "Altura libre al suelo: dato estimado. Ni Nissan (catálogo y manual del propietario), ni km77 (ficha y mediciones propias), ni motor.es, ni coches.net, ni auto-data.net publican la cota del Qashqai. Los 180 mm salen de medidasdecoches.com, un agregador, y no de una medición trazable.",
+      "Anchura de hombros: km77 la mide sobre una unidad e-POWER 190 CV N-Design de la misma carrocería retocada, y la publica como «anchura de hombros mínima» de la segunda fila, no como máxima —al revés que la mayoría del catálogo, incluido el X-Trail—. La cifra es la misma que km77 daba como máxima en la ficha del Qashqai 2021 (138 cm).",
+      "Mantenimiento anual estimado a partir de la tarifa oficial de contratos de Nissan España: el contrato de mantenimiento anual de 3 años del Qashqai (J12) cuesta 765 €, es decir 255 € al año. No es un coste anual desglosado por revisión.",
+      "Faltan las fotos de maletero: ni Wikimedia Commons, ni la sala de prensa de Nissan España, ni la web comercial de nissan.es publican el portón abierto y vacío (la única imagen del maletero en nissan.es es la de un accesorio, con manos y una bandeja dentro).",
+      "Las fotos de frontal, lateral y trasera son los renders oficiales del configurador de nissan.es en acabado Tekna, no en el N-Connecta que puntúa la ficha: es el único origen permitido con las tres vistas rectas del Qashqai retocado. Las llantas y los faldones pueden no coincidir con los del N-Connecta."
+    ],
+    "lengthMm": {
+      "value": 4425,
+      "sources": [
+        {
+          "label": "km77, ficha Qashqai e-POWER Gen 3 151 kW (205 CV) N-Connecta (agosto 2026), https://www.km77.com/coches/nissan/qashqai/2024/estandar/hev/qashqai-e-power-gen-3-151-kw-205-cv-n-connecta/datos",
+          "value": 4425,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "widthMm": {
+      "value": 1848,
+      "sources": [
+        {
+          "label": "km77, ficha Qashqai e-POWER Gen 3 151 kW (205 CV) N-Connecta (agosto 2026), https://www.km77.com/coches/nissan/qashqai/2024/estandar/hev/qashqai-e-power-gen-3-151-kw-205-cv-n-connecta/datos",
+          "value": 1848,
+          "estimated": false,
+          "current": true
+        },
+        {
+          "label": "Nissan España, e-catálogo del Qashqai (agosto 2026): «Anchura total con retrovisores plegados» 1.835 mm",
+          "value": 1835,
+          "estimated": false,
+          "current": false,
+          "discardedReason": "Mide con los retrovisores plegados, un criterio distinto al del resto del catálogo; km77 publica la anchura de carrocería."
+        }
+      ],
+      "unit": "mm"
+    },
+    "heightMm": {
+      "value": 1625,
+      "sources": [
+        {
+          "label": "km77, ficha Qashqai e-POWER Gen 3 151 kW (205 CV) N-Connecta (agosto 2026), https://www.km77.com/coches/nissan/qashqai/2024/estandar/hev/qashqai-e-power-gen-3-151-kw-205-cv-n-connecta/datos",
+          "value": 1625,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "wheelbaseMm": {
+      "value": 2665,
+      "sources": [
+        {
+          "label": "km77, ficha Qashqai e-POWER Gen 3 151 kW (205 CV) N-Connecta (agosto 2026), https://www.km77.com/coches/nissan/qashqai/2024/estandar/hev/qashqai-e-power-gen-3-151-kw-205-cv-n-connecta/datos",
+          "value": 2665,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "rearShoulderWidthMm": {
+      "value": 1380,
+      "sources": [
+        {
+          "label": "km77, mediciones propias — Nissan Qashqai (2024), unidad e-POWER 140 kW (190 CV) N-Design (agosto 2026): 138 cm de anchura de hombros en la segunda fila, https://www.km77.com/coches/nissan/qashqai/2024/estandar/mediciones-propias/detalle",
+          "value": 1380,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "groundClearanceMm": {
+      "value": 180,
+      "sources": [
+        {
+          "label": "medidasdecoches.com, ficha del Nissan Qashqai (agosto 2026): «Altura libre al suelo: 18 cm», https://www.medidasdecoches.com/modelo/nissan/qashqai",
+          "value": 180,
+          "estimated": true,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "trunkLiters": {
+      "value": 479,
+      "sources": [
+        {
+          "label": "km77, ficha Qashqai e-POWER Gen 3 151 kW (205 CV) N-Connecta (agosto 2026), https://www.km77.com/coches/nissan/qashqai/2024/estandar/hev/qashqai-e-power-gen-3-151-kw-205-cv-n-connecta/datos — «Volumen mínimo con dos filas de asientos disponibles: 479 litros»",
+          "value": 479,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "L"
+    },
+    "powerCv": {
+      "value": 205,
+      "sources": [
+        {
+          "label": "km77, ficha Qashqai e-POWER Gen 3 151 kW (205 CV) N-Connecta (agosto 2026), https://www.km77.com/coches/nissan/qashqai/2024/estandar/hev/qashqai-e-power-gen-3-151-kw-205-cv-n-connecta/datos",
+          "value": 205,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "CV"
+    },
+    "weightKg": {
+      "value": 1712,
+      "sources": [
+        {
+          "label": "km77, ficha Qashqai e-POWER Gen 3 151 kW (205 CV) N-Connecta (agosto 2026), https://www.km77.com/coches/nissan/qashqai/2024/estandar/hev/qashqai-e-power-gen-3-151-kw-205-cv-n-connecta/datos",
+          "value": 1712,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kg"
+    },
+    "acceleration0to100": {
+      "value": 7.6,
+      "sources": [
+        {
+          "label": "km77, ficha Qashqai e-POWER Gen 3 151 kW (205 CV) N-Connecta (agosto 2026), https://www.km77.com/coches/nissan/qashqai/2024/estandar/hev/qashqai-e-power-gen-3-151-kw-205-cv-n-connecta/datos",
+          "value": 7.6,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "s"
+    },
+    "consumption": {
+      "value": 4.6,
+      "sources": [
+        {
+          "label": "km77, ficha Qashqai e-POWER Gen 3 151 kW (205 CV) N-Connecta (agosto 2026), https://www.km77.com/coches/nissan/qashqai/2024/estandar/hev/qashqai-e-power-gen-3-151-kw-205-cv-n-connecta/datos — «Consumo WLTP Combinado: 4,6 l/100 km»",
+          "value": 4.6,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "l/100km"
+    },
+    "batteryKwh": {
+      "value": 2.1,
+      "sources": [
+        {
+          "label": "km77, ficha Qashqai e-POWER Gen 3 151 kW (205 CV) N-Connecta (agosto 2026), https://www.km77.com/coches/nissan/qashqai/2024/estandar/hev/qashqai-e-power-gen-3-151-kw-205-cv-n-connecta/datos — sección «Batería», «Capacidad» 2,1 kWh",
+          "value": 2.1,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kWh"
+    },
+    "maintenanceEurYear": {
+      "value": 255,
+      "sources": [
+        {
+          "label": "Nissan España, tarifa de contratos de mantenimiento (PDF interactivo, vigente desde enero de 2025), https://www-europe.nissan-cdn.net/content/dam/Nissan/es/PDF/PDF-Interactivo-Contratos-Mantenimiento-2025.pdf — QASHQAI, contrato de mantenimiento anual de 3 años: 765 €, es decir 255 € al año",
+          "value": 255,
+          "estimated": true,
+          "current": true
+        }
+      ],
+      "unit": "€/año"
+    },
+    "priceEur": {
+      "value": 35100,
+      "sources": [
+        {
+          "label": "km77, ficha Qashqai e-POWER Gen 3 151 kW (205 CV) N-Connecta (agosto 2026), https://www.km77.com/coches/nissan/qashqai/2024/estandar/hev/qashqai-e-power-gen-3-151-kw-205-cv-n-connecta/datos — 35.100 € de PVP con «Descuento oficial: 0 €», así que es el precio de tarifa sin descontar",
+          "value": 35100,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "€"
+    },
+    "reliabilityOcu": {
+      "value": 87,
+      "sources": [
+        {
+          "label": "Índice de fiabilidad OCU 2026 vía coches.com (25 de marzo de 2026): Nissan, 87 puntos sobre 100, puesto 12, https://noticias.coches.com/informes/fiabilidad-coches-ocu-2026/565582",
+          "value": 87,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyYears": {
+      "value": 3,
+      "sources": [
+        {
+          "label": "Nissan España, «Garantías» (agosto 2026): 3 años o 100.000 km de garantía de fábrica, https://www.nissan.es/propietarios/garantia-10-nissan.html",
+          "value": 3,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "años"
+    },
+    "warrantyExtension": {
+      "years": {
+        "value": 10,
+        "sources": [
+          {
+            "label": "Nissan España, programa Nissan+ (agosto 2026): hasta 10 años o 200.000 km, https://www.nissan.es/propietarios/garantia-10-nissan.html",
+            "value": 10,
+            "estimated": false,
+            "current": true
+          }
+        ],
+        "unit": "años"
+      },
+      "kmLimit": {
+        "value": 200000,
+        "sources": [
+          {
+            "label": "Nissan España, programa Nissan+ (agosto 2026): hasta 10 años o 200.000 km, https://www.nissan.es/propietarios/garantia-10-nissan.html",
+            "value": 200000,
+            "estimated": false,
+            "current": true
+          }
+        ],
+        "unit": "km"
+      },
+      "condition": "Programa Nissan+: la garantía se amplía un año más en cada mantenimiento hecho en la red oficial Nissan, hasta 10 años o 200.000 km. A diferencia de las extensiones de Toyota, Lexus y Mazda, no cubre el vehículo entero: solo motor, caja de cambios y eje."
+    },
+    "aestheticsExterior": {
+      "value": 3,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "aestheticsInterior": {
+      "value": 4,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "photos": {
+      "front": {
+        "url": "https://storyblok-assets.prod.nissan.eu/f/288274551197823/1024x1280/db7be70935/26nueu_qq_tekna-_360_xex_lhd_0018.jpg",
+        "credit": "Nissan — nissan.es (web comercial oficial, vista 360º del Qashqai)",
+        "shows": "Nissan Qashqai (J12) retocado, acabado Tekna en gris — render de estudio, frontal recto y centrado. NO es el N-Connecta que puntúa la ficha: las llantas y los faldones pueden diferir."
+      },
+      "side": {
+        "url": "https://storyblok-assets.prod.nissan.eu/f/288274551197823/1024x1280/1d61ee0901/26nueu_qq_tekna-_360_xex_lhd_0036.jpg",
+        "credit": "Nissan — nissan.es (web comercial oficial, vista 360º del Qashqai)",
+        "shows": "Nissan Qashqai (J12) retocado, acabado Tekna en gris — render de estudio, perfil estricto del mismo coche que la vista frontal. NO es el N-Connecta que puntúa la ficha."
+      },
+      "rear": {
+        "url": "https://storyblok-assets.prod.nissan.eu/f/288274551197823/1024x1280/1e2d55b21b/26nueu_qq_tekna-_360_xex_lhd_0054.jpg",
+        "credit": "Nissan — nissan.es (web comercial oficial, vista 360º del Qashqai)",
+        "shows": "Nissan Qashqai (J12) retocado, acabado Tekna en gris — render de estudio, trasera recta con el portón cerrado. NO es el N-Connecta que puntúa la ficha."
+      },
+      "interior": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/2024_Nissan_Qashqai_%28J12%29_Automesse_Ludwigsburg_2024_IMG_1621.jpg/1280px-2024_Nissan_Qashqai_%28J12%29_Automesse_Ludwigsburg_2024_IMG_1621.jpg",
+        "credit": "Wikimedia Commons — Alexander-93 (CC BY-SA 4.0)",
+        "shows": "Nissan Qashqai (J12) de 2024, salpicadero, volante, pantalla central y consola — foto de salón (Automesse Ludwigsburg 2024). Unidad real, acabado no identificado y distinta de la de las vistas exteriores."
+      }
+    }
+  },
+  {
+    "id": "nissan-x-trail-e-power",
+    "name": "X-Trail e-Power",
+    "brand": "Nissan",
+    "technology": "HEV",
+    "generation": {
+      "launchYear": {
+        "value": 2021,
+        "sources": [
+          {
+            "label": "Wikipedia (agosto 2026), «Nissan X-Trail»: cuarta generación (T33) presentada el 19 de abril de 2021 en el Salón de Shanghái, https://en.wikipedia.org/wiki/Nissan_X-Trail",
+            "value": 2021,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "faceliftYear": {
+        "value": 2026,
+        "sources": [
+          {
+            "label": "Nissan España, nota de prensa «Más robusto y conectado: descubre el nuevo Nissan X-Trail 2026» (11 de marzo de 2026): parrilla V-Motion rediseñada, nueva firma luminosa trasera y llegada a España en mayo de 2026 — la versión puntuada es esa, https://spain.nissannews.com/es-ES/releases/mas-robusto-y-conectado-descubre-el-nuevo-nissan-x-trail-2026",
+            "value": 2026,
+            "estimated": false,
+            "current": true
+          },
+          {
+            "label": "Wikipedia (agosto 2026), «Nissan X-Trail»: «The facelifted version was launched on 21 August 2025»",
+            "value": 2025,
+            "estimated": false,
+            "current": false,
+            "discardedReason": "Es el lanzamiento del retoque en Japón (variantes Nismo y Rock Creek); el que corresponde a la versión europea que puntúa la ficha es el de marzo de 2026."
+          }
+        ]
+      },
+      "code": "T33"
+    },
+    "notes": [
+      "Versión e-POWER de 150 kW (204 CV), acabado N-Connecta, tracción delantera y cinco plazas — km77 y motor.es, tarifa de 2026. NO es la e-4ORCE de 213 CV con tracción total ni la de siete plazas, que tienen otro peso, otro precio y otro maletero. Es híbrido serie no enchufable (el motor de gasolina de 158 CV solo genera electricidad), por eso se clasifica como HEV.",
+      "Autonomía eléctrica: no se declara. El WLTP no homologa autonomía eléctrica fuera de los enchufables y ninguna fuente publica una para esta versión.",
+      "Precio: 45.334 € es el PVP de tarifa sin descuentos (motor.es, gama 2026 vigente desde abril de 2026). km77 publica 38.800 € porque descuenta un descuento oficial de 7.000 €; el catálogo no modela descuentos, igual que se corrigió con el Kia EV5, el C5 Aircross y el Compass.",
+      "Consumo: se usan los 5,8 l/100 km que km77 da para el N-Connecta con sus llantas de 19 pulgadas. Nissan declara 5,7 l/100 km para la gama 2WD, pero marcado «pendiente de homologación» en la nota de prensa; se declara como fuente descartada.",
+      "Batería: km77 responde «No disponible» en la capacidad, así que los 2,1 kWh vienen de motor.es. Es la misma capacidad que km77 sí publica para el Qashqai e-POWER, que comparte sistema.",
+      "Anchura de hombros: km77 publica 139 cm como «anchura de hombros máxima» de la segunda fila. El Qashqai de este mismo alta lleva la suya declarada como mínima, así que las dos cifras no son estrictamente comparables entre sí — es la deuda de hombros mínimos mezclados con máximos que ya arrastra el catálogo.",
+      "Mantenimiento anual estimado a partir de la tarifa oficial de contratos de Nissan España: el contrato de mantenimiento anual de 3 años del X-Trail (T33) cuesta 795 €, es decir 265 € al año. No es un coste anual desglosado por revisión.",
+      "Faltan las fotos de maletero: ni Wikimedia Commons, ni la sala de prensa de Nissan España, ni la web comercial de nissan.es publican el portón abierto y vacío del X-Trail 2026.",
+      "Las fotos de frontal, lateral y trasera son los renders oficiales del configurador de nissan.es en acabado Tekna, no en el N-Connecta que puntúa la ficha. Wikimedia Commons solo tiene unidades anteriores al retoque de 2026, que cambia justo la parrilla y los pilotos, así que no servían para estas vistas."
+    ],
+    "lengthMm": {
+      "value": 4680,
+      "sources": [
+        {
+          "label": "km77, ficha X-Trail e-POWER 204 CV N-Connecta 2026 (agosto 2026), https://www.km77.com/coches/nissan/x-trail/2026/estandar/estandar/x-trail-e-power-204-cv-n-connecta/datos",
+          "value": 4680,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "widthMm": {
+      "value": 1840,
+      "sources": [
+        {
+          "label": "km77, ficha X-Trail e-POWER 204 CV N-Connecta 2026 (agosto 2026), https://www.km77.com/coches/nissan/x-trail/2026/estandar/estandar/x-trail-e-power-204-cv-n-connecta/datos",
+          "value": 1840,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "heightMm": {
+      "value": 1725,
+      "sources": [
+        {
+          "label": "km77, ficha X-Trail e-POWER 204 CV N-Connecta 2026 (agosto 2026), https://www.km77.com/coches/nissan/x-trail/2026/estandar/estandar/x-trail-e-power-204-cv-n-connecta/datos",
+          "value": 1725,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "wheelbaseMm": {
+      "value": 2705,
+      "sources": [
+        {
+          "label": "km77, ficha X-Trail e-POWER 204 CV N-Connecta 2026 (agosto 2026), https://www.km77.com/coches/nissan/x-trail/2026/estandar/estandar/x-trail-e-power-204-cv-n-connecta/datos",
+          "value": 2705,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "rearShoulderWidthMm": {
+      "value": 1390,
+      "sources": [
+        {
+          "label": "km77, mediciones propias — Nissan X-Trail (2026) (agosto 2026): 139 cm de anchura de hombros máxima en la segunda fila, https://www.km77.com/coches/nissan/x-trail/2026/estandar/mediciones-propias/detalle",
+          "value": 1390,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "groundClearanceMm": {
+      "value": 201,
+      "sources": [
+        {
+          "label": "km77, ficha X-Trail e-POWER 204 CV N-Connecta 2026 (agosto 2026), https://www.km77.com/coches/nissan/x-trail/2026/estandar/estandar/x-trail-e-power-204-cv-n-connecta/datos — «Altura libre: 201 mm»",
+          "value": 201,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "trunkLiters": {
+      "value": 575,
+      "sources": [
+        {
+          "label": "km77, ficha X-Trail e-POWER 204 CV N-Connecta 2026 (agosto 2026), https://www.km77.com/coches/nissan/x-trail/2026/estandar/estandar/x-trail-e-power-204-cv-n-connecta/datos — «Volumen mínimo con dos filas de asientos disponibles: 575 litros»",
+          "value": 575,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "L"
+    },
+    "powerCv": {
+      "value": 204,
+      "sources": [
+        {
+          "label": "km77, ficha X-Trail e-POWER 204 CV N-Connecta 2026 (agosto 2026), https://www.km77.com/coches/nissan/x-trail/2026/estandar/estandar/x-trail-e-power-204-cv-n-connecta/datos",
+          "value": 204,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "CV"
+    },
+    "weightKg": {
+      "value": 1800,
+      "sources": [
+        {
+          "label": "km77, ficha X-Trail e-POWER 204 CV N-Connecta 2026 (agosto 2026), https://www.km77.com/coches/nissan/x-trail/2026/estandar/estandar/x-trail-e-power-204-cv-n-connecta/datos",
+          "value": 1800,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kg"
+    },
+    "acceleration0to100": {
+      "value": 8.0,
+      "sources": [
+        {
+          "label": "km77, ficha X-Trail e-POWER 204 CV N-Connecta 2026 (agosto 2026), https://www.km77.com/coches/nissan/x-trail/2026/estandar/estandar/x-trail-e-power-204-cv-n-connecta/datos",
+          "value": 8.0,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "s"
+    },
+    "consumption": {
+      "value": 5.8,
+      "sources": [
+        {
+          "label": "km77, ficha X-Trail e-POWER 204 CV N-Connecta 2026 (agosto 2026), https://www.km77.com/coches/nissan/x-trail/2026/estandar/estandar/x-trail-e-power-204-cv-n-connecta/datos — «Consumo WLTP Combinado: 5,8 l/100 km»",
+          "value": 5.8,
+          "estimated": false,
+          "current": true
+        },
+        {
+          "label": "Nissan España, nota de prensa del X-Trail 2026 (11 de marzo de 2026): 5,7 l/100 km WLTP combinado en la versión 2WD",
+          "value": 5.7,
+          "estimated": false,
+          "current": false,
+          "discardedReason": "La propia nota lo marca «pendiente de homologación» y es la cifra de gama, no la del N-Connecta con llantas de 19 pulgadas que puntúa la ficha."
+        }
+      ],
+      "unit": "l/100km"
+    },
+    "batteryKwh": {
+      "value": 2.1,
+      "sources": [
+        {
+          "label": "motor.es, gama Nissan X-Trail 2026 (6 de abril de 2026): batería de iones de litio de 2,1 kWh, https://www.motor.es/noticias/precio-nissan-x-trail-2027-2026113478.html",
+          "value": 2.1,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kWh"
+    },
+    "maintenanceEurYear": {
+      "value": 265,
+      "sources": [
+        {
+          "label": "Nissan España, tarifa de contratos de mantenimiento (PDF interactivo, vigente desde enero de 2025), https://www-europe.nissan-cdn.net/content/dam/Nissan/es/PDF/PDF-Interactivo-Contratos-Mantenimiento-2025.pdf — X-TRAIL, contrato de mantenimiento anual de 3 años: 795 €, es decir 265 € al año",
+          "value": 265,
+          "estimated": true,
+          "current": true
+        }
+      ],
+      "unit": "€/año"
+    },
+    "priceEur": {
+      "value": 45334,
+      "sources": [
+        {
+          "label": "motor.es, gama Nissan X-Trail 2026 (6 de abril de 2026): e-POWER 204 CV 5 plazas N-Connecta, 45.334 €, «precios vigentes desde abril/2026 sin incluir descuentos u otras promociones», https://www.motor.es/noticias/precio-nissan-x-trail-2027-2026113478.html",
+          "value": 45334,
+          "estimated": false,
+          "current": true
+        },
+        {
+          "label": "km77 (agosto 2026): 38.800 € con el descuento oficial de 7.000 € ya aplicado",
+          "value": 38800,
+          "estimated": false,
+          "current": false,
+          "discardedReason": "Lleva restado un descuento oficial de 7.000 €; el catálogo compara PVP de tarifa sin descuentos."
+        }
+      ],
+      "unit": "€"
+    },
+    "reliabilityOcu": {
+      "value": 87,
+      "sources": [
+        {
+          "label": "Índice de fiabilidad OCU 2026 vía coches.com (25 de marzo de 2026): Nissan, 87 puntos sobre 100, puesto 12, https://noticias.coches.com/informes/fiabilidad-coches-ocu-2026/565582",
+          "value": 87,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyYears": {
+      "value": 3,
+      "sources": [
+        {
+          "label": "Nissan España, «Garantías» (agosto 2026): 3 años o 100.000 km de garantía de fábrica, https://www.nissan.es/propietarios/garantia-10-nissan.html",
+          "value": 3,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "años"
+    },
+    "warrantyExtension": {
+      "years": {
+        "value": 10,
+        "sources": [
+          {
+            "label": "Nissan España, programa Nissan+ (agosto 2026): hasta 10 años o 200.000 km, https://www.nissan.es/propietarios/garantia-10-nissan.html",
+            "value": 10,
+            "estimated": false,
+            "current": true
+          }
+        ],
+        "unit": "años"
+      },
+      "kmLimit": {
+        "value": 200000,
+        "sources": [
+          {
+            "label": "Nissan España, programa Nissan+ (agosto 2026): hasta 10 años o 200.000 km, https://www.nissan.es/propietarios/garantia-10-nissan.html",
+            "value": 200000,
+            "estimated": false,
+            "current": true
+          }
+        ],
+        "unit": "km"
+      },
+      "condition": "Programa Nissan+: la garantía se amplía un año más en cada mantenimiento hecho en la red oficial Nissan, hasta 10 años o 200.000 km. A diferencia de las extensiones de Toyota, Lexus y Mazda, no cubre el vehículo entero: solo motor, caja de cambios y eje."
+    },
+    "aestheticsExterior": {
+      "value": 4,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "aestheticsInterior": {
+      "value": 4,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "photos": {
+      "front": {
+        "url": "https://storyblok-assets.prod.nissan.eu/f/288274551197823/1024x1280/596dd978c6/color_picker_tekna_grey_0018.jpg",
+        "credit": "Nissan — nissan.es (web comercial oficial, vista 360º del X-Trail)",
+        "shows": "Nissan X-Trail (T33) retocado de 2026, acabado Tekna en gris — render de estudio, frontal recto y centrado, con la parrilla V-Motion nueva. NO es el N-Connecta que puntúa la ficha: las llantas y los faldones pueden diferir."
+      },
+      "side": {
+        "url": "https://storyblok-assets.prod.nissan.eu/f/288274551197823/1024x1280/96e169f9d6/color_picker_tekna_grey_0036.jpg",
+        "credit": "Nissan — nissan.es (web comercial oficial, vista 360º del X-Trail)",
+        "shows": "Nissan X-Trail (T33) retocado de 2026, acabado Tekna en gris — render de estudio, perfil estricto del mismo coche que la vista frontal. NO es el N-Connecta que puntúa la ficha."
+      },
+      "rear": {
+        "url": "https://storyblok-assets.prod.nissan.eu/f/288274551197823/1024x1280/fa84534e40/color_picker_tekna_grey_0054.jpg",
+        "credit": "Nissan — nissan.es (web comercial oficial, vista 360º del X-Trail)",
+        "shows": "Nissan X-Trail (T33) retocado de 2026, acabado Tekna en gris — render de estudio, trasera recta con el portón cerrado. NO es el N-Connecta que puntúa la ficha."
+      },
+      "interior": {
+        "url": "https://storyblok-assets.prod.nissan.eu/f/288274551197823/2560x1280/6551d8af8b/xtrail_modale_interior_tab3_01_desktop.jpg",
+        "credit": "Nissan — nissan.es (web comercial oficial, galería de interior del X-Trail)",
+        "shows": "Nissan X-Trail (T33) retocado de 2026, salpicadero, volante, pantalla central y consola, tapicería negra — foto oficial de estudio. Acabado alto de gama, no necesariamente el N-Connecta que puntúa la ficha."
+      }
+    }
   }
 ]
