@@ -1133,3 +1133,93 @@ describe('decision status in the ficha (product/0030)', () => {
     expect(markup).toContain('Referencia');
   });
 });
+
+describe('the eligibility mark (product/0031)', () => {
+  it('shows no mark for any candidate when there are no rules and everyone is within budget', () => {
+    const markup = renderToStaticMarkup(
+      <FichaPage
+        cars={threeCarFixture}
+        references={[referenceFixture()]}
+        scoredCars={SCORED_FIXTURE}
+        weights={DEFAULT_WEIGHTS}
+        eliminatoryRules={[]}
+        decisionLog={EMPTY_DECISIONS}
+        onSetDecision={() => undefined}
+        onClearDecision={() => undefined}
+      />,
+    );
+    expect(markup).not.toContain('No cumple');
+  });
+
+  it('marks a candidate that fails a rule, naming what it fails', () => {
+    // El Sportage (500 L de maletero, fixture) incumple un mínimo de 600 L.
+    const markup = renderToStaticMarkup(
+      <FichaPage
+        cars={threeCarFixture}
+        references={[referenceFixture()]}
+        scoredCars={SCORED_FIXTURE}
+        weights={DEFAULT_WEIGHTS}
+        eliminatoryRules={[
+          { field: 'trunkLiters', operator: 'min', value: 600 },
+        ]}
+        decisionLog={EMPTY_DECISIONS}
+        onSetDecision={() => undefined}
+        onClearDecision={() => undefined}
+      />,
+    );
+    expect(markup).toContain('No cumple 1 imprescindible');
+  });
+
+  it('never marks the reference, even when every candidate fails the rule', () => {
+    const markup = renderToStaticMarkup(
+      <FichaPage
+        cars={threeCarFixture}
+        references={[referenceFixture()]}
+        scoredCars={SCORED_FIXTURE}
+        weights={DEFAULT_WEIGHTS}
+        eliminatoryRules={[
+          { field: 'trunkLiters', operator: 'min', value: 100000 },
+        ]}
+        decisionLog={EMPTY_DECISIONS}
+        onSetDecision={() => undefined}
+        onClearDecision={() => undefined}
+      />,
+    );
+    // La referencia es la comparación fijada por defecto (sin otra
+    // referencia declarada, `defaultComparisonId` cae en la única que hay):
+    // esta prueba cubre a la vez «nunca en la referencia» y «nunca en el
+    // modelo fijado como comparación», que aquí son la misma columna.
+    const referenceHeader = /<th[^>]*pinnedHeader[^>]*>[\s\S]*?<\/th>/.exec(
+      markup,
+    )?.[0];
+    expect(referenceHeader).toContain('Giulietta');
+    expect(referenceHeader).not.toContain('No cumple');
+  });
+
+  it('defaults to no rules when the prop is omitted, same markup as an explicit empty array', () => {
+    const withProp = renderToStaticMarkup(
+      <FichaPage
+        cars={threeCarFixture}
+        references={[referenceFixture()]}
+        scoredCars={SCORED_FIXTURE}
+        weights={DEFAULT_WEIGHTS}
+        eliminatoryRules={[]}
+        decisionLog={EMPTY_DECISIONS}
+        onSetDecision={() => undefined}
+        onClearDecision={() => undefined}
+      />,
+    );
+    const withoutProp = renderToStaticMarkup(
+      <FichaPage
+        cars={threeCarFixture}
+        references={[referenceFixture()]}
+        scoredCars={SCORED_FIXTURE}
+        weights={DEFAULT_WEIGHTS}
+        decisionLog={EMPTY_DECISIONS}
+        onSetDecision={() => undefined}
+        onClearDecision={() => undefined}
+      />,
+    );
+    expect(withoutProp).toBe(withProp);
+  });
+});
