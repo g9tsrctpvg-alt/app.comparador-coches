@@ -34,6 +34,13 @@ export const ReferenceSchema = z.object({
   heightMm: SourcedNumberSchema,
   groundClearanceMm: SourcedNumberSchema,
   trunkLiters: SourcedNumberSchema,
+  /**
+   * Carga dinámica máxima sobre el techo (product/0034): la misma
+   * excepción a «solo dimensiones» que `turningCircleM`, y por el mismo
+   * motivo — sin ella, la Δ de esta magnitud quedaría `'unavailable'` para
+   * los candidatos siempre que se comparen contra esta referencia.
+   */
+  maxRoofLoadKg: SourcedNumberSchema.optional(),
   photos: PhotosSchema,
 });
 export type Reference = z.infer<typeof ReferenceSchema>;

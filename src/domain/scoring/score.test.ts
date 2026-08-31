@@ -6,7 +6,8 @@ import { percentageOf, scoreCatalog } from './score';
 import { EmptyCandidateSetError } from './normalize';
 
 const ZERO_WEIGHTS: AxisWeights = {
-  viaje: 0,
+  carga: 0,
+  habitabilidad: 0,
   diario: 0,
   prestaciones: 0,
   fiabilidad: 0,
@@ -23,7 +24,7 @@ describe('scoreCatalog', () => {
     ).toThrow(EmptyCandidateSetError);
   });
 
-  it('returns one breakdown per car, covering all six axes', () => {
+  it('returns one breakdown per car, covering all seven axes', () => {
     const result = scoreCatalog(
       threeCarFixture,
       DEFAULT_WEIGHTS,
@@ -33,7 +34,8 @@ describe('scoreCatalog', () => {
     expect(result).toHaveLength(3);
     for (const carBreakdown of result) {
       expect(carBreakdown.axes.map((axis) => axis.axisId)).toEqual([
-        'viaje',
+        'carga',
+        'habitabilidad',
         'diario',
         'prestaciones',
         'fiabilidad',
@@ -78,7 +80,7 @@ describe('scoreCatalog', () => {
     );
   });
 
-  it('sums the six axis contributions into the total, within floating-point tolerance', () => {
+  it('sums the seven axis contributions into the total, within floating-point tolerance', () => {
     const result = scoreCatalog(
       threeCarFixture,
       DEFAULT_WEIGHTS,
@@ -152,7 +154,7 @@ describe('percentageOf', () => {
     expect(percentageOf(123, ZERO_WEIGHTS)).toBe(0);
   });
 
-  it('is 100 for a car that scored 10 on all six axes', () => {
+  it('is 100 for a car that scored 10 on all seven axes', () => {
     const weightSum = AXIS_ORDER.reduce(
       (sum, id) => sum + DEFAULT_WEIGHTS[id],
       0,

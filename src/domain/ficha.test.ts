@@ -408,6 +408,50 @@ describe('withComparison', () => {
       expect(entities[0]?.cells.turningCircleM).toEqual({ kind: 'missing' });
     });
   });
+
+  describe('max roof load (product/0034)', () => {
+    it('marks a higher roof load as better and a lower one as worse: moreIsBetter', () => {
+      const stronger = {
+        ...sportageFixture,
+        maxRoofLoadKg: sourced(75, 'kg'),
+      };
+      const weaker = { ...x1Fixture, maxRoofLoadKg: sourced(60, 'kg') };
+      const entities = withComparison(
+        buildFicha([stronger, weaker], []),
+        'kia-sportage-hev',
+      );
+      const x1 = entities.find((e) => e.id === 'bmw-x1-xdrive25e')!;
+      // El X1 aguanta menos peso en el techo (60 kg < 75 kg): empeora.
+      expect(x1.cells.maxRoofLoadKg).toMatchObject({
+        value: 60,
+        unit: 'kg',
+        delta: { value: 60 - 75, direction: 'worse' },
+      });
+    });
+
+    it('marks the delta unavailable when the comparison entity does not declare it', () => {
+      // La Giulietta de fixture no declara carga de techo, igual que el
+      // diámetro de giro: es la ausencia real de `ReferenceSchema`, no un
+      // caso fabricado para el test.
+      const withRoofLoad = {
+        ...sportageFixture,
+        maxRoofLoadKg: sourced(75, 'kg'),
+      };
+      const entities = withComparison(
+        buildFicha([withRoofLoad], [referenceFixture()]),
+        'alfa-romeo-giulietta',
+      );
+      const sportage = entities.find((e) => e.kind === 'candidate')!;
+      expect(sportage.cells.maxRoofLoadKg).toMatchObject({
+        delta: 'unavailable',
+      });
+    });
+
+    it('leaves the cell missing for a car that does not declare it, not zero', () => {
+      const entities = buildFicha([sportageFixture], []);
+      expect(entities[0]?.cells.maxRoofLoadKg).toEqual({ kind: 'missing' });
+    });
+  });
 });
 
 describe('sortFicha', () => {

@@ -97,12 +97,13 @@ interface BlockDef {
 type CompleteBlockDef = BlockDef & { label: string };
 
 /**
- * Las veinticinco magnitudes de la ficha (product/0014, requisito 1;
+ * Las veintiséis magnitudes de la ficha (product/0014, requisito 1;
  * product/0018 las reparte en dos conjuntos; product/0021 añade el bloque
  * de generación; product/0028 añade autonomía eléctrica y batería;
- * product/0032 añade el diámetro de giro), agrupadas y rotuladas — el
- * dominio (`ficha.ts`) solo declara las claves y extrae los valores;
- * etiquetas, unidades de respaldo y decimales son decisión de la interfaz.
+ * product/0032 añade el diámetro de giro; product/0034 añade la carga
+ * máxima sobre el techo), agrupadas y rotuladas — el dominio (`ficha.ts`)
+ * solo declara las claves y extrae los valores; etiquetas, unidades de
+ * respaldo y decimales son decisión de la interfaz.
  */
 // Exportado además de `COMPLETE_FIELD_DEFS` (más abajo) para que
 // `EliminatoryRulesPanel` (product/0031) pueda agrupar el selector de
@@ -154,6 +155,11 @@ export const COMPLETE_BLOCKS: CompleteBlockDef[] = [
         label: 'Litros por m²',
         unitFallback: 'L/m²',
         decimals: 1,
+      },
+      {
+        key: 'maxRoofLoadKg',
+        label: 'Carga máxima en techo',
+        unitFallback: 'kg',
       },
     ],
   },
@@ -276,7 +282,7 @@ const ESSENTIAL_BLOCKS: BlockDef[] = [
 
 /** El orden del propio catálogo: la única opción del selector que no es una
  * magnitud, y por eso la única que se rotula aquí a mano. Las otras
- * veinticinco salen de `COMPLETE_BLOCKS` (product/0027, requisitos 1-3). */
+ * veintiséis salen de `COMPLETE_BLOCKS` (product/0027, requisitos 1-3). */
 const CATALOG_SORT_LABEL = 'Catálogo';
 
 // Exportado para que el test de estructura compruebe el número de filas de
@@ -1018,7 +1024,7 @@ function attachScrollAxisLock(el: HTMLDivElement): () => void {
  * Δ que antes solo existía contra el Alfa Romeo Giulietta ahora se calcula
  * contra cualquier modelo que se elija, y un conmutador de campos recupera
  * la lectura «de un vistazo» de seis magnitudes cuando no hace falta ver
- * las veinticinco. No calcula nada por su cuenta: `ficha.ts` ya entrega cada
+ * las veintiséis. No calcula nada por su cuenta: `ficha.ts` ya entrega cada
  * celda lista para formatear (`ui-no-scoring-internals`).
  */
 export function FichaPage({

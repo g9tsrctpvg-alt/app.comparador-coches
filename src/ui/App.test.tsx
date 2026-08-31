@@ -210,7 +210,7 @@ describe('App', () => {
       expect(markup).toContain('Presupuesto 47.000 €');
     });
 
-    it('restores a weight saved in localStorage when the URL is clean', () => {
+    it('restores a weight saved in localStorage when the URL is clean, migrating a legacy viaje weight (product/0033)', () => {
       const storage = fakeStorage({
         'comparador-coches:config': JSON.stringify({
           version: 2,
@@ -239,7 +239,8 @@ describe('App', () => {
       });
       stubBrowser({ storage });
       const markup = renderToStaticMarkup(<App load={() => threeCarFixture} />);
-      expect(markup).toContain('viaje 7');
+      expect(markup).toContain('Capacidad de carga 3.5');
+      expect(markup).toContain('Espacio para los de atrás 3.5');
     });
 
     it('prefers the URL over a different configuration saved in localStorage (requisito 3)', () => {
@@ -271,9 +272,10 @@ describe('App', () => {
       });
       stubBrowser({ search: '?budget=30000&v=2', storage });
       const markup = renderToStaticMarkup(<App load={() => threeCarFixture} />);
-      // Gana el enlace (presupuesto 30.000), no lo guardado (peso de viaje a 7).
+      // Gana el enlace (presupuesto 30.000), no lo guardado (peso de viaje
+      // a 7, que se habría migrado a carga y habitabilidad a 3,5).
       expect(markup).toContain('Presupuesto 30.000 €');
-      expect(markup).not.toContain('viaje 7');
+      expect(markup).not.toContain('Capacidad de carga 3.5');
     });
 
     it('falls back to defaults when localStorage holds an unknown config version', () => {

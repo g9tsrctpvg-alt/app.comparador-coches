@@ -442,6 +442,66 @@ describe('CarSchema, diámetro de giro (product/0032)', () => {
   );
 });
 
+describe('CarSchema, carga máxima sobre el techo (product/0034)', () => {
+  it('accepts a car that declares the max roof load', () => {
+    expect(
+      CarSchema.safeParse({
+        ...validCar,
+        maxRoofLoadKg: sourced(75),
+      }).success,
+    ).toBe(true);
+  });
+
+  it('accepts a car without the optional max roof load', () => {
+    const result = CarSchema.safeParse(validCar);
+    expect(result.success).toBe(true);
+  });
+
+  it('rejects a malformed max roof load, same as any other sourced value', () => {
+    const result = CarSchema.safeParse({
+      ...validCar,
+      maxRoofLoadKg: sourced(75, {
+        sources: [
+          {
+            label: 'Honda, accesorios',
+            value: 60,
+            estimated: false,
+            current: true,
+          },
+        ],
+      }),
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(
+        result.error.issues.some((issue) => issue.path[0] === 'maxRoofLoadKg'),
+      ).toBe(true);
+    }
+  });
+
+  it.each(['ICE', 'MHEV', 'HEV', 'PHEV', 'EV'] as const)(
+    'is genuinely optional on a %s: no cross-field rule with technology',
+    (technology) => {
+      const range = sourced(510);
+      const battery = sourced(65.4);
+      const base =
+        technology === 'EV' || technology === 'PHEV'
+          ? {
+              ...validCar,
+              technology,
+              electricRangeKm: range,
+              batteryKwh: battery,
+            }
+          : { ...validCar, technology };
+
+      expect(CarSchema.safeParse(base).success).toBe(true);
+      expect(
+        CarSchema.safeParse({ ...base, maxRoofLoadKg: sourced(75) }).success,
+      ).toBe(true);
+    },
+  );
+});
+
 describe('publishedCars', () => {
   function carWith(id: string, published: boolean): Car {
     return { ...sportageFixture, id, published };

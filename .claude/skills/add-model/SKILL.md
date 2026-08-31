@@ -77,9 +77,9 @@ intercambiables:
   estimated, current, discardedReason? }] }`.
   Es el formato de todo lo que viene de fuera: `lengthMm`, `widthMm`,
   `heightMm`, `wheelbaseMm`, `turningCircleM` (opcional), `rearShoulderWidthMm`,
-  `groundClearanceMm`, `trunkLiters`, `powerCv`, `weightKg`,
-  `acceleration0to100`, `consumption`, `maintenanceEurYear`, `priceEur`,
-  `reliabilityOcu`, `warrantyYears`, `residualPct5y` (opcional),
+  `groundClearanceMm`, `trunkLiters`, `maxRoofLoadKg` (opcional), `powerCv`,
+  `weightKg`, `acceleration0to100`, `consumption`, `maintenanceEurYear`,
+  `priceEur`, `reliabilityOcu`, `warrantyYears`, `residualPct5y` (opcional),
   y el objeto opcional `warrantyExtension` (`{ years: SourcedNumber,
   kmLimit?: SourcedNumber, condition }`). Zod exige **exactamente una**
   fuente con `current: true`, y su `value` tiene que coincidir con el
@@ -146,6 +146,27 @@ lo que parece:
   de fuente, no de dato, y se registra como deuda como cualquier otra.
 - La versión importa tanto como en el resto de magnitudes: llanta y
   dirección al eje trasero mueven el número dentro del mismo modelo.
+
+**`maxRoofLoadKg` es la carga dinámica máxima sobre el techo, en
+kilogramos** (product/0034). Es opcional para cualquier tecnología —todo
+coche tiene techo, pero no toda fuente publica su límite— y, como
+`turningCircleM`, la definición es más estricta de lo que parece:
+
+- Vale una fuente que publique la carga **dinámica** —con el coche en
+  marcha— **incluido el peso del portaequipajes y del cofre**: es la
+  documentación técnica o de accesorios del propio fabricante, casi
+  siempre en la ficha de barras de techo o portaequipajes.
+- **No vale** la capacidad que anuncia un fabricante de barras de techo de
+  accesorio (Thule, Menabo…) para ese modelo: es un dato del accesorio, no
+  del coche, y varía de una marca de barras a otra. Si es lo único que
+  encuentras, omite el campo.
+- **No vale tampoco** la carga estática —con el coche parado, la que
+  importa para una tienda de techo—: es otra magnitud, casi siempre mayor,
+  y no se estima una a partir de la otra. Si la fuente no distingue cuál
+  de las dos publica, no declares el dato.
+- Si de verdad no lo encuentras, omite el campo — no es una de las
+  magnitudes que se estiman a ojo, porque una cifra inventada aquí puede
+  llevar a poner peso de más sobre un techo real.
 
 **Cómo investigar cada magnitud**: busca la ficha técnica oficial del
 fabricante para el mercado español (o europeo si no la hay en español) y,

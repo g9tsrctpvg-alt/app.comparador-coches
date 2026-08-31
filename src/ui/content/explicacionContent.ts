@@ -23,15 +23,19 @@ export interface AxisContent {
 }
 
 export const AXIS_CONTENT: Record<AxisId, AxisContent> = {
-  viaje: {
-    measures:
-      'El espacio para viajar: el sitio para el equipaje y para las ' +
-      'piernas de quien va detrás.',
-    data: 'Litros de maletero y batalla (la distancia entre ejes, que aproxima el espacio interior).',
+  carga: {
+    measures: 'Cuánto equipaje entra en el coche.',
+    data: 'Litros de maletero.',
     anchorReasoning: [
       'El techo lo marca el Škoda Kodiaq —910 L a cinco plazas—, el maletero generalista más grande del mercado. El suelo lo pone el Fiat 500 Hybrid —185 L—: los dos anclajes son extremos del mercado, no de la gama que se compara (ADR 0010).',
-      'Mismas referencias que el maletero, en otra magnitud: el BMW i7 marca el techo de batalla —3.215 mm— y el Kia Picanto el suelo —2.400 mm, la batalla más corta a la venta—. El maletero pesa más —0,5 frente a 0,25 de la batalla y 0,25 de la anchura de hombros— porque es la restricción que se incumple: el equipaje cabe o no cabe. El espacio de atrás es gradual, y la batalla solo lo mide de forma indirecta, a lo largo.',
-      'El Mercedes Clase E marca el techo —146 cm de hombros en la segunda fila, según las mediciones de km77—; el Kia Picanto el suelo —126 cm—. Pesa lo mismo que la batalla —0,25 cada una— porque mide el mismo tipo de espacio de los que van atrás, a lo ancho en vez de a lo largo, y es igual de gradual.',
+    ],
+  },
+  habitabilidad: {
+    measures: 'El sitio para las piernas y los hombros de quien va detrás.',
+    data: 'Batalla (la distancia entre ejes, que aproxima el espacio interior) y anchura de hombros de la segunda fila.',
+    anchorReasoning: [
+      'El BMW i7 marca el techo de batalla —3.215 mm— y el Kia Picanto el suelo —2.400 mm, la batalla más corta a la venta—: los dos anclajes son extremos del mercado, no de la gama que se compara (ADR 0010).',
+      'El Mercedes Clase E marca el techo —146 cm de hombros en la segunda fila, según las mediciones de km77—; el Kia Picanto el suelo —126 cm—. Pesa lo mismo que la batalla —la mitad cada una— porque mide el mismo tipo de espacio de los que van atrás, a lo ancho en vez de a lo largo, y es igual de gradual.',
     ],
   },
   diario: {
@@ -85,8 +89,8 @@ export const CURVE_EXPLANATION =
   'Entre los dos anclajes, la nota no sube en línea recta: sube poco cerca ' +
   'de los extremos y rápido en el centro. Afinar cerca del anclaje bueno no ' +
   'compra casi nada —ya casi es un 10—, y estar cerca del anclaje malo es ' +
-  'casi tan malo como estarlo del todo. Es una curva en S, y la usan cinco ' +
-  'de los seis ejes: todos menos estética.';
+  'casi tan malo como estarlo del todo. Es una curva en S, y la usan seis ' +
+  'de los siete ejes: todos menos estética.';
 
 export const WEIGHT_TIE_WARNING =
   'Con estas escalas fijas, subir el peso de un eje no cambia nada si los ' +

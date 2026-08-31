@@ -14,8 +14,12 @@
  * 1px y en gris.
  */
 
-.viaje {
-  --axis-color: var(--color-axis-viaje);
+.carga {
+  --axis-color: var(--color-axis-carga);
+}
+
+.habitabilidad {
+  --axis-color: var(--color-axis-habitabilidad);
 }
 
 .diario {

@@ -4,7 +4,8 @@ import { AXIS_ORDER, type AxisId, type AxisWeights } from './weights';
 import type { AxisBreakdown, CarScoreBreakdown } from './breakdown';
 import { mustGet } from './mustGet';
 import { EmptyCandidateSetError } from './normalize';
-import { buildViajeBreakdown } from './axes/viaje';
+import { buildCargaBreakdown } from './axes/carga';
+import { buildHabitabilidadBreakdown } from './axes/habitabilidad';
 import { buildDiarioBreakdown } from './axes/diario';
 import { buildPrestacionesBreakdown } from './axes/prestaciones';
 import { buildFiabilidadBreakdown } from './axes/fiabilidad';
@@ -28,7 +29,7 @@ export function scoreCatalog(
 ): CarScoreBreakdown[] {
   if (cars.length === 0) {
     // Ya no hay ningún eje que normalice contra el conjunto de candidatos
-    // (los seis están en escala absoluta), así que nada dentro de los ejes
+    // (los siete están en escala absoluta), así que nada dentro de los ejes
     // falla por su cuenta con un catálogo vacío. La invariante — puntuar
     // sin candidatos no tiene sentido — sigue siendo cierta, así que se
     // declara aquí en vez de dejar de comprobarse.
@@ -38,7 +39,8 @@ export function scoreCatalog(
   }
 
   const byAxis: Record<AxisId, Map<string, AxisBreakdown>> = {
-    viaje: buildViajeBreakdown(cars, weights.viaje),
+    carga: buildCargaBreakdown(cars, weights.carga),
+    habitabilidad: buildHabitabilidadBreakdown(cars, weights.habitabilidad),
     diario: buildDiarioBreakdown(cars, assumptions, weights.diario),
     prestaciones: buildPrestacionesBreakdown(cars, weights.prestaciones),
     fiabilidad: buildFiabilidadBreakdown(cars, weights.fiabilidad),

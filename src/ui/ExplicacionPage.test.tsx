@@ -50,9 +50,11 @@ describe('ExplicacionPage', () => {
 
   it('shows all thirteen anchors with a value taken from the domain', () => {
     const markup = render();
-    // Los cinco ejes con curva en S, dos magnitudes cada uno salvo `viaje`,
-    // que desde product/0017 tiene tres, más las dos de estética (editables
-    // por el usuario, pero con la misma forma de anclaje): trece en total.
+    // Cinco ejes de dos magnitudes cada uno —diario, prestaciones,
+    // fiabilidad, estética (editable por el usuario, pero con la misma
+    // forma de anclaje) y coste—, más `carga` con una sola magnitud y
+    // `habitabilidad` con dos (product/0033 parte lo que antes era `viaje`,
+    // de tres magnitudes, sin cambiar el total): trece en total.
     const anchorCount = (markup.match(/→ 10/g) ?? []).length;
     expect(anchorCount).toBe(13);
     expect((markup.match(/→ 0/g) ?? []).length).toBe(13);
@@ -61,9 +63,10 @@ describe('ExplicacionPage', () => {
   it('gives every anchor row its own non-empty reasoning text — none left blank by index', () => {
     // `anchorRow` empareja `axis.subcomponents` con `anchorReasoning` por
     // índice (AXIS_CONTENT, comentario de cabecera): un array más corto que
-    // el otro deja alguna fila con el hueco vacío. Regresión concreta:
-    // `viaje` ganó un tercer subcomponente (product/0017) sin que
-    // `anchorReasoning` ganara una tercera entrada.
+    // el otro deja alguna fila con el hueco vacío. Regresión concreta,
+    // heredada de antes de `product/0033`: `viaje` ganó un tercer
+    // subcomponente (product/0017) sin que `anchorReasoning` ganara una
+    // tercera entrada.
     const markup = render();
     const reasoningCells =
       markup.match(/<dd class="[^"]*reasoning[^"]*">([\s\S]*?)<\/dd>/g) ?? [];
@@ -73,21 +76,25 @@ describe('ExplicacionPage', () => {
     }
   });
 
-  it("does not restate viaje's own weights with numbers stale against its live formula", () => {
-    // Regresión concreta: la prosa fija de `anchorReasoning` decía «0,6
-    // frente a 0,4» cuando la fórmula viva —la que ya renderiza esta misma
-    // página vía `scoreCatalog`, no un import aparte de `scoring/`
-    // (`ui-no-scoring-internals`)— ya llevaba 0,5/0,25/0,25 desde
-    // product/0017. La prosa fija no puede quedarse atrás de la fórmula que
-    // tiene al lado en la misma página.
+  it("does not restate habitabilidad's own weights with numbers stale against its live formula", () => {
+    // Regresión concreta, heredada de `viaje` antes de `product/0033`: la
+    // prosa fija de `anchorReasoning` decía «0,6 frente a 0,4» cuando la
+    // fórmula viva —la que ya renderiza esta misma página vía
+    // `scoreCatalog`, no un import aparte de `scoring/`
+    // (`ui-no-scoring-internals`)— ya llevaba otro reparto. Hoy
+    // `habitabilidad` reparte batalla y anchura de hombros al 50/50; la
+    // prosa fija no puede quedarse atrás de la fórmula que tiene al lado en
+    // la misma página.
     const markup = render();
+    const block = /id="eje-habitabilidad"[\s\S]*?<\/article>/.exec(markup);
+    const habitabilidadBlock = block?.[0] ?? '';
     const formulaMatch = /<p class="[^"]*formula[^"]*">([^<]*)<\/p>/.exec(
-      markup,
+      habitabilidadBlock,
     );
     const liveFormula = formulaMatch?.[1] ?? '';
     expect(liveFormula).toContain('0,5');
-    expect(markup).not.toContain('0,6 frente a 0,4');
-    expect(markup).toContain('0,5 frente a 0,25');
+    expect(habitabilidadBlock).not.toContain('0,6 frente a 0,4');
+    expect(habitabilidadBlock).not.toContain('0,25 cada una');
   });
 
   it('declares that estética is the only axis without an S-curve, and why', () => {
@@ -131,7 +138,7 @@ describe('ExplicacionPage', () => {
     const markup = render();
     for (const axisId of AXIS_ORDER) {
       const themeClass = AXIS_THEME_CLASS[axisId];
-      // Dos sitios por eje: la tarjeta de la sección «Los seis ejes» y su
+      // Dos sitios por eje: la tarjeta de la sección «Los siete ejes» y su
       // fila en la lista de pesos.
       expect(markup.split(themeClass).length - 1, axisId).toBe(2);
     }
@@ -139,7 +146,7 @@ describe('ExplicacionPage', () => {
 
   it('draws an icon beside every axis name, and none of them announces itself', () => {
     const markup = render();
-    // Doce iconos: seis tarjetas más seis filas de peso. Si alguno se
+    // Catorce iconos: siete tarjetas más siete filas de peso. Si alguno se
     // anunciara, el lector de pantalla diría el nombre del eje dos veces.
     const icons = markup.match(/<svg[^>]*>/g) ?? [];
     const axisIcons = icons.filter((tag) => tag.includes('aria-hidden="true"'));

@@ -206,8 +206,8 @@ describe('FichaPage', () => {
       expect(markup).toContain('<option value="completa">Completa</option>');
     });
 
-    it('declares TOTAL_FIELD_COUNT as the twenty-five magnitudes of "Completa"', () => {
-      expect(TOTAL_FIELD_COUNT).toBe(25);
+    it('declares TOTAL_FIELD_COUNT as the twenty-six magnitudes of "Completa"', () => {
+      expect(TOTAL_FIELD_COUNT).toBe(26);
     });
 
     it("matches FICHA_FIELDS exactly: no domain field silently missing from Completa's render", () => {

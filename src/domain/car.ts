@@ -159,6 +159,17 @@ const CarObjectSchema = z.object({
   rearShoulderWidthMm: SourcedNumberSchema,
   groundClearanceMm: SourcedNumberSchema,
   trunkLiters: SourcedNumberSchema,
+  /**
+   * Carga dinámica máxima sobre el techo, en kilogramos (product/0034):
+   * lo que el fabricante permite llevar arriba con el coche en marcha,
+   * incluido el peso del portaequipajes y del cofre — no la capacidad de
+   * unas barras de accesorio concretas, ni la carga estática con el coche
+   * parado. Opcional de verdad: todo coche tiene techo, pero no toda
+   * fuente publica su límite, y no hay ninguna invariante cruzada con
+   * `technology` que la obligue ni la prohíba, a diferencia de la
+   * electrificación (product/0028).
+   */
+  maxRoofLoadKg: SourcedNumberSchema.optional(),
   powerCv: SourcedNumberSchema,
   weightKg: SourcedNumberSchema,
   acceleration0to100: SourcedNumberSchema,

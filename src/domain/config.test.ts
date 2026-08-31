@@ -30,13 +30,13 @@ describe('restoreConfig', () => {
 
   it('returns the config unchanged when everything is valid', () => {
     const raw = validRaw({
-      weights: { ...DEFAULT_WEIGHTS, viaje: 7 },
+      weights: { ...DEFAULT_WEIGHTS, carga: 7 },
       budgetEur: 30000,
       hideFailingRules: true,
     });
     const result = restoreConfig(raw, CARS);
     expect(result.discardedEntirely).toBe(false);
-    expect(result.config.weights.viaje).toBe(7);
+    expect(result.config.weights.carga).toBe(7);
     expect(result.config.budgetEur).toBe(30000);
     expect(result.config.hideFailingRules).toBe(true);
   });
@@ -76,7 +76,7 @@ describe('restoreConfig', () => {
 
   it('falls back to default weights and logs when weights are present but invalid', () => {
     const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    const result = restoreConfig(validRaw({ weights: { viaje: 99 } }), CARS);
+    const result = restoreConfig(validRaw({ weights: { carga: 99 } }), CARS);
     expect(result.discardedEntirely).toBe(false);
     expect(result.config.weights).toEqual(DEFAULT_WEIGHTS);
     const logged = JSON.parse(errorSpy.mock.calls[0]?.[0] as string);
@@ -123,6 +123,90 @@ describe('restoreConfig', () => {
     expect(result.config).toEqual(DEFAULT_CONFIG);
     const logged = JSON.parse(errorSpy.mock.calls[0]?.[0] as string);
     expect(logged.Attributes.reason).toBe('unknown_version');
+  });
+
+  describe('migration from version 2 to 3 (product/0033, requisito 5.2)', () => {
+    it('splits weights.viaje evenly into carga and habitabilidad, keeping the rest intact', () => {
+      const raw = {
+        version: 2,
+        weights: {
+          viaje: 7,
+          diario: 3,
+          prestaciones: 2,
+          fiabilidad: 4,
+          estetica: 6,
+          coste: 5,
+        },
+        assumptions: DEFAULT_ASSUMPTIONS,
+        budgetEur: 30000,
+        eliminatoryRules: [],
+        hideFailingRules: true,
+        overrides: { 'kia-ev3': { aestheticsExterior: 4 } },
+      };
+      const result = restoreConfig(raw, CARS);
+      expect(result.discardedEntirely).toBe(false);
+      expect(result.config.version).toBe(CONFIG_VERSION);
+      expect(result.config.weights).toEqual({
+        carga: 3.5,
+        habitabilidad: 3.5,
+        diario: 3,
+        prestaciones: 2,
+        fiabilidad: 4,
+        estetica: 6,
+        coste: 5,
+      });
+      expect(result.config.budgetEur).toBe(30000);
+      expect(result.config.hideFailingRules).toBe(true);
+      expect(result.config.overrides).toEqual({
+        'kia-ev3': { aestheticsExterior: 4 },
+      });
+    });
+
+    it('leaves a non-object weights field untouched for the usual field-discard path', () => {
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const result = restoreConfig(
+        {
+          version: 2,
+          weights: 'not an object',
+          assumptions: DEFAULT_ASSUMPTIONS,
+          budgetEur: DEFAULT_BUDGET_EUR,
+          eliminatoryRules: [],
+          hideFailingRules: false,
+          overrides: {},
+        },
+        CARS,
+      );
+      expect(result.discardedEntirely).toBe(false);
+      expect(result.config.weights).toEqual(DEFAULT_WEIGHTS);
+      const logged = JSON.parse(errorSpy.mock.calls[0]?.[0] as string);
+      expect(logged.Attributes.field).toBe('weights');
+    });
+
+    it('does not lose the migration when weights.viaje is absent: falls back to default weights', () => {
+      const result = restoreConfig(
+        {
+          version: 2,
+          weights: {
+            diario: 3,
+            prestaciones: 2,
+            fiabilidad: 4,
+            estetica: 6,
+            coste: 5,
+          },
+          assumptions: DEFAULT_ASSUMPTIONS,
+          budgetEur: DEFAULT_BUDGET_EUR,
+          eliminatoryRules: [],
+          hideFailingRules: false,
+          overrides: {},
+        },
+        CARS,
+      );
+      // Sin `viaje`, `migrateWeightsV2ToV3` no inventa nada: el objeto sigue
+      // sin `carga` ni `habitabilidad`, así que `AxisWeightsSchema` lo
+      // rechaza y el descarte de campo cae a los valores por defecto.
+      expect(result.discardedEntirely).toBe(false);
+      expect(result.config.weights).toEqual(DEFAULT_WEIGHTS);
+    });
   });
 
   describe('eliminatoryRules (product/0031, requisito 3.3)', () => {

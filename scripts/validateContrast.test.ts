@@ -32,7 +32,8 @@ describe('validateContrast', () => {
         --color-positive: #14655c;
         --color-negative: #a34d18;
         --color-mute-on-ink: #8fa69b;
-        --color-axis-viaje: #2a6f8f;
+        --color-axis-carga: #2a6f8f;
+        --color-axis-habitabilidad: #2d4b03;
         --color-axis-diario: #14655c;
         --color-axis-prestaciones: #8e2f45;
         --color-axis-fiabilidad: #31417a;
@@ -62,7 +63,8 @@ describe('validateContrast', () => {
         --color-positive: #14655c;
         --color-negative: #a34d18;
         --color-mute-on-ink: #8fa69b;
-        --color-axis-viaje: #2a6f8f;
+        --color-axis-carga: #2a6f8f;
+        --color-axis-habitabilidad: #2d4b03;
         --color-axis-diario: #14655c;
         --color-axis-prestaciones: #8e2f45;
         --color-axis-fiabilidad: #31417a;
@@ -91,7 +93,8 @@ describe('validateContrast', () => {
         --color-positive: #14655c;
         --color-negative: #a34d18;
         --color-mute-on-ink: #8fa69b;
-        --color-axis-viaje: #2a6f8f;
+        --color-axis-carga: #2a6f8f;
+        --color-axis-habitabilidad: #2d4b03;
         --color-axis-diario: #14655c;
         --color-axis-prestaciones: #8e2f45;
         --color-axis-fiabilidad: #31417a;

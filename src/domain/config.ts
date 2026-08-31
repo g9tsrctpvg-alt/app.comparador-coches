@@ -25,8 +25,15 @@ import { FICHA_FIELDS } from './ficha';
  * se descarta entera: no se intenta adivinar qué campos siguen valiendo.
  * `2` desde `product/0031`, requisito 3.2: `hideOverBudget` se renombra a
  * `hideFailingRules` y `eliminatoryRules` es nuevo — una configuración
- * guardada con `version: 1` cae a los valores por defecto, a propósito. */
-export const CONFIG_VERSION = 2;
+ * guardada con `version: 1` cae a los valores por defecto, a propósito.
+ *
+ * `3` desde `product/0033`, requisito 5.1: `weights.viaje` se parte en
+ * `weights.carga` y `weights.habitabilidad`. Este salto **sí** se migra —
+ * ver `migrateWeightsV2ToV3` — porque a diferencia del resto de saltos de
+ * versión, aquí no hay nada que adivinar: el reparto a partes iguales es
+ * una equivalencia aritmética exacta (requisito 4.2 de la spec), no una
+ * suposición sobre qué quiso decir el usuario. */
+export const CONFIG_VERSION = 3;
 
 export const DEFAULT_BUDGET_EUR = 47000;
 
@@ -62,7 +69,8 @@ export const DEFAULT_CONFIG: AppConfig = {
 };
 
 const AxisWeightsSchema = z.object({
-  viaje: z.number().min(0).max(10),
+  carga: z.number().min(0).max(10),
+  habitabilidad: z.number().min(0).max(10),
   diario: z.number().min(0).max(10),
   prestaciones: z.number().min(0).max(10),
   fiabilidad: z.number().min(0).max(10),
@@ -206,6 +214,22 @@ function restoreEliminatoryRules(value: unknown): EliminatoryRule[] {
   return result;
 }
 
+/**
+ * Migra `weights` de la versión 2 a la 3 (product/0033, requisito 5.2):
+ * `viaje` se reparte a partes iguales entre `carga` y `habitabilidad`. Un
+ * `viaje` no numérico o ausente deja el objeto tal cual, sin inventar un
+ * valor — `AxisWeightsSchema` lo rechazará después por su cuenta y el
+ * descarte de campo hará su trabajo habitual.
+ */
+function migrateWeightsV2ToV3(rawWeights: unknown): unknown {
+  if (typeof rawWeights !== 'object' || rawWeights === null) {
+    return rawWeights;
+  }
+  const { viaje, ...rest } = rawWeights as Record<string, unknown>;
+  if (typeof viaje !== 'number') return rest;
+  return { ...rest, carga: viaje / 2, habitabilidad: viaje / 2 };
+}
+
 export interface RestoreResult {
   config: AppConfig;
   /** Verdadero cuando `raw` no era un objeto restaurable en absoluto —JSON
@@ -232,19 +256,26 @@ export function restoreConfig(
   }
 
   const record = raw as Record<string, unknown>;
-  if (record.version !== CONFIG_VERSION) {
+  // La única versión que se migra en vez de descartarse (requisito 5.2 de
+  // product/0033): el reparto de `viaje` es una equivalencia exacta, no una
+  // suposición, así que aquí sí se adivina qué campos siguen valiendo.
+  const isVersion2 = record.version === 2;
+  if (record.version !== CONFIG_VERSION && !isVersion2) {
     logError('config_discarded', {
       reason: 'unknown_version',
       'config.version': String(record.version),
     });
     return { config: DEFAULT_CONFIG, discardedEntirely: true };
   }
+  const rawWeights = isVersion2
+    ? migrateWeightsV2ToV3(record.weights)
+    : record.weights;
 
   const config: AppConfig = {
     version: CONFIG_VERSION,
     weights: restoreField(
       'weights',
-      record.weights,
+      rawWeights,
       AxisWeightsSchema,
       DEFAULT_WEIGHTS,
     ),

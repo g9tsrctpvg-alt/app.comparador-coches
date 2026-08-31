@@ -9,6 +9,12 @@ import {
 } from './config';
 
 const WEIGHT_PREFIX = 'w_';
+// El nombre de parámetro que `viaje` usaba hasta `product/0033`. No entra
+// en `AXIS_ORDER` —no es un eje vigente—, así que se lee aparte para que un
+// enlace `v=2` con `w_viaje` llegue a `restoreConfig` con la clave `viaje`
+// intacta, que es la que `migrateWeightsV2ToV3` sabe repartir (requisito
+// 5.5 de la spec).
+const LEGACY_VIAJE_WEIGHT_PARAM = `${WEIGHT_PREFIX}viaje`;
 const ASSUMPTION_PREFIX = 'a_';
 const OVERRIDE_PREFIX = 'o_';
 const RULE_PREFIX = 'r_';
@@ -100,6 +106,8 @@ export function paramsToRawConfig(params: URLSearchParams): unknown {
     const raw = params.get(`${WEIGHT_PREFIX}${axisId}`);
     if (raw !== null) weights[axisId] = Number(raw);
   }
+  const legacyViaje = params.get(LEGACY_VIAJE_WEIGHT_PARAM);
+  if (legacyViaje !== null) weights.viaje = Number(legacyViaje);
 
   const assumptions: Record<string, unknown> = {
     ...DEFAULT_CONFIG.assumptions,
