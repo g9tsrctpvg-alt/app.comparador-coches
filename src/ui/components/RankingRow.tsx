@@ -157,10 +157,10 @@ export function RankingRow({
     </button>
   );
 
-  // El maletero sustituye a la potencia (product/0022): es la magnitud de
-  // mayor peso del eje `viaje`, el que más pesa por defecto, y se lee tal
-  // cual del catálogo, igual que hoy se lee la potencia — la interfaz no
-  // calcula nada nuevo.
+  // El maletero sustituye a la potencia (product/0022): es la única
+  // magnitud del eje `carga` (product/0033), y se lee tal cual del
+  // catálogo, igual que hoy se lee la potencia — la interfaz no calcula
+  // nada nuevo.
   const secondaryLine = rawCar && (
     <p className={isPodium ? styles.secondaryLinePodium : styles.secondaryLine}>
       <span>{TECHNOLOGY_LABELS[rawCar.technology]}</span>

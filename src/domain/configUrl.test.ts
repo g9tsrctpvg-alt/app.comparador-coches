@@ -17,20 +17,20 @@ describe('configToParams', () => {
     expect(params.toString()).toBe('');
   });
 
-  it('produces exactly one parameter for a single changed weight, not all six', () => {
+  it('produces exactly one parameter for a single changed weight, not all seven', () => {
     const params = configToParams({
       ...DEFAULT_CONFIG,
-      weights: { ...DEFAULT_WEIGHTS, viaje: 7 },
+      weights: { ...DEFAULT_WEIGHTS, carga: 7 },
     });
     const keys = Array.from(params.keys());
-    expect(keys).toContain('w_viaje');
+    expect(keys).toContain('w_carga');
     expect(keys.filter((k) => k.startsWith('w_'))).toHaveLength(1);
   });
 
   it('includes the version whenever any other parameter is present', () => {
     const params = configToParams({
       ...DEFAULT_CONFIG,
-      weights: { ...DEFAULT_WEIGHTS, viaje: 7 },
+      weights: { ...DEFAULT_WEIGHTS, carga: 7 },
     });
     expect(params.get('v')).toBe(String(CONFIG_VERSION));
   });
@@ -88,13 +88,32 @@ describe('paramsToRawConfig', () => {
   it('round-trips a single changed weight through configToParams and restoreConfig', () => {
     const original = {
       ...DEFAULT_CONFIG,
-      weights: { ...DEFAULT_WEIGHTS, viaje: 8 },
+      weights: { ...DEFAULT_WEIGHTS, carga: 8 },
     };
     const params = configToParams(original);
     const raw = paramsToRawConfig(params);
     const { config, discardedEntirely } = restoreConfig(raw, CARS);
     expect(discardedEntirely).toBe(false);
     expect(config.weights).toEqual(original.weights);
+  });
+
+  it('migrates a legacy w_viaje link (product/0033, requisito 5.5): splits it evenly', () => {
+    const raw = paramsToRawConfig(new URLSearchParams('w_viaje=7&v=2'));
+    const { config, discardedEntirely } = restoreConfig(raw, CARS);
+    expect(discardedEntirely).toBe(false);
+    expect(config.version).toBe(CONFIG_VERSION);
+    expect(config.weights.carga).toBe(3.5);
+    expect(config.weights.habitabilidad).toBe(3.5);
+  });
+
+  it('never emits w_viaje for a new link: only w_carga and w_habitabilidad', () => {
+    const params = configToParams({
+      ...DEFAULT_CONFIG,
+      weights: { ...DEFAULT_WEIGHTS, carga: 3, habitabilidad: 8 },
+    });
+    expect(params.has('w_viaje')).toBe(false);
+    expect(params.get('w_carga')).toBe('3');
+    expect(params.get('w_habitabilidad')).toBe('8');
   });
 
   it('round-trips a numeric assumption', () => {

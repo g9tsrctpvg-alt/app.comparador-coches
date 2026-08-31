@@ -143,11 +143,23 @@
    *    contraste a 7,45:1.
    *
    * Contraste sobre `card` y sobre `paper`, en ese orden: 5,23 y 4,77 azul;
-   * 6,47 y 5,90 teal; 7,45 y 6,80 carmín; 9,09 y 8,29 índigo; 5,85 y 5,34
-   * ciruela; 5,31 y 4,85 ocre. Los doce pasan el umbral de texto normal y los
-   * doce los comprueba `scripts/validateContrast.ts`, así que estas cifras no
-   * dependen de que este comentario esté al día. */
-  --color-axis-viaje: #2a6f8f;
+   * 9,30 y 8,48 verde musgo; 6,47 y 5,90 teal; 7,45 y 6,80 carmín; 9,09 y
+   * 8,29 índigo; 5,85 y 5,34 ciruela; 5,31 y 4,85 ocre. Los catorce pasan el
+   * umbral de texto normal y los catorce los comprueba
+   * `scripts/validateContrast.ts`, así que estas cifras no dependen de que
+   * este comentario esté al día.
+   *
+   * `habitabilidad` es el séptimo eje (product/0033, requisito 3.3): parte
+   * en dos el antiguo `viaje`, que se queda con el nombre `carga` y el
+   * mismo azul —es la misma mitad de la fórmula, el maletero, ahora sola—.
+   * El verde musgo es nuevo y se eligió por búsqueda entre los que cumplen
+   * a la vez las tres condiciones de arriba: extiende el rango de
+   * luminosidad por abajo (L* 28,4, contra 29-44) en vez de comprimirlo, su
+   * ΔE2000 mínimo contra los otros seis es 21,7 (`coste`) y contra `signal`
+   * 40,1, y su peor par bajo protanopia (11,2, contra `coste`) queda por
+   * encima del peor par que la paleta ya tenía (5,2). */
+  --color-axis-carga: #2a6f8f;
+  --color-axis-habitabilidad: #2d4b03;
   --color-axis-diario: #14655c;
   --color-axis-prestaciones: #8e2f45;
   --color-axis-fiabilidad: #31417a;

@@ -24,6 +24,12 @@ import { scoreCatalog } from './score';
  * fiabilidad 7, estética 6, prestaciones 5, coste 5): es una prioridad
  * personal, no una fórmula del negocio (`docs/estado/dominio.md`), y mover
  * los seis pesos por defecto sube los totales en bloque a propósito.
+ *
+ * **No tocados por `product/0033`**, a propósito: partir `viaje` en `carga`
+ * y `habitabilidad` con pesos 5 y 5 es una equivalencia aritmética exacta
+ * con el `viaje` de peso 10 anterior (requisito 4.2 de la spec), así que
+ * este test sigue en verde sin cambiar una sola cifra — es el criterio de
+ * aceptación que lo demuestra.
  */
 const EXPECTED_TOTALS: Record<string, number> = {
   'hyundai-tucson-hev': 241.86342157153587,

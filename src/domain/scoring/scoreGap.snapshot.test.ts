@@ -19,6 +19,13 @@ import { crossingsInRange, splitScoreGap, stableAxes } from './scoreGap';
  * mover los pesos por defecto cambia tanto las cifras como, en el segundo
  * caso, qué ejes cruzan dentro del recorrido 0-10, porque el peso de cruce
  * de un eje depende de los otros cinco.
+ *
+ * Vueltas a medir de nuevo tras `product/0033`: `viaje` se parte en `carga`
+ * y `habitabilidad` con peso 5 cada uno en vez de 10. La suma de pesos
+ * (40) y el total de cada coche no cambian —es la equivalencia exacta que
+ * demuestra el requisito 4.2 de la spec—, pero la línea de `viaje` se
+ * reparte en dos: su valor de antes es, en cada caso, la suma de los
+ * nuevos valores de `carga` y `habitabilidad`.
  */
 describe('splitScoreGap against the real catalogue', () => {
   const cars = publishedCars(loadCatalog());
@@ -30,7 +37,7 @@ describe('splitScoreGap against the real catalogue', () => {
   );
   const byId = (id: string) => scored.find((car) => car.carId === id)!;
 
-  it('sums its six lines back into the total difference, for every pair of published candidates', () => {
+  it('sums its seven lines back into the total difference, for every pair of published candidates', () => {
     for (const a of scored) {
       for (const b of scored) {
         if (a.carId === b.carId) continue;
@@ -48,7 +55,7 @@ describe('splitScoreGap against the real catalogue', () => {
     }
   });
 
-  it('splits the EV3-vs-Civic e:HEV gap as measured: +5,6 estética, -3,0 diario, -2,8 viaje, total +2,2', () => {
+  it('splits the EV3-vs-Civic e:HEV gap as measured: +5,6 estética, -3,0 diario, +1,2 carga, -4,0 habitabilidad, total +2,2', () => {
     const gap = splitScoreGap(byId('kia-ev3'), byId('honda-civic-e-hev'));
     expect(gap.percentageDiff).toBeCloseTo(2.2, 1);
 
@@ -58,13 +65,16 @@ describe('splitScoreGap against the real catalogue', () => {
 
     expect(ppOf(byAxis('estetica').value)).toBeCloseTo(5.6, 1);
     expect(ppOf(byAxis('diario').value)).toBeCloseTo(-3.0, 1);
-    expect(ppOf(byAxis('viaje').value)).toBeCloseTo(-2.8, 1);
+    // `viaje` valía aquí -2,8 pp antes de `product/0033`; repartido en los
+    // dos ejes nuevos suma lo mismo: 1,2 + (-4,0) = -2,8.
+    expect(ppOf(byAxis('carga').value)).toBeCloseTo(1.2, 1);
+    expect(ppOf(byAxis('habitabilidad').value)).toBeCloseTo(-4.0, 1);
 
     const summed = gap.lines.reduce((sum, line) => sum + line.value, 0);
     expect(summed).toBeCloseTo(gap.totalDiff, 9);
   });
 
-  it('crosses prestaciones (6,0), viaje (7,7) and coste (1,8) for Tucson HEV vs Tucson PHEV', () => {
+  it('crosses prestaciones (6,0), carga (3,8) and coste (1,8) for Tucson HEV vs Tucson PHEV', () => {
     const gap = splitScoreGap(
       byId('hyundai-tucson-hev'),
       byId('hyundai-tucson-phev'),
@@ -72,30 +82,31 @@ describe('splitScoreGap against the real catalogue', () => {
 
     expect(crossingsInRange(gap).map((line) => line.axisId)).toEqual([
       'prestaciones',
-      'viaje',
+      'carga',
       'coste',
     ]);
 
-    const viaje = gap.lines.find((line) => line.axisId === 'viaje')!;
+    const carga = gap.lines.find((line) => line.axisId === 'carga')!;
     const prestaciones = gap.lines.find(
       (line) => line.axisId === 'prestaciones',
     )!;
     const coste = gap.lines.find((line) => line.axisId === 'coste')!;
-    expect(viaje.crossingWeight).toBeCloseTo(7.7, 1);
-    expect(viaje.crossingDirection).toBe('below');
+    expect(carga.crossingWeight).toBeCloseTo(3.8, 1);
+    expect(carga.crossingDirection).toBe('below');
     expect(prestaciones.crossingWeight).toBeCloseTo(6.0, 1);
     expect(prestaciones.crossingDirection).toBe('above');
     expect(coste.crossingWeight).toBeCloseTo(1.8, 1);
     expect(coste.crossingDirection).toBe('below');
 
-    // diario, fiabilidad y estética empatan entre las dos motorizaciones
-    // del Tucson (mismo cuerpo, mismo interior, misma fiabilidad OCU): son
-    // los tres que quedan en el resumen. Con los pesos por defecto en 40 en
-    // vez de 13, coste sí cruza dentro de 0-10 (antes no).
+    // diario, fiabilidad, estética y habitabilidad empatan entre las dos
+    // motorizaciones del Tucson (mismo cuerpo, misma batalla, misma
+    // anchura de hombros, mismo interior, misma fiabilidad OCU): solo el
+    // maletero difiere, por dónde va la batería del PHEV, así que `carga`
+    // es el único de los dos ejes de espacio que separa a los dos.
     expect(
       stableAxes(gap)
         .map((line) => line.axisId)
         .sort(),
-    ).toEqual(['diario', 'estetica', 'fiabilidad'].sort());
+    ).toEqual(['diario', 'estetica', 'fiabilidad', 'habitabilidad'].sort());
   });
 });

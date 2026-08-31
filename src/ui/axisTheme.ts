@@ -27,7 +27,8 @@ function themeClass(axisId: AxisId): string {
  * tipo salga exacto sin un `as`. Que la lista esté completa no queda al aire:
  * lo comprueba `axisTheme.test.ts` contra `AXIS_ORDER`. */
 export const AXIS_THEME_CLASS: Record<AxisId, string> = {
-  viaje: themeClass('viaje'),
+  carga: themeClass('carga'),
+  habitabilidad: themeClass('habitabilidad'),
   diario: themeClass('diario'),
   prestaciones: themeClass('prestaciones'),
   fiabilidad: themeClass('fiabilidad'),

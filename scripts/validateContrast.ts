@@ -74,14 +74,17 @@ export const DECLARED_PAIRS: readonly ContrastPair[] = [
   { foreground: 'ink-tertiary', background: 'paper', level: 'large' },
   { foreground: 'ink-tertiary', background: 'card', level: 'large' },
 
-  /* Los seis colores de eje (technical/0011, requisito 6.1), cada uno sobre
+  /* Los siete colores de eje (technical/0011, requisito 6.1; product/0033
+   * añade `axis-habitabilidad` al partir `viaje` en dos), cada uno sobre
    * las dos superficies donde se pinta. Entran al umbral estricto de 4,5:1
    * aunque hoy ninguno sirva texto pequeño: declararlos como texto normal
    * deja escrito el margen y hace que un retoque de tono que se lo coma
-   * falle aquí en vez de en pantalla. El más justo es `axis-viaje` sobre
+   * falle aquí en vez de en pantalla. El más justo es `axis-carga` sobre
    * `paper`, a 4,77:1. */
-  { foreground: 'axis-viaje', background: 'card', level: 'normal' },
-  { foreground: 'axis-viaje', background: 'paper', level: 'normal' },
+  { foreground: 'axis-carga', background: 'card', level: 'normal' },
+  { foreground: 'axis-carga', background: 'paper', level: 'normal' },
+  { foreground: 'axis-habitabilidad', background: 'card', level: 'normal' },
+  { foreground: 'axis-habitabilidad', background: 'paper', level: 'normal' },
   { foreground: 'axis-diario', background: 'card', level: 'normal' },
   { foreground: 'axis-diario', background: 'paper', level: 'normal' },
   { foreground: 'axis-prestaciones', background: 'card', level: 'normal' },

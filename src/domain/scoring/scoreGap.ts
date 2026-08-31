@@ -6,10 +6,10 @@ import { percentageOf } from './score';
  * Cuánto explica un eje de la diferencia de nota entre dos coches
  * (product/0029, requisito 1). `value` es
  * `peso × (score(A) − score(B))`, que por construcción coincide con
- * `contribution(A) − contribution(B)`; la suma de los seis `value` de un
+ * `contribution(A) − contribution(B)`; la suma de los siete `value` de un
  * `ScoreGap` reproduce exactamente `totalDiff`.
  *
- * `crossingWeight` es el valor de este peso —con los otros cinco fijos— en
+ * `crossingWeight` es el valor de este peso —con los otros seis fijos— en
  * el que la diferencia de nota cambia de signo (requisito 5.1). Ausente
  * cuando `scoreAdvantage` es 0: ningún peso multiplicando a cero cambia el
  * resultado (requisito 5.4). No está acotado a 0-10 aquí — el rango real
@@ -35,7 +35,7 @@ export interface ScoreGap {
   /** La misma diferencia, en puntos porcentuales del máximo alcanzable —la
    * unidad que ya usa `percentage` en pantalla (requisito 2). */
   percentageDiff: number;
-  /** Las seis líneas, ordenadas por valor absoluto descendente (requisito 1.3). */
+  /** Las siete líneas, ordenadas por valor absoluto descendente (requisito 1.3). */
   lines: AxisGapLine[];
 }
 
@@ -49,7 +49,7 @@ function axisWeights(car: CarScoreBreakdown): AxisWeights {
 
 /**
  * Reparte la diferencia de nota entre dos coches ya puntuados en la
- * aportación de cada uno de los seis ejes, y calcula el peso de cruce de
+ * aportación de cada uno de los siete ejes, y calcula el peso de cruce de
  * cada eje (product/0029, requisitos 1 y 5).
  *
  * `a` y `b` deben venir del mismo `scoreCatalog` — mismos pesos y mismos
@@ -67,7 +67,7 @@ export function splitScoreGap(
   const unsorted: AxisGapLine[] = a.axes.map((axisA) => {
     const axisB = byAxisB.get(axisA.axisId);
     if (!axisB) {
-      // `a` y `b` vienen de `scoreCatalog`, que siempre construye los seis
+      // `a` y `b` vienen de `scoreCatalog`, que siempre construye los siete
       // ejes de `AXIS_ORDER` para todo coche; esta rama es defensiva.
       throw new Error(`Eje «${axisA.axisId}» sin contrapartida en el rival`);
     }
@@ -137,12 +137,12 @@ export function stableAxes(gap: ScoreGap): AxisGapLine[] {
 
 /** Los ejes que más explican la diferencia, uno de cada signo cuando lo
  * haya (product/0029, requisito 4): el resumen de una línea de la
- * clasificación no necesita las seis, solo el que más pesa a favor y el
+ * clasificación no necesita las siete, solo el que más pesa a favor y el
  * que más pesa en contra —el top absoluto por sí solo podría ser dos ejes
  * del mismo lado, que cuentan la mitad de la historia. */
 export function topGapLines(gap: ScoreGap): AxisGapLine[] {
   // `splitScoreGap` construye `lines` a partir de `a.axes`, que siempre
-  // tiene las seis entradas de `AXIS_ORDER`: nunca vacío.
+  // tiene las siete entradas de `AXIS_ORDER`: nunca vacío.
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- invariante de splitScoreGap
   const top = gap.lines[0]!;
   if (top.value === 0) return [top];

@@ -13,12 +13,23 @@ import styles from './AxisIcon.module.css';
  * eje que sea.
  */
 const AXIS_SHAPE: Record<AxisId, ReactNode> = {
-  /* Maleta: el eje mide espacio y confort en viaje. */
-  viaje: (
+  /* Maleta: el eje mide cuánto equipaje entra (product/0033: la mitad de
+   * `viaje` que sigue siendo un dato de maletero, ahora sola). */
+  carga: (
     <>
       <rect x="3" y="7" width="18" height="13" rx="2" />
       <path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" />
       <path d="M3 12h18" />
+    </>
+  ),
+
+  /* Asiento trasero: el eje mide el sitio de quien va detrás, la otra mitad
+   * de `viaje` (product/0033). */
+  habitabilidad: (
+    <>
+      <rect x="5" y="4" width="5" height="7" rx="2" />
+      <rect x="14" y="4" width="5" height="7" rx="2" />
+      <path d="M4 11v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6" />
     </>
   ),
 

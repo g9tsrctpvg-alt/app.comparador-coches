@@ -9,10 +9,15 @@ import {
   topGapLines,
 } from './scoreGap';
 
-/** Pesos de test: los mismos que `DEFAULT_WEIGHTS`, para que la suma —13—
- * coincida con la que se usa a mano abajo para verificar cada cruce. */
+/** Pesos de test: análogos a `DEFAULT_WEIGHTS` (product/0033 los partió en
+ * dos, `carga` y `habitabilidad`), para que la suma —15— coincida con la
+ * que se usa a mano abajo para verificar cada cruce. `habitabilidad` se
+ * mantiene siempre empatada entre A y B en las puntuaciones de más abajo,
+ * igual que `diario`, `fiabilidad`, `estetica` y `coste`: así su presencia
+ * no cambia ningún cálculo hecho a mano antes de que el eje existiera. */
 const TEST_WEIGHTS: Record<AxisId, number> = {
-  viaje: 4,
+  carga: 4,
+  habitabilidad: 2,
   diario: 3,
   prestaciones: 1,
   fiabilidad: 2,
@@ -51,11 +56,12 @@ function carBreakdown(
   };
 }
 
-// A gana en viaje (+2) y pierde en prestaciones (-3); los otros cuatro ejes
-// empatan. total(A) = 79, total(B) = 74, diferencia = 5 — a mano, para que
+// A gana en carga (+2) y pierde en prestaciones (-3); los otros cinco ejes
+// empatan. total(A) = 89, total(B) = 84, diferencia = 5 — a mano, para que
 // cada aserción de abajo se pueda comprobar sin ejecutar código.
 const carA = carBreakdown('a', {
-  viaje: 6,
+  carga: 6,
+  habitabilidad: 5,
   diario: 5,
   prestaciones: 5,
   fiabilidad: 8,
@@ -63,7 +69,8 @@ const carA = carBreakdown('a', {
   coste: 5,
 });
 const carB = carBreakdown('b', {
-  viaje: 4,
+  carga: 4,
+  habitabilidad: 5,
   diario: 5,
   prestaciones: 8,
   fiabilidad: 8,
@@ -77,30 +84,31 @@ describe('splitScoreGap', () => {
     expect(gap.carAId).toBe('a');
     expect(gap.carBId).toBe('b');
     expect(gap.totalDiff).toBeCloseTo(5, 9);
-    expect(gap.percentageDiff).toBeCloseTo((5 / (10 * 13)) * 100, 9);
+    expect(gap.percentageDiff).toBeCloseTo((5 / (10 * 15)) * 100, 9);
   });
 
-  it('sums the six lines back into the total difference (requisito 1.2)', () => {
+  it('sums the seven lines back into the total difference (requisito 1.2)', () => {
     const gap = splitScoreGap(carA, carB);
     const summed = gap.lines.reduce((sum, line) => sum + line.value, 0);
     expect(summed).toBeCloseTo(gap.totalDiff, 9);
-    expect(gap.lines).toHaveLength(6);
+    expect(gap.lines).toHaveLength(7);
   });
 
   it('orders lines by descending absolute value, independent of AXIS_ORDER (requisito 1.3)', () => {
     const gap = splitScoreGap(carA, carB);
-    // viaje (8) > prestaciones (-3) > los cuatro empates a 0, que
+    // carga (8) > prestaciones (-3) > los cinco empates a 0, que
     // conservan su orden de `AXIS_ORDER` porque el sort es estable.
     expect(gap.lines.map((line) => line.axisId)).toEqual([
-      'viaje',
+      'carga',
       'prestaciones',
+      'habitabilidad',
       'diario',
       'fiabilidad',
       'estetica',
       'coste',
     ]);
     expect(gap.lines[0]).toMatchObject({
-      axisId: 'viaje',
+      axisId: 'carga',
       weight: 4,
       scoreAdvantage: 2,
       value: 8,
@@ -115,10 +123,10 @@ describe('splitScoreGap', () => {
 
   it('keeps weight and score advantage separate from their product (requisito 1.4)', () => {
     const gap = splitScoreGap(carA, carB);
-    const viaje = gap.lines.find((line) => line.axisId === 'viaje')!;
-    expect(viaje.weight).toBe(4);
-    expect(viaje.scoreAdvantage).toBe(2);
-    expect(viaje.value).toBe(viaje.weight * viaje.scoreAdvantage);
+    const carga = gap.lines.find((line) => line.axisId === 'carga')!;
+    expect(carga.weight).toBe(4);
+    expect(carga.scoreAdvantage).toBe(2);
+    expect(carga.value).toBe(carga.weight * carga.scoreAdvantage);
   });
 
   it('returns a valid zero-value line for an axis where both cars tie (requisito 1.5)', () => {
@@ -131,13 +139,13 @@ describe('splitScoreGap', () => {
 
   it('computes an exact crossing weight: at that weight the gap is zero (requisito 5.1)', () => {
     const gap = splitScoreGap(carA, carB);
-    const viaje = gap.lines.find((line) => line.axisId === 'viaje')!;
-    expect(viaje.crossingWeight).toBeCloseTo(1.5, 9);
-    expect(viaje.crossingDirection).toBe('below');
+    const carga = gap.lines.find((line) => line.axisId === 'carga')!;
+    expect(carga.crossingWeight).toBeCloseTo(1.5, 9);
+    expect(carga.crossingDirection).toBe('below');
 
     const atCrossing = splitScoreGap(
-      reweighAxis(carA, 'viaje', viaje.crossingWeight!),
-      reweighAxis(carB, 'viaje', viaje.crossingWeight!),
+      reweighAxis(carA, 'carga', carga.crossingWeight!),
+      reweighAxis(carB, 'carga', carga.crossingWeight!),
     );
     expect(atCrossing.totalDiff).toBeCloseTo(0, 9);
   });
@@ -152,7 +160,7 @@ describe('splitScoreGap', () => {
   });
 
   it('throws when the rival is missing an axis that A has', () => {
-    // `scoreCatalog` siempre construye los seis ejes de `AXIS_ORDER` para
+    // `scoreCatalog` siempre construye los siete ejes de `AXIS_ORDER` para
     // todo coche, así que esta rama no ocurre en la aplicación; se
     // comprueba directamente, igual que `inputDatumFrom` comprueba su
     // propia rama defensiva pasándole un dato mal formado a mano.
@@ -168,17 +176,18 @@ describe('crossingsInRange', () => {
   it('keeps only the axes whose crossing weight falls within the 0-10 slider range (requisito 5.2)', () => {
     const gap = splitScoreGap(carA, carB);
     expect(crossingsInRange(gap).map((line) => line.axisId)).toEqual([
-      'viaje',
+      'carga',
       'prestaciones',
     ]);
   });
 
   it('is empty when A leads every axis and no single weight can flip the result (requisito 5.5)', () => {
-    // A gana los seis ejes por 1 punto; con los pesos por defecto sumando
-    // 13, ningún eje puede aportar por sí solo más de 4 (su peso máximo,
-    // viaje), así que ninguno cruza dentro de 0-10.
+    // A gana los siete ejes por 1 punto; con los pesos por defecto sumando
+    // 15, ningún eje puede aportar por sí solo más de 4 (su peso máximo,
+    // carga), así que ninguno cruza dentro de 0-10.
     const dominant = carBreakdown('dominant', {
-      viaje: 6,
+      carga: 6,
+      habitabilidad: 6,
       diario: 6,
       prestaciones: 6,
       fiabilidad: 6,
@@ -186,7 +195,8 @@ describe('crossingsInRange', () => {
       coste: 6,
     });
     const dominated = carBreakdown('dominated', {
-      viaje: 5,
+      carga: 5,
+      habitabilidad: 5,
       diario: 5,
       prestaciones: 5,
       fiabilidad: 5,
@@ -195,7 +205,7 @@ describe('crossingsInRange', () => {
     });
     const gap = splitScoreGap(dominant, dominated);
     expect(crossingsInRange(gap)).toEqual([]);
-    expect(stableAxes(gap)).toHaveLength(6);
+    expect(stableAxes(gap)).toHaveLength(7);
   });
 });
 
@@ -209,6 +219,7 @@ describe('stableAxes', () => {
       expect(inRangeIds.has(line.axisId)).toBe(false);
     }
     expect(stableAxes(gap).map((line) => line.axisId)).toEqual([
+      'habitabilidad',
       'diario',
       'fiabilidad',
       'estetica',
@@ -226,26 +237,27 @@ describe('stableAxes', () => {
 describe('topGapLines', () => {
   it('returns the top axis and the top axis of the opposite sign (requisito 4)', () => {
     const gap = splitScoreGap(carA, carB);
-    // viaje (+8) es el mayor en valor absoluto; prestaciones (-3) es el
+    // carga (+8) es el mayor en valor absoluto; prestaciones (-3) es el
     // mayor de signo contrario.
     expect(topGapLines(gap).map((line) => line.axisId)).toEqual([
-      'viaje',
+      'carga',
       'prestaciones',
     ]);
   });
 
   it('returns only the top axis when no other axis has the opposite sign', () => {
     const dominant = carBreakdown('dominant', {
-      viaje: 8,
+      carga: 8,
+      habitabilidad: 5,
       diario: 5,
       prestaciones: 8,
       fiabilidad: 8,
       estetica: 7,
       coste: 5,
     });
-    // Igual que B salvo en viaje: los otros cinco ejes empatan en 0.
+    // Igual que B salvo en carga: los otros seis ejes empatan en 0.
     const gap = splitScoreGap(dominant, carB);
-    expect(topGapLines(gap).map((line) => line.axisId)).toEqual(['viaje']);
+    expect(topGapLines(gap).map((line) => line.axisId)).toEqual(['carga']);
   });
 
   it('returns just the top empty-value line when the two cars tie on every axis', () => {

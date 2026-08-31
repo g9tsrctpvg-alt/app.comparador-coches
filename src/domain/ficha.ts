@@ -148,8 +148,9 @@ const POLARITY: Record<FichaField, DeltaPolarity> = {
   // matices (product/0032, requisito 3.3): a igualdad de todo lo demás,
   // nadie prefiere necesitar más sitio para dar la vuelta.
   turningCircleM: 'moreIsWorse',
-  // La magnitud que product/0017 añadió al eje de viaje precisamente porque
-  // mide si caben tres personas atrás.
+  // La magnitud que product/0017 añadió al eje de espacio precisamente
+  // porque mide si caben tres personas atrás; hoy es una de las dos que
+  // puntúa `habitabilidad` (product/0033).
   rearShoulderWidthMm: 'moreIsBetter',
   // Litros de maletero por el sitio que el coche ocupa: cuanto más alto,
   // mejor aprovechado está el espacio.

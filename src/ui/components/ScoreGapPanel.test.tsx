@@ -75,7 +75,7 @@ describe('ScoreGapPanel', () => {
     expect(markup).toContain('«Giulietta» es tu coche de referencia');
   });
 
-  it('renders the six axis lines, the headline and the sensitivity summary when both cars are scored', () => {
+  it('renders the seven axis lines, the headline and the sensitivity summary when both cars are scored', () => {
     const markup = renderToStaticMarkup(
       <ScoreGapPanel
         focusedName={sportage.carName}
@@ -89,7 +89,8 @@ describe('ScoreGapPanel', () => {
     expect(markup).toContain('aria-label="Detalle ejes"');
     expect(markup).toMatch(/gana por [\d,]+ pp\./);
     for (const label of [
-      'Espacio y confort en viaje',
+      'Capacidad de carga',
+      'Espacio para los de atrás',
       'Facilidad de uso diario',
       'Prestaciones',
       'Fiabilidad y garantía',

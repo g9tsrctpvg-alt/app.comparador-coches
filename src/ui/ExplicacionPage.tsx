@@ -37,7 +37,7 @@ function mustGet<T>(value: T | undefined, description: string): T {
 }
 
 const TOC = [
-  { id: 'ejes', label: 'Los seis ejes' },
+  { id: 'ejes', label: 'Los siete ejes' },
   { id: 'pesos', label: 'Los pesos' },
   { id: 'supuestos', label: 'Supuestos globales' },
   { id: 'penalizaciones', label: 'Penalizaciones condicionales' },
@@ -108,7 +108,7 @@ export function ExplicacionPage({ cars }: ExplicacionPageProps) {
 
       <section aria-labelledby="ejes" className={styles.section}>
         <h2 id="ejes" className={styles.sectionTitle}>
-          Los seis ejes
+          Los siete ejes
         </h2>
         <p className={styles.sectionIntro}>{CURVE_EXPLANATION}</p>
         <SCurveChart />

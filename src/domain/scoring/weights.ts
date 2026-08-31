@@ -1,10 +1,25 @@
 export type AxisId =
-  'viaje' | 'diario' | 'prestaciones' | 'fiabilidad' | 'estetica' | 'coste';
+  | 'carga'
+  | 'habitabilidad'
+  | 'diario'
+  | 'prestaciones'
+  | 'fiabilidad'
+  | 'estetica'
+  | 'coste';
 
 export type AxisWeights = Record<AxisId, number>;
 
+/**
+ * `carga` y `habitabilidad` a 5 cada uno (product/0033, requisito 4) no es
+ * una preferencia: es la única pareja que deja la nota total de todo el
+ * catálogo bit a bit igual a la que daba `viaje` con peso 10, porque
+ * `viaje` ya pesaba el maletero al 0,5 y la habitabilidad al 0,5 (0,25 +
+ * 0,25 entre batalla y hombros). Partir el eje, con estos pesos, no mueve
+ * ninguna nota por sí solo.
+ */
 export const DEFAULT_WEIGHTS: AxisWeights = {
-  viaje: 10,
+  carga: 5,
+  habitabilidad: 5,
   diario: 7,
   fiabilidad: 7,
   estetica: 6,
@@ -13,7 +28,8 @@ export const DEFAULT_WEIGHTS: AxisWeights = {
 };
 
 export const AXIS_ORDER: AxisId[] = [
-  'viaje',
+  'carga',
+  'habitabilidad',
   'diario',
   'prestaciones',
   'fiabilidad',
@@ -22,7 +38,8 @@ export const AXIS_ORDER: AxisId[] = [
 ];
 
 export const AXIS_LABELS: Record<AxisId, string> = {
-  viaje: 'Espacio y confort en viaje',
+  carga: 'Capacidad de carga',
+  habitabilidad: 'Espacio para los de atrás',
   diario: 'Facilidad de uso diario',
   prestaciones: 'Prestaciones',
   fiabilidad: 'Fiabilidad y garantía',

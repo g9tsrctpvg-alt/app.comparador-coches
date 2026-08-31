@@ -31,8 +31,9 @@ export interface PenaltyLine {
  * estable entre dominio e interfaz: la interfaz conmuta sobre estos
  * identificadores, nunca sobre el texto de una etiqueta.
  *
- * El confort de viaje no está aquí porque no es un juicio: lo calcula el
- * eje `viaje` a partir de magnitudes medidas (product/0005, product/0017). */
+ * El confort de viaje no está aquí porque no es un juicio: lo calculan los
+ * ejes `carga` y `habitabilidad` a partir de magnitudes medidas
+ * (product/0005, product/0017, product/0033). */
 export type EditableRatingField = 'aestheticsExterior' | 'aestheticsInterior';
 
 /** Un sumando puntuado contra una escala absoluta fija —dos anclajes, no el
@@ -94,7 +95,7 @@ export interface AxisBreakdown {
   weight: number;
   /** rawScore + penalizaciones, acotado a 0-10. */
   score: number;
-  /** score × weight. La suma de aportaciones de los seis ejes reproduce el total. */
+  /** score × weight. La suma de aportaciones de los siete ejes reproduce el total. */
   contribution: number;
 }
 

@@ -1,7 +1,7 @@
 # 0033 — El maletero y las plazas de atrás dejan de ser un solo eje
 
 - **Id:** product/0033
-- **Estado:** approved
+- **Estado:** implemented
 - **Tipo:** product
 - **Fecha:** 2026-08-31
 - **Specs relacionadas:** product/0001, product/0005, product/0011,
@@ -9,6 +9,12 @@
   technical/0011
 - **ADRs relacionados:** 0004, 0010
 - **Doc de estado:** `docs/estado/dominio.md`, `docs/estado/interfaz.md`
+
+> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
+> implementado: su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy no es cierta. **No es referencia del estado actual** — para
+> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
+> **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
