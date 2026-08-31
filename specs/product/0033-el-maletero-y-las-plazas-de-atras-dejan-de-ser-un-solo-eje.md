@@ -1,7 +1,7 @@
 # 0033 — El maletero y las plazas de atrás dejan de ser un solo eje
 
 - **Id:** product/0033
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-08-31
 - **Specs relacionadas:** product/0001, product/0005, product/0011,
