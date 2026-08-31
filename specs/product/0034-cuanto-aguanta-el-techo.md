@@ -1,7 +1,7 @@
 # 0034 — Cuánto aguanta el techo
 
 - **Id:** product/0034
-- **Estado:** implemented
+- **Estado:** verified
 - **Tipo:** product
 - **Fecha:** 2026-08-31
 - **Specs relacionadas:** product/0013, product/0014, product/0018,
