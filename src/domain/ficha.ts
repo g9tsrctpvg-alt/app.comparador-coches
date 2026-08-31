@@ -39,12 +39,13 @@ export function currentSourceOf(sourced: SourcedNumber) {
 }
 
 /**
- * Las veinticuatro magnitudes de `Car` que no son identidad, más la métrica
+ * Las veinticinco magnitudes de `Car` que no son identidad, más la métrica
  * derivada de litros por metro cuadrado (product/0014, requisito 1;
  * product/0018 les añade Δ y polaridad; product/0021 añade las dos de
  * generación; product/0028 añade autonomía eléctrica y batería; product/0032
- * añade el diámetro de giro): el inventario completo de «la ficha». El orden
- * y las etiquetas son cosa de la interfaz; aquí solo se declaran las claves.
+ * añade el diámetro de giro; product/0034 añade la carga máxima sobre el
+ * techo): el inventario completo de «la ficha». El orden y las etiquetas son
+ * cosa de la interfaz; aquí solo se declaran las claves.
  */
 export const FICHA_FIELDS = [
   'generationLaunchYear',
@@ -58,6 +59,7 @@ export const FICHA_FIELDS = [
   'groundClearanceMm',
   'trunkLiters',
   'litersPerSquareMeter',
+  'maxRoofLoadKg',
   'powerCv',
   'weightKg',
   'acceleration0to100',
@@ -155,6 +157,10 @@ const POLARITY: Record<FichaField, DeltaPolarity> = {
   // Litros de maletero por el sitio que el coche ocupa: cuanto más alto,
   // mejor aprovechado está el espacio.
   litersPerSquareMeter: 'moreIsBetter',
+  // Afirmable sin matices, como el diámetro de giro (product/0034,
+  // requisito 2.3): a igualdad de todo lo demás, nadie prefiere que el
+  // techo aguante menos.
+  maxRoofLoadKg: 'moreIsBetter',
 
   // Dirección del eje de prestaciones.
   powerCv: 'moreIsBetter',
@@ -238,6 +244,7 @@ interface EntityLike {
   rearShoulderWidthMm?: SourcedNumber;
   groundClearanceMm?: SourcedNumber;
   trunkLiters: SourcedNumber;
+  maxRoofLoadKg?: SourcedNumber;
   powerCv?: SourcedNumber;
   weightKg?: SourcedNumber;
   acceleration0to100?: SourcedNumber;
@@ -306,6 +313,7 @@ function cellsOf(entity: EntityLike): Record<FichaField, FichaCell> {
     groundClearanceMm: sourcedCell(entity.groundClearanceMm),
     trunkLiters: sourcedCell(entity.trunkLiters),
     litersPerSquareMeter: litersPerSquareMeterCell(entity),
+    maxRoofLoadKg: sourcedCell(entity.maxRoofLoadKg),
     powerCv: sourcedCell(entity.powerCv),
     weightKg: sourcedCell(entity.weightKg),
     acceleration0to100: sourcedCell(entity.acceleration0to100),
@@ -357,7 +365,7 @@ export function buildFicha(
 }
 
 /** Construye un `Record<FichaField, T>` recorriendo `FICHA_FIELDS` una sola
- * vez: evita repetir las veinticinco claves cada vez que hace falta un
+ * vez: evita repetir las veintiséis claves cada vez que hace falta un
  * registro nuevo con esa forma. */
 function mapFields<T>(fn: (field: FichaField) => T): Record<FichaField, T> {
   const result = {} as Record<FichaField, T>;
@@ -438,7 +446,7 @@ function numericValueOf(cell: FichaCell): number | undefined {
   return cell.kind === 'missing' ? undefined : cell.value;
 }
 
-/** El valor numérico de cada campo, para las veinticinco magnitudes que ya
+/** El valor numérico de cada campo, para las veintiséis magnitudes que ya
  * tiene calculadas un `FichaEntity` (product/0031, requisito 1.4): la misma
  * vía que decide si una celda «no tiene dato» decide si un imprescindible
  * cuenta o no cuenta para ese coche. `undefined` cuando la celda es

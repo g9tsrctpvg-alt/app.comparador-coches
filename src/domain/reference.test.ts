@@ -97,4 +97,17 @@ describe('ReferenceSchema', () => {
     const result = ReferenceSchema.safeParse(validReference);
     expect(result.success).toBe(true);
   });
+
+  it('accepts the max roof load, a third exception to "solo dimensiones" (product/0034)', () => {
+    const result = ReferenceSchema.safeParse({
+      ...validReference,
+      maxRoofLoadKg: sourced(75, 'kg'),
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it('accepts a reference without the optional max roof load', () => {
+    const result = ReferenceSchema.safeParse(validReference);
+    expect(result.success).toBe(true);
+  });
 });

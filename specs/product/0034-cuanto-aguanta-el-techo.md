@@ -1,7 +1,7 @@
 # 0034 — Cuánto aguanta el techo
 
 - **Id:** product/0034
-- **Estado:** approved
+- **Estado:** implemented
 - **Tipo:** product
 - **Fecha:** 2026-08-31
 - **Specs relacionadas:** product/0013, product/0014, product/0018,
@@ -10,6 +10,12 @@
   alcance*: puntuar esta magnitud exigiría anclar una escala con el criterio
   que fijan)
 - **Doc de estado:** `docs/estado/dominio.md`, `docs/estado/interfaz.md`
+
+> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
+> implementado: su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy no es cierta. **No es referencia del estado actual** — para
+> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
+> **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 

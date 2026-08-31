@@ -2891,6 +2891,18 @@
       ],
       "unit": "L"
     },
+    "maxRoofLoadKg": {
+      "value": 75,
+      "unit": "kg",
+      "sources": [
+        {
+          "label": "Honda España, accesorios oficiales (agosto 2026): «La carga máxima en la parte superior de la barra transversal es de 75 kg», https://www.honda.es/cars/new/cr-v-hybrid-suv/accessories.html",
+          "value": 75,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "powerCv": {
       "value": 184,
       "sources": [
@@ -5202,6 +5214,18 @@
       ],
       "unit": "L"
     },
+    "maxRoofLoadKg": {
+      "value": 75,
+      "unit": "kg",
+      "sources": [
+        {
+          "label": "Nissan España, manual del propietario oficial del Qashqai 2024 (agosto 2026): «El soporte para baca está ideado para soportar cargas (equipaje más barras transversales) inferiores a 75 kg», https://www.nissan.es/propietarios/manuales-del-propietario/manual-del-propietario/iom/qashqai/0j12/e1/2024/soporte-para-baca-segn-modelo-1.shtml",
+          "value": 75,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "powerCv": {
       "value": 205,
       "sources": [
@@ -5510,6 +5534,18 @@
         }
       ],
       "unit": "L"
+    },
+    "maxRoofLoadKg": {
+      "value": 100,
+      "unit": "kg",
+      "sources": [
+        {
+          "label": "Nissan España, manual del propietario oficial del X-Trail 2024 (agosto 2026): «La capacidad de carga de servicio de los soportes laterales para baca es de 100 kg (221 lb)», https://www.nissan.es/propietarios/manuales-del-propietario/manual-del-propietario/iom/xtrail/0t33/e1/2024/soporte-para-baca-segn-modelo-1.shtml",
+          "value": 100,
+          "estimated": false,
+          "current": true
+        }
+      ]
     },
     "powerCv": {
       "value": 204,
