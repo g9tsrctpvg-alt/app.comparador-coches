@@ -114,7 +114,7 @@ magnitudes se declaran, se muestran y se comparan; no producen nota.
 
 El núcleo de puntuación (`src/domain/scoring/`) no expone una función que
 devuelva solo un número. `scoreCatalog(cars, weights, assumptions,
-budgetEur)` devuelve, por coche, un `CarScoreBreakdown`: sus seis
+budgetEur)` devuelve, por coche, un `CarScoreBreakdown`: sus siete
 `AxisBreakdown` —uno por eje—, el `total`, que es la suma literal de sus
 `contribution` (peso × puntuación 0-10 de cada eje), y `percentage`, que es
 `total` expresado sobre el máximo posible con los pesos vigentes —`10 × Σ
@@ -146,13 +146,13 @@ es información del coche.
 
 `src/domain/scoring/scoreGap.ts` (product/0029) reparte la diferencia de
 nota entre dos `CarScoreBreakdown` ya puntuados —`splitScoreGap(a, b)`— en
-la aportación de cada uno de los seis ejes. Existe porque `AxisBreakdown` ya
+la aportación de cada uno de los siete ejes. Existe porque `AxisBreakdown` ya
 sabe explicar una nota, pero ninguna pieza del dominio sabía explicar una
 diferencia: dos coches con la misma nota redondeada pueden ser, por dentro,
 completamente opuestos.
 
 Cada línea es `peso × (score_i(A) − score_i(B))`, que por construcción
-coincide con `contribution_i(A) − contribution_i(B)`: la suma de las seis
+coincide con `contribution_i(A) − contribution_i(B)`: la suma de las siete
 reproduce exactamente `total(A) − total(B)`. Las líneas salen ordenadas por
 valor absoluto descendente, y un eje en el que los dos coches empatan es una
 línea válida de valor 0 —dos coches empatando en un eje es información, no
@@ -161,10 +161,10 @@ diferencia, una de cada signo cuando lo hay: el eje de mayor valor absoluto
 por sí solo podría ser, dos veces, el mismo lado de la historia.
 
 **La sensibilidad se deriva de la misma propiedad que hace exacto el
-reparto.** Desde que los seis ejes puntúan contra escalas absolutas (ADR
+reparto.** Desde que los siete ejes puntúan contra escalas absolutas (ADR
 0004), la nota de un eje no depende de los pesos ni del resto de
 candidatos: el peso solo multiplica. Por eso la diferencia de nota entre dos
-coches es una función **lineal** de cualquier peso —con los otros cinco
+coches es una función **lineal** de cualquier peso —con los otros seis
 fijos—, y el peso en el que esa diferencia cambia de signo (`crossingWeight`
 de cada línea) es una división exacta, no una búsqueda. `crossingsInRange`
 se queda con los ejes cuyo cruce cae dentro de `0-10` —el recorrido real del
@@ -184,7 +184,7 @@ importa estas cuatro funciones y los tipos, nunca las fórmulas de un eje.
 ## Cómo se puntúa un sumando
 
 El ADR 0004 fija el principio: una nota debe decir si un coche es bueno, no
-en qué puesto va de once. **Los seis ejes puntúan hoy contra escalas
+en qué puesto va de once. **Los siete ejes puntúan hoy contra escalas
 absolutas** — cada magnitud se puntúa contra dos anclajes fijos, razonados
 contra el mundo y no contra el catálogo: uno de saturación (nota 10, por
 debajo o por encima ya no mejora) y uno de rechazo (nota 0). Ninguna nota
@@ -194,9 +194,9 @@ sumando lleva un `AbsoluteScale` —valor, los dos anclajes y la nota—; no
 nombra ningún modelo del catálogo, porque la escala absoluta no tiene
 extremos que nombrar.
 
-Entre anclajes, la forma de la curva no es única. Cinco ejes (`diario`,
-`coste`, `viaje`, `prestaciones`, `fiabilidad`) siguen una curva en S
-(*smoothstep*, `scoreOnAbsoluteScale` en `scale.ts`):
+Entre anclajes, la forma de la curva no es única. Seis ejes (`diario`,
+`coste`, `carga`, `habitabilidad`, `prestaciones`, `fiabilidad`) siguen una
+curva en S (*smoothstep*, `scoreOnAbsoluteScale` en `scale.ts`):
 
 ```text
 t    = posición entre anclajes, 0 en el bueno y 1 en el malo
@@ -236,21 +236,22 @@ reconocer un control por el texto de su etiqueta. `applyOverride`
 `UserRatingSchema`: la cota 1-5 es del dominio, y una valoración fuera de
 rango falla en vez de entrar al cálculo.
 
-## Los seis ejes
+## Los siete ejes
 
 | Eje | Fórmula vigente | Cómo combina sus sumandos |
 | --- | --- | --- |
 | `diario` | `0,6×escala(anchura) + 0,4×escala(longitud)` (ponderación configurable), escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
 | `coste` | `0,5×escala(precio) + 0,5×escala(uso mensual)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
 | `estetica` | `mix×nota_exterior + (1−mix)×nota_interior`, escala absoluta lineal | Cada valoración se traduce a nota antes de combinarse |
-| `viaje` | `0,5×escala(maletero) + 0,25×escala(batalla) + 0,25×escala(anchura de hombros)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
+| `carga` | `escala(maletero)`, escala absoluta | Un solo sumando: no hay reparto que declarar |
+| `habitabilidad` | `0,5×escala(batalla) + 0,5×escala(anchura de hombros)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
 | `prestaciones` | `0,5×escala(CV/t) + 0,5×escala(aceleración invertida)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
 | `fiabilidad` | `0,7×escala(OCU) + 0,3×escala(garantía incondicional)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
 
-**Los seis ejes están migrados a escala absoluta** — `product/0002` a
+**Los siete ejes están migrados a escala absoluta** — `product/0002` a
 `product/0007`, entre el 2026-08-04 y el 2026-08-06 —. Ninguno normaliza ya
 contra el conjunto de candidatos: un peso solo significa lo que dice si se
-aplica sobre notas ya comparables, y eso rige ahora en los seis por igual.
+aplica sobre notas ya comparables, y eso rige ahora en los siete por igual.
 
 `prestaciones` y `fiabilidad` llegaban a este cambio ya sanos
 estructuralmente —normalizaban cada sumando por separado desde
@@ -259,9 +260,9 @@ estructuralmente —normalizaban cada sumando por separado desde
 `scoreOnAbsoluteScale` en cada sumando sin tocar el reparto declarado, que
 ya regía sobre notas comparables.
 
-**`viaje` ya no es una valoración subjetiva.** Antes de `product/0005` era
-un 1-5 que el usuario daba sobre fotos de catálogo — el único de los seis
-ejes sin fórmula—, y resultó estar midiendo lo bonito que parecía el
+**El espacio de viaje ya no es una valoración subjetiva.** Antes de
+`product/0005` era un 1-5 que el usuario daba sobre fotos de catálogo — el
+único eje sin fórmula—, y resultó estar midiendo lo bonito que parecía el
 interior (r = 0,77 con la estética) y no el espacio (r = 0,08 con el
 maletero, la única medida de espacio del catálogo). Los tres coches con la
 valoración subjetiva más alta eran los tres de marca premium juzgados en
@@ -272,7 +273,27 @@ se puntúa, no se edita desde el ranking y el campo `travelComfort` ya no
 existe ni en `Car` ni en `cars.json`. El confort de viaje es un dato
 calculado, no una nota que nadie dé.
 
-**`estetica` es el único de los seis sin curva en S.** Su escala
+**Esas tres magnitudes se reparten hoy en dos ejes, `carga` y
+`habitabilidad`, no uno** (`product/0033`). Hasta el 2026-08-31 vivían
+juntas en un único eje, `viaje`, con el maletero pesando el doble que la
+batalla y que la anchura de hombros porque era «la restricción que se
+incumple» —el equipaje cabe o no cabe, y si no cabe se deja en casa—,
+mientras que el espacio de atrás es gradual. Un cofre de techo derriba ese
+argumento sin tocar el espacio de quien va detrás: con baca, la carga deja
+de ser una restricción que se incumple y pasa a ser comprable, así que
+bajar su peso frente al de la habitabilidad dejó de ser expresable con un
+solo deslizador. Medido sobre el catálogo real, el maletero y la
+habitabilidad —batalla y anchura de hombros combinadas— son casi
+independientes (r = 0,28): un peso único gobernaba dos cosas que no van
+juntas. `carga` se queda con el maletero solo; `habitabilidad`, con
+batalla y anchura de hombros al 50/50, la misma proporción relativa que ya
+tenían dentro de `viaje` (0,25 y 0,25). Los pesos por defecto de los dos
+ejes nuevos, 5 y 5, no son una preferencia: son la única pareja que deja la
+nota total de todo el catálogo bit a bit igual a la que daba `viaje` con
+peso 10, porque `viaje` ya pesaba el maletero al 0,5 y la habitabilidad al
+0,5 en conjunto.
+
+**`estetica` es el único de los siete sin curva en S.** Su escala
 absoluta es lineal —`nota = (valoración − 1) × 2,5`—, no *smoothstep*: la
 valoración 1-5 que da el usuario ya es su juicio completo (1 = «no hay nada
 que salvar», 5 = «tan guapo como hace falta»), y comprimir los extremos con
@@ -286,20 +307,20 @@ migrados sin necesitar un tipo nuevo.
 eléctrico y el supuesto `cargaEnCasa` está desactivado. Se aplica después de
 combinar las dos escalas, y el resultado se acota de nuevo a 0-10.
 
-**Los anclajes de `diario`, `viaje` y `prestaciones` son los extremos del
-mercado, no de la gama comparada** (ADR 0010, `product/0026`). El ADR 0004
-ya exigía que cada escala se ancle contra algo externo al conjunto de
-candidatos, pero no fijaba con qué criterio se elige el número: los siete
-anclajes de estos tres ejes se habían ido apretando contra los candidatos
-que en cada momento se comparaban, hasta el punto de que un 10 en maletero
-llegaba a significar 620 litros con 910 ya a la venta. El criterio vigente
-es que el 10 es el mejor valor de esa magnitud en un turismo generalista de
-venta al público —sin deportivos, versiones de prestaciones, ultralujo,
-comerciales ni cuadriciclos— y el 0 el peor, cada uno con su modelo y su
-fuente publicada. `coste` queda fuera a propósito —su 0 de precio es el
-presupuesto declarado, no una cifra de mercado— y `fiabilidad` ya cumplía el
-criterio sin cambiar nada, porque sus extremos son los que la propia OCU
-publica.
+**Los anclajes de `diario`, `carga`, `habitabilidad` y `prestaciones` son
+los extremos del mercado, no de la gama comparada** (ADR 0010,
+`product/0026`). El ADR 0004 ya exigía que cada escala se ancle contra algo
+externo al conjunto de candidatos, pero no fijaba con qué criterio se elige
+el número: los siete anclajes de estos cuatro ejes se habían ido apretando
+contra los candidatos que en cada momento se comparaban, hasta el punto de
+que un 10 en maletero llegaba a significar 620 litros con 910 ya a la
+venta. El criterio vigente es que el 10 es el mejor valor de esa magnitud
+en un turismo generalista de venta al público —sin deportivos, versiones de
+prestaciones, ultralujo, comerciales ni cuadriciclos— y el 0 el peor, cada
+uno con su modelo y su fuente publicada. `coste` queda fuera a propósito
+—su 0 de precio es el presupuesto declarado, no una cifra de mercado— y
+`fiabilidad` ya cumplía el criterio sin cambiar nada, porque sus extremos
+son los que la propia OCU publica.
 
 ### Los anclajes de `diario`
 
@@ -346,34 +367,42 @@ no los usa: su fórmula vigente no resta residual de ninguna de las dos
 escalas. Quedan inertes a propósito — retirarlos del todo es decisión de una
 spec futura que analice la reventa con un horizonte explícito, no de esta.
 
-### Los anclajes de `viaje`
+### Los anclajes de `carga`
 
 | Magnitud | Nota 10 desde | Nota 0 hasta |
 | --- | --- | --- |
 | Maletero | 910 L | 185 L |
+
+El anclaje es el extremo del turismo generalista de venta al público (ADR
+0010), no el mejor y el peor de la gama que se está comparando. El techo lo
+pone el Škoda Kodiaq —910 L a cinco plazas—, el maletero generalista más
+grande del mercado; el suelo lo pone el Fiat 500 Hybrid —185 L—. Fuente:
+[motor.es](https://www.motor.es/).
+
+### Los anclajes de `habitabilidad`
+
+| Magnitud | Nota 10 desde | Nota 0 hasta |
+| --- | --- | --- |
 | Batalla | 3.200 mm | 2.400 mm |
 | Anchura de hombros (2ª fila) | 1.460 mm | 1.260 mm |
 
-Los tres anclajes son los extremos del turismo generalista de venta al
+Los dos anclajes son los extremos del turismo generalista de venta al
 público (ADR 0010), no el mejor y el peor de la gama que se está comparando.
-**Maletero:** el techo lo pone el Škoda Kodiaq —910 L a cinco plazas—, el
-maletero generalista más grande del mercado; el suelo lo pone el Fiat 500
-Hybrid —185 L—. **Batalla:** el BMW i7 —3.215 mm— marca el techo real; el Kia
-Picanto —2.400 mm, la batalla más corta a la venta— marca el suelo.
-**Anchura de hombros:** el Mercedes Clase E —146 cm, según las mediciones
-propias de km77— marca el techo; el mismo Picanto —126 cm, km77— marca el
-suelo. Dimensiones y maleteros de [motor.es](https://www.motor.es/) salvo la
-anchura de hombros, que es de [km77](https://www.km77.com/) porque es la
-fuente que ya usa el catálogo para esa magnitud.
+**Batalla:** el BMW i7 —3.215 mm— marca el techo real; el Kia Picanto
+—2.400 mm, la batalla más corta a la venta— marca el suelo. **Anchura de
+hombros:** el Mercedes Clase E —146 cm, según las mediciones propias de
+km77— marca el techo; el mismo Picanto —126 cm, km77— marca el suelo.
+Batalla de [motor.es](https://www.motor.es/); anchura de hombros de
+[km77](https://www.km77.com/), porque es la fuente que ya usa el catálogo
+para esa magnitud.
 
-**El maletero pesa 0,5 y las otras dos 0,25 cada una** porque el maletero es
-la restricción que se **incumple** —el equipaje cabe o no cabe, y si no cabe
-se deja en casa—, mientras que el espacio de atrás es gradual. Batalla y
-anchura de hombros miden ese mismo espacio en dos direcciones, a lo largo y
-a lo ancho, y pesan igual entre sí porque ninguna es mejor proxy que la
-otra: la batalla reparte entre habitáculo y vanos, así que dos coches con la
-misma batalla pueden dar distinto sitio a las piernas; la anchura de hombros
-se mide dentro del habitáculo pero solo a una altura.
+**Batalla y anchura de hombros pesan igual entre sí** —0,5 cada una—
+**porque ninguna es mejor proxy que la otra** del espacio de quien va
+detrás: la batalla reparte entre habitáculo y vanos, así que dos coches con
+la misma batalla pueden dar distinto sitio a las piernas; la anchura de
+hombros se mide dentro del habitáculo pero solo a una altura. Es la misma
+proporción relativa que las dos tenían entre sí antes de `product/0033`,
+cuando vivían dentro de `viaje` a 0,25 cada una.
 
 Con anclajes de mercado, ningún candidato del catálogo satura ya un extremo
 salvo el Hyundai IONIQ 5 en anchura de hombros —mide exactamente 1.460 mm—.
@@ -455,8 +484,11 @@ remite a ese panel, sin ofrecer edición propia.
 ## Pesos
 
 `AxisWeights` (`src/domain/scoring/weights.ts`), uno por eje, 0-10. Por
-defecto: viaje 10, diario 7, fiabilidad 7, estética 6, prestaciones 5,
-coste 5 — reflejan una prioridad personal, no una fórmula del negocio.
+defecto: carga 5, habitabilidad 5, diario 7, fiabilidad 7, estética 6,
+prestaciones 5, coste 5 — reflejan una prioridad personal, no una fórmula
+del negocio. Los dos primeros son la única excepción: no son una
+preferencia, sino la partición exacta del peso 10 que llevaba `viaje` antes
+de `product/0033` (ver «Los siete ejes», arriba).
 
 ## El catálogo
 
@@ -466,7 +498,7 @@ de fuentes.
 Un catálogo **sin ningún coche** no es un catálogo válido: `loadCatalog` lo
 rechaza igual que rechaza un registro mal formado, así que el fallo se
 declara al cargar y no a mitad del primer ranking. `scoreCatalog` lleva
-además su propia comprobación — con los seis ejes en escala absoluta, nada
+además su propia comprobación — con los siete ejes en escala absoluta, nada
 dentro de ellos falla por su cuenta si de todos modos se le pasara un
 catálogo vacío.
 
@@ -511,7 +543,7 @@ cabeza.
 ## Los imprescindibles
 
 `src/domain/eliminatoryRules.ts` (product/0031): un umbral sobre una de las
-veinticinco magnitudes de la ficha (`FICHA_FIELDS`), `{ field, operator,
+veintiséis magnitudes de la ficha (`FICHA_FIELDS`), `{ field, operator,
 value }`, con `operator` en `'min'` o `'max'`. `evaluateRules` los evalúa
 contra los valores numéricos ya extraídos de un coche
 (`numericFieldValues`/`numericValuesFromCells`, `src/domain/ficha.ts`) y
@@ -553,11 +585,18 @@ sobre el mismo dato, pero no lo duplica como una regla de esta lista.
 entran en el ranking—, sino puntos de comparación para la ficha
 (`product/0013`, requisitos 3 y 4). Comparten con `Car` la forma de un dato
 con fuente (`SourcedNumber`), pero no su lista de campos: una `Reference`
-solo declara identidad, tecnología, fotos y cinco magnitudes dimensionales
-—longitud, anchura, altura, altura libre al suelo y maletero—, nada de lo
-que solo sirve para puntuar. Una lista separada, no un campo en `Car`, hace
-que pasarle una `Reference` a `scoreCatalog` sea un error de tipos, no un
-olvido posible en tiempo de ejecución.
+declara identidad, tecnología, fotos, generación (`product/0021` — la
+referencia existe para dar contexto, y de cuándo es el coche contra el que
+se compara todo es precisamente eso) y cinco magnitudes dimensionales
+obligatorias —longitud, anchura, altura, altura libre al suelo y
+maletero—, nada de lo que solo sirve para puntuar. Dos excepciones más,
+ambas opcionales por el mismo motivo: sin ellas, la Δ de esa magnitud
+quedaría `'unavailable'` para todos los candidatos siempre que se comparen
+contra esta referencia. El diámetro de giro (`turningCircleM`,
+`product/0032`) fue la primera; la carga máxima sobre el techo
+(`maxRoofLoadKg`, `product/0034`) es la segunda. Una lista separada, no un
+campo en `Car`, hace que pasarle una `Reference` a `scoreCatalog` sea un
+error de tipos, no un olvido posible en tiempo de ejecución.
 
 `references.json` trae hoy al Alfa Romeo Giulietta de la especificación
 original del proyecto —la fila que `product/0001` dejó fuera a propósito
@@ -567,16 +606,17 @@ por no ser un candidato—, con sus cinco magnitudes fuente por fuente.
 
 `src/domain/ficha.ts` (product/0014, fundido con la antigua ficha técnica
 por product/0018; product/0021 añade las dos de generación; product/0028
-la autonomía eléctrica y la batería; product/0032 el diámetro de giro):
-compara candidatos y referencias entre sí, magnitud por magnitud, sobre
-veinticinco campos de `Car`/`Reference` —veinticuatro propios más
-`litersPerSquareMeter`, derivada—. No calcula puntuación: es lectura, no
-juicio agregado, así que vive fuera de `scoring/`.
+la autonomía eléctrica y la batería; product/0032 el diámetro de giro;
+product/0034 la carga máxima sobre el techo): compara candidatos y
+referencias entre sí, magnitud por magnitud, sobre veintiséis campos de
+`Car`/`Reference` —veinticinco propios más `litersPerSquareMeter`,
+derivada—. No calcula puntuación: es lectura, no juicio agregado, así que
+vive fuera de `scoring/`.
 
 - **`litrosPorMetroCuadrado(trunkLiters, lengthMm, widthMm)`** — litros de
   maletero por metro cuadrado de huella en el suelo: cuánto espacio da un
   coche por el sitio que ocupa (`product/0013`, requisito 11).
-- **`FICHA_FIELDS`/`FichaField`** — las veinticinco claves, en el orden en
+- **`FICHA_FIELDS`/`FichaField`** — las veintiséis claves, en el orden en
   que se declaran; la interfaz decide etiqueta, unidad y agrupación por
   bloque a partir de ahí, no aquí.
 - **`buildFicha(cars, references)`** — un `FichaEntity` por candidato y por
@@ -585,16 +625,16 @@ juicio agregado, así que vive fuera de `scoring/`.
   comparación los elige quien mira la ficha. Una celda es `'sourced'`
   (valor, unidad, estimado), `'rating'` (una nota de usuario, sobre 5) o
   `'missing'` —el campo no existe en esa entidad, no un cero—: una
-  `Reference` declara siempre siete de las veinticinco —las cinco
+  `Reference` declara siempre siete de las veintiséis —las cinco
   dimensionales, `litersPerSquareMeter` derivada y el año de lanzamiento de
   su generación, obligatorio—, así que comparar contra ella deja dieciséis
-  celdas `'missing'` por construcción, no por caso especial; dos más
-  —el año de retoque y el diámetro de giro (product/0032)— dependen de si
-  esa referencia concreta las declara. Entre las que faltan siempre están
-  la autonomía eléctrica y la batería: la referencia es un térmico puro y
-  no le aplican.
+  celdas `'missing'` por construcción, no por caso especial; tres más —el
+  año de retoque, el diámetro de giro (product/0032) y la carga máxima
+  sobre el techo (product/0034)— dependen de si esa referencia concreta las
+  declara. Entre las que faltan siempre están la autonomía eléctrica y la
+  batería: la referencia es un térmico puro y no le aplican.
 - **La tabla de polaridad** (`POLARITY`, `Record<FichaField,
-  DeltaPolarity>` — TypeScript exige las veinticinco claves en tiempo de
+  DeltaPolarity>` — TypeScript exige las veintiséis claves en tiempo de
   compilación, así que ninguna puede quedar sin dirección declarada por
   descuido) fija si más es mejor, peor o si el dato no tiene una dirección
   declarada, con su razón junto a cada una:
@@ -608,7 +648,9 @@ juicio agregado, así que vive fuera de `scoring/`.
   - **`moreIsBetter`** — `trunkLiters`, `litersPerSquareMeter` (mejor
     aprovechado el espacio), `rearShoulderWidthMm` (la magnitud que
     `product/0017` añadió porque mide si caben tres personas atrás),
-    `powerCv`, `residualPct5y` (lo que se recupera al vender),
+    `maxRoofLoadKg` (product/0034: la misma dirección afirmable sin
+    matices que el diámetro de giro — nadie prefiere que el techo aguante
+    menos), `powerCv`, `residualPct5y` (lo que se recupera al vender),
     `reliabilityOcu`, `warrantyYears`, `warrantyExtensionYears`,
     `electricRangeKm` (kilómetros con la batería llena: aquí sí hay una
     dirección que el proyecto puede afirmar sin matices),
@@ -639,7 +681,7 @@ juicio agregado, así que vive fuera de `scoring/`.
   con texto accesible, nunca como un cero engañoso, pero el dominio los
   distingue: apagar la Δ a propósito no es lo mismo que no poder calcularla.
 - **`sortFicha(entities, criterion)`** — ordena por `catalog` (el orden del
-  propio catálogo) o por **cualquiera de las veinticinco magnitudes**:
+  propio catálogo) o por **cualquiera de las veintiséis magnitudes**:
   `FICHA_SORT_CRITERIA` se declara como `['catalog', ...FICHA_FIELDS]`, no
   como una lista aparte, así que una magnitud nueva en la ficha es ordenable
   el mismo día que existe. La **dirección la fija la tabla de polaridad**, no

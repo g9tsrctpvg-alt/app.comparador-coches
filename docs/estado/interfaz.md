@@ -116,7 +116,7 @@ de colores por debajo de su umbral de contraste hace fallar
   espacio que el estado necesita ya lo reserva la regla base.
 - **La paleta** son siete papeles con nombre por función, no por tono
   (`--color-paper`, `--color-card`, `--color-ink`, `--color-mute`,
-  `--color-rule`, `--color-accent`, `--color-signal`) **más seis colores de
+  `--color-rule`, `--color-accent`, `--color-signal`) **más siete colores de
   eje** (ver el punto siguiente), con derivados para
   superficie elevada (`--color-card-raised`), regla estructural
   (`--color-rule-strong`, frente al pelo de 1px de `--color-rule`), un
@@ -138,31 +138,41 @@ de colores por debajo de su umbral de contraste hace fallar
   igual que `--color-accent-tint-solid` lo es de `card`: si el acento se mueve,
   se recalcula. Contrastes sobre él, los tres declarados: `ink` 13,77:1,
   `accent` 5,96:1 y `mute` 4,86:1.
-- **Cada eje tiene su color** (`technical/0011`): `--color-axis-viaje`
-  `#2a6f8f` azul, `--color-axis-diario` `#14655c` teal, `--color-axis-prestaciones`
-  `#8e2f45` carmín, `--color-axis-fiabilidad` `#31417a` índigo,
-  `--color-axis-estetica` `#8d4784` ciruela y `--color-axis-coste` `#7d6417`
-  ocre. Los doce pares que forman con `card` y `paper` están declarados en
-  `scripts/validateContrast.ts` y van del 4,77:1 —`viaje` sobre `paper`, el
-  más justo— al 9,09:1. Tres cosas de esta paleta no son estéticas y por eso
-  se leen aquí:
+- **Cada eje tiene su color** (`technical/0011`; `product/0033` añade el
+  séptimo): `--color-axis-carga` `#2a6f8f` azul, `--color-axis-habitabilidad`
+  `#2d4b03` verde musgo, `--color-axis-diario` `#14655c` teal,
+  `--color-axis-prestaciones` `#8e2f45` carmín, `--color-axis-fiabilidad`
+  `#31417a` índigo, `--color-axis-estetica` `#8d4784` ciruela y
+  `--color-axis-coste` `#7d6417` ocre. `carga` hereda el azul de `viaje`,
+  el eje que `product/0033` parte en dos: es la misma mitad de la fórmula
+  —el maletero—, ahora sola. Los catorce pares que forman con `card` y
+  `paper` están declarados en `scripts/validateContrast.ts` y van del
+  4,77:1 —`carga` sobre `paper`, el más justo— al 9,30:1. Cuatro cosas de
+  esta paleta no son estéticas y por eso se leen aquí:
   - **`diario` repite el valor exacto del acento.** Es el eje del uso de
     todos los días; un tono nuevo para él no compraba nada. Token propio y no
     alias, igual que `--color-positive`.
-  - **La luminosidad está separada a propósito**, L\* de 29 a 44 en vez de
-    35-39. Con los seis a la misma luminosidad el peor par bajo protanopia
-    caía a ΔE 5,2; abriendo el rango sube a 10,1, porque la luminosidad es lo
-    único que sobrevive a una deficiencia de visión del color.
+  - **La luminosidad está separada a propósito**, L\* de 28 a 44 en vez de
+    35-39. Con los seis originales a la misma luminosidad el peor par bajo
+    protanopia caía a ΔE 5,2; abriendo el rango sube a 10,1, porque la
+    luminosidad es lo único que sobrevive a una deficiencia de visión del
+    color. `habitabilidad` extiende ese rango por abajo en vez de
+    comprimirlo, y su peor par bajo protanopia (11,2) queda por encima del
+    peor que la paleta ya tenía.
   - **`prestaciones` es carmín y no rojo tierra.** El candidato natural
     quedaba a ΔE 24,5 de `signal`, con el que comparte pantalla en las celdas
     Δ: un rojo de eje confundible con «este coche empeora».
+  - **`habitabilidad` se eligió por búsqueda**, no a ojo: entre los tonos que
+    cumplen a la vez las tres condiciones de arriba, con ΔE2000 mínimo de
+    21,7 contra los otros seis y de 40,1 contra `signal`.
 
   **El color nunca sustituye al texto.** El nombre del eje va siempre escrito
-  al lado de su color y de su icono, así que quien no distinga dos de los seis
-  tonos no pierde ningún dato. **No hay tinte por eje**: teñir el fondo de una
-  tarjeta cambiaría el fondo real de todo el texto que lleva encima y obligaría
-  a recalcular los pares de contraste contra el resultado compuesto, no contra
-  `card`. La razón está escrita en `global.css`, donde estarían los tokens.
+  al lado de su color y de su icono, así que quien no distinga dos de los
+  siete tonos no pierde ningún dato. **No hay tinte por eje**: teñir el fondo
+  de una tarjeta cambiaría el fondo real de todo el texto que lleva encima y
+  obligaría a recalcular los pares de contraste contra el resultado
+  compuesto, no contra `card`. La razón está escrita en `global.css`, donde
+  estarían los tokens.
 
   Esto **amplía la paleta de siete papeles** que fija `product/0009`, que está
   consolidada y no se edita: la enmienda vive en `technical/0011` y aquí. Lo
@@ -274,7 +284,7 @@ independientemente del fragmento, así que ningún alias puede dar 404.
 - **`EliminatoryRulesPanel`** (product/0031) — el panel «Imprescindibles»:
   una fila fija y no eliminable con el presupuesto, y una lista de reglas
   eliminatorias, cada una magnitud + operador + umbral, sobre cualquiera de
-  las veinticinco claves de `FICHA_FIELDS`. El `<select>` de magnitud
+  las veintiséis claves de `FICHA_FIELDS`. El `<select>` de magnitud
   agrupa por los mismos seis bloques que «Orden» en la ficha
   (`COMPLETE_BLOCKS`, exportado de `FichaPage.tsx` para esto), y oculta las
   magnitudes que ya tienen regla —a lo sumo una por magnitud—. El operador
@@ -341,12 +351,12 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   o que incumpla una regla llega a esta fila: vive en el tramo no elegible
   de `RankingList`, con `IneligibleRow` (product/0031) — la marca «Fuera de
   presupuesto» que esta fila llevaba antes de esa spec ya no hace falta
-  aquí. El maletero sustituye a la potencia en esa línea
-  desde `product/0022`: es la magnitud de mayor peso dentro de la fórmula
-  del eje `viaje` —la mitad de su nota—, que es a su vez el eje de mayor
-  peso por defecto; la potencia, que solo pesaba dentro de `prestaciones`,
-  el eje de menor peso por defecto, sigue disponible en el desglose, como
-  dato de entrada de ese eje. La tecnología se muestra con su etiqueta
+  aquí. El maletero sustituye a la potencia en esa línea desde
+  `product/0022`: es la única magnitud del eje `carga` (product/0033 lo
+  separó de `habitabilidad`, que antes compartía fórmula con él bajo el
+  nombre `viaje`); la potencia, que solo pesaba dentro de `prestaciones`,
+  sigue disponible en el desglose, como dato de entrada de ese eje. La
+  tecnología se muestra con su etiqueta
   legible (`src/ui/technologyLabels.ts`, product/0008: «Eléctrico», «Híbrido
   enchufable»…), nunca con la sigla del modelo de datos.
 
@@ -373,7 +383,7 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   van los controles de valoración editables (los subcomponentes que el
   dominio marca con `editableRating`; la fila no sabe
   de antemano cuáles son ni cuántos) y por último el desglose completo de
-  los seis ejes.
+  los siete ejes.
 
   Con `variant="list"` la fila conserva el marcado y el tamaño que ya tenía
   antes de `product/0022`: posición y nombre en una línea, la línea de apoyo
@@ -410,7 +420,8 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   perciba visualmente. La usan `RankingRow` (línea de apoyo),
   `AxisBreakdownView` (datos de entrada), `AppFooter` (leyenda) y
   `FichaPage` (leyenda y celdas).
-- **`AxisIcon`** (technical/0011) — el dibujo de cada eje: maleta `viaje`,
+- **`AxisIcon`** (technical/0011; `product/0033` añade el séptimo) — el
+  dibujo de cada eje: maleta `carga`, asiento trasero `habitabilidad`,
   volante `diario`, cuentarrevoluciones `prestaciones`, escudo `fiabilidad`,
   gema `estetica` y etiqueta `coste`. SVG en línea sobre un `viewBox` común de
   24×24, `fill="none"`, `stroke="currentColor"` y un solo grosor de trazo
@@ -455,16 +466,16 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   el catálogo real con los pesos y supuestos por defecto, nunca a mano: es
   la misma vía (`scoreCatalog`) que usa el desglose por coche, así que no
   puede desincronizarse de lo que la aplicación realmente calcula. Tiene su
-  propia tabla de contenidos (los seis ejes, los pesos, los supuestos
+  propia tabla de contenidos (los siete ejes, los pesos, los supuestos
   globales, las penalizaciones condicionales, los criterios eliminatorios
   —product/0031: que un imprescindible filtra y nunca puntúa, texto
   estático, sin pasar por `scoreCatalog`—, las limitaciones conocidas y la
   procedencia de los datos) y comparte `SCurveChart` y `AXIS_CONTENT`
-  con `AxisBreakdownView`. Las seis tarjetas de eje y las seis filas de la
+  con `AxisBreakdownView`. Las siete tarjetas de eje y las siete filas de la
   lista de pesos llevan el icono y el filete de color de su eje
   (`technical/0011`); **la tabla de contenidos no**, porque sus entradas son
-  secciones y no ejes — teñir «Los seis ejes» de uno de los seis colores
-  diría algo falso. Sus seis `<h2>` de sección llevan un filete corto de acento
+  secciones y no ejes — teñir «Los siete ejes» de uno de los siete colores
+  diría algo falso. Sus siete `<h2>` de sección llevan un filete corto de acento
   encima (`technical/0012`), que los hace **localizables, no jerárquicos**: un
   `<h2>` sigue sin tamaño propio entre los 40px del título de vista y los 16px
   del cuerpo, y esa deuda sigue anotada en `docs/roadmap.md`.
@@ -488,7 +499,7 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     anchura, altura libre al suelo, maletero, potencia, precio —tamaño,
     mecánica y coste, en ese orden— reutilizando el mismo `FieldDef` que
     `Completa` para potencia y precio, sin una segunda declaración) o
-    `Completa` (las veinticinco, agrupadas en seis bloques con cabecera
+    `Completa` (las veintiséis, agrupadas en seis bloques con cabecera
     propia). Arranca en `Esenciales`. En «Mecánica y prestaciones», detrás
     de «Consumo», van **«Autonomía eléctrica»** y **«Batería»**
     (product/0028): consumo, autonomía y batería son la misma pregunta
@@ -500,7 +511,11 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     «Tamaño y espacio», detrás de «Batalla», va **«Diámetro de giro»**
     (product/0032, un decimal): las dos se leen juntas porque la batalla es
     el factor que más manda en el giro. A diferencia de la batalla —neutra—,
-    aquí sí hay una dirección afirmable: menos es mejor.
+    aquí sí hay una dirección afirmable: menos es mejor. Detrás de «Litros
+    por m²», cierra el bloque **«Carga máxima en techo»** (product/0034, sin
+    decimales): misma dirección afirmable que el diámetro de giro, pero al
+    revés —más es mejor—, y su Δ es `'unavailable'` contra cualquier
+    referencia o candidato que no la declare.
   - **Comparar** — **dos controles para el mismo estado**, sincronizados por
     construcción porque los dos escriben `comparisonId`: un radio por columna,
     con `name` compartido (`pinned-model`), y el `<select>` de la barra, que
@@ -521,7 +536,7 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     que una celda sin dato, no un número que no diría nada. Arranca fijada
     la primera referencia del catálogo, si hay alguna.
   - **Orden** — `Catálogo` más **una opción por cada una de las
-    veinticinco magnitudes** de «Completa» (product/0027), agrupadas en el
+    veintiséis magnitudes** de «Completa» (product/0027), agrupadas en el
     `<select>` por los mismos seis bloques y con el mismo rótulo que da a esa
     fila su
     `FieldDef` —las opciones se generan de `COMPLETE_BLOCKS`, no de una
@@ -571,9 +586,10 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     rótulo, el icono y el color del eje (`technical/0011`) y el valor
     firmado en puntos porcentuales del máximo alcanzable —la misma unidad
     que `percentage`—, siempre en texto junto a la barra: el color nunca es
-    la única codificación, porque los seis colores de eje no se separan lo
-    bastante como paleta categórica (deuda registrada el 2026-08-29 en
-    `docs/roadmap.md`) para ser la única vía de leer seis series a la vez.
+    la única codificación, porque los seis colores de eje originales no se
+    separaban lo bastante como paleta categórica (deuda registrada el
+    2026-08-29 en `docs/roadmap.md`, sobre los seis anteriores al séptimo de
+    `product/0033`) para ser la única vía de leer varias series a la vez.
     Un eje en el que empatáis no dibuja una barra de longitud cero: se
     resume en una frase aparte. Cada línea es un botón que despliega, para
     ese eje, el `AxisBreakdownView` del modelo enfocado y el del modelo de
