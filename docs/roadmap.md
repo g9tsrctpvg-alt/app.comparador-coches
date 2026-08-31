@@ -5,7 +5,7 @@
 > las indexa todas en una sola tabla. `CLAUDE.md` resume y no duplica: al
 > cerrar una fase se actualiza este documento, no el índice.
 
-**Última actualización:** 2026-08-30
+**Última actualización:** 2026-08-31
 
 ## Fases
 
@@ -68,6 +68,7 @@ que no vuelva sin argumento nuevo.
 | Código: cotas de los campos numéricos en `CarSchema`, andamiaje repetido de los seis ejes y `normalizeAll` sin uso, `ui/` fuera del suelo de cobertura, `pensandoVender`/`residualPct5y` desconectados, dos escalones tipográficos sin consumidor, `.duelChipActive` sin tratamiento visual, `index.html` sin icono | *Deudas abiertas* |
 | Infraestructura y proceso: acciones de GitHub sin fijar a SHA, *smoke test* post-despliegue con el disparador ya cumplido, `docs/estado/observabilidad.md` sin declarar | *Deudas abiertas* |
 | Propuestas de evolución aceptadas y aún sin spec: P5 a P7 | *Propuestas de evolución*, abajo |
+| P16 — el cofre de techo rompe el reparto interno de `viaje`: falta elegir cómo se adapta antes de dar de alta el Honda ZR-V | *Propuestas de evolución*, abajo |
 | Ocho aplazamientos conscientes, cada uno con su disparador | *Aplazamientos con disparador* |
 
 ### Propuestas de evolución
@@ -100,6 +101,7 @@ vuelve sin argumento nuevo).
 | P13 | «Qué renuncias si eliges el líder»: la magnitud en la que el segundo ganaba | `descartada` | La ficha comparada ya lo da entre dos coches, que es donde importa (decisión del usuario, 2026-08-29) |
 | P14 | Instantánea fechada de la decisión | `descartada` | Sin valor sustancial: la configuración ya viaja en la URL (decisión del usuario, 2026-08-29) |
 | P15 | **Cuánto sitio necesita para dar la vuelta**: declarar el diámetro de giro entre bordillos de cada coche y mostrarlo en la ficha completa, con Δ y orden | `consolidada` | `product/0032`, consolidada el 2026-08-30: `turningCircleM` en `Car` y `Reference`, fila nueva en «Tamaño y espacio» detrás de «Batalla», `moreIsWorse`, un decimal, Δ y orden desde el primer día. Nace de una petición directa del usuario, no del repaso de producto del 2026-08-29. Quince candidatos y la referencia declaran el dato con fuente km77 «entre bordillos»; tres quedan sin él —deuda registrada— porque su fuente solo publica la medida «entre paredes», que la spec rechaza a propósito para no repetir el error de la anchura de hombros. Que el giro puntúe queda fuera y aplazado con disparador: que un candidato quede descartado de verdad por no maniobrar donde tiene que maniobrar |
+| P16 | **El cofre de techo rompe el 0,5 del maletero en `viaje`**: el eje pesa el maletero el doble que la batalla y que la anchura de hombros porque es «la restricción que se incumple —el equipaje cabe o no cabe—», y con un cofre en la baca deja de incumplirse: la carga de viaje pasa a ser comprable, la habitabilidad de atrás no. Adaptar el eje a esa asimetría antes de meter en el catálogo un coche que la exhibe (Honda ZR-V: 380 L de maletero y 145 cm de hombros, el segundo mejor del catálogo) | `en espera` | Falta elegir la forma. Medido el 2026-08-31 sobre los dieciocho candidatos publicados más un ZR-V simulado: (a) el maletero y la habitabilidad —batalla y hombros— son casi independientes (r = 0,28), así que hoy un solo peso, el más alto de los seis, gobierna dos cosas que no van juntas; (b) sumar los litros del cofre al dato de maletero **no sirve**: con +400 L la desviación de esa subnota cae de 1,26 a 0,22 y los dieciocho se apilan en el 10, que es el fallo del ADR 0010 al revés; (c) mover el reparto interno —maletero de 0,5 a 0,25— sube al ZR-V del puesto 12 al 8 y al Civic del 5 al 3, y es aritméticamente equivalente a partir `viaje` en dos ejes, con precedente ya en el código (`ponderacionAnchoDiario`, `mezclaEstetica`). Un eje nuevo solo compra visibilidad —color, icono y su línea en el reparto de `product/0029`—, no poder de expresión |
 
 ## Fase 0 — Base documental
 
