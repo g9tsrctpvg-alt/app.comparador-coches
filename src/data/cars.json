@@ -418,11 +418,11 @@
       "unit": "kg"
     },
     "acceleration0to100": {
-      "value": 11.0,
+      "value": 11,
       "sources": [
         {
           "label": "Especificación del proyecto (julio 2026)",
-          "value": 11.0,
+          "value": 11,
           "estimated": false,
           "current": true
         }
@@ -2639,11 +2639,11 @@
       "unit": "s"
     },
     "consumption": {
-      "value": 8.0,
+      "value": 8,
       "sources": [
         {
           "label": "Especificación del proyecto (julio 2026)",
-          "value": 8.0,
+          "value": 8,
           "estimated": true,
           "current": true
         }
@@ -2947,11 +2947,11 @@
       "unit": "s"
     },
     "consumption": {
-      "value": 6.0,
+      "value": 6,
       "sources": [
         {
           "label": "Especificación del proyecto (julio 2026)",
-          "value": 6.0,
+          "value": 6,
           "estimated": true,
           "current": true
         }
@@ -3219,12 +3219,12 @@
       ]
     },
     "consumption": {
-      "value": 16.0,
+      "value": 16,
       "unit": "kWh/100km",
       "sources": [
         {
           "label": "km77, ficha ID.4 Pro 210 kW 286 CV 77 kWh, consumo WLTP combinado (agosto 2026)",
-          "value": 16.0,
+          "value": 16,
           "estimated": false,
           "current": true
         }
@@ -3836,12 +3836,12 @@
       ]
     },
     "consumption": {
-      "value": 16.0,
+      "value": 16,
       "unit": "kWh/100km",
       "sources": [
         {
           "label": "km77, ficha IONIQ 5 Light 84 kWh 228 CV RWD, consumo WLTP combinado (agosto 2026)",
-          "value": 16.0,
+          "value": 16,
           "estimated": false,
           "current": true
         }
@@ -5572,11 +5572,11 @@
       "unit": "kg"
     },
     "acceleration0to100": {
-      "value": 8.0,
+      "value": 8,
       "sources": [
         {
           "label": "km77, ficha X-Trail e-POWER 204 CV N-Connecta 2026 (agosto 2026), https://www.km77.com/coches/nissan/x-trail/2026/estandar/estandar/x-trail-e-power-204-cv-n-connecta/datos",
-          "value": 8.0,
+          "value": 8,
           "estimated": false,
           "current": true
         }
@@ -5723,6 +5723,308 @@
         "url": "https://storyblok-assets.prod.nissan.eu/f/288274551197823/2560x1280/6551d8af8b/xtrail_modale_interior_tab3_01_desktop.jpg",
         "credit": "Nissan — nissan.es (web comercial oficial, galería de interior del X-Trail)",
         "shows": "Nissan X-Trail (T33) retocado de 2026, salpicadero, volante, pantalla central y consola, tapicería negra — foto oficial de estudio. Acabado alto de gama, no necesariamente el N-Connecta que puntúa la ficha."
+      }
+    }
+  },
+  {
+    "id": "honda-zr-v",
+    "name": "ZR-V e:HEV",
+    "brand": "Honda",
+    "technology": "HEV",
+    "generation": {
+      "launchYear": {
+        "value": 2022,
+        "sources": [
+          {
+            "label": "Wikipedia (agosto 2026), «Honda ZR-V»: «was first unveiled in the United States on 4 April 2022», https://en.wikipedia.org/wiki/Honda_ZR-V",
+            "value": 2022,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      }
+    },
+    "notes": [
+      "Acabado Advance (2.0 i-MMD e:HEV, 184 CV), el de gama alta — decisión del usuario, 2026-09-01. Único acabado que puntúa la ficha; el Sport (desde 37.950 €) no se ha comparado.",
+      "Maletero: Honda España distingue 380 L en el Sport y 370 L en el Advance —el Advance monta un subwoofer BOSE bajo el suelo del maletero que resta capacidad—. km77 publica 380 L en su ficha del Advance sin reflejar esa diferencia; se descarta a favor del dato oficial de Honda por acabado.",
+      "Precio: Honda España publica el PVP de catálogo (47.050 €) junto a una oferta vigente hasta el 31/08/2026 (43.250 €, con 3.800 € de descuento oficial). Se usa el PVP sin descuento, como manda el criterio del proyecto — mismo caso que el Kia EV5.",
+      "Batería de tracción: km77 no publica la capacidad («no especificada»). Sin dato, no estimado.",
+      "Sin datos de valor residual a 5 años: el ZR-V se vende en España desde 2023, sin histórico de reventa a ese plazo todavía.",
+      "Fotos: solo lateral y trasera confirman el acabado Advance. La frontal y el maletero no se han encontrado con el acabado verificado. El interior es de un ZR-V e:HEV expuesto en el Auto Zürich 2023, acabado sin confirmar — usada con conformidad expresa del usuario para valorar el interior, pese a no cumplir el criterio habitual de verificación de acabado."
+    ],
+    "lengthMm": {
+      "value": 4568,
+      "sources": [
+        {
+          "label": "km77, ficha ZR-V Advance 2.0 i-MMD Full Hybrid (agosto 2026), https://www.km77.com/coches/honda/zr-v/2023/estandar/hev/zr-v-advance/datos",
+          "value": 4568,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "widthMm": {
+      "value": 1840,
+      "sources": [
+        {
+          "label": "km77, ficha ZR-V Advance 2.0 i-MMD Full Hybrid (agosto 2026), https://www.km77.com/coches/honda/zr-v/2023/estandar/hev/zr-v-advance/datos",
+          "value": 1840,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "heightMm": {
+      "value": 1620,
+      "sources": [
+        {
+          "label": "km77, ficha ZR-V Advance 2.0 i-MMD Full Hybrid (agosto 2026), https://www.km77.com/coches/honda/zr-v/2023/estandar/hev/zr-v-advance/datos",
+          "value": 1620,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "wheelbaseMm": {
+      "value": 2657,
+      "sources": [
+        {
+          "label": "km77, ficha ZR-V Advance 2.0 i-MMD Full Hybrid (agosto 2026), https://www.km77.com/coches/honda/zr-v/2023/estandar/hev/zr-v-advance/datos",
+          "value": 2657,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "turningCircleM": {
+      "value": 11,
+      "sources": [
+        {
+          "label": "km77, ficha ZR-V Advance 2.0 i-MMD Full Hybrid (agosto 2026): «Diámetro de giro entre bordillos: 11 m», https://www.km77.com/coches/honda/zr-v/2023/estandar/hev/zr-v-advance/datos",
+          "value": 11,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "m"
+    },
+    "rearShoulderWidthMm": {
+      "value": 1390,
+      "sources": [
+        {
+          "label": "km77, mediciones propias — Honda ZR-V (2023) (agosto 2026): «Anchura hombros máxima» 139 cm, https://www.km77.com/coches/honda/zr-v/2023/estandar/mediciones-propias/detalle",
+          "value": 1390,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "groundClearanceMm": {
+      "value": 180,
+      "sources": [
+        {
+          "label": "km77, ficha ZR-V Advance 2.0 i-MMD Full Hybrid (agosto 2026), https://www.km77.com/coches/honda/zr-v/2023/estandar/hev/zr-v-advance/datos",
+          "value": 180,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "mm"
+    },
+    "trunkLiters": {
+      "value": 370,
+      "sources": [
+        {
+          "label": "Honda España, especificaciones oficiales (agosto 2026): «Capacidad del maletero - asientos traseros montados (litros, método VDA)» 370, acabado Advance, https://www.honda.es/cars/new/zr-v-hybrid-suv/specifications.html",
+          "value": 370,
+          "estimated": false,
+          "current": true
+        },
+        {
+          "label": "km77, ficha ZR-V Advance 2.0 i-MMD Full Hybrid (agosto 2026): «Volumen mínimo con dos filas de asientos disponibles: 380 litros», https://www.km77.com/coches/honda/zr-v/2023/estandar/hev/zr-v-advance/datos",
+          "value": 380,
+          "estimated": false,
+          "current": false,
+          "discardedReason": "Honda España distingue 380 L en el acabado Sport y 370 L en el Advance —el subwoofer BOSE del Advance resta capacidad—; km77 no refleja esa diferencia en la ficha del Advance."
+        }
+      ],
+      "unit": "L"
+    },
+    "maxRoofLoadKg": {
+      "value": 60,
+      "sources": [
+        {
+          "label": "Honda España, accesorios oficiales (agosto 2026): «Incluye 4 cierres de seguridad y tiene una capacidad máxima de carga de 60 kg» (barras de techo), https://www.honda.es/cars/new/zr-v-hybrid-suv/accessories.html",
+          "value": 60,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kg"
+    },
+    "powerCv": {
+      "value": 184,
+      "sources": [
+        {
+          "label": "km77, ficha ZR-V Advance 2.0 i-MMD Full Hybrid (agosto 2026), https://www.km77.com/coches/honda/zr-v/2023/estandar/hev/zr-v-advance/datos",
+          "value": 184,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "CV"
+    },
+    "weightKg": {
+      "value": 1714,
+      "sources": [
+        {
+          "label": "km77, ficha ZR-V Advance 2.0 i-MMD Full Hybrid (agosto 2026), https://www.km77.com/coches/honda/zr-v/2023/estandar/hev/zr-v-advance/datos",
+          "value": 1714,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "kg"
+    },
+    "acceleration0to100": {
+      "value": 8,
+      "sources": [
+        {
+          "label": "km77, ficha ZR-V Advance 2.0 i-MMD Full Hybrid (agosto 2026): «8 s», https://www.km77.com/coches/honda/zr-v/2023/estandar/hev/zr-v-advance/datos",
+          "value": 8,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "s"
+    },
+    "consumption": {
+      "value": 5.8,
+      "sources": [
+        {
+          "label": "km77, ficha ZR-V Advance 2.0 i-MMD Full Hybrid (agosto 2026): consumo medio WLTP «5,8 l/100 km», https://www.km77.com/coches/honda/zr-v/2023/estandar/hev/zr-v-advance/datos",
+          "value": 5.8,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "l/100km"
+    },
+    "maintenanceEurYear": {
+      "value": 300,
+      "sources": [
+        {
+          "label": "Honda España, contrato de mantenimiento a precio fijo (agosto 2026): gama híbrida 1.500 € a 5 años/100.000 km, es decir 300 € al año, https://www.honda.es/cars/owners/fixed-price-service-plan.html",
+          "value": 300,
+          "estimated": true,
+          "current": true
+        }
+      ],
+      "unit": "€/año"
+    },
+    "priceEur": {
+      "value": 47050,
+      "sources": [
+        {
+          "label": "Honda España, especificaciones oficiales del ZR-V Advance (agosto 2026): «PVP: 47.050€», https://www.honda.es/cars/new/zr-v-hybrid-suv/specifications.html",
+          "value": 47050,
+          "estimated": false,
+          "current": true
+        },
+        {
+          "label": "Honda España (agosto 2026): «43.250€ / PVP: 47.050€ / Consulta la sección ofertas», oferta vigente hasta el 31/08/2026, https://www.honda.es/cars/new/zr-v-hybrid-suv/specifications.html",
+          "value": 43250,
+          "estimated": false,
+          "current": false,
+          "discardedReason": "Incluye una oferta comercial de 3.800 € vigente hasta el 31/08/2026; el proyecto usa el PVP de catálogo sin descuentos."
+        },
+        {
+          "label": "km77, ficha ZR-V Advance 2.0 i-MMD Full Hybrid (agosto 2026): precio 43.250 € con «Descuento oficial» de 3.800 €, https://www.km77.com/coches/honda/zr-v/2023/estandar/hev/zr-v-advance/datos",
+          "value": 43250,
+          "estimated": false,
+          "current": false,
+          "discardedReason": "Mismo descuento oficial de 3.800 € que ya refleja Honda España; coincide con el PVP de 47.050 € restado ese importe, no es el PVP de catálogo."
+        }
+      ],
+      "unit": "€"
+    },
+    "reliabilityOcu": {
+      "value": 89,
+      "sources": [
+        {
+          "label": "OCU, índice de fiabilidad 2026 — 85.590 encuestas, 39 marcas (vía motor.es)",
+          "value": 89,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyYears": {
+      "value": 5,
+      "sources": [
+        {
+          "label": "Honda España, garantía oficial (agosto 2026): «Componente sistema híbrido i-MMD: 5 años» y «Tren de potencia eléctrico: 5 años», sin condiciones, https://www.honda.es/cars/owners/honda-warranty.html",
+          "value": 5,
+          "estimated": false,
+          "current": true
+        }
+      ],
+      "unit": "años"
+    },
+    "warrantyExtension": {
+      "years": {
+        "value": 8,
+        "sources": [
+          {
+            "label": "Honda España, garantía oficial (agosto 2026): «Se puede extender hasta 8 años o 160.000 kilómetros, siempre que el vehículo haya seguido el plan de mantenimiento recomendado por Honda en un Concesionario o Taller Oficial Honda», https://www.honda.es/cars/owners/honda-warranty.html",
+            "value": 8,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "kmLimit": {
+        "value": 160000,
+        "sources": [
+          {
+            "label": "Honda España, garantía oficial (agosto 2026), https://www.honda.es/cars/owners/honda-warranty.html",
+            "value": 160000,
+            "estimated": false,
+            "current": true
+          }
+        ],
+        "unit": "km"
+      },
+      "condition": "Mantenimiento en la red de Concesionarios o Talleres Oficiales Honda, renovado anualmente a partir del tercer año."
+    },
+    "aestheticsExterior": {
+      "value": 2,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "aestheticsInterior": {
+      "value": 4,
+      "label": "Valoración del usuario sobre fotos de catálogo (interior de acabado sin confirmar, aceptado explícitamente por el usuario)"
+    },
+    "photos": {
+      "side": {
+        "url": "https://www.honda.es/content/dam/configuratorHub/zr-v-hybrid-suv-2026/grades/advance_eu/27YM_ZRV_ADVANCE_EU_side_stu_G_553P_001.png/jcr:content/renditions/medium.png",
+        "credit": "Honda España (configurador oficial)",
+        "shows": "Honda ZR-V Advance, azul oscuro, perfil recto de estudio."
+      },
+      "rear": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Honda_ZR-V_e-HEV_Advance_%E2%80%93_h_14072024.jpg/1280px-Honda_ZR-V_e-HEV_Advance_%E2%80%93_h_14072024.jpg",
+        "credit": "Wikimedia Commons — M 93 (CC BY-SA 3.0 de)",
+        "shows": "Honda ZR-V e:HEV Advance, blanco, tres cuartos trasero con el portón cerrado."
+      },
+      "interior": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Honda_ZR-V_e-HEV_Auto_Zuerich_2023_1X7A1218.jpg/1280px-Honda_ZR-V_e-HEV_Auto_Zuerich_2023_1X7A1218.jpg",
+        "credit": "Wikimedia Commons — Alexander-93",
+        "shows": "Honda ZR-V e:HEV expuesto en el Auto Zürich 2023, salpicadero y volante en negro — acabado no confirmado, puede no ser el Advance que puntúa la ficha. Usada con conformidad expresa del usuario para la valoración de interior pese a esa incertidumbre."
       }
     }
   }
