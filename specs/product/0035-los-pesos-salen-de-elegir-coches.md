@@ -7,7 +7,7 @@
 - **Specs relacionadas:** product/0009, product/0012, product/0018,
   product/0023, product/0029, product/0030, product/0031, product/0033,
   technical/0010, technical/0011
-- **ADRs relacionados:** 0004
+- **ADRs relacionados:** 0004, 0011
 - **Doc de estado:** `docs/estado/dominio.md`, `docs/estado/interfaz.md`
 
 ## Contexto
@@ -163,9 +163,9 @@ clasificación— = **78.124**.
 
 3.2. Los cinco niveles son un compromiso medido, no una intuición: cubren el
 recorrido entero del deslizador con sus dos extremos y su centro, y una
-rejilla más fina de siete niveles (823.542 combinaciones) no mejora el
-resultado —97,1 % contra 98,2 % de acuerdo final— a cambio de multiplicar
-por diez el trabajo.
+rejilla más fina de siete niveles (823.542 combinaciones) apenas mejora el
+resultado —a igualdad de veinte preguntas, 98,2 % contra 97,0 % de acuerdo—
+a cambio de multiplicar por diez el trabajo.
 
 3.3. Todos los valores de la rejilla son enteros de 0 a 10, así que
 **cualquier resultado es representable en los deslizadores** tal como están.
@@ -467,11 +467,13 @@ vuelo. Ni una dependencia nueva.
 
 ## Decisiones abiertas
 
-- **¿Hace falta un ADR?** Esta spec fija dos cosas de calado que sobreviven a
-  su implementación: que se razona sobre una **rejilla declarada y finita**
-  de combinaciones de pesos en vez de resolver un problema continuo, y que lo
-  que una tanda identifica es **la clasificación y no los pesos**, con lo que
-  eso obliga a decir en pantalla. Las dos son del tipo que este repositorio
-  registra como ADR —comparables al 0004 y al 0010— y ninguna es reversible
-  sin rehacer la spec entera. Queda por decidir si se escriben como ADR
-  propio antes de aprobar esta spec, o si se dan por documentadas aquí.
+Ninguna.
+
+**Cerrada el 2026-09-01 — «¿hace falta un ADR?»: sí.** Las dos cosas de
+calado que esta spec traía dentro —que se razona sobre una **rejilla
+declarada y finita** en vez de resolver un problema continuo, y que lo que
+una tanda identifica es **la clasificación y no los pesos**, con lo que eso
+obliga a decir en pantalla— salen de aquí y pasan al **ADR 0011**, por la
+regla de `docs/proceso/adrs.md`: si al redactar una spec aparece una decisión
+estructural, sale de la spec y entra en un ADR. Los requisitos 3, 5, 9 y 10.2
+son ahora la aplicación de ese ADR, y su razonamiento no se duplica aquí.
