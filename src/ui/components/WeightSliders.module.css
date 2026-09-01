@@ -42,3 +42,41 @@
 .slider {
   composes: rangeInput from '../primitives.module.css';
 }
+
+.calibration {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: var(--size-border-hairline) solid var(--color-rule);
+}
+
+.calibrateButton {
+  min-height: var(--size-touch-min);
+  padding: var(--space-2) var(--space-4);
+  border: var(--size-border-hairline) solid var(--color-accent);
+  border-radius: var(--radius-sm);
+  background: var(--color-card-raised);
+  color: var(--color-accent);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+}
+
+.calibrateButton:hover:not(:disabled) {
+  background: var(--color-accent);
+  color: var(--color-card);
+}
+
+.calibrateButton:disabled {
+  border-color: var(--color-rule);
+  color: var(--color-mute);
+  cursor: not-allowed;
+}
+
+.calibrationHint {
+  margin: 0;
+  color: var(--color-mute);
+  font-size: var(--font-size-xs);
+}

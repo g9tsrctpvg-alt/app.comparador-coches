@@ -4,6 +4,7 @@ import { loadReferences } from '../data/loadReferences';
 import { publishedCars, type Car } from '../domain/car';
 import type { Reference } from '../domain/reference';
 import { scoreCatalog } from '../domain/scoring/score';
+import { profileOf } from '../domain/calibration';
 import { applyOverride } from '../domain/scoring/overrides';
 import { logError } from '../logging/logger';
 import { clearViewState } from '../adapters/localStorageConfigPort';
@@ -106,16 +107,26 @@ export function App({
     clearViewState();
   }, [resetToDefaults]);
 
+  // Se calcula una vez y lo consumen tanto la puntuación como el cara a cara
+  // de la calibración (product/0035): el diálogo enseña los mismos coches
+  // que se han puntuado, con las valoraciones sobrescritas ya aplicadas.
+  const carsWithOverrides = useMemo(
+    () =>
+      'error' in catalogResult
+        ? []
+        : catalogResult.cars.map((car) =>
+            applyOverride(car, overrides[car.id]),
+          ),
+    [catalogResult, overrides],
+  );
+
   const scored = useMemo(() => {
     // Las reglas de los hooks obligan a que este `useMemo` corra también en
     // la rama de error, así que la guarda va dentro: puntuar un catálogo
     // vacío lanzaría y se llevaría por delante el mensaje de error de abajo.
-    if ('error' in catalogResult) return [];
-    const carsWithOverrides = catalogResult.cars.map((car) =>
-      applyOverride(car, overrides[car.id]),
-    );
+    if (carsWithOverrides.length === 0) return [];
     return scoreCatalog(carsWithOverrides, weights, assumptions, budgetEur);
-  }, [catalogResult, overrides, weights, assumptions, budgetEur]);
+  }, [carsWithOverrides, weights, assumptions, budgetEur]);
 
   if ('error' in catalogResult) {
     return (
@@ -152,12 +163,22 @@ export function App({
     );
   }
 
-  const leader = splitByEligibility(
+  const eligible = splitByEligibility(
     scored,
     catalogResult.cars,
     eliminatoryRules,
     decisionLog,
-  ).eligible[0];
+  ).eligible;
+  const leader = eligible[0];
+
+  // Los candidatos de la tanda de calibración: solo el tramo elegible
+  // (product/0035, requisito 11.1), para no preguntar por coches que ya
+  // están fuera por presupuesto, por una regla o por estar descartados.
+  const carsById = new Map(carsWithOverrides.map((car) => [car.id, car]));
+  const calibrationCars = eligible
+    .map((car) => carsById.get(car.carId))
+    .filter((car): car is Car => car !== undefined);
+  const calibrationProfiles = eligible.map(profileOf);
 
   return (
     <AppShell route={route}>
@@ -177,7 +198,12 @@ export function App({
             filter={decisionLog.filter}
             onChange={setDecisionFilter}
           />
-          <WeightSliders weights={weights} onChange={setWeights} />
+          <WeightSliders
+            weights={weights}
+            onChange={setWeights}
+            calibrationCars={calibrationCars}
+            calibrationProfiles={calibrationProfiles}
+          />
           <AssumptionsPanel
             assumptions={assumptions}
             onChange={setAssumptions}
