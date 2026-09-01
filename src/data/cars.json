@@ -4570,7 +4570,7 @@
       "Precio: 33.990 € es el PVP de catálogo. km77 publica 28.990 € porque descuenta un descuento oficial de 5.000 €; el catálogo no modela descuentos, igual que se corrigió con el Kia EV5.",
       "Maletero: km77 solo declara «volumen mínimo con dos filas de asientos disponibles: 565 litros», sin cifra máxima con la segunda fila en uso, así que no hay ambigüedad de banqueta deslizante. Los 651 L que circulan en prensa no coinciden con esa medición.",
       "Mantenimiento anual estimado a partir del precio de la revisión oficial (250-350 € por revisión, anual o cada 15.000 km), no de un coste anual desglosado del fabricante.",
-      "Faltan las fotos de frontal, trasera y maletero: Wikimedia Commons solo tiene interiores de esta generación, la web de Citroën España responde 403 desde este entorno y los configuradores de concesionario solo publican vistas en 3/4, que las reglas de fotos no admiten para esas vistas.",
+      "Faltan las fotos de frontal, trasera y maletero: Wikimedia Commons solo tiene interiores de esta generación, la web de Citroën España responde 403 desde este entorno y los configuradores de concesionario solo publican vistas en 3/4, que las reglas de fotos no admiten para esas vistas. Revisado de nuevo (septiembre 2026): km77.com redistribuye una nota de prensa oficial de Citroën con frontal y trasera rectos de estudio, pero el propio coche lleva el distintivo «ë» junto a «C5» en el portón — es el ë-C5 Aircross eléctrico, no el You Hybrid 145 CV que puntúa la ficha, así que se descarta. coches.net solo tiene un render genérico en 3/4 y fotos de anuncios de compraventa, ambos fuera de las reglas de fotos.",
       "La foto de interior es de una unidad enchufable (Plug-in Hybrid), no del You Hybrid 145 que puntúa la ficha: misma generación CR3 y mismo salpicadero, pero la tapicería del acabado puede no coincidir."
     ],
     "lengthMm": {
@@ -4835,7 +4835,8 @@
       "Precio: 43.200 € es el PVP de catálogo, confirmado por Quadis («Nuevo JEEP Compass desde 43.200 euros»). km77 publica 32.541 € porque descuenta un descuento oficial de 10.659 €, el mayor del catálogo; el proyecto no modela descuentos.",
       "Fiabilidad: Jeep NO aparece entre las 39 marcas del índice OCU 2026, ni como Jeep ni bajo ninguna otra denominación. Por decisión explícita del usuario se le asigna 64, el suelo de la escala —la nota de Land Rover, la peor medida—, tratando la ausencia de medición como señal mala y no como señal neutra. No es una medición de la OCU sobre Jeep: es una convención de este catálogo, y por eso va marcada como estimada.",
       "Mantenimiento anual estimado a partir del pack Mopar de 3 años (~700 € IVA incluido), no de un coste anual desglosado por revisión.",
-      "Faltan las fotos de frontal, lateral, trasera y maletero: Wikimedia Commons solo tiene vistas en 3/4 de esta generación, la web de Jeep España responde 403, la galería del concesionario Quadis es de la generación anterior (MP) pese a anunciar el modelo nuevo, y el configurador oficial solo publica el Compass eléctrico, cuya parrilla cerrada no es la de esta motorización.",
+      "Falta la foto de maletero: Wikimedia Commons solo tiene vistas en 3/4 de esta generación, la web de Jeep España responde 403, la galería del concesionario Quadis es de la generación anterior (MP) pese a anunciar el modelo nuevo, y el configurador oficial solo publica el Compass eléctrico, cuya parrilla cerrada no es la de esta motorización. Es la vista más difícil por regla general (product/0016) y aquí no se ha encontrado en ningún concesionario.",
+      "Frontal, lateral y trasera sí se encontraron (septiembre 2026), en la nota de prensa oficial de Jeep para el lanzamiento europeo del J4U (6 de mayo de 2025), redistribuida por km77.com: mismo coche verde en las tres vistas, con el distintivo «e» de e-Hybrid visible en la trasera y la parrilla funcional (no cerrada) que descarta que sea el eléctrico. El color coincide con el de la unidad que km77 fotografió para sus propias mediciones de esta misma ficha (Altitude e-Hybrid 145 CV), lo que corrobora el acabado; no se ha podido confirmar con un rótulo de acabado visible en la carrocería.",
       "La foto de interior es del Compass eléctrico, no del e-Hybrid que puntúa la ficha: misma generación J4U y mismo salpicadero, pero es otra motorización."
     ],
     "lengthMm": {
@@ -5064,6 +5065,21 @@
       "label": "Valoración del usuario sobre fotos de catálogo"
     },
     "photos": {
+      "front": {
+        "url": "https://imagenes.km77.com/fotos/bbtcontent/clippingnew/KM7KPH20250506_0013/full.jpg",
+        "credit": "Jeep — Stellantis Media (sala de prensa oficial), vía km77.com",
+        "shows": "Jeep Compass Altitude e-Hybrid 107 kW (145 CV), generación J4U, verde — mismo coche y color que la unidad que km77 fotografió para sus propias mediciones de esta ficha. Frontal recto de estudio con parrilla funcional de rejilla, distinta de la parrilla cerrada del Compass eléctrico."
+      },
+      "side": {
+        "url": "https://imagenes.km77.com/fotos/bbtcontent/clippingnew/KM7KPH20250506_0015/full.jpg",
+        "credit": "Jeep — Stellantis Media (sala de prensa oficial), vía km77.com",
+        "shows": "Jeep Compass Altitude e-Hybrid 107 kW (145 CV), generación J4U, verde — mismo coche que la foto de frontal de esta ficha. Lateral recto de estudio."
+      },
+      "rear": {
+        "url": "https://imagenes.km77.com/fotos/bbtcontent/clippingnew/KM7KPH20250506_0016/full.jpg",
+        "credit": "Jeep — Stellantis Media (sala de prensa oficial), vía km77.com",
+        "shows": "Jeep Compass Altitude e-Hybrid 107 kW (145 CV), generación J4U, verde — mismo coche que las fotos de frontal y lateral. Trasera recta de estudio con el portón cerrado; se distingue el distintivo «e» de e-Hybrid junto al portón, que confirma la motorización."
+      },
       "interior": {
         "url": "https://cdn-datak.motork.net/configurator-imgs/cars/es/800/JEEP/COMPASS/49394_SUV-5-DOORS/jeep-compass-bev-intern-1.jpg",
         "credit": "Vian Automobile (concesionario oficial Jeep), imagen del configurador oficial",
@@ -5750,7 +5766,7 @@
       "Precio: Honda España publica el PVP de catálogo (47.050 €) junto a una oferta vigente hasta el 31/08/2026 (43.250 €, con 3.800 € de descuento oficial). Se usa el PVP sin descuento, como manda el criterio del proyecto — mismo caso que el Kia EV5.",
       "Batería de tracción: km77 no publica la capacidad («no especificada»). Sin dato, no estimado.",
       "Sin datos de valor residual a 5 años: el ZR-V se vende en España desde 2023, sin histórico de reventa a ese plazo todavía.",
-      "Fotos: solo lateral y trasera confirman el acabado Advance. La frontal y el maletero no se han encontrado con el acabado verificado. El interior es de un ZR-V e:HEV expuesto en el Auto Zürich 2023, acabado sin confirmar — usada con conformidad expresa del usuario para valorar el interior, pese a no cumplir el criterio habitual de verificación de acabado."
+      "Fotos: frontal, lateral y trasera confirman el acabado Advance. La frontal se encontró (septiembre 2026) en el mismo configurador oficial de Honda España que ya daba la de lateral, con el acabado en el propio nombre de fichero (27YM_ZRV_ADVANCE_EU_front...). Falta el maletero, que no se ha encontrado con el acabado verificado. El interior es de un ZR-V e:HEV expuesto en el Auto Zürich 2023, acabado sin confirmar — usada con conformidad expresa del usuario para valorar el interior, pese a no cumplir el criterio habitual de verificación de acabado."
     ],
     "lengthMm": {
       "value": 4568,
@@ -6011,6 +6027,11 @@
       "label": "Valoración del usuario sobre fotos de catálogo (interior de acabado sin confirmar, aceptado explícitamente por el usuario)"
     },
     "photos": {
+      "front": {
+        "url": "https://www.honda.es/content/dam/configuratorHub/zr-v-hybrid-suv-2026/grades/advance_eu/27YM_ZRV_ADVANCE_EU_front_stu_NH_912P_001.png/jcr:content/renditions/medium.png",
+        "credit": "Honda España (configurador oficial)",
+        "shows": "Honda ZR-V Advance, gris (Medium Gray, NH-912P), frontal recto de estudio. Misma ruta de configurador que la foto de lateral, con el acabado Advance confirmado en el propio nombre del fichero."
+      },
       "side": {
         "url": "https://www.honda.es/content/dam/configuratorHub/zr-v-hybrid-suv-2026/grades/advance_eu/27YM_ZRV_ADVANCE_EU_side_stu_G_553P_001.png/jcr:content/renditions/medium.png",
         "credit": "Honda España (configurador oficial)",
