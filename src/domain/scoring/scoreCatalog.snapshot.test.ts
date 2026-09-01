@@ -32,6 +32,7 @@ import { scoreCatalog } from './score';
  * aceptación que lo demuestra.
  */
 const EXPECTED_TOTALS: Record<string, number> = {
+  'honda-zr-v': 193.61323375362224,
   'hyundai-tucson-hev': 241.86342157153587,
   'hyundai-tucson-phev': 240.49144853205905,
   'kia-sportage-hev': 232.68125998320298,
