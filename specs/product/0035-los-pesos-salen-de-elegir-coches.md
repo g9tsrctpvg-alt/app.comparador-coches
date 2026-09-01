@@ -1,7 +1,7 @@
 # 0035 — Los pesos salen de elegir coches, no de mover deslizadores
 
 - **Id:** product/0035
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-09-01
 - **Specs relacionadas:** product/0009, product/0012, product/0018,
@@ -439,6 +439,14 @@ vuelo. Ni una dependencia nueva.
 
 ## Dependencias y supuestos
 
+- **Depende del ADR 0011**, que registra por qué una tanda identifica la
+  clasificación y no los pesos, y por qué se enumera una rejilla declarada en
+  vez de ajustar un modelo continuo. Nació de la única decisión que esta spec
+  dejó abierta al redactarse —«¿hace falta un ADR?»—, cerrada el 2026-09-01
+  por decisión del usuario: las dos cosas de calado que la spec traía dentro
+  salen de aquí y pasan al ADR, por la regla de `docs/proceso/adrs.md`. Los
+  requisitos 3, 5, 9 y 10.2 son la aplicación de ese ADR y no duplican su
+  razonamiento.
 - **Depende del ADR 0004** y de que los siete ejes estén en escala absoluta.
   Sin esa propiedad una respuesta no sería una desigualdad lineal sobre los
   pesos, y toda la spec se cae. El requisito 1.2 la comprueba en vez de
@@ -468,12 +476,3 @@ vuelo. Ni una dependencia nueva.
 ## Decisiones abiertas
 
 Ninguna.
-
-**Cerrada el 2026-09-01 — «¿hace falta un ADR?»: sí.** Las dos cosas de
-calado que esta spec traía dentro —que se razona sobre una **rejilla
-declarada y finita** en vez de resolver un problema continuo, y que lo que
-una tanda identifica es **la clasificación y no los pesos**, con lo que eso
-obliga a decir en pantalla— salen de aquí y pasan al **ADR 0011**, por la
-regla de `docs/proceso/adrs.md`: si al redactar una spec aparece una decisión
-estructural, sale de la spec y entra en un ADR. Los requisitos 3, 5, 9 y 10.2
-son ahora la aplicación de ese ADR, y su razonamiento no se duplica aquí.

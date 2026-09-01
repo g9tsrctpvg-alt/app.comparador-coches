@@ -1,6 +1,6 @@
 # 0011 — Una preferencia identifica la clasificación, no los pesos
 
-- **Estado:** draft
+- **Estado:** approved
 - **Fecha:** 2026-09-01
 - **Nivel:** 🟡
 
