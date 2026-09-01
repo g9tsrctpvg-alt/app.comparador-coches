@@ -357,7 +357,10 @@ function CellValue({
   );
 }
 
-function CellContent({
+/** Exportada para el diálogo de calibración (product/0035, requisito 7.1):
+ * el cara a cara pinta las mismas magnitudes con el mismo formato y la
+ * misma Δ que la ficha, en vez de declarar un segundo formateador. */
+export function CellContent({
   cell,
   def,
   code,

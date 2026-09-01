@@ -1,7 +1,7 @@
 # 0035 — Los pesos salen de elegir coches, no de mover deslizadores
 
 - **Id:** product/0035
-- **Estado:** approved
+- **Estado:** implemented
 - **Tipo:** product
 - **Fecha:** 2026-09-01
 - **Specs relacionadas:** product/0009, product/0012, product/0018,
@@ -9,6 +9,12 @@
   technical/0010, technical/0011
 - **ADRs relacionados:** 0004, 0011
 - **Doc de estado:** `docs/estado/dominio.md`, `docs/estado/interfaz.md`
+
+> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
+> implementado: su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy no es cierta. **No es referencia del estado actual** — para
+> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
+> **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -223,6 +229,13 @@ menos, y si no, los que resultan de recorrerlo a paso fijo hasta quedarse en
 la primera pregunta obliga a mirar 78.124 combinaciones por cada uno de los
 153 pares.
 
+El comité decide **qué se pregunta, y solo eso**. Ninguna cifra que se
+afirme en pantalla sale de él: las dos del requisito 9 se calculan sobre el
+conjunto compatible entero. Una muestra puede equivocarse sobre un par
+concreto, y equivocarse eligiendo pregunta no cuesta nada —se pregunta otra
+cosa—, mientras que equivocarse en una cifra que se enseña es afirmar algo
+falso.
+
 6.2. El **primer cara a cara** de la tanda es el par de coches cuyos perfiles
 están más lejos entre sí, en distancia euclídea sobre los siete ejes. Es
 fijo, no depende de nada y con el catálogo de hoy es **EV3 contra Compass**.
@@ -281,14 +294,24 @@ que lleve. Cerrar sin aplicar no cambia ningún peso.
 ### 9. El avance
 
 9.1. Mientras la tanda está abierta se muestran dos cifras, las dos
-recalculadas tras cada respuesta:
+recalculadas tras cada respuesta y las dos sobre el **conjunto compatible
+entero**, nunca sobre el comité:
 
 - **cuántos coches pueden todavía ser el primero** —cuántos líderes
-  distintos producen las combinaciones del comité—, sobre el total de coches
-  activos;
+  distintos producen las combinaciones compatibles—, sobre el total de
+  coches activos;
 - **cuántos de los enfrentamientos posibles han quedado decididos** —los
-  pares que todas las combinaciones del comité ordenan igual—, sobre el
+  pares que todas las combinaciones compatibles ordenan igual—, sobre el
   total.
+
+Sobre una muestra las dos cifras mienten en la dirección que más halaga:
+dirían que un par está decidido cuando alguna combinación compatible lo
+ordena al revés, y esconderían coches que todavía pueden ganar. Además el
+avance dejaría de ser monótono —la muestra cambia de composición al
+estrecharse el conjunto—, y una cifra de avance que retrocede es un error
+visible. Calcularlas enteras es barato: un par que no está decidido se
+detecta en cuanto aparecen las dos orientaciones, y cuando el conjunto ya es
+estrecho recorrerlo entero no cuesta nada.
 
 9.2. Son la medida honesta del avance porque miden **lo que cambia en la
 clasificación**, no lo estrecho que ha quedado un peso. Con el catálogo de
@@ -366,9 +389,10 @@ la regla `ui-no-scoring-internals`.
 ### 13. Coste
 
 13.1. Recalcular tras una respuesta debe ser imperceptible. Medido sobre
-esta máquina con diecisiete respuestas: **57,5 ms** recorrer las 78.124
-combinaciones enteras y **13,4 ms** elegir el siguiente par sobre un comité
-de 1.500.
+esta máquina, una tanda entera de diecisiete preguntas cuesta **580 ms en
+total**, y el paso más caro es el primero: **99 ms**, cuando el conjunto
+compatible es toda la rejilla. A partir de la tercera respuesta ningún paso
+pasa de 65 ms, y de la octava en adelante ninguno pasa de 18 ms.
 
 13.2. El conjunto compatible **solo se estrecha** mientras las respuestas no
 se contradigan, así que basta filtrar los supervivientes con la respuesta

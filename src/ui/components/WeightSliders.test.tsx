@@ -7,10 +7,31 @@ import {
 } from '../../domain/scoring/weights';
 import { AXIS_THEME_CLASS } from '../axisTheme';
 import { WeightSliders } from './WeightSliders';
+import { loadCatalog } from '../../data/loadCatalog';
+import { publishedCars } from '../../domain/car';
+import { profileOf } from '../../domain/calibration';
+import { scoreCatalog } from '../../domain/scoring/score';
+import { DEFAULT_ASSUMPTIONS } from '../../domain/scoring/assumptions';
 
-function render(weights: AxisWeights = DEFAULT_WEIGHTS): string {
+const cars = publishedCars(loadCatalog());
+const profiles = scoreCatalog(
+  cars,
+  DEFAULT_WEIGHTS,
+  DEFAULT_ASSUMPTIONS,
+  47000,
+).map(profileOf);
+
+function render(
+  weights: AxisWeights = DEFAULT_WEIGHTS,
+  candidates = cars,
+): string {
   return renderToStaticMarkup(
-    <WeightSliders weights={weights} onChange={() => {}} />,
+    <WeightSliders
+      weights={weights}
+      onChange={() => {}}
+      calibrationCars={candidates}
+      calibrationProfiles={profiles.slice(0, candidates.length)}
+    />,
   );
 }
 
@@ -36,5 +57,24 @@ describe('WeightSliders', () => {
       expect(range).toContain('min="0"');
       expect(range).toContain('max="10"');
     }
+  });
+});
+
+describe('la entrada a la calibración (product/0035)', () => {
+  it('ofrece la tanda cuando hay coches de sobra (requisito 12.1)', () => {
+    const markup = render();
+    expect(markup).toContain('Calibrar eligiendo coches');
+    expect(markup).toContain('ajuste fino');
+    expect(markup).not.toContain('disabled');
+  });
+
+  it('no la ofrece con menos de cuatro coches, y dice por qué (requisito 11.3)', () => {
+    const markup = render(DEFAULT_WEIGHTS, cars.slice(0, 3));
+    expect(markup).toContain('disabled');
+    expect(markup).toContain('al menos 4 coches elegibles');
+  });
+
+  it('con cuatro justos sí la ofrece', () => {
+    expect(render(DEFAULT_WEIGHTS, cars.slice(0, 4))).not.toContain('disabled');
   });
 });
