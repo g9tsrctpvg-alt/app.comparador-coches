@@ -1,7 +1,7 @@
 # 0035 — Los pesos salen de elegir coches, no de mover deslizadores
 
 - **Id:** product/0035
-- **Estado:** implemented
+- **Estado:** consolidated
 - **Tipo:** product
 - **Fecha:** 2026-09-01
 - **Specs relacionadas:** product/0009, product/0012, product/0018,
@@ -10,11 +10,11 @@
 - **ADRs relacionados:** 0004, 0011
 - **Doc de estado:** `docs/estado/dominio.md`, `docs/estado/interfaz.md`
 
-> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
-> implementado: su sección *Contexto* retrata el sistema **anterior** al
-> cambio y hoy no es cierta. **No es referencia del estado actual** — para
-> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
-> **criterios de aceptación**, como registro de verificación.
+> ⚠️ **Spec consolidada (2026-09-01).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/dominio.md` y `docs/estado/interfaz.md`. Vigentes aquí solo
+> los **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -408,58 +408,80 @@ vuelo. Ni una dependencia nueva.
 
 > Obligatorios y verificables.
 
-- [ ] Puntuando el catálogo con dos vectores de pesos distintos, los perfiles
+- [x] Puntuando el catálogo con dos vectores de pesos distintos, los perfiles
       de los dieciocho coches son idénticos: diferencia máxima exactamente 0
       (requisito 1.2).
-- [ ] La rejilla tiene exactamente 78.124 combinaciones, todas con los siete
+- [x] La rejilla tiene exactamente 78.124 combinaciones, todas con los siete
       pesos en `{0, 2, 5, 8, 10}`, ninguna nula, y el mismo orden en dos
       ejecuciones (requisitos 3.1 y 3.4).
-- [ ] Dado un conjunto de respuestas coherentes, los pesos propuestos no
+- [x] Dado un conjunto de respuestas coherentes, los pesos propuestos no
       contradicen ninguna, y el conjunto compatible es no vacío
       (requisitos 4.2 y 5.3).
-- [ ] Dadas dos respuestas que se contradicen entre sí sobre el mismo par, la
+- [x] Dadas dos respuestas que se contradicen entre sí sobre el mismo par, la
       derivación devuelve pesos y un conjunto compatible no vacío, sin lanzar
       (requisito 4.2).
-- [ ] Con las mismas respuestas y los mismos pesos de partida, dos
+- [x] Con las mismas respuestas y los mismos pesos de partida, dos
       derivaciones devuelven los siete pesos idénticos (requisito 3.4).
-- [ ] Entre dos combinaciones que satisfacen todas las respuestas con el
+- [x] Entre dos combinaciones que satisfacen todas las respuestas con el
       mismo margen mínimo, se propone la más cercana a los pesos vigentes
       (requisito 5.1, criterio 3).
-- [ ] «Me da igual» no cambia los pesos propuestos ni el conjunto compatible,
+- [x] «Me da igual» no cambia los pesos propuestos ni el conjunto compatible,
       y el par no se vuelve a ofrecer en esa tanda (requisito 2.3).
-- [ ] Deshacer la última respuesta devuelve los pesos propuestos, el conjunto
+- [x] Deshacer la última respuesta devuelve los pesos propuestos, el conjunto
       compatible y las dos cifras de avance al valor exacto que tenían antes
       de contestarla (requisito 8.2).
-- [ ] El primer cara a cara del catálogo de hoy es EV3 contra Compass, y no
+- [x] El primer cara a cara del catálogo de hoy es EV3 contra Compass, y no
       cambia entre ejecuciones (requisito 6.2).
-- [ ] La tanda termina sola: existe un momento en que ningún par sin ver
+- [x] La tanda termina sola: existe un momento en que ningún par sin ver
       divide al comité, y a partir de ahí no se ofrece ninguna pregunta más
       (requisito 6.4).
-- [ ] Sobre sesenta perfiles de preferencia sintéticos, la tanda completa
+- [x] Sobre sesenta perfiles de preferencia sintéticos, la tanda completa
       con selección por comité se cierra en **18 preguntas o menos** y
       reproduce **al menos el 95 %** de los 153 enfrentamientos del perfil
       real, contra el 81,2 % de los pesos por defecto (requisitos 6.5 y
       10.3).
-- [ ] Con el 10 % de las respuestas invertidas a propósito, la tanda sigue
+- [x] Con el 10 % de las respuestas invertidas a propósito, la tanda sigue
       cerrándose y reproduce **al menos el 90 %** de los enfrentamientos
       (requisitos 4.2 y 10.3).
-- [ ] Ningún elemento del diálogo de un cara a cara muestra la nota, el
+- [x] Ningún elemento del diálogo de un cara a cara muestra la nota, el
       porcentaje, una nota de eje ni el puesto de ninguno de los dos coches
       (requisito 7.2).
-- [ ] Cerrar la tanda sin aplicar deja los siete deslizadores exactamente
+- [x] Cerrar la tanda sin aplicar deja los siete deslizadores exactamente
       como estaban; aplicar los deja en los pesos propuestos, y esa
       configuración se persiste y viaja en el enlace compartible
       (requisitos 8.3 y 10.4).
-- [ ] `CONFIG_VERSION` no cambia y no se añade ninguna clave de
+- [x] `CONFIG_VERSION` no cambia y no se añade ninguna clave de
       almacenamiento nueva (fuera de alcance, «que la tanda sobreviva a una
       recarga»).
-- [ ] Con menos de cuatro coches elegibles no se ofrece la tanda y el panel
+- [x] Con menos de cuatro coches elegibles no se ofrece la tanda y el panel
       de pesos dice por qué (requisito 11.3).
-- [ ] `src/ui/` no contiene ninguna operación aritmética sobre perfiles,
+- [x] `src/ui/` no contiene ninguna operación aritmética sobre perfiles,
       pesos ni combinaciones: `arch:check` y la revisión del diff lo
       confirman (requisito 12.3).
-- [ ] La CI entera pasa en local con cobertura al 100 % en `domain/`,
+- [x] La CI entera pasa en local con cobertura al 100 % en `domain/`,
       `data/` y `logging/`.
+
+**Verificado el 2026-09-01.** Los trece primeros criterios y el
+decimosexto, contra tests unitarios (`src/domain/calibration.test.ts`,
+`src/ui/components/CalibrationDialog.test.tsx`,
+`src/ui/components/WeightSliders.test.tsx`). El decimocuarto y el
+decimoquinto, contra el navegador sobre el *build* de producción con
+Playwright: la tanda real se cierra en **17 preguntas**, «me da igual» deja
+el avance intacto y no repite el par, «Deshacer» devuelve el avance al valor
+exacto anterior, «Descartar» deja los siete deslizadores como estaban,
+«Aplicar» los mueve a los pesos propuestos, y esos pesos sobreviven a una
+recarga y viajan en el enlace copiado —abierto en una sesión limpia, sin
+`localStorage`, los siete coinciden—. Sin desbordamiento horizontal a 390px
+ni en el documento ni en el diálogo. El decimoséptimo, contra `arch:check`
+más la revisión del diff; el decimoctavo, contra la CI entera en local: 671
+tests y cobertura 100 % en `domain/`+`data/`+`logging/`.
+
+**Una nota honesta sobre el criterio decimocuarto.** Con el presupuesto por
+defecto el tramo elegible son **15 de los 18 coches publicados**, así que la
+tanda real se juega sobre 15 candidatos y 105 enfrentamientos, no sobre 18 y
+153. Es el requisito 11.1 funcionando, no una desviación: las cifras del
+*Contexto* describen el catálogo entero y las de la pantalla, lo que de
+verdad se está comparando.
 
 ## Dependencias y supuestos
 

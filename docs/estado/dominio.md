@@ -490,6 +490,61 @@ del negocio. Los dos primeros son la única excepción: no son una
 preferencia, sino la partición exacta del peso 10 que llevaba `viaje` antes
 de `product/0033` (ver «Los siete ejes», arriba).
 
+### Calibrar los pesos eligiendo coches
+
+Los siete pesos se pueden **deducir de una tanda de elecciones cara a cara**
+en vez de fijarlos a ojo (`src/domain/calibration.ts`). Se apoya en una
+propiedad del ADR 0004: como la nota de un eje no depende de los pesos,
+«prefiero este coche a ese» es exactamente una desigualdad lineal,
+`Σ pesoᵢ × (notaᵢ(A) − notaᵢ(B)) > 0`. La tanda es, por tanto, un sistema de
+desigualdades que se resuelve **por enumeración**, sin optimizador ni
+dependencias.
+
+- **La rejilla.** Cada peso toma valor en `{0, 2, 5, 8, 10}`: `5⁷` menos la
+  combinación nula = **78.124** combinaciones, recorridas siempre en el mismo
+  orden, sin muestreo ni semilla. Todos sus valores son enteros de 0 a 10, así
+  que cualquier resultado se puede poner en los deslizadores tal cual.
+- **El conjunto compatible** son las combinaciones que contradicen el menor
+  número posible de respuestas. Con respuestas coherentes ese mínimo es 0;
+  con respuestas que se contradicen entre sí es mayor, y el conjunto sigue
+  sin estar vacío: una tanda nunca se rompe por una respuesta arrepentida.
+- **Los pesos propuestos** son un representante declarado de ese conjunto:
+  mayor margen mínimo —la menor de las diferencias de nota, en puntos
+  porcentuales, con que gana los cara a cara respondidos—, a igualdad la
+  combinación más cercana a los pesos que ya tenían los deslizadores, y a
+  igualdad de todo, el primero del recorrido.
+- **Qué se pregunta.** El primer cara a cara es el par de perfiles más
+  lejanos entre sí; cada uno siguiente, el par no visto que más divide al
+  **comité** —el conjunto compatible, o un recorrido a paso fijo de él hasta
+  1.500 elementos—. La tanda **termina sola** cuando ningún par sin ver
+  divide al comité: no hay cuota fija de preguntas. Hay un tope duro de 25.
+- **Un «me da igual»** marca el par como visto y no aporta desigualdad; no se
+  modela como igualdad porque `Σ pesoᵢ × Δᵢ = 0` casi nunca tiene solución y
+  convertiría una indiferencia sincera en una contradicción.
+
+**Lo que una tanda identifica es la clasificación, no los pesos** (ADR 0011).
+El conjunto de explicaciones compatibles es un cono —si un vector explica las
+respuestas, también lo explican todos sus múltiplos—, así que no existe tanda
+que fije los siete números. Por eso el comité solo decide **qué se pregunta**,
+y las dos cifras que la interfaz afirma —cuántos coches pueden todavía ser el
+primero y cuántos enfrentamientos han quedado decididos— se calculan sobre el
+conjunto compatible **entero**: sobre una muestra mentirían en la dirección
+que más halaga, y el avance podría retroceder.
+
+Medido sobre los dieciocho coches publicados: de partida, **trece** llegan a
+ser líderes con alguna de las 78.124 combinaciones y **ninguno** de los 153
+enfrentamientos está decidido de antemano. Una tanda completa se cierra en
+**14 a 18 preguntas** y reproduce el **97,1 %** de los enfrentamientos del
+perfil real, frente al **81,2 %** de los pesos por defecto; con el 10 % de las
+respuestas invertidas, el 93,1 %. Y aun así los siete números rara vez
+coinciden con los del perfil: un perfil con los pesos por defecto exactos
+(`5,5,7,5,7,6,5`) recibe la propuesta `5,8,10,5,10,8,5`, con el mismo líder y
+el 96,7 % de los enfrentamientos iguales.
+
+Calibrar **no cambia cómo se puntúa**: lee las notas de eje que `scoreCatalog`
+ya produce y solo propone pesos. Nada se aplica sin confirmación, y una vez
+aplicados son pesos como cualquier otro.
+
 ## El catálogo
 
 `src/data/cars.json`: once candidatos reales, cada campo con su estructura

@@ -275,7 +275,44 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   `AXIS_ORDER`, uno por línea siempre. Cada fila lleva el icono y el color de
   su eje: la cifra del peso y el pulgar del deslizador van en `--axis-color`.
   El valor se apaga a `--color-mute` cuando vale 0, y ese apagado gana al
-  color del eje — que un eje no cuente pesa más que de qué color es.
+  color del eje — que un eje no cuente pesa más que de qué color es. Debajo
+  de los siete deslizadores, y separado por un filete, el control que abre la
+  tanda de calibración (`product/0035`); se deshabilita con menos de cuatro
+  coches elegibles y dice por qué.
+- **`CalibrationDialog`** — la tanda de cara a cara que deduce los siete
+  pesos (`product/0035`). Es un `<dialog>` modal abierto desde el panel de
+  pesos, no una vista nueva ni una entrada del menú. Todo el cálculo es de
+  `calibrate` (`src/domain/calibration.ts`): el componente guarda la lista de
+  respuestas, pinta el par que toca y ofrece las tres salidas.
+  - **Cada cara a cara** enseña los dos coches en dos columnas, con su foto
+    frontal de cabecera y **las mismas magnitudes de la ficha completa, en
+    sus bloques y con la Δ del uno contra el otro** —reutiliza
+    `COMPLETE_BLOCKS` y `CellContent` de `FichaPage`, no declara un segundo
+    formateador—. **Ninguna cifra del modelo aparece**: ni nota, ni
+    porcentaje, ni nota de eje, ni puesto, ni el color de un eje. Se pregunta
+    qué coche prefiere quien mira, no cuál prefiere la aplicación; enseñar la
+    nota convertiría la respuesta en un eco.
+  - **Tres salidas** por pregunta: preferir el de la izquierda, preferir el
+    de la derecha y «me da igual». Además, «Deshacer la última» retira la
+    última respuesta y recalcula como si nunca se hubiera dado, y «Terminar
+    ahora» salta al resultado con lo que lleve contestado.
+  - **El avance**, recalculado tras cada respuesta: cuántos coches pueden
+    todavía ser el primero, cuántos enfrentamientos han quedado decididos y
+    cuántas respuestas se llevan. No hay barra de progreso ni porcentaje de
+    confianza: no hay número fijo de preguntas al que referirlos.
+  - **El resultado** enseña los siete pesos propuestos con su valor anterior
+    al lado cuando cambian, y dice cuántas combinaciones siguen siendo
+    compatibles — con más de una, que los pesos son *una* de las
+    explicaciones y no la medida de lo que quien contesta valora (ADR 0011).
+    **Aplicar** los copia a los deslizadores por la misma vía que moverlos a
+    mano, así que se persisten y viajan en el enlace; **Descartar** cierra
+    sin tocar nada. Nunca se aplica solo.
+  - **La tanda vive en memoria.** No añade ninguna clave de almacenamiento ni
+    sube `CONFIG_VERSION`: cerrar sin aplicar, o recargar, pierde las
+    respuestas. Lo único que persiste es el resultado, y solo al aplicarlo.
+  - Los candidatos son **los del tramo elegible en el momento de abrirla**
+    (presupuesto, imprescindibles y estado de decisión ya aplicados), y
+    quedan congelados mientras dure.
 - **`AssumptionsPanel`** — el punto de edición de los supuestos globales y
   del presupuesto máximo. El presupuesto se edita también desde
   `EliminatoryRulesPanel` —el mismo `budgetEur`, dos controles sobre el
