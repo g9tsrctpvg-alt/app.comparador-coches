@@ -16,7 +16,7 @@ multiplica.
 La consecuencia es que «prefiero este coche a ese» **es exactamente una
 desigualdad lineal sobre los siete pesos**:
 
-```
+```text
 Σ pesoᵢ × (notaᵢ(A) − notaᵢ(B)) > 0
 ```
 

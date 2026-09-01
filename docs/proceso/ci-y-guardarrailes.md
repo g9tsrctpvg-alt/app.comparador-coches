@@ -44,7 +44,7 @@ activos, en el mismo orden en que aparecen ahí.
 | Lint y formato de código | Activo | Prettier + ESLint, modo comprobación |
 | Tipado estático estricto | Activo | `tsc --noEmit` con `strict` |
 | Contratos de arquitectura | Activo | dependency-cruiser (`domain/` no importa `ui/`, React ni React DOM) |
-| Tests y suelo de cobertura | Activo | Vitest con cobertura v8, suelo al 100% en `domain/`, `data/` y `logging/` |
+| Tests y suelo de cobertura | Activo | Vitest con cobertura v8, suelo al 100% en `domain/`, `data/` y `logging/`; el job `test` añade después `npm run test:recovery` (ver abajo) |
 | Lint y formato de documentación | Activo | `markdownlint` sobre `**/*.md` |
 | Enlaces de documentación | Activo | `lychee` sobre `**/*.md` |
 | Coherencia de specs y ADRs | Activo | `scripts/validateDocs.ts`, bajo Vitest |
@@ -83,8 +83,16 @@ de 17 segundos a dos minutos y medio, y eso desincentiva justo lo que la
 regla de arriba manda: pasar la tanda entera antes de afirmar nada. Suelta,
 sin cobertura, tarda **17 segundos**.
 
-**Cuándo hay que ejecutarla.** La condición es mecánica, no un juicio —
-cámbialo y la medición puede cambiar; no lo cambies y no puede—:
+**Estar fuera de la secuencia local no la hace opcional: corre siempre en
+CI**, como paso del job `test`, en cada `push` y cada `pull_request`. La
+garantía es mecánica y no depende de que nadie se acuerde — que es justo lo
+que exige el principio IA-First, porque quien trabaja aquí mañana no recuerda
+esta sesión. En local es una conveniencia para no descubrir el fallo en CI,
+no la garantía.
+
+**Cuándo conviene ejecutarla en local.** La condición es mecánica, no un
+juicio — toca una de estas y la medición puede cambiar; no toques ninguna y
+no puede:
 
 - `src/domain/calibration.ts`;
 - cualquier eje de `src/domain/scoring/`, o la forma de puntuar;
@@ -92,8 +100,8 @@ cámbialo y la medición puede cambiar; no lo cambies y no puede—:
 - `src/data/cars.json`.
 
 Son las cuatro entradas de la medición. Si el cambio no toca ninguna, no hay
-nada que volver a medir. Si toca alguna, se ejecuta: son 17 segundos, así que
-ante la duda se ejecuta y punto — deliberar sale más caro que medir.
+nada que volver a medir. Si toca alguna, se ejecuta sin preguntar a nadie:
+son 17 segundos, y deliberar sale más caro que medir.
 
 ### Suelo de cobertura
 

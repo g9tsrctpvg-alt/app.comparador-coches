@@ -66,6 +66,16 @@ jobs:
       - run: npm ci
       - run: npm run test:coverage
 
+      # La medición empírica de product/0035, fuera de `test:coverage` porque
+      # bajo la instrumentación de cobertura pasa de 17 segundos a dos minutos
+      # y medio (ver docs/proceso/ci-y-guardarrailes.md §4). Aquí corre
+      # **siempre**, no solo cuando cambian sus entradas: filtrar por rutas
+      # costaría más de lo que ahorra y dejaría la garantía dependiendo de que
+      # el filtro esté bien escrito. Paso del mismo job y no uno propio para
+      # no pagar otro `npm ci` por 17 segundos de trabajo.
+      - name: Empirical recovery measurement
+        run: npm run test:recovery
+
   docs:
     name: Documentation consistency
     runs-on: ubuntu-latest
