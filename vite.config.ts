@@ -1,4 +1,4 @@
-import { defineConfig } from 'vitest/config';
+import { configDefaults, defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
@@ -11,6 +11,12 @@ export default defineConfig({
     // el contenido real de `.module.css` y de la hoja global con
     // `import.meta.glob`, así que necesita el CSS de verdad.
     css: true,
+    // La medición empírica de `product/0035` queda fuera de la tanda por
+    // omisión: son setenta tandas completas recorriendo las 78.124
+    // combinaciones de la rejilla, dos minutos y medio. Se ejecuta aparte,
+    // con `npm run test:recovery`, y su propio fichero declara la condición
+    // —mecánica, no un juicio— que obliga a ejecutarla.
+    exclude: [...configDefaults.exclude, '**/*.recovery.test.ts'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov'],

@@ -73,6 +73,28 @@ validador corre bajo Vitest, no como paso aparte.
 
 **Pásala entera antes de dar algo por hecho.**
 
+### El paso que no está en la secuencia: `npm run test:recovery`
+
+Hay **una** comprobación fuera de la secuencia de arriba: la medición
+empírica que sostiene los criterios de `product/0035` sobre lo que una tanda
+de calibración recupera (`src/domain/calibration.recovery.test.ts`). No entra
+en `npm run test:coverage` porque bajo la instrumentación de cobertura pasa
+de 17 segundos a dos minutos y medio, y eso desincentiva justo lo que la
+regla de arriba manda: pasar la tanda entera antes de afirmar nada. Suelta,
+sin cobertura, tarda **17 segundos**.
+
+**Cuándo hay que ejecutarla.** La condición es mecánica, no un juicio —
+cámbialo y la medición puede cambiar; no lo cambies y no puede—:
+
+- `src/domain/calibration.ts`;
+- cualquier eje de `src/domain/scoring/`, o la forma de puntuar;
+- `DEFAULT_WEIGHTS` (`src/domain/scoring/weights.ts`);
+- `src/data/cars.json`.
+
+Son las cuatro entradas de la medición. Si el cambio no toca ninguna, no hay
+nada que volver a medir. Si toca alguna, se ejecuta: son 17 segundos, así que
+ante la duda se ejecuta y punto — deliberar sale más caro que medir.
+
 ### Suelo de cobertura
 
 Se fija por *ratcheting*, al nivel que alcanza la suite hoy: el 100% de

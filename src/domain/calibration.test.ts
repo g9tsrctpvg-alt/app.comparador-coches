@@ -69,46 +69,6 @@ function runSession(
   return { outcomes, proposed: state.proposedWeights };
 }
 
-/** Proporción de los enfrentamientos que dos vectores de pesos ordenan
- * igual: la medida de «reproduce la clasificación» del requisito 10.3. */
-function agreement(a: AxisWeights, b: AxisWeights): number {
-  let ok = 0;
-  let pairs = 0;
-  for (let i = 0; i < profiles.length; i += 1) {
-    for (let j = i + 1; j < profiles.length; j += 1) {
-      const p = profiles[i] as CarProfile;
-      const q = profiles[j] as CarProfile;
-      const da = totalOf(a, p) - totalOf(a, q);
-      const db = totalOf(b, p) - totalOf(b, q);
-      pairs += 1;
-      if (da === 0 || db === 0) ok += 0.5;
-      else if (Math.sign(da) === Math.sign(db)) ok += 1;
-    }
-  }
-  return ok / pairs;
-}
-
-/** Perfiles sintéticos reproducibles, sin depender de `Math.random`. */
-function syntheticProfiles(count: number, seed: number): AxisWeights[] {
-  let state = seed >>> 0;
-  const next = () => {
-    state = (state * 1664525 + 1013904223) >>> 0;
-    return state / 4294967296;
-  };
-  const result: AxisWeights[] = [];
-  while (result.length < count) {
-    const weights = {} as AxisWeights;
-    let sum = 0;
-    for (const axisId of AXIS_ORDER) {
-      const value = Math.floor(next() * 11);
-      weights[axisId] = value;
-      sum += value;
-    }
-    if (sum > 0) result.push(weights);
-  }
-  return result;
-}
-
 describe('profileOf', () => {
   it('el perfil no depende de los pesos con que se puntúe (requisito 1.2)', () => {
     const opposite: AxisWeights = {
@@ -424,46 +384,4 @@ describe('la unidad del margen', () => {
       12,
     );
   });
-});
-
-/**
- * Los dos tests de esta sección son lentos a propósito y no se pueden
- * abaratar sin dejar de comprobar lo que comprueban: son sesenta y diez
- * tandas completas, y cada respuesta recorre las 78.124 combinaciones. Bajo
- * cobertura, este fichero tarda unos dos minutos y medio. Es el precio de
- * tener un criterio de aceptación empírico comprobado de verdad y no
- * declarado de palabra.
- */
-describe('lo que una tanda recupera', () => {
-  it('reproduce la clasificación mucho mejor que los pesos por defecto', () => {
-    const truths = syntheticProfiles(60, 12345);
-    let lengths = 0;
-    let longest = 0;
-    let derived = 0;
-    let baseline = 0;
-    for (const truth of truths) {
-      const { outcomes, proposed } = runSession(truth);
-      lengths += outcomes.length;
-      longest = Math.max(longest, outcomes.length);
-      derived += agreement(proposed, truth);
-      baseline += agreement(DEFAULT_WEIGHTS, truth);
-    }
-    const n = truths.length;
-    // Requisito 6.5 y criterio de aceptación: 18 preguntas o menos.
-    expect(longest).toBeLessThanOrEqual(18);
-    expect(lengths / n).toBeLessThan(18);
-    // Requisito 10.3: al menos el 95 %, contra el 81,2 % de la línea base.
-    expect(derived / n).toBeGreaterThanOrEqual(0.95);
-    expect(baseline / n).toBeLessThan(0.83);
-  }, 120000);
-
-  it('aguanta una de cada diez respuestas invertida', () => {
-    const truths = syntheticProfiles(10, 999);
-    let derived = 0;
-    for (const truth of truths) {
-      const { proposed } = runSession(truth, { flipEvery: 10 });
-      derived += agreement(proposed, truth);
-    }
-    expect(derived / truths.length).toBeGreaterThanOrEqual(0.9);
-  }, 120000);
 });

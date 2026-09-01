@@ -473,8 +473,11 @@ exacto anterior, «Descartar» deja los siete deslizadores como estaban,
 recarga y viajan en el enlace copiado —abierto en una sesión limpia, sin
 `localStorage`, los siete coinciden—. Sin desbordamiento horizontal a 390px
 ni en el documento ni en el diálogo. El decimoséptimo, contra `arch:check`
-más la revisión del diff; el decimoctavo, contra la CI entera en local: 671
-tests y cobertura 100 % en `domain/`+`data/`+`logging/`.
+más la revisión del diff; el decimoctavo, contra la CI entera en local: 669
+tests y cobertura 100 % en `domain/`+`data/`+`logging/`, más los dos de
+`npm run test:recovery` —la medición empírica de los criterios undécimo y
+duodécimo, que vive fuera de la tanda por omisión: ver
+`docs/proceso/ci-y-guardarrailes.md` §4—.
 
 **Una nota honesta sobre el criterio decimocuarto.** Con el presupuesto por
 defecto el tramo elegible son **15 de los 18 coches publicados**, así que la
