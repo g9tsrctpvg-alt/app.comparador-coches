@@ -670,6 +670,40 @@ fase abierta. Se lista para no perderlo, no para bloquear nada.
   atribución imposible no puede colar— y contra el navegador sobre el build
   de producción. Consolidada en `docs/estado/dominio.md` y
   `docs/estado/interfaz.md`.
+- **Los defectos que la revisión encontró en la calibración —
+  `technical/0013`, `consolidated`.** Una revisión de código posterior a
+  consolidar `product/0036` —dos pasadas independientes, coincidentes en dos
+  hallazgos— encontró **seis defectos reales**, verificados uno a uno contra
+  el código antes de aceptarlos. Los dos con efecto visible hoy: el aviso de
+  contradicción **mentía** —desde `product/0036` una respuesta aporta dos
+  desigualdades si atribuye ejes, y `contradicted` las cuenta por separado, así
+  que con **una sola** respuesta y una atribución imposible la pantalla decía
+  «Una de tus respuestas no encaja **con las demás**», cuando no había
+  ninguna otra, y además culpaba a la elección de coche en vez de a la
+  atribución—; y `constraintsOf` decidía si la marca era un subconjunto propio
+  por la **longitud** del array, no por los ejes distintos, así que siete
+  entradas de un mismo eje se leían como «marcó los siete» y su segunda
+  desigualdad se descartaba en silencio. Los otros cuatro: del paso de
+  atribución **no se podía volver** —un clic equivocado en un coche obligaba a
+  registrar una respuesta que ya se sabía mala y deshacerla después—, el foco
+  volvía al principio del diálogo en **cada** cara a cara, `grid()` seguía
+  construyendo y cacheando un `Uint8Array` de 78.124 posiciones que nadie leía
+  desde que `product/0036` retiró el criterio de margen, y el `:hover` de las
+  marcas de eje, con más especificidad que el `border-left` de la marca y que
+  el `border-color` de la marca pulsada, se comía a la vez el color del eje y
+  la señal de estar marcada. Ninguno es un cambio de comportamiento de una
+  spec consolidada, así que ninguna se editó: se corrigieron aquí, con el
+  precedente de `technical/0002` sobre `product/0001`. **Ninguna cifra medida
+  cambia** —cuatro defectos son de interfaz, uno es código muerto y el de la
+  guarda solo es alcanzable con una entrada que la interfaz no produce—, y
+  `npm run test:recovery` se ejecutó para comprobarlo. Recorrió
+  `draft → approved → implemented → verified → consolidated` el 2026-09-02,
+  con el gate humano en un commit propio sin implementación, la CI entera
+  verde en local (686 tests, cobertura 100 % en `domain/`+`data/`+`logging/`,
+  más `npm run test:recovery`) y los nueve criterios cerrados contra tests
+  unitarios y contra el navegador sobre el build de producción —el foco, la
+  vuelta atrás y los dos colores del `:hover` se midieron ahí—. Consolidada
+  en `docs/estado/dominio.md` y `docs/estado/interfaz.md`.
 - **Eje de autonomía y repostaje.** Es la mayor diferencia práctica entre los
   once candidatos en un viaje largo —los térmicos e híbridos hacen 640-950 km
   con un depósito, los eléctricos la mitad en autopista— y el modelo es hoy

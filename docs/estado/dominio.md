@@ -505,8 +505,9 @@ dependencias.
   orden, sin muestreo ni semilla. Todos sus valores son enteros de 0 a 10, así
   que cualquier resultado se puede poner en los deslizadores tal cual.
 - **El conjunto compatible** son las combinaciones que contradicen el menor
-  número posible de respuestas. Con respuestas coherentes ese mínimo es 0;
-  con respuestas que se contradicen entre sí es mayor, y el conjunto sigue
+  número posible de **desigualdades** —no de respuestas: una respuesta aporta
+  una desigualdad, o dos si además atribuye ejes—. Con lo contestado coherente
+  ese mínimo es 0; si se contradice consigo mismo es mayor, y el conjunto sigue
   sin estar vacío: una tanda nunca se rompe por una respuesta arrepentida.
 - **Los pesos propuestos** son un representante declarado de ese conjunto:
   la combinación **más cercana al centro** del propio conjunto compatible —la
@@ -535,8 +536,12 @@ dependencias.
   quisiera entre los siete pesos a la vez. Marcar los siete ejes equivale a
   no marcar ninguno —«lo decidió todo junto» no es una atribución—, y una
   atribución que resulte imposible para cualquier combinación de la rejilla
-  se absorbe igual que cualquier otra respuesta que se contradiga con las
-  demás: no rompe la tanda, solo cuenta como una contradicción más.
+  se absorbe igual que cualquier otra contradicción: no rompe la tanda, solo
+  cuenta como una desigualdad contradicha más. Como esa segunda desigualdad
+  puede chocar con la primera de **su propia** respuesta, desde `product/0036`
+  una respuesta suelta ya puede contradecirse sola. Lo que cuenta para decidir
+  si la marca es un subconjunto propio son los ejes **distintos**: una lista
+  con repeticiones describe el mismo subconjunto que la lista sin ellas.
 
 **Lo que una tanda identifica es la clasificación, no los pesos** (ADR 0011).
 El conjunto de explicaciones compatibles es un cono —si un vector explica las

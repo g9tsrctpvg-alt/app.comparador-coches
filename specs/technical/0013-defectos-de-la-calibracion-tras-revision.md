@@ -1,12 +1,18 @@
 # 0013 — Los defectos que la revisión encontró en la calibración
 
 - **Id:** technical/0013
-- **Estado:** approved
+- **Estado:** consolidated
 - **Tipo:** technical
 - **Fecha:** 2026-09-02
 - **Specs relacionadas:** product/0035, product/0036
 - **ADRs relacionados:** 0011
 - **Doc de estado:** `docs/estado/dominio.md`, `docs/estado/interfaz.md`
+
+> ⚠️ **Spec consolidada (2026-09-02).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/dominio.md` y `docs/estado/interfaz.md`. Vigentes aquí solo
+> los **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -145,25 +151,35 @@ respuesta visible, pero sobre una propiedad que no pisa ninguna de las dos.
 
 > Obligatorios y verificables.
 
-- [ ] Con una sola respuesta y una atribución imposible, el aviso no afirma que
+- [x] Con una sola respuesta y una atribución imposible, el aviso no afirma que
       haya otras respuestas (requisito 1.2), y el comentario de `contradicted`
       dice «desigualdades» (requisito 1.1).
-- [ ] `calibrate` da exactamente el mismo resultado con
+- [x] `calibrate` da exactamente el mismo resultado con
       `decisiveAxes: ['coste']` que con siete copias de `'coste'`, y ese
       resultado **no** es el de no atribuir (requisito 2.1).
-- [ ] Marcar los siete ejes distintos sigue equivaliendo a no atribuir
+- [x] Marcar los siete ejes distintos sigue equivaliendo a no atribuir
       (`product/0036`, requisito 2.3, que no cambia).
-- [ ] En el paso de atribución se ofrece «Deshacer la última», y pulsarla
+- [x] En el paso de atribución se ofrece «Deshacer la última», y pulsarla
       vuelve al mismo cara a cara sin registrar respuesta: el número de
       respuestas no sube y las marcas de eje quedan limpias (requisito 3.1).
-- [ ] En el paso de atribución no se ofrecen «Me da igual» ni «Terminar ahora»
+      Comprobado en el navegador sobre el build de producción: el avance sigue
+      diciendo «0 respuestas» al volver, y al reentrar en el paso no hay
+      ninguna marca pulsada.
+- [x] En el paso de atribución no se ofrecen «Me da igual» ni «Terminar ahora»
       (requisito 3.2).
-- [ ] Al entrar en el paso de atribución, el elemento con foco es su rótulo
-      (requisito 4.1).
-- [ ] `grid()` no expone `sums`, y ningún módulo lo lee (requisito 5.1).
-- [ ] Con el ratón encima, una marca de eje conserva el color de su eje, y una
-      marcada conserva su señal de marcada (requisito 6.1).
-- [ ] La CI entera pasa en local, `npm run test:recovery` incluido —esta spec
+- [x] Al entrar en el paso de atribución, el elemento con foco es su rótulo
+      (requisito 4.1). El test unitario fija que el rótulo es enfocable
+      (`tabindex="-1"`) —los componentes se comprueban por su marcado con
+      `renderToStaticMarkup`, sin entorno DOM—, y en el navegador sobre el
+      build de producción `document.activeElement` al entrar en el paso es ese
+      `<p tabindex="-1">`.
+- [x] `grid()` no expone `sums`, y ningún módulo lo lee (requisito 5.1).
+- [x] Con el ratón encima, una marca de eje conserva el color de su eje, y una
+      marcada conserva su señal de marcada (requisito 6.1). Medido en el
+      navegador: `border-left-color` y `border-color` valen `rgb(42, 111, 143)`
+      en reposo y con el ratón encima, y el `:hover` sigue dando respuesta
+      visible por `box-shadow` (de `none` a `--shadow-control`).
+- [x] La CI entera pasa en local, `npm run test:recovery` incluido —esta spec
       toca `src/domain/calibration.ts`—, con cobertura al 100 % en `domain/`,
       `data/` y `logging/`.
 
