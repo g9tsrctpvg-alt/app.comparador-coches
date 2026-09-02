@@ -111,12 +111,14 @@ function referenceConstraints(
     const delta = deltaFor(winner, loser);
     constraints.push({ delta, positive: true });
     const decisive = outcome.decisiveAxes;
+    const decisiveSet =
+      decisive === undefined ? undefined : new Set<AxisId>(decisive);
+    // Ejes distintos, no entradas (`technical/0013`, requisito 2.1).
     if (
-      decisive !== undefined &&
-      decisive.length > 0 &&
-      decisive.length < AXIS_ORDER.length
+      decisiveSet !== undefined &&
+      decisiveSet.size > 0 &&
+      decisiveSet.size < AXIS_ORDER.length
     ) {
-      const decisiveSet = new Set(decisive);
       const complement = AXIS_ORDER.map((axisId, index) =>
         decisiveSet.has(axisId) ? 0 : (delta[index] ?? 0),
       );
@@ -585,6 +587,35 @@ describe('la atribución de ejes (product/0036, fase 2)', () => {
         state.proposedWeights[axisId] as (typeof WEIGHT_LEVELS)[number],
       );
     }
+  });
+
+  it('una atribución con repeticiones vale lo mismo que el conjunto sin ellas (technical/0013, requisito 2.1)', () => {
+    const once = calibrate(profiles, [
+      { ...ev3VsCompass, decisiveAxes: ['coste'] },
+    ]);
+    const repeated = calibrate(profiles, [
+      {
+        ...ev3VsCompass,
+        decisiveAxes: Array.from<AxisId>({ length: 7 }).fill('coste'),
+      },
+    ]);
+    const unattributed = calibrate(profiles, [ev3VsCompass]);
+    expect(repeated).toEqual(once);
+    // Y no es el resultado de no atribuir: siete entradas de un solo eje no
+    // pueden leerse como «marcó los siete».
+    expect(repeated).not.toEqual(unattributed);
+    expectRepresentativeMatchesReference([
+      {
+        ...ev3VsCompass,
+        decisiveAxes: Array.from<AxisId>({ length: 7 }).fill('coste'),
+      },
+    ]);
+  });
+
+  it('una atribución vacía equivale a no atribuir', () => {
+    expect(
+      calibrate(profiles, [{ ...ev3VsCompass, decisiveAxes: [] }]),
+    ).toEqual(calibrate(profiles, [ev3VsCompass]));
   });
 
   it('respetar `AxisId`: solo se aceptan los siete identificadores declarados', () => {

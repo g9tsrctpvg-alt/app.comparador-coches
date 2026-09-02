@@ -144,16 +144,27 @@ export function AttributionStep({
   onToggle,
   onNext,
   onDontKnow,
+  onUndo,
 }: {
   carName: string;
   selected: ReadonlySet<AxisId>;
   onToggle: (axisId: AxisId) => void;
   onNext: () => void;
   onDontKnow: () => void;
+  onUndo: () => void;
 }) {
+  // El foco entra en el paso (`technical/0013`, requisito 4.1): sin esto
+  // vuelve al principio del diálogo y quien navega con teclado tiene que
+  // tabular desde arriba en cada cara a cara. Al rótulo, que además lo
+  // anuncia; volver al cara a cara no toca el foco (requisito 4.2).
+  const hintRef = useRef<HTMLParagraphElement>(null);
+  useEffect(() => {
+    hintRef.current?.focus();
+  }, []);
+
   return (
     <>
-      <p className={styles.hint}>
+      <p className={styles.hint} ref={hintRef} tabIndex={-1}>
         ¿Qué hizo que prefirieras el {carName}? Marca los ejes que, sin ellos,
         no lo habrías elegido. Es opcional: si no sabrías decirlo, sigue sin
         marcar nada.
@@ -186,6 +197,9 @@ export function AttributionStep({
         </button>
         <button type="button" className={styles.secondary} onClick={onDontKnow}>
           No sabría decir
+        </button>
+        <button type="button" className={styles.secondary} onClick={onUndo}>
+          Deshacer la última
         </button>
       </div>
     </>
@@ -259,8 +273,8 @@ export function CalibrationResult({
           {contradicted > 0 && (
             <p className={styles.resultNote}>
               {contradicted === 1
-                ? 'Una de tus respuestas no encaja con las demás, así que la mejor combinación la contradice.'
-                : `${contradicted} de tus respuestas no encajan con las demás, así que la mejor combinación las contradice.`}
+                ? 'Hay algo en lo que has contestado que no encaja: la mejor combinación no lo cumple.'
+                : `Hay ${contradicted} cosas en lo que has contestado que no encajan: la mejor combinación no las cumple.`}
             </p>
           )}
         </>
@@ -375,9 +389,17 @@ export function CalibrationDialog({
     ]);
     // El paso de atribución solo tiene sentido para el cara a cara que
     // acaba de registrarse: se limpia aquí, no en un efecto que reaccionara
-    // a `outcomes` — «Deshacer la última» y «Terminar ahora» ya son
-    // inalcanzables mientras hay una preferencia pendiente (están ocultos),
-    // así que este es el único sitio del que hace falta salir.
+    // a `outcomes`. La otra salida del paso —cancelar la elección
+    // pendiente— la limpia por su cuenta en `cancelPending`.
+    setPendingPreference(null);
+    setSelectedAxes(new Set());
+  }
+
+  /** Cancela la elección pendiente y vuelve al mismo cara a cara, con las
+   * marcas limpias y sin registrar nada (`technical/0013`, requisito 3.1):
+   * un clic equivocado en un coche tiene marcha atrás sin pasar por
+   * registrar una respuesta que ya se sabe mala. */
+  function cancelPending() {
     setPendingPreference(null);
     setSelectedAxes(new Set());
   }
@@ -445,9 +467,15 @@ export function CalibrationDialog({
               )
             }
             onDontKnow={() => commitAttribution(undefined)}
+            onUndo={cancelPending}
           />
         )}
 
+        {/* En el paso de atribución esta fila sigue escondida
+            (`technical/0013`, requisito 3.2): «Me da igual» es otra forma de
+            contestar el cara a cara que ya se contestó, y «Terminar ahora»
+            saltaría al resultado dejando la respuesta sin registrar. La
+            vuelta atrás la ofrece el propio `AttributionStep`. */}
         {pendingPreference === null && (
           <div className={styles.actions}>
             {matchup !== null && (

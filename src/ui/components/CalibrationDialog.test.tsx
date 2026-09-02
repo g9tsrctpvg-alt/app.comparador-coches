@@ -115,6 +115,7 @@ describe('AttributionStep', () => {
         onToggle={() => {}}
         onNext={() => {}}
         onDontKnow={() => {}}
+        onUndo={() => {}}
       />,
     );
   }
@@ -143,6 +144,21 @@ describe('AttributionStep', () => {
     const markup = render();
     expect(markup).toContain('Siguiente');
     expect(markup).toContain('No sabría decir');
+  });
+
+  it('ofrece la vuelta atrás, y no las otras dos salidas del cara a cara (technical/0013, requisitos 3.1 y 3.2)', () => {
+    const markup = render();
+    expect(markup).toContain('Deshacer la última');
+    expect(markup).not.toContain('Me da igual');
+    expect(markup).not.toContain('Terminar ahora');
+  });
+
+  it('el rótulo del paso puede recibir el foco (technical/0013, requisito 4.1)', () => {
+    // El efecto que lo enfoca al montar no corre en `renderToStaticMarkup`;
+    // lo que el marcado sí prueba es que el rótulo es enfocable, que es la
+    // mitad estructural del requisito. La otra —que el efecto lo enfoque al
+    // entrar— es una línea de `AttributionStep` sin rama.
+    expect(render()).toMatch(/<p[^>]*tabindex="-1"/);
   });
 });
 
@@ -199,10 +215,25 @@ describe('CalibrationResult', () => {
     expect(markup).toContain('tu clasificación, no tus pesos');
   });
 
-  it('avisa cuando alguna respuesta se contradice (requisito 4.2)', () => {
-    expect(render({ contradicted: 1 })).toContain('Una de tus respuestas');
-    expect(render({ contradicted: 3 })).toContain('3 de tus respuestas');
+  it('avisa cuando algo de lo contestado se contradice (requisito 4.2)', () => {
+    expect(render({ contradicted: 1 })).toContain('Hay algo en lo que has');
+    expect(render({ contradicted: 3 })).toContain('Hay 3 cosas en lo que has');
     expect(render()).not.toContain('no encaja');
+  });
+
+  it('con una sola desigualdad contradicha no afirma que haya otras respuestas (technical/0013, requisito 1.2)', () => {
+    // Desde `product/0036` una sola respuesta con atribución imposible ya da
+    // `contradicted: 1`, así que el aviso no puede hablar de «las demás» ni
+    // culpar a la elección de coche.
+    const markup = render({ contradicted: 1, answered: 1 });
+    const note = markup
+      .split('<p class=')
+      .find((chunk) => chunk.includes('no encaja'));
+    expect(note).toBeDefined();
+    expect(note).not.toContain('las demás');
+    // Ni cuenta respuestas ni culpa a la elección de coche.
+    expect(note).not.toContain('respuesta');
+    expect(note).not.toContain('prefer');
   });
 
   it('sin respuestas no propone nada y no deja aplicar', () => {

@@ -234,8 +234,13 @@
   cursor: pointer;
 }
 
+/* La respuesta al ratón va por `box-shadow`, no por `border-color`
+ * (`technical/0013`, requisito 6.1): este selector tiene más especificidad
+ * que el `border-left` de `.axisToggle` y que el `border-color` de
+ * `.axisToggleSelected`, así que tocar el borde borraría el color del eje y
+ * la señal de marcada. */
 .axisToggle:hover {
-  border-color: var(--color-rule-strong);
+  box-shadow: var(--shadow-control);
 }
 
 .axisToggleSelected {

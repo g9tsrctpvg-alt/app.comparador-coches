@@ -88,8 +88,11 @@ export interface CalibrationState {
   proposedWeights: AxisWeights;
   /** Cuántas combinaciones de la rejilla siguen siendo compatibles. */
   compatibleCount: number;
-  /** Cuántas respuestas contradice la mejor combinación: 0 salvo que las
-   * respuestas se contradigan entre sí (requisito 4.2). */
+  /** Cuántas **desigualdades** contradice la mejor combinación: 0 salvo que
+   * lo contestado se contradiga consigo mismo (requisito 4.2). Una respuesta
+   * aporta una desigualdad, o dos si además atribuye ejes
+   * (`product/0036`, requisito 2.4), así que esta cifra no es un recuento de
+   * respuestas (`technical/0013`, requisito 1.1). */
   contradicted: number;
   /** Coches que pueden todavía ser el primero, en orden de catálogo. */
   possibleLeaderIds: string[];
@@ -102,13 +105,12 @@ export interface CalibrationState {
 
 /** La rejilla, aplanada: siete valores por combinación, en el mismo orden
  * siempre (requisito 3.4). Se construye una vez y se reutiliza. */
-let gridCache: { values: Uint8Array; sums: Uint8Array } | undefined;
+let gridCache: { values: Uint8Array } | undefined;
 
-function grid(): { values: Uint8Array; sums: Uint8Array } {
+function grid(): { values: Uint8Array } {
   if (gridCache !== undefined) return gridCache;
   const axes = AXIS_ORDER.length;
   const values = new Uint8Array(GRID_SIZE * axes);
-  const sums = new Uint8Array(GRID_SIZE);
   const current = new Array<number>(axes).fill(0);
   let written = 0;
 
@@ -119,7 +121,6 @@ function grid(): { values: Uint8Array; sums: Uint8Array } {
       for (let a = 0; a < axes; a += 1) {
         values[written * axes + a] = current[a] as number;
       }
-      sums[written] = sum;
       written += 1;
       return;
     }
@@ -130,7 +131,7 @@ function grid(): { values: Uint8Array; sums: Uint8Array } {
   };
   walk(0, 0);
 
-  gridCache = { values, sums };
+  gridCache = { values };
   return gridCache;
 }
 
@@ -285,12 +286,14 @@ function constraintsOf(
     constraints.push({ delta, positive: true });
 
     const decisive = outcome.decisiveAxes;
-    if (
-      decisive !== undefined &&
-      decisive.length > 0 &&
-      decisive.length < AXIS_ORDER.length
-    ) {
+    if (decisive !== undefined) {
       const decisiveSet = new Set(decisive);
+      // Ejes **distintos**, no entradas: una lista con repeticiones describe
+      // el mismo subconjunto que la lista sin ellas
+      // (`technical/0013`, requisito 2.1).
+      if (decisiveSet.size === 0 || decisiveSet.size === AXIS_ORDER.length) {
+        continue;
+      }
       const complement = new Float64Array(AXIS_ORDER.length);
       AXIS_ORDER.forEach((axisId, index) => {
         // `delta` es un `Float64Array` de `AXIS_ORDER.length` posiciones,
