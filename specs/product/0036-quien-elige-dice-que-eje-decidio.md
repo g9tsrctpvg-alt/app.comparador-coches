@@ -1,18 +1,18 @@
 # 0036 — Quien elige dice qué eje decidió
 
 - **Id:** product/0036
-- **Estado:** implemented
+- **Estado:** consolidated
 - **Tipo:** product
 - **Fecha:** 2026-09-02
 - **Specs relacionadas:** product/0029, product/0033, product/0035
 - **ADRs relacionados:** 0004, 0011
 - **Doc de estado:** `docs/estado/dominio.md`, `docs/estado/interfaz.md`
 
-> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
-> implementado: su sección *Contexto* retrata el sistema **anterior** al
-> cambio y hoy no es cierta. **No es referencia del estado actual** — para
-> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
-> **criterios de aceptación**, como registro de verificación.
+> ⚠️ **Spec consolidada (2026-09-02).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/dominio.md` y `docs/estado/interfaz.md`. Vigentes aquí solo
+> los **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -230,6 +230,41 @@ esa regla evita.
       toca `src/domain/calibration.ts`, que es una de sus cuatro entradas
       (`docs/proceso/ci-y-guardarrailes.md` §4)—, con cobertura al 100 % en
       `domain/`, `data/` y `logging/`.
+
+**Verificado el 2026-09-02**, criterio a criterio y contra la evidencia real
+que lo cierra, no contra una carrera completa de la suite. En el orden en que
+aparecen en la lista de arriba:
+
+- **El primero, el segundo, el quinto, el sexto, el séptimo, el octavo, el
+  undécimo y el duodécimo**, contra tests unitarios
+  (`src/domain/calibration.test.ts`,
+  `src/ui/components/CalibrationDialog.test.tsx`). El representante (primero
+  y quinto) se verifica combinación a combinación contra una
+  reimplementación independiente del conjunto compatible y del centro, no
+  solo por sus propiedades. La atribución imposible (octavo) tiene además
+  demostración algebraica en el propio test: con pesos que no pueden ser
+  negativos, marcar el único eje en que se pierde nunca puede hacer ganar. El
+  deshacer con atribución (duodécimo) usa una respuesta con `decisiveAxes`
+  real, no una simplificada.
+- **El tercero, el cuarto y el noveno**, contra `npm run test:recovery`
+  (`src/domain/calibration.recovery.test.ts`), sobre los mismos treinta
+  perfiles sintéticos del diagnóstico que motivó la spec: 0,07 ejes en cero a
+  tres respuestas (el criterio pedía ≤0,5 — antes de esta spec, 4,50), y
+  0,86 / 0,90 de acuerdo donde el criterio pedía ≥0,82 y ≥0,90.
+- **El décimo**, contra el navegador sobre el *build* de producción con
+  Playwright: pulsar «Me da igual» avanza directamente al siguiente cara a
+  cara, sin que el paso de atribución llegue a aparecer.
+- **El decimotercero**, por inspección directa: `CONFIG_VERSION` sigue en 3
+  (`src/domain/config.ts`) y `localStorageConfigPort.ts` no declara ninguna
+  clave nueva.
+- **El decimocuarto**, contra la CI entera en local: 680 tests y cobertura
+  100 % en `domain/`+`data/`+`logging/`, más `npm run test:recovery` (4
+  tests, ~20 s suelto).
+
+Y dos comprobaciones más en el navegador, fuera de la lista pero parte del
+mismo requisito 3.4: el paso de atribución no muestra ninguna nota, porcentaje
+ni puesto, y no hay desbordamiento horizontal a 390px con el paso de
+atribución abierto.
 
 ## Dependencias y supuestos
 
