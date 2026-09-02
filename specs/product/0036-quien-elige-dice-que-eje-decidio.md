@@ -1,12 +1,18 @@
 # 0036 — Quien elige dice qué eje decidió
 
 - **Id:** product/0036
-- **Estado:** approved
+- **Estado:** implemented
 - **Tipo:** product
 - **Fecha:** 2026-09-02
 - **Specs relacionadas:** product/0029, product/0033, product/0035
 - **ADRs relacionados:** 0004, 0011
 - **Doc de estado:** `docs/estado/dominio.md`, `docs/estado/interfaz.md`
+
+> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
+> implementado: su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy no es cierta. **No es referencia del estado actual** — para
+> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
+> **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -193,34 +199,34 @@ esa regla evita.
 
 > Obligatorios y verificables.
 
-- [ ] Los pesos propuestos son siempre un elemento del conjunto compatible, y
+- [x] Los pesos propuestos son siempre un elemento del conjunto compatible, y
       con respuestas coherentes no contradicen ninguna (requisito 1.2).
-- [ ] Con las mismas respuestas, dos derivaciones devuelven los siete pesos
+- [x] Con las mismas respuestas, dos derivaciones devuelven los siete pesos
       idénticos (determinismo, sin muestreo ni semilla).
-- [ ] Sobre treinta perfiles sintéticos y tres respuestas, la media de ejes en
+- [x] Sobre treinta perfiles sintéticos y tres respuestas, la media de ejes en
       cero baja de 4,50 a **0,5 o menos**, y el acuerdo con la clasificación
       real sube de 0,715 a **0,82 como mínimo** (requisito 1.4).
-- [ ] Con cinco respuestas, el acuerdo sube de 0,786 a **0,86 como mínimo**.
-- [ ] Ninguna combinación del conjunto compatible está más cerca del centro
+- [x] Con cinco respuestas, el acuerdo sube de 0,786 a **0,86 como mínimo**.
+- [x] Ninguna combinación del conjunto compatible está más cerca del centro
       que la propuesta (requisito 1.1).
-- [ ] Marcar los siete ejes da exactamente el mismo conjunto compatible que no
+- [x] Marcar los siete ejes da exactamente el mismo conjunto compatible que no
       marcar ninguno (requisito 2.3).
-- [ ] Marcar un subconjunto propio reduce el conjunto compatible o lo deja
+- [x] Marcar un subconjunto propio reduce el conjunto compatible o lo deja
       igual, nunca lo agranda, cuando la atribución es coherente.
-- [ ] Una atribución imposible —marcar un eje en el que el coche elegido pierde
+- [x] Una atribución imposible —marcar un eje en el que el coche elegido pierde
       y ningún otro— se absorbe: la derivación devuelve pesos y conjunto no
       vacío, sin lanzar (requisito 2.4).
-- [ ] Sobre treinta perfiles sintéticos que atribuyen, la tanda se cierra en
+- [x] Sobre treinta perfiles sintéticos que atribuyen, la tanda se cierra en
       **menos preguntas** que sin atribuir, y el acuerdo con cinco respuestas
       es **0,90 como mínimo** (requisito 2.6).
-- [ ] «Me da igual» no ofrece marcar ejes (requisito 2.5).
-- [ ] El segundo paso no muestra ninguna nota, porcentaje, nota de eje ni
+- [x] «Me da igual» no ofrece marcar ejes (requisito 2.5).
+- [x] El segundo paso no muestra ninguna nota, porcentaje, nota de eje ni
       puesto (requisito 3.4).
-- [ ] «Deshacer» tras atribuir retira la elección y la atribución juntas, y
+- [x] «Deshacer» tras atribuir retira la elección y la atribución juntas, y
       devuelve el avance al valor exacto anterior (requisito 3.3).
-- [ ] `CONFIG_VERSION` no cambia y no se añade ninguna clave de
+- [x] `CONFIG_VERSION` no cambia y no se añade ninguna clave de
       almacenamiento.
-- [ ] La CI entera pasa en local, `npm run test:recovery` incluido —esta spec
+- [x] La CI entera pasa en local, `npm run test:recovery` incluido —esta spec
       toca `src/domain/calibration.ts`, que es una de sus cuatro entradas
       (`docs/proceso/ci-y-guardarrailes.md` §4)—, con cobertura al 100 % en
       `domain/`, `data/` y `logging/`.

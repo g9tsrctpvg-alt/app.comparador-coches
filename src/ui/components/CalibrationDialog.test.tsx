@@ -14,10 +14,15 @@ import {
   AXIS_LABELS,
   AXIS_ORDER,
   DEFAULT_WEIGHTS,
+  type AxisId,
   type AxisWeights,
 } from '../../domain/scoring/weights';
 import { AXIS_THEME_CLASS } from '../axisTheme';
-import { CalibrationResult, MatchupView } from './CalibrationDialog';
+import {
+  AttributionStep,
+  CalibrationResult,
+  MatchupView,
+} from './CalibrationDialog';
 
 const cars = publishedCars(loadCatalog());
 const scored = scoreCatalog(cars, DEFAULT_WEIGHTS, DEFAULT_ASSUMPTIONS, 47000);
@@ -25,7 +30,7 @@ const profiles = scored.map(profileOf);
 const entities = buildFicha(cars, []);
 
 function matchupMarkup(): string {
-  const { nextMatchup } = calibrate(profiles, [], DEFAULT_WEIGHTS);
+  const { nextMatchup } = calibrate(profiles, []);
   const matchup = nextMatchup as { aCarId: string; bCarId: string };
   const a = withComparison(entities, matchup.bCarId).find(
     (entity) => entity.id === matchup.aCarId,
@@ -98,6 +103,46 @@ describe('MatchupView', () => {
     const markup = matchupMarkup();
     expect(markup).toContain('Prefiero el EV3');
     expect(markup).toContain('Prefiero el Compass');
+  });
+});
+
+describe('AttributionStep', () => {
+  function render(selected: Set<AxisId> = new Set()): string {
+    return renderToStaticMarkup(
+      <AttributionStep
+        carName="EV3"
+        selected={selected}
+        onToggle={() => {}}
+        onNext={() => {}}
+        onDontKnow={() => {}}
+      />,
+    );
+  }
+
+  it('ofrece marcar los siete ejes, con el nombre del coche elegido (requisito 3.1)', () => {
+    const markup = render();
+    expect(markup).toContain('EV3');
+    for (const axisId of AXIS_ORDER) {
+      expect(markup, axisId).toContain(AXIS_LABELS[axisId]);
+    }
+  });
+
+  it('no enseña ninguna cifra del modelo (requisito 3.4)', () => {
+    const text = render().replace(/<[^>]*>/g, ' ');
+    expect(text).not.toMatch(/\bNota\b|\bPuntuación\b|\bPuesto\b/);
+    expect(text).not.toContain('%');
+  });
+
+  it('marca como pulsados solo los ejes seleccionados', () => {
+    const markup = render(new Set<AxisId>(['fiabilidad', 'coste']));
+    const pressed = (markup.match(/aria-pressed="true"/g) ?? []).length;
+    expect(pressed).toBe(2);
+  });
+
+  it('ofrece «Siguiente» y «No sabría decir» (requisito 3.2)', () => {
+    const markup = render();
+    expect(markup).toContain('Siguiente');
+    expect(markup).toContain('No sabría decir');
   });
 });
 
@@ -181,7 +226,7 @@ describe('la tanda no toca nada por su cuenta', () => {
     const outcomes: MatchupOutcome[] = [
       { aCarId: 'kia-ev3', bCarId: 'jeep-compass', preferred: 'a' },
     ];
-    const state = calibrate(profiles, outcomes, DEFAULT_WEIGHTS);
+    const state = calibrate(profiles, outcomes);
     const markup = renderToStaticMarkup(
       <CalibrationResult
         proposedWeights={state.proposedWeights}
