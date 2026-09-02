@@ -8,9 +8,17 @@ import { AXIS_ORDER, type AxisId, type AxisWeights } from './scoring/weights';
  * continuo — se enumera una rejilla declarada y finita y se mira qué
  * combinaciones siguen explicando lo respondido.
  *
+ * `product/0036` corrige el criterio de representante y añade la atribución
+ * de ejes: el representante propuesto es la combinación compatible más
+ * cercana al **centro** del conjunto compatible, no la de mayor margen —que
+ * sobre un conjunto que es un cono siempre cae en una esquina—; y quien
+ * contesta puede marcar qué ejes decidieron su elección, lo que añade una
+ * segunda desigualdad por respuesta en vez de dejar que el algoritmo la
+ * invente.
+ *
  * Todo el cálculo vive aquí: `src/ui/` recibe el cara a cara que toca, los
  * pesos propuestos y las cifras de avance ya hechos, y no divide ni
- * multiplica nada (requisito 12.3).
+ * multiplica nada (requisito 12.3 de `product/0035`).
  */
 
 /** Los cinco valores que puede tomar cada peso en la rejilla (requisito
@@ -61,10 +69,17 @@ export interface Matchup {
 /**
  * Lo que ha pasado con un cara a cara. `'none'` es «me da igual»: no aporta
  * ninguna desigualdad, pero marca el par como visto para no repetirlo
- * (requisito 2.3).
+ * (requisito 2.3 de `product/0035`).
  */
 export interface MatchupOutcome extends Matchup {
   preferred: 'a' | 'b' | 'none';
+  /** Los ejes que quien contesta marcó como determinantes en esta elección
+   * (product/0036, requisito 2). Ausente o vacío: la respuesta no atribuye
+   * y se comporta exactamente como antes de esta spec. Con las siete claves:
+   * equivalente a no atribuir (requisito 2.3), porque «lo decidió todo
+   * junto» no es una atribución. Ignorado cuando `preferred === 'none'`
+   * (requisito 2.5): sin elección no hay nada que atribuir. */
+  decisiveAxes?: AxisId[];
 }
 
 export interface CalibrationState {
@@ -73,8 +88,11 @@ export interface CalibrationState {
   proposedWeights: AxisWeights;
   /** Cuántas combinaciones de la rejilla siguen siendo compatibles. */
   compatibleCount: number;
-  /** Cuántas respuestas contradice la mejor combinación: 0 salvo que las
-   * respuestas se contradigan entre sí (requisito 4.2). */
+  /** Cuántas **desigualdades** contradice la mejor combinación: 0 salvo que
+   * lo contestado se contradiga consigo mismo (requisito 4.2). Una respuesta
+   * aporta una desigualdad, o dos si además atribuye ejes
+   * (`product/0036`, requisito 2.4), así que esta cifra no es un recuento de
+   * respuestas (`technical/0013`, requisito 1.1). */
   contradicted: number;
   /** Coches que pueden todavía ser el primero, en orden de catálogo. */
   possibleLeaderIds: string[];
@@ -87,13 +105,12 @@ export interface CalibrationState {
 
 /** La rejilla, aplanada: siete valores por combinación, en el mismo orden
  * siempre (requisito 3.4). Se construye una vez y se reutiliza. */
-let gridCache: { values: Uint8Array; sums: Uint8Array } | undefined;
+let gridCache: { values: Uint8Array } | undefined;
 
-function grid(): { values: Uint8Array; sums: Uint8Array } {
+function grid(): { values: Uint8Array } {
   if (gridCache !== undefined) return gridCache;
   const axes = AXIS_ORDER.length;
   const values = new Uint8Array(GRID_SIZE * axes);
-  const sums = new Uint8Array(GRID_SIZE);
   const current = new Array<number>(axes).fill(0);
   let written = 0;
 
@@ -104,7 +121,6 @@ function grid(): { values: Uint8Array; sums: Uint8Array } {
       for (let a = 0; a < axes; a += 1) {
         values[written * axes + a] = current[a] as number;
       }
-      sums[written] = sum;
       written += 1;
       return;
     }
@@ -115,7 +131,7 @@ function grid(): { values: Uint8Array; sums: Uint8Array } {
   };
   walk(0, 0);
 
-  gridCache = { values, sums };
+  gridCache = { values };
   return gridCache;
 }
 
@@ -166,17 +182,6 @@ function leaderByCombination(profiles: CarProfile[]): Uint8Array {
 
   leaderCache = { key, leaders };
   return leaders;
-}
-
-/**
- * La diferencia de nota en puntos porcentuales del máximo alcanzable, que es
- * la unidad que ya usa la pantalla (requisito 5.2). Es `percentageOf`
- * evaluado sobre una diferencia de totales en vez de sobre un total; se
- * escribe aquí para no construir un `AxisWeights` por combinación dentro del
- * bucle, y un test comprueba que las dos formas coinciden.
- */
-function marginPP(dot: number, weightSum: number): number {
-  return (dot / (10 * weightSum)) * 100;
 }
 
 function weightsFrom(values: Uint8Array, index: number): AxisWeights {
@@ -244,23 +249,63 @@ function pairsOf(profiles: CarProfile[]): Pair[] {
 }
 
 /**
- * Las respuestas que aportan desigualdad, ya como vector de diferencia
- * orientado hacia el coche preferido: `dot > 0` significa «esta combinación
- * explica esta respuesta». Un «me da igual», o una respuesta cuyos coches ya
- * no están en el conjunto, no aporta ninguna.
+ * Una desigualdad sobre los siete pesos: `dot(w, delta)` debe ser `> 0`
+ * cuando `positive` es verdadero, o `<= 0` cuando es falso. Las dos formas
+ * conviven en la misma lista para que `compatibleIndices` las recorra en un
+ * único bucle, sin ramificar por tipo de respuesta.
+ */
+interface Constraint {
+  delta: Float64Array;
+  positive: boolean;
+}
+
+/**
+ * Las respuestas que aportan desigualdad. Un «me da igual», o una respuesta
+ * cuyos coches ya no están en el conjunto, no aporta ninguna.
+ *
+ * Cada preferencia aporta **como mínimo** una desigualdad —`dot > 0`, la de
+ * siempre (product/0035, requisito 2.2)— y, si además atribuye a un
+ * subconjunto propio y no vacío de ejes, una segunda (product/0036,
+ * requisito 2.2): sin los ejes marcados, la decisión no se sostiene —
+ * `Σ pesoᵢ × Δᵢ ≤ 0` sobre los ejes que quedan fuera de la atribución—. Las
+ * dos cuentan por separado en el recuento de contradicciones (requisito
+ * 2.4): no se funden en una.
  */
 function constraintsOf(
   outcomes: MatchupOutcome[],
   byId: Map<string, CarProfile>,
-): Float64Array[] {
-  const constraints: Float64Array[] = [];
+): Constraint[] {
+  const constraints: Constraint[] = [];
   for (const outcome of outcomes) {
     if (outcome.preferred === 'none') continue;
     const a = byId.get(outcome.aCarId);
     const b = byId.get(outcome.bCarId);
     if (a === undefined || b === undefined) continue;
     const [winner, loser] = outcome.preferred === 'a' ? [a, b] : [b, a];
-    constraints.push(deltaOf(winner as CarProfile, loser as CarProfile));
+    const delta = deltaOf(winner as CarProfile, loser as CarProfile);
+    constraints.push({ delta, positive: true });
+
+    const decisive = outcome.decisiveAxes;
+    if (decisive !== undefined) {
+      const decisiveSet = new Set(decisive);
+      // Ejes **distintos**, no entradas: una lista con repeticiones describe
+      // el mismo subconjunto que la lista sin ellas
+      // (`technical/0013`, requisito 2.1).
+      if (decisiveSet.size === 0 || decisiveSet.size === AXIS_ORDER.length) {
+        continue;
+      }
+      const complement = new Float64Array(AXIS_ORDER.length);
+      AXIS_ORDER.forEach((axisId, index) => {
+        // `delta` es un `Float64Array` de `AXIS_ORDER.length` posiciones,
+        // recorridas aquí una a una: el índice siempre existe. El `?? 0`
+        // que exigiría `noUncheckedIndexedAccess` sería una rama muerta que
+        // ningún test podría alcanzar de verdad.
+        complement[index] = decisiveSet.has(axisId)
+          ? 0
+          : (delta[index] as number);
+      });
+      constraints.push({ delta: complement, positive: false });
+    }
   }
   return constraints;
 }
@@ -272,8 +317,8 @@ function constraintsOf(
 const indicesScratch = new Int32Array(GRID_SIZE);
 
 /** Los índices de la rejilla que contradicen el mínimo posible de respuestas,
- * cuántos son y cuál es ese mínimo (requisito 4). */
-function compatibleIndices(constraints: Float64Array[]): {
+ * cuántos son y cuál es ese mínimo (requisito 4 de `product/0035`). */
+function compatibleIndices(constraints: Constraint[]): {
   indices: Int32Array;
   contradicted: number;
 } {
@@ -290,14 +335,17 @@ function compatibleIndices(constraints: Float64Array[]): {
     const base = index * axes;
     let bad = 0;
     for (let c = 0; c < constraints.length; c += 1) {
-      const delta = constraints[c] as Float64Array;
+      const constraint = constraints[c] as Constraint;
+      const delta = constraint.delta;
       let dot = 0;
       for (let a = 0; a < axes; a += 1) {
         dot += (values[base + a] as number) * (delta[a] as number);
       }
       // Empate incluido: una diferencia de 0 no confirma una preferencia
-      // (requisito 2.2).
-      if (dot <= 0) bad += 1;
+      // ni una atribución (requisito 2.2 de `product/0035` y de
+      // `product/0036`).
+      const violates = constraint.positive ? dot <= 0 : dot > 0;
+      if (violates) bad += 1;
       // En cuanto contradice más que el mejor visto ya no puede entrar ni
       // mover el mínimo, así que no hace falta terminar de contar. Con
       // respuestas coherentes el mínimo es 0 y casi toda la rejilla sale en
@@ -316,45 +364,47 @@ function compatibleIndices(constraints: Float64Array[]): {
   return { indices: indicesScratch.subarray(0, count), contradicted: best };
 }
 
-/** El representante: mayor margen mínimo, luego menor distancia a los pesos
- * vigentes, luego orden de recorrido (requisito 5.1). */
-function representativeOf(
-  indices: Int32Array,
-  constraints: Float64Array[],
-  currentWeights: AxisWeights,
-): number {
-  const { values, sums } = grid();
+/**
+ * El representante (product/0036, requisito 1.1): la combinación **del
+ * conjunto compatible** más cercana, en distancia euclídea, al centro de ese
+ * mismo conjunto. Se busca dentro del conjunto y no en el centro redondeado
+ * sin más, para conservar la garantía de que la propuesta no contradice
+ * ninguna respuesta coherente (requisito 1.2; `product/0035`, requisito
+ * 5.3): el centro crudo puede caer fuera del conjunto.
+ *
+ * No hay desempate por cercanía a los pesos vigentes (requisito 1.3): el
+ * criterio de `product/0035` nunca llegó a activarse —la distancia al
+ * centro, como el margen que sustituye, es una cantidad continua que
+ * prácticamente nunca empata—, así que mantenerlo prometía una propiedad que
+ * el sistema no daba. El desempate que queda es el orden de recorrido de la
+ * rejilla, coherente con el resto del módulo.
+ */
+function representativeOf(indices: Int32Array): number {
+  const { values } = grid();
   const axes = AXIS_ORDER.length;
-  const anchor = AXIS_ORDER.map((axisId) => currentWeights[axisId]);
+
+  const centroid = new Float64Array(axes);
+  for (let position = 0; position < indices.length; position += 1) {
+    const base = (indices[position] as number) * axes;
+    for (let a = 0; a < axes; a += 1) {
+      centroid[a] = (centroid[a] as number) + (values[base + a] as number);
+    }
+  }
+  for (let a = 0; a < axes; a += 1) {
+    centroid[a] = (centroid[a] as number) / indices.length;
+  }
 
   let best = indices[0] as number;
-  let bestMargin = Number.NEGATIVE_INFINITY;
   let bestDistance = Number.POSITIVE_INFINITY;
-
-  for (const index of indices) {
-    let margin = 0;
-    if (constraints.length > 0) {
-      margin = Number.POSITIVE_INFINITY;
-      const sum = sums[index] as number;
-      for (let c = 0; c < constraints.length; c += 1) {
-        const pp = marginPP(
-          dotOf(values, index, constraints[c] as Float64Array),
-          sum,
-        );
-        if (pp < margin) margin = pp;
-      }
-    }
+  for (let position = 0; position < indices.length; position += 1) {
+    const index = indices[position] as number;
+    const base = index * axes;
     let distance = 0;
     for (let a = 0; a < axes; a += 1) {
-      distance += Math.abs(
-        (values[index * axes + a] as number) - (anchor[a] as number),
-      );
+      const diff = (values[base + a] as number) - (centroid[a] as number);
+      distance += diff * diff;
     }
-    if (
-      margin > bestMargin + 1e-9 ||
-      (Math.abs(margin - bestMargin) <= 1e-9 && distance < bestDistance)
-    ) {
-      bestMargin = margin;
+    if (distance < bestDistance - 1e-9) {
       bestDistance = distance;
       best = index;
     }
@@ -387,14 +437,14 @@ export function canCalibrate(carCount: number): boolean {
  * El estado completo de una tanda tras las respuestas dadas: qué pesos se
  * proponen, qué han fijado las respuestas y qué se pregunta ahora.
  *
- * Función pura y determinista: las mismas respuestas y los mismos pesos de
- * partida devuelven exactamente lo mismo, sin muestreo ni semilla
- * (requisito 3.4).
+ * Función pura y determinista: las mismas respuestas devuelven exactamente
+ * lo mismo, sin muestreo ni semilla (requisito 3.4 de `product/0035`). No
+ * recibe los pesos vigentes de los deslizadores: `product/0036`, requisito
+ * 1.3, retira el único uso que tenían dentro de este cálculo.
  */
 export function calibrate(
   profiles: CarProfile[],
   outcomes: MatchupOutcome[],
-  currentWeights: AxisWeights,
 ): CalibrationState {
   const { values } = grid();
   const byId = new Map(profiles.map((profile) => [profile.carId, profile]));
@@ -490,10 +540,7 @@ export function calibrate(
   const finished = outcomes.length >= MAX_MATCHUPS || nextPair === undefined;
 
   return {
-    proposedWeights: weightsFrom(
-      values,
-      representativeOf(indices, constraints, currentWeights),
-    ),
+    proposedWeights: weightsFrom(values, representativeOf(indices)),
     compatibleCount: indices.length,
     contradicted,
     possibleLeaderIds: profiles

@@ -14,10 +14,15 @@ import {
   AXIS_LABELS,
   AXIS_ORDER,
   DEFAULT_WEIGHTS,
+  type AxisId,
   type AxisWeights,
 } from '../../domain/scoring/weights';
 import { AXIS_THEME_CLASS } from '../axisTheme';
-import { CalibrationResult, MatchupView } from './CalibrationDialog';
+import {
+  AttributionStep,
+  CalibrationResult,
+  MatchupView,
+} from './CalibrationDialog';
 
 const cars = publishedCars(loadCatalog());
 const scored = scoreCatalog(cars, DEFAULT_WEIGHTS, DEFAULT_ASSUMPTIONS, 47000);
@@ -25,7 +30,7 @@ const profiles = scored.map(profileOf);
 const entities = buildFicha(cars, []);
 
 function matchupMarkup(): string {
-  const { nextMatchup } = calibrate(profiles, [], DEFAULT_WEIGHTS);
+  const { nextMatchup } = calibrate(profiles, []);
   const matchup = nextMatchup as { aCarId: string; bCarId: string };
   const a = withComparison(entities, matchup.bCarId).find(
     (entity) => entity.id === matchup.aCarId,
@@ -101,6 +106,62 @@ describe('MatchupView', () => {
   });
 });
 
+describe('AttributionStep', () => {
+  function render(selected: Set<AxisId> = new Set()): string {
+    return renderToStaticMarkup(
+      <AttributionStep
+        carName="EV3"
+        selected={selected}
+        onToggle={() => {}}
+        onNext={() => {}}
+        onDontKnow={() => {}}
+        onUndo={() => {}}
+      />,
+    );
+  }
+
+  it('ofrece marcar los siete ejes, con el nombre del coche elegido (requisito 3.1)', () => {
+    const markup = render();
+    expect(markup).toContain('EV3');
+    for (const axisId of AXIS_ORDER) {
+      expect(markup, axisId).toContain(AXIS_LABELS[axisId]);
+    }
+  });
+
+  it('no enseña ninguna cifra del modelo (requisito 3.4)', () => {
+    const text = render().replace(/<[^>]*>/g, ' ');
+    expect(text).not.toMatch(/\bNota\b|\bPuntuación\b|\bPuesto\b/);
+    expect(text).not.toContain('%');
+  });
+
+  it('marca como pulsados solo los ejes seleccionados', () => {
+    const markup = render(new Set<AxisId>(['fiabilidad', 'coste']));
+    const pressed = (markup.match(/aria-pressed="true"/g) ?? []).length;
+    expect(pressed).toBe(2);
+  });
+
+  it('ofrece «Siguiente» y «No sabría decir» (requisito 3.2)', () => {
+    const markup = render();
+    expect(markup).toContain('Siguiente');
+    expect(markup).toContain('No sabría decir');
+  });
+
+  it('ofrece la vuelta atrás, y no las otras dos salidas del cara a cara (technical/0013, requisitos 3.1 y 3.2)', () => {
+    const markup = render();
+    expect(markup).toContain('Deshacer la última');
+    expect(markup).not.toContain('Me da igual');
+    expect(markup).not.toContain('Terminar ahora');
+  });
+
+  it('el rótulo del paso puede recibir el foco (technical/0013, requisito 4.1)', () => {
+    // El efecto que lo enfoca al montar no corre en `renderToStaticMarkup`;
+    // lo que el marcado sí prueba es que el rótulo es enfocable, que es la
+    // mitad estructural del requisito. La otra —que el efecto lo enfoque al
+    // entrar— es una línea de `AttributionStep` sin rama.
+    expect(render()).toMatch(/<p[^>]*tabindex="-1"/);
+  });
+});
+
 describe('CalibrationResult', () => {
   const proposed: AxisWeights = {
     carga: 5,
@@ -154,10 +215,25 @@ describe('CalibrationResult', () => {
     expect(markup).toContain('tu clasificación, no tus pesos');
   });
 
-  it('avisa cuando alguna respuesta se contradice (requisito 4.2)', () => {
-    expect(render({ contradicted: 1 })).toContain('Una de tus respuestas');
-    expect(render({ contradicted: 3 })).toContain('3 de tus respuestas');
+  it('avisa cuando algo de lo contestado se contradice (requisito 4.2)', () => {
+    expect(render({ contradicted: 1 })).toContain('Hay algo en lo que has');
+    expect(render({ contradicted: 3 })).toContain('Hay 3 cosas en lo que has');
     expect(render()).not.toContain('no encaja');
+  });
+
+  it('con una sola desigualdad contradicha no afirma que haya otras respuestas (technical/0013, requisito 1.2)', () => {
+    // Desde `product/0036` una sola respuesta con atribución imposible ya da
+    // `contradicted: 1`, así que el aviso no puede hablar de «las demás» ni
+    // culpar a la elección de coche.
+    const markup = render({ contradicted: 1, answered: 1 });
+    const note = markup
+      .split('<p class=')
+      .find((chunk) => chunk.includes('no encaja'));
+    expect(note).toBeDefined();
+    expect(note).not.toContain('las demás');
+    // Ni cuenta respuestas ni culpa a la elección de coche.
+    expect(note).not.toContain('respuesta');
+    expect(note).not.toContain('prefer');
   });
 
   it('sin respuestas no propone nada y no deja aplicar', () => {
@@ -181,7 +257,7 @@ describe('la tanda no toca nada por su cuenta', () => {
     const outcomes: MatchupOutcome[] = [
       { aCarId: 'kia-ev3', bCarId: 'jeep-compass', preferred: 'a' },
     ];
-    const state = calibrate(profiles, outcomes, DEFAULT_WEIGHTS);
+    const state = calibrate(profiles, outcomes);
     const markup = renderToStaticMarkup(
       <CalibrationResult
         proposedWeights={state.proposedWeights}

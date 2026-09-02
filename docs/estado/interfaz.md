@@ -280,10 +280,11 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   tanda de calibración (`product/0035`); se deshabilita con menos de cuatro
   coches elegibles y dice por qué.
 - **`CalibrationDialog`** — la tanda de cara a cara que deduce los siete
-  pesos (`product/0035`). Es un `<dialog>` modal abierto desde el panel de
-  pesos, no una vista nueva ni una entrada del menú. Todo el cálculo es de
-  `calibrate` (`src/domain/calibration.ts`): el componente guarda la lista de
-  respuestas, pinta el par que toca y ofrece las tres salidas.
+  pesos (`product/0035`, con el paso de atribución de ejes de
+  `product/0036`). Es un `<dialog>` modal abierto desde el panel de pesos, no
+  una vista nueva ni una entrada del menú. Todo el cálculo es de `calibrate`
+  (`src/domain/calibration.ts`): el componente guarda la lista de
+  respuestas —con su atribución, si la hay— y pinta el paso que toca.
   - **Cada cara a cara** enseña los dos coches en dos columnas, con su foto
     frontal de cabecera y **las mismas magnitudes de la ficha completa, en
     sus bloques y con la Δ del uno contra el otro** —reutiliza
@@ -292,10 +293,29 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     porcentaje, ni nota de eje, ni puesto, ni el color de un eje. Se pregunta
     qué coche prefiere quien mira, no cuál prefiere la aplicación; enseñar la
     nota convertiría la respuesta en un eco.
-  - **Tres salidas** por pregunta: preferir el de la izquierda, preferir el
-    de la derecha y «me da igual». Además, «Deshacer la última» retira la
-    última respuesta y recalcula como si nunca se hubiera dado, y «Terminar
-    ahora» salta al resultado con lo que lleve contestado.
+  - **Elegir un coche no pasa a la pregunta siguiente**: abre un paso de
+    **atribución** (`product/0036`) que ofrece los siete ejes, con su icono y
+    su color, como marcas conmutables bajo el rótulo de qué hizo elegir ese
+    coche — tampoco aquí se ve ninguna cifra del modelo. Marcar es opcional:
+    **«Siguiente»** avanza con los ejes marcados, o con ninguno si no se
+    marcó nada, y **«No sabría decir»** avanza igual que si no se hubiera
+    marcado nada. Y **«Deshacer la última»** es aquí la vuelta atrás: cancela
+    la elección pendiente y devuelve al mismo cara a cara, con las marcas
+    limpias y sin registrar nada, para que un clic equivocado en un coche no
+    obligue a registrar una respuesta que ya se sabe mala. «Me da igual» y
+    «Terminar ahora» sí siguen escondidos en este paso: la primera es otra
+    forma de contestar el cara a cara que ya se contestó, y la segunda
+    saltaría al resultado dejando la respuesta a medias. **El foco entra en el
+    paso**, en su rótulo, para que quien navega con teclado no tenga que
+    tabular desde el principio del diálogo y para que el cambio de paso se
+    anuncie; volver al cara a cara no toca el foco, que forzarlo a un coche
+    concreto sugeriría una preferencia.
+  - **«Me da igual»**, en cambio, se registra en el acto y no pasa por el
+    paso de atribución: sin elección no hay nada que atribuir.
+  - «Deshacer la última», **ya en el cara a cara**, retira la última
+    respuesta con su atribución, si la llevaba, de una sola vez, y recalcula
+    como si nunca se hubiera dado; «Terminar ahora» salta al resultado con lo
+    que lleve contestado.
   - **El avance**, recalculado tras cada respuesta: cuántos coches pueden
     todavía ser el primero, cuántos enfrentamientos han quedado decididos y
     cuántas respuestas se llevan. No hay barra de progreso ni porcentaje de
@@ -304,12 +324,17 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     al lado cuando cambian, y dice cuántas combinaciones siguen siendo
     compatibles — con más de una, que los pesos son *una* de las
     explicaciones y no la medida de lo que quien contesta valora (ADR 0011).
+    Si algo de lo contestado no encaja, lo avisa sin decir cuántas respuestas
+    están implicadas ni cuál: lo que la derivación cuenta son **desigualdades**
+    —una respuesta aporta una, o dos si atribuye ejes—, así que una sola
+    respuesta con una atribución imposible ya se contradice sola.
     **Aplicar** los copia a los deslizadores por la misma vía que moverlos a
     mano, así que se persisten y viajan en el enlace; **Descartar** cierra
     sin tocar nada. Nunca se aplica solo.
   - **La tanda vive en memoria.** No añade ninguna clave de almacenamiento ni
     sube `CONFIG_VERSION`: cerrar sin aplicar, o recargar, pierde las
-    respuestas. Lo único que persiste es el resultado, y solo al aplicarlo.
+    respuestas —atribución incluida—. Lo único que persiste es el resultado,
+    y solo al aplicarlo.
   - Los candidatos son **los del tramo elegible en el momento de abrirla**
     (presupuesto, imprescindibles y estado de decisión ya aplicados), y
     quedan congelados mientras dure.

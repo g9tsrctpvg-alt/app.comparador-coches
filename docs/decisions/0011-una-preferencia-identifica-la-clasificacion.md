@@ -87,9 +87,11 @@ ahí, cuatro decisiones:
    los deslizadores tal como están**.
 
 4. **Los pesos propuestos son un representante declarado del conjunto
-   compatible**, elegido por una regla determinista y publicada —mayor margen
-   mínimo, y a igualdad, menor distancia a los pesos que ya tienen los
-   deslizadores—, no por una precisión que no existe.
+   compatible**, elegido por una regla determinista y publicada —la
+   combinación del conjunto compatible más cercana al centro de ese mismo
+   conjunto (`product/0036`)—, no por una precisión que no existe. La regla
+   concreta puede corregirse sin reabrir esta decisión: lo que fija esta
+   decisión es que exista una regla así, determinista y publicada, no cuál.
 
 Lo que **no** se decide aquí: cómo se elige la siguiente pregunta, cuándo
 termina la tanda, qué se enseña de cada coche y dónde vive el diálogo. Eso es
@@ -155,11 +157,14 @@ el cambio concreto y vive en `product/0035`.
   decididos»; pierde la lectura de «estos son tus pesos». Es un peor titular
   y una mejor afirmación.
 
-- **Dos personas con el mismo criterio pueden recibir números distintos.** El
-  desempate por cercanía a los pesos vigentes hace que el resultado dependa
-  de dónde estaban los deslizadores al empezar. Es coherente con lo decidido
-  —no hay un valor verdadero que recuperar— y es la razón por la que ese
-  desempate se declara en vez de esconderse.
+- **Dos personas con el mismo criterio pueden recibir números distintos.**
+  `product/0036` corrigió el desempate original —por cercanía a los pesos
+  vigentes, que en la práctica no llegó a activarse nunca— por el centro del
+  propio conjunto compatible, y ahí también puede haber empate: dos
+  combinaciones igual de cercanas al centro se deciden por el orden de
+  recorrido de la rejilla, no por ninguna preferencia entre ellas. Es
+  coherente con lo decidido —no hay un valor verdadero que recuperar— y es la
+  razón por la que ese desempate se declara en vez de esconderse.
 
 - **Sobre la rejilla, el conjunto compatible sí puede quedarse en una sola
   combinación**, y en el ejemplo medido se quedó. No es identificación: es
@@ -202,3 +207,13 @@ el cambio concreto y vive en `product/0035`.
   proceden de la medición hecha al redactar `product/0035`, sobre los
   dieciocho coches publicados con `DEFAULT_ASSUMPTIONS` y el presupuesto por
   defecto.
+- **2026-09-02 — Corrección de la decisión 4.** Al usar la tanda por primera
+  vez sobre el despliegue real, el criterio de «mayor margen mínimo» resultó
+  ser extremo con pocas respuestas —maximizar un margen sobre un conjunto que
+  es un cono, la decisión 1 de este mismo ADR, siempre cae en una esquina—, y
+  su desempate por cercanía a los pesos vigentes no llegó a activarse ni una
+  vez en cuarenta sesiones medidas. `product/0036` corrige la regla:
+  representante = combinación más cercana al centro del conjunto compatible,
+  sin ese desempate. La decisión 4 y la consecuencia sobre empates se
+  reescriben para describir la regla vigente; el resto del ADR —el porqué,
+  las alternativas, las demás consecuencias— no cambia.

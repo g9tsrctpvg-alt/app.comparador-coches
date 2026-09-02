@@ -5,7 +5,7 @@
 > las indexa todas en una sola tabla. `CLAUDE.md` resume y no duplica: al
 > cerrar una fase se actualiza este documento, no el índice.
 
-**Última actualización:** 2026-09-01
+**Última actualización:** 2026-09-02
 
 ## Fases
 
@@ -89,7 +89,7 @@ vuelve sin argumento nuevo).
 | P2b | **Empate técnico**: marcar cuándo una diferencia entre dos coches está por debajo de un umbral | `descartada` | Decisión del usuario (2026-08-29): no hace falta que la aplicación avise de que una diferencia es pequeña, eso se ve; lo que faltaba era el reparto, no el aviso. Queda medido, por si vuelve a plantearse: un solo clic en la estética mueve `2,31 pp`, más que trece de las catorce distancias entre puestos consecutivos |
 | P3 | **Estado de decisión por coche** desde la interfaz: lista corta o descartado, con motivo y fecha | `consolidada` | `product/0030`, consolidada el 2026-08-30: marca en el ranking y en la cabecera de columna de la ficha, edición en línea y por diálogo, filtro de tres posiciones, «Borrar decisiones» separado de «Restablecer». Sin el cuarto estado de «candidato» que la propuesta original mencionaba |
 | P4 | **Criterios eliminatorios** además del presupuesto: largo máximo, maletero mínimo, autonomía mínima, altura de acceso | `consolidada` | `product/0031`, consolidada el 2026-08-30: un umbral mínimo o máximo sobre cualquiera de las veinticinco magnitudes de la ficha, operador forzado por la polaridad declarada del campo, clasificación partida en tramo elegible/no elegible, marca en la cabecera de columna y en la vista de duelo. Sin el hint de a quién excluiría una regla nueva ni el mensaje que nombra la regla más restrictiva, sin marca a nivel de celda ni de fila de duelo, sin puente con `product/0030` y sin regla categórica por tecnología — quedan anotados como trabajo futuro, no comprometido |
-| P5 | **Pesos por preferencia revelada**: derivar los siete pesos de una tanda de duelos «¿cuál prefieres?», dejando los deslizadores como ajuste fino | `consolidada` | `product/0035`, consolidada el 2026-09-01, con el **ADR 0011** detrás. Nadie sabe si su `habitabilidad` vale 4 o 5; siete deslizadores a ojo son un mal instrumento para lo que más manda en la nota. **Lo medido al redactarla**, sobre los dieciocho coches publicados: trece de ellos llegan a ser líderes con alguna de las 78.124 combinaciones enteras de pesos de la rejilla `{0, 2, 5, 8, 10}⁷`, y **ninguno** de los 153 enfrentamientos está decidido de antemano — la clasificación que se ve es una de muchas. Como el ADR 0004 hace la nota de un eje independiente de los pesos (comprobado: diferencia máxima exactamente 0), una respuesta «prefiero A» es exactamente una desigualdad lineal, y la tanda se resuelve por enumeración, sin optimizador ni dependencias nuevas. Preguntando siempre por el par que más divide al conjunto compatible, la tanda se cierra sola en 14-18 preguntas (mediana 17) y reproduce el 97,1 % de los enfrentamientos del perfil real frente al 81,2 % de los pesos por defecto; en orden aleatorio la mediana sube a 27. El hallazgo que da forma a la spec: las respuestas fijan **la clasificación**, no **los pesos** — de ahí que el avance se mida en «cuántos coches pueden todavía ser el primero» y que el resultado diga cuántas combinaciones siguen siendo compatibles. Ese hallazgo no se queda dentro de la spec: es el **ADR 0011**, redactado el 2026-09-01 por decisión del usuario, que registra por qué no hay pesos que recuperar —el conjunto compatible es un cono, no un punto: ninguna tanda, por larga que sea, los fija— y por qué se enumera una rejilla declarada en vez de ajustar un modelo continuo. Spec y ADR pasaron juntos el gate humano el 2026-09-01, en commit propio sin implementación, tras confirmación explícita del usuario. Al implementar se enmendaron tres requisitos: el comité muestreado solo elige **qué se pregunta**, y las dos cifras de avance se calculan sobre el conjunto compatible entero — sobre la muestra exageraban y el avance llegaba a retroceder. La tanda real se cierra en 17 preguntas sobre los 15 coches que el presupuesto por defecto deja elegibles |
+| P5 | **Pesos por preferencia revelada**: derivar los siete pesos de una tanda de duelos «¿cuál prefieres?», dejando los deslizadores como ajuste fino | `consolidada` | `product/0035`, consolidada el 2026-09-01, con el **ADR 0011** detrás. Nadie sabe si su `habitabilidad` vale 4 o 5; siete deslizadores a ojo son un mal instrumento para lo que más manda en la nota. **Lo medido al redactarla**, sobre los dieciocho coches publicados: trece de ellos llegan a ser líderes con alguna de las 78.124 combinaciones enteras de pesos de la rejilla `{0, 2, 5, 8, 10}⁷`, y **ninguno** de los 153 enfrentamientos está decidido de antemano — la clasificación que se ve es una de muchas. Como el ADR 0004 hace la nota de un eje independiente de los pesos (comprobado: diferencia máxima exactamente 0), una respuesta «prefiero A» es exactamente una desigualdad lineal, y la tanda se resuelve por enumeración, sin optimizador ni dependencias nuevas. Preguntando siempre por el par que más divide al conjunto compatible, la tanda se cierra sola en 14-18 preguntas (mediana 17) y reproduce el 97,1 % de los enfrentamientos del perfil real frente al 81,2 % de los pesos por defecto; en orden aleatorio la mediana sube a 27. El hallazgo que da forma a la spec: las respuestas fijan **la clasificación**, no **los pesos** — de ahí que el avance se mida en «cuántos coches pueden todavía ser el primero» y que el resultado diga cuántas combinaciones siguen siendo compatibles. Ese hallazgo no se queda dentro de la spec: es el **ADR 0011**, redactado el 2026-09-01 por decisión del usuario, que registra por qué no hay pesos que recuperar —el conjunto compatible es un cono, no un punto: ninguna tanda, por larga que sea, los fija— y por qué se enumera una rejilla declarada en vez de ajustar un modelo continuo. Spec y ADR pasaron juntos el gate humano el 2026-09-01, en commit propio sin implementación, tras confirmación explícita del usuario. **Al usarla el usuario sobre el despliegue real apareció un defecto de diseño**, corregido por `product/0036` —fila propia abajo—: el requisito 5.1 elegía la combinación de **mayor margen mínimo**, que sobre un conjunto que es un cono es siempre una esquina — con tres respuestas dejaba 4,50 de los 7 ejes clavados en cero —, y su desempate por cercanía a los deslizadores no llegó a activarse ni una vez en cuarenta sesiones. Al implementar se enmendaron además tres requisitos de esta spec: el comité muestreado solo elige **qué se pregunta**, y las dos cifras de avance se calculan sobre el conjunto compatible entero — sobre la muestra exageraban y el avance llegaba a retroceder. La tanda real se cierra en 17 preguntas sobre los 15 coches que el presupuesto por defecto deja elegibles |
 | P6 | **Registro de la prueba real**: anotar por coche y con fecha lo que solo se sabe sentado dentro —postura, ruido, visibilidad, plazas traseras, maletero— y que pese en la nota | `aceptada` | Es la parte del «eje subjetivo de conducción» de *Más adelante* que **sí** depende del proyecto: tener el sitio donde anotarlo. Hoy lo único subjetivo editable es la estética |
 | P7 | **Checklist de visita al concesionario**, generada por coche desde su ficha, que vuelve como entrada de P6 | `aceptada` | Barata y encadenada con P6: sin qué mirar, la prueba se olvida a mitad |
 | P8 | Dos perfiles de pesos, para comparar el ranking de dos personas | `descartada` | Demasiado complejo para lo que aporta (decisión del usuario, 2026-08-29) |
@@ -633,6 +633,77 @@ fase abierta. Se lista para no perderlo, no para bloquear nada.
   reabrirlo con el mismo estado, ver la marca en la ficha y en la vista de
   duelo a 375px. Consolidada en `docs/estado/dominio.md` y
   `docs/estado/interfaz.md`.
+- **Quien elige dice qué eje decidió — `product/0036`, `consolidated`.**
+  Enmienda a `product/0035` (P5), nacida de usar la calibración por primera
+  vez sobre el despliegue real: partiendo de unos deslizadores en
+  `carga 5 · habitabilidad 9 · diario 8 · prestaciones 7 · fiabilidad 6 ·
+  estética 6 · coste 6`, la tanda propuso `0 · 0 · 0 · 10 · 2 · 5 · 2`. No
+  era ruido — era el criterio de la spec haciendo justo lo que se le había
+  pedido: elegir, entre las combinaciones compatibles, la de **mayor margen
+  mínimo**, que sobre un conjunto que es un cono (ADR 0011) siempre cae en
+  una esquina, y con pocas respuestas deja varios ejes clavados en 0. El
+  desempate por cercanía a los deslizadores que debía suavizarlo nunca llegó
+  a activarse: el margen es continuo y casi nunca empata. Dos correcciones,
+  medidas las dos sobre treinta perfiles sintéticos:
+  1. **El representante pasa a ser la combinación más cercana al centro del
+     conjunto compatible**, sin ese desempate muerto. A tres respuestas, de
+     4,50 ejes en cero de media a 0,07, y de 71,5 % a 84,5 % de acuerdo con
+     la clasificación real; a cinco respuestas, 88,3 %.
+  2. **Quien elige puede marcar qué ejes decidieron su elección**, y eso
+     añade una segunda desigualdad a la respuesta —sin esos ejes, la
+     decisión no se sostiene— en vez de dejar que el algoritmo repartiera la
+     explicación por su cuenta entre los siete pesos. Sube el acuerdo a
+     cinco respuestas a 91,9 % y acorta la tanda de 16,8 a 13,2 preguntas de
+     media. Preguntar por un eje suelto («¿cuál prefieres en capacidad de
+     carga?») se consideró y se descartó: la nota de un eje ya sale de los
+     datos, así que no informa de ningún peso.
+
+  Deja sin tocar cómo se puntúa, la rejilla declarada de `product/0035` y el
+  ADR 0004; corrige en su sitio la decisión 4 del ADR 0011, que nombraba el
+  criterio antiguo. `CONFIG_VERSION` no sube: nada nuevo se persiste.
+  Recorrió `draft → approved → implemented → verified → consolidated` el
+  2026-09-02, con el gate humano en un commit propio sin implementación, la
+  CI entera verde en local (680 tests, cobertura 100 % en
+  `domain/`+`data/`+`logging/`, más `npm run test:recovery`) y los catorce
+  criterios cerrados contra una reimplementación independiente del
+  representante —incluida una demostración algebraica de por qué una
+  atribución imposible no puede colar— y contra el navegador sobre el build
+  de producción. Consolidada en `docs/estado/dominio.md` y
+  `docs/estado/interfaz.md`.
+- **Los defectos que la revisión encontró en la calibración —
+  `technical/0013`, `consolidated`.** Una revisión de código posterior a
+  consolidar `product/0036` —dos pasadas independientes, coincidentes en dos
+  hallazgos— encontró **seis defectos reales**, verificados uno a uno contra
+  el código antes de aceptarlos. Los dos con efecto visible hoy: el aviso de
+  contradicción **mentía** —desde `product/0036` una respuesta aporta dos
+  desigualdades si atribuye ejes, y `contradicted` las cuenta por separado, así
+  que con **una sola** respuesta y una atribución imposible la pantalla decía
+  «Una de tus respuestas no encaja **con las demás**», cuando no había
+  ninguna otra, y además culpaba a la elección de coche en vez de a la
+  atribución—; y `constraintsOf` decidía si la marca era un subconjunto propio
+  por la **longitud** del array, no por los ejes distintos, así que siete
+  entradas de un mismo eje se leían como «marcó los siete» y su segunda
+  desigualdad se descartaba en silencio. Los otros cuatro: del paso de
+  atribución **no se podía volver** —un clic equivocado en un coche obligaba a
+  registrar una respuesta que ya se sabía mala y deshacerla después—, el foco
+  volvía al principio del diálogo en **cada** cara a cara, `grid()` seguía
+  construyendo y cacheando un `Uint8Array` de 78.124 posiciones que nadie leía
+  desde que `product/0036` retiró el criterio de margen, y el `:hover` de las
+  marcas de eje, con más especificidad que el `border-left` de la marca y que
+  el `border-color` de la marca pulsada, se comía a la vez el color del eje y
+  la señal de estar marcada. Ninguno es un cambio de comportamiento de una
+  spec consolidada, así que ninguna se editó: se corrigieron aquí, con el
+  precedente de `technical/0002` sobre `product/0001`. **Ninguna cifra medida
+  cambia** —cuatro defectos son de interfaz, uno es código muerto y el de la
+  guarda solo es alcanzable con una entrada que la interfaz no produce—, y
+  `npm run test:recovery` se ejecutó para comprobarlo. Recorrió
+  `draft → approved → implemented → verified → consolidated` el 2026-09-02,
+  con el gate humano en un commit propio sin implementación, la CI entera
+  verde en local (686 tests, cobertura 100 % en `domain/`+`data/`+`logging/`,
+  más `npm run test:recovery`) y los nueve criterios cerrados contra tests
+  unitarios y contra el navegador sobre el build de producción —el foco, la
+  vuelta atrás y los dos colores del `:hover` se midieron ahí—. Consolidada
+  en `docs/estado/dominio.md` y `docs/estado/interfaz.md`.
 - **Eje de autonomía y repostaje.** Es la mayor diferencia práctica entre los
   once candidatos en un viaje largo —los térmicos e híbridos hacen 640-950 km
   con un depósito, los eléctricos la mitad en autopista— y el modelo es hoy

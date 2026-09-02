@@ -505,14 +505,20 @@ dependencias.
   orden, sin muestreo ni semilla. Todos sus valores son enteros de 0 a 10, así
   que cualquier resultado se puede poner en los deslizadores tal cual.
 - **El conjunto compatible** son las combinaciones que contradicen el menor
-  número posible de respuestas. Con respuestas coherentes ese mínimo es 0;
-  con respuestas que se contradicen entre sí es mayor, y el conjunto sigue
+  número posible de **desigualdades** —no de respuestas: una respuesta aporta
+  una desigualdad, o dos si además atribuye ejes—. Con lo contestado coherente
+  ese mínimo es 0; si se contradice consigo mismo es mayor, y el conjunto sigue
   sin estar vacío: una tanda nunca se rompe por una respuesta arrepentida.
 - **Los pesos propuestos** son un representante declarado de ese conjunto:
-  mayor margen mínimo —la menor de las diferencias de nota, en puntos
-  porcentuales, con que gana los cara a cara respondidos—, a igualdad la
-  combinación más cercana a los pesos que ya tenían los deslizadores, y a
-  igualdad de todo, el primero del recorrido.
+  la combinación **más cercana al centro** del propio conjunto compatible —la
+  media, eje a eje, de todas las combinaciones que siguen en pie—, y a
+  igualdad de distancia, el primero del recorrido. No hay desempate por
+  cercanía a los deslizadores (product/0036): el criterio original —mayor
+  margen mínimo— maximizaba una cantidad sobre un conjunto que es un cono, y
+  eso siempre cae en una esquina; con pocas respuestas dejaba varios ejes
+  clavados en 0. Su desempate por cercanía a los deslizadores tampoco
+  sobrevivió: nunca llegó a activarse, porque el margen es una cantidad
+  continua que casi nunca empata.
 - **Qué se pregunta.** El primer cara a cara es el par de perfiles más
   lejanos entre sí; cada uno siguiente, el par no visto que más divide al
   **comité** —el conjunto compatible, o un recorrido a paso fijo de él hasta
@@ -520,7 +526,22 @@ dependencias.
   divide al comité: no hay cuota fija de preguntas. Hay un tope duro de 25.
 - **Un «me da igual»** marca el par como visto y no aporta desigualdad; no se
   modela como igualdad porque `Σ pesoᵢ × Δᵢ = 0` casi nunca tiene solución y
-  convertiría una indiferencia sincera en una contradicción.
+  convertiría una indiferencia sincera en una contradicción. No admite
+  atribución: sin elección no hay nada que atribuir.
+- **Qué ejes decidieron** (product/0036). Al preferir un coche se puede
+  marcar, opcionalmente, qué ejes fueron determinantes: sin ellos, esa
+  elección no se sostiene. Marcarlos añade una **segunda desigualdad** a la
+  respuesta —`Σ pesoᵢ × Δᵢ ≤ 0` sobre los ejes que quedan fuera de la
+  marca—, en vez de dejar que el algoritmo repartiera la explicación como
+  quisiera entre los siete pesos a la vez. Marcar los siete ejes equivale a
+  no marcar ninguno —«lo decidió todo junto» no es una atribución—, y una
+  atribución que resulte imposible para cualquier combinación de la rejilla
+  se absorbe igual que cualquier otra contradicción: no rompe la tanda, solo
+  cuenta como una desigualdad contradicha más. Como esa segunda desigualdad
+  puede chocar con la primera de **su propia** respuesta, desde `product/0036`
+  una respuesta suelta ya puede contradecirse sola. Lo que cuenta para decidir
+  si la marca es un subconjunto propio son los ejes **distintos**: una lista
+  con repeticiones describe el mismo subconjunto que la lista sin ellas.
 
 **Lo que una tanda identifica es la clasificación, no los pesos** (ADR 0011).
 El conjunto de explicaciones compatibles es un cono —si un vector explica las
@@ -536,10 +557,27 @@ ser líderes con alguna de las 78.124 combinaciones y **ninguno** de los 153
 enfrentamientos está decidido de antemano. Una tanda completa se cierra en
 **14 a 18 preguntas** y reproduce el **97,1 %** de los enfrentamientos del
 perfil real, frente al **81,2 %** de los pesos por defecto; con el 10 % de las
-respuestas invertidas, el 93,1 %. Y aun así los siete números rara vez
-coinciden con los del perfil: un perfil con los pesos por defecto exactos
-(`5,5,7,5,7,6,5`) recibe la propuesta `5,8,10,5,10,8,5`, con el mismo líder y
-el 96,7 % de los enfrentamientos iguales.
+respuestas invertidas, el **95,0 %**. Estas cifras no cambian con el
+representante de `product/0036`: una tanda completa suele agotar el criterio
+de parada —«ningún par sin ver divide al comité»— con muy pocas combinaciones
+compatibles, y ahí el centro del conjunto y el antiguo margen máximo casi
+siempre coinciden. Un perfil con los pesos por defecto exactos
+(`5,5,7,5,7,6,5`) sigue recibiendo la propuesta `5,8,10,5,10,8,5` al terminar
+la tanda entera, con el mismo líder y el 96,7 % de los enfrentamientos
+iguales: los siete números rara vez coinciden con los del perfil, y eso es
+justo lo que dice el ADR 0011 —una tanda identifica la clasificación, no los
+pesos—.
+
+**Donde sí cambia todo es a mitad de tanda**, que es el caso normal de quien
+no llega al final: la interfaz deja terminar en cualquier momento. Medido
+sobre treinta perfiles sintéticos, a **tres** respuestas el representante
+anterior dejaba de media **4,50 de los 7 ejes clavados en 0** y acertaba el
+**71,5 %** de los enfrentamientos; el de `product/0036` deja **0,07** ejes en
+cero y acierta el **84,5 %**, y a cinco respuestas el **88,3 %**. Marcar
+además qué ejes decidieron cada elección (el mismo `product/0036`) sube el
+acierto a cinco respuestas al **91,9 %**, y acorta la tanda: de 16,8
+preguntas de media a 13,2, porque cada atribución equivale a una respuesta
+extra sin necesitar una pregunta más.
 
 Calibrar **no cambia cómo se puntúa**: lee las notas de eje que `scoreCatalog`
 ya produce y solo propone pesos. Nada se aplica sin confirmación, y una vez

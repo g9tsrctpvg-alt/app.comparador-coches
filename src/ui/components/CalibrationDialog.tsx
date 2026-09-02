@@ -15,6 +15,7 @@ import {
 import {
   AXIS_LABELS,
   AXIS_ORDER,
+  type AxisId,
   type AxisWeights,
 } from '../../domain/scoring/weights';
 import { AXIS_THEME_CLASS } from '../axisTheme';
@@ -128,6 +129,84 @@ export function MatchupView({
 }
 
 /**
+ * El paso de atribución (product/0036, requisito 3): tras elegir un coche,
+ * antes de pasar al siguiente cara a cara, se puede marcar qué ejes
+ * decidieron esa elección. Marcar es opcional —«No sabría decir» avanza sin
+ * atribuir, igual que «Siguiente» sin marcar nada (requisito 2.1)—, y aquí
+ * tampoco se ve ninguna cifra del modelo (requisito 3.4): los ejes se
+ * marcan por su nombre, sin nota ni desglose detrás.
+ *
+ * Exportado solo para el test, por el mismo motivo que `MatchupView`.
+ */
+export function AttributionStep({
+  carName,
+  selected,
+  onToggle,
+  onNext,
+  onDontKnow,
+  onUndo,
+}: {
+  carName: string;
+  selected: ReadonlySet<AxisId>;
+  onToggle: (axisId: AxisId) => void;
+  onNext: () => void;
+  onDontKnow: () => void;
+  onUndo: () => void;
+}) {
+  // El foco entra en el paso (`technical/0013`, requisito 4.1): sin esto
+  // vuelve al principio del diálogo y quien navega con teclado tiene que
+  // tabular desde arriba en cada cara a cara. Al rótulo, que además lo
+  // anuncia; volver al cara a cara no toca el foco (requisito 4.2).
+  const hintRef = useRef<HTMLParagraphElement>(null);
+  useEffect(() => {
+    hintRef.current?.focus();
+  }, []);
+
+  return (
+    <>
+      <p className={styles.hint} ref={hintRef} tabIndex={-1}>
+        ¿Qué hizo que prefirieras el {carName}? Marca los ejes que, sin ellos,
+        no lo habrías elegido. Es opcional: si no sabrías decirlo, sigue sin
+        marcar nada.
+      </p>
+      <ul className={styles.axisToggles}>
+        {AXIS_ORDER.map((axisId) => {
+          const isSelected = selected.has(axisId);
+          return (
+            <li key={axisId}>
+              <button
+                type="button"
+                className={[
+                  styles.axisToggle,
+                  AXIS_THEME_CLASS[axisId],
+                  isSelected ? styles.axisToggleSelected : '',
+                ].join(' ')}
+                aria-pressed={isSelected}
+                onClick={() => onToggle(axisId)}
+              >
+                <AxisIcon axisId={axisId} />
+                {AXIS_LABELS[axisId]}
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+      <div className={styles.actions}>
+        <button type="button" className={styles.primary} onClick={onNext}>
+          Siguiente
+        </button>
+        <button type="button" className={styles.secondary} onClick={onDontKnow}>
+          No sabría decir
+        </button>
+        <button type="button" className={styles.secondary} onClick={onUndo}>
+          Deshacer la última
+        </button>
+      </div>
+    </>
+  );
+}
+
+/**
  * El resultado de la tanda (requisito 10): los siete pesos propuestos, qué
  * han fijado las respuestas y qué no, y las dos salidas. Exportado solo para
  * el test, por el mismo motivo que `MatchupView`.
@@ -194,8 +273,8 @@ export function CalibrationResult({
           {contradicted > 0 && (
             <p className={styles.resultNote}>
               {contradicted === 1
-                ? 'Una de tus respuestas no encaja con las demás, así que la mejor combinación la contradice.'
-                : `${contradicted} de tus respuestas no encajan con las demás, así que la mejor combinación las contradice.`}
+                ? 'Hay algo en lo que has contestado que no encaja: la mejor combinación no lo cumple.'
+                : `Hay ${contradicted} cosas en lo que has contestado que no encajan: la mejor combinación no las cumple.`}
             </p>
           )}
         </>
@@ -218,14 +297,17 @@ export function CalibrationResult({
 }
 
 /**
- * La tanda de cara a cara que calibra los siete pesos (product/0035).
+ * La tanda de cara a cara que calibra los siete pesos (product/0035), con
+ * el paso de atribución de `product/0036`: tras elegir un coche, antes de
+ * pasar al siguiente cara a cara, se puede decir qué ejes decidieron esa
+ * elección.
  *
  * Todo el cálculo es de `calibrate`: aquí solo se guarda la lista de
- * respuestas, se pinta el par que toca y se ofrecen las tres salidas
- * (requisito 12.3). El diálogo no aplica nada por su cuenta —los pesos
- * propuestos solo llegan a los deslizadores si se pulsa «Aplicar»
- * (requisito 10.4)—, y las respuestas viven en memoria: cerrar sin aplicar
- * las pierde, a propósito.
+ * respuestas —con su atribución, si la hay—, se pinta el paso que toca y se
+ * ofrecen sus salidas (requisito 12.3 de `product/0035`). El diálogo no
+ * aplica nada por su cuenta —los pesos propuestos solo llegan a los
+ * deslizadores si se pulsa «Aplicar» (requisito 10.4)—, y las respuestas
+ * viven en memoria: cerrar sin aplicar las pierde, a propósito.
  */
 export function CalibrationDialog({
   cars,
@@ -237,14 +319,25 @@ export function CalibrationDialog({
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [outcomes, setOutcomes] = useState<MatchupOutcome[]>([]);
   const [finishedEarly, setFinishedEarly] = useState(false);
+  // El coche elegido en el cara a cara actual, mientras se decide qué ejes
+  // atribuirle (product/0036, requisito 3.1): la elección todavía no está en
+  // `outcomes` — se une a su atribución y se registran las dos juntas al
+  // salir de este paso, para que «Deshacer la última» las retire de una vez
+  // (requisito 3.3).
+  const [pendingPreference, setPendingPreference] = useState<'a' | 'b' | null>(
+    null,
+  );
+  const [selectedAxes, setSelectedAxes] = useState<ReadonlySet<AxisId>>(
+    new Set(),
+  );
 
   useEffect(() => {
     dialogRef.current?.showModal();
   }, []);
 
   const state = useMemo(
-    () => calibrate(profiles, outcomes, currentWeights),
-    [profiles, outcomes, currentWeights],
+    () => calibrate(profiles, outcomes),
+    [profiles, outcomes],
   );
 
   const entities = useMemo(() => buildFicha(cars, []), [cars]);
@@ -267,7 +360,48 @@ export function CalibrationDialog({
 
   function answer(preferred: 'a' | 'b' | 'none') {
     if (matchup === null) return;
-    setOutcomes((previous) => [...previous, { ...matchup, preferred }]);
+    if (preferred === 'none') {
+      // «Me da igual» no admite atribución: sin elección no hay nada que
+      // atribuir (requisito 2.5), así que se registra directamente.
+      setOutcomes((previous) => [
+        ...previous,
+        { ...matchup, preferred: 'none' },
+      ]);
+      return;
+    }
+    setPendingPreference(preferred);
+  }
+
+  function toggleAxis(axisId: AxisId) {
+    setSelectedAxes((previous) => {
+      const next = new Set(previous);
+      if (next.has(axisId)) next.delete(axisId);
+      else next.add(axisId);
+      return next;
+    });
+  }
+
+  function commitAttribution(decisiveAxes: AxisId[] | undefined) {
+    if (matchup === null || pendingPreference === null) return;
+    setOutcomes((previous) => [
+      ...previous,
+      { ...matchup, preferred: pendingPreference, decisiveAxes },
+    ]);
+    // El paso de atribución solo tiene sentido para el cara a cara que
+    // acaba de registrarse: se limpia aquí, no en un efecto que reaccionara
+    // a `outcomes`. La otra salida del paso —cancelar la elección
+    // pendiente— la limpia por su cuenta en `cancelPending`.
+    setPendingPreference(null);
+    setSelectedAxes(new Set());
+  }
+
+  /** Cancela la elección pendiente y vuelve al mismo cara a cara, con las
+   * marcas limpias y sin registrar nada (`technical/0013`, requisito 3.1):
+   * un clic equivocado en un coche tiene marcha atrás sin pasar por
+   * registrar una respuesta que ya se sabe mala. */
+  function cancelPending() {
+    setPendingPreference(null);
+    setSelectedAxes(new Set());
   }
 
   const answered = outcomes.filter(
@@ -288,7 +422,11 @@ export function CalibrationDialog({
         <header className={styles.header}>
           <div>
             <h2 className={styles.title}>
-              {matchup === null ? 'Resultado de la tanda' : '¿Cuál prefieres?'}
+              {matchup === null
+                ? 'Resultado de la tanda'
+                : pendingPreference === null
+                  ? '¿Cuál prefieres?'
+                  : '¿Qué lo decidió?'}
             </h2>
             <p className={styles.progress}>
               {state.possibleLeaderIds.length === 1
@@ -314,42 +452,64 @@ export function CalibrationDialog({
           </button>
         </header>
 
-        {matchup !== null && pair !== null && (
+        {matchup !== null && pair !== null && pendingPreference === null && (
           <MatchupView a={pair.a} b={pair.b} onPrefer={answer} />
         )}
 
-        <div className={styles.actions}>
-          {matchup !== null && (
-            <button
-              type="button"
-              className={styles.secondary}
-              onClick={() => answer('none')}
-            >
-              Me da igual
-            </button>
-          )}
-          {outcomes.length > 0 && (
-            <button
-              type="button"
-              className={styles.secondary}
-              onClick={() => {
-                setFinishedEarly(false);
-                setOutcomes((previous) => previous.slice(0, -1));
-              }}
-            >
-              Deshacer la última
-            </button>
-          )}
-          {matchup !== null && outcomes.length > 0 && (
-            <button
-              type="button"
-              className={styles.secondary}
-              onClick={() => setFinishedEarly(true)}
-            >
-              Terminar ahora
-            </button>
-          )}
-        </div>
+        {matchup !== null && pair !== null && pendingPreference !== null && (
+          <AttributionStep
+            carName={pendingPreference === 'a' ? pair.a.name : pair.b.name}
+            selected={selectedAxes}
+            onToggle={toggleAxis}
+            onNext={() =>
+              commitAttribution(
+                selectedAxes.size > 0 ? [...selectedAxes] : undefined,
+              )
+            }
+            onDontKnow={() => commitAttribution(undefined)}
+            onUndo={cancelPending}
+          />
+        )}
+
+        {/* En el paso de atribución esta fila sigue escondida
+            (`technical/0013`, requisito 3.2): «Me da igual» es otra forma de
+            contestar el cara a cara que ya se contestó, y «Terminar ahora»
+            saltaría al resultado dejando la respuesta sin registrar. La
+            vuelta atrás la ofrece el propio `AttributionStep`. */}
+        {pendingPreference === null && (
+          <div className={styles.actions}>
+            {matchup !== null && (
+              <button
+                type="button"
+                className={styles.secondary}
+                onClick={() => answer('none')}
+              >
+                Me da igual
+              </button>
+            )}
+            {outcomes.length > 0 && (
+              <button
+                type="button"
+                className={styles.secondary}
+                onClick={() => {
+                  setFinishedEarly(false);
+                  setOutcomes((previous) => previous.slice(0, -1));
+                }}
+              >
+                Deshacer la última
+              </button>
+            )}
+            {matchup !== null && outcomes.length > 0 && (
+              <button
+                type="button"
+                className={styles.secondary}
+                onClick={() => setFinishedEarly(true)}
+              >
+                Terminar ahora
+              </button>
+            )}
+          </div>
+        )}
 
         {matchup === null && (
           <CalibrationResult
