@@ -1,7 +1,7 @@
 # 0036 — Quien elige dice qué eje decidió
 
 - **Id:** product/0036
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-09-02
 - **Specs relacionadas:** product/0029, product/0033, product/0035
