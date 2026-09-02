@@ -1,7 +1,7 @@
 # 0013 — Los defectos que la revisión encontró en la calibración
 
 - **Id:** technical/0013
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** technical
 - **Fecha:** 2026-09-02
 - **Specs relacionadas:** product/0035, product/0036
