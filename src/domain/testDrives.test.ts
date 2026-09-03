@@ -177,6 +177,35 @@ describe('clearJudgement', () => {
     const next = clearJudgement(log, 'kia-ev3', 'noise');
     expect(next.entries).toEqual({});
   });
+
+  it('removes the whole entry when it was the last judgement and there is no note', () => {
+    const log = setJudgement(
+      defaultTestDriveLog(),
+      'kia-ev3',
+      'noise',
+      2,
+      '2026-09-01',
+    );
+    const next = clearJudgement(log, 'kia-ev3', 'noise');
+    expect(entryOf(next, 'kia-ev3')).toBeUndefined();
+  });
+
+  it('keeps the entry, with empty ratings, when a note survives the last judgement', () => {
+    let log = setJudgement(
+      defaultTestDriveLog(),
+      'kia-ev3',
+      'noise',
+      2,
+      '2026-09-01',
+    );
+    log = setNotes(log, 'kia-ev3', 'una nota', '2026-09-01');
+    const next = clearJudgement(log, 'kia-ev3', 'noise');
+    expect(entryOf(next, 'kia-ev3')).toEqual({
+      ratings: {},
+      notes: 'una nota',
+      date: '2026-09-01',
+    });
+  });
 });
 
 describe('setNotes', () => {
@@ -194,13 +223,12 @@ describe('setNotes', () => {
     });
   });
 
-  it('trims the note and treats a blank one as no note at all', () => {
+  it('creates no entry at all for a blank note when none existed: nothing to save', () => {
     const log = setNotes(defaultTestDriveLog(), 'kia-ev3', '   ', '2026-09-01');
-    expect(entryOf(log, 'kia-ev3')).toEqual({
-      ratings: {},
-      date: '2026-09-01',
-    });
+    expect(entryOf(log, 'kia-ev3')).toBeUndefined();
+  });
 
+  it('trims the note', () => {
     const trimmed = setNotes(
       defaultTestDriveLog(),
       'kia-ev3',
@@ -208,6 +236,33 @@ describe('setNotes', () => {
       '2026-09-01',
     );
     expect(entryOf(trimmed, 'kia-ev3')?.notes).toBe('con espacios');
+  });
+
+  it('removes the entry entirely when its only note is cleared and it has no ratings', () => {
+    const log = setNotes(
+      defaultTestDriveLog(),
+      'kia-ev3',
+      'una nota',
+      '2026-09-01',
+    );
+    const next = setNotes(log, 'kia-ev3', '   ', '2026-09-01');
+    expect(entryOf(next, 'kia-ev3')).toBeUndefined();
+  });
+
+  it('keeps the entry, dropping only the note, when ratings remain after clearing it', () => {
+    const log = setJudgement(
+      defaultTestDriveLog(),
+      'kia-ev3',
+      'noise',
+      2,
+      '2026-08-20',
+    );
+    const withNote = setNotes(log, 'kia-ev3', 'una nota', '2026-08-20');
+    const next = setNotes(withNote, 'kia-ev3', '   ', '2026-08-20');
+    expect(entryOf(next, 'kia-ev3')).toEqual({
+      ratings: { noise: 2 },
+      date: '2026-08-20',
+    });
   });
 
   it('keeps the existing ratings and date when only the note changes', () => {
@@ -428,7 +483,7 @@ describe('restoreTestDriveLog', () => {
     expect(logged.Body).toBe('test_drive_rating_discarded');
   });
 
-  it('discards the whole entry when ratings is present but not an object', () => {
+  it('discards only the ratings, keeping the entry, when ratings is present but not an object', () => {
     const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const result = restoreTestDriveLog(
       validRaw({
@@ -441,7 +496,7 @@ describe('restoreTestDriveLog', () => {
       date: '2026-09-01',
     });
     const logged = loggedCalls(errorSpy)[0]!;
-    expect(logged.Body).toBe('test_drive_entry_discarded');
+    expect(logged.Body).toBe('test_drive_ratings_discarded');
     expect(logged.Attributes.reason).toBe('ratings_not_an_object');
   });
 

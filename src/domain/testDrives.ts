@@ -179,8 +179,23 @@ export function setJudgement(
   return { ...log, entries: { ...log.entries, [carId]: entry } };
 }
 
+/** Verdadero cuando una entrada no tiene ni un juicio contestado ni una nota:
+ * el estado que ni `clearJudgement` ni `setNotes` deben dejar grabado, para
+ * que «probado» (`isTested`) no quede marcado por una entrada fantasma sin
+ * nada que enseñar (requisitos 1.6, 1.4). */
+function isEmptyEntry(entry: TestDriveEntry): boolean {
+  return Object.keys(entry.ratings).length === 0 && entry.notes === undefined;
+}
+
+function withoutEntry(log: TestDriveLog, carId: string): TestDriveLog {
+  const { [carId]: _removed, ...entries } = log.entries;
+  return { ...log, entries };
+}
+
 /** Deja un juicio sin contestar: vuelve a puntuar el neutro (requisito 1.6),
- * sin tocar los demás juicios, la nota ni la fecha. */
+ * sin tocar los demás juicios, la nota ni la fecha. Si era el último juicio
+ * y no hay nota, la entrada entera se retira: un «probado» sin un solo
+ * juicio ni una nota no es una prueba, es una entrada fantasma. */
 export function clearJudgement(
   log: TestDriveLog,
   carId: string,
@@ -189,15 +204,19 @@ export function clearJudgement(
   const existing = log.entries[carId];
   if (existing === undefined) return log;
   const { [judgement]: _removed, ...ratings } = existing.ratings;
+  const entry: TestDriveEntry = { ...existing, ratings };
+  if (isEmptyEntry(entry)) return withoutEntry(log, carId);
   return {
     ...log,
-    entries: { ...log.entries, [carId]: { ...existing, ratings } },
+    entries: { ...log.entries, [carId]: entry },
   };
 }
 
 /** Fija la nota en texto libre (requisito 1.4), opcional. Una cadena vacía
  * o solo espacios se guarda como «sin nota», igual que `setDecision` trata
- * un motivo en blanco. */
+ * un motivo en blanco. Sin juicios contestados tampoco, no hay nada que
+ * guardar: no se crea una entrada solo para dejarla vacía, y si ya existía
+ * una que se queda vacía al borrar su única nota, se retira entera. */
 export function setNotes(
   log: TestDriveLog,
   carId: string,
@@ -206,8 +225,12 @@ export function setNotes(
 ): TestDriveLog {
   const existing = log.entries[carId];
   const trimmed = notes.trim();
+  const ratings = existing?.ratings ?? {};
+  if (trimmed === '' && Object.keys(ratings).length === 0) {
+    return existing === undefined ? log : withoutEntry(log, carId);
+  }
   const entry: TestDriveEntry = {
-    ratings: existing?.ratings ?? {},
+    ratings,
     ...(trimmed ? { notes: trimmed } : {}),
     date: existing?.date ?? today,
   };
@@ -247,7 +270,10 @@ const TestDriveNotesSchema = z.string().min(1);
 function restoreRatings(carId: string, raw: unknown): TestDriveRatings {
   if (raw === undefined) return {};
   if (typeof raw !== 'object' || raw === null) {
-    logError('test_drive_entry_discarded', {
+    // No se descarta la entrada, solo sus juicios: la fecha y la nota
+    // sobreviven intactas (ver `restoreEntry`), así que el evento no puede
+    // llamarse `test_drive_entry_discarded` sin mentir sobre lo que pasó.
+    logError('test_drive_ratings_discarded', {
       'car.id': carId,
       reason: 'ratings_not_an_object',
     });

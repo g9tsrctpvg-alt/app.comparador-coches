@@ -253,9 +253,15 @@ function VisitaSheet({
                 type="date"
                 className={primitives.fieldSelect}
                 value={entry?.date}
-                onChange={(event) =>
-                  onSetTestDriveDate(car.id, event.target.value)
-                }
+                onChange={(event) => {
+                  // El selector nativo permite dejar el campo vacío (botón
+                  // de borrar de Chrome); `setTestDriveDate` no acepta una
+                  // fecha que no sea real y lanzaría sin nadie que lo
+                  // capture. Sin fecha que fechar, no hay nada que hacer.
+                  const { value } = event.target;
+                  if (value === '') return;
+                  onSetTestDriveDate(car.id, value);
+                }}
               />
             </label>
           ) : (
@@ -556,6 +562,7 @@ export function VisitaPage({
     <>
       <h1 className={shellStyles.viewTitle}>{car.name}</h1>
       <VisitaSheet
+        key={car.id}
         car={car}
         breakdown={breakdown}
         testDriveLog={testDriveLog}

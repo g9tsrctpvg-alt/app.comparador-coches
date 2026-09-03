@@ -73,7 +73,7 @@ export const AXIS_CONTENT: Record<AxisId, AxisContent> = {
       'La misma escala se aplica al interior. La mezcla entre exterior e interior es un supuesto global, no algo que decida este eje.',
     ],
     curveException:
-      'Es el único eje sin curva en S. Tu valoración de 1 a 5 ya es tu juicio completo, y comprimir los extremos con la misma curva que usan los milímetros o los euros lo deformaría dos veces. Por eso aquí la nota es una línea recta: el 1 vale 0, el 5 vale 10, y los pasos intermedios se reparten por igual.',
+      'Es uno de los dos ejes sin curva en S (el otro es la prueba real). Tu valoración de 1 a 5 ya es tu juicio completo, y comprimir los extremos con la misma curva que usan los milímetros o los euros lo deformaría dos veces. Por eso aquí la nota es una línea recta: el 1 vale 0, el 5 vale 10, y los pasos intermedios se reparten por igual.',
   },
   prueba: {
     measures:

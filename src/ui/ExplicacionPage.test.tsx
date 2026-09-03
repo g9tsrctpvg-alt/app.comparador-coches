@@ -98,9 +98,10 @@ describe('ExplicacionPage', () => {
     expect(habitabilidadBlock).not.toContain('0,25 cada una');
   });
 
-  it('declares that estética is the only axis without an S-curve, and why', () => {
+  it('declares that estética and prueba are the two axes without an S-curve, and why', () => {
     const markup = render();
-    expect(markup).toContain('único eje sin curva en S');
+    expect(markup).toContain('uno de los dos ejes sin curva en S');
+    expect(markup).toContain('el otro eje sin curva en S');
   });
 
   it('warns about what a tied weight does not do', () => {

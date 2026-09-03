@@ -40,7 +40,15 @@ export function visitaHashFor(carId: string): string {
 export function visitaCarIdFromHash(hash: string): string | null {
   if (!hash.startsWith(VISITA_CAR_PREFIX)) return null;
   const carId = hash.slice(VISITA_CAR_PREFIX.length);
-  return carId.length > 0 ? decodeURIComponent(carId) : null;
+  if (carId.length === 0) return null;
+  try {
+    return decodeURIComponent(carId);
+  } catch {
+    // Un `%` mal formado en el fragmento (tecleado a mano, o un enlace
+    // roto) no debe tirar la vista entera: se trata como si no hubiera
+    // `carId`, igual que un fragmento vacío.
+    return null;
+  }
 }
 
 /** `renderToStaticMarkup` —lo que usan los tests de `src/ui/`— corre en

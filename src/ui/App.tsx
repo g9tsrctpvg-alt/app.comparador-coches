@@ -33,7 +33,7 @@ interface AppProps {
 }
 
 type CatalogResult =
-  { cars: Car[]; references: Reference[] } | { error: string };
+  { cars: Car[]; allCars: Car[]; references: Reference[] } | { error: string };
 
 export function App({
   load = loadCatalog,
@@ -48,11 +48,12 @@ export function App({
       // se trata igual que uno vacío, con el mismo mensaje de abajo, en vez
       // de dejar pasar una lista vacía a `scoreCatalog`, que lanzaría sin
       // capturar.
-      const cars = publishedCars(load());
+      const allCars = load();
+      const cars = publishedCars(allCars);
       if (cars.length === 0) {
         throw new Error('el catálogo no puede estar vacío');
       }
-      return { cars, references: loadReferencesProp() };
+      return { cars, allCars, references: loadReferencesProp() };
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
       logError('catalog_load_failed', { 'error.message': message });
@@ -60,11 +61,18 @@ export function App({
     }
   }, [load, loadReferencesProp]);
 
+  // Contra el catálogo entero, no solo los publicados: despublicar un
+  // coche (product/0015) no le borra sus datos, así que tampoco debería
+  // borrarle sus valoraciones sobrescritas, su decisión o su prueba real.
+  // Con `validCarIds` restringido a publicados, la siguiente carga de
+  // página descartaba esas tres cosas como «car_not_in_catalog» en cuanto
+  // se despublicaba un coche, contradiciendo lo que la propia skill
+  // `unpublish-model` promete conservar.
   const validCarIds = useMemo(
     () =>
       'error' in catalogResult
         ? new Set<string>()
-        : new Set(catalogResult.cars.map((car) => car.id)),
+        : new Set(catalogResult.allCars.map((car) => car.id)),
     [catalogResult],
   );
   const {

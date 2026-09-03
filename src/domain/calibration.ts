@@ -410,7 +410,8 @@ function constraintsOf(
 }
 
 /** Buffer de trabajo del conjunto compatible: hasta `GRID_SIZE` índices.
- * Es de módulo y no por llamada porque en el caso peor son 312 KB, y
+ * Es de módulo y no por llamada porque en el caso peor son
+ * `GRID_SIZE * 4` bytes (~1,5 MB con los ocho ejes de hoy), y
  * `calibrate` es síncrona — termina antes de que nadie pueda volver a
  * entrar—, así que reutilizarlo no puede mezclar dos conjuntos. */
 const indicesScratch = new Int32Array(GRID_SIZE);
@@ -429,10 +430,11 @@ function compatibleIndices(
   let count = 0;
 
   // Bucles indexados y producto escalar en línea, no `for…of` ni una llamada
-  // por combinación: este bucle se recorre hasta 78.124 veces por respuesta
-  // (menos si algún eje queda excluido, product/0037), y a esa escala el
-  // iterador que `for…of` construye en cada vuelta cuesta más que la propia
-  // aritmética. Medido, no supuesto.
+  // por combinación: este bucle se recorre hasta `GRID_SIZE` veces por
+  // respuesta (390.624 con los ocho ejes activos; 78.124 si `prueba` queda
+  // excluida por constante, product/0037), y a esa escala el iterador que
+  // `for…of` construye en cada vuelta cuesta más que la propia aritmética.
+  // Medido, no supuesto.
   const axes = activeAxes.length;
   for (let index = 0; index < size; index += 1) {
     const base = index * axes;
