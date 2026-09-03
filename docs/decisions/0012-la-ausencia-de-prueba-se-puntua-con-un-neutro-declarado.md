@@ -1,6 +1,6 @@
 # 0012 — La ausencia de prueba se puntúa con un neutro declarado
 
-- **Estado:** draft
+- **Estado:** approved
 - **Fecha:** 2026-09-03
 - **Nivel:** 🟡
 

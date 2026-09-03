@@ -1,7 +1,7 @@
 # 0037 — La prueba real y la hoja de visita
 
 - **Id:** product/0037
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-09-03
 - **Specs relacionadas:** product/0001, product/0005, product/0011,
