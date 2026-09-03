@@ -1,7 +1,7 @@
 # 0037 — La prueba real y la hoja de visita
 
 - **Id:** product/0037
-- **Estado:** approved
+- **Estado:** consolidated
 - **Tipo:** product
 - **Fecha:** 2026-09-03
 - **Specs relacionadas:** product/0001, product/0005, product/0011,
@@ -10,6 +10,12 @@
   technical/0005, technical/0006, technical/0011
 - **ADRs relacionados:** 0004, 0009, 0010, 0012
 - **Doc de estado:** `docs/estado/dominio.md`, `docs/estado/interfaz.md`
+
+> ⚠️ **Spec consolidada (2026-09-03).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/dominio.md` y `docs/estado/interfaz.md`. Vigentes aquí solo
+> los **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -386,76 +392,76 @@ registrado**, ni la nota ni nada derivado de ella.
 
 > Obligatorios y verificables.
 
-- [ ] Un test comprueba que los cinco juicios son un conjunto cerrado, que
+- [x] Un test comprueba que los cinco juicios son un conjunto cerrado, que
       cada uno acepta 1-5 y rechaza lo demás, y que la nota del eje es
       `(media − 1) × 2,5`.
-- [ ] Un test comprueba que un coche sin prueba saca exactamente 5,0 en
+- [x] Un test comprueba que un coche sin prueba saca exactamente 5,0 en
       `prueba`, y que una prueba con 3 en los cinco juicios saca **el mismo**
       5,0.
-- [ ] Un test comprueba que una prueba parcial puntúa como si los juicios sin
+- [x] Un test comprueba que una prueba parcial puntúa como si los juicios sin
       contestar valieran 3, y que el desglose declara cuántos hay
       contestados.
-- [ ] Un test comprueba que el desglose de un coche sin probar trae la línea
+- [x] Un test comprueba que el desglose de un coche sin probar trae la línea
       de `info` que lo declara, y que ningún subcomponente del eje es
       `editableRating`.
-- [ ] `scoreCatalog.snapshot.test.ts` pasa **sin tocar el snapshot**: con los
+- [x] `scoreCatalog.snapshot.test.ts` pasa **sin tocar el snapshot**: con los
       pesos por defecto y sin ninguna prueba, la puntuación de los dieciocho
       candidatos publicados es bit a bit la de antes de esta spec.
-- [ ] Un test comprueba que, con peso 0, guardar una prueba con los cinco
+- [x] Un test comprueba que, con peso 0, guardar una prueba con los cinco
       juicios a 5 **no mueve** ninguna nota total ni ningún puesto; y que con
       peso 5 sí los mueve.
-- [ ] Un test comprueba que guardar una prueba no modifica `AppConfig`, y que
+- [x] Un test comprueba que guardar una prueba no modifica `AppConfig`, y que
       «Que la prueba cuente» sube el peso de `prueba` a 5 y solo eso.
-- [ ] Un test comprueba la migración de pesos: una configuración `version: 3`
+- [x] Un test comprueba la migración de pesos: una configuración `version: 3`
       con sus siete pesos se restaura con los siete intactos y `prueba: 0`;
       una `version: 2` se migra 2 → 3 → 4 y conserva el reparto de `viaje`.
-- [ ] Un test comprueba que un enlace generado antes de esta spec —con `v=3`
+- [x] Un test comprueba que un enlace generado antes de esta spec —con `v=3`
       y sin `w_prueba`— reproduce la misma clasificación que reproducía, y
       que `w_prueba` solo aparece en el enlace cuando el peso no es 0.
-- [ ] Un test comprueba la degradación por partes del registro: un `car.id`
+- [x] Un test comprueba la degradación por partes del registro: un `car.id`
       fuera del catálogo descarta su entrada; una fecha inválida descarta la
       prueba; un juicio fuera de rango descarta **solo ese juicio** y
       conserva la nota escrita; una versión desconocida descarta el objeto
       entero; un campo ausente no genera registro.
-- [ ] Un test comprueba que los tres eventos de descarte se emiten con
+- [x] Un test comprueba que los tres eventos de descarte se emiten con
       `car.id` y motivo, y que **el texto de la nota no aparece** en ningún
       atributo registrado.
-- [ ] Un test comprueba que la fecha se valida como fecha real, que por
+- [x] Un test comprueba que la fecha se valida como fecha real, que por
       defecto es la que se le pasa desde fuera y que **ninguna nota cambia**
       al cambiarla (ADR 0009).
-- [ ] Un test comprueba que la hoja de un coche es determinista: dos
+- [x] Un test comprueba que la hoja de un coche es determinista: dos
       construcciones con el mismo coche, la misma configuración y el mismo
       registro dan el mismo texto.
-- [ ] Un test comprueba que el bloque «Lo que hay que preguntar» lista
+- [x] Un test comprueba que el bloque «Lo que hay que preguntar» lista
       exactamente las magnitudes con fuente vigente estimada más las
       opcionales que ese coche no declara, sobre un coche real del catálogo.
-- [ ] Un test comprueba que «Dónde flojea» trae los tres ejes de nota más
+- [x] Un test comprueba que «Dónde flojea» trae los tres ejes de nota más
       baja de ese coche, con `prueba` excluido.
-- [ ] Un test comprueba que `#/visita/<id>` con un id desconocido o no
+- [x] Un test comprueba que `#/visita/<id>` con un id desconocido o no
       publicado renderiza el aviso y el enlace al índice, y no una hoja
       vacía.
-- [ ] Un test comprueba que el índice aplica el filtro de decisión y muestra
+- [x] Un test comprueba que el índice aplica el filtro de decisión y muestra
       «Sin probar» o la fecha, y que con el filtro vaciando la lista
       renderiza su mensaje.
-- [ ] Un test comprueba que la navegación tiene cuatro destinos y marca
+- [x] Un test comprueba que la navegación tiene cuatro destinos y marca
       exactamente uno como activo en cada una de las cuatro rutas,
       `#/visita/<id>` incluida.
-- [ ] Un test comprueba que «Restablecer» deja el registro de pruebas
+- [x] Un test comprueba que «Restablecer» deja el registro de pruebas
       intacto, que «Borrar pruebas» lo vacía y que ese botón no se renderiza
       sin ninguna prueba guardada.
-- [ ] Un test comprueba que, con todos los coches sin probar, la tanda de
+- [x] Un test comprueba que, con todos los coches sin probar, la tanda de
       calibración propone **los mismos pesos** y hace **las mismas
       preguntas** que antes de esta spec, y que `prueba` conserva su peso; y
       que con un coche probado el eje entra en la rejilla.
-- [ ] `axisTheme.test.ts` sigue comprobando que la hoja declara clase para
+- [x] `axisTheme.test.ts` sigue comprobando que la hoja declara clase para
       **todos** los ejes de `AXIS_ORDER`, y el validador de contraste pasa con
       el color nuevo.
-- [ ] Verificación manual sobre el *build* de producción: rellenar una hoja
+- [x] Verificación manual sobre el *build* de producción: rellenar una hoja
       de visita en un viewport de 320px, recargar y comprobar que sobrevive;
       copiarla al portapapeles y comprobar el texto; comprobar que el enlace
       compartible no lleva la prueba; subir el peso y ver moverse la
       clasificación en vivo.
-- [ ] La secuencia de CI pasa entera en local
+- [x] La secuencia de CI pasa entera en local
       (`docs/proceso/ci-y-guardarrailes.md`, §4), con cobertura al 100 % en
       `src/domain/`, `src/data/` y `src/logging/`.
 

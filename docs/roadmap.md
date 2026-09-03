@@ -65,9 +65,8 @@ que no vuelva sin argumento nuevo.
 | `product/0015` — falta ejecutar de verdad `unpublish-model` o `republish-model` sobre un coche real | *Más adelante* |
 | `product/0016` — `implemented`, sin consolidar | *Más adelante* |
 | Datos del catálogo: fotos que faltan y acabados que no coinciden, magnitudes estimadas sin fuente firme, hombros mínimos mezclados con máximos, cuatro híbridos sin batería, tres modelos sin diámetro de giro entre bordillos, dieciocho registros sin carga máxima en techo, la versión del EV3, tres `faceliftYear` sin confirmar, la fiabilidad de Jeep por convención, precios de julio de 2026, dos fotos en CDN de concesionario | *Deudas abiertas* |
-| Código: cotas de los campos numéricos en `CarSchema`, andamiaje repetido de los siete ejes y `normalizeAll` sin uso, `ui/` fuera del suelo de cobertura, `pensandoVender`/`residualPct5y` desconectados, dos escalones tipográficos sin consumidor, `.duelChipActive` sin tratamiento visual, `index.html` sin icono | *Deudas abiertas* |
+| Código: cotas de los campos numéricos en `CarSchema`, andamiaje repetido de los ocho ejes y `normalizeAll` sin uso, `ui/` fuera del suelo de cobertura, `pensandoVender`/`residualPct5y` desconectados, dos escalones tipográficos sin consumidor, `.duelChipActive` sin tratamiento visual, `index.html` sin icono | *Deudas abiertas* |
 | Infraestructura y proceso: acciones de GitHub sin fijar a SHA, *smoke test* post-despliegue con el disparador ya cumplido, `docs/estado/observabilidad.md` sin declarar | *Deudas abiertas* |
-| `product/0037` — la prueba real y la hoja de visita (P6 y P7 juntas), `draft` con el **ADR 0012** detrás: pendiente del gate humano | *Propuestas de evolución*, abajo |
 | Ocho aplazamientos conscientes, cada uno con su disparador | *Aplazamientos con disparador* |
 
 ### Propuestas de evolución
@@ -90,8 +89,8 @@ vuelve sin argumento nuevo).
 | P3 | **Estado de decisión por coche** desde la interfaz: lista corta o descartado, con motivo y fecha | `consolidada` | `product/0030`, consolidada el 2026-08-30: marca en el ranking y en la cabecera de columna de la ficha, edición en línea y por diálogo, filtro de tres posiciones, «Borrar decisiones» separado de «Restablecer». Sin el cuarto estado de «candidato» que la propuesta original mencionaba |
 | P4 | **Criterios eliminatorios** además del presupuesto: largo máximo, maletero mínimo, autonomía mínima, altura de acceso | `consolidada` | `product/0031`, consolidada el 2026-08-30: un umbral mínimo o máximo sobre cualquiera de las veinticinco magnitudes de la ficha, operador forzado por la polaridad declarada del campo, clasificación partida en tramo elegible/no elegible, marca en la cabecera de columna y en la vista de duelo. Sin el hint de a quién excluiría una regla nueva ni el mensaje que nombra la regla más restrictiva, sin marca a nivel de celda ni de fila de duelo, sin puente con `product/0030` y sin regla categórica por tecnología — quedan anotados como trabajo futuro, no comprometido |
 | P5 | **Pesos por preferencia revelada**: derivar los siete pesos de una tanda de duelos «¿cuál prefieres?», dejando los deslizadores como ajuste fino | `consolidada` | `product/0035`, consolidada el 2026-09-01, con el **ADR 0011** detrás. Nadie sabe si su `habitabilidad` vale 4 o 5; siete deslizadores a ojo son un mal instrumento para lo que más manda en la nota. **Lo medido al redactarla**, sobre los dieciocho coches publicados: trece de ellos llegan a ser líderes con alguna de las 78.124 combinaciones enteras de pesos de la rejilla `{0, 2, 5, 8, 10}⁷`, y **ninguno** de los 153 enfrentamientos está decidido de antemano — la clasificación que se ve es una de muchas. Como el ADR 0004 hace la nota de un eje independiente de los pesos (comprobado: diferencia máxima exactamente 0), una respuesta «prefiero A» es exactamente una desigualdad lineal, y la tanda se resuelve por enumeración, sin optimizador ni dependencias nuevas. Preguntando siempre por el par que más divide al conjunto compatible, la tanda se cierra sola en 14-18 preguntas (mediana 17) y reproduce el 97,1 % de los enfrentamientos del perfil real frente al 81,2 % de los pesos por defecto; en orden aleatorio la mediana sube a 27. El hallazgo que da forma a la spec: las respuestas fijan **la clasificación**, no **los pesos** — de ahí que el avance se mida en «cuántos coches pueden todavía ser el primero» y que el resultado diga cuántas combinaciones siguen siendo compatibles. Ese hallazgo no se queda dentro de la spec: es el **ADR 0011**, redactado el 2026-09-01 por decisión del usuario, que registra por qué no hay pesos que recuperar —el conjunto compatible es un cono, no un punto: ninguna tanda, por larga que sea, los fija— y por qué se enumera una rejilla declarada en vez de ajustar un modelo continuo. Spec y ADR pasaron juntos el gate humano el 2026-09-01, en commit propio sin implementación, tras confirmación explícita del usuario. **Al usarla el usuario sobre el despliegue real apareció un defecto de diseño**, corregido por `product/0036` —fila propia abajo—: el requisito 5.1 elegía la combinación de **mayor margen mínimo**, que sobre un conjunto que es un cono es siempre una esquina — con tres respuestas dejaba 4,50 de los 7 ejes clavados en cero —, y su desempate por cercanía a los deslizadores no llegó a activarse ni una vez en cuarenta sesiones. Al implementar se enmendaron además tres requisitos de esta spec: el comité muestreado solo elige **qué se pregunta**, y las dos cifras de avance se calculan sobre el conjunto compatible entero — sobre la muestra exageraban y el avance llegaba a retroceder. La tanda real se cierra en 17 preguntas sobre los 15 coches que el presupuesto por defecto deja elegibles |
-| P6 | **Registro de la prueba real**: anotar por coche y con fecha lo que solo se sabe sentado dentro —postura, ruido, visibilidad, plazas traseras, maletero— y que pese en la nota | `en spec` | `product/0037`, redactada el 2026-09-03 junto a P7: las dos son el mismo artefacto en dos momentos —la hoja de visita es el registro antes de rellenarlo—, así que una sola spec las cubre, con el precedente de `product/0029` sobre P1 y P2a. Es la parte del «eje subjetivo de conducción» de *Más adelante* que **sí** depende del proyecto: tener el sitio donde anotarlo. Hoy lo único subjetivo editable es la estética |
-| P7 | **Checklist de visita al concesionario**, generada por coche desde su ficha, que vuelve como entrada de P6 | `en spec` | Dentro de `product/0037`, requisito 5: ruta propia por coche, cinco bloques generados de datos declarados —los cinco juicios, lo que hay que preguntar (las magnitudes estimadas y las que el coche no declara), los tres ejes en los que flojea— y copia al portapapeles. Barata y encadenada con P6: sin qué mirar, la prueba se olvida a mitad |
+| P6 | **Registro de la prueba real**: anotar por coche y con fecha lo que solo se sabe sentado dentro —postura, ruido, visibilidad, plazas traseras, maletero— y que pese en la nota | `consolidada` | `product/0037`, consolidada el 2026-09-03 junto a P7: las dos son el mismo artefacto en dos momentos —la hoja de visita es el registro antes de rellenarlo—, así que una sola spec las cubre, con el precedente de `product/0029` sobre P1 y P2a. Octavo eje, `prueba`, con el **ADR 0012** detrás: un coche sin probar puntúa el neutro declarado (5,0), nunca una exclusión del total ni una estimación desde otros ejes, y el peso nace en 0 para que la clasificación de todo el catálogo quede bit a bit igual el día que el eje aterriza |
+| P7 | **Checklist de visita al concesionario**, generada por coche desde su ficha, que vuelve como entrada de P6 | `consolidada` | Dentro de `product/0037`: ruta `#/visita`, con índice ordenado como la clasificación y hoja por coche de cinco bloques generados de datos declarados —los cinco juicios, lo que hay que preguntar (magnitudes estimadas y las dos opcionales que el coche no declara), los tres ejes en los que flojea, notas— y copia al portapapeles con el mismo texto que se ve en pantalla. Barata y encadenada con P6: sin qué mirar, la prueba se olvida a mitad |
 | P8 | Dos perfiles de pesos, para comparar el ranking de dos personas | `descartada` | Demasiado complejo para lo que aporta (decisión del usuario, 2026-08-29) |
 | P9 | **Coste en euros a cinco años** en vez de solo una nota de 0 a 10: seguro, impuesto de circulación, ayudas, financiación y depreciación | `en espera` | Antes de comprometer trabajo, hacer un estimado a mano con dos o tres candidatos y ver si la diferencia entre ellos es sustancial. Si lo es, spec propia; y entonces `pensandoVender`/`residualPct5y` dejan de estar desconectados |
 | P10 | **Viaje real con paradas**: tiempo puerta a puerta en una ruta tipo, no solo autonomía | `en espera` | Sospecha razonada de que los candidatos apenas se diferencian en esto. Comprobarlo primero con los datos que ya hay antes de pedir curva de carga y capacidad de depósito |
@@ -704,6 +703,51 @@ fase abierta. Se lista para no perderlo, no para bloquear nada.
   unitarios y contra el navegador sobre el build de producción —el foco, la
   vuelta atrás y los dos colores del `:hover` se midieron ahí—. Consolidada
   en `docs/estado/dominio.md` y `docs/estado/interfaz.md`.
+- **La prueba real y la hoja de visita — `product/0037`, `consolidated`,
+  con el ADR 0012 detrás.** P6 y P7 juntas: la primera anotación del
+  usuario que entra en la puntuación, no solo en lo que se ve. Octavo eje,
+  `prueba` (0,2×Σ de cinco juicios de 1 a 5 —postura al volante, ruido,
+  visibilidad, plazas de atrás, maletero por dentro—, escala lineal sin
+  curva en S como la estética), y la hoja de visita en `#/visita`, que da
+  y recoge esos juicios. **El ADR 0012 es la pieza de calado**: qué
+  puntúa un eje cuya entrada no existe todavía para la mayoría de la
+  tabla —tres o cuatro coches probados de dieciocho, lo normal—. Contestó
+  con un neutro declarado y siempre rotulado (5,0, el mismo valor que
+  darían los cinco juicios a 3), nunca con una exclusión del total —que
+  rompería el reparto de la diferencia de `product/0029`— ni con una
+  estimación desde otros ejes —el fallo exacto que ya midió `product/0005`
+  al sacar el confort subjetivo de `viaje`, una valoración sin dato real
+  detrás midiendo lo bonito de las fotos en vez de lo que decía medir—. El
+  peso nace en 0 (`DEFAULT_WEIGHTS`) para que la clasificación del catálogo
+  entero quede bit a bit igual el día que el eje aterriza, verificado
+  contra `scoreCatalog.snapshot.test.ts` sin tocarlo; subirlo es «Que la
+  prueba cuente», un acto explícito, nunca un efecto de guardar una prueba.
+  `CONFIG_VERSION` sube a 4, con el salto `3 → 4` migrado y compuesto con el
+  `2 → 3` que ya existía, así que ningún peso ni enlace ya compartido
+  cambia de significado. **La calibración por preferencia revelada
+  (`product/0035`) no paga por el eje nuevo**: `activeAxesOf` excluye de la
+  rejilla cualquier eje constante en el conjunto que se compara —`prueba`
+  mientras nadie se ha probado, el caso normal—, así que una tanda hace
+  las mismas preguntas al mismo coste que antes de esta spec; en cuanto un
+  coche está probado y otro no, el eje deja de ser constante y entra en la
+  rejilla como los demás. La hoja de visita —índice ordenado como la
+  clasificación, hoja por coche con los cinco juicios, lo que hay que
+  preguntar (magnitudes con fuente estimada, más el diámetro de giro y la
+  carga máxima en techo cuando faltan, las dos únicas opcionales que tiene
+  sentido preguntar en cualquier concesionario), los tres ejes en los que
+  peor queda el coche y una nota libre— es **determinista**: la misma
+  función de datos pinta la pantalla y genera lo que copia el botón
+  «Copiar», así que las dos nunca pueden desincronizarse. Recorrió
+  `draft → approved → implemented → verified → consolidated` el
+  2026-09-03, con el gate humano en un commit propio sin implementación, la
+  CI entera verde en local (773 tests, cobertura 100 % en
+  `domain/`+`data/`+`logging/`, más `npm run test:recovery`) y los
+  veintitrés criterios cerrados contra tests unitarios y contra el
+  navegador sobre el build de producción —la persistencia de un juicio y
+  de una nota tras recargar, que «Restablecer» no las toca, que contestar
+  un juicio no mueve ningún peso, y el recorrido completo a 320px, se
+  midieron ahí—. Consolidada en `docs/estado/dominio.md` y
+  `docs/estado/interfaz.md`.
 - **Eje de autonomía y repostaje.** Es la mayor diferencia práctica entre los
   once candidatos en un viaje largo —los térmicos e híbridos hacen 640-950 km
   con un depósito, los eléctricos la mitad en autopista— y el modelo es hoy
@@ -716,10 +760,12 @@ fase abierta. Se lista para no perderlo, no para bloquear nada.
   el catálogo es el otro lado de la pregunta —potencia y curva de carga,
   capacidad del depósito— y la decisión de fondo: cómo se puntúa en una misma
   escala algo que se recupera en cinco minutos y algo que tarda horas.
-- **Eje subjetivo de conducción, tras probar los coches.** Es donde vuelve el
-  juicio de primera mano que `product/0005` retira de `viaje`: butacas, ruido,
-  suspensión — lo que una ficha técnica no recoge. No depende del proyecto
-  sino de conducir los candidatos, y por eso no puede ser tarea de una fase.
+- **Eje subjetivo de conducción, tras probar los coches.** `product/0037`
+  ya construyó la parte que dependía del proyecto —tener el sitio donde
+  anotarlo—; lo que queda aquí es lo que no puede automatizarse: butacas,
+  ruido, suspensión, lo que una ficha técnica no recoge, exigen conducir de
+  verdad cada candidato. No depende del proyecto sino de hacerlo, y por eso
+  sigue sin poder ser tarea de una fase.
 
 ## Proceso
 

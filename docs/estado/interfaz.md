@@ -209,7 +209,7 @@ de colores por debajo de su umbral de contraste hace fallar
 
 ## Shell de aplicación y navegación
 
-`AppShell` (`src/ui/components/AppShell.tsx`) envuelve las tres vistas —no
+`AppShell` (`src/ui/components/AppShell.tsx`) envuelve las cuatro vistas —no
 lo compone ninguna vista por separado—: cabecera, contenedor de página
 (`<main>`, ancho máximo, relleno) y pie. Ninguna página declara su propia
 cabecera ni su propio ancho máximo; cada una deja solo su propio `<h1>`,
@@ -223,16 +223,18 @@ antes de esto, las tres páginas repetían literalmente
   `backdrop-filter`, que se degrada de forma distinta en cada motor—. El fondo
   es `--color-chrome` desde `technical/0012`, con el pelo de abajo en tinte de
   acento: no es una línea de dato, separa el cromo del contenido.
-- **`ViewSwitcher`** — la navegación única de la aplicación, tres destinos:
-  Clasificación (`#`), Ficha (`#/ficha`) y Cómo se calcula
-  (`#/como-se-calcula`). La vista activa lleva `aria-current="page"`, y
-  ninguna otra. Sus tres estados **se invirtieron con la cabecera tintada**
+- **`ViewSwitcher`** — la navegación única de la aplicación, cuatro destinos:
+  Clasificación (`#`), Ficha (`#/ficha`), Visita (`#/visita`, `product/0037`)
+  y Cómo se calcula (`#/como-se-calcula`). La vista activa lleva
+  `aria-current="page"`, y ninguna otra — «Visita» lo lleva tanto en el
+  índice como en la hoja de un coche concreto, porque las dos comparten la
+  misma `Route`. Sus estados **se invirtieron con la cabecera tintada**
   (`technical/0012`): la pastilla activa era un tinte de acento al 7 % sobre
   blanco, y sobre un carril que ya es acento al 10 % dejaba de distinguirse —
-  el conmutador volvía a leerse como tres etiquetas planas, la regresión que
+  el conmutador volvía a leerse como etiquetas planas, la regresión que
   `technical/0009` había arreglado. Ahora la activa **se levanta en blanco**
   con su sombra de control, el `:hover` tiñe y el `:active` tiñe más fuerte.
-  Medido sobre el build: los tres se distinguen entre sí y del fondo de la
+  Medido sobre el build: los cuatro se distinguen entre sí y del fondo de la
   cabecera.
 - **`AppFooter`** — la procedencia y fecha de los datos («Los precios del
   catálogo son de julio de 2026…») y la leyenda de la marca de estimado
@@ -241,7 +243,10 @@ antes de esto, las tres páginas repetían literalmente
 **Ruta y alias** (`src/ui/useHashRoute.ts`): la ruta canónica de la ficha es
 `#/ficha`; `#/ficha-tecnica` y `#/ficha-completa` —las dos vistas que
 `product/0018` fundió en una— siguen resolviendo a la misma vista, como
-alias, para no romper un enlace ya compartido. `routeFromHash` nunca
+alias, para no romper un enlace ya compartido. `#/visita` es el índice de la
+hoja de visita y `#/visita/<carId>` la hoja de un coche —`visitaHashFor`
+construye el segundo, `visitaCarIdFromHash`/`useVisitaCarId` lo leen—, las
+dos resolviendo a la misma `Route`, `'visita'`. `routeFromHash` nunca
 consulta el servidor: GitHub Pages sirve siempre `index.html`
 independientemente del fragmento, así que ningún alias puede dar 404.
 
@@ -528,16 +533,16 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   el catálogo real con los pesos y supuestos por defecto, nunca a mano: es
   la misma vía (`scoreCatalog`) que usa el desglose por coche, así que no
   puede desincronizarse de lo que la aplicación realmente calcula. Tiene su
-  propia tabla de contenidos (los siete ejes, los pesos, los supuestos
+  propia tabla de contenidos (los ocho ejes, los pesos, los supuestos
   globales, las penalizaciones condicionales, los criterios eliminatorios
   —product/0031: que un imprescindible filtra y nunca puntúa, texto
   estático, sin pasar por `scoreCatalog`—, las limitaciones conocidas y la
   procedencia de los datos) y comparte `SCurveChart` y `AXIS_CONTENT`
-  con `AxisBreakdownView`. Las siete tarjetas de eje y las siete filas de la
+  con `AxisBreakdownView`. Las ocho tarjetas de eje y las ocho filas de la
   lista de pesos llevan el icono y el filete de color de su eje
   (`technical/0011`); **la tabla de contenidos no**, porque sus entradas son
-  secciones y no ejes — teñir «Los siete ejes» de uno de los siete colores
-  diría algo falso. Sus siete `<h2>` de sección llevan un filete corto de acento
+  secciones y no ejes — teñir «Los ocho ejes» de uno de los ocho colores
+  diría algo falso. Sus `<h2>` de sección llevan un filete corto de acento
   encima (`technical/0012`), que los hace **localizables, no jerárquicos**: un
   `<h2>` sigue sin tamaño propio entre los 40px del título de vista y los 16px
   del cuerpo, y esa deuda sigue anotada en `docs/roadmap.md`.
@@ -768,6 +773,30 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     (`tabindex="0"`, `role="group"`).
   - La leyenda al pie explica la Δ, la dirección de cada magnitud, los
     litros por m² y la marca de estimado.
+- **`VisitaPage`** (`#/visita`, product/0037) — la hoja de visita. El índice
+  lista los candidatos publicados en el orden de la clasificación vigente
+  —`total` descendente—, con el filtro de decisión de `product/0030`
+  aplicado sin la excepción del modelo de comparación, que aquí no existe;
+  vacío por el filtro, renderiza el mismo mensaje que la clasificación
+  («Volver a Todos»). La hoja de un coche tiene cinco bloques generados de
+  datos ya declarados —nunca redactados a mano por coche—, así que es
+  **determinista**: identidad (nombre, foto frontal, tecnología, fecha de
+  la prueba si existe, editable); los cinco juicios con su pregunta y un
+  `<select>` de «Sin contestar» a 5; «Lo que hay que preguntar» —una línea
+  por magnitud con fuente vigente estimada, más el diámetro de giro y la
+  carga máxima en techo cuando el coche no los declara, las únicas
+  magnitudes opcionales que tiene sentido preguntar en un concesionario
+  cualquiera que sea la tecnología del coche—; los tres ejes con la nota
+  más baja del desglose, `prueba` excluido, cada uno con su sumando peor; y
+  la nota en texto libre. Un botón «Copiar» pone la hoja entera en texto
+  plano en el portapapeles, generado por la misma función que pinta la
+  pantalla, para que las dos nunca puedan desincronizarse. Un `carId`
+  desconocido o no publicado no tiene hoja: se avisa y se enlaza al índice,
+  nunca una hoja en blanco. «Que la prueba cuente» —sube el peso de
+  `prueba` a 5 y solo eso— solo aparece con el coche probado y el peso
+  todavía en 0. Enlazan aquí la fila desplegada del ranking, la cabecera de
+  columna de la ficha (candidatos, nunca la referencia) y el propio
+  desglose del eje `prueba` cuando el coche no se ha probado.
 
 ## Configuración persistente y compartible
 
@@ -785,11 +814,18 @@ directamente.
   se comparte. `hideFailingRules` viaja con la configuración a propósito,
   mismo motivo que su antecesor `hideOverBudget`: sin él, un enlace
   compartido no reproduce la misma lista de coches.
-  **`CONFIG_VERSION` es `2` desde `product/0031`** — subió al renombrar
-  `hideOverBudget` a `hideFailingRules` y añadir `eliminatoryRules`, un
-  cambio de forma incompatible; una configuración guardada con la versión
-  anterior se descarta entera y cae a los valores por defecto, el mismo
-  criterio que cualquier otra versión desconocida.
+  **`CONFIG_VERSION` es `4` desde `product/0037`.** Subió a `2` con
+  `product/0031` —al renombrar `hideOverBudget` a `hideFailingRules` y
+  añadir `eliminatoryRules`—, a `3` con `product/0033` —al partir
+  `weights.viaje` en `weights.carga` y `weights.habitabilidad`— y a `4` con
+  `product/0037` —al añadir `weights.prueba`—. Los saltos `2 → 3` y
+  `3 → 4` **se migran**, y se componen: una configuración guardada en
+  `1` se descarta entera y cae a los valores por defecto, el mismo criterio
+  que cualquier otra versión desconocida; una guardada en `2` o en `3`
+  conserva sus pesos, reparte `viaje` a partes iguales cuando hace falta y
+  añade `prueba: 0` — la migración es una equivalencia aritmética exacta en
+  los dos saltos, no una suposición sobre qué quiso decir quien guardó la
+  configuración.
 - **Precedencia**: lo que trae la URL gana sobre lo guardado en
   `localStorage`, que gana sobre los valores por defecto
   (`DEFAULT_CONFIG`). Una fuente que se descarta entera —versión
@@ -827,15 +863,15 @@ directamente.
   otro parámetro. Con la configuración por defecto, el enlace generado es la
   URL limpia del sitio.
 - **El puerto de almacenamiento** es `src/adapters/localStorageConfigPort.ts`
-  (`loadRawConfig`, `saveConfig`, `clearConfig`, y las tres equivalentes del
-  estado de vista de abajo): el único módulo que toca `window.localStorage`.
-  `src/domain/` no lo importa —lo comprueba la regla
+  (`loadRawConfig`, `saveConfig`, `clearConfig`, y las tres equivalentes de
+  cada una de las otras tres claves de abajo): el único módulo que toca
+  `window.localStorage`. `src/domain/` no lo importa —lo comprueba la regla
   `domain-no-storage-adapter` de `.dependency-cruiser.mjs`—, así que tampoco
   conoce `window` de forma transitiva. Si el almacenamiento no está
   disponible (modo privado, cuota agotada, permiso denegado), la aplicación
   sigue funcionando sin persistencia; se registra **una vez por carga de
   página**, no una vez por clave ni una vez por intento de guardar —el
-  módulo lleva un único flag, compartido por las dos claves.
+  módulo lleva un único flag, compartido por las cuatro claves.
 
 ### El estado de vista de la ficha
 
@@ -912,11 +948,51 @@ quien lo abre una lista vacía sin ninguna manera de entender por qué.
 - **«Restablecer» no la toca** (requisito 3.5, enmienda deliberada a la
   promesa de `product/0024`): un motivo escrito a mano no se repone en un
   minuto como un peso o una elección de vista, así que ese botón deja de
-  significar «como una primera visita» en las tres claves y pasa a
-  significar, con precisión, «restablecer la configuración». Vaciar el
+  significar «como una primera visita» en `AppConfig` y `ViewState` y pasa
+  a significar, con precisión, «restablecer la configuración». Vaciar el
   registro de decisiones es una acción propia, «Borrar decisiones» (ver
   `ConfigActions` más arriba): destructiva, con confirmación, y solo visible
   cuando hay algo que borrar.
+
+### El registro de la prueba real
+
+product/0037. Un cuarto objeto persistido, hermano de `AppConfig`,
+`ViewState` y `DecisionLog`: `TestDriveLog` (`src/domain/testDrives.ts`),
+clave propia (`comparador-coches:testdrives`), versión propia
+(`TEST_DRIVE_LOG_VERSION`). Guarda, por coche, los cinco juicios de la
+prueba, una nota opcional y una fecha editable
+(`docs/estado/dominio.md`, sección «El registro de la prueba real»). A
+diferencia de `DecisionLog`, no guarda ningún filtro propio: la hoja de
+visita reutiliza el filtro de decisión ya existente.
+
+- **`useTestDrives`** (`src/ui/useTestDrives.ts`) es hermano de
+  `useDecisions` en forma —restauración tolerante con
+  `restoreTestDriveLog`, guardado al cambiar, el mismo *wiring* entre
+  dominio puro y `localStorage` detrás de su puerto—, instanciado en
+  `App.tsx`: tanto la clasificación (el desglose del eje `prueba`) como la
+  hoja de visita leen y editan el mismo registro. La fecha de una entrada
+  nueva la aporta el hook —`new Date().toISOString().slice(0, 10)`—, nunca
+  `src/domain/testDrives.ts`, que no conoce el reloj; cambiarla a mano
+  después sí pasa por el dominio, que la valida como un día real.
+- **No hay URL de por medio, igual que las decisiones**: la única
+  precedencia es «lo guardado gana sobre los valores por defecto»
+  (`defaultTestDriveLog`, sin entradas). Un enlace compartido nunca lleva
+  las pruebas de quien lo genera; el peso de `prueba`, en cambio, viaja
+  como cualquier otro peso, porque vive en `AppConfig`.
+- **Se edita solo desde la hoja de visita** (`VisitaPage`, más arriba): los
+  cinco juicios, la nota y la fecha. Ninguna otra superficie edita — a
+  diferencia de las decisiones, el desglose del eje `prueba` en el ranking
+  no tiene control propio, solo un enlace a la hoja cuando el coche no se
+  ha probado.
+- **«Restablecer» no lo toca**, mismo criterio que el registro de
+  decisiones. Vaciarlo es una acción propia, «Borrar pruebas» (ver
+  `ConfigActions` más arriba): destructiva, con confirmación, y solo
+  visible cuando hay al menos una prueba registrada.
+- **«Que la prueba cuente»** (requisito 2.5) sube el peso de `prueba` a 5 y
+  solo eso: guardar un juicio o una nota nunca cambia un peso por su
+  cuenta —el ADR 0012 lo exige—, así que subir el peso es siempre un clic
+  aparte, ofrecido en la hoja de visita mientras haya al menos una prueba
+  guardada y el peso siga en 0.
 
 ## Responsive
 
@@ -954,8 +1030,9 @@ la unidad del campo y antepone el signo con `formatSigned`.
 `src/ui/` tiene un fichero de test por componente que lo justifica —entre
 otros, `App.test.tsx`, `RankingList.test.tsx`, `AxisBreakdownView.test.tsx`,
 `ConfigActions.test.tsx`, `ViewSwitcher.test.tsx`, `ExplicacionPage.test.tsx`,
-`WeightSliders.test.tsx`, `AxisIcon.test.tsx`, `axisTheme.test.ts`
-y `FichaPage.test.tsx`—, pero **no cubren la interfaz entera**: cubren los
+`WeightSliders.test.tsx`, `AxisIcon.test.tsx`, `axisTheme.test.ts`,
+`FichaPage.test.tsx` y `VisitaPage.test.tsx`—, pero **no cubren la interfaz
+entera**: cubren los
 fallos concretos que `technical/0002` corrigió y las invariantes que
 protegen (que el aviso de error se renderice de verdad, que renombrar una
 etiqueta del dominio no rompa los controles, que no aparezca `NaN`), las que
