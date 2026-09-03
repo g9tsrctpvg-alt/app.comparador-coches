@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  activeAxesOf,
   calibrate,
   profileOf,
   type CarProfile,
@@ -51,7 +52,7 @@ function runSession(
   options: { flipEvery?: number } = {},
 ): { outcomes: MatchupOutcome[]; proposed: AxisWeights } {
   const outcomes: MatchupOutcome[] = [];
-  let state = calibrate(profiles, outcomes);
+  let state = calibrate(profiles, outcomes, DEFAULT_WEIGHTS);
   let step = 0;
   while (state.nextMatchup !== null) {
     const { aCarId, bCarId } = state.nextMatchup;
@@ -61,7 +62,7 @@ function runSession(
       preferred = preferred === 'a' ? 'b' : 'a';
     }
     outcomes.push({ aCarId, bCarId, preferred });
-    state = calibrate(profiles, outcomes);
+    state = calibrate(profiles, outcomes, DEFAULT_WEIGHTS);
   }
   return { outcomes, proposed: state.proposedWeights };
 }
@@ -104,7 +105,7 @@ function runSessionAttributing(truth: AxisWeights): {
   proposed: AxisWeights;
 } {
   const outcomes: MatchupOutcome[] = [];
-  let state = calibrate(profiles, outcomes);
+  let state = calibrate(profiles, outcomes, DEFAULT_WEIGHTS);
   while (state.nextMatchup !== null) {
     const { aCarId, bCarId } = state.nextMatchup;
     const a = byId.get(aCarId) as CarProfile;
@@ -113,14 +114,21 @@ function runSessionAttributing(truth: AxisWeights): {
     const [winner, loser] = preferred === 'a' ? [a, b] : [b, a];
     const decisiveAxes = decisiveAxesFor(truth, winner, loser);
     outcomes.push({ aCarId, bCarId, preferred, decisiveAxes });
-    state = calibrate(profiles, outcomes);
+    state = calibrate(profiles, outcomes, DEFAULT_WEIGHTS);
   }
   return { outcomes, proposed: state.proposedWeights };
 }
 
-/** Cuántos de los siete pesos propuestos son exactamente 0. */
+/** Cuántos de los pesos propuestos **sobre ejes activos** son exactamente 0
+ * (product/0037, requisito 7): `prueba` queda fuera a propósito en esta
+ * medición —nadie prueba un coche en un perfil sintético, así que el eje es
+ * constante y `calibrate` nunca lo toca (se queda en el 0 de
+ * `DEFAULT_WEIGHTS`, no en el 0 que la tanda «decide»)—. Contarlo aquí
+ * sumaría un cero estructural a los siete que sí mide esta cifra, sin que
+ * ninguna respuesta lo haya causado. */
 function zeroAxes(weights: AxisWeights): number {
-  return AXIS_ORDER.filter((axisId) => weights[axisId] === 0).length;
+  return activeAxesOf(profiles).filter((axisId) => weights[axisId] === 0)
+    .length;
 }
 
 /** Proporción de los enfrentamientos que dos vectores de pesos ordenan
@@ -236,7 +244,7 @@ describe('el representante ya no es extremo (product/0036, fase 1)', () => {
 
     for (const truth of truths) {
       const outcomes: MatchupOutcome[] = [];
-      let state = calibrate(profiles, outcomes);
+      let state = calibrate(profiles, outcomes, DEFAULT_WEIGHTS);
       let step = 0;
       while (state.nextMatchup !== null && step < Math.max(...stops)) {
         const { aCarId, bCarId } = state.nextMatchup;
@@ -245,7 +253,7 @@ describe('el representante ya no es extremo (product/0036, fase 1)', () => {
           bCarId,
           preferred: answerWith(truth, aCarId, bCarId),
         });
-        state = calibrate(profiles, outcomes);
+        state = calibrate(profiles, outcomes, DEFAULT_WEIGHTS);
         step += 1;
         if (stops.includes(step)) {
           const entry = acc[step] as { n: number; zero: number; agree: number };
@@ -289,11 +297,16 @@ describe('atribuir acorta la tanda y mejora el acuerdo (product/0036, fase 2)', 
 
       // El acuerdo a cinco respuestas de cada protocolo, recalculando el
       // estado en ese punto exacto de su propia tanda.
-      const plainAt5 = calibrate(profiles, plain.outcomes.slice(0, 5));
+      const plainAt5 = calibrate(
+        profiles,
+        plain.outcomes.slice(0, 5),
+        DEFAULT_WEIGHTS,
+      );
       agreeAt5Plain += agreement(plainAt5.proposedWeights, truth);
       const attributedAt5 = calibrate(
         profiles,
         attributed.outcomes.slice(0, 5),
+        DEFAULT_WEIGHTS,
       );
       agreeAt5Attributed += agreement(attributedAt5.proposedWeights, truth);
     }

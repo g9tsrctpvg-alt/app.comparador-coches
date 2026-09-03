@@ -64,6 +64,15 @@ const AXIS_SHAPE: Record<AxisId, ReactNode> = {
     </>
   ),
 
+  /* Hoja de visita con una marca: el eje mide lo que solo se sabe sentado
+   * dentro, anotado en la prueba real (product/0037). */
+  prueba: (
+    <>
+      <path d="M9 3h6a1 1 0 0 1 1 1v1h1.5A1.5 1.5 0 0 1 19 6.5v13a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 19.5v-13A1.5 1.5 0 0 1 6.5 5H8V4a1 1 0 0 1 1-1z" />
+      <path d="M9 12l2 2 4-4" />
+    </>
+  ),
+
   /* Etiqueta de precio, con su ojal. */
   coste: (
     <>

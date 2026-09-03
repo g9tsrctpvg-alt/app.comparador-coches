@@ -41,6 +41,7 @@ import { EligibilityMark } from './components/EligibilityMark';
 import { EstimatedMark } from './components/EstimatedMark';
 import { ScoreGapPanel } from './components/ScoreGapPanel';
 import { useViewState } from './useViewState';
+import { visitaHashFor } from './useHashRoute';
 import primitives from './primitives.module.css';
 import shellStyles from './components/AppShell.module.css';
 import styles from './FichaPage.module.css';
@@ -668,6 +669,14 @@ function ModelHeaderCell({
         decisionLog={decisionLog}
         onOpen={onOpenDecision}
       />
+      {/* Solo los candidatos tienen hoja de visita: una referencia no se
+       * prueba (product/0037, fuera de alcance), mismo criterio que
+       * `ModelDecisionControl` (requisito 6.2). */}
+      {entity.kind === 'candidate' && (
+        <a className={primitives.buttonGhost} href={visitaHashFor(entity.id)}>
+          Hoja de visita
+        </a>
+      )}
       {/* El presupuesto y las reglas eliminatorias nunca alcanzan a la
        * referencia ni al modelo fijado como comparación (product/0031,
        * requisito 5.2), mismo criterio que `ModelDecisionControl`. */}

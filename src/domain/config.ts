@@ -32,8 +32,15 @@ import { FICHA_FIELDS } from './ficha';
  * ver `migrateWeightsV2ToV3` — porque a diferencia del resto de saltos de
  * versión, aquí no hay nada que adivinar: el reparto a partes iguales es
  * una equivalencia aritmética exacta (requisito 4.2 de la spec), no una
- * suposición sobre qué quiso decir el usuario. */
-export const CONFIG_VERSION = 3;
+ * suposición sobre qué quiso decir el usuario.
+ *
+ * `4` desde `product/0037`, requisito 4.1: `weights` gana la clave `prueba`.
+ * También se migra — `migrateWeightsV3ToV4` — por el mismo motivo que el
+ * salto anterior: `prueba: 0` conserva exactamente la clasificación que
+ * producían los pesos guardados, porque el eje nace con peso 0 (ADR 0012).
+ * Las dos migraciones se componen: una configuración `version: 2` pasa por
+ * las dos, 2 → 3 → 4, antes de validarse. */
+export const CONFIG_VERSION = 4;
 
 export const DEFAULT_BUDGET_EUR = 47000;
 
@@ -75,6 +82,7 @@ const AxisWeightsSchema = z.object({
   prestaciones: z.number().min(0).max(10),
   fiabilidad: z.number().min(0).max(10),
   estetica: z.number().min(0).max(10),
+  prueba: z.number().min(0).max(10),
   coste: z.number().min(0).max(10),
 });
 
@@ -230,6 +238,21 @@ function migrateWeightsV2ToV3(rawWeights: unknown): unknown {
   return { ...rest, carga: viaje / 2, habitabilidad: viaje / 2 };
 }
 
+/**
+ * Migra `weights` de la versión 3 a la 4 (product/0037, requisito 4.2):
+ * añade `prueba: 0`. No hay nada que adivinar —el eje nace con ese peso por
+ * definición (ADR 0012)—, así que el salto siempre se aplica y nunca se
+ * descarta. Un `rawWeights` que no es objeto se deja tal cual, con el mismo
+ * criterio que `migrateWeightsV2ToV3`: `AxisWeightsSchema` lo rechazará
+ * después por su cuenta.
+ */
+function migrateWeightsV3ToV4(rawWeights: unknown): unknown {
+  if (typeof rawWeights !== 'object' || rawWeights === null) {
+    return rawWeights;
+  }
+  return { prueba: 0, ...(rawWeights as Record<string, unknown>) };
+}
+
 export interface RestoreResult {
   config: AppConfig;
   /** Verdadero cuando `raw` no era un objeto restaurable en absoluto —JSON
@@ -256,20 +279,23 @@ export function restoreConfig(
   }
 
   const record = raw as Record<string, unknown>;
-  // La única versión que se migra en vez de descartarse (requisito 5.2 de
-  // product/0033): el reparto de `viaje` es una equivalencia exacta, no una
-  // suposición, así que aquí sí se adivina qué campos siguen valiendo.
+  // Las dos únicas versiones que se migran en vez de descartarse (requisito
+  // 5.2 de product/0033, requisito 4.2 de product/0037): el reparto de
+  // `viaje` y la llegada de `prueba` son equivalencias exactas, no
+  // suposiciones, así que aquí sí se adivina qué campos siguen valiendo. Se
+  // componen en orden: una `version: 2` pasa por las dos, 2 → 3 → 4.
   const isVersion2 = record.version === 2;
-  if (record.version !== CONFIG_VERSION && !isVersion2) {
+  const isVersion3 = record.version === 3;
+  if (record.version !== CONFIG_VERSION && !isVersion2 && !isVersion3) {
     logError('config_discarded', {
       reason: 'unknown_version',
       'config.version': String(record.version),
     });
     return { config: DEFAULT_CONFIG, discardedEntirely: true };
   }
-  const rawWeights = isVersion2
-    ? migrateWeightsV2ToV3(record.weights)
-    : record.weights;
+  let rawWeights = record.weights;
+  if (isVersion2) rawWeights = migrateWeightsV2ToV3(rawWeights);
+  if (isVersion2 || isVersion3) rawWeights = migrateWeightsV3ToV4(rawWeights);
 
   const config: AppConfig = {
     version: CONFIG_VERSION,

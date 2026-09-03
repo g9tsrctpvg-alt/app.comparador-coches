@@ -26,8 +26,48 @@ import { AXIS_ORDER, type AxisId, type AxisWeights } from './scoring/weights';
  * en los deslizadores tal como están (requisito 3.3). */
 export const WEIGHT_LEVELS = [0, 2, 5, 8, 10] as const;
 
-/** `5⁷` combinaciones menos la nula, que no define ninguna clasificación. */
+/** `5⁸` combinaciones menos la nula, que no define ninguna clasificación —el
+ * tamaño de la rejilla **completa**, sobre los ocho ejes de `AXIS_ORDER`
+ * (product/0037 añadió `prueba`, el octavo). Es el tope de reserva de
+ * `indicesScratch`, no necesariamente lo que una tanda concreta enumera:
+ * `calibrate` recorta la rejilla a los ejes activos de esa tanda (ver
+ * `activeAxesOf`), casi siempre menos de ocho. */
 export const GRID_SIZE = WEIGHT_LEVELS.length ** AXIS_ORDER.length - 1;
+
+function gridSizeFor(axisCount: number): number {
+  return WEIGHT_LEVELS.length ** axisCount - 1;
+}
+
+/** Umbral por debajo del cual dos notas del mismo eje se consideran
+ * empatadas para decidir si el eje varía en el conjunto (requisito 7.1 de
+ * product/0037). Las notas de eje son sumas de fracciones simples de un
+ * peso entero de 0 a 10; un margen mucho más fino que cualquier diferencia
+ * real basta para no confundir un empate genuino con un redondeo de coma
+ * flotante. */
+const CONSTANT_AXIS_EPSILON = 1e-9;
+
+/**
+ * Los ejes cuyo perfil **no** es constante en el conjunto de coches que
+ * entra en la tanda (requisito 7.1 de product/0037): los únicos que pueden
+ * decidir algún duelo, porque un eje constante aporta 0 a
+ * `Σ pesoᵢ × Δᵢ` sea cual sea su peso — su Δ es 0 para cualquier par. La
+ * rejilla se enumera solo sobre ellos (requisito 7.2), en el mismo orden de
+ * `AXIS_ORDER` (requisito 3.4 de `product/0035`, que sigue rigiendo).
+ * Exportada para que la interfaz no ofrezca un eje constante como decisivo
+ * (requisito 7.4): marcarlo afirmaría una desigualdad que sus notas no
+ * pueden sostener.
+ */
+export function activeAxesOf(profiles: CarProfile[]): AxisId[] {
+  if (profiles.length === 0) return [];
+  const first = profiles[0] as CarProfile;
+  return AXIS_ORDER.filter((axisId) =>
+    profiles.some(
+      (profile) =>
+        Math.abs(profile.scores[axisId] - first.scores[axisId]) >
+        CONSTANT_AXIS_EPSILON,
+    ),
+  );
+}
 
 /** Tope duro de preguntas por tanda (requisito 6.6). Con el catálogo de hoy
  * no se alcanza —la tanda se cierra sola antes, por el requisito 6.4—, y
@@ -103,14 +143,24 @@ export interface CalibrationState {
   nextMatchup: Matchup | null;
 }
 
-/** La rejilla, aplanada: siete valores por combinación, en el mismo orden
- * siempre (requisito 3.4). Se construye una vez y se reutiliza. */
-let gridCache: { values: Uint8Array } | undefined;
+/** La rejilla, aplanada: un valor por eje **activo** y por combinación, en
+ * el mismo orden que `activeAxes` (requisito 3.4 de `product/0035`;
+ * recortada a los ejes activos por el requisito 7 de `product/0037`).
+ * Memoiza la última combinación de ejes activos que se pidió: dentro de una
+ * tanda no cambia, salvo que registrar una prueba real active `prueba`
+ * (requisito 7.5) — momento en que la rejilla vuelve a construirse una
+ * vez, no en cada respuesta. */
+let gridCache: { key: string; size: number; values: Uint8Array } | undefined;
 
-function grid(): { values: Uint8Array } {
-  if (gridCache !== undefined) return gridCache;
-  const axes = AXIS_ORDER.length;
-  const values = new Uint8Array(GRID_SIZE * axes);
+function grid(activeAxes: AxisId[]): { size: number; values: Uint8Array } {
+  const key = activeAxes.join(',');
+  if (gridCache !== undefined && gridCache.key === key) {
+    return gridCache;
+  }
+
+  const axes = activeAxes.length;
+  const size = gridSizeFor(axes);
+  const values = new Uint8Array(size * axes);
   const current = new Array<number>(axes).fill(0);
   let written = 0;
 
@@ -131,7 +181,7 @@ function grid(): { values: Uint8Array } {
   };
   walk(0, 0);
 
-  gridCache = { values };
+  gridCache = { key, size, values };
   return gridCache;
 }
 
@@ -147,22 +197,32 @@ function grid(): { values: Uint8Array } {
  */
 let leaderCache: { key: string; leaders: Uint8Array } | undefined;
 
-function leaderByCombination(profiles: CarProfile[]): Uint8Array {
-  const key = profiles
+/**
+ * Un eje constante en el conjunto (fuera de `activeAxes`) aporta el mismo
+ * término a la suma de **todos** los coches, cualquiera que sea su peso —su
+ * nota es igual para todos—, así que nunca cambia quién tiene el total más
+ * alto. Excluirlo del cálculo es exactamente equivalente a incluirlo con
+ * cualquier peso, y más barato.
+ */
+function leaderByCombination(
+  profiles: CarProfile[],
+  activeAxes: AxisId[],
+): Uint8Array {
+  const key = `${activeAxes.join(',')}|${profiles
     .map(
       (profile) =>
-        `${profile.carId}:${AXIS_ORDER.map((axisId) => profile.scores[axisId]).join(',')}`,
+        `${profile.carId}:${activeAxes.map((axisId) => profile.scores[axisId]).join(',')}`,
     )
-    .join('|');
+    .join('|')}`;
   if (leaderCache !== undefined && leaderCache.key === key) {
     return leaderCache.leaders;
   }
 
-  const { values } = grid();
-  const axes = AXIS_ORDER.length;
-  const matrix = profileMatrix(profiles);
-  const leaders = new Uint8Array(GRID_SIZE);
-  for (let index = 0; index < GRID_SIZE; index += 1) {
+  const { size, values } = grid(activeAxes);
+  const axes = activeAxes.length;
+  const matrix = profileMatrix(profiles, activeAxes);
+  const leaders = new Uint8Array(size);
+  for (let index = 0; index < size; index += 1) {
     const base = index * axes;
     let leader = 0;
     let bestTotal = Number.NEGATIVE_INFINITY;
@@ -184,38 +244,64 @@ function leaderByCombination(profiles: CarProfile[]): Uint8Array {
   return leaders;
 }
 
-function weightsFrom(values: Uint8Array, index: number): AxisWeights {
-  const weights = {} as AxisWeights;
-  AXIS_ORDER.forEach((axisId, a) => {
-    weights[axisId] = values[index * AXIS_ORDER.length + a] as number;
+/**
+ * Los pesos completos que propone una combinación de la rejilla: los ejes
+ * activos toman el valor que la rejilla les dio, y los excluidos —constantes
+ * en este conjunto— conservan el peso que ya tenían (requisito 7.5 de
+ * `product/0037`): la tanda no los propone ni los toca.
+ */
+function weightsFrom(
+  values: Uint8Array,
+  index: number,
+  activeAxes: AxisId[],
+  currentWeights: AxisWeights,
+): AxisWeights {
+  const weights = { ...currentWeights };
+  const axes = activeAxes.length;
+  activeAxes.forEach((axisId, a) => {
+    weights[axisId] = values[index * axes + a] as number;
   });
   return weights;
 }
 
-/** Vector de diferencia de perfiles, en el orden de `AXIS_ORDER`. */
-function deltaOf(a: CarProfile, b: CarProfile): Float64Array {
-  const delta = new Float64Array(AXIS_ORDER.length);
-  AXIS_ORDER.forEach((axisId, index) => {
+/** Vector de diferencia de perfiles, en el orden de `activeAxes`. Un eje
+ * excluido no entra —su diferencia es 0 para cualquier par, por
+ * definición—, así que omitirlo no cambia ningún resultado (requisito 7.2
+ * de `product/0037`). */
+function deltaOf(
+  a: CarProfile,
+  b: CarProfile,
+  activeAxes: AxisId[],
+): Float64Array {
+  const delta = new Float64Array(activeAxes.length);
+  activeAxes.forEach((axisId, index) => {
     delta[index] = a.scores[axisId] - b.scores[axisId];
   });
   return delta;
 }
 
 /** Las notas de todos los coches en una sola tira, para que los bucles
- * calientes no busquen propiedades por nombre ni creen cierres. */
-function profileMatrix(profiles: CarProfile[]): Float64Array {
-  const axes = AXIS_ORDER.length;
+ * calientes no busquen propiedades por nombre ni creen cierres. Solo los
+ * ejes activos: los mismos que enumera `grid`. */
+function profileMatrix(
+  profiles: CarProfile[],
+  activeAxes: AxisId[],
+): Float64Array {
+  const axes = activeAxes.length;
   const matrix = new Float64Array(profiles.length * axes);
   profiles.forEach((profile, position) => {
-    AXIS_ORDER.forEach((axisId, a) => {
+    activeAxes.forEach((axisId, a) => {
       matrix[position * axes + a] = profile.scores[axisId];
     });
   });
   return matrix;
 }
 
+/** El tamaño de `delta` es siempre el número de ejes activos de la tanda en
+ * curso —lo mismo que `values` enumera—, así que no hace falta pasarlo
+ * aparte: `delta.length` ya lo dice. */
 function dotOf(values: Uint8Array, index: number, delta: Float64Array): number {
-  const axes = AXIS_ORDER.length;
+  const axes = delta.length;
   const base = index * axes;
   let dot = 0;
   for (let a = 0; a < axes; a += 1) {
@@ -231,13 +317,18 @@ interface Pair {
   distance: number;
 }
 
-function pairsOf(profiles: CarProfile[]): Pair[] {
+/** La distancia entre dos perfiles sobre los ejes activos es idéntica a la
+ * distancia sobre todos los ejes: un eje excluido aporta 0 a la diferencia
+ * de cualquier par (por ser constante), así que su término al cuadrado es
+ * siempre 0 y no cambia la suma. */
+function pairsOf(profiles: CarProfile[], activeAxes: AxisId[]): Pair[] {
   const pairs: Pair[] = [];
   for (let i = 0; i < profiles.length; i += 1) {
     for (let j = i + 1; j < profiles.length; j += 1) {
       const delta = deltaOf(
         profiles[i] as CarProfile,
         profiles[j] as CarProfile,
+        activeAxes,
       );
       let square = 0;
       for (const component of delta) square += component * component;
@@ -274,6 +365,7 @@ interface Constraint {
 function constraintsOf(
   outcomes: MatchupOutcome[],
   byId: Map<string, CarProfile>,
+  activeAxes: AxisId[],
 ): Constraint[] {
   const constraints: Constraint[] = [];
   for (const outcome of outcomes) {
@@ -282,7 +374,11 @@ function constraintsOf(
     const b = byId.get(outcome.bCarId);
     if (a === undefined || b === undefined) continue;
     const [winner, loser] = outcome.preferred === 'a' ? [a, b] : [b, a];
-    const delta = deltaOf(winner as CarProfile, loser as CarProfile);
+    const delta = deltaOf(
+      winner as CarProfile,
+      loser as CarProfile,
+      activeAxes,
+    );
     constraints.push({ delta, positive: true });
 
     const decisive = outcome.decisiveAxes;
@@ -290,13 +386,16 @@ function constraintsOf(
       const decisiveSet = new Set(decisive);
       // Ejes **distintos**, no entradas: una lista con repeticiones describe
       // el mismo subconjunto que la lista sin ellas
-      // (`technical/0013`, requisito 2.1).
-      if (decisiveSet.size === 0 || decisiveSet.size === AXIS_ORDER.length) {
+      // (`technical/0013`, requisito 2.1). Se compara contra los ejes
+      // **activos** (requisito 7.4 de `product/0037`): un eje excluido
+      // nunca se ofrece como decisivo, así que no puede aparecer aquí en
+      // una tanda nueva.
+      if (decisiveSet.size === 0 || decisiveSet.size === activeAxes.length) {
         continue;
       }
-      const complement = new Float64Array(AXIS_ORDER.length);
-      AXIS_ORDER.forEach((axisId, index) => {
-        // `delta` es un `Float64Array` de `AXIS_ORDER.length` posiciones,
+      const complement = new Float64Array(activeAxes.length);
+      activeAxes.forEach((axisId, index) => {
+        // `delta` es un `Float64Array` de `activeAxes.length` posiciones,
         // recorridas aquí una a una: el índice siempre existe. El `?? 0`
         // que exigiría `noUncheckedIndexedAccess` sería una rama muerta que
         // ningún test podría alcanzar de verdad.
@@ -318,20 +417,24 @@ const indicesScratch = new Int32Array(GRID_SIZE);
 
 /** Los índices de la rejilla que contradicen el mínimo posible de respuestas,
  * cuántos son y cuál es ese mínimo (requisito 4 de `product/0035`). */
-function compatibleIndices(constraints: Constraint[]): {
+function compatibleIndices(
+  constraints: Constraint[],
+  activeAxes: AxisId[],
+): {
   indices: Int32Array;
   contradicted: number;
 } {
-  const { values } = grid();
+  const { size, values } = grid(activeAxes);
   let best = Number.POSITIVE_INFINITY;
   let count = 0;
 
   // Bucles indexados y producto escalar en línea, no `for…of` ni una llamada
-  // por combinación: este bucle se recorre 78.124 veces por respuesta, y a
-  // esa escala el iterador que `for…of` construye en cada vuelta cuesta más
-  // que la propia aritmética. Medido, no supuesto.
-  const axes = AXIS_ORDER.length;
-  for (let index = 0; index < GRID_SIZE; index += 1) {
+  // por combinación: este bucle se recorre hasta 78.124 veces por respuesta
+  // (menos si algún eje queda excluido, product/0037), y a esa escala el
+  // iterador que `for…of` construye en cada vuelta cuesta más que la propia
+  // aritmética. Medido, no supuesto.
+  const axes = activeAxes.length;
+  for (let index = 0; index < size; index += 1) {
     const base = index * axes;
     let bad = 0;
     for (let c = 0; c < constraints.length; c += 1) {
@@ -379,9 +482,9 @@ function compatibleIndices(constraints: Constraint[]): {
  * el sistema no daba. El desempate que queda es el orden de recorrido de la
  * rejilla, coherente con el resto del módulo.
  */
-function representativeOf(indices: Int32Array): number {
-  const { values } = grid();
-  const axes = AXIS_ORDER.length;
+function representativeOf(indices: Int32Array, activeAxes: AxisId[]): number {
+  const { values } = grid(activeAxes);
+  const axes = activeAxes.length;
 
   const centroid = new Float64Array(axes);
   for (let position = 0; position < indices.length; position += 1) {
@@ -438,20 +541,25 @@ export function canCalibrate(carCount: number): boolean {
  * proponen, qué han fijado las respuestas y qué se pregunta ahora.
  *
  * Función pura y determinista: las mismas respuestas devuelven exactamente
- * lo mismo, sin muestreo ni semilla (requisito 3.4 de `product/0035`). No
- * recibe los pesos vigentes de los deslizadores: `product/0036`, requisito
- * 1.3, retira el único uso que tenían dentro de este cálculo.
+ * lo mismo, sin muestreo ni semilla (requisito 3.4 de `product/0035`).
+ * `currentWeights` no participa en ningún desempate —`product/0036`,
+ * requisito 1.3, retiró ese uso—: entra de nuevo aquí solo para que los
+ * ejes excluidos de la rejilla (requisito 7 de `product/0037`) conserven el
+ * peso que ya tenían en `proposedWeights`, sin que la tanda los proponga ni
+ * los toque.
  */
 export function calibrate(
   profiles: CarProfile[],
   outcomes: MatchupOutcome[],
+  currentWeights: AxisWeights,
 ): CalibrationState {
-  const { values } = grid();
+  const activeAxes = activeAxesOf(profiles);
+  const { values } = grid(activeAxes);
   const byId = new Map(profiles.map((profile) => [profile.carId, profile]));
-  const constraints = constraintsOf(outcomes, byId);
-  const { indices, contradicted } = compatibleIndices(constraints);
+  const constraints = constraintsOf(outcomes, byId, activeAxes);
+  const { indices, contradicted } = compatibleIndices(constraints, activeAxes);
   const committee = committeeOf(indices);
-  const pairs = pairsOf(profiles);
+  const pairs = pairsOf(profiles, activeAxes);
 
   const seen = new Set(
     outcomes.map((outcome) => `${outcome.aCarId}|${outcome.bCarId}`),
@@ -531,7 +639,7 @@ export function calibrate(
   // el error que peor sienta en una cifra pensada para no prometer de más.
   const leaderSeen = new Uint8Array(profiles.length);
   if (profiles.length > 0) {
-    const leaders = leaderByCombination(profiles);
+    const leaders = leaderByCombination(profiles, activeAxes);
     for (let position = 0; position < indices.length; position += 1) {
       leaderSeen[leaders[indices[position] as number] as number] = 1;
     }
@@ -540,7 +648,12 @@ export function calibrate(
   const finished = outcomes.length >= MAX_MATCHUPS || nextPair === undefined;
 
   return {
-    proposedWeights: weightsFrom(values, representativeOf(indices)),
+    proposedWeights: weightsFrom(
+      values,
+      representativeOf(indices, activeAxes),
+      activeAxes,
+      currentWeights,
+    ),
     compatibleCount: indices.length,
     contradicted,
     possibleLeaderIds: profiles

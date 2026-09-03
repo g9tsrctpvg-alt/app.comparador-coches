@@ -74,13 +74,13 @@ export const DECLARED_PAIRS: readonly ContrastPair[] = [
   { foreground: 'ink-tertiary', background: 'paper', level: 'large' },
   { foreground: 'ink-tertiary', background: 'card', level: 'large' },
 
-  /* Los siete colores de eje (technical/0011, requisito 6.1; product/0033
-   * añade `axis-habitabilidad` al partir `viaje` en dos), cada uno sobre
-   * las dos superficies donde se pinta. Entran al umbral estricto de 4,5:1
-   * aunque hoy ninguno sirva texto pequeño: declararlos como texto normal
-   * deja escrito el margen y hace que un retoque de tono que se lo coma
-   * falle aquí en vez de en pantalla. El más justo es `axis-carga` sobre
-   * `paper`, a 4,77:1. */
+  /* Los ocho colores de eje (technical/0011, requisito 6.1; product/0033
+   * añade `axis-habitabilidad` al partir `viaje` en dos; product/0037 añade
+   * `axis-prueba`, el octavo), cada uno sobre las dos superficies donde se
+   * pinta. Entran al umbral estricto de 4,5:1 aunque hoy ninguno sirva
+   * texto pequeño: declararlos como texto normal deja escrito el margen y
+   * hace que un retoque de tono que se lo coma falle aquí en vez de en
+   * pantalla. El más justo es `axis-carga` sobre `paper`, a 4,77:1. */
   { foreground: 'axis-carga', background: 'card', level: 'normal' },
   { foreground: 'axis-carga', background: 'paper', level: 'normal' },
   { foreground: 'axis-habitabilidad', background: 'card', level: 'normal' },
@@ -93,6 +93,8 @@ export const DECLARED_PAIRS: readonly ContrastPair[] = [
   { foreground: 'axis-fiabilidad', background: 'paper', level: 'normal' },
   { foreground: 'axis-estetica', background: 'card', level: 'normal' },
   { foreground: 'axis-estetica', background: 'paper', level: 'normal' },
+  { foreground: 'axis-prueba', background: 'card', level: 'normal' },
+  { foreground: 'axis-prueba', background: 'paper', level: 'normal' },
   { foreground: 'axis-coste', background: 'card', level: 'normal' },
   { foreground: 'axis-coste', background: 'paper', level: 'normal' },
 

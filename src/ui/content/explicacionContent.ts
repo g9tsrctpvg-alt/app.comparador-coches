@@ -18,7 +18,7 @@ export interface AxisContent {
   measures: string;
   data: string;
   anchorReasoning: string[];
-  /** Solo `estetica`: por qué es el único eje sin curva en S. */
+  /** `estetica` y `prueba`: por qué son los únicos ejes sin curva en S. */
   curveException?: string;
 }
 
@@ -75,6 +75,20 @@ export const AXIS_CONTENT: Record<AxisId, AxisContent> = {
     curveException:
       'Es el único eje sin curva en S. Tu valoración de 1 a 5 ya es tu juicio completo, y comprimir los extremos con la misma curva que usan los milímetros o los euros lo deformaría dos veces. Por eso aquí la nota es una línea recta: el 1 vale 0, el 5 vale 10, y los pasos intermedios se reparten por igual.',
   },
+  prueba: {
+    measures:
+      'Lo que solo se sabe sentado dentro: postura, ruido, visibilidad, plazas de atrás y maletero por dentro.',
+    data: 'La media de cinco juicios de 1 a 5 que anotas tú mismo en la hoja de visita de cada coche, tras probarlo: el segundo eje que editas directamente, no un dato del catálogo. Un coche sin probar puntúa el punto medio de la escala, ni a favor ni en contra.',
+    anchorReasoning: [
+      'Postura al volante: 1 es «no me pongo cómodo ni a los diez minutos», 5 es «asiento, volante y pedales caen donde tienen que caer».',
+      'Ruido: 1 es «no se aguanta una autovía larga», 5 es «se conversa sin subir la voz».',
+      'Visibilidad: 1 es «los pilares tapan lo que hace falta ver», 5 es «se maniobra sin sorpresas».',
+      'Plazas de atrás: 1 es «un adulto detrás de otro adulto no cabe», 5 es «cabe con margen, plaza central incluida».',
+      'Maletero por dentro: 1 es «la forma o el escalón de carga estorban», 5 es «se aprovecha bien y se carga sin esfuerzo».',
+    ],
+    curveException:
+      'Es el otro eje sin curva en S. Cada juicio de 1 a 5 ya es tu valoración completa, con el mismo motivo que la estética: comprimir los extremos con la misma curva que usan los milímetros o los euros lo deformaría dos veces. La nota es una línea recta, y un juicio sin contestar puntúa el 3 central (ADR 0012).',
+  },
   coste: {
     measures: 'Cuánto cuesta el coche: de compra y de uso mensual.',
     data: 'Precio de compra, y un coste de uso mensual calculado a partir del consumo, los km/año, el precio del combustible o de la electricidad, y el mantenimiento anual.',
@@ -90,7 +104,7 @@ export const CURVE_EXPLANATION =
   'de los extremos y rápido en el centro. Afinar cerca del anclaje bueno no ' +
   'compra casi nada —ya casi es un 10—, y estar cerca del anclaje malo es ' +
   'casi tan malo como estarlo del todo. Es una curva en S, y la usan seis ' +
-  'de los siete ejes: todos menos estética.';
+  'de los ocho ejes: todos menos estética y prueba real.';
 
 export const WEIGHT_TIE_WARNING =
   'Con estas escalas fijas, subir el peso de un eje no cambia nada si los ' +

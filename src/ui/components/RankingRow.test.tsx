@@ -131,4 +131,10 @@ describe('RankingRow, decision status (product/0030)', () => {
     expect(markup).toContain('Lista corta');
     expect(markup).toContain('Descartado');
   });
+
+  it('links to the visit sheet of this car (product/0037, requisito 6.3)', () => {
+    const markup = renderRow();
+    expect(markup).toContain(`href="#/visita/${sportage.carId}"`);
+    expect(markup).toContain('Hoja de visita');
+  });
 });

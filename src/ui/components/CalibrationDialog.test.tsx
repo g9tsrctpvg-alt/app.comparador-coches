@@ -4,6 +4,7 @@ import { loadCatalog } from '../../data/loadCatalog';
 import { publishedCars } from '../../domain/car';
 import { buildFicha, withComparison } from '../../domain/ficha';
 import {
+  activeAxesOf,
   calibrate,
   profileOf,
   type MatchupOutcome,
@@ -30,7 +31,7 @@ const profiles = scored.map(profileOf);
 const entities = buildFicha(cars, []);
 
 function matchupMarkup(): string {
-  const { nextMatchup } = calibrate(profiles, []);
+  const { nextMatchup } = calibrate(profiles, [], DEFAULT_WEIGHTS);
   const matchup = nextMatchup as { aCarId: string; bCarId: string };
   const a = withComparison(entities, matchup.bCarId).find(
     (entity) => entity.id === matchup.aCarId,
@@ -107,10 +108,13 @@ describe('MatchupView', () => {
 });
 
 describe('AttributionStep', () => {
+  const activeAxes = activeAxesOf(profiles);
+
   function render(selected: Set<AxisId> = new Set()): string {
     return renderToStaticMarkup(
       <AttributionStep
         carName="EV3"
+        activeAxes={activeAxes}
         selected={selected}
         onToggle={() => {}}
         onNext={() => {}}
@@ -120,12 +124,18 @@ describe('AttributionStep', () => {
     );
   }
 
-  it('ofrece marcar los siete ejes, con el nombre del coche elegido (requisito 3.1)', () => {
+  it('ofrece marcar los siete ejes activos, con el nombre del coche elegido (requisito 3.1)', () => {
     const markup = render();
     expect(markup).toContain('EV3');
-    for (const axisId of AXIS_ORDER) {
+    expect(activeAxes).toHaveLength(7);
+    for (const axisId of activeAxes) {
       expect(markup, axisId).toContain(AXIS_LABELS[axisId]);
     }
+  });
+
+  it('no ofrece un eje constante como decisivo (requisito 7.4 de product/0037)', () => {
+    expect(activeAxes).not.toContain('prueba');
+    expect(render()).not.toContain(AXIS_LABELS.prueba);
   });
 
   it('no enseña ninguna cifra del modelo (requisito 3.4)', () => {
@@ -170,6 +180,7 @@ describe('CalibrationResult', () => {
     prestaciones: 5,
     fiabilidad: 10,
     estetica: 8,
+    prueba: 0,
     coste: 5,
   };
 
@@ -257,7 +268,7 @@ describe('la tanda no toca nada por su cuenta', () => {
     const outcomes: MatchupOutcome[] = [
       { aCarId: 'kia-ev3', bCarId: 'jeep-compass', preferred: 'a' },
     ];
-    const state = calibrate(profiles, outcomes);
+    const state = calibrate(profiles, outcomes, DEFAULT_WEIGHTS);
     const markup = renderToStaticMarkup(
       <CalibrationResult
         proposedWeights={state.proposedWeights}

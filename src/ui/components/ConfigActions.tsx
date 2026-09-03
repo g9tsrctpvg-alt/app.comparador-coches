@@ -10,6 +10,12 @@ interface ConfigActionsProps {
    * aparece cuando hay al menos una decisión registrada. */
   decisionCount: number;
   onClearDecisions: () => void;
+  /** «Borrar pruebas» (product/0037, requisito 3.5), mismo criterio que
+   * «Borrar decisiones»: acción propia, separada de «Restablecer», que
+   * tampoco toca el registro de pruebas. Solo aparece con al menos una
+   * prueba registrada. */
+  testDriveCount: number;
+  onClearTestDrives: () => void;
 }
 
 const COPIED_LABEL_MS = 2000;
@@ -23,6 +29,8 @@ export function ConfigActions({
   onReset,
   decisionCount,
   onClearDecisions,
+  testDriveCount,
+  onClearTestDrives,
 }: ConfigActionsProps) {
   const [copied, setCopied] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
@@ -38,6 +46,15 @@ export function ConfigActions({
       `Se van a borrar ${decisionCount} ${noun}. Esta acción no se puede deshacer. ¿Continuar?`,
     );
     if (confirmed) onClearDecisions();
+  }
+
+  function handleClearTestDrives() {
+    const noun =
+      testDriveCount === 1 ? 'prueba registrada' : 'pruebas registradas';
+    const confirmed = window.confirm(
+      `Se van a borrar ${testDriveCount} ${noun}. Esta acción no se puede deshacer. ¿Continuar?`,
+    );
+    if (confirmed) onClearTestDrives();
   }
 
   async function handleCopy() {
@@ -76,6 +93,15 @@ export function ConfigActions({
           onClick={handleClearDecisions}
         >
           Borrar decisiones
+        </button>
+      )}
+      {testDriveCount > 0 && (
+        <button
+          type="button"
+          className={styles.button}
+          onClick={handleClearTestDrives}
+        >
+          Borrar pruebas
         </button>
       )}
       {copied && (

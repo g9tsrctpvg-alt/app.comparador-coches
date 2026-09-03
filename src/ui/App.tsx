@@ -19,9 +19,11 @@ import { AppShell } from './components/AppShell';
 import { splitByEligibility } from './components/ranking';
 import { ExplicacionPage } from './ExplicacionPage';
 import { FichaPage } from './FichaPage';
-import { useHashRoute } from './useHashRoute';
+import { VisitaPage } from './VisitaPage';
+import { useHashRoute, useVisitaCarId } from './useHashRoute';
 import { useConfig } from './useConfig';
 import { useDecisions } from './useDecisions';
+import { useTestDrives } from './useTestDrives';
 import shellStyles from './components/AppShell.module.css';
 import styles from './App.module.css';
 
@@ -38,6 +40,7 @@ export function App({
   loadReferences: loadReferencesProp = loadReferences,
 }: AppProps) {
   const route = useHashRoute();
+  const visitaCarId = useVisitaCarId();
   const catalogResult = useMemo<CatalogResult>(() => {
     try {
       // `load()` devuelve todos los coches del fichero, publicados o no
@@ -96,6 +99,19 @@ export function App({
     clearAllDecisions,
   } = useDecisions(validCarIds);
 
+  // El registro de pruebas reales (product/0037): cuarta clave persistida,
+  // hermana de `AppConfig`, `ViewState` y `DecisionLog`, instanciada aquí
+  // porque tanto la hoja de visita como el desglose del eje `prueba` la
+  // leen sobre el mismo registro.
+  const {
+    testDriveLog,
+    setJudgement,
+    clearJudgement,
+    setNotes,
+    setTestDriveDate,
+    clearAllTestDrives,
+  } = useTestDrives(validCarIds);
+
   // «Restablecer» deja la aplicación como una primera visita en las dos
   // claves de almacenamiento, no solo en `AppConfig` (product/0024,
   // requisito 13). `clearViewState` es una llamada directa al puerto, no al
@@ -125,8 +141,21 @@ export function App({
     // la rama de error, así que la guarda va dentro: puntuar un catálogo
     // vacío lanzaría y se llevaría por delante el mensaje de error de abajo.
     if (carsWithOverrides.length === 0) return [];
-    return scoreCatalog(carsWithOverrides, weights, assumptions, budgetEur);
-  }, [carsWithOverrides, weights, assumptions, budgetEur]);
+    return scoreCatalog(
+      carsWithOverrides,
+      weights,
+      assumptions,
+      budgetEur,
+      testDriveLog,
+    );
+  }, [carsWithOverrides, weights, assumptions, budgetEur, testDriveLog]);
+
+  // «Que la prueba cuente» (product/0037, requisito 2.5): sube el peso de
+  // `prueba` a 5 y solo eso. No se dispara solo al guardar una prueba —el
+  // ADR 0012 lo exige—, así que es una acción explícita, propia.
+  const handleEnableTestDriveWeight = useCallback(() => {
+    setWeights({ ...weights, prueba: 5 });
+  }, [setWeights, weights]);
 
   if ('error' in catalogResult) {
     return (
@@ -163,6 +192,27 @@ export function App({
     );
   }
 
+  if (route === 'visita') {
+    return (
+      <AppShell route={route}>
+        <VisitaPage
+          cars={catalogResult.cars}
+          scoredCars={scored}
+          weights={weights}
+          decisionLog={decisionLog}
+          onDecisionFilterChange={setDecisionFilter}
+          testDriveLog={testDriveLog}
+          onSetJudgement={setJudgement}
+          onClearJudgement={clearJudgement}
+          onSetNotes={setNotes}
+          onSetTestDriveDate={setTestDriveDate}
+          onEnableTestDriveWeight={handleEnableTestDriveWeight}
+          carId={visitaCarId}
+        />
+      </AppShell>
+    );
+  }
+
   const eligible = splitByEligibility(
     scored,
     catalogResult.cars,
@@ -193,6 +243,8 @@ export function App({
             onReset={handleReset}
             decisionCount={Object.keys(decisionLog.entries).length}
             onClearDecisions={clearAllDecisions}
+            testDriveCount={Object.keys(testDriveLog.entries).length}
+            onClearTestDrives={clearAllTestDrives}
           />
           <DecisionFilterControl
             filter={decisionLog.filter}

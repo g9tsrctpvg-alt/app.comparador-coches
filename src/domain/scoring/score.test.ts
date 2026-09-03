@@ -4,6 +4,7 @@ import { AXIS_ORDER, DEFAULT_WEIGHTS, type AxisWeights } from './weights';
 import { threeCarFixture } from './testFixtures';
 import { percentageOf, scoreCatalog } from './score';
 import { EmptyCandidateSetError } from './normalize';
+import { defaultTestDriveLog, setJudgement } from '../testDrives';
 
 const ZERO_WEIGHTS: AxisWeights = {
   carga: 0,
@@ -12,6 +13,7 @@ const ZERO_WEIGHTS: AxisWeights = {
   prestaciones: 0,
   fiabilidad: 0,
   estetica: 0,
+  prueba: 0,
   coste: 0,
 };
 
@@ -24,7 +26,7 @@ describe('scoreCatalog', () => {
     ).toThrow(EmptyCandidateSetError);
   });
 
-  it('returns one breakdown per car, covering all seven axes', () => {
+  it('returns one breakdown per car, covering all eight axes', () => {
     const result = scoreCatalog(
       threeCarFixture,
       DEFAULT_WEIGHTS,
@@ -40,6 +42,7 @@ describe('scoreCatalog', () => {
         'prestaciones',
         'fiabilidad',
         'estetica',
+        'prueba',
         'coste',
       ]);
     }
@@ -145,6 +148,46 @@ describe('scoreCatalog', () => {
         effect: -1.5,
       },
     ]);
+  });
+
+  it('defaults to no test drives at all: the prueba axis scores every car the neutral', () => {
+    const result = scoreCatalog(
+      threeCarFixture,
+      DEFAULT_WEIGHTS,
+      DEFAULT_ASSUMPTIONS,
+      47000,
+    );
+    for (const carBreakdown of result) {
+      const prueba = carBreakdown.axes.find(
+        (axis) => axis.axisId === 'prueba',
+      )!;
+      expect(prueba.score).toBe(5);
+    }
+  });
+
+  it('threads a given test-drive log into the prueba axis (requisito 2.8)', () => {
+    const carId = threeCarFixture[0]!.id;
+    const log = setJudgement(
+      defaultTestDriveLog(),
+      carId,
+      'posture',
+      5,
+      '2026-09-01',
+    );
+    const result = scoreCatalog(
+      threeCarFixture,
+      { ...DEFAULT_WEIGHTS, prueba: 5 },
+      DEFAULT_ASSUMPTIONS,
+      47000,
+      log,
+    );
+    const tested = result.find((car) => car.carId === carId)!;
+    const untested = result.find((car) => car.carId !== carId)!;
+    const testedPrueba = tested.axes.find((axis) => axis.axisId === 'prueba')!;
+    const untestedPrueba = untested.axes.find(
+      (axis) => axis.axisId === 'prueba',
+    )!;
+    expect(testedPrueba.score).toBeGreaterThan(untestedPrueba.score);
   });
 });
 

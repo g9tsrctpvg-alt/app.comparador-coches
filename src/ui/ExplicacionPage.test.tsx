@@ -48,16 +48,17 @@ describe('ExplicacionPage', () => {
     );
   });
 
-  it('shows all thirteen anchors with a value taken from the domain', () => {
+  it('shows all eighteen anchors with a value taken from the domain', () => {
     const markup = render();
     // Cinco ejes de dos magnitudes cada uno —diario, prestaciones,
     // fiabilidad, estética (editable por el usuario, pero con la misma
     // forma de anclaje) y coste—, más `carga` con una sola magnitud y
     // `habitabilidad` con dos (product/0033 parte lo que antes era `viaje`,
-    // de tres magnitudes, sin cambiar el total): trece en total.
+    // de tres magnitudes, sin cambiar el total): trece. `prueba` añade
+    // cinco más, uno por juicio (product/0037): dieciocho en total.
     const anchorCount = (markup.match(/→ 10/g) ?? []).length;
-    expect(anchorCount).toBe(13);
-    expect((markup.match(/→ 0/g) ?? []).length).toBe(13);
+    expect(anchorCount).toBe(18);
+    expect((markup.match(/→ 0/g) ?? []).length).toBe(18);
   });
 
   it('gives every anchor row its own non-empty reasoning text — none left blank by index', () => {
@@ -70,7 +71,7 @@ describe('ExplicacionPage', () => {
     const markup = render();
     const reasoningCells =
       markup.match(/<dd class="[^"]*reasoning[^"]*">([\s\S]*?)<\/dd>/g) ?? [];
-    expect(reasoningCells).toHaveLength(13);
+    expect(reasoningCells).toHaveLength(18);
     for (const cell of reasoningCells) {
       expect(cell.replace(/<[^>]*>/g, '').trim().length).toBeGreaterThan(0);
     }
@@ -138,7 +139,7 @@ describe('ExplicacionPage', () => {
     const markup = render();
     for (const axisId of AXIS_ORDER) {
       const themeClass = AXIS_THEME_CLASS[axisId];
-      // Dos sitios por eje: la tarjeta de la sección «Los siete ejes» y su
+      // Dos sitios por eje: la tarjeta de la sección «Los ocho ejes» y su
       // fila en la lista de pesos.
       expect(markup.split(themeClass).length - 1, axisId).toBe(2);
     }

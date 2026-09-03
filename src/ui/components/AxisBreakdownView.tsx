@@ -1,6 +1,7 @@
 import type { AxisBreakdown } from '../../domain/scoring/breakdown';
 import { AXIS_THEME_CLASS } from '../axisTheme';
 import { formatEur, formatNumber, formatSigned } from '../format';
+import { visitaHashFor } from '../useHashRoute';
 import primitives from '../primitives.module.css';
 import { AxisIcon } from './AxisIcon';
 import styles from './AxisBreakdownView.module.css';
@@ -14,9 +15,18 @@ function formatValue(value: number, unit?: string): string {
 
 interface AxisBreakdownViewProps {
   breakdown: AxisBreakdown;
+  /** Solo hace falta para el enlace del eje `prueba` a su hoja de visita
+   * cuando el coche no se ha probado (product/0037, requisito 6.4).
+   * Opcional para no obligar a los demás sitios que ya llaman a este
+   * componente —`ScoreGapPanel`, que compara dos coches a la vez— a saber
+   * de qué `carId` se trata. */
+  carId?: string;
 }
 
-export function AxisBreakdownView({ breakdown }: AxisBreakdownViewProps) {
+export function AxisBreakdownView({
+  breakdown,
+  carId,
+}: AxisBreakdownViewProps) {
   const barPct = Math.max(0, Math.min(100, (breakdown.score / 10) * 100));
   const dimmed = breakdown.weight === 0;
 
@@ -113,6 +123,11 @@ export function AxisBreakdownView({ breakdown }: AxisBreakdownViewProps) {
               </li>
             ))}
           </ul>
+          {breakdown.axisId === 'prueba' && carId !== undefined && (
+            <a className={primitives.buttonGhost} href={visitaHashFor(carId)}>
+              Ir a la hoja de visita
+            </a>
+          )}
         </div>
       )}
 

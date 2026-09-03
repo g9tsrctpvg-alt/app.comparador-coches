@@ -153,6 +153,7 @@ describe('restoreConfig', () => {
         prestaciones: 2,
         fiabilidad: 4,
         estetica: 6,
+        prueba: 0,
         coste: 5,
       });
       expect(result.config.budgetEur).toBe(30000);
@@ -206,6 +207,73 @@ describe('restoreConfig', () => {
       // rechaza y el descarte de campo cae a los valores por defecto.
       expect(result.discardedEntirely).toBe(false);
       expect(result.config.weights).toEqual(DEFAULT_WEIGHTS);
+    });
+  });
+
+  describe('migration from version 3 to 4 (product/0037, requisito 4.2)', () => {
+    it('adds prueba: 0, keeping the other seven weights intact', () => {
+      const raw = {
+        version: 3,
+        weights: {
+          carga: 3.5,
+          habitabilidad: 3.5,
+          diario: 3,
+          prestaciones: 2,
+          fiabilidad: 4,
+          estetica: 6,
+          coste: 5,
+        },
+        assumptions: DEFAULT_ASSUMPTIONS,
+        budgetEur: 30000,
+        eliminatoryRules: [],
+        hideFailingRules: true,
+        overrides: {},
+      };
+      const result = restoreConfig(raw, CARS);
+      expect(result.discardedEntirely).toBe(false);
+      expect(result.config.version).toBe(CONFIG_VERSION);
+      expect(result.config.weights).toEqual({
+        carga: 3.5,
+        habitabilidad: 3.5,
+        diario: 3,
+        prestaciones: 2,
+        fiabilidad: 4,
+        estetica: 6,
+        prueba: 0,
+        coste: 5,
+      });
+    });
+
+    it('composes with the version 2 migration: version 2 -> 3 -> 4 in one pass', () => {
+      const raw = {
+        version: 2,
+        weights: {
+          viaje: 10,
+          diario: 3,
+          prestaciones: 2,
+          fiabilidad: 4,
+          estetica: 6,
+          coste: 5,
+        },
+        assumptions: DEFAULT_ASSUMPTIONS,
+        budgetEur: DEFAULT_BUDGET_EUR,
+        eliminatoryRules: [],
+        hideFailingRules: false,
+        overrides: {},
+      };
+      const result = restoreConfig(raw, CARS);
+      expect(result.discardedEntirely).toBe(false);
+      expect(result.config.version).toBe(CONFIG_VERSION);
+      expect(result.config.weights).toEqual({
+        carga: 5,
+        habitabilidad: 5,
+        diario: 3,
+        prestaciones: 2,
+        fiabilidad: 4,
+        estetica: 6,
+        prueba: 0,
+        coste: 5,
+      });
     });
   });
 

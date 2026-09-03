@@ -11,6 +11,7 @@ import { splitScoreGap, topGapLines } from '../../domain/scoring/scoreGap';
 import type { AxisWeights } from '../../domain/scoring/weights';
 import { DECISION_LABELS } from '../decisionLabels';
 import { formatDate, formatEur, formatNumber, formatSigned } from '../format';
+import { visitaHashFor } from '../useHashRoute';
 import primitives from '../primitives.module.css';
 import { AxisBreakdownView } from './AxisBreakdownView';
 import { DecisionEditor } from './DecisionEditor';
@@ -184,6 +185,9 @@ export function RankingRow({
         onSetDecision={onSetDecision}
         onClear={onClearDecision}
       />
+      <a className={primitives.buttonGhost} href={visitaHashFor(car.carId)}>
+        Hoja de visita
+      </a>
 
       {compareTo && (
         <GapSummaryLine car={car} compareTo={compareTo} weights={weights} />
@@ -219,7 +223,11 @@ export function RankingRow({
       )}
 
       {car.axes.map((axis) => (
-        <AxisBreakdownView key={axis.axisId} breakdown={axis} />
+        <AxisBreakdownView
+          key={axis.axisId}
+          breakdown={axis}
+          carId={car.carId}
+        />
       ))}
     </div>
   );

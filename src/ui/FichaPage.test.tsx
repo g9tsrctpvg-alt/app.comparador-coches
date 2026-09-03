@@ -1061,6 +1061,24 @@ describe('decision status in the ficha (product/0030)', () => {
     expect(markup).toContain('markShortlist');
   });
 
+  it('links to the visit sheet of every candidate column, never for the reference (product/0037, requisito 6.2)', () => {
+    const markup = renderToStaticMarkup(
+      <FichaPage
+        cars={threeCarFixture}
+        references={[referenceFixture()]}
+        scoredCars={SCORED_FIXTURE}
+        weights={DEFAULT_WEIGHTS}
+        decisionLog={EMPTY_DECISIONS}
+        onSetDecision={() => undefined}
+        onClearDecision={() => undefined}
+      />,
+    );
+    for (const car of threeCarFixture) {
+      expect(markup).toContain(`href="#/visita/${car.id}"`);
+    }
+    expect(markup).toContain('Hoja de visita');
+  });
+
   // El `<select>` «Comparar» sigue enseñando los quince candidatos sin
   // filtrar a propósito (dependencias y supuestos, requisito 4.4): elegir
   // comparación no debe verse limitado por la lista corta. Así que estos

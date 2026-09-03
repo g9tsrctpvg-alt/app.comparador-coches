@@ -7,6 +7,7 @@ import {
 } from '../../domain/ficha';
 import { photoSrc } from '../../domain/photo';
 import {
+  activeAxesOf,
   calibrate,
   MAX_MATCHUPS,
   type CarProfile,
@@ -136,10 +137,16 @@ export function MatchupView({
  * tampoco se ve ninguna cifra del modelo (requisito 3.4): los ejes se
  * marcan por su nombre, sin nota ni desglose detrás.
  *
+ * Solo ofrece los ejes **activos** de esta tanda (`activeAxes`, product/0037,
+ * requisito 7.4): un eje constante en el conjunto —hoy, `prueba` mientras
+ * nadie se ha probado— nunca decide ningún duelo, así que marcarlo
+ * afirmaría una desigualdad que sus notas no pueden sostener.
+ *
  * Exportado solo para el test, por el mismo motivo que `MatchupView`.
  */
 export function AttributionStep({
   carName,
+  activeAxes,
   selected,
   onToggle,
   onNext,
@@ -147,6 +154,7 @@ export function AttributionStep({
   onUndo,
 }: {
   carName: string;
+  activeAxes: AxisId[];
   selected: ReadonlySet<AxisId>;
   onToggle: (axisId: AxisId) => void;
   onNext: () => void;
@@ -170,7 +178,7 @@ export function AttributionStep({
         marcar nada.
       </p>
       <ul className={styles.axisToggles}>
-        {AXIS_ORDER.map((axisId) => {
+        {activeAxes.map((axisId) => {
           const isSelected = selected.has(axisId);
           return (
             <li key={axisId}>
@@ -336,9 +344,14 @@ export function CalibrationDialog({
   }, []);
 
   const state = useMemo(
-    () => calibrate(profiles, outcomes),
-    [profiles, outcomes],
+    () => calibrate(profiles, outcomes, currentWeights),
+    [profiles, outcomes, currentWeights],
   );
+
+  // Los ejes que esta tanda puede decidir de verdad (product/0037, requisito
+  // 7.4): un eje constante en `profiles` —hoy, `prueba` mientras nadie se
+  // ha probado— nunca se ofrece como decisivo.
+  const activeAxes = useMemo(() => activeAxesOf(profiles), [profiles]);
 
   const entities = useMemo(() => buildFicha(cars, []), [cars]);
 
@@ -459,6 +472,7 @@ export function CalibrationDialog({
         {matchup !== null && pair !== null && pendingPreference !== null && (
           <AttributionStep
             carName={pendingPreference === 'a' ? pair.a.name : pair.b.name}
+            activeAxes={activeAxes}
             selected={selectedAxes}
             onToggle={toggleAxis}
             onNext={() =>

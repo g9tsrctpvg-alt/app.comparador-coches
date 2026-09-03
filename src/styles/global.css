@@ -165,6 +165,14 @@
   --color-axis-fiabilidad: #31417a;
   --color-axis-estetica: #8d4784;
   --color-axis-coste: #7d6417;
+  /* `prueba` es el octavo eje (product/0037): un naranja quemado, elegido
+   * por el mismo criterio con que se eligió `habitabilidad`. Su L* (41,1)
+   * cae dentro del rango de los otros siete (29-44); su ΔE76 mínimo contra
+   * ellos es 27,2 (`coste`), muy por encima de lo que hace falta para
+   * distinguirlos a simple vista; y su distancia mínima bajo protanopia
+   * simulada es 20,3 (también contra `coste`), muy por encima del peor par
+   * que la paleta ya tenía (5,2) — no lo empeora. */
+  --color-axis-prueba: #994c00;
 
   /* **No hay tinte por eje**, y no es un olvido. La versión inicial de
    * `technical/0011` declaraba los seis al 8 % para teñir el fondo de la
@@ -429,6 +437,16 @@
    * la pista todavía se lee como una barra y no como una raya. */
   --size-gap-label-basis: 11rem;
   --size-gap-track-basis: 8rem;
+
+  /* La hoja de visita (product/0037): `--size-visita-photo` es el ancho de
+   * la foto frontal en la cabecera de identidad, el mismo orden de
+   * magnitud que la columna de la ficha. `--size-visita-judgement` acota
+   * cada fila de juicio a una medida de lectura cómoda para su pregunta,
+   * sin llegar al ancho de página entero. `--size-visita-notes` es la
+   * altura mínima del cuadro de notas: cabe una frase larga sin desplazar. */
+  --size-visita-photo: 12rem;
+  --size-visita-judgement: 32rem;
+  --size-visita-notes: 6rem;
 }
 
 /* Reset mínimo (technical/0004, requisito 7). */

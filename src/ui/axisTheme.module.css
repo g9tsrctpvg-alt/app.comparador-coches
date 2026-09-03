@@ -41,3 +41,7 @@
 .coste {
   --axis-color: var(--color-axis-coste);
 }
+
+.prueba {
+  --axis-color: var(--color-axis-prueba);
+}
