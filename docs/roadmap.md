@@ -59,13 +59,12 @@ que no vuelva sin argumento nuevo.
 
 | Asunto | Detalle en |
 | --- | --- |
-| `product/0019` — la portada enseña el coche: redactada el 2026-09-04, `draft`, esperando el gate humano | *Fase 5* |
 | `product/0014` se queda en `implemented`: su criterio de dos columnas a 320px no se puede cumplir con los anchos vigentes | *Deudas abiertas* |
 | `technical/0006` se queda en `implemented`: dos criterios incumplidos (`overflow-x`, composición de la pastilla activa) y el despliegue por verificar | *Deudas abiertas* |
 | `product/0015` — falta ejecutar de verdad `unpublish-model` o `republish-model` sobre un coche real | *Más adelante* |
 | `product/0016` — `implemented`, sin consolidar | *Más adelante* |
 | Datos del catálogo: fotos que faltan y acabados que no coinciden, magnitudes estimadas sin fuente firme, hombros mínimos mezclados con máximos, cuatro híbridos sin batería, tres modelos sin diámetro de giro entre bordillos, dieciocho registros sin carga máxima en techo, la versión del EV3, tres `faceliftYear` sin confirmar, la fiabilidad de Jeep asignada y no medida (ya corroborada), precios de julio de 2026, dos fotos en CDN de concesionario | *Deudas abiertas* |
-| Código: cotas de los campos numéricos en `CarSchema`, andamiaje repetido de los ocho ejes y `normalizeAll` sin uso, `ui/` fuera del suelo de cobertura, `pensandoVender`/`residualPct5y` desconectados, dos escalones tipográficos sin consumidor, `.duelChipActive` sin tratamiento visual, `index.html` sin icono | *Deudas abiertas* |
+| Código: cotas de los campos numéricos en `CarSchema`, andamiaje repetido de los ocho ejes y `normalizeAll` sin uso, `ui/` fuera del suelo de cobertura, `pensandoVender`/`residualPct5y` desconectados, dos escalones tipográficos sin consumidor, `.duelChipActive` sin tratamiento visual, `index.html` sin icono, la foto del cara a cara de la calibración sin degradación ni alternativa | *Deudas abiertas* |
 | Infraestructura y proceso: acciones de GitHub sin fijar a SHA, *smoke test* post-despliegue con el disparador ya cumplido, `docs/estado/observabilidad.md` sin declarar | *Deudas abiertas* |
 | Ocho aplazamientos conscientes, cada uno con su disparador | *Aplazamientos con disparador* |
 
@@ -297,7 +296,7 @@ entera verde en local y cobertura al 100 %.
 | Gate humano: aprobar el ADR 0008 y las dos specs, y marcar `product/0013` como `superseded` | Hecha — 2026-08-08, en commit propio sin implementación |
 | Implementar y verificar las dos specs | Hecha — CI entera en verde en local, cobertura 100 % en `domain/`+`data/`+`logging/`, verificación manual en navegador a 320/592/960/1440px, despliegue real confirmado tras el merge de PR #57 |
 | Consolidar `docs/estado/interfaz.md` y `dominio.md`, y las specs (`technical/0005`, `product/0018`, `technical/0004`, `product/0011`) | Hecha — 2026-08-12. `product/0014` se queda fuera: sigue `implemented`, no `verified` (ver deudas abiertas), pero su comportamiento vigente —fotos, columna fijada, diálogo— ya se lee en `docs/estado/interfaz.md` y `dominio.md`, escrito como parte de esta misma consolidación porque `product/0018` la enmienda sin sustituirla |
-| `product/0019` — la portada enseña el coche | `draft` — redactada el 2026-09-04, pendiente del gate humano |
+| `product/0019` — la portada enseña el coche | **Descartada** el 2026-09-04, por decisión del usuario, antes del gate. El fichero de spec se borra y el número queda quemado: no se reutiliza |
 | `product/0020` — los campos esenciales destacan precio y potencia | `consolidated` |
 | `technical/0006` — menú de navegación: pastillas y selector en móvil | `implemented` — dos criterios de aceptación no se cumplen tal como están escritos, uno no es comprobable sin desplegar (ver deudas abiertas); el resto, verificado |
 | Gate humano: aprobar `product/0020` y `technical/0006` | Hecha — 2026-08-12, en commit propio sin implementación, tras confirmación explícita del usuario en modo plan |
@@ -382,24 +381,33 @@ familia que la pinta, y la ficha unificada consume el shell, el primitivo de
 tabla y los papeles de dirección que `technical/0005` declara. Al revés habría
 que escribir dos veces la cabecera que aquélla elimina.
 
-**`product/0019` estuvo sin redactar a propósito.** Enseñar la foto del coche
-en la tarjeta del líder y en la fila desplegada es la mayor ganancia de
-«producto acabado» por unidad de trabajo, y reutiliza `photoSrc` y el degradado
-a hueco que `product/0014` ya tiene. Pero **cambia qué información muestra la
-portada**, así que es producto y no cabe en `technical/0005`. Se separó para
-que no bloqueara al resto, y se redactó el 2026-09-04, cuando ya era lo único
-que mantenía la fase abierta.
+**`product/0019` se descartó el 2026-09-04, y la portada no enseña el coche.**
+Estuvo sin redactar a propósito —enseñar la foto **cambia qué información
+muestra la portada**, así que era producto y no cabía en `technical/0005`—, se
+redactó ese día, cuando ya era la única entrega de la fase sin spec, y no llegó
+al gate humano: **decisión del usuario, sobre la spec ya escrita.** Con ella
+fuera, lo único que la fase 5 tiene abierto es la deuda de `technical/0006`.
 
-**Lo que la redacción encontró y la spec se lleva dentro.** La foto no se
-pinta hoy de una sola manera: `PhotoBox` degrada al hueco rotulado tanto si la
-foto falta como si su `src` falla, pero el cara a cara de la calibración
+El motivo manda sobre el argumento de «producto acabado» que la sostenía:
+**esta aplicación se usa en el móvil, y ahí el recurso escaso es el alto de
+pantalla, no el atractivo.** Una foto no se añade, desplaza: empuja hacia abajo
+las cifras, la línea de apoyo y el desglose por los que se entra a la portada.
+Cambiar información por imagen no compensa en la vista que de verdad se usa. Lo
+que la spec proponía —foto y crédito en la tarjeta del líder y en la fila
+desplegada, `coverPhoto` en el dominio y una sola implementación de la
+degradación— queda registrado aquí y **el fichero de spec se borra**: un `draft`
+que nadie va a aprobar es ruido para quien lea `specs/product/` después. El
+número `0019` no se reutiliza (`docs/proceso/ciclo-de-spec.md` §1). Dos punteros
+quedan colgando a propósito y se resuelven leyendo esto: la fila de arriba en
+esta misma tabla y la mención de `technical/0005`, que está `consolidated` y no
+se edita.
+
+**La redacción sí dejó un defecto encontrado**, independiente de la portada y
+por tanto no descartado con ella: el cara a cara de la calibración
 (`product/0035`) lee `photos.front` directo, sin `onError` y sin alternativa
-cuando el coche no declara frontal — con el resultado, comprobable hoy en
-producción, de que el C5 Aircross se enseña como «Sin foto» en la tanda de
-calibración teniendo dos. Por eso `product/0019` no solo añade dos fotos a la
-portada: declara `coverPhoto` en el dominio —qué foto representa a un coche
-cuando la elige la aplicación y no la persona— y deja una sola implementación
-de la degradación para los cuatro sitios que pintan una foto.
+cuando el coche no declara frontal, así que el C5 Aircross se enseña como «Sin
+foto» teniendo dos. Queda anotado en *Deudas abiertas*, no como trabajo
+comprometido.
 
 **Lo que esta fase no toca:** la paleta —los siete papeles de `product/0009`
 conservan su valor—, el esquema oscuro —sigue aplazado por el ADR 0006 con su
@@ -850,6 +858,7 @@ una sorpresa esperando fecha.
 | Alta de `nissan-x-trail-e-power`: **mantenimiento anual** estimado (265 €/año derivados del contrato oficial de mantenimiento anual de 3 años de Nissan España, 795 €, no un coste por revisión desglosado); la **batería** (2,1 kWh) sale de motor.es porque km77 responde «No disponible», y la **anchura de hombros** es la máxima de km77 mientras la del Qashqai de esta misma alta es la mínima, así que las dos entran en la deuda de hombros mezclados que ya arrastra el catálogo. No declara **valor residual a 5 años** | 2026-08-30 | Encontrar un coste de mantenimiento desglosado por revisión; confirmar la capacidad de la batería en una ficha del fabricante; una fuente de valor residual española específica del modelo |
 | Alta de `product/0034`: **dieciocho de los veintidós registros no declaran `maxRoofLoadKg`** —los veintiún candidatos del catálogo salvo `honda-cr-v-e-hev` (75 kg), `nissan-qashqai-e-power` (75 kg), `nissan-x-trail-e-power` (100 kg) y `honda-zr-v` (60 kg, accesorios oficiales de Honda España), más la referencia (Alfa Romeo Giulietta)—. No es que falte el dato: es que la búsqueda solo encontró una fuente que cumpliera la definición estricta de la spec —carga **dinámica**, del propio fabricante, no la capacidad que anuncia una marca de barras de accesorio (Thule, OMAC, Menabo…) ni la carga **estática** con el coche parado— para esos cuatro. El resto de fabricantes no publica el dato en una página consultable, o solo publica cifras de accesorios de terceros que la spec rechaza a propósito | 2026-08-31 | Encontrar, para cada modelo que falte, la carga dinámica máxima sobre el techo en la documentación técnica o de accesorios del propio fabricante, y declararla con esa fuente |
 | Alta de `honda-zr-v`: falta la foto de **maletero** (`check:photos` en verde con 4 de las 5 vistas) — ninguna fuente consultada publica el maletero abierto del acabado Advance. La **frontal** se encontró más tarde el mismo día en el configurador oficial de Honda España, la misma fuente que ya daba la de lateral, con el acabado Advance confirmado en el propio nombre de fichero (`27YM_ZRV_ADVANCE_EU_front...`). La de **interior** es de un ZR-V e:HEV expuesto en el Auto Zürich 2023, acabado sin confirmar como Advance —usada con conformidad expresa del usuario (2026-09-01) para la valoración de estética, pese a no cumplir el criterio habitual de verificación de acabado— | 2026-09-01 | Encontrar el maletero abierto del acabado Advance en la sala de prensa de Honda, el configurador oficial o un concesionario (orígenes 1, 3 y 4 de `photo-sourcing.md`); sustituir el interior por uno confirmado del Advance si aparece |
+| El cara a cara de la tanda de calibración (`product/0035`) lee `entity.photos.front` directamente, sin `onError` y sin alternativa cuando el coche no declara frontal, mientras que la ficha (`PhotoBox`, `product/0014`) degrada al hueco rotulado en los dos casos. Efecto real en producción: el **C5 Aircross**, que es candidato elegible y no declara `front`, se enseña como «Sin foto» en la tanda teniendo `side` e `interior`; y una URL caída deja el icono de imagen rota. Detectado al redactar `product/0019`, y **no descartado con ella**: es un defecto de la calibración, no de la portada. La corrección que se había pensado —`coverPhoto` en el dominio y una sola implementación de la degradación— sigue siendo válida y no obliga a enseñar ninguna foto nueva | 2026-09-04 | Una spec propia que unifique cómo se pinta una foto, o la decisión explícita de que enseñar «Sin foto» de un coche que tiene fotos es aceptable en el cara a cara |
 | Alta de `honda-zr-v`: **batería de tracción** no publicada por km77 («no especificada») y sin **valor residual a 5 años** — el modelo se vende en España desde 2023, sin histórico de reventa a ese plazo todavía | 2026-09-01 | Encontrar la capacidad de la batería en documentación técnica del fabricante; esperar a que el ZR-V tenga histórico de mercado de segunda mano a 5 años |
 
 ## Aplazamientos con disparador
