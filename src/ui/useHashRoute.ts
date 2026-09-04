@@ -7,8 +7,13 @@ export const FICHA_HASH = '#/ficha';
  * vista, para que ningún enlace ya compartido deje de llevar a algo. */
 export const FICHA_TECNICA_HASH = '#/ficha-tecnica';
 export const FICHA_COMPLETA_HASH = '#/ficha-completa';
+/** El índice de la hoja de visita (product/0037, requisito 5.1). La hoja de
+ * un coche concreto es `${VISITA_HASH}/<carId>`, sin una constante propia:
+ * se construye y se lee con `visitaHashFor`/`visitaCarIdFromHash`. */
+export const VISITA_HASH = '#/visita';
+const VISITA_CAR_PREFIX = `${VISITA_HASH}/`;
 
-export type Route = 'comparativa' | 'explicacion' | 'ficha';
+export type Route = 'comparativa' | 'explicacion' | 'ficha' | 'visita';
 
 function routeFromHash(hash: string): Route {
   if (hash === EXPLICACION_HASH) return 'explicacion';
@@ -19,7 +24,31 @@ function routeFromHash(hash: string): Route {
   ) {
     return 'ficha';
   }
+  if (hash === VISITA_HASH || hash.startsWith(VISITA_CAR_PREFIX)) {
+    return 'visita';
+  }
   return 'comparativa';
+}
+
+/** El enlace a la hoja de visita de un coche concreto. */
+export function visitaHashFor(carId: string): string {
+  return `${VISITA_CAR_PREFIX}${encodeURIComponent(carId)}`;
+}
+
+/** El `carId` de la hoja de visita vigente, o `null` en el índice —o en
+ * cualquier otra ruta—. */
+export function visitaCarIdFromHash(hash: string): string | null {
+  if (!hash.startsWith(VISITA_CAR_PREFIX)) return null;
+  const carId = hash.slice(VISITA_CAR_PREFIX.length);
+  if (carId.length === 0) return null;
+  try {
+    return decodeURIComponent(carId);
+  } catch {
+    // Un `%` mal formado en el fragmento (tecleado a mano, o un enlace
+    // roto) no debe tirar la vista entera: se trata como si no hubiera
+    // `carId`, igual que un fragmento vacío.
+    return null;
+  }
 }
 
 /** `renderToStaticMarkup` —lo que usan los tests de `src/ui/`— corre en
@@ -43,4 +72,23 @@ export function useHashRoute(): Route {
   }, []);
 
   return route;
+}
+
+/** El `carId` de la hoja de visita vigente (product/0037, requisito 5.1):
+ * `null` en el índice, en cualquier otra ruta, o si la app no está montada
+ * en un navegador real. Reactivo al mismo `hashchange` que `useHashRoute`,
+ * pero es un hook aparte porque no toda vista necesita saberlo. */
+export function useVisitaCarId(): string | null {
+  const [carId, setCarId] = useState<string | null>(() =>
+    visitaCarIdFromHash(currentHash()),
+  );
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const onHashChange = () => setCarId(visitaCarIdFromHash(currentHash()));
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, []);
+
+  return carId;
 }

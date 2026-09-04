@@ -14,7 +14,9 @@ import {
  * que se usa a mano abajo para verificar cada cruce. `habitabilidad` se
  * mantiene siempre empatada entre A y B en las puntuaciones de más abajo,
  * igual que `diario`, `fiabilidad`, `estetica` y `coste`: así su presencia
- * no cambia ningún cálculo hecho a mano antes de que el eje existiera. */
+ * no cambia ningún cálculo hecho a mano antes de que el eje existiera.
+ * `prueba` nace con peso 0, igual que `DEFAULT_WEIGHTS` (product/0037): su
+ * contribución es siempre 0, así que tampoco cambia ningún cálculo. */
 const TEST_WEIGHTS: Record<AxisId, number> = {
   carga: 4,
   habitabilidad: 2,
@@ -22,6 +24,7 @@ const TEST_WEIGHTS: Record<AxisId, number> = {
   prestaciones: 1,
   fiabilidad: 2,
   estetica: 2,
+  prueba: 0,
   coste: 1,
 };
 
@@ -66,6 +69,7 @@ const carA = carBreakdown('a', {
   prestaciones: 5,
   fiabilidad: 8,
   estetica: 7,
+  prueba: 7,
   coste: 5,
 });
 const carB = carBreakdown('b', {
@@ -75,6 +79,7 @@ const carB = carBreakdown('b', {
   prestaciones: 8,
   fiabilidad: 8,
   estetica: 7,
+  prueba: 7,
   coste: 5,
 });
 
@@ -87,16 +92,16 @@ describe('splitScoreGap', () => {
     expect(gap.percentageDiff).toBeCloseTo((5 / (10 * 15)) * 100, 9);
   });
 
-  it('sums the seven lines back into the total difference (requisito 1.2)', () => {
+  it('sums the eight lines back into the total difference (requisito 1.2)', () => {
     const gap = splitScoreGap(carA, carB);
     const summed = gap.lines.reduce((sum, line) => sum + line.value, 0);
     expect(summed).toBeCloseTo(gap.totalDiff, 9);
-    expect(gap.lines).toHaveLength(7);
+    expect(gap.lines).toHaveLength(8);
   });
 
   it('orders lines by descending absolute value, independent of AXIS_ORDER (requisito 1.3)', () => {
     const gap = splitScoreGap(carA, carB);
-    // carga (8) > prestaciones (-3) > los cinco empates a 0, que
+    // carga (8) > prestaciones (-3) > los seis empates a 0, que
     // conservan su orden de `AXIS_ORDER` porque el sort es estable.
     expect(gap.lines.map((line) => line.axisId)).toEqual([
       'carga',
@@ -105,6 +110,7 @@ describe('splitScoreGap', () => {
       'diario',
       'fiabilidad',
       'estetica',
+      'prueba',
       'coste',
     ]);
     expect(gap.lines[0]).toMatchObject({
@@ -182,7 +188,7 @@ describe('crossingsInRange', () => {
   });
 
   it('is empty when A leads every axis and no single weight can flip the result (requisito 5.5)', () => {
-    // A gana los siete ejes por 1 punto; con los pesos por defecto sumando
+    // A gana los ocho ejes por 1 punto; con los pesos por defecto sumando
     // 15, ningún eje puede aportar por sí solo más de 4 (su peso máximo,
     // carga), así que ninguno cruza dentro de 0-10.
     const dominant = carBreakdown('dominant', {
@@ -192,6 +198,7 @@ describe('crossingsInRange', () => {
       prestaciones: 6,
       fiabilidad: 6,
       estetica: 6,
+      prueba: 6,
       coste: 6,
     });
     const dominated = carBreakdown('dominated', {
@@ -201,11 +208,12 @@ describe('crossingsInRange', () => {
       prestaciones: 5,
       fiabilidad: 5,
       estetica: 5,
+      prueba: 5,
       coste: 5,
     });
     const gap = splitScoreGap(dominant, dominated);
     expect(crossingsInRange(gap)).toEqual([]);
-    expect(stableAxes(gap)).toHaveLength(7);
+    expect(stableAxes(gap)).toHaveLength(8);
   });
 });
 
@@ -223,6 +231,7 @@ describe('stableAxes', () => {
       'diario',
       'fiabilidad',
       'estetica',
+      'prueba',
       'coste',
     ]);
   });
@@ -253,9 +262,10 @@ describe('topGapLines', () => {
       prestaciones: 8,
       fiabilidad: 8,
       estetica: 7,
+      prueba: 7,
       coste: 5,
     });
-    // Igual que B salvo en carga: los otros seis ejes empatan en 0.
+    // Igual que B salvo en carga: los otros siete ejes empatan en 0.
     const gap = splitScoreGap(dominant, carB);
     expect(topGapLines(gap).map((line) => line.axisId)).toEqual(['carga']);
   });

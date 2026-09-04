@@ -1,4 +1,5 @@
 import type { Car } from '../car';
+import { defaultTestDriveLog, type TestDriveLog } from '../testDrives';
 import type { GlobalAssumptions } from './assumptions';
 import { AXIS_ORDER, type AxisId, type AxisWeights } from './weights';
 import type { AxisBreakdown, CarScoreBreakdown } from './breakdown';
@@ -10,6 +11,7 @@ import { buildDiarioBreakdown } from './axes/diario';
 import { buildPrestacionesBreakdown } from './axes/prestaciones';
 import { buildFiabilidadBreakdown } from './axes/fiabilidad';
 import { buildEsteticaBreakdown } from './axes/estetica';
+import { buildPruebaBreakdown } from './axes/prueba';
 import { buildCosteBreakdown } from './axes/coste';
 
 /** `total` como porcentaje de `10 × Σ pesos`, el máximo posible con los
@@ -21,11 +23,20 @@ export function percentageOf(total: number, weights: AxisWeights): number {
   return (total / (10 * weightSum)) * 100;
 }
 
+/**
+ * `testDriveLog` es la primera anotación del usuario que entra en la
+ * puntuación (product/0037, requisito 2.8): a diferencia del estado de
+ * decisión (`product/0030`) y de los imprescindibles (`product/0031`), que
+ * dicen qué se ve, este dice qué se sabe del coche. Por defecto, «ninguna
+ * prueba», para que el resto de llamadas —tests, snapshots— no tengan que
+ * conocer un cuarto objeto persistido que no les importa.
+ */
 export function scoreCatalog(
   cars: Car[],
   weights: AxisWeights,
   assumptions: GlobalAssumptions,
   budgetEur: number,
+  testDriveLog: TestDriveLog = defaultTestDriveLog(),
 ): CarScoreBreakdown[] {
   if (cars.length === 0) {
     // Ya no hay ningún eje que normalice contra el conjunto de candidatos
@@ -45,6 +56,7 @@ export function scoreCatalog(
     prestaciones: buildPrestacionesBreakdown(cars, weights.prestaciones),
     fiabilidad: buildFiabilidadBreakdown(cars, weights.fiabilidad),
     estetica: buildEsteticaBreakdown(cars, assumptions, weights.estetica),
+    prueba: buildPruebaBreakdown(cars, testDriveLog, weights.prueba),
     coste: buildCosteBreakdown(cars, assumptions, weights.coste),
   };
 

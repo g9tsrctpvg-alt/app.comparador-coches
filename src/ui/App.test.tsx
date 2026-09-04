@@ -169,6 +169,73 @@ describe('App', () => {
 
       consoleError.mockRestore();
     });
+
+    it("keeps an unpublished car's saved decision and test-drive log instead of discarding them as car_not_in_catalog", () => {
+      // `unpublish-model` promete conservar los datos del coche al
+      // despublicarlo. Antes, `validCarIds` se calculaba solo sobre los
+      // coches publicados, así que la siguiente carga descartaba la
+      // decisión y la prueba real guardadas de EV3 con
+      // `car_not_in_catalog` en cuanto se despublicaba.
+      const map = new Map<string, string>([
+        [
+          'comparador-coches:decisions',
+          JSON.stringify({
+            version: 1,
+            entries: {
+              'kia-ev3': {
+                state: 'shortlist',
+                reason: undefined,
+                date: '2026-01-01',
+              },
+            },
+            filter: 'all',
+          }),
+        ],
+        [
+          'comparador-coches:testdrives',
+          JSON.stringify({
+            version: 1,
+            entries: {
+              'kia-ev3': {
+                ratings: { posture: 4 },
+                notes: 'buen maletero',
+                date: '2026-01-01',
+              },
+            },
+          }),
+        ],
+      ]);
+      const storage = {
+        getItem: (key: string) => map.get(key) ?? null,
+        setItem: (key: string, value: string) => {
+          map.set(key, value);
+        },
+        removeItem: (key: string) => {
+          map.delete(key);
+        },
+      };
+      vi.stubGlobal('window', {
+        location: { hash: '', search: '', href: 'http://x.test/' },
+        localStorage: storage,
+        addEventListener: () => undefined,
+        removeEventListener: () => undefined,
+      });
+
+      const consoleError = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => undefined);
+
+      renderToStaticMarkup(<App load={withEv3Unpublished} />);
+
+      const discardedEv3 = consoleError.mock.calls.some(([entry]) => {
+        const text = typeof entry === 'string' ? entry : JSON.stringify(entry);
+        return text.includes('car_not_in_catalog') && text.includes('kia-ev3');
+      });
+      expect(discardedEv3).toBe(false);
+
+      consoleError.mockRestore();
+      vi.unstubAllGlobals();
+    });
   });
 
   describe('configuración persistente y compartible (product/0012)', () => {

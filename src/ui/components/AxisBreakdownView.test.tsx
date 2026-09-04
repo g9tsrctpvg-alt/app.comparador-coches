@@ -171,3 +171,49 @@ describe('AxisBreakdownView', () => {
     }
   });
 });
+
+describe('the prueba axis links to the visit sheet when untested (product/0037, requisito 6.4)', () => {
+  const untestedInfo = [
+    { label: 'Sin probar', value: 'Puntúa el neutro declarado (ADR 0012)' },
+  ];
+
+  it('links to the visit sheet when the axis declares the untested info and a carId is given', () => {
+    const markup = renderToStaticMarkup(
+      <AxisBreakdownView
+        breakdown={baseAxis({ axisId: 'prueba', info: untestedInfo })}
+        carId="kia-ev3"
+      />,
+    );
+    expect(markup).toContain('href="#/visita/kia-ev3"');
+    expect(markup).toContain('Ir a la hoja de visita');
+  });
+
+  it('renders no link when the car has been tested (info is empty)', () => {
+    const markup = renderToStaticMarkup(
+      <AxisBreakdownView
+        breakdown={baseAxis({ axisId: 'prueba', info: [] })}
+        carId="kia-ev3"
+      />,
+    );
+    expect(markup).not.toContain('Ir a la hoja de visita');
+  });
+
+  it('renders no link without a carId, even when untested', () => {
+    const markup = renderToStaticMarkup(
+      <AxisBreakdownView
+        breakdown={baseAxis({ axisId: 'prueba', info: untestedInfo })}
+      />,
+    );
+    expect(markup).not.toContain('Ir a la hoja de visita');
+  });
+
+  it('never links for any other axis', () => {
+    const markup = renderToStaticMarkup(
+      <AxisBreakdownView
+        breakdown={baseAxis({ axisId: 'coste', info: untestedInfo })}
+        carId="kia-ev3"
+      />,
+    );
+    expect(markup).not.toContain('Ir a la hoja de visita');
+  });
+});

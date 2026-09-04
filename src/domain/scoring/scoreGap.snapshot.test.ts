@@ -102,11 +102,14 @@ describe('splitScoreGap against the real catalogue', () => {
     // motorizaciones del Tucson (mismo cuerpo, misma batalla, misma
     // anchura de hombros, mismo interior, misma fiabilidad OCU): solo el
     // maletero difiere, por dónde va la batería del PHEV, así que `carga`
-    // es el único de los dos ejes de espacio que separa a los dos.
+    // es el único de los dos ejes de espacio que separa a los dos. `prueba`
+    // empata también, con peso 0 por defecto y ninguno de los dos probado.
     expect(
       stableAxes(gap)
         .map((line) => line.axisId)
         .sort(),
-    ).toEqual(['diario', 'estetica', 'fiabilidad', 'habitabilidad'].sort());
+    ).toEqual(
+      ['diario', 'estetica', 'fiabilidad', 'habitabilidad', 'prueba'].sort(),
+    );
   });
 });

@@ -38,6 +38,7 @@ describe('validateContrast', () => {
         --color-axis-prestaciones: #8e2f45;
         --color-axis-fiabilidad: #31417a;
         --color-axis-estetica: #8d4784;
+        --color-axis-prueba: #994c00;
         --color-axis-coste: #7d6417;
         --color-chrome: #e8f0ef;
       }
@@ -69,6 +70,7 @@ describe('validateContrast', () => {
         --color-axis-prestaciones: #8e2f45;
         --color-axis-fiabilidad: #31417a;
         --color-axis-estetica: #8d4784;
+        --color-axis-prueba: #994c00;
         --color-axis-coste: #7d6417;
         --color-chrome: #e8f0ef;
       }
@@ -99,6 +101,7 @@ describe('validateContrast', () => {
         --color-axis-prestaciones: #8e2f45;
         --color-axis-fiabilidad: #31417a;
         --color-axis-estetica: #8d4784;
+        --color-axis-prueba: #994c00;
         --color-axis-coste: #7d6417;
         --color-chrome: #e8f0ef;
       }

@@ -17,7 +17,7 @@ describe('configToParams', () => {
     expect(params.toString()).toBe('');
   });
 
-  it('produces exactly one parameter for a single changed weight, not all seven', () => {
+  it('produces exactly one parameter for a single changed weight, not all eight', () => {
     const params = configToParams({
       ...DEFAULT_CONFIG,
       weights: { ...DEFAULT_WEIGHTS, carga: 7 },
@@ -25,6 +25,17 @@ describe('configToParams', () => {
     const keys = Array.from(params.keys());
     expect(keys).toContain('w_carga');
     expect(keys.filter((k) => k.startsWith('w_'))).toHaveLength(1);
+  });
+
+  it('adds w_prueba only when its weight departs from the 0 default (requisito 4.3)', () => {
+    const atDefault = configToParams(DEFAULT_CONFIG);
+    expect(Array.from(atDefault.keys())).not.toContain('w_prueba');
+
+    const changed = configToParams({
+      ...DEFAULT_CONFIG,
+      weights: { ...DEFAULT_WEIGHTS, prueba: 5 },
+    });
+    expect(changed.get('w_prueba')).toBe('5');
   });
 
   it('includes the version whenever any other parameter is present', () => {
@@ -104,6 +115,14 @@ describe('paramsToRawConfig', () => {
     expect(config.version).toBe(CONFIG_VERSION);
     expect(config.weights.carga).toBe(3.5);
     expect(config.weights.habitabilidad).toBe(3.5);
+  });
+
+  it('reproduces a v=3 link generated before product/0037, with no w_prueba at all (requisito 4.3)', () => {
+    const raw = paramsToRawConfig(new URLSearchParams('w_carga=8&v=3'));
+    const { config, discardedEntirely } = restoreConfig(raw, CARS);
+    expect(discardedEntirely).toBe(false);
+    expect(config.version).toBe(CONFIG_VERSION);
+    expect(config.weights).toEqual({ ...DEFAULT_WEIGHTS, carga: 8 });
   });
 
   it('never emits w_viaje for a new link: only w_carga and w_habitabilidad', () => {

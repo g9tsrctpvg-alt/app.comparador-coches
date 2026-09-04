@@ -1,27 +1,29 @@
 import type { AppConfig } from '../domain/config';
 import type { DecisionLog } from '../domain/decisions';
 import type { ViewState } from '../domain/viewState';
+import type { TestDriveLog } from '../domain/testDrives';
 import { logError } from '../logging/logger';
 
 /**
  * El adaptador que lee y escribe en `localStorage` (product/0012, requisito
- * 16; ampliado por product/0024, requisito 15, y por product/0030, requisito
- * 3.2): el puerto que `src/domain/` declara con sus formas de datos
- * (`AppConfig`, `ViewState`, `DecisionLog`) pero no conoce. `src/domain/` no
- * importa este módulo —lo comprueba `.dependency-cruiser.mjs`— así que no
- * conoce `window` ni `localStorage` de forma transitiva. Tres claves
- * independientes, un solo módulo: ninguna se lee ni se escribe desde ningún
- * otro sitio.
+ * 16; ampliado por product/0024, requisito 15; por product/0030, requisito
+ * 3.2; y por product/0037, requisito 3.2): el puerto que `src/domain/`
+ * declara con sus formas de datos (`AppConfig`, `ViewState`, `DecisionLog`,
+ * `TestDriveLog`) pero no conoce. `src/domain/` no importa este módulo —lo
+ * comprueba `.dependency-cruiser.mjs`— así que no conoce `window` ni
+ * `localStorage` de forma transitiva. Cuatro claves independientes, un solo
+ * módulo: ninguna se lee ni se escribe desde ningún otro sitio.
  */
 
 const CONFIG_STORAGE_KEY = 'comparador-coches:config';
 const VIEW_STATE_STORAGE_KEY = 'comparador-coches:view';
 const DECISIONS_STORAGE_KEY = 'comparador-coches:decisions';
+const TEST_DRIVES_STORAGE_KEY = 'comparador-coches:testdrives';
 
 // Si el almacenamiento no está disponible, se registra una vez por carga
 // de página —no una vez por clave ni una vez por intento (product/0012,
 // requisito 15; product/0024, requisito 14)—, así que la marca es una sola
-// para las tres claves.
+// para las cuatro claves.
 let hasLoggedUnavailable = false;
 
 function logUnavailableOnce(): void {
@@ -112,4 +114,16 @@ export function saveDecisions(decisionLog: DecisionLog): void {
 
 export function clearDecisions(): void {
   clearRaw(DECISIONS_STORAGE_KEY);
+}
+
+export function loadRawTestDrives(): unknown {
+  return loadRaw(TEST_DRIVES_STORAGE_KEY);
+}
+
+export function saveTestDrives(testDriveLog: TestDriveLog): void {
+  saveRaw(TEST_DRIVES_STORAGE_KEY, testDriveLog);
+}
+
+export function clearTestDrives(): void {
+  clearRaw(TEST_DRIVES_STORAGE_KEY);
 }

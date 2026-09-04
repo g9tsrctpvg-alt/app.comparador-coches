@@ -236,7 +236,7 @@ reconocer un control por el texto de su etiqueta. `applyOverride`
 `UserRatingSchema`: la cota 1-5 es del dominio, y una valoración fuera de
 rango falla en vez de entrar al cálculo.
 
-## Los siete ejes
+## Los ocho ejes
 
 | Eje | Fórmula vigente | Cómo combina sus sumandos |
 | --- | --- | --- |
@@ -247,11 +247,14 @@ rango falla en vez de entrar al cálculo.
 | `habitabilidad` | `0,5×escala(batalla) + 0,5×escala(anchura de hombros)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
 | `prestaciones` | `0,5×escala(CV/t) + 0,5×escala(aceleración invertida)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
 | `fiabilidad` | `0,7×escala(OCU) + 0,3×escala(garantía incondicional)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
+| `prueba` | `0,2×Σ escala(juicioᵢ)` sobre los cinco juicios de la prueba real, escala absoluta lineal | Cada juicio se traduce a nota antes de combinarse; sin contestar, puntúa el neutro |
 
-**Los siete ejes están migrados a escala absoluta** — `product/0002` a
-`product/0007`, entre el 2026-08-04 y el 2026-08-06 —. Ninguno normaliza ya
+**Los siete primeros ejes están migrados a escala absoluta** — `product/0002`
+a `product/0007`, entre el 2026-08-04 y el 2026-08-06 —. Ninguno normaliza ya
 contra el conjunto de candidatos: un peso solo significa lo que dice si se
-aplica sobre notas ya comparables, y eso rige ahora en los siete por igual.
+aplica sobre notas ya comparables, y eso rige en los ocho por igual —
+`prueba` (`product/0037`) nació ya en escala absoluta, sin normalización que
+migrar.
 
 `prestaciones` y `fiabilidad` llegaban a este cambio ya sanos
 estructuralmente —normalizaban cada sumando por separado desde
@@ -293,15 +296,40 @@ nota total de todo el catálogo bit a bit igual a la que daba `viaje` con
 peso 10, porque `viaje` ya pesaba el maletero al 0,5 y la habitabilidad al
 0,5 en conjunto.
 
-**`estetica` es el único de los siete sin curva en S.** Su escala
+**`estetica` y `prueba` son los dos únicos sin curva en S.** Su escala
 absoluta es lineal —`nota = (valoración − 1) × 2,5`—, no *smoothstep*: la
 valoración 1-5 que da el usuario ya es su juicio completo (1 = «no hay nada
 que salvar», 5 = «tan guapo como hace falta»), y comprimir los extremos con
 la misma curva que traduce milímetros o euros deformaría ese juicio dos
 veces. `AbsoluteScale` (`breakdown.ts`) no distingue qué forma de curva
 produjo la nota — describe los dos anclajes y el resultado, no la fórmula
-entre ambos — así que el mismo campo `scale` sirve para los tres ejes ya
+entre ambos — así que el mismo campo `scale` sirve para los ejes ya
 migrados sin necesitar un tipo nuevo.
+
+**`prueba` es el octavo eje** (`product/0037`): la media de cinco juicios de
+1 a 5 que solo se pueden dar sentado dentro del coche —postura al volante,
+ruido, visibilidad, plazas de atrás y maletero por dentro—, cada uno
+puntuado con la misma recta que la estética. Ninguno de los cinco repite lo
+que ya mide una magnitud del catálogo: `rearSeats` no juzga los milímetros
+de batalla ni de anchura de hombros —eso ya lo puntúa `habitabilidad`—, sino
+si esos milímetros están donde hacen falta; `boot` no juzga los litros de
+`trunkLiters` —eso ya lo puntúa `carga`—, sino la forma en que están
+repartidos.
+
+**Un coche sin probar puntúa exactamente el neutro, 5,0** —el mismo valor
+que darían los cinco juicios contestados a 3—, por el **ADR 0012**: la
+ausencia de un juicio de primera mano se puntúa con un neutro declarado y
+rotulado, nunca con una exclusión del total ni con una estimación a partir
+de otros ejes. Esa última vía es justo el fallo que ya midió `product/0005`
+al sacar el confort subjetivo de `viaje` — una valoración sin dato real
+detrás acababa midiendo lo bonito que parecía el interior en las fotos, no
+lo que decía medir —, y el ADR 0012 lo evita a propósito para `prueba`. Con
+tres o cuatro coches probados de dieciocho publicados, que es lo normal,
+el neutro rige la mayoría de la tabla; por eso el peso de `prueba` nace en
+0 (`DEFAULT_WEIGHTS`) y subirlo es un acto explícito de quien decide, nunca
+un efecto de haber guardado una prueba. El desglose del eje declara el
+neutro en `info` cuando aplica, para que ningún 5,0 se lea como «del montón»
+sin serlo.
 
 `diario` lleva una penalización condicional: `−1,5` puntos si el coche es
 eléctrico y el supuesto `cargaEnCasa` está desactivado. Se aplica después de
@@ -485,24 +513,41 @@ remite a ese panel, sin ofrecer edición propia.
 
 `AxisWeights` (`src/domain/scoring/weights.ts`), uno por eje, 0-10. Por
 defecto: carga 5, habitabilidad 5, diario 7, fiabilidad 7, estética 6,
-prestaciones 5, coste 5 — reflejan una prioridad personal, no una fórmula
-del negocio. Los dos primeros son la única excepción: no son una
-preferencia, sino la partición exacta del peso 10 que llevaba `viaje` antes
-de `product/0033` (ver «Los siete ejes», arriba).
+prueba 0, prestaciones 5, coste 5 — reflejan una prioridad personal, no una
+fórmula del negocio. Los dos primeros son la excepción de siempre: no son
+una preferencia, sino la partición exacta del peso 10 que llevaba `viaje`
+antes de `product/0033` (ver «Los ocho ejes», arriba). `prueba` es la
+excepción nueva (`product/0037`): nace en 0 porque el neutro del ADR 0012
+no puede mover nada mientras el eje no pese, y subirlo es un acto explícito
+—«Que la prueba cuente»—, nunca un efecto de haber guardado una prueba.
 
 ### Calibrar los pesos eligiendo coches
 
-Los siete pesos se pueden **deducir de una tanda de elecciones cara a cara**
-en vez de fijarlos a ojo (`src/domain/calibration.ts`). Se apoya en una
+Los pesos se pueden **deducir de una tanda de elecciones cara a cara** en
+vez de fijarlos a ojo (`src/domain/calibration.ts`). Se apoya en una
 propiedad del ADR 0004: como la nota de un eje no depende de los pesos,
 «prefiero este coche a ese» es exactamente una desigualdad lineal,
 `Σ pesoᵢ × (notaᵢ(A) − notaᵢ(B)) > 0`. La tanda es, por tanto, un sistema de
 desigualdades que se resuelve **por enumeración**, sin optimizador ni
 dependencias.
 
-- **La rejilla.** Cada peso toma valor en `{0, 2, 5, 8, 10}`: `5⁷` menos la
-  combinación nula = **78.124** combinaciones, recorridas siempre en el mismo
-  orden, sin muestreo ni semilla. Todos sus valores son enteros de 0 a 10, así
+**Un eje constante en el conjunto que se compara queda fuera de la rejilla**
+(`activeAxesOf`, `product/0037`, requisito 7): si todos los coches de la
+tanda sacan la misma nota en un eje, ese eje no puede decidir ningún duelo,
+cualquiera que sea su peso —su término se cancela en la desigualdad de
+arriba—, así que enumerar sus cinco niveles no cambiaría ningún resultado y
+solo multiplicaría el coste. Es el caso normal de `prueba` mientras nadie ha
+probado ningún coche de la tanda: todos sacan el neutro del ADR 0012, el eje
+es constante, y la tanda ignora sus cinco niveles sin que nadie lo note. En
+cuanto un coche está probado y otro no, `prueba` deja de ser constante y
+entra en la rejilla como los demás. Los pesos de los ejes excluidos se
+conservan tal cual: la tanda nunca los propone ni los toca.
+
+- **La rejilla.** Cada peso activo toma valor en `{0, 2, 5, 8, 10}`: con los
+  siete ejes objetivos —el caso normal, sin ninguna prueba real— son `5⁷`
+  menos la combinación nula = **78.124** combinaciones, recorridas siempre en
+  el mismo orden, sin muestreo ni semilla; con `prueba` activo también son
+  `5⁸` menos la nula, 390.624. Todos sus valores son enteros de 0 a 10, así
   que cualquier resultado se puede poner en los deslizadores tal cual.
 - **El conjunto compatible** son las combinaciones que contradicen el menor
   número posible de **desigualdades** —no de respuestas: una respuesta aporta
@@ -533,8 +578,10 @@ dependencias.
   elección no se sostiene. Marcarlos añade una **segunda desigualdad** a la
   respuesta —`Σ pesoᵢ × Δᵢ ≤ 0` sobre los ejes que quedan fuera de la
   marca—, en vez de dejar que el algoritmo repartiera la explicación como
-  quisiera entre los siete pesos a la vez. Marcar los siete ejes equivale a
-  no marcar ninguno —«lo decidió todo junto» no es una atribución—, y una
+  quisiera entre todos los pesos activos a la vez. Marcar todos los ejes
+  activos equivale a no marcar ninguno —«lo decidió todo junto» no es una
+  atribución, y un eje excluido de la rejilla nunca se ofrece como
+  decisivo—, y una
   atribución que resulte imposible para cualquier combinación de la rejilla
   se absorbe igual que cualquier otra contradicción: no rompe la tanda, solo
   cuenta como una desigualdad contradicha más. Como esa segunda desigualdad
@@ -632,6 +679,49 @@ y sigue en juego» de «no lo he mirado todavía» se dejó fuera a propósito
 —es la propuesta P3 del roadmap, aceptada solo en parte—, porque añadía una
 casilla que mantener a cambio de un matiz que quien decide ya lleva en la
 cabeza.
+
+## El registro de la prueba real
+
+`src/domain/testDrives.ts` (product/0037, P6 y P7 del roadmap): a diferencia
+del estado de decisión y de los imprescindibles, esta es la primera
+anotación del usuario que **sí** entra en la puntuación — a través del eje
+`prueba` de la sección anterior, no de una fórmula propia de este módulo.
+
+Una `TestDriveEntry` registra, por coche, cinco juicios de 1 a 5
+—`posture`, `noise`, `visibility`, `rearSeats`, `boot`—, una nota en texto
+libre opcional y la fecha en que se anotó, editable a mano porque una
+visita se apunta esa noche y no en el mostrador. Un coche sin entrada en
+`TestDriveLog.entries` está **sin probar**, con el mismo criterio que
+`undecided` en `decisions.ts`: no se guarda nada por lo que no se ha hecho.
+Una entrada puede ser parcial —un solo juicio, o solo una nota—, y cada
+juicio sin contestar puntúa el neutro del ADR 0012 (3, el punto medio de la
+escala 1-5); `judgementValue` y `averageRating` son el único punto donde se
+lee ese neutro, así que la hoja de visita y el eje `prueba` nunca pueden
+mostrar números distintos para el mismo coche.
+
+**La fecha no entra en ninguna fórmula** (ADR 0009): se muestra y se
+edita, pero ninguna nota depende de ella. Se mueve solo cuando alguien la
+cambia a mano —a diferencia de `DecisionEntry`, aquí no hay un «estado» cuyo
+cambio dispare la fecha—, y se valida como un día real, no solo con la
+forma `AAAA-MM-DD`: `2026-02-30` se rechaza aunque tenga el formato
+correcto.
+
+**Cuarto objeto persistido**, hermano de `AppConfig`, `ViewState` y
+`DecisionLog`: clave propia (`comparador-coches:testdrives`), versión
+propia (`TEST_DRIVE_LOG_VERSION`). La degradación por partes llega hasta el
+juicio suelto: un número fuera de 1-5 descarta solo ese juicio, no la nota
+ni los demás juicios de la misma prueba — el mismo criterio que
+`restoreOverrides` aplica campo a campo, llevado un nivel más hondo porque
+aquí sí hay texto escrito a mano que perder. Una fecha inválida o una
+entrada que no es un objeto descartan la entrada entera, igual que
+`decisions.ts`. Ningún texto de la nota entra nunca en un registro de
+`logError`.
+
+**No viaja en el enlace compartible**, por el mismo doble motivo que las
+decisiones (`product/0030`): el enlace reproduce cómo se puntúa, no lo que
+anotó quien comparte, y el texto libre no cabe en una URL sin volverla
+ilegible. El peso del eje `prueba`, en cambio, sí viaja como cualquier otro
+peso.
 
 ## Los imprescindibles
 
@@ -790,9 +880,11 @@ vive fuera de `scoring/`.
 
 ## Qué queda fuera
 
-Un eje de autonomía y repostaje, y un eje de conducción subjetiva tras
-probar los coches, quedan fuera del dominio actual — son extensiones
-futuras, registradas en `docs/roadmap.md`, no ausencias por descuido.
-Corregir o completar los valores del catálogo tampoco es parte de este
-dominio: las specs de eje fijan cómo se declara fuente y estimación y contra
-qué se puntúa, no qué valores son correctos.
+Un eje de autonomía y repostaje queda fuera del dominio actual — es una
+extensión futura, registrada en `docs/roadmap.md`, no una ausencia por
+descuido. El eje de conducción subjetiva ya no está en esta lista: `prueba`
+(`product/0037`) es la parte de esa idea que dependía del proyecto —tener el
+sitio donde anotarlo—, y ya existe. Corregir o completar los valores del
+catálogo tampoco es parte de este dominio: las specs de eje fijan cómo se
+declara fuente y estimación y contra qué se puntúa, no qué valores son
+correctos.

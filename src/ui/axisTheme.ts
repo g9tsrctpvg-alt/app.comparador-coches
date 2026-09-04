@@ -33,5 +33,6 @@ export const AXIS_THEME_CLASS: Record<AxisId, string> = {
   prestaciones: themeClass('prestaciones'),
   fiabilidad: themeClass('fiabilidad'),
   estetica: themeClass('estetica'),
+  prueba: themeClass('prueba'),
   coste: themeClass('coste'),
 };

@@ -1,4 +1,9 @@
-import { EXPLICACION_HASH, FICHA_HASH, type Route } from '../useHashRoute';
+import {
+  EXPLICACION_HASH,
+  FICHA_HASH,
+  VISITA_HASH,
+  type Route,
+} from '../useHashRoute';
 import styles from './ViewSwitcher.module.css';
 
 interface ViewSwitcherProps {
@@ -8,17 +13,21 @@ interface ViewSwitcherProps {
 const LINKS: { route: Route; href: string; label: string }[] = [
   { route: 'comparativa', href: '#', label: 'Clasificación' },
   { route: 'ficha', href: FICHA_HASH, label: 'Ficha' },
+  { route: 'visita', href: VISITA_HASH, label: 'Visita' },
   { route: 'explicacion', href: EXPLICACION_HASH, label: 'Cómo se calcula' },
 ];
 
 /** La navegación única de la aplicación (technical/0005, requisito 4.3;
  * origen en product/0013, requisito 1; reducida de cuatro destinos a tres
- * por product/0018, que funde las dos fichas en una): la vista activa se
- * señala visualmente —fondo de pastilla en escritorio, opción marcada en el
- * `<select>` de móvil (technical/0006)— y de forma accesible, con
- * `aria-current` en el primer caso. Vive dentro de `AppHeader`, que es
- * quien decide el resto de la cabecera —la marca, el fondo fijo—; este
- * componente solo sabe de destinos y de cuál está activo.
+ * por product/0018, que funde las dos fichas en una; ampliada de nuevo a
+ * cuatro por product/0037, requisito 6.1, que añade «Visita»): la vista
+ * activa se señala visualmente —fondo de pastilla en escritorio, opción
+ * marcada en el `<select>` de móvil (technical/0006)— y de forma accesible,
+ * con `aria-current` en el primer caso. «Visita» queda activa tanto en el
+ * índice (`#/visita`) como en la hoja de un coche (`#/visita/<carId>`): las
+ * dos comparten el mismo `Route`. Vive dentro de `AppHeader`, que es quien
+ * decide el resto de la cabecera —la marca, el fondo fijo—; este componente
+ * solo sabe de destinos y de cuál está activo.
  *
  * Los dos marcados se renderizan siempre; cuál se ve lo decide
  * `ViewSwitcher.module.css` con `display`, a cada lado de `--bp-columna`
