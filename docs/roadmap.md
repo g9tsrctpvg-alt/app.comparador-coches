@@ -5,7 +5,7 @@
 > las indexa todas en una sola tabla. `CLAUDE.md` resume y no duplica: al
 > cerrar una fase se actualiza este documento, no el índice.
 
-**Última actualización:** 2026-09-03
+**Última actualización:** 2026-09-04
 
 ## Fases
 
@@ -59,7 +59,7 @@ que no vuelva sin argumento nuevo.
 
 | Asunto | Detalle en |
 | --- | --- |
-| `product/0019` — la portada enseña el coche: sin redactar, única entrega de la fase 5 sin spec | *Fase 5* |
+| `product/0019` — la portada enseña el coche: redactada el 2026-09-04, `draft`, esperando el gate humano | *Fase 5* |
 | `product/0014` se queda en `implemented`: su criterio de dos columnas a 320px no se puede cumplir con los anchos vigentes | *Deudas abiertas* |
 | `technical/0006` se queda en `implemented`: dos criterios incumplidos (`overflow-x`, composición de la pastilla activa) y el despliegue por verificar | *Deudas abiertas* |
 | `product/0015` — falta ejecutar de verdad `unpublish-model` o `republish-model` sobre un coche real | *Más adelante* |
@@ -297,7 +297,7 @@ entera verde en local y cobertura al 100 %.
 | Gate humano: aprobar el ADR 0008 y las dos specs, y marcar `product/0013` como `superseded` | Hecha — 2026-08-08, en commit propio sin implementación |
 | Implementar y verificar las dos specs | Hecha — CI entera en verde en local, cobertura 100 % en `domain/`+`data/`+`logging/`, verificación manual en navegador a 320/592/960/1440px, despliegue real confirmado tras el merge de PR #57 |
 | Consolidar `docs/estado/interfaz.md` y `dominio.md`, y las specs (`technical/0005`, `product/0018`, `technical/0004`, `product/0011`) | Hecha — 2026-08-12. `product/0014` se queda fuera: sigue `implemented`, no `verified` (ver deudas abiertas), pero su comportamiento vigente —fotos, columna fijada, diálogo— ya se lee en `docs/estado/interfaz.md` y `dominio.md`, escrito como parte de esta misma consolidación porque `product/0018` la enmienda sin sustituirla |
-| `product/0019` — la portada enseña el coche | Sin redactar |
+| `product/0019` — la portada enseña el coche | `draft` — redactada el 2026-09-04, pendiente del gate humano |
 | `product/0020` — los campos esenciales destacan precio y potencia | `consolidated` |
 | `technical/0006` — menú de navegación: pastillas y selector en móvil | `implemented` — dos criterios de aceptación no se cumplen tal como están escritos, uno no es comprobable sin desplegar (ver deudas abiertas); el resto, verificado |
 | Gate humano: aprobar `product/0020` y `technical/0006` | Hecha — 2026-08-12, en commit propio sin implementación, tras confirmación explícita del usuario en modo plan |
@@ -382,12 +382,24 @@ familia que la pinta, y la ficha unificada consume el shell, el primitivo de
 tabla y los papeles de dirección que `technical/0005` declara. Al revés habría
 que escribir dos veces la cabecera que aquélla elimina.
 
-**`product/0019` no está redactada a propósito.** Enseñar la foto del coche en
-la tarjeta del líder y en la fila desplegada es la mayor ganancia de «producto
-acabado» por unidad de trabajo, y reutiliza `photoSrc` y el degradado a hueco
-que `product/0014` ya tiene. Pero **cambia qué información muestra la
-portada**, así que es producto y no cabe en `technical/0005`. Se separa para
-que no bloquee al resto.
+**`product/0019` estuvo sin redactar a propósito.** Enseñar la foto del coche
+en la tarjeta del líder y en la fila desplegada es la mayor ganancia de
+«producto acabado» por unidad de trabajo, y reutiliza `photoSrc` y el degradado
+a hueco que `product/0014` ya tiene. Pero **cambia qué información muestra la
+portada**, así que es producto y no cabe en `technical/0005`. Se separó para
+que no bloqueara al resto, y se redactó el 2026-09-04, cuando ya era lo único
+que mantenía la fase abierta.
+
+**Lo que la redacción encontró y la spec se lleva dentro.** La foto no se
+pinta hoy de una sola manera: `PhotoBox` degrada al hueco rotulado tanto si la
+foto falta como si su `src` falla, pero el cara a cara de la calibración
+(`product/0035`) lee `photos.front` directo, sin `onError` y sin alternativa
+cuando el coche no declara frontal — con el resultado, comprobable hoy en
+producción, de que el C5 Aircross se enseña como «Sin foto» en la tanda de
+calibración teniendo dos. Por eso `product/0019` no solo añade dos fotos a la
+portada: declara `coverPhoto` en el dominio —qué foto representa a un coche
+cuando la elige la aplicación y no la persona— y deja una sola implementación
+de la degradación para los cuatro sitios que pintan una foto.
 
 **Lo que esta fase no toca:** la paleta —los siete papeles de `product/0009`
 conservan su valor—, el esquema oscuro —sigue aplazado por el ADR 0006 con su
