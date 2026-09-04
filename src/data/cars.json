@@ -5037,7 +5037,7 @@
       "value": 64,
       "sources": [
         {
-          "label": "Jeep no figura entre las 39 marcas del índice de fiabilidad OCU 2026 (85.590 encuestas). Convención de este catálogo, decidida por el usuario: se le asigna el suelo de la escala, 64, que es la nota real de Land Rover, la peor marca medida",
+          "label": "Jeep no figura entre las 39 marcas del índice de fiabilidad OCU 2026 (85.590 encuestas), así que este catálogo le asigna el suelo de la escala, 64 —la nota real de Land Rover, la peor marca medida—. Sigue siendo un valor asignado, no publicado. Corroborado con una segunda fuente (septiembre de 2026): la encuesta Driver Power 2026 de Auto Express sitúa a Jeep como la marca menos fiable de las 30 que mide, con 81,68 %, por debajo de Land Rover (84,39 %), https://www.autoexpress.co.uk/best-cars-vans/91220/most-and-least-reliable-car-manufacturers-2026",
           "value": 64,
           "estimated": true,
           "current": true
