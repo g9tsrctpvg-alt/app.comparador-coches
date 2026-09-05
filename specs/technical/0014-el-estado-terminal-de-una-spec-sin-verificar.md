@@ -1,7 +1,7 @@
 # 0014 — El estado terminal de una spec que no se va a verificar
 
 - **Id:** technical/0014
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** technical
 - **Fecha:** 2026-09-04
 - **Specs relacionadas:** technical/0003, technical/0006, product/0014

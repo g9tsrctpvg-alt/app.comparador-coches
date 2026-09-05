@@ -1,6 +1,6 @@
 # 0013 — Una spec implementada que no se verifica se cierra, no se da por verificada
 
-- **Estado:** draft
+- **Estado:** approved
 - **Fecha:** 2026-09-04
 - **Nivel:** 🟡
 

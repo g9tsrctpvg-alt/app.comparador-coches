@@ -59,7 +59,7 @@ que no vuelva sin argumento nuevo.
 
 | Asunto | Detalle en |
 | --- | --- |
-| ADR 0013 y `technical/0014` — el estado terminal de una spec que no se va a verificar: redactados el 2026-09-04, `draft`, esperando el gate humano; cierran `technical/0006` | *Fase 5* |
+| ADR 0013 y `technical/0014` — el estado terminal de una spec que no se va a verificar: `approved` el 2026-09-04, por implementar; cierran `technical/0006` | *Fase 5* |
 | `technical/0006` se queda en `implemented`: dos de sus tres criterios abiertos ya se pueden cerrar (composición y despliegue); queda solo el `overflow-x` de la cabecera a 320px | *Deudas abiertas* |
 | `product/0015` — falta ejecutar de verdad `unpublish-model` o `republish-model` sobre un coche real | *Más adelante* |
 | `product/0016` — `implemented`, sin consolidar | *Más adelante* |
@@ -302,9 +302,9 @@ entera verde en local y cobertura al 100 %.
 | Gate humano: aprobar `product/0020` y `technical/0006` | Hecha — 2026-08-12, en commit propio sin implementación, tras confirmación explícita del usuario en modo plan |
 | Implementar y verificar las dos specs | Hecha — CI entera en verde en local, verificación manual en navegador (pastillas y `<select>` a 320/592/960/1440px, navegación real del `<select>`, foco visible en los dos) |
 | Consolidar `product/0020` en `docs/estado/interfaz.md` | Hecha — 2026-08-12. `technical/0006` se queda fuera: sus criterios pendientes bloquean `verified` (ver deudas abiertas) |
-| ADR 0013 — una spec implementada que no se verifica se cierra, no se da por verificada | `draft` — redactado el 2026-09-04 |
-| `technical/0014` — el estado terminal de una spec que no se va a verificar | `draft` — redactada el 2026-09-04; implementa el ADR 0013 y cierra `technical/0006` |
-| Gate humano: aprobar el ADR 0013 y `technical/0014` | Pendiente |
+| ADR 0013 — una spec implementada que no se verifica se cierra, no se da por verificada | `approved` |
+| `technical/0014` — el estado terminal de una spec que no se va a verificar | `approved` — implementa el ADR 0013 y cierra `technical/0006` |
+| Gate humano: aprobar el ADR 0013 y `technical/0014` | Hecha — 2026-09-04, en commit propio sin implementación, tras aprobación explícita del usuario |
 | `technical/0007` — anclaje de eje en el desplazamiento táctil de la ficha | `consolidated` |
 | Gate humano: aprobar `technical/0007` | Hecha — 2026-08-12, en commit propio sin implementación |
 | Implementar y verificar la spec | Hecha — CI entera en verde en local, verificación manual con Playwright simulando la secuencia de eventos táctiles (`touchstart`/`touchmove`/`touchend`/`touchcancel`), con el límite honesto de que este entorno no tiene una pantalla táctil real |
