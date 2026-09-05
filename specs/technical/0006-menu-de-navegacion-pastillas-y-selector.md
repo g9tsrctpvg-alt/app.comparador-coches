@@ -1,18 +1,19 @@
 # 0006 — Menú de navegación: pastillas y selector en móvil
 
 - **Id:** technical/0006
-- **Estado:** implemented
+- **Estado:** closed
 - **Tipo:** technical
 - **Fecha:** 2026-08-12
-- **Specs relacionadas:** technical/0005
-- **ADRs relacionados:** ninguno
+- **Specs relacionadas:** technical/0005, technical/0014
+- **ADRs relacionados:** 0013
 - **Doc de estado:** `docs/estado/interfaz.md`
 
-> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
+> ⚠️ **Spec cerrada sin verificar (2026-09-04).** Describe un cambio ya
 > implementado: su sección *Contexto* retrata el sistema **anterior** al
-> cambio y hoy no es cierta. **No es referencia del estado actual** — para
-> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
-> **criterios de aceptación**, como registro de verificación.
+> cambio y hoy es histórica. Para el estado actual, ver el **Doc de estado**
+> indicado arriba. **No llegó a `verified`**: los criterios que siguen sin
+> marcar no se cumplieron, y cada uno tiene su destino escrito en
+> `docs/roadmap.md`. Se congela aquí como registro, con el ADR 0013 detrás.
 
 ## Contexto
 
@@ -116,7 +117,7 @@ por un control que no lo necesite.
       después es la del destino elegido. Verificado a mano con Playwright
       sobre el build de producción, en las dos direcciones (Clasificación
       → Cómo se calcula y de vuelta).
-- [ ] `.buttonGhost`/`.buttonSolid` u otro primitivo de botón ya declarado
+- [x] `.buttonGhost`/`.buttonSolid` u otro primitivo de botón ya declarado
       queda compuesto por el grupo de pastillas, no reinventado —o, si el
       contenedor necesita algo que ningún primitivo actual cubre, la
       diferencia queda documentada aquí, no en el código sin más.
@@ -133,6 +134,12 @@ por un control que no lo necesite.
       botones) y los mismos tokens de color, radio y duración que
       `.buttonGhost` — la diferencia es solo el fondo persistente, no toda
       la superficie de la clase.
+      **Marcado el 2026-09-04.** El criterio es una disyunción y su segunda
+      rama —«o, si el contenedor necesita algo que ningún primitivo actual
+      cubre, la diferencia queda documentada aquí»— es exactamente lo que
+      hacen los párrafos de arriba. Dejarlo sin marcar fue un error de
+      contabilidad, no un incumplimiento; el razonamiento está además
+      consolidado en `docs/estado/interfaz.md`.
 - [x] Ningún `.module.css` nuevo declara un color, radio, duración o
       tipografía como literal: todo sale de `var(--…)`.
       `scripts/validateStyleTokensRepo.test.ts` en verde.
@@ -149,10 +156,21 @@ por un control que no lo necesite.
       4). El foco se muestra correctamente en ambos casos —pastillas y
       `<select>`—, confirmado con Playwright (segundo tabulador en
       escritorio, primer tabulador tras la marca en móvil).
-- [ ] El sitio desplegado en GitHub Pages sirve el marcado nuevo sin 404.
-      Solo comprobable tras un `push` a `main`
-      (`docs/estado/despliegue.md`); mismo motivo que ya deja este mismo
-      criterio sin marcar en specs anteriores de esta fase.
+      **Se queda sin marcar para siempre (2026-09-04).** Es el único criterio
+      de esta spec que no se cumple, y no se va a cumplir sin un cambio de
+      diseño —acortar la marca o esconderla a ese ancho— que nadie ha pedido.
+      Su destino, como exige el ADR 0013: *Aplazamientos con disparador* de
+      `docs/roadmap.md`, con este disparador — **que la cabecera cambie de
+      contenido, marca o destinos, por cualquier motivo, o que el
+      desplazamiento a 320px estorbe de verdad al usarla**. El límite queda
+      además escrito en `docs/estado/interfaz.md`, con su medición.
+- [x] El sitio desplegado en GitHub Pages sirve el marcado nuevo sin 404.
+      Esperaba un `push` a `main` que desde entonces ha ocurrido decenas de
+      veces. **Comprobado el 2026-09-04** contra la URL pública: `index.html`
+      responde `200` y sirve `index-DEvpBliU.js` e `index-gCKKUTLA.css` —los
+      mismos hashes que produce `npm run build` en local—, los dos también
+      con `200`. Es la misma comprobación que cerró este criterio en
+      `technical/0004`, `product/0011`, `technical/0005` y `product/0018`.
 
 ## Dependencias y supuestos
 

@@ -177,6 +177,15 @@ La regla es: **se aplaza con disparador explícito, no se ignora**.
 | Cobertura por *diff* en vez de suelo global | Que el suelo global deje de ser suficiente |
 | Suite E2E | Que la cobertura unitaria deje de detectar las regresiones que importan |
 | Hooks de pre-commit locales | Que el ciclo de espera de CI moleste de verdad |
+| El `overflow-x: auto` del carril de la cabecera (`technical/0006`) | Que la cabecera cambie de contenido —marca o destinos—, o que el desplazamiento a 320px estorbe de verdad al usarla |
+
+El de la cabecera es el único de la tabla que no es un guardarraíl aplazado
+sino un **criterio de aceptación que no se cumplió**: a 320px la marca y el
+`<select>` suman 407px sobre los 320 disponibles, así que sin esa regla la
+cabecera recortaría contenido. Vive aquí porque el ADR 0013 exige que todo
+criterio sin marcar de una spec `closed` tenga destino escrito, y el suyo es
+un aplazamiento consciente, no una deuda que alguien vaya a saldar. El
+documento, en cambio, no se desplaza en horizontal a ningún ancho.
 
 **Gates de CD (smoke tests, canary) — disparador cumplido.** El aplazamiento
 tenía como condición «que exista despliegue real»; desde `technical/0001`
