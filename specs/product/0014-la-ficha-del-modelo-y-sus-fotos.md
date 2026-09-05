@@ -1,19 +1,27 @@
 # 0014 — La ficha del modelo y sus fotos
 
 - **Id:** product/0014
-- **Estado:** implemented
+- **Estado:** superseded
 - **Tipo:** product
 - **Fecha:** 2026-08-06
 - **Specs relacionadas:** product/0001, product/0009, product/0010,
-  product/0011, product/0012, product/0013, product/0016, technical/0004
+  product/0011, product/0012, product/0013, product/0016, product/0018,
+  product/0023, technical/0004
 - **ADRs relacionados:** 0003, 0006
 - **Doc de estado:** `docs/estado/dominio.md`, `docs/estado/interfaz.md`
 
-> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio ya
-> implementado: su sección *Contexto* retrata el sistema **anterior** al
-> cambio y hoy no es cierta. **No es referencia del estado actual** — para
-> eso, ver el **Doc de estado** indicado arriba. Vigentes aquí los
-> **criterios de aceptación**, como registro de verificación.
+> ⚠️ **Spec sustituida por `product/0018` y `product/0023` (2026-09-04).** La
+> vista que esta spec introdujo —una columna por modelo, con la de
+> características y la del modelo elegido fijadas a la izquierda— ya no
+> existe tal cual: `product/0018` la fundió con la ficha técnica en una sola
+> ficha, y `product/0023` **retiró la tabla por debajo de `--bp-columna`** y
+> la sustituyó por la vista de un candidato a la vez. Lo que esta spec
+> aportó y **sigue vigente** —el esquema de foto con `credit` y `shows`, el
+> punto único `photoSrc`, la caja 4/3 con su hueco rotulado y la ficha por
+> bloques— se lee hoy en los **Docs de estado** indicados arriba, no aquí.
+> No se edita esta spec para reflejarlo: se congela como registro de lo que
+> fue. Su único criterio sin marcar quedó **obsoleto**, no incumplido — ver
+> la nota en *Criterios de aceptación*.
 
 ## Contexto
 
@@ -522,6 +530,14 @@ Una tabla de doce columnas en 320px de ancho no cabe de ninguna manera.
       ampliar el contenido disponible reduciendo el relleno de página —un
       cambio de diseño real, fuera del alcance de una verificación—.
       Registrado como deuda en `docs/roadmap.md`.
+      **Criterio obsoleto desde `product/0023` (2026-08-19), constatado el
+      2026-09-04:** esa spec retiró la tabla por debajo de `--bp-columna` y
+      la sustituyó por la vista de un candidato a la vez, así que a 320px ya
+      no hay ninguna columna de modelo que leer entera —ni una ni dos—. El
+      criterio no se marca, porque nunca llegó a cumplirse; pero deja de ser
+      una deuda que resolver: mide una composición que el producto retiró, y
+      es el motivo por el que esta spec se congela como `superseded` en vez
+      de esperar una verificación que ya no puede ocurrir.
 - [x] El selector cambia la foto de **todas** las columnas a la vez, y
       arranca en lateral (test de render sobre el estado inicial; el cambio
       es correcto por construcción — todas las cabeceras leen el mismo
