@@ -236,6 +236,32 @@ antes de esto, las tres páginas repetían literalmente
   con su sombra de control, el `:hover` tiñe y el `:active` tiñe más fuerte.
   Medido sobre el build: los cuatro se distinguen entre sí y del fondo de la
   cabecera.
+
+  **La navegación se presenta de dos formas, a cada lado de `--bp-columna`**:
+  por encima, ese grupo de pastillas; por debajo, un `<select>` con una opción
+  por destino, con nombre accesible propio (`aria-label="Vista"`, el mismo que
+  el `<nav>`) y con la opción de la ruta activa seleccionada. Cambiar su valor
+  mueve `window.location.hash`, así que navega de verdad. **Los dos marcados
+  se renderizan siempre** y cuál se ve lo decide el CSS con `display`: no hay
+  dos componentes ni un estado de React que elija entre ellos, y por tanto no
+  existe el instante en que ninguno de los dos está montado.
+
+  El grupo de pastillas **no compone `.buttonGhost`/`.buttonSolid`**, y es a
+  propósito: la pastilla activa necesita una superficie persistente, y
+  `.buttonGhost` fija `background: transparent` en su propia regla — la
+  composición entre ficheros de CSS Modules resuelve los conflictos a favor
+  del primitivo, así que ese fondo perdería siempre. Semánticamente tampoco
+  encaja: `.buttonGhost` es «sin superficie propia hasta que se interactúa» y
+  un indicador de página activa quiere justo lo contrario. Lo que sí reutiliza
+  son `mono` y los mismos tokens de color, radio y duración.
+
+  **Límite conocido:** `.inner` de la cabecera conserva `overflow-x: auto`.
+  A 320px la marca y el `<select>` suman 407px sobre los 320 disponibles, y
+  justo en el borde de 592px faltan 31px, así que sin esa regla la cabecera
+  recortaría contenido. El **documento** no se desplaza en horizontal a ningún
+  ancho; el que puede hacerlo es el carril de la cabecera. Quitarla exigiría
+  acortar la marca o esconderla a ese ancho —un cambio de diseño—, y queda
+  aplazado con disparador en `docs/roadmap.md`.
 - **`AppFooter`** — la procedencia y fecha de los datos («Los precios del
   catálogo son de julio de 2026…») y la leyenda de la marca de estimado
   (`<EstimatedMark />`), antes repetidas al pie de cada tabla de la ficha.
