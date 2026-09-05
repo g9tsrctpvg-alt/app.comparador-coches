@@ -1,13 +1,20 @@
 # 0014 — El estado terminal de una spec que no se va a verificar
 
 - **Id:** technical/0014
-- **Estado:** approved
+- **Estado:** consolidated
 - **Tipo:** technical
 - **Fecha:** 2026-09-04
 - **Specs relacionadas:** technical/0003, technical/0006, product/0014
 - **ADRs relacionados:** 0013
 - **Doc de estado:** `docs/proceso/ciclo-de-spec.md`,
   `docs/proceso/consolidacion.md`, `docs/estado/interfaz.md`
+
+> ⚠️ **Spec consolidada (2026-09-04).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/proceso/ciclo-de-spec.md`, `docs/proceso/consolidacion.md` y
+> `docs/estado/interfaz.md`. Vigentes aquí solo los **criterios de
+> aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -189,37 +196,46 @@ proceso y el validador.
 
 > Obligatorios y verificables.
 
-- [ ] `docs/proceso/ciclo-de-spec.md` §2 lista `closed` con «**Humano** 🔴», y
+- [x] `docs/proceso/ciclo-de-spec.md` §2 lista `closed` con «**Humano** 🔴», y
       §5 remite al ADR 0013 sin relajar la regla de que no existe
-      «verificado con salvedades».
-- [ ] `docs/proceso/consolidacion.md` §2 recoge el aviso C literal y §3 habla
-      de los dos estados terminales.
-- [ ] Una spec en `closed` **sin** aviso C falla la validación con el mensaje
-      `Estado 'closed' requires notice C`; con él, pasa. Test en
-      `scripts/validateDocs.test.ts`.
-- [ ] Una spec en `closed` que lleve el aviso A o el B falla la validación.
-      Test.
-- [ ] Una spec en `implemented`, `verified` o `consolidated` que lleve el
-      aviso C falla la validación. Test.
-- [ ] Una spec en `closed` sin criterios de aceptación, con *Decisiones
+      «verificado con salvedades». La regla sigue escrita palabra por palabra
+      y §6 recoge la mecánica del cierre.
+- [x] `docs/proceso/consolidacion.md` §2 recoge el aviso C literal y §3 habla
+      de los dos estados terminales, con la nota de por qué en una `closed`
+      la prohibición de editar es si acaso más estricta.
+- [x] Una spec en `closed` **sin** aviso C falla la validación con el mensaje
+      `Estado 'closed' requires notice C`; con él, pasa.
+      `validateDocs.test.ts`, «15 — closed without notice C».
+- [x] Una spec en `closed` que lleve el aviso A o el B falla la validación.
+      `validateDocs.test.ts`, «16 — closed still carrying notice A or B»,
+      probado con los dos.
+- [x] Una spec en `implemented`, `verified` o `consolidated` que lleve el
+      aviso C falla la validación. `validateDocs.test.ts`, «17 — notice C
+      outside the closed state», que recorre los seis estados restantes.
+- [x] Una spec en `closed` sin criterios de aceptación, con *Decisiones
       abiertas* sin cerrar, o sin *Doc de estado*, falla la validación con
       los tres mensajes que ya existen para los demás estados avanzados.
-      Test.
-- [ ] `docs/estado/interfaz.md` describe en presente las dos formas de la
+      `validateDocs.test.ts`, «15 — … demands the same three things every
+      advanced state demands».
+- [x] `docs/estado/interfaz.md` describe en presente las dos formas de la
       navegación, que los dos marcados se renderizan siempre, que el CSS
       decide cuál se ve, y el límite del `overflow-x` con su medición.
-      Revisión del texto.
-- [ ] `technical/0006` queda en `closed`, con el aviso C, con sus dos
-      criterios marcados y con el del `overflow-x` sin marcar.
-- [ ] El criterio del `overflow-x` aparece en *Aplazamientos con disparador*
+      Escrito en la sección «Shell de aplicación y navegación», bajo
+      `ViewSwitcher`.
+- [x] `technical/0006` queda en `closed`, con el aviso C, con sus dos
+      criterios marcados y con el del `overflow-x` sin marcar. Comprobado:
+      un solo `- [ ]` en el fichero.
+- [x] El criterio del `overflow-x` aparece en *Aplazamientos con disparador*
       de `docs/roadmap.md` y en `docs/proceso/ci-y-guardarrailes.md` §7, con
-      su disparador escrito.
-- [ ] `docs/roadmap.md` no deja ninguna fila que siga diciendo que
-      `technical/0006` espera verificación.
-- [ ] Ni un fichero de `src/` cambia: `git diff --stat` sobre la rama no
-      toca `src/`, y `scoreCatalog.snapshot.test.ts` sigue en verde sin
-      modificar un valor.
-- [ ] `npm run format:check`, `npm run lint`, `npm run typecheck`,
+      su disparador escrito —que la cabecera cambie de contenido, o que el
+      desplazamiento a 320px estorbe de verdad al usarla—.
+- [x] `docs/roadmap.md` no deja ninguna fila que siga diciendo que
+      `technical/0006` espera verificación: la de la fase 5 dice `closed` y
+      la de la deuda abre con «**Cerrada.**» y habla en pasado.
+- [x] Ni un fichero de `src/` cambia: `git diff --stat origin/main...HEAD --
+      src/` no devuelve nada, y `scoreCatalog.snapshot.test.ts` sigue en
+      verde sin modificar un valor.
+- [x] `npm run format:check`, `npm run lint`, `npm run typecheck`,
       `npm run arch:check`, `npm run test:coverage` y `npm run build` pasan en
       local, con la cobertura intacta.
 
