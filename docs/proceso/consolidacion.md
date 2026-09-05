@@ -24,10 +24,11 @@ Los tres pasos van **en el mismo commit**. Una spec marcada `consolidated`
 cuyo doc de estado no se actualizó es **peor** que no haberla consolidado:
 afirma una propiedad falsa sobre dónde vive la verdad.
 
-## 2. Los dos avisos
+## 2. Los tres avisos
 
-Son dos, según lo que sea cierto en cada momento. Se copian literalmente: la
-CI comprueba que el aviso presente corresponde al estado declarado.
+Son tres, según lo que sea cierto en cada momento. Se copian literalmente: la
+CI comprueba que el aviso presente corresponde al estado declarado, y que no
+hay dos a la vez.
 
 **A — al pasar a `implemented`.** El *Contexto* ya no es cierto, pero los docs
 de estado aún no recogen el cambio:
@@ -46,18 +47,34 @@ de estado aún no recogen el cambio:
 > Vigentes aquí solo los **criterios de aceptación**, como registro de
 > verificación.
 
+**C — al cerrar sin verificar** (ADR 0013, `ciclo-de-spec.md` §6). Sustituye
+al aviso A en la spec que no llegó a `verified` y no va a llegar:
+
+> ⚠️ **Spec cerrada sin verificar (AAAA-MM-DD).** Describe un cambio ya
+> implementado: su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver el **Doc de estado**
+> indicado arriba. **No llegó a `verified`**: los criterios que siguen sin
+> marcar no se cumplieron, y cada uno tiene su destino escrito en
+> `docs/roadmap.md`. Se congela aquí como registro, con el ADR 0013 detrás.
+
 La diferencia importa: **el aviso B afirma que el estado vigente ya se puede
 leer en los docs**, y eso solo es cierto una vez hecha la consolidación.
-Estamparlo antes es exactamente el fallo que este flujo persigue.
+Estamparlo antes es exactamente el fallo que este flujo persigue. El aviso C
+afirma lo mismo sobre el doc de estado —por eso cerrar exige haberlo
+consolidado— pero **no** afirma que los criterios se cumplieran: dice justo
+lo contrario, y por eso no se puede sustituir por el B.
 
 ## 3. Regla de lectura
 
 - Una spec `consolidated` **no se lee para obtener contexto** sobre cómo
   funciona el sistema. Se consulta **solo para auditoría**: qué cambió,
   cuándo, con qué criterios y contra qué ADR.
-- Una spec consolidada **no se edita**. Si el comportamiento vuelve a cambiar,
-  eso es una **spec nueva**, que a su vez se consolidará sobre el mismo doc de
-  estado.
+- **Ninguno de los dos estados terminales se edita** —ni `consolidated` ni
+  `closed`—. Si el comportamiento vuelve a cambiar, eso es una **spec
+  nueva**, que a su vez se consolidará sobre el mismo doc de estado. En una
+  spec `closed` la regla es si acaso más estricta: sus criterios sin marcar
+  son el registro de qué no se cumplió, y marcarlos después borraría la única
+  señal que queda.
 - Antes de tocar código de un área, **lee su doc de estado**, no sus specs.
 
 ## 4. Qué doc recibe qué

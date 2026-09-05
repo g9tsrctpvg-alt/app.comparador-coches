@@ -31,11 +31,16 @@ humano como para el enrutado de modelo.
 | `implemented` | Existe código derivado de la spec | IA 🟢 |
 | `verified` | La implementación cumple los criterios de aceptación | IA 🟢 |
 | `consolidated` | Su efecto está plegado en el doc de estado; la spec queda congelada como registro | IA 🟢 |
+| `closed` | No llegó a `verified` y no va a llegar; se cierra sin afirmar que sus criterios se cumplieran (ADR 0013) | **Humano** 🔴 |
 | `superseded` | Sustituida por otra spec (enlazar cuál) | Humano 🔴 |
 
 `consolidated` es el estado **terminal del camino feliz**. Una spec no está
 cerrada hasta que el comportamiento que introdujo se puede leer en los docs de
 estado **sin abrir la spec**.
+
+Los otros dos estados terminales son para cuando ese camino no se recorre:
+`superseded` cuando otra spec sustituye a ésta, y `closed` cuando la
+verificación no va a ocurrir — ver §6.
 
 ## 3. El gate humano
 
@@ -75,7 +80,36 @@ test, ejecución o revisión, según el criterio—. Si alguno falla, la spec
 `draft`. No existe «verificado con salvedades»: o se cumplen los criterios o
 no se cumplen.
 
-## 6. Plantilla
+Esa regla no se relaja nunca. Lo que sí existe, desde el **ADR 0013**, es una
+salida para la spec que se queda ahí: si el código lleva semanas en
+producción y el criterio que falta no se va a cumplir, la spec se **cierra**
+—§6—, que no es lo mismo que darla por verificada.
+
+## 6. Cerrar una spec que no se va a verificar
+
+Lo decide el **ADR 0013**; aquí va la mecánica. Cerrar exige las **cinco**
+condiciones, todas:
+
+1. La spec está en `implemented`. Desde `draft` o `approved` no se cierra: sin
+   código no hay nada que cerrar, hay algo que abandonar, y eso se borra.
+2. Han pasado **21 días naturales o más** desde que pasó a `implemented` sin
+   llegar a `verified`. Aquí ese tramo se recorre casi siempre el mismo día,
+   así que tres semanas no cierra nada que solo esté en curso.
+3. El comportamiento vigente **se lee en el doc de estado** declarado. Si
+   falta, se consolida primero lo que haya: cerrar dejando la verdad solo en
+   el código es el anti-patrón 6.
+4. **Cada criterio sin marcar tiene destino escrito** — una fila de deuda en
+   `docs/roadmap.md` o un aplazamiento con su disparador. Sin destino es el
+   anti-patrón 7 con otro nombre.
+5. La transición la hace **una persona** 🔴. Aceptar un criterio incumplido es
+   un juicio de producto, no de contabilidad.
+
+Se estampa entonces el **aviso C** (`consolidacion.md` §2), que sustituye al
+A. Los criterios sin marcar **se quedan sin marcar para siempre**: son el
+registro de qué no se cumplió. Una spec `closed` no se edita, igual que una
+`consolidated`.
+
+## 7. Plantilla
 
 La plantilla única está en `specs/TEMPLATE.md`. No se redacta una spec desde
 cero ni se recorta la plantilla: los campos de cabecera son los que hacen la

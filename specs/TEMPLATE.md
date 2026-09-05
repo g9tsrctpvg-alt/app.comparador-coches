@@ -1,7 +1,7 @@
 # NNNN — Título de la spec
 
 - **Id:** product/NNNN | technical/NNNN
-- **Estado:** draft | approved | implemented | verified | consolidated | superseded
+- **Estado:** draft | approved | implemented | verified | consolidated | closed | superseded
 - **Tipo:** product | technical
 - **Fecha:** AAAA-MM-DD
 - **Specs relacionadas:** (ids o «ninguna»)

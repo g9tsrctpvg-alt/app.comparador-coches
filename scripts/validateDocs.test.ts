@@ -338,6 +338,11 @@ const NOTICE_B = [
   '> que se redactó.',
 ].join('\n');
 
+const NOTICE_C = [
+  '> ⚠️ **Spec cerrada sin verificar (2026-09-04).** Describe un cambio ya',
+  '> implementado que no llegó a `verified`.',
+].join('\n');
+
 function specWithNotice(estado: string, notice: string): string {
   return validSpec({ Estado: estado }).replace(
     '## Contexto',
@@ -430,7 +435,92 @@ describe('14 — draft or approved carrying a historic notice', () => {
   });
 });
 
-describe('15 — Nivel outside the three autonomy levels', () => {
+describe('15 — closed without notice C', () => {
+  it('fires when the notice is missing altogether', () => {
+    const result = run({
+      'specs/technical/0001-andamiaje.md': validSpec({ Estado: 'closed' }),
+    });
+    expect(result.errors).toContain(
+      "specs/technical/0001-andamiaje.md: Estado 'closed' requires notice C",
+    );
+  });
+
+  it('stays quiet once notice C is stamped', () => {
+    const result = run({
+      'specs/technical/0001-andamiaje.md': specWithNotice('closed', NOTICE_C),
+    });
+    expect(result.errors).toEqual([]);
+  });
+
+  it('demands the same three things every advanced state demands', () => {
+    const bare = validSpec({ Estado: 'closed', 'Doc de estado': undefined })
+      .replace('- [ ] Un criterio.', 'Sin criterios todavía.')
+      .replace('Ninguna.', 'Falta decidir el nombre.');
+    const result = run({ 'specs/technical/0001-andamiaje.md': bare });
+    expect(result.errors).toEqual(
+      expect.arrayContaining([
+        "specs/technical/0001-andamiaje.md: Estado 'closed' requires at least one acceptance criterion",
+        "specs/technical/0001-andamiaje.md: Estado 'closed' requires 'Decisiones abiertas' to be empty or to say so explicitly",
+        "specs/technical/0001-andamiaje.md: Estado 'closed' requires 'Doc de estado'",
+      ]),
+    );
+  });
+});
+
+describe('15b — the spec that documents notice C is not tripped by it', () => {
+  it('ignores the placeholder form, which carries no real date', () => {
+    const documenting = validSpec({ Estado: 'approved' }).replace(
+      'Algo que motiva la spec.',
+      [
+        'Al cerrar se estampa:',
+        '',
+        '> ⚠️ **Spec cerrada sin verificar (AAAA-MM-DD).** Describe un cambio',
+        '> ya implementado.',
+      ].join('\n'),
+    );
+    expect(
+      run({ 'specs/technical/0001-andamiaje.md': documenting }).errors,
+    ).toEqual([]);
+  });
+});
+
+describe('16 — closed still carrying notice A or B', () => {
+  it('fires for either of the two it replaces', () => {
+    for (const notice of [NOTICE_A, NOTICE_B]) {
+      const result = run({
+        'specs/technical/0001-andamiaje.md': specWithNotice(
+          'closed',
+          `${notice}\n\n${NOTICE_C}`,
+        ),
+      });
+      expect(result.errors).toContain(
+        'specs/technical/0001-andamiaje.md: notice A or B must be replaced by notice C on closing',
+      );
+    }
+  });
+});
+
+describe('17 — notice C outside the closed state', () => {
+  it('fires on every other state', () => {
+    for (const estado of [
+      'draft',
+      'approved',
+      'implemented',
+      'verified',
+      'consolidated',
+      'superseded',
+    ]) {
+      const result = run({
+        'specs/technical/0001-andamiaje.md': specWithNotice(estado, NOTICE_C),
+      });
+      expect(result.errors).toContain(
+        "specs/technical/0001-andamiaje.md: notice C belongs to Estado 'closed' only",
+      );
+    }
+  });
+});
+
+describe('18 — Nivel outside the three autonomy levels', () => {
   it('fires on anything else', () => {
     const result = run({
       'docs/decisions/0001-formato.md': validAdr({ Nivel: 'alto' }),
@@ -450,7 +540,7 @@ describe('15 — Nivel outside the three autonomy levels', () => {
   });
 });
 
-describe('16 — a mandatory ADR section left empty', () => {
+describe('19 — a mandatory ADR section left empty', () => {
   it('fires for each of the five', () => {
     const sections: Record<string, string> = {
       Contexto: 'El porqué.',
@@ -473,7 +563,7 @@ describe('16 — a mandatory ADR section left empty', () => {
   });
 });
 
-describe('17 — filename outside NNNN-titulo-en-kebab-case.md', () => {
+describe('20 — filename outside NNNN-titulo-en-kebab-case.md', () => {
   it('fires on a name with no number', () => {
     const result = run({ 'specs/technical/andamiaje.md': validSpec() });
     expect(result.errors).toContain(
@@ -500,7 +590,7 @@ describe('17 — filename outside NNNN-titulo-en-kebab-case.md', () => {
   });
 });
 
-describe('18 — a number already used', () => {
+describe('21 — a number already used', () => {
   it('fires on the second document sharing a number', () => {
     const result = run({
       'specs/technical/0001-andamiaje.md': validSpec(),
@@ -524,7 +614,7 @@ describe('18 — a number already used', () => {
   });
 });
 
-describe('19 — a missing spec directory', () => {
+describe('22 — a missing spec directory', () => {
   it('fires when the folder is not there', () => {
     const result = run(healthyRepo(), ['specs/technical', 'docs/decisions']);
     expect(result.errors).toContain('missing directory: specs/product');
@@ -535,7 +625,7 @@ describe('19 — a missing spec directory', () => {
   });
 });
 
-describe('20 — a missing template', () => {
+describe('23 — a missing template', () => {
   it('fires for each template that is absent', () => {
     const result = validateDocs({
       documents: healthyRepo(),

@@ -28,16 +28,19 @@
  * 12. `consolidated` sin el aviso B.
  * 13. `consolidated` que conserva el aviso A.
  * 14. `draft` o `approved` con un aviso histórico.
+ * 15. `closed` sin el aviso C.
+ * 16. `closed` que conserva el aviso A o el B.
+ * 17. El aviso C en un estado que no es `closed`.
  *
  * Solo ADRs:
- * 15. `Nivel` que no es 🟢, 🟡 ni 🔴.
- * 16. Una de sus cinco secciones obligatorias, vacía.
+ * 18. `Nivel` que no es 🟢, 🟡 ni 🔴.
+ * 19. Una de sus cinco secciones obligatorias, vacía.
  *
  * De conjunto:
- * 17. Nombre de fichero que no es `NNNN-titulo-en-kebab-case.md`.
- * 18. Número ya usado por otro documento de la misma carpeta.
- * 19. Falta un directorio de specs.
- * 20. Falta una plantilla.
+ * 20. Nombre de fichero que no es `NNNN-titulo-en-kebab-case.md`.
+ * 21. Número ya usado por otro documento de la misma carpeta.
+ * 22. Falta un directorio de specs.
+ * 23. Falta una plantilla.
  */
 
 export type SpecKind = 'product' | 'technical';
@@ -67,6 +70,7 @@ const SPEC_STATES = [
   'implemented',
   'verified',
   'consolidated',
+  'closed',
   'superseded',
 ] as const;
 const ADR_STATES = ['draft', 'approved', 'superseded', 'rejected'] as const;
@@ -89,10 +93,23 @@ const STATES_NEEDING_CRITERIA = [
   'implemented',
   'verified',
   'consolidated',
+  'closed',
 ];
 
 const NOTICE_A = '**Spec histórica — implementada, sin consolidar.**';
 const NOTICE_B = '**Spec consolidada (';
+/**
+ * El aviso del estado terminal del ADR 0013: la spec no llegó a `verified`
+ * y no lo va a hacer, así que sus criterios sin marcar siguen sin marcar y
+ * cada uno tiene su destino escrito fuera.
+ *
+ * Exige una **fecha real**, y no basta el prefijo como en los avisos A y B,
+ * porque `technical/0014` —la spec que introduce este aviso— lo transcribe
+ * literalmente con el marcador `(AAAA-MM-DD)` para poder implementarlo. Sin
+ * la fecha, esa transcripción haría fallar a la spec que define la regla.
+ */
+const NOTICE_C_RE =
+  /\*\*Spec cerrada sin verificar \(\d{4}-\d{2}-\d{2}\)\.\*\*/;
 
 const ADR_SECTIONS = [
   'Contexto',
@@ -246,6 +263,7 @@ function checkSpec(
 
   const hasA = text.includes(NOTICE_A);
   const hasB = text.includes(NOTICE_B);
+  const hasC = NOTICE_C_RE.test(text);
   if ((estado === 'implemented' || estado === 'verified') && !hasA) {
     errors.push(`${rel}: Estado '${estado}' requires notice A`);
   }
@@ -258,6 +276,20 @@ function checkSpec(
         `${rel}: notice A must be replaced by notice B on consolidation`,
       );
     }
+  }
+  // El aviso C es excluyente con los otros dos (technical/0014, requisito
+  // 2.2): una spec lleva exactamente uno, y el que corresponde a su estado.
+  if (estado === 'closed') {
+    if (!hasC) {
+      errors.push(`${rel}: Estado 'closed' requires notice C`);
+    }
+    if (hasA || hasB) {
+      errors.push(
+        `${rel}: notice A or B must be replaced by notice C on closing`,
+      );
+    }
+  } else if (hasC) {
+    errors.push(`${rel}: notice C belongs to Estado 'closed' only`);
   }
   if ((estado === 'draft' || estado === 'approved') && (hasA || hasB)) {
     errors.push(`${rel}: Estado '${estado}' must carry no historic notice`);
