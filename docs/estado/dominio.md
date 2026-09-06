@@ -146,13 +146,13 @@ es información del coche.
 
 `src/domain/scoring/scoreGap.ts` (product/0029) reparte la diferencia de
 nota entre dos `CarScoreBreakdown` ya puntuados —`splitScoreGap(a, b)`— en
-la aportación de cada uno de los siete ejes. Existe porque `AxisBreakdown` ya
+la aportación de cada uno de los ocho ejes. Existe porque `AxisBreakdown` ya
 sabe explicar una nota, pero ninguna pieza del dominio sabía explicar una
 diferencia: dos coches con la misma nota redondeada pueden ser, por dentro,
 completamente opuestos.
 
 Cada línea es `peso × (score_i(A) − score_i(B))`, que por construcción
-coincide con `contribution_i(A) − contribution_i(B)`: la suma de las siete
+coincide con `contribution_i(A) − contribution_i(B)`: la suma de las ocho
 reproduce exactamente `total(A) − total(B)`. Las líneas salen ordenadas por
 valor absoluto descendente, y un eje en el que los dos coches empatan es una
 línea válida de valor 0 —dos coches empatando en un eje es información, no
@@ -161,7 +161,7 @@ diferencia, una de cada signo cuando lo hay: el eje de mayor valor absoluto
 por sí solo podría ser, dos veces, el mismo lado de la historia.
 
 **La sensibilidad se deriva de la misma propiedad que hace exacto el
-reparto.** Desde que los siete ejes puntúan contra escalas absolutas (ADR
+reparto.** Desde que los ocho ejes puntúan contra escalas absolutas (ADR
 0004), la nota de un eje no depende de los pesos ni del resto de
 candidatos: el peso solo multiplica. Por eso la diferencia de nota entre dos
 coches es una función **lineal** de cualquier peso —con los otros seis
@@ -184,7 +184,7 @@ importa estas cuatro funciones y los tipos, nunca las fórmulas de un eje.
 ## Cómo se puntúa un sumando
 
 El ADR 0004 fija el principio: una nota debe decir si un coche es bueno, no
-en qué puesto va de once. **Los siete ejes puntúan hoy contra escalas
+en qué puesto va de once. **Los ocho ejes puntúan hoy contra escalas
 absolutas** — cada magnitud se puntúa contra dos anclajes fijos, razonados
 contra el mundo y no contra el catálogo: uno de saturación (nota 10, por
 debajo o por encima ya no mejora) y uno de rechazo (nota 0). Ninguna nota
@@ -205,11 +205,12 @@ nota = 10 × (1 − t²(3 − 2t))
 
 La pendiente es cero en los dos anclajes y máxima en el centro: afinar cerca
 del extremo bueno no compra casi nada, y estar cerca del extremo malo es casi
-tan malo como estarlo. `estetica` es la excepción: su escala es lineal, sin
-`scoreOnAbsoluteScale` de por medio — el 1-5 que da el usuario ya es su
-juicio completo, y comprimir los extremos otra vez lo deformaría dos veces.
-`AbsoluteScale` no distingue cuál de las dos produjo la nota; describe los
-anclajes y el resultado, no la fórmula entre ambos.
+tan malo como estarlo. `estetica` y `prueba` son las dos excepciones: su
+escala es lineal, sin `scoreOnAbsoluteScale` de por medio — el 1-5 que da el
+usuario ya es su juicio completo, y comprimir los extremos otra vez lo
+deformaría dos veces. `AbsoluteScale` no distingue cuál de las dos curvas
+produjo la nota; describe los anclajes y el resultado, no la fórmula entre
+ambos.
 
 **La normalización relativa (`normalizeAll`, `normalize.ts`) ya no la llama
 ningún eje.** Fue el mecanismo de antes del ADR 0004 —
@@ -632,13 +633,13 @@ aplicados son pesos como cualquier otro.
 
 ## El catálogo
 
-`src/data/cars.json`: once candidatos reales, cada campo con su estructura
-de fuentes.
+`src/data/cars.json`: veintiún registros reales, dieciocho de ellos
+publicados, cada campo con su estructura de fuentes.
 
 Un catálogo **sin ningún coche** no es un catálogo válido: `loadCatalog` lo
 rechaza igual que rechaza un registro mal formado, así que el fallo se
 declara al cargar y no a mitad del primer ranking. `scoreCatalog` lleva
-además su propia comprobación — con los siete ejes en escala absoluta, nada
+además su propia comprobación — con los ocho ejes en escala absoluta, nada
 dentro de ellos falla por su cuenta si de todos modos se le pasara un
 catálogo vacío.
 

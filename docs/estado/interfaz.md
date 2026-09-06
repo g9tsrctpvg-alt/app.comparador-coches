@@ -281,7 +281,7 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   su eje: la cifra del peso y el pulgar del deslizador van en `--axis-color`.
   El valor se apaga a `--color-mute` cuando vale 0, y ese apagado gana al
   color del eje — que un eje no cuente pesa más que de qué color es. Debajo
-  de los siete deslizadores, y separado por un filete, el control que abre la
+  de los ocho deslizadores, y separado por un filete, el control que abre la
   tanda de calibración (`product/0035`); se deshabilita con menos de cuatro
   coches elegibles y dice por qué.
 - **`CalibrationDialog`** — la tanda de cara a cara que deduce los siete
@@ -450,7 +450,7 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   van los controles de valoración editables (los subcomponentes que el
   dominio marca con `editableRating`; la fila no sabe
   de antemano cuáles son ni cuántos) y por último el desglose completo de
-  los siete ejes.
+  los ocho ejes.
 
   Con `variant="list"` la fila conserva el marcado y el tamaño que ya tenía
   antes de `product/0022`: posición y nombre en una línea, la línea de apoyo
@@ -1042,7 +1042,7 @@ el marcado del shell y la ficha (que cada vista renderice exactamente un
 `<h1>`; que la navegación marque `aria-current="page"` sobre la activa y
 sobre ninguna más; que el conjunto de campos, el modelo de comparación y el
 criterio de orden por defecto sean los que la spec fija; que una Δ se
-renderice con signo escrito). La puntuación de los once candidatos del
+renderice con signo escrito). La puntuación de los veintiún registros del
 catálogo real está protegida aparte, en
 `src/domain/scoring/scoreCatalog.snapshot.test.ts`: no es un test de `ui/`,
 pero es la comprobación de que ningún cambio de presentación mueve una
