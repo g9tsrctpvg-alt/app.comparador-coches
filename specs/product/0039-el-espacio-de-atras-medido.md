@@ -33,24 +33,26 @@ se parece a la que quieres medir no es la que quieres medir.
 Y la medida directa está en la fuente que el catálogo ya usa. La ficha de
 *mediciones propias* de km77 —de la que salen **los veintiún** valores de
 `rearShoulderWidthMm` del catálogo, comprobado registro a registro— publica
-en su bloque de segunda fila, además de la anchura de hombros: «Distancia del
-respaldo al respaldo delantero», «Altura al techo», «Regulación longit. de la
-banqueta» e «Isofix. Distancia entre anclajes»; y en el de maletero, anchura,
-profundidad y «Altura de borde de carga». Comprobado fila a fila sobre la
-ficha del Kia EV3 el 2026-09-06.
+en su bloque de segunda fila la fila «Distancia del respaldo al respaldo
+delantero»: cuánto hay, dentro del coche, entre el respaldo de atrás y el de
+delante.
 
-De paso, esa misma tabla cierra una deuda abierta desde `product/0017`: km77
-publica la anchura de hombros como máxima y mínima, y el catálogo guardó
-«la que publicara cada ficha» sin distinguir cuál, así que hoy mezcla mínimos
-con máximos en la misma columna.
+**Esa fila se publica con un solo rótulo y un solo valor**, y eso no es un
+detalle menor: comprobado el 2026-09-06 en tres fichas de segmentos opuestos
+—Kia Picanto, Kia EV3 y Mercedes-Benz Clase E—, las tres la publican igual.
+La anchura de hombros, en cambio, aparece en unas fichas como «Anchura
+hombros mínima» y en otras como «Anchura hombros máxima», **nunca las dos a
+la vez**: la del Picanto solo trae la mínima (126 cm) y la de la Clase E solo
+la máxima (146 cm). La magnitud nueva llega sin la ambigüedad que arrastra la
+que ya está.
 
 Está registrado como propuesta P18 en `docs/roadmap.md`.
 
 ## Objetivo
 
 Que `habitabilidad` puntúe el espacio de atrás **medido dentro del coche**,
-no inferido de la distancia entre ejes, y que la anchura de hombros deje de
-mezclar mínimos con máximos en la misma columna.
+no inferido de la distancia entre ejes, y que cada anchura de hombros diga
+qué fila de la fuente hay detrás de su número.
 
 ## Alcance
 
@@ -58,10 +60,11 @@ mezclar mínimos con máximos en la misma columna.
   longitudinal de la segunda fila, en milímetros.
 - **La fórmula de `habitabilidad`**, que pasa a puntuar esa magnitud en lugar
   de la batalla, con el mismo reparto 50/50.
-- **Los dos anclajes de la escala nueva**, con el criterio del ADR 0010.
-- **La re-declaración de los veintiún `rearShoulderWidthMm`** desde una fila
-  declarada y la misma para todos, conservando el valor anterior como fuente
-  descartada.
+- **Los dos anclajes de la escala nueva**, fijados con el criterio del ADR
+  0010 y medidos en la misma fuente y la misma fila que la magnitud.
+- **El re-etiquetado de los veintiún `rearShoulderWidthMm`** para que cada
+  uno declare qué fila de la fuente hay detrás de su valor. Ningún valor
+  cambia.
 - **Una fila nueva en la ficha completa**, con su polaridad, su orden y su
   disponibilidad como criterio eliminatorio.
 - **El alta del dato para los veintiún registros** —publicados y
@@ -73,9 +76,13 @@ mezclar mínimos con máximos en la misma columna.
 ## Fuera de alcance
 
 - **La altura al techo atrás como tercer sumando.** La misma tabla la
-  publica, y es espacio de atrás tan legítimo como los otros dos, pero
-  añadirla obliga a repartir el eje entre tres y a anclar una escala más.
-  Esta spec cambia una magnitud por otra mejor; no rehace el eje.
+  publica, y es espacio de atrás tan legítimo como los otros dos, pero llega
+  con el mismo defecto que la anchura de hombros —unas fichas dan «Altura
+  mínima al techo» y otras «Altura máxima con techo solar»— y además obliga a
+  repartir el eje entre tres y a anclar una escala más. Esta spec cambia una
+  magnitud por otra mejor; no rehace el eje.
+- **Homogeneizar la anchura de hombros.** No se puede con esta fuente, y el
+  requisito 3 lo demuestra en vez de suponerlo.
 - **`Reference`.** La referencia declara solo magnitudes dimensionales de
   carrocería, y la anchura de hombros ya no está allí: la Δ de esta magnitud
   saldrá `'unavailable'` contra ella, exactamente como pasa hoy con los
@@ -126,10 +133,39 @@ es inventar una propia.
 indirectas: una mide el sitio a lo largo y otra a lo ancho, ninguna sustituye
 a la otra, y las dos se miden dentro del coche.
 
-2.3. Los dos anclajes de la escala nueva son los extremos del turismo
-generalista de venta al público (ADR 0010), cada uno con su modelo y su
-fuente publicada. Quedan por fijar: es la única **decisión abierta** de esta
-spec, y sin ellos no puede pasar a `approved`.
+2.3. Los anclajes de la magnitud nueva son los extremos del turismo
+generalista de venta al público (ADR 0010):
+
+| Magnitud | Nota 10 desde | Nota 0 hasta |
+| --- | --- | --- |
+| Espacio de piernas atrás | 810 mm | 590 mm |
+
+**El techo lo pone el BMW i7 xDrive60 —81 cm—**, el mismo modelo que ya ancla
+la batalla, y no es un artefacto de berlina de lujo: el Škoda Superb, una
+berlina generalista, se queda a un centímetro. **El suelo lo pone el Toyota
+Aygo X Cross Play —59 cm—**, el más justo de los siete urbanos medidos.
+Consultado el 2026-09-06 en las mediciones propias de km77, en la misma fila
+que declara el requisito 1.2:
+
+| Modelo medido | Espacio de piernas atrás |
+| --- | --- |
+| BMW i7 xDrive60 (2022) | 81 cm |
+| Škoda Superb (2024) | 80 cm |
+| Tesla Model S (2021) | 75 cm |
+| Mercedes-Benz Clase E Berlina (2023) | 74 cm |
+| Hyundai i10 (2020) | 69 cm |
+| Mitsubishi Space Star (2020) | 68 cm |
+| Dacia Spring (2021) | 62 cm |
+| Leapmotor T03 (2024) | 62 cm |
+| Fiat 500 3 puertas (2021) | 61 cm |
+| Kia Picanto (2024) | 61 cm |
+| Toyota Aygo X Cross Play (2022) | 59 cm |
+
+Ninguno de los dos anclajes se elige mirando dónde caen los candidatos: los
+once modelos medidos son ajenos a la comparativa, y entre los dieciocho
+publicados no hay ni un urbano ni una berlina de representación. Es el
+criterio del ADR 0010, y el fallo que ese ADR corrige era exactamente el
+contrario —apretar la escala contra la gama que se compara—.
 
 2.4. La curva entre anclajes es la misma que la del resto de ejes medidos:
 *smoothstep*, vía `scoreOnAbsoluteScale`.
@@ -138,26 +174,35 @@ spec, y sin ellos no puede pasar a `approved`.
 lee, así que no queda ningún consumidor de puntuación; sigue en la ficha con
 polaridad `neutral`, comparable y ordenable.
 
-2.6. Los anclajes de la anchura de hombros —1.460 y 1.260 mm— **se revisan al
-re-declarar el dato** (requisito 3): si el criterio del requisito 3.1 cambia
-la magnitud que la columna guarda, los extremos que la anclan tienen que
-medirse con ese mismo criterio o dejan de ser comparables con ella.
+2.6. **Los anclajes de la anchura de hombros no se tocan** —1.460 y
+1.260 mm—: son los que publican las fichas de sus dos modelos, y el requisito
+3 explica por qué no hay una fila común con la que re-medirlos.
 
-### 3. Los hombros
+### 3. Los hombros, y por qué su deuda no se cierra aquí
 
-3.1. Los veintiún registros re-declaran `rearShoulderWidthMm` desde **la fila
-mínima** de esa tabla, la misma para todos, y la etiqueta de la fuente dice
-cuál se ha tomado. Se elige la mínima porque es la que manda para lo que la
-magnitud existe para responder —si caben tres atrás—: el hueco lo decide el
-punto más estrecho, no el más ancho. Es un juicio, y el gate humano puede
-darle la vuelta; lo que no puede quedarse es la columna mezclando las dos.
+3.1. **Comprobado el 2026-09-06** sobre las fichas de los dos modelos que
+anclan esa escala: la del Kia Picanto publica **solo** «Anchura hombros
+mínima» (126 cm) y la de la Mercedes-Benz Clase E publica **solo** «Anchura
+hombros máxima» (146 cm). km77 no publica las dos filas para un mismo coche,
+así que **elegir una y re-declarar los veintiún registros con ella es
+imposible con esta fuente**. La deuda abierta desde `product/0017` no se
+cierra aquí: su condición de cierre —«decidir cuál de las dos usa el proyecto
+y revisar las fichas»— da por hecho que hay dos entre las que elegir.
 
-3.2. El valor anterior **se conserva como fuente descartada** con su
-`discardedReason`, no se sobrescribe: corregir un valor no es cambiarlo de
-opinión sin registro (`docs/proceso/calibracion-de-escalas.md` §6).
+3.2. Lo que esta spec sí hace es **hacer visible la mezcla**: cada
+`rearShoulderWidthMm` declara en la etiqueta de su fuente cuál de las dos
+filas hay detrás de su número, y los registros que hoy no lo dicen se
+re-etiquetan contra su ficha. **Ningún valor cambia**, así que este requisito
+no mueve ninguna nota.
 
-3.3. La deuda de hombros mínimos mezclados con máximos se cierra en
-`docs/roadmap.md`, no se reescribe.
+3.3. La asimetría llega también a los anclajes, y se escribe en vez de
+disimularse: el 1.460 del techo es una anchura **máxima** y el 1.260 del
+suelo es una **mínima**. Se consolida así en `docs/estado/dominio.md`.
+
+3.4. La deuda de `docs/roadmap.md` se **actualiza con este hallazgo**, no se
+cierra: su condición de cierre pasa a ser encontrar una fuente que publique
+la misma fila para todos los candidatos, o declarar la mezcla como límite
+asumido del eje.
 
 ### 4. En la ficha
 
@@ -190,7 +235,7 @@ medición publicada, el alta se detiene ahí y se decide qué hacer con ese
 coche —no se rellena—.
 
 5.3. La skill `add-model` pasa a pedir la magnitud, con la definición del
-requisito 1.2, el criterio de hombros del 3.1 y su recuento actualizado.
+requisito 1.2, la regla de etiquetado del 3.2 y su recuento actualizado.
 
 ### 6. El movimiento de las notas
 
@@ -218,8 +263,11 @@ después.
       sin motivo falla al cargar el catálogo nombrando el campo y el
       registro.
 - [ ] `habitabilidad` puntúa `0,5 × escala(rearLegroomMm) + 0,5 ×
-      escala(rearShoulderWidthMm)`, y su desglose declara los dos anclajes de
-      cada sumando con el valor, la nota y el modelo que los fija.
+      escala(rearShoulderWidthMm)`, con los anclajes 810 mm y 590 mm para la
+      primera y 1.460 mm y 1.260 mm para la segunda.
+- [ ] El desglose del eje declara los dos anclajes de cada sumando con su
+      valor y su nota, y la descripción de fórmula nombra el modelo que fija
+      cada extremo.
 - [ ] Ningún eje lee ya `wheelbaseMm`: buscarlo en `src/domain/scoring/` no
       devuelve ninguna aparición.
 - [ ] `wheelbaseMm` sigue en `FICHA_FIELDS` con polaridad `neutral`, con su
@@ -231,17 +279,18 @@ después.
       espacio», entre «Diámetro de giro» y «Anchura de hombros atrás».
 - [ ] Los veintiún registros declaran `rearLegroomMm` con fuente con enlace y
       versión, y ninguno está marcado `estimated: true`.
-- [ ] Los veintiún `rearShoulderWidthMm` declaran la misma fila de la fuente,
-      la etiqueta lo dice, y el valor anterior sigue presente como fuente
-      descartada con su motivo allí donde haya cambiado.
+- [ ] Los veintiún `rearShoulderWidthMm` declaran en la etiqueta de su fuente
+      qué fila de km77 —«máxima» o «mínima»— hay detrás de su valor, y
+      ninguno de los veintiún valores ha cambiado.
 - [ ] El *snapshot* de puntuación está actualizado y la verificación declara
       qué puestos se movieron y cuánto.
 - [ ] La correlación medida entre la subnota de espacio de piernas y el
       maletero está declarada en la verificación.
-- [ ] La skill `add-model` pide la magnitud y el criterio de hombros del
-      requisito 3.1.
-- [ ] La deuda de hombros mínimos mezclados con máximos está cerrada en
-      `docs/roadmap.md`.
+- [ ] La skill `add-model` pide la magnitud y la regla de etiquetado del
+      requisito 3.2.
+- [ ] La deuda de hombros mínimos mezclados con máximos está **actualizada**
+      en `docs/roadmap.md` con el hallazgo del requisito 3.1 y su nueva
+      condición de cierre.
 - [ ] La CI entera pasa en local: `format:check`, `lint`, `typecheck`,
       `arch:check`, `test:coverage` con el suelo de cobertura vigente,
       `markdownlint` y `build`.
@@ -254,6 +303,10 @@ después.
   hay que comprobar durante el alta es que ninguna ficha concreta la deje en
   «No disponible», como le pasa a cuatro híbridos con la capacidad de
   batería.
+- **Los anclajes se han medido en la misma fuente y la misma fila que la
+  magnitud** (requisito 2.3), no en una fuente distinta: comparar el valor de
+  un coche contra un extremo medido con otro protocolo es el error que este
+  proyecto ya cometió con la anchura de hombros.
 - **Es independiente de `product/0038`**, redactada el mismo día: las dos
   añaden un campo a `FICHA_FIELDS`, así que la que llegue segunda ajusta el
   recuento en su verificación. Ninguna necesita a la otra.
@@ -267,12 +320,4 @@ después.
 
 ## Decisiones abiertas
 
-1. **Los dos anclajes de la escala de espacio de piernas atrás**: qué valor
-   marca el 10 y cuál el 0, cada uno con el modelo que lo fija y su fuente
-   publicada, dentro del universo que declara el ADR 0010 —turismo
-   generalista de venta al público, sin deportivos, versiones de
-   prestaciones, ultralujo, comerciales ni cuadriciclos—. No se pueden
-   deducir del catálogo: apretarlos contra la gama comparada es exactamente
-   el fallo que el ADR 0010 corrige. Cerrar esta decisión es trabajo de
-   búsqueda en la misma fuente que mide la magnitud, y hasta que no esté
-   hecha esta spec no puede pasar a `approved`.
+Ninguna.
