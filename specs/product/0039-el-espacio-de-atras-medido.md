@@ -1,7 +1,7 @@
 # 0039 — El espacio de atrás, medido
 
 - **Id:** product/0039
-- **Estado:** approved
+- **Estado:** consolidated
 - **Tipo:** product
 - **Fecha:** 2026-09-06
 - **Specs relacionadas:** product/0005, product/0013, product/0017,
@@ -9,6 +9,12 @@
   product/0038
 - **ADRs relacionados:** 0004, 0010
 - **Doc de estado:** `docs/estado/dominio.md`, `docs/estado/interfaz.md`
+
+> ⚠️ **Spec consolidada (2026-09-06).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/dominio.md` y `docs/estado/interfaz.md`. Vigentes aquí solo
+> los **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -258,40 +264,40 @@ después.
 
 > Obligatorios y verificables.
 
-- [ ] `CarSchema` exige `rearLegroomMm` y lo valida como `SourcedNumber`; un
+- [x] `CarSchema` exige `rearLegroomMm` y lo valida como `SourcedNumber`; un
       registro sin el campo, con dos fuentes vigentes o con una descartada
       sin motivo falla al cargar el catálogo nombrando el campo y el
       registro.
-- [ ] `habitabilidad` puntúa `0,5 × escala(rearLegroomMm) + 0,5 ×
+- [x] `habitabilidad` puntúa `0,5 × escala(rearLegroomMm) + 0,5 ×
       escala(rearShoulderWidthMm)`, con los anclajes 810 mm y 590 mm para la
       primera y 1.460 mm y 1.260 mm para la segunda.
-- [ ] El desglose del eje declara los dos anclajes de cada sumando con su
+- [x] El desglose del eje declara los dos anclajes de cada sumando con su
       valor y su nota, y la descripción de fórmula nombra el modelo que fija
       cada extremo.
-- [ ] Ningún eje lee ya `wheelbaseMm`: buscarlo en `src/domain/scoring/` no
+- [x] Ningún eje lee ya `wheelbaseMm`: buscarlo en `src/domain/scoring/` no
       devuelve ninguna aparición.
-- [ ] `wheelbaseMm` sigue en `FICHA_FIELDS` con polaridad `neutral`, con su
+- [x] `wheelbaseMm` sigue en `FICHA_FIELDS` con polaridad `neutral`, con su
       fila, su Δ y su orden intactos.
-- [ ] `FICHA_FIELDS` incluye `rearLegroomMm` y `polarityOf` devuelve
+- [x] `FICHA_FIELDS` incluye `rearLegroomMm` y `polarityOf` devuelve
       `'moreIsBetter'`; una regla eliminatoria sobre la magnitud solo admite
       `min`.
-- [ ] La ficha completa muestra «Espacio de piernas atrás» en «Tamaño y
+- [x] La ficha completa muestra «Espacio de piernas atrás» en «Tamaño y
       espacio», entre «Diámetro de giro» y «Anchura de hombros atrás».
-- [ ] Los veintiún registros declaran `rearLegroomMm` con fuente con enlace y
+- [x] Los veintiún registros declaran `rearLegroomMm` con fuente con enlace y
       versión, y ninguno está marcado `estimated: true`.
-- [ ] Los veintiún `rearShoulderWidthMm` declaran en la etiqueta de su fuente
+- [x] Los veintiún `rearShoulderWidthMm` declaran en la etiqueta de su fuente
       qué fila de km77 —«máxima» o «mínima»— hay detrás de su valor, y
       ninguno de los veintiún valores ha cambiado.
-- [ ] El *snapshot* de puntuación está actualizado y la verificación declara
+- [x] El *snapshot* de puntuación está actualizado y la verificación declara
       qué puestos se movieron y cuánto.
-- [ ] La correlación medida entre la subnota de espacio de piernas y el
+- [x] La correlación medida entre la subnota de espacio de piernas y el
       maletero está declarada en la verificación.
-- [ ] La skill `add-model` pide la magnitud y la regla de etiquetado del
+- [x] La skill `add-model` pide la magnitud y la regla de etiquetado del
       requisito 3.2.
-- [ ] La deuda de hombros mínimos mezclados con máximos está **actualizada**
+- [x] La deuda de hombros mínimos mezclados con máximos está **actualizada**
       en `docs/roadmap.md` con el hallazgo del requisito 3.1 y su nueva
       condición de cierre.
-- [ ] La CI entera pasa en local: `format:check`, `lint`, `typecheck`,
+- [x] La CI entera pasa en local: `format:check`, `lint`, `typecheck`,
       `arch:check`, `test:coverage` con el suelo de cobertura vigente,
       `markdownlint` y `build`.
 

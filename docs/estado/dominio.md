@@ -136,11 +136,12 @@ escala absoluta, nunca las dos cosas — ver la siguiente sección. Un campo
 opcional más, `info`, muestra dato del propio coche que no entra en ninguna
 nota. Lo usan `fiabilidad`, para la extensión de garantía condicionada;
 `coste`, para declarar qué precio unitario de la energía se ha aplicado y
-que es la tecnología del coche quien lo decide (product/0008); y `diario`,
-para declarar que la penalización por carga en casa solo puede aplicar a un
-vehículo eléctrico, esté activa o no. Es distinto de `assumptionsUsed`: no
-es un supuesto global,
-es información del coche.
+que es la tecnología del coche quien lo decide (product/0008), y qué cifra
+de consumo ha aplicado y por qué —homologada o sostenida— en un enchufable
+(product/0038); y `diario`, para declarar que la penalización por carga en
+casa solo puede aplicar a un vehículo eléctrico, esté activa o no. Es
+distinto de `assumptionsUsed`: no es un supuesto global, es información del
+coche.
 
 ## La diferencia entre dos coches
 
@@ -245,7 +246,7 @@ rango falla en vez de entrar al cálculo.
 | `coste` | `0,5×escala(precio) + 0,5×escala(uso mensual)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
 | `estetica` | `mix×nota_exterior + (1−mix)×nota_interior`, escala absoluta lineal | Cada valoración se traduce a nota antes de combinarse |
 | `carga` | `escala(maletero)`, escala absoluta | Un solo sumando: no hay reparto que declarar |
-| `habitabilidad` | `0,5×escala(batalla) + 0,5×escala(anchura de hombros)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
+| `habitabilidad` | `0,5×escala(espacio de piernas atrás) + 0,5×escala(anchura de hombros)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
 | `prestaciones` | `0,5×escala(CV/t) + 0,5×escala(aceleración invertida)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
 | `fiabilidad` | `0,7×escala(OCU) + 0,3×escala(garantía incondicional)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
 | `prueba` | `0,2×Σ escala(juicioᵢ)` sobre los cinco juicios de la prueba real, escala absoluta lineal | Cada juicio se traduce a nota antes de combinarse; sin contestar, puntúa el neutro |
@@ -396,6 +397,26 @@ no los usa: su fórmula vigente no resta residual de ninguna de las dos
 escalas. Quedan inertes a propósito — retirarlos del todo es decisión de una
 spec futura que analice la reventa con un horizonte explícito, no de esta.
 
+**Qué consumo entra en la energía anual, para un enchufable** (`coste`
+computa `costeComponents`, product/0038): un `Car` puede declarar
+`sustainedConsumption` —el consumo WLTP en modo sostenido, con la batería en
+su estado mínimo de carga—, y solo un `PHEV` puede hacerlo; en cualquier
+otra tecnología, `CarSchema` lo prohíbe. `coste` lo usa en vez del
+`consumption` ponderado **si y solo si** se cumplen tres condiciones a la
+vez: el coche es `PHEV`, el supuesto `cargaEnCasa` está desactivado y la
+cifra sostenida está declarada. En cualquier otro caso —se carga en casa, o
+la fuente no publica el modo sostenido— usa el ponderado, como todos los
+demás. El motivo: el consumo ponderado de un enchufable presupone empezar
+cada trayecto con la batería llena, y quien no puede cargar en casa no vive
+en ese supuesto — es un híbrido que carga con la batería vacía. El desglose
+declara en `info` cuál de las dos cifras ha aplicado y por qué, y el dato de
+entrada que muestra bajo «Consumo» es siempre el que ha entrado en el
+cálculo, nunca el ponderado por defecto si no es el que se ha usado. `diario`
+no cambia: la penalización por no cargar en casa sigue sin aplicar a un
+enchufable, porque mide la molestia de depender de un cargador ajeno, y
+quien no enchufa un `PHEV` reposta gasolina como cualquiera — lo que cambia
+por no cargar es lo que gasta, no si depende de un cargador.
+
 ### Los anclajes de `carga`
 
 | Magnitud | Nota 10 desde | Nota 0 hasta |
@@ -412,26 +433,43 @@ grande del mercado; el suelo lo pone el Fiat 500 Hybrid —185 L—. Fuente:
 
 | Magnitud | Nota 10 desde | Nota 0 hasta |
 | --- | --- | --- |
-| Batalla | 3.200 mm | 2.400 mm |
+| Espacio de piernas atrás | 810 mm | 590 mm |
 | Anchura de hombros (2ª fila) | 1.460 mm | 1.260 mm |
 
 Los dos anclajes son los extremos del turismo generalista de venta al
 público (ADR 0010), no el mejor y el peor de la gama que se está comparando.
-**Batalla:** el BMW i7 —3.215 mm— marca el techo real; el Kia Picanto
-—2.400 mm, la batalla más corta a la venta— marca el suelo. **Anchura de
-hombros:** el Mercedes Clase E —146 cm, según las mediciones propias de
-km77— marca el techo; el mismo Picanto —126 cm, km77— marca el suelo.
-Batalla de [motor.es](https://www.motor.es/); anchura de hombros de
-[km77](https://www.km77.com/), porque es la fuente que ya usa el catálogo
-para esa magnitud.
 
-**Batalla y anchura de hombros pesan igual entre sí** —0,5 cada una—
-**porque ninguna es mejor proxy que la otra** del espacio de quien va
-detrás: la batalla reparte entre habitáculo y vanos, así que dos coches con
-la misma batalla pueden dar distinto sitio a las piernas; la anchura de
-hombros se mide dentro del habitáculo pero solo a una altura. Es la misma
-proporción relativa que las dos tenían entre sí antes de `product/0033`,
-cuando vivían dentro de `viaje` a 0,25 cada una.
+**Espacio de piernas atrás** (`rearLegroomMm`, product/0039): sustituye a la
+batalla desde el 2026-09-06 porque la batalla no mide el espacio de atrás,
+lo insinúa —reparte entre habitáculo y vanos, y dos coches con la misma
+batalla pueden dar sitio distinto a las piernas—. La magnitud es
+«Distancia del respaldo al respaldo delantero» de las mediciones propias de
+km77, la misma ficha que ya mide la anchura de hombros. El techo lo marca el
+**BMW i7 xDrive60** —81 cm—, el mismo modelo que ya ancla la batalla, con el
+Škoda Superb a un centímetro; el suelo lo marca el **Toyota Aygo X Cross
+Play** —59 cm—, el más justo de once modelos ajenos al catálogo medidos al
+fijar la escala. Cuando la fuente publica un rango porque la segunda fila es
+deslizante —el BMW X1 xDrive25e (76-62 cm) y el Nissan X-Trail e-Power
+(77-56 cm) del catálogo, y el propio BMW i7 que ancla el techo—, el
+catálogo declara el **mínimo**: la cifra que no depende de cómo se reparta
+el hueco con el maletero.
+
+**Anchura de hombros** (`rearShoulderWidthMm`): el Mercedes Clase E —146 cm,
+mediciones propias de km77— marca el techo; el Kia Picanto —126 cm, km77—
+marca el suelo. **Los dos anclajes no son la misma medida**: km77 publica
+para el Picanto solo «Anchura hombros mínima» y para la Clase E solo
+«Anchura hombros máxima» —nunca las dos filas para un mismo coche—, así que
+el 10 de esta escala es un máximo y el 0 un mínimo. No es un descuido: es el
+límite de la fuente, heredado a propósito en vez de disimulado, y el
+catálogo declara en la etiqueta de cada coche cuál de las dos filas hay
+detrás de su valor.
+
+**Espacio de piernas y anchura de hombros pesan igual entre sí** —0,5 cada
+una— **porque ninguna es mejor proxy que la otra** del espacio de quien va
+detrás: una mide el sitio a lo largo y otra a lo ancho, y las dos se miden
+dentro del coche. Es razón más fuerte que la de antes de `product/0039`,
+cuando la batalla y la anchura de hombros pesaban igual «porque ninguna era
+mejor proxy que la otra» siendo las dos medidas indirectas.
 
 Con anclajes de mercado, ningún candidato del catálogo satura ya un extremo
 salvo el Hyundai IONIQ 5 en anchura de hombros —mide exactamente 1.460 mm—.
@@ -441,12 +479,19 @@ precisamente el fallo que corrige — cuánto separa un eje lo deciden los
 pesos, no el ancho del recorrido entre sus dos anclajes.
 
 **La anchura de hombros se publica en centímetros enteros** (km77, ficha de
-mediciones propias, fila «Anchura» de la segunda fila). Se guarda en
-milímetros por coherencia con el resto de medidas, pero su resolución real
-es de 10 mm y no debe leerse como precisión milimétrica. km77 publica para
-unos modelos el mínimo de esa fila y para otros el máximo sin distinguirlo
-en la etiqueta, y el catálogo guarda el que publique cada ficha: es una
-deuda conocida, en `docs/roadmap.md`.
+mediciones propias, fila «Anchura hombros mínima» o «Anchura hombros
+máxima» de la segunda fila, según el modelo). Se guarda en milímetros por
+coherencia con el resto de medidas, pero su resolución real es de 10 mm y no
+debe leerse como precisión milimétrica. Que unos modelos declaren la mínima
+y otros la máxima sigue siendo una deuda conocida, en `docs/roadmap.md`:
+`product/0039` la hace visible en la etiqueta de cada fuente, no la cierra,
+porque km77 no publica las dos filas para un mismo coche.
+
+**`wheelbaseMm` sigue declarada y no puntúa ningún eje**, el mismo trato que
+ya reciben `generation` o `warrantyExtension`: informativa por diseño, no un
+descuido. Batalla y espacio de piernas no son la misma pregunta —la batalla
+también describe cuánto coche hay fuera—, y por eso se muestra en la ficha
+aunque ya no decida ninguna nota.
 
 ### Los anclajes de `prestaciones`
 
@@ -727,7 +772,7 @@ peso.
 ## Los imprescindibles
 
 `src/domain/eliminatoryRules.ts` (product/0031): un umbral sobre una de las
-veintiséis magnitudes de la ficha (`FICHA_FIELDS`), `{ field, operator,
+veintiocho magnitudes de la ficha (`FICHA_FIELDS`), `{ field, operator,
 value }`, con `operator` en `'min'` o `'max'`. `evaluateRules` los evalúa
 contra los valores numéricos ya extraídos de un coche
 (`numericFieldValues`/`numericValuesFromCells`, `src/domain/ficha.ts`) y
@@ -791,16 +836,17 @@ por no ser un candidato—, con sus cinco magnitudes fuente por fuente.
 `src/domain/ficha.ts` (product/0014, fundido con la antigua ficha técnica
 por product/0018; product/0021 añade las dos de generación; product/0028
 la autonomía eléctrica y la batería; product/0032 el diámetro de giro;
-product/0034 la carga máxima sobre el techo): compara candidatos y
-referencias entre sí, magnitud por magnitud, sobre veintiséis campos de
-`Car`/`Reference` —veinticinco propios más `litersPerSquareMeter`,
-derivada—. No calcula puntuación: es lectura, no juicio agregado, así que
-vive fuera de `scoring/`.
+product/0034 la carga máxima sobre el techo; product/0038 el consumo en
+modo sostenido; product/0039 el espacio de piernas atrás): compara
+candidatos y referencias entre sí, magnitud por magnitud, sobre veintiocho
+campos de `Car`/`Reference` —veintisiete propios más
+`litersPerSquareMeter`, derivada—. No calcula puntuación: es lectura, no
+juicio agregado, así que vive fuera de `scoring/`.
 
 - **`litrosPorMetroCuadrado(trunkLiters, lengthMm, widthMm)`** — litros de
   maletero por metro cuadrado de huella en el suelo: cuánto espacio da un
   coche por el sitio que ocupa (`product/0013`, requisito 11).
-- **`FICHA_FIELDS`/`FichaField`** — las veintiséis claves, en el orden en
+- **`FICHA_FIELDS`/`FichaField`** — las veintiocho claves, en el orden en
   que se declaran; la interfaz decide etiqueta, unidad y agrupación por
   bloque a partir de ahí, no aquí.
 - **`buildFicha(cars, references)`** — un `FichaEntity` por candidato y por
@@ -809,33 +855,39 @@ vive fuera de `scoring/`.
   comparación los elige quien mira la ficha. Una celda es `'sourced'`
   (valor, unidad, estimado), `'rating'` (una nota de usuario, sobre 5) o
   `'missing'` —el campo no existe en esa entidad, no un cero—: una
-  `Reference` declara siempre siete de las veintiséis —las cinco
+  `Reference` declara siempre siete de las veintiocho —las cinco
   dimensionales, `litersPerSquareMeter` derivada y el año de lanzamiento de
-  su generación, obligatorio—, así que comparar contra ella deja dieciséis
-  celdas `'missing'` por construcción, no por caso especial; tres más —el
-  año de retoque, el diámetro de giro (product/0032) y la carga máxima
-  sobre el techo (product/0034)— dependen de si esa referencia concreta las
-  declara. Entre las que faltan siempre están la autonomía eléctrica y la
-  batería: la referencia es un térmico puro y no le aplican.
+  su generación, obligatorio—, así que comparar contra ella deja
+  veintiuna celdas `'missing'` por construcción, no por caso especial; tres
+  más —el año de retoque, el diámetro de giro (product/0032) y la carga
+  máxima sobre el techo (product/0034)— dependen de si esa referencia
+  concreta las declara. Entre las que faltan siempre están la autonomía
+  eléctrica, la batería, el consumo en modo sostenido y el espacio de
+  piernas atrás: la referencia es un térmico puro y no declara magnitudes
+  que no sean dimensionales.
 - **La tabla de polaridad** (`POLARITY`, `Record<FichaField,
-  DeltaPolarity>` — TypeScript exige las veintiséis claves en tiempo de
+  DeltaPolarity>` — TypeScript exige las veintiocho claves en tiempo de
   compilación, así que ninguna puede quedar sin dirección declarada por
   descuido) fija si más es mejor, peor o si el dato no tiene una dirección
   declarada, con su razón junto a cada una:
   - **`moreIsWorse`** — `lengthMm`, `widthMm` (el problema que el proyecto
     resuelve es que los sustitutos son más grandes), `weightKg` (penaliza
     consumo, frenada y agilidad), `acceleration0to100` (son segundos: más
-    es más lento), `consumption`, `priceEur`, `maintenanceEurYear`,
-    `turningCircleM` (product/0032: a igualdad de todo lo demás, nadie
-    prefiere necesitar más sitio para dar la vuelta — a diferencia de la
-    batalla, aquí sí hay una dirección afirmable sin matices).
+    es más lento), `consumption`, `sustainedConsumption` (product/0038: son
+    litros a los 100 km, la misma dirección afirmable que el consumo
+    homologado), `priceEur`, `maintenanceEurYear`, `turningCircleM`
+    (product/0032: a igualdad de todo lo demás, nadie prefiere necesitar
+    más sitio para dar la vuelta — a diferencia de la batalla, aquí sí hay
+    una dirección afirmable sin matices).
   - **`moreIsBetter`** — `trunkLiters`, `litersPerSquareMeter` (mejor
-    aprovechado el espacio), `rearShoulderWidthMm` (la magnitud que
-    `product/0017` añadió porque mide si caben tres personas atrás),
-    `maxRoofLoadKg` (product/0034: la misma dirección afirmable sin
-    matices que el diámetro de giro — nadie prefiere que el techo aguante
-    menos), `powerCv`, `residualPct5y` (lo que se recupera al vender),
-    `reliabilityOcu`, `warrantyYears`, `warrantyExtensionYears`,
+    aprovechado el espacio), `rearLegroomMm` (product/0039: a igualdad de
+    todo lo demás, nadie prefiere menos sitio para las piernas de atrás —a
+    diferencia de la batalla, esto solo mide lo de dentro), `rearShoulderWidthMm`
+    (la magnitud que `product/0017` añadió porque mide si caben tres
+    personas atrás), `maxRoofLoadKg` (product/0034: la misma dirección
+    afirmable sin matices que el diámetro de giro — nadie prefiere que el
+    techo aguante menos), `powerCv`, `residualPct5y` (lo que se recupera al
+    vender), `reliabilityOcu`, `warrantyYears`, `warrantyExtensionYears`,
     `electricRangeKm` (kilómetros con la batería llena: aquí sí hay una
     dirección que el proyecto puede afirmar sin matices),
     `aestheticsExterior`, `aestheticsInterior` (notas de usuario sobre 5:
@@ -843,9 +895,11 @@ vive fuera de `scoring/`.
   - **`neutral`** — `heightMm`, `groundClearanceMm`, `wheelbaseMm` —más
     batalla da más espacio dentro y más coche fuera; el proyecto no ha
     declarado cuál de las dos cosas le importa más, y ante la duda no se
-    inventa un juicio de color—; `batteryKwh` —más batería es más alcance,
-    pero también más peso, más precio y más tiempo de carga: el mismo caso
-    que la batalla, y por eso la misma respuesta—; `generationLaunchYear` y
+    inventa un juicio de color—; deja de puntuar ningún eje desde
+    `product/0039`, con el mismo trato informativo que `generation` o
+    `warrantyExtension`—; `batteryKwh` —más batería es más alcance, pero
+    también más peso, más precio y más tiempo de carga: el mismo caso que
+    la batalla, y por eso la misma respuesta—; `generationLaunchYear` y
     `generationFaceliftYear` —el ADR 0009 decide que el calendario no
     entra en la puntuación, y sin nota que juzgar no hay dirección que
     declarar: más nuevo no está dicho que sea mejor—.
@@ -865,7 +919,7 @@ vive fuera de `scoring/`.
   con texto accesible, nunca como un cero engañoso, pero el dominio los
   distingue: apagar la Δ a propósito no es lo mismo que no poder calcularla.
 - **`sortFicha(entities, criterion)`** — ordena por `catalog` (el orden del
-  propio catálogo) o por **cualquiera de las veintiséis magnitudes**:
+  propio catálogo) o por **cualquiera de las veintiocho magnitudes**:
   `FICHA_SORT_CRITERIA` se declara como `['catalog', ...FICHA_FIELDS]`, no
   como una lista aparte, así que una magnitud nueva en la ficha es ordenable
   el mismo día que existe. La **dirección la fija la tabla de polaridad**, no
