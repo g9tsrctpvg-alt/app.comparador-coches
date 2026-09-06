@@ -51,7 +51,7 @@ function matchupMarkup(): string {
 describe('MatchupView', () => {
   it('enseña los dos coches con sus magnitudes y su Δ (requisito 7.1)', () => {
     const markup = matchupMarkup();
-    expect(markup).toContain('EV3');
+    expect(markup).toContain('Civic e:HEV');
     expect(markup).toContain('Compass');
     // Las mismas magnitudes de la ficha completa, en sus bloques.
     for (const label of [
@@ -102,7 +102,7 @@ describe('MatchupView', () => {
 
   it('ofrece preferir cada uno de los dos coches', () => {
     const markup = matchupMarkup();
-    expect(markup).toContain('Prefiero el EV3');
+    expect(markup).toContain('Prefiero el Civic e:HEV');
     expect(markup).toContain('Prefiero el Compass');
   });
 });

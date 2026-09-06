@@ -30,29 +30,36 @@ import { scoreCatalog } from './score';
  * con el `viaje` de peso 10 anterior (requisito 4.2 de la spec), así que
  * este test sigue en verde sin cambiar una sola cifra — es el criterio de
  * aceptación que lo demuestra.
+ *
+ * Vueltos a actualizar por `product/0038` y `product/0039` (2026-09-06), a
+ * propósito: `coste` deja de leer el consumo ponderado de los dos `PHEV`
+ * cuando declaran modo sostenido y no se carga en casa, y `habitabilidad`
+ * puntúa el espacio de piernas atrás en vez de la batalla. El catálogo pasó
+ * además de once a veintiún registros entre medias, así que las cifras de
+ * abajo no son comparables con las de más arriba fila a fila.
  */
 const EXPECTED_TOTALS: Record<string, number> = {
-  'honda-zr-v': 193.61323375362224,
-  'hyundai-tucson-hev': 241.86342157153587,
-  'hyundai-tucson-phev': 240.49144853205905,
-  'kia-sportage-hev': 232.68125998320298,
-  'mazda-cx-5': 222.1500051017747,
-  'bmw-x1-xdrive25e': 217.30430796428354,
-  'kia-ev3': 236.8658679126243,
-  'honda-civic-e-hev': 228.11517767231123,
-  'hyundai-kona-hev': 217.33337259474501,
-  'lexus-nx-350h': 212.3620228757981,
-  'kia-ev5': 216.28313700458864,
-  'hyundai-kona-electrico': 215.24537882786342,
-  'hyundai-ioniq-5': 206.6177184743785,
-  'honda-cr-v-e-hev': 199.6827626891658,
-  'alfa-romeo-tonale': 198.08606996874985,
-  'volkswagen-id4': 199.65102109590532,
-  'toyota-corolla-cross': 183.87060309758877,
-  'citroen-c5-aircross': 176.62035617260113,
-  'jeep-compass': 176.12611004352019,
-  'nissan-qashqai-e-power': 222.07922337385097,
-  'nissan-x-trail-e-power': 221.13874945494933,
+  'kia-ev3': 245.69364308167013,
+  'hyundai-kona-hev': 228.61475583572926,
+  'hyundai-kona-electrico': 226.52676206884763,
+  'toyota-corolla-cross': 187.59907792854295,
+  'bmw-x1-xdrive25e': 217.7546627259612,
+  'alfa-romeo-tonale': 205.34281371874985,
+  'kia-sportage-hev': 248.4586970605884,
+  'honda-civic-e-hev': 239.11661447558416,
+  'lexus-nx-350h': 228.6204486805267,
+  'mazda-cx-5': 224.81873486066428,
+  'honda-cr-v-e-hev': 215.46078820092563,
+  'volkswagen-id4': 212.33339309204013,
+  'kia-ev5': 228.93586705072403,
+  'hyundai-ioniq-5': 208.34515555176395,
+  'hyundai-tucson-hev': 257.64085864892127,
+  'hyundai-tucson-phev': 252.74589285395749,
+  'citroen-c5-aircross': 183.88761207042228,
+  'jeep-compass': 174.66062309944914,
+  'nissan-qashqai-e-power': 231.53860254680305,
+  'nissan-x-trail-e-power': 213.00814642760557,
+  'honda-zr-v': 206.54844756159966,
 };
 
 describe('scoreCatalog against the real catalogue (product/0009 regression)', () => {
@@ -64,7 +71,7 @@ describe('scoreCatalog against the real catalogue (product/0009 regression)', ()
     47000,
   );
 
-  it('covers the same eleven candidates as the expectation table', () => {
+  it('covers the same candidates as the expectation table', () => {
     expect(result.map((car) => car.carId).sort()).toEqual(
       Object.keys(EXPECTED_TOTALS).sort(),
     );

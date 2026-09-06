@@ -26,6 +26,15 @@ import { crossingsInRange, splitScoreGap, stableAxes } from './scoreGap';
  * demuestra el requisito 4.2 de la spec—, pero la línea de `viaje` se
  * reparte en dos: su valor de antes es, en cada caso, la suma de los
  * nuevos valores de `carga` y `habitabilidad`.
+ *
+ * Vueltas a medir de nuevo tras `product/0038` y `product/0039`
+ * (2026-09-06): `habitabilidad` puntúa el espacio de piernas atrás en vez
+ * de la batalla, y `coste` deja de leer el consumo ponderado del Tucson
+ * PHEV cuando no se carga en casa. El primer caso mueve `habitabilidad` en
+ * el par EV3-Civic; el segundo mueve `coste` —y, con él, el peso de cruce
+ * de todos los demás ejes del par Tucson HEV-PHEV, porque el cruce de un
+ * eje depende del valor de los otros— sin cambiar qué ejes cruzan ni en
+ * qué sentido.
  */
 describe('splitScoreGap against the real catalogue', () => {
   const cars = publishedCars(loadCatalog());
@@ -55,9 +64,9 @@ describe('splitScoreGap against the real catalogue', () => {
     }
   });
 
-  it('splits the EV3-vs-Civic e:HEV gap as measured: +5,6 estética, -3,0 diario, +1,2 carga, -4,0 habitabilidad, total +2,2', () => {
+  it('splits the EV3-vs-Civic e:HEV gap as measured: +5,6 estética, -4,5 habitabilidad, -3,0 diario, +1,2 carga, total +1,6', () => {
     const gap = splitScoreGap(byId('kia-ev3'), byId('honda-civic-e-hev'));
-    expect(gap.percentageDiff).toBeCloseTo(2.2, 1);
+    expect(gap.percentageDiff).toBeCloseTo(1.6, 1);
 
     const byAxis = (axisId: string) =>
       gap.lines.find((line) => line.axisId === axisId)!;
@@ -65,16 +74,17 @@ describe('splitScoreGap against the real catalogue', () => {
 
     expect(ppOf(byAxis('estetica').value)).toBeCloseTo(5.6, 1);
     expect(ppOf(byAxis('diario').value)).toBeCloseTo(-3.0, 1);
-    // `viaje` valía aquí -2,8 pp antes de `product/0033`; repartido en los
-    // dos ejes nuevos suma lo mismo: 1,2 + (-4,0) = -2,8.
     expect(ppOf(byAxis('carga').value)).toBeCloseTo(1.2, 1);
-    expect(ppOf(byAxis('habitabilidad').value)).toBeCloseTo(-4.0, 1);
+    // `habitabilidad` puntuaba aquí -4,0 pp con la batalla (product/0033);
+    // con el espacio de piernas atrás (product/0039) el EV3 pierde más
+    // frente al Civic, y por eso el total del par baja de +2,2 a +1,6 pp.
+    expect(ppOf(byAxis('habitabilidad').value)).toBeCloseTo(-4.5, 1);
 
     const summed = gap.lines.reduce((sum, line) => sum + line.value, 0);
     expect(summed).toBeCloseTo(gap.totalDiff, 9);
   });
 
-  it('crosses prestaciones (6,0), carga (3,8) and coste (1,8) for Tucson HEV vs Tucson PHEV', () => {
+  it('crosses prestaciones (8,7), carga (0,9) and coste (0,7) for Tucson HEV vs Tucson PHEV', () => {
     const gap = splitScoreGap(
       byId('hyundai-tucson-hev'),
       byId('hyundai-tucson-phev'),
@@ -91,11 +101,17 @@ describe('splitScoreGap against the real catalogue', () => {
       (line) => line.axisId === 'prestaciones',
     )!;
     const coste = gap.lines.find((line) => line.axisId === 'coste')!;
-    expect(carga.crossingWeight).toBeCloseTo(3.8, 1);
+    // Los tres seguían cruzando antes de `product/0038`, con pesos 3,8, 6,0
+    // y 1,8: `coste` deja de leer el consumo ponderado del PHEV cuando no
+    // se carga en casa, así que su línea cambia — y con ella el peso de
+    // cruce de los otros dos, porque el cruce de un eje es una división
+    // exacta sobre el valor de los demás (product/0029), no una constante
+    // propia del eje.
+    expect(carga.crossingWeight).toBeCloseTo(0.9, 1);
     expect(carga.crossingDirection).toBe('below');
-    expect(prestaciones.crossingWeight).toBeCloseTo(6.0, 1);
+    expect(prestaciones.crossingWeight).toBeCloseTo(8.7, 1);
     expect(prestaciones.crossingDirection).toBe('above');
-    expect(coste.crossingWeight).toBeCloseTo(1.8, 1);
+    expect(coste.crossingWeight).toBeCloseTo(0.7, 1);
     expect(coste.crossingDirection).toBe('below');
 
     // diario, fiabilidad, estética y habitabilidad empatan entre las dos

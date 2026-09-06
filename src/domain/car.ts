@@ -142,6 +142,14 @@ const CarObjectSchema = z.object({
   heightMm: SourcedNumberSchema,
   wheelbaseMm: SourcedNumberSchema,
   /**
+   * Espacio de piernas de la segunda fila (product/0039): «Distancia del
+   * respaldo al respaldo delantero» de las mediciones propias de km77.
+   * Sustituye a la batalla como magnitud puntuada por `habitabilidad` — la
+   * batalla reparte entre habitáculo y vanos, esto mide dentro del coche—.
+   * Obligatoria como `rearShoulderWidthMm`: un eje la puntúa.
+   */
+  rearLegroomMm: SourcedNumberSchema,
+  /**
    * Diámetro de giro entre bordillos, en metros (product/0032). No el
    * radio, y no el diámetro entre paredes: km77 publica a veces solo esa
    * segunda medida, y no sirve para esta celda —es opcional justamente por
@@ -175,6 +183,15 @@ const CarObjectSchema = z.object({
   acceleration0to100: SourcedNumberSchema,
   consumption: SourcedNumberSchema,
   /**
+   * Consumo WLTP en modo sostenido —*charge-sustaining*, con la batería en
+   * su estado mínimo de carga— en l/100km (product/0038). Solo lo puede
+   * declarar un `PHEV`: fuera del enchufable la magnitud no existe, porque
+   * `consumption` ya es, por construcción, un consumo sostenido. Opcional
+   * de verdad: si la fuente no lo publica para la versión comparada, se
+   * deja ausente.
+   */
+  sustainedConsumption: SourcedNumberSchema.optional(),
+  /**
    * Autonomía eléctrica homologada WLTP en ciclo mixto (product/0028,
    * requisito 1.2): la combinada en un `EV`, la equivalente (EAER) en un
    * `PHEV`. Opcional en la forma; quién debe declararla lo decide
@@ -201,20 +218,24 @@ const CarObjectSchema = z.object({
 });
 
 /**
- * Qué tecnologías pueden llevar cada magnitud de electrificación
- * (product/0028, requisitos 1.3 y 2.3). `required` son las que **deben**
- * declararla; `forbidden`, aquellas a las que la magnitud no les aplica.
- * Las que no están en ninguna de las dos listas —`HEV` y `MHEV`— pueden
- * declararla o no: son opcionales de verdad, no un olvido.
+ * Qué tecnologías pueden llevar cada magnitud cuya declaración depende de
+ * `technology` (product/0028, requisitos 1.3 y 2.3; extendida por
+ * product/0038, requisito 1.2, al consumo en modo sostenido). `required`
+ * son las que **deben** declararla; `forbidden`, aquellas a las que la
+ * magnitud no les aplica. Las que no están en ninguna de las dos listas
+ * —`HEV` y `MHEV` para la electrificación— pueden declararla o no: son
+ * opcionales de verdad, no un olvido.
  *
- * Las dos reglas son distintas por un motivo real, no por simetría rota.
+ * Las tres reglas son distintas por un motivo real, no por simetría rota.
  * La autonomía eléctrica no está homologada fuera de los enchufables, así
  * que un híbrido convencional solo la declara si aparece fuente; la
  * capacidad de la batería sí se publica para casi todos, y es la magnitud
- * con la que un híbrido se compara con otro.
+ * con la que un híbrido se compara con otro; el consumo sostenido solo
+ * existe en el enchufable, así que en todo lo demás está prohibido sin
+ * excepción.
  */
 interface ElectrificationRule {
-  field: 'electricRangeKm' | 'batteryKwh';
+  field: 'electricRangeKm' | 'batteryKwh' | 'sustainedConsumption';
   label: string;
   required: readonly Technology[];
   forbidden: readonly Technology[];
@@ -232,6 +253,15 @@ const ELECTRIFICATION_RULES: readonly ElectrificationRule[] = [
     label: 'la capacidad de la batería',
     required: ['EV', 'PHEV'],
     forbidden: ['ICE'],
+  },
+  // product/0038, requisito 1.2: fuera del enchufable no existe un modo
+  // sostenido que declarar — un EV no quema nada, y en HEV/MHEV/ICE
+  // `consumption` ya es, por construcción, la cifra sostenida.
+  {
+    field: 'sustainedConsumption',
+    label: 'el consumo en modo sostenido',
+    required: [],
+    forbidden: ['ICE', 'MHEV', 'HEV', 'EV'],
   },
 ];
 

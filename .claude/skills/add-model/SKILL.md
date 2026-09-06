@@ -1,6 +1,6 @@
 ---
 name: add-model
-description: Añade un coche nuevo al catálogo de comparador-coches (src/data/cars.json) — investiga en la web sus 23 magnitudes con fuente real (incluidas su generación y, si es electrificado, su autonomía eléctrica y su batería), busca y verifica sus 5 fotos (frontal, lateral, trasera, maletero, interior), y deja el repositorio en verde antes de comitear. Úsala en cuanto el usuario pida "añadir un coche", "meter un modelo nuevo en la comparativa", "comparar también el/la <marca modelo>", o describa un coche que quiere ver en el ranking o en la ficha completa — aunque no mencione explícitamente "catálogo" ni "cars.json". No la uses para corregir un dato de un coche que ya está en el catálogo (eso es una edición puntual, no un alta) ni para cambiar la referencia (`references.json`, hoy solo el Alfa Romeo Giulietta).
+description: Añade un coche nuevo al catálogo de comparador-coches (src/data/cars.json) — investiga en la web sus 25 magnitudes con fuente real (incluidas su generación y, si es electrificado, su autonomía eléctrica y su batería), busca y verifica sus 5 fotos (frontal, lateral, trasera, maletero, interior), y deja el repositorio en verde antes de comitear. Úsala en cuanto el usuario pida "añadir un coche", "meter un modelo nuevo en la comparativa", "comparar también el/la <marca modelo>", o describa un coche que quiere ver en el ranking o en la ficha completa — aunque no mencione explícitamente "catálogo" ni "cars.json". No la uses para corregir un dato de un coche que ya está en el catálogo (eso es una edición puntual, no un alta) ni para cambiar la referencia (`references.json`, hoy solo el Alfa Romeo Giulietta).
 ---
 
 # Añadir un modelo al catálogo
@@ -23,7 +23,7 @@ relleno de formulario.
 
 1. Rama nueva para esta unidad de trabajo (`docs/proceso/trazabilidad.md`).
 2. Identidad: `id`, `name`, `brand`, `technology`, `generation`.
-3. Las 22 magnitudes, cada una con una fuente real — la sección más larga.
+3. Las 25 magnitudes, cada una con una fuente real — la sección más larga.
 4. Las 5 fotos — flujo completo en `references/photo-sourcing.md`.
 5. Las valoraciones subjetivas, **enseñándole las fotos del paso 4 al
    usuario** para que las puntúe. Es interactivo por diseño: van después de
@@ -47,7 +47,7 @@ motorización/acabado— pregúntaselo antes de investigar nada: `technology`
 buscar la genérica cuando hay varias en el mercado es la forma más directa
 de acabar mezclando datos de dos coches distintos.
 
-## 2. Las 23 magnitudes
+## 2. Las 25 magnitudes
 
 **La generación va aparte y no puntúa.** `generation` (product/0021, ADR
 0009) es obligatoria y no es una de las magnitudes con las que se puntúa:
@@ -76,9 +76,10 @@ intercambiables:
 - **`SourcedNumber`** — `{ value, unit?, sources: [{ label, value,
   estimated, current, discardedReason? }] }`.
   Es el formato de todo lo que viene de fuera: `lengthMm`, `widthMm`,
-  `heightMm`, `wheelbaseMm`, `turningCircleM` (opcional), `rearShoulderWidthMm`,
-  `groundClearanceMm`, `trunkLiters`, `maxRoofLoadKg` (opcional), `powerCv`,
-  `weightKg`, `acceleration0to100`, `consumption`, `maintenanceEurYear`,
+  `heightMm`, `wheelbaseMm`, `turningCircleM` (opcional), `rearLegroomMm`,
+  `rearShoulderWidthMm`, `groundClearanceMm`, `trunkLiters`, `maxRoofLoadKg`
+  (opcional), `powerCv`, `weightKg`, `acceleration0to100`, `consumption`,
+  `sustainedConsumption` (opcional, solo `PHEV`), `maintenanceEurYear`,
   `priceEur`, `reliabilityOcu`, `warrantyYears`, `residualPct5y` (opcional),
   y el objeto opcional `warrantyExtension` (`{ years: SourcedNumber,
   kmLimit?: SourcedNumber, condition }`). Zod exige **exactamente una**
@@ -167,6 +168,56 @@ coche tiene techo, pero no toda fuente publica su límite— y, como
 - Si de verdad no lo encuentras, omite el campo — no es una de las
   magnitudes que se estiman a ojo, porque una cifra inventada aquí puede
   llevar a poner peso de más sobre un techo real.
+
+**`rearLegroomMm` es el espacio de piernas de la segunda fila, en
+milímetros, y es obligatorio** (product/0039): a diferencia de
+`turningCircleM` o `maxRoofLoadKg`, un eje lo puntúa, así que no se puede
+omitir como si fuera opcional de verdad.
+
+- Vale la fila **«Distancia del respaldo al respaldo delantero»** del
+  bloque «Segunda fila» de las mediciones propias de km77 — la misma
+  ficha de la que ya sale `rearShoulderWidthMm`. Se publica en cm; guárdalo
+  en mm.
+- **No vale** una cifra de «espacio para las piernas» del propio
+  fabricante, ni la longitud del habitáculo: no es la misma medida.
+- Si la fila muestra un **rango** (p. ej. «76-62 cm») porque la segunda
+  fila es deslizante, declara el **mínimo** — la cifra que no depende de
+  cómo se reparta el hueco con el maletero —, y dilo en una nota del coche
+  (`notes`) igual que ya hacen el BMW X1 xDrive25e y el Nissan X-Trail
+  e-Power en el catálogo actual.
+- Si de verdad la fuente no la publica para la versión que das de alta, el
+  alta se detiene ahí: no es una magnitud que se estime a ojo, porque va
+  directa a la nota de `habitabilidad`.
+
+**La anchura de hombros (`rearShoulderWidthMm`) tiene una ambigüedad
+conocida** (product/0039): km77 publica **«Anchura hombros mínima»** *o*
+**«Anchura hombros máxima»** según el modelo —nunca las dos a la vez—.
+Declara en el `label` de la fuente cuál de las dos has usado, con el mismo
+formato que ya lleva el resto del catálogo: `«Anchura hombros máxima»
+139 cm`. No intentes conseguir la que falte de otra fuente: es la misma
+fila y el mismo protocolo de medición los que tienen que coincidir.
+
+**`sustainedConsumption` es el consumo WLTP en modo sostenido —con la
+batería en su estado mínimo de carga— y solo lo puede declarar un `PHEV`**
+(product/0038): `CarSchema` rechaza el campo en cualquier otra tecnología,
+nombrando el campo y la tecnología.
+
+- Vale una fuente que distinga explícitamente esta cifra del consumo
+  combinado ponderado — por ejemplo, ADAC (adac.de) la publica como
+  «Verbrauch kombiniert (WLTP) PHEV (Batterie leer)», separada de
+  «Verbrauch kombiniert (WLTP)» a secas. km77 no suele darla en la ficha
+  de «Datos»: si no la encuentras ahí, prueba el catálogo técnico oficial
+  del fabricante o ADAC antes de darla por perdida.
+- **No vale** una cifra de consumo real medido por un medio de prensa
+  («ronda los X l/100 km») ni una estimación: tiene que ser una cifra
+  homologada, con la misma exigencia de fuente que el resto del catálogo.
+- Comprueba que la versión de la fuente coincide con la que estás dando de
+  alta —mismo `electricRangeKm`, misma `batteryKwh`—, porque el consumo
+  sostenido varía con el peso y la aerodinámica igual que el resto de
+  cifras de consumo.
+- Es opcional de verdad: si no la encuentras, omite el campo y regístralo
+  como deuda en `docs/roadmap.md`, igual que cualquier otra magnitud
+  opcional sin fuente.
 
 **Cómo investigar cada magnitud**: busca la ficha técnica oficial del
 fabricante para el mercado español (o europeo si no la hay en español) y,
