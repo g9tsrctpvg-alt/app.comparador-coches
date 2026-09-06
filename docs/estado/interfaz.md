@@ -351,11 +351,11 @@ independientemente del fragmento, así que ningún alias puede dar 404.
 - **`EliminatoryRulesPanel`** (product/0031) — el panel «Imprescindibles»:
   una fila fija y no eliminable con el presupuesto, y una lista de reglas
   eliminatorias, cada una magnitud + operador + umbral, sobre cualquiera de
-  las veintiséis claves de `FICHA_FIELDS`. El `<select>` de magnitud
+  las veintiocho claves de `FICHA_FIELDS`. El `<select>` de magnitud
   agrupa por los mismos seis bloques que «Orden» en la ficha
   (`COMPLETE_BLOCKS`, exportado de `FichaPage.tsx` para esto), y oculta las
   magnitudes que ya tienen regla —a lo sumo una por magnitud—. El operador
-  es un texto fijo («mínimo»/«máximo») en los dieciocho campos con
+  es un texto fijo («mínimo»/«máximo») en los veintidós campos con
   polaridad declarada, y un `<select>` de dos opciones solo en los seis
   campos `neutral` (`requiredOperatorFor`, `src/domain/eliminatoryRules.ts`):
   la interfaz nunca deja construir una combinación que el dominio no
@@ -566,23 +566,30 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     anchura, altura libre al suelo, maletero, potencia, precio —tamaño,
     mecánica y coste, en ese orden— reutilizando el mismo `FieldDef` que
     `Completa` para potencia y precio, sin una segunda declaración) o
-    `Completa` (las veintiséis, agrupadas en seis bloques con cabecera
+    `Completa` (las veintiocho, agrupadas en seis bloques con cabecera
     propia). Arranca en `Esenciales`. En «Mecánica y prestaciones», detrás
-    de «Consumo», van **«Autonomía eléctrica»** y **«Batería»**
-    (product/0028): consumo, autonomía y batería son la misma pregunta
-    contada por sus tres caras y se leen juntas. La batería se muestra con
-    **dos decimales**, y no por gusto: las capacidades de los híbridos y
-    microhíbridos van de 0,77 a 1,49 kWh, y con un solo decimal 0,77 y 0,85
-    se leerían las dos como «0,8» — la comparación entre híbridos, que es la
-    razón de que esa magnitud exista, quedaría anulada por el formato. En
-    «Tamaño y espacio», detrás de «Batalla», va **«Diámetro de giro»**
-    (product/0032, un decimal): las dos se leen juntas porque la batalla es
-    el factor que más manda en el giro. A diferencia de la batalla —neutra—,
-    aquí sí hay una dirección afirmable: menos es mejor. Detrás de «Litros
-    por m²», cierra el bloque **«Carga máxima en techo»** (product/0034, sin
-    decimales): misma dirección afirmable que el diámetro de giro, pero al
-    revés —más es mejor—, y su Δ es `'unavailable'` contra cualquier
-    referencia o candidato que no la declare.
+    de «Consumo», va **«Consumo sin cargar»** (product/0038: el consumo WLTP
+    en modo sostenido, solo declarado por un enchufable) y, detrás,
+    **«Autonomía eléctrica»** y **«Batería»** (product/0028): las cuatro
+    filas responden la misma pregunta contada por sus caras y se leen
+    juntas. La batería se muestra con **dos decimales**, y no por gusto: las
+    capacidades de los híbridos y microhíbridos van de 0,77 a 1,49 kWh, y
+    con un solo decimal 0,77 y 0,85 se leerían las dos como «0,8» — la
+    comparación entre híbridos, que es la razón de que esa magnitud exista,
+    quedaría anulada por el formato. En «Tamaño y espacio», detrás de
+    «Batalla», va **«Diámetro de giro»** (product/0032, un decimal): las dos
+    se leen juntas porque la batalla es el factor que más manda en el giro.
+    A diferencia de la batalla —neutra—, aquí sí hay una dirección
+    afirmable: menos es mejor. Justo detrás, **«Espacio de piernas atrás»**
+    (product/0039) precede a «Anchura de hombros atrás»: las tres son las
+    medidas de la segunda fila que km77 mide dentro del coche, y por eso van
+    seguidas; a diferencia de la batalla, el espacio de piernas sí tiene
+    dirección afirmable —más es mejor— y es el que hoy puntúa
+    `habitabilidad`. Detrás de «Litros por m²», cierra el bloque **«Carga
+    máxima en techo»** (product/0034, sin decimales): misma dirección
+    afirmable que el diámetro de giro, pero al revés —más es mejor—, y su Δ
+    es `'unavailable'` contra cualquier referencia o candidato que no la
+    declare.
   - **Comparar** — **dos controles para el mismo estado**, sincronizados por
     construcción porque los dos escriben `comparisonId`: un radio por columna,
     con `name` compartido (`pinned-model`), y el `<select>` de la barra, que
@@ -603,16 +610,17 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     que una celda sin dato, no un número que no diría nada. Arranca fijada
     la primera referencia del catálogo, si hay alguna.
   - **Orden** — `Catálogo` más **una opción por cada una de las
-    veintiséis magnitudes** de «Completa» (product/0027), agrupadas en el
+    veintiocho magnitudes** de «Completa» (product/0027), agrupadas en el
     `<select>` por los mismos seis bloques y con el mismo rótulo que da a esa
     fila su
     `FieldDef` —las opciones se generan de `COMPLETE_BLOCKS`, no de una
     segunda lista—. Ordena **mejor primero**, con la dirección que fija la
     tabla de polaridad del dominio (`docs/estado/dominio.md`): descendente
     donde más es mejor (potencia, maletero, fiabilidad, valor residual,
-    estética…, y la autonomía eléctrica), ascendente donde más es peor
-    (precio, longitud, anchura, peso, diámetro de giro…) y ascendente en las
-    neutras (altura, batalla, generación, capacidad de la batería…).
+    estética, espacio de piernas atrás…, y la autonomía eléctrica),
+    ascendente donde más es peor (precio, longitud, anchura, peso, diámetro
+    de giro, consumo sin cargar…) y ascendente en las neutras (altura,
+    batalla, generación, capacidad de la batería…).
     Arranca en Longitud. El criterio vigente ordena a la vez las columnas
     desplazables de la tabla, las opciones de «Comparar» y la tira de
     candidatos de la vista de duelo. Es independiente de «Campos»: se puede

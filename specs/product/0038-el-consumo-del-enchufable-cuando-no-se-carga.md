@@ -1,7 +1,7 @@
 # 0038 — El consumo del enchufable cuando no se carga en casa
 
 - **Id:** product/0038
-- **Estado:** approved
+- **Estado:** consolidated
 - **Tipo:** product
 - **Fecha:** 2026-09-06
 - **Specs relacionadas:** product/0003, product/0008, product/0013,
@@ -9,6 +9,12 @@
 - **ADRs relacionados:** 0004 y 0010, los dos solo como motivo del *fuera de
   alcance*: la escala de `coste` no se toca, solo la cifra que entra en ella
 - **Doc de estado:** `docs/estado/dominio.md`, `docs/estado/interfaz.md`
+
+> ⚠️ **Spec consolidada (2026-09-06).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/dominio.md` y `docs/estado/interfaz.md`. Vigentes aquí solo
+> los **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -218,34 +224,34 @@ sensibilidad del *Contexto*.
 
 > Obligatorios y verificables.
 
-- [ ] `CarSchema` acepta `sustainedConsumption` opcional en un `PHEV` y lo
+- [x] `CarSchema` acepta `sustainedConsumption` opcional en un `PHEV` y lo
       valida como `SourcedNumber`; un registro con dos fuentes vigentes, o
       con una descartada sin motivo, sigue fallando al cargar nombrando el
       campo y el registro.
-- [ ] Un `EV`, un `HEV`, un `MHEV` y un `ICE` que declaran el campo fallan al
+- [x] Un `EV`, un `HEV`, un `MHEV` y un `ICE` que declaran el campo fallan al
       cargar, con un error que nombra el campo y la tecnología; los mismos
       cuatro sin el campo cargan sin error.
-- [ ] Con `cargaEnCasa` desactivado, el coste de uso de un `PHEV` que declara
+- [x] Con `cargaEnCasa` desactivado, el coste de uso de un `PHEV` que declara
       la cifra sostenida se calcula con ella; con `cargaEnCasa` activado, con
       la homologada; un `PHEV` sin la cifra usa la homologada en los dos
       casos; y un coche que no es `PHEV` usa la homologada siempre.
-- [ ] El desglose de `coste` muestra en `info` cuál de los tres casos del
+- [x] El desglose de `coste` muestra en `info` cuál de los tres casos del
       requisito 3.1 se ha aplicado, y el dato de entrada que enseña coincide
       con el que ha entrado en el cálculo.
-- [ ] `FICHA_FIELDS` incluye `sustainedConsumption` y `polarityOf` devuelve
+- [x] `FICHA_FIELDS` incluye `sustainedConsumption` y `polarityOf` devuelve
       `'moreIsWorse'`; una regla eliminatoria sobre la magnitud solo admite
       `max`.
-- [ ] La ficha completa muestra «Consumo sin cargar» en «Mecánica y
+- [x] La ficha completa muestra «Consumo sin cargar» en «Mecánica y
       prestaciones», inmediatamente después de «Consumo».
-- [ ] Todo `sustainedConsumption` presente en `cars.json` lleva fuente con
+- [x] Todo `sustainedConsumption` presente en `cars.json` lleva fuente con
       enlace y versión, y ninguno está marcado `estimated: true`.
-- [ ] El *snapshot* de puntuación se mueve solo en los registros `PHEV` que
+- [x] El *snapshot* de puntuación se mueve solo en los registros `PHEV` que
       declaran la cifra, y ningún otro total cambia.
-- [ ] La skill `add-model` pide la magnitud para un `PHEV`, con la definición
+- [x] La skill `add-model` pide la magnitud para un `PHEV`, con la definición
       del requisito 1.4.
-- [ ] Los registros `PHEV` que se queden sin el dato, y la limitación del
+- [x] Los registros `PHEV` que se queden sin el dato, y la limitación del
       requisito 2.5, están anotados en `docs/roadmap.md`.
-- [ ] La CI entera pasa en local: `format:check`, `lint`, `typecheck`,
+- [x] La CI entera pasa en local: `format:check`, `lint`, `typecheck`,
       `arch:check`, `test:coverage` con el suelo de cobertura vigente,
       `markdownlint` y `build`.
 
