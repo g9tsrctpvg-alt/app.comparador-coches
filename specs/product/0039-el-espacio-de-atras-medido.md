@@ -1,7 +1,7 @@
 # 0039 — El espacio de atrás, medido
 
 - **Id:** product/0039
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-09-06
 - **Specs relacionadas:** product/0005, product/0013, product/0017,
