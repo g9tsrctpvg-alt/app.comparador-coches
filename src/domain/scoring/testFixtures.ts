@@ -22,9 +22,13 @@ interface FixtureInput {
   lengthMm: number;
   widthMm: number;
   wheelbaseMm: number;
+  rearLegroomMm: number;
   rearShoulderWidthMm: number;
   priceEur: number;
   consumption: number;
+  /** Solo en un `PHEV` (product/0038): un fixture de cualquier otra
+   * tecnología lo deja fuera, como exige la invariante cruzada. */
+  sustainedConsumption?: number;
   maintenanceEurYear: number;
   powerCv: number;
   weightKg: number;
@@ -53,6 +57,7 @@ function buildCar(input: FixtureInput): Car {
     widthMm: sourced(input.widthMm, 'mm'),
     heightMm: sourced(1600, 'mm'),
     wheelbaseMm: sourced(input.wheelbaseMm, 'mm'),
+    rearLegroomMm: sourced(input.rearLegroomMm, 'mm'),
     rearShoulderWidthMm: sourced(input.rearShoulderWidthMm, 'mm'),
     groundClearanceMm: sourced(160, 'mm'),
     trunkLiters: sourced(500, 'L'),
@@ -63,6 +68,11 @@ function buildCar(input: FixtureInput): Car {
       input.consumption,
       input.technology === 'EV' ? 'kWh/100km' : 'l/100km',
     ),
+    ...(input.sustainedConsumption === undefined
+      ? {}
+      : {
+          sustainedConsumption: sourced(input.sustainedConsumption, 'l/100km'),
+        }),
     maintenanceEurYear: sourced(input.maintenanceEurYear, '€/año'),
     priceEur: sourced(input.priceEur, '€'),
     reliabilityOcu: sourced(input.reliabilityOcu),
@@ -91,6 +101,7 @@ export const sportageFixture = buildCar({
   lengthMm: 4540,
   widthMm: 1865,
   wheelbaseMm: 2680,
+  rearLegroomMm: 700,
   rearShoulderWidthMm: 1390,
   priceEur: 36000,
   consumption: 6.2,
@@ -113,9 +124,11 @@ export const x1Fixture = buildCar({
   lengthMm: 4500,
   widthMm: 1845,
   wheelbaseMm: 2692,
+  rearLegroomMm: 690,
   rearShoulderWidthMm: 1380,
   priceEur: 44000,
   consumption: 7.5,
+  sustainedConsumption: 6.0,
   maintenanceEurYear: 750,
   powerCv: 245,
   weightKg: 1930,
@@ -137,6 +150,7 @@ export const ev3Fixture = buildCar({
   lengthMm: 4300,
   widthMm: 1850,
   wheelbaseMm: 2680,
+  rearLegroomMm: 710,
   rearShoulderWidthMm: 1340,
   priceEur: 32000,
   consumption: 16,

@@ -36,6 +36,7 @@ function minimalCar(overrides: Record<string, unknown> = {}) {
     lengthMm: sourced(4540, 'mm'),
     widthMm: sourced(1865, 'mm'),
     wheelbaseMm: sourced(2680, 'mm'),
+    rearLegroomMm: sourced(770, 'mm'),
     rearShoulderWidthMm: sourced(1390, 'mm'),
     heightMm: sourced(1645, 'mm'),
     groundClearanceMm: sourced(170, 'mm'),

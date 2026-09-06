@@ -98,13 +98,14 @@ interface BlockDef {
 type CompleteBlockDef = BlockDef & { label: string };
 
 /**
- * Las veintiséis magnitudes de la ficha (product/0014, requisito 1;
+ * Las veintiocho magnitudes de la ficha (product/0014, requisito 1;
  * product/0018 las reparte en dos conjuntos; product/0021 añade el bloque
  * de generación; product/0028 añade autonomía eléctrica y batería;
  * product/0032 añade el diámetro de giro; product/0034 añade la carga
- * máxima sobre el techo), agrupadas y rotuladas — el dominio (`ficha.ts`)
- * solo declara las claves y extrae los valores; etiquetas, unidades de
- * respaldo y decimales son decisión de la interfaz.
+ * máxima sobre el techo; product/0038 añade el consumo en modo sostenido;
+ * product/0039 el espacio de piernas atrás), agrupadas y rotuladas — el
+ * dominio (`ficha.ts`) solo declara las claves y extrae los valores;
+ * etiquetas, unidades de respaldo y decimales son decisión de la interfaz.
  */
 // Exportado además de `COMPLETE_FIELD_DEFS` (más abajo) para que
 // `EliminatoryRulesPanel` (product/0031) pueda agrupar el selector de
@@ -139,6 +140,13 @@ export const COMPLETE_BLOCKS: CompleteBlockDef[] = [
         label: 'Diámetro de giro',
         unitFallback: 'm',
         decimals: 1,
+      },
+      // Las tres medidas de la segunda fila que km77 mide dentro del coche
+      // van seguidas (product/0039, requisito 4.1).
+      {
+        key: 'rearLegroomMm',
+        label: 'Espacio de piernas atrás',
+        unitFallback: 'mm',
       },
       {
         key: 'rearShoulderWidthMm',
@@ -177,6 +185,13 @@ export const COMPLETE_BLOCKS: CompleteBlockDef[] = [
         decimals: 1,
       },
       { key: 'consumption', label: 'Consumo', decimals: 1 },
+      // Justo detrás del consumo homologado, con el que se compara
+      // (product/0038, requisito 4.1).
+      {
+        key: 'sustainedConsumption',
+        label: 'Consumo sin cargar',
+        decimals: 1,
+      },
       // Consumo, autonomía y batería son la misma pregunta contada por sus
       // tres caras, y por eso van seguidas (product/0028, requisito 3.1).
       {
@@ -283,7 +298,7 @@ const ESSENTIAL_BLOCKS: BlockDef[] = [
 
 /** El orden del propio catálogo: la única opción del selector que no es una
  * magnitud, y por eso la única que se rotula aquí a mano. Las otras
- * veintiséis salen de `COMPLETE_BLOCKS` (product/0027, requisitos 1-3). */
+ * veintiocho salen de `COMPLETE_BLOCKS` (product/0027, requisitos 1-3). */
 const CATALOG_SORT_LABEL = 'Catálogo';
 
 // Exportado para que el test de estructura compruebe el número de filas de
@@ -1036,7 +1051,7 @@ function attachScrollAxisLock(el: HTMLDivElement): () => void {
  * Δ que antes solo existía contra el Alfa Romeo Giulietta ahora se calcula
  * contra cualquier modelo que se elija, y un conmutador de campos recupera
  * la lectura «de un vistazo» de seis magnitudes cuando no hace falta ver
- * las veintiséis. No calcula nada por su cuenta: `ficha.ts` ya entrega cada
+ * las veintiocho. No calcula nada por su cuenta: `ficha.ts` ya entrega cada
  * celda lista para formatear (`ui-no-scoring-internals`).
  */
 export function FichaPage({

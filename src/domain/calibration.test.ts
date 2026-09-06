@@ -277,8 +277,12 @@ describe('la rejilla', () => {
 describe('calibrate', () => {
   it('el primer cara a cara es el par de perfiles más lejanos (requisito 6.2)', () => {
     const state = calibrate(profiles, [], DEFAULT_WEIGHTS);
+    // product/0038 y product/0039 (2026-09-06) mueven los perfiles reales
+    // —`coste` deja de leer el consumo ponderado del Tucson PHEV sin carga
+    // en casa, y `habitabilidad` puntúa el espacio de piernas atrás—, así
+    // que el par más lejano deja de ser kia-ev3/jeep-compass.
     expect(state.nextMatchup).toEqual({
-      aCarId: 'kia-ev3',
+      aCarId: 'honda-civic-e-hev',
       bCarId: 'jeep-compass',
     });
     // Y no depende de con qué pesos se haya puntuado.

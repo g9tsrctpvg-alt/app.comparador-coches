@@ -33,6 +33,7 @@ const validCar = {
   lengthMm: sourced(4540),
   widthMm: sourced(1865),
   wheelbaseMm: sourced(2680),
+  rearLegroomMm: sourced(700),
   rearShoulderWidthMm: sourced(1390),
   heightMm: sourced(1645),
   groundClearanceMm: sourced(170),
@@ -500,6 +501,108 @@ describe('CarSchema, carga máxima sobre el techo (product/0034)', () => {
       ).toBe(true);
     },
   );
+});
+
+describe('CarSchema, espacio de piernas atrás (product/0039)', () => {
+  it('rejects a car without the required rear legroom, naming the field', () => {
+    const { rearLegroomMm: _rearLegroomMm, ...withoutLegroom } = validCar;
+    const result = CarSchema.safeParse(withoutLegroom);
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(
+        result.error.issues.some((issue) => issue.path[0] === 'rearLegroomMm'),
+      ).toBe(true);
+    }
+  });
+
+  it('rejects a malformed rear legroom, same as any other sourced value', () => {
+    const result = CarSchema.safeParse({
+      ...validCar,
+      rearLegroomMm: sourced(700, {
+        sources: [
+          { label: 'km77', value: 690, estimated: false, current: true },
+        ],
+      }),
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(
+        result.error.issues.some((issue) => issue.path[0] === 'rearLegroomMm'),
+      ).toBe(true);
+    }
+  });
+});
+
+describe('CarSchema, consumo en modo sostenido (product/0038)', () => {
+  const plugIn = {
+    ...validCar,
+    technology: 'PHEV',
+    consumption: sourced(2.7),
+    electricRangeKm: sourced(70),
+    batteryKwh: sourced(13.8),
+  };
+
+  it('accepts a PHEV that declares the sustained consumption', () => {
+    expect(
+      CarSchema.safeParse({
+        ...plugIn,
+        sustainedConsumption: sourced(6.0),
+      }).success,
+    ).toBe(true);
+  });
+
+  it('accepts a PHEV that does not declare it: opcional de verdad', () => {
+    expect(CarSchema.safeParse(plugIn).success).toBe(true);
+  });
+
+  it.each(['ICE', 'MHEV', 'HEV', 'EV'] as const)(
+    'rejects a %s that declares it, naming the field and the technology',
+    (technology) => {
+      const range = sourced(510);
+      const battery = sourced(65.4);
+      const base =
+        technology === 'EV'
+          ? {
+              ...validCar,
+              technology,
+              electricRangeKm: range,
+              batteryKwh: battery,
+            }
+          : { ...validCar, technology };
+      const result = CarSchema.safeParse({
+        ...base,
+        sustainedConsumption: sourced(6.0),
+      });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        const issue = result.error.issues.find(
+          (candidate) => candidate.path[0] === 'sustainedConsumption',
+        );
+        expect(issue?.message).toBe(
+          `un ${technology} no puede declarar el consumo en modo sostenido: no le aplica`,
+        );
+      }
+    },
+  );
+
+  it('rejects a malformed sustained consumption, same as any other sourced value', () => {
+    const result = CarSchema.safeParse({
+      ...plugIn,
+      sustainedConsumption: sourced(6.0, {
+        sources: [
+          { label: 'ADAC', value: 5.5, estimated: false, current: true },
+        ],
+      }),
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(
+        result.error.issues.some(
+          (issue) => issue.path[0] === 'sustainedConsumption',
+        ),
+      ).toBe(true);
+    }
+  });
 });
 
 describe('publishedCars', () => {

@@ -39,13 +39,14 @@ export function currentSourceOf(sourced: SourcedNumber) {
 }
 
 /**
- * Las veinticinco magnitudes de `Car` que no son identidad, más la métrica
+ * Las veintisiete magnitudes de `Car` que no son identidad, más la métrica
  * derivada de litros por metro cuadrado (product/0014, requisito 1;
  * product/0018 les añade Δ y polaridad; product/0021 añade las dos de
  * generación; product/0028 añade autonomía eléctrica y batería; product/0032
  * añade el diámetro de giro; product/0034 añade la carga máxima sobre el
- * techo): el inventario completo de «la ficha». El orden y las etiquetas son
- * cosa de la interfaz; aquí solo se declaran las claves.
+ * techo; product/0038 añade el consumo en modo sostenido; product/0039 el
+ * espacio de piernas atrás): el inventario completo de «la ficha». El orden
+ * y las etiquetas son cosa de la interfaz; aquí solo se declaran las claves.
  */
 export const FICHA_FIELDS = [
   'generationLaunchYear',
@@ -55,6 +56,7 @@ export const FICHA_FIELDS = [
   'heightMm',
   'wheelbaseMm',
   'turningCircleM',
+  'rearLegroomMm',
   'rearShoulderWidthMm',
   'groundClearanceMm',
   'trunkLiters',
@@ -64,6 +66,7 @@ export const FICHA_FIELDS = [
   'weightKg',
   'acceleration0to100',
   'consumption',
+  'sustainedConsumption',
   'electricRangeKm',
   'batteryKwh',
   'priceEur',
@@ -150,6 +153,11 @@ const POLARITY: Record<FichaField, DeltaPolarity> = {
   // matices (product/0032, requisito 3.3): a igualdad de todo lo demás,
   // nadie prefiere necesitar más sitio para dar la vuelta.
   turningCircleM: 'moreIsWorse',
+  // A diferencia de la batalla, esto solo mide lo de dentro (product/0039,
+  // requisito 4.3): a igualdad de todo lo demás, nadie prefiere menos sitio
+  // para las piernas de atrás. Sustituye a la batalla como magnitud puntuada
+  // por `habitabilidad`.
+  rearLegroomMm: 'moreIsBetter',
   // La magnitud que product/0017 añadió al eje de espacio precisamente
   // porque mide si caben tres personas atrás; hoy es una de las dos que
   // puntúa `habitabilidad` (product/0033).
@@ -170,6 +178,9 @@ const POLARITY: Record<FichaField, DeltaPolarity> = {
   acceleration0to100: 'moreIsWorse',
   // Dirección del eje de coste de tenencia.
   consumption: 'moreIsWorse',
+  // Son litros a los 100 km, la misma dirección afirmable que el consumo
+  // homologado (product/0038, requisito 4.3).
+  sustainedConsumption: 'moreIsWorse',
   // Kilómetros con la batería llena: aquí sí hay una dirección que el
   // proyecto puede afirmar sin matices (product/0028, requisito 3.2).
   electricRangeKm: 'moreIsBetter',
@@ -241,6 +252,7 @@ interface EntityLike {
   heightMm?: SourcedNumber;
   wheelbaseMm?: SourcedNumber;
   turningCircleM?: SourcedNumber;
+  rearLegroomMm?: SourcedNumber;
   rearShoulderWidthMm?: SourcedNumber;
   groundClearanceMm?: SourcedNumber;
   trunkLiters: SourcedNumber;
@@ -249,6 +261,7 @@ interface EntityLike {
   weightKg?: SourcedNumber;
   acceleration0to100?: SourcedNumber;
   consumption?: SourcedNumber;
+  sustainedConsumption?: SourcedNumber;
   electricRangeKm?: SourcedNumber;
   batteryKwh?: SourcedNumber;
   priceEur?: SourcedNumber;
@@ -309,6 +322,7 @@ function cellsOf(entity: EntityLike): Record<FichaField, FichaCell> {
     heightMm: sourcedCell(entity.heightMm),
     wheelbaseMm: sourcedCell(entity.wheelbaseMm),
     turningCircleM: sourcedCell(entity.turningCircleM),
+    rearLegroomMm: sourcedCell(entity.rearLegroomMm),
     rearShoulderWidthMm: sourcedCell(entity.rearShoulderWidthMm),
     groundClearanceMm: sourcedCell(entity.groundClearanceMm),
     trunkLiters: sourcedCell(entity.trunkLiters),
@@ -318,6 +332,7 @@ function cellsOf(entity: EntityLike): Record<FichaField, FichaCell> {
     weightKg: sourcedCell(entity.weightKg),
     acceleration0to100: sourcedCell(entity.acceleration0to100),
     consumption: sourcedCell(entity.consumption),
+    sustainedConsumption: sourcedCell(entity.sustainedConsumption),
     electricRangeKm: sourcedCell(entity.electricRangeKm),
     batteryKwh: sourcedCell(entity.batteryKwh),
     priceEur: sourcedCell(entity.priceEur),
@@ -365,7 +380,7 @@ export function buildFicha(
 }
 
 /** Construye un `Record<FichaField, T>` recorriendo `FICHA_FIELDS` una sola
- * vez: evita repetir las veintiséis claves cada vez que hace falta un
+ * vez: evita repetir las veintiocho claves cada vez que hace falta un
  * registro nuevo con esa forma. */
 function mapFields<T>(fn: (field: FichaField) => T): Record<FichaField, T> {
   const result = {} as Record<FichaField, T>;
@@ -446,7 +461,7 @@ function numericValueOf(cell: FichaCell): number | undefined {
   return cell.kind === 'missing' ? undefined : cell.value;
 }
 
-/** El valor numérico de cada campo, para las veintiséis magnitudes que ya
+/** El valor numérico de cada campo, para las veintiocho magnitudes que ya
  * tiene calculadas un `FichaEntity` (product/0031, requisito 1.4): la misma
  * vía que decide si una celda «no tiene dato» decide si un imprescindible
  * cuenta o no cuenta para ese coche. `undefined` cuando la celda es

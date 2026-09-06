@@ -2,12 +2,13 @@ import { describe, expect, it } from 'vitest';
 import { threeCarFixture } from '../testFixtures';
 import { buildHabitabilidadBreakdown } from './habitabilidad';
 
-function wheelbaseScale(
+function legroomScale(
   breakdown: ReturnType<typeof buildHabitabilidadBreakdown>,
   id: string,
 ) {
-  return breakdown.get(id)!.subcomponents!.find((s) => s.label === 'Batalla')!
-    .scale!;
+  return breakdown
+    .get(id)!
+    .subcomponents!.find((s) => s.label === 'Espacio de piernas atrás')!.scale!;
 }
 
 function shoulderScale(
@@ -19,12 +20,12 @@ function shoulderScale(
     .subcomponents!.find((s) => s.label === 'Anchura de hombros')!.scale!;
 }
 
-function withWheelbase(wheelbase: number, id = 'x') {
+function withLegroom(legroom: number, id = 'x') {
   const base = threeCarFixture[0]!;
   return {
     ...base,
     id,
-    wheelbaseMm: { ...base.wheelbaseMm, value: wheelbase },
+    rearLegroomMm: { ...base.rearLegroomMm, value: legroom },
   };
 }
 
@@ -46,12 +47,12 @@ describe('buildHabitabilidadBreakdown', () => {
     );
   });
 
-  it('scores 10 on wheelbase at and above 3200mm, and 0 at and below 2400mm', () => {
-    const roomy = withWheelbase(3200, 'roomy');
-    const cramped = withWheelbase(2400, 'cramped');
+  it('scores 10 on rear legroom at and above 810mm, and 0 at and below 590mm', () => {
+    const roomy = withLegroom(810, 'roomy');
+    const cramped = withLegroom(590, 'cramped');
     const breakdown = buildHabitabilidadBreakdown([roomy, cramped], 4);
-    expect(wheelbaseScale(breakdown, 'roomy').score).toBe(10);
-    expect(wheelbaseScale(breakdown, 'cramped').score).toBe(0);
+    expect(legroomScale(breakdown, 'roomy').score).toBe(10);
+    expect(legroomScale(breakdown, 'cramped').score).toBe(0);
   });
 
   it('scores 10 on rear shoulder width at and above 1460mm, and 0 at and below 1260mm', () => {
@@ -78,27 +79,27 @@ describe('buildHabitabilidadBreakdown', () => {
     expect(shoulderScale(breakdown, 'mid').score).toBeCloseTo(5, 9);
   });
 
-  it('weighs wheelbase and rear shoulder width equally, at a half each', () => {
+  it('weighs rear legroom and rear shoulder width equally, at a half each', () => {
     const base = threeCarFixture[0]!;
     const t1 = 0.2;
     const t2 = 0.6;
-    const wheelbaseAt = (t: number) => 2400 + t * (3200 - 2400);
+    const legroomAt = (t: number) => 590 + t * (810 - 590);
     const shoulderAt = (t: number) => 1260 + t * (1460 - 1260);
 
     const gapBetween = (pair: ReturnType<typeof buildHabitabilidadBreakdown>) =>
       pair.get(base.id)!.score - pair.get('other')!.score;
 
-    const wheelbaseGap = gapBetween(
+    const legroomGap = gapBetween(
       buildHabitabilidadBreakdown(
         [
           {
             ...base,
-            wheelbaseMm: { ...base.wheelbaseMm, value: wheelbaseAt(t1) },
+            rearLegroomMm: { ...base.rearLegroomMm, value: legroomAt(t1) },
           },
           {
             ...base,
             id: 'other',
-            wheelbaseMm: { ...base.wheelbaseMm, value: wheelbaseAt(t2) },
+            rearLegroomMm: { ...base.rearLegroomMm, value: legroomAt(t2) },
           },
         ],
         1,
@@ -126,13 +127,13 @@ describe('buildHabitabilidadBreakdown', () => {
         1,
       ),
     );
-    expect(shoulderGap / wheelbaseGap).toBeCloseTo(1, 6);
+    expect(shoulderGap / legroomGap).toBeCloseTo(1, 6);
   });
 
   it('declares a formula: the axis no longer says it has none', () => {
     const breakdown = buildHabitabilidadBreakdown(threeCarFixture, 4);
     expect(breakdown.get('kia-sportage-hev')!.formulaDescription).toContain(
-      'escala(batalla)',
+      'escala(espacio de piernas atrás)',
     );
   });
 
@@ -148,9 +149,9 @@ describe('buildHabitabilidadBreakdown', () => {
     const breakdown = buildHabitabilidadBreakdown(threeCarFixture, 4);
     const sportage = breakdown.get('kia-sportage-hev')!;
     expect(sportage.normalization).toBeUndefined();
-    expect(wheelbaseScale(breakdown, 'kia-sportage-hev')).toMatchObject({
-      goodAnchor: 3200,
-      badAnchor: 2400,
+    expect(legroomScale(breakdown, 'kia-sportage-hev')).toMatchObject({
+      goodAnchor: 810,
+      badAnchor: 590,
     });
     expect(shoulderScale(breakdown, 'kia-sportage-hev')).toMatchObject({
       goodAnchor: 1460,
@@ -165,7 +166,7 @@ describe('buildHabitabilidadBreakdown', () => {
     const breakdown = buildHabitabilidadBreakdown(threeCarFixture, 4);
     const sportage = breakdown.get('kia-sportage-hev')!;
     expect(sportage.inputs.map((input) => input.label)).toEqual([
-      'Batalla',
+      'Espacio de piernas atrás',
       'Anchura de hombros',
     ]);
     expect(sportage.inputs.every((input) => input.sourceLabel !== '')).toBe(

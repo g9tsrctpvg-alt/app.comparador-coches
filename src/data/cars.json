@@ -68,6 +68,18 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 720,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 72 cm, https://www.km77.com/coches/kia/ev3/2025/estandar/mediciones-propias/detalle",
+          "value": 720,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 10.4,
       "unit": "m",
@@ -85,7 +97,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — Standard (2025) (agosto 2026): 134 cm a la altura de los hombros, https://www.km77.com/coches/kia/ev3/2025/estandar/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — Standard (2025) (agosto 2026): «Anchura hombros mínima» 134 cm, https://www.km77.com/coches/kia/ev3/2025/estandar/mediciones-propias/detalle",
           "value": 1340,
           "estimated": false,
           "current": true
@@ -345,6 +357,18 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 730,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 73 cm, https://www.km77.com/coches/hyundai/kona/2023/estandar/hibrido/kona-n-line-style-hibrido-16-gdi-129-cv/mediciones-propias/detalle",
+          "value": 730,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 10.6,
       "unit": "m",
@@ -362,7 +386,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — Hibrido N Line Style 1.6 GDi 129 CV (agosto 2026): 138 cm a la altura de los hombros, https://www.km77.com/coches/hyundai/kona/2023/estandar/hibrido/kona-n-line-style-hibrido-16-gdi-129-cv/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — Hibrido N Line Style 1.6 GDi 129 CV (agosto 2026): «Anchura hombros máxima» 138 cm, https://www.km77.com/coches/hyundai/kona/2023/estandar/hibrido/kona-n-line-style-hibrido-16-gdi-129-cv/mediciones-propias/detalle",
           "value": 1380,
           "estimated": false,
           "current": true
@@ -612,6 +636,18 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 730,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 73 cm, https://www.km77.com/coches/hyundai/kona/2023/estandar/electric/kona-electrico-204-cv-65-kwh-tecno/mediciones-propias/detalle",
+          "value": 730,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 10.6,
       "unit": "m",
@@ -629,7 +665,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — Electrico Tecno 204 CV 65 kWh (agosto 2026): 138 cm a la altura de los hombros, https://www.km77.com/coches/hyundai/kona/2023/estandar/electric/kona-electrico-204-cv-65-kwh-tecno/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — Electrico Tecno 204 CV 65 kWh (agosto 2026): «Anchura hombros máxima» 138 cm, https://www.km77.com/coches/hyundai/kona/2023/estandar/electric/kona-electrico-204-cv-65-kwh-tecno/mediciones-propias/detalle",
           "value": 1380,
           "estimated": false,
           "current": true
@@ -896,6 +932,18 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 680,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 68 cm, https://www.km77.com/coches/toyota/corolla-cross/2023/estandar/estandar/corolla-cross-style-18-hybrid/mediciones-propias/detalle",
+          "value": 680,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 10.4,
       "unit": "m",
@@ -913,7 +961,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — Style 140H Hybrid FWD (agosto 2026): 135 cm a la altura de los hombros, https://www.km77.com/coches/toyota/corolla-cross/2023/estandar/estandar/corolla-cross-style-18-hybrid/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — Style 140H Hybrid FWD (agosto 2026): «Anchura hombros máxima» 135 cm, https://www.km77.com/coches/toyota/corolla-cross/2023/estandar/estandar/corolla-cross-style-18-hybrid/mediciones-propias/detalle",
           "value": 1350,
           "estimated": false,
           "current": true
@@ -1155,7 +1203,8 @@
     "notes": [
       "Es PHEV y el usuario no tiene carga en casa: no puede aprovechar el enchufe.",
       "Solo entra en presupuesto como seminuevo (43.900-45.900 € con ~18.000 km); nuevo cuesta ~52.900 €.",
-      "Despublicado el 2026-08-08: fuera de presupuesto/rango."
+      "Despublicado el 2026-08-08: fuera de presupuesto/rango.",
+      "Espacio de piernas atrás: km77 publica un rango 76-62 cm porque la segunda fila es deslizante; se declara el mínimo, la cifra que no depende de cómo se reparta el hueco con el maletero (product/0039). La anchura de hombros (138 cm) no se ha podido re-etiquetar como mínima o máxima: en septiembre de 2026 la ficha de km77 muestra ese dato dentro de un módulo comparativo con varios modelos, con 141 cm de máxima y sin mínima visible, así que no se sabe cuál de las dos filas era 138 cm cuando se declaró en agosto de 2026 — deuda registrada, no un valor corregido a ciegas."
     ],
     "lengthMm": {
       "value": 4500,
@@ -1200,6 +1249,18 @@
         {
           "label": "motor.es, ficha de medidas (agosto 2026)",
           "value": 2692,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearLegroomMm": {
+      "value": 620,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 62 cm, https://www.km77.com/coches/bmw/x1/2023/estandar/e/x1-xdrive25e/mediciones-propias/detalle",
+          "value": 620,
           "estimated": false,
           "current": true
         }
@@ -1288,6 +1349,18 @@
         }
       ],
       "unit": "l/100km"
+    },
+    "sustainedConsumption": {
+      "value": 6.0,
+      "unit": "l/100km",
+      "sources": [
+        {
+          "label": "ADAC (adac.de), ficha «BMW X1 xDrive25e xLine Steptronic (DKG) (11/23 - 10/25)», datos del fabricante (septiembre 2026): «Verbrauch kombiniert (WLTP) PHEV (Batterie leer)» 6,0 l/100 km — consumo WLTP en modo sostenido, distinto del combinado ponderado (0,8 l/100 km); misma autonomía eléctrica (83 km) y misma capacidad de batería bruta (16,3 kWh) que declara el catálogo, https://www.adac.de/rund-ums-fahrzeug/autokatalog/marken-modelle/bmw/x1/u11/330732/",
+          "value": 6.0,
+          "estimated": false,
+          "current": true
+        }
+      ]
     },
     "electricRangeKm": {
       "value": 83,
@@ -1473,6 +1546,18 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 700,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 70 cm, https://www.km77.com/coches/alfa-romeo/tonale/2022/estandar/mediciones-propias/detalle",
+          "value": 700,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 11.6,
       "unit": "m",
@@ -1490,7 +1575,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — ficha estandar del modelo (agosto 2026): 137 cm a la altura de los hombros, https://www.km77.com/coches/alfa-romeo/tonale/2022/estandar/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — ficha estandar del modelo (agosto 2026): «Anchura hombros máxima» 137 cm, https://www.km77.com/coches/alfa-romeo/tonale/2022/estandar/mediciones-propias/detalle",
           "value": 1370,
           "estimated": false,
           "current": true
@@ -1745,6 +1830,18 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 770,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 77 cm, https://www.km77.com/coches/kia/sportage/2022/estandar/hev/mediciones-propias",
+          "value": 770,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 10.92,
       "unit": "m",
@@ -1762,7 +1859,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — ficha HEV del modelo (agosto 2026): 139 cm a la altura de los hombros, https://www.km77.com/coches/kia/sportage/2022/estandar/hev/mediciones-propias",
+          "label": "km77, mediciones propias — ficha HEV del modelo (agosto 2026): «Anchura hombros máxima» 139 cm, https://www.km77.com/coches/kia/sportage/2022/estandar/hev/mediciones-propias",
           "value": 1390,
           "estimated": false,
           "current": true
@@ -2009,6 +2106,18 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 750,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 75 cm, https://www.km77.com/coches/honda/civic/2023/5-puertas/hev/civic-ehev-advance/mediciones-propias/detalle",
+          "value": 750,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 11.6,
       "unit": "m",
@@ -2026,7 +2135,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — e:HEV Advance (agosto 2026): 142 cm a la altura de los hombros, https://www.km77.com/coches/honda/civic/2023/5-puertas/hev/civic-ehev-advance/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — e:HEV Advance (agosto 2026): «Anchura hombros máxima» 142 cm, https://www.km77.com/coches/honda/civic/2023/5-puertas/hev/civic-ehev-advance/mediciones-propias/detalle",
           "value": 1420,
           "estimated": false,
           "current": true
@@ -2275,6 +2384,18 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 780,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 78 cm, https://www.km77.com/coches/lexus/nx/2022/estandar/hev/nx-350h-4wd-business/mediciones-propias/detalle",
+          "value": 780,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 11.6,
       "unit": "m",
@@ -2292,7 +2413,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — 350h 4WD Business (agosto 2026): 138 cm a la altura de los hombros, https://www.km77.com/coches/lexus/nx/2022/estandar/hev/nx-350h-4wd-business/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — 350h 4WD Business (agosto 2026): «Anchura hombros máxima» 138 cm, https://www.km77.com/coches/lexus/nx/2022/estandar/hev/nx-350h-4wd-business/mediciones-propias/detalle",
           "value": 1380,
           "estimated": false,
           "current": true
@@ -2566,12 +2687,24 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 720,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 72 cm, https://www.km77.com/coches/mazda/cx-5/2022/estandar/estandar/cx-5-20-e-skyactiv-g-mhev-121-kw-165-cv-2wd-takumi/mediciones-propias/detalle",
+          "value": 720,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "rearShoulderWidthMm": {
       "value": 1390,
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — 2.0 e-SKYACTIV G MHEV 165 CV 2WD Takumi (agosto 2026): 139 cm a la altura de los hombros, https://www.km77.com/coches/mazda/cx-5/2022/estandar/estandar/cx-5-20-e-skyactiv-g-mhev-121-kw-165-cv-2wd-takumi/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — 2.0 e-SKYACTIV G MHEV 165 CV 2WD Takumi (agosto 2026): «Anchura hombros máxima» 139 cm, https://www.km77.com/coches/mazda/cx-5/2022/estandar/estandar/cx-5-20-e-skyactiv-g-mhev-121-kw-165-cv-2wd-takumi/mediciones-propias/detalle",
           "value": 1390,
           "estimated": false,
           "current": true
@@ -2843,6 +2976,18 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 780,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 78 cm, https://www.km77.com/coches/honda/cr-v/2024/estandar/hev/cr-v-elegance-full-hybrid-4x4/mediciones-propias/detalle",
+          "value": 780,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 11,
       "unit": "m",
@@ -2860,7 +3005,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — Full Hybrid 4x4 (agosto 2026): 142 cm a la altura de los hombros, https://www.km77.com/coches/honda/cr-v/2024/estandar/hev/cr-v-elegance-full-hybrid-4x4/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — Full Hybrid 4x4 (agosto 2026): «Anchura hombros máxima» 142 cm, https://www.km77.com/coches/honda/cr-v/2024/estandar/hev/cr-v-elegance-full-hybrid-4x4/mediciones-propias/detalle",
           "value": 1420,
           "estimated": false,
           "current": true
@@ -3139,12 +3284,24 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 780,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 78 cm, https://www.km77.com/coches/volkswagen/id4/2021/estandar/mediciones-propias",
+          "value": 780,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "rearShoulderWidthMm": {
       "value": 1370,
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — ID.4 estándar (agosto 2026): 137 cm a la altura de los hombros, https://www.km77.com/coches/volkswagen/id4/2021/estandar/mediciones-propias",
+          "label": "km77, mediciones propias — ID.4 estándar (agosto 2026): «Anchura hombros mínima» 137 cm, https://www.km77.com/coches/volkswagen/id4/2021/estandar/mediciones-propias",
           "value": 1370,
           "estimated": false,
           "current": true
@@ -3449,6 +3606,18 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 770,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 77 cm, https://www.km77.com/coches/kia/ev5/2025/mediciones-propias/detalle",
+          "value": 770,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 11.72,
       "unit": "m",
@@ -3466,7 +3635,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — KIA EV5 (agosto 2026): 140 cm de anchura de hombros en la 2ª fila, https://www.km77.com/coches/kia/ev5/2025/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — KIA EV5 (agosto 2026): «Anchura hombros máxima» 140 cm, https://www.km77.com/coches/kia/ev5/2025/mediciones-propias/detalle",
           "value": 1400,
           "estimated": false,
           "current": true
@@ -3751,6 +3920,18 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 770,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 77 cm, https://www.km77.com/coches/hyundai/ioniq-5/2021/estandar/estandar/ioniq-5-218-cv-bateria-74-kwh-rwd-light/mediciones-propias/detalle",
+          "value": 770,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 11.8,
       "unit": "m",
@@ -3768,7 +3949,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — IONIQ 5 Light RWD (agosto 2026): 146 cm de anchura de hombros en la 2ª fila, https://www.km77.com/coches/hyundai/ioniq-5/2021/estandar/estandar/ioniq-5-218-cv-bateria-74-kwh-rwd-light/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — IONIQ 5 Light RWD (agosto 2026): «Anchura hombros máxima» 146 cm, https://www.km77.com/coches/hyundai/ioniq-5/2021/estandar/estandar/ioniq-5-218-cv-bateria-74-kwh-rwd-light/mediciones-propias/detalle",
           "value": 1460,
           "estimated": false,
           "current": true
@@ -4044,6 +4225,18 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 770,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 77 cm, https://www.km77.com/coches/hyundai/tucson/2024/mediciones-propias/detalle",
+          "value": 770,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 11,
       "unit": "m",
@@ -4061,7 +4254,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — Hyundai Tucson (agosto 2026): 139 cm de anchura de hombros en la 2ª fila, https://www.km77.com/coches/hyundai/tucson/2024/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — Hyundai Tucson (agosto 2026): «Anchura hombros máxima» 139 cm, https://www.km77.com/coches/hyundai/tucson/2024/mediciones-propias/detalle",
           "value": 1390,
           "estimated": false,
           "current": true
@@ -4332,6 +4525,18 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 770,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 77 cm, https://www.km77.com/coches/hyundai/tucson/2024/mediciones-propias/detalle",
+          "value": 770,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 11,
       "unit": "m",
@@ -4349,7 +4554,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — Hyundai Tucson (agosto 2026): 139 cm de anchura de hombros en la 2ª fila, misma carrocería que el HEV, https://www.km77.com/coches/hyundai/tucson/2024/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — Hyundai Tucson (agosto 2026): «Anchura hombros máxima» 139 cm, https://www.km77.com/coches/hyundai/tucson/2024/mediciones-propias/detalle",
           "value": 1390,
           "estimated": false,
           "current": true
@@ -4423,6 +4628,18 @@
         {
           "label": "km77, ficha Tucson Klass 1.6 T-GDi PHEV 288 CV, consumo WLTP combinado (agosto 2026)",
           "value": 2.7,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "sustainedConsumption": {
+      "value": 6.0,
+      "unit": "l/100km",
+      "sources": [
+        {
+          "label": "ADAC (adac.de), ficha «Hyundai Tucson 1.6 T-GDI PHEV Select Automatik (ab 11/25)», datos del fabricante (septiembre 2026): «Verbrauch kombiniert (WLTP) PHEV (Batterie leer)» 6,0 l/100 km — consumo WLTP en modo sostenido, distinto del combinado ponderado (2,7 l/100 km) que ya declara «consumption»; misma autonomía eléctrica (70 km) y misma batería (13,8 kWh) que la versión Klass 288 CV que compara el catálogo, https://www.adac.de/rund-ums-fahrzeug/autokatalog/marken-modelle/hyundai/tucson/3generation-facelift/346749/",
+          "value": 6.0,
           "estimated": false,
           "current": true
         }
@@ -4621,6 +4838,18 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 740,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 74 cm, https://www.km77.com/coches/citroen/c5-aircross/2026/estandar/mediciones-propias/detalle",
+          "value": 740,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 10.9,
       "unit": "m",
@@ -4638,7 +4867,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — C5 Aircross (2026) (agosto 2026): 142 cm a la altura de los hombros en la segunda fila, https://www.km77.com/coches/citroen/c5-aircross/2026/estandar/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — C5 Aircross (2026) (agosto 2026): «Anchura hombros máxima» 142 cm, https://www.km77.com/coches/citroen/c5-aircross/2026/estandar/mediciones-propias/detalle",
           "value": 1420,
           "estimated": false,
           "current": true
@@ -4887,6 +5116,18 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 690,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 69 cm, https://www.km77.com/coches/jeep/compass/2025/estandar/mediciones-propias/detalle",
+          "value": 690,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 10.8,
       "unit": "m",
@@ -4904,7 +5145,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — Jeep Compass (2025) (agosto 2026): 142 cm a la altura de los hombros en la segunda fila, https://www.km77.com/coches/jeep/compass/2025/estandar/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — Jeep Compass (2025) (agosto 2026): «Anchura hombros máxima» 142 cm, https://www.km77.com/coches/jeep/compass/2025/estandar/mediciones-propias/detalle",
           "value": 1420,
           "estimated": false,
           "current": true
@@ -5182,6 +5423,18 @@
       ],
       "unit": "mm"
     },
+    "rearLegroomMm": {
+      "value": 720,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 72 cm, https://www.km77.com/coches/nissan/qashqai/2024/estandar/mediciones-propias/detalle",
+          "value": 720,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 11.1,
       "unit": "m",
@@ -5198,7 +5451,7 @@
       "value": 1380,
       "sources": [
         {
-          "label": "km77, mediciones propias — Nissan Qashqai (2024), unidad e-POWER 140 kW (190 CV) N-Design (agosto 2026): 138 cm de anchura de hombros en la segunda fila, https://www.km77.com/coches/nissan/qashqai/2024/estandar/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — Nissan Qashqai (2024), unidad e-POWER 140 kW (190 CV) N-Design (agosto 2026): «Anchura hombros máxima» 138 cm, https://www.km77.com/coches/nissan/qashqai/2024/estandar/mediciones-propias/detalle",
           "value": 1380,
           "estimated": false,
           "current": true
@@ -5453,7 +5706,8 @@
       "Anchura de hombros: km77 publica 139 cm como «anchura de hombros máxima» de la segunda fila. El Qashqai de este mismo alta lleva la suya declarada como mínima, así que las dos cifras no son estrictamente comparables entre sí — es la deuda de hombros mínimos mezclados con máximos que ya arrastra el catálogo.",
       "Mantenimiento anual estimado a partir de la tarifa oficial de contratos de Nissan España: el contrato de mantenimiento anual de 3 años del X-Trail (T33) cuesta 795 €, es decir 265 € al año. No es un coste anual desglosado por revisión.",
       "Faltan las fotos de maletero: ni Wikimedia Commons, ni la sala de prensa de Nissan España, ni la web comercial de nissan.es publican el portón abierto y vacío del X-Trail 2026.",
-      "Las fotos de frontal, lateral y trasera son los renders oficiales del configurador de nissan.es en acabado Tekna, no en el N-Connecta que puntúa la ficha. Wikimedia Commons solo tiene unidades anteriores al retoque de 2026, que cambia justo la parrilla y los pilotos, así que no servían para estas vistas."
+      "Las fotos de frontal, lateral y trasera son los renders oficiales del configurador de nissan.es en acabado Tekna, no en el N-Connecta que puntúa la ficha. Wikimedia Commons solo tiene unidades anteriores al retoque de 2026, que cambia justo la parrilla y los pilotos, así que no servían para estas vistas.",
+      "Espacio de piernas atrás: km77 publica un rango 77-56 cm porque la segunda fila es deslizante; se declara el mínimo, la cifra que no depende de cómo se reparta el hueco con el maletero (product/0039)."
     ],
     "lengthMm": {
       "value": 4680,
@@ -5503,6 +5757,18 @@
       ],
       "unit": "mm"
     },
+    "rearLegroomMm": {
+      "value": 560,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 56 cm, https://www.km77.com/coches/nissan/x-trail/2026/estandar/mediciones-propias/detalle",
+          "value": 560,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 11.1,
       "unit": "m",
@@ -5519,7 +5785,7 @@
       "value": 1390,
       "sources": [
         {
-          "label": "km77, mediciones propias — Nissan X-Trail (2026) (agosto 2026): 139 cm de anchura de hombros máxima en la segunda fila, https://www.km77.com/coches/nissan/x-trail/2026/estandar/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — Nissan X-Trail (2026) (agosto 2026): «Anchura hombros máxima» 139 cm, https://www.km77.com/coches/nissan/x-trail/2026/estandar/mediciones-propias/detalle",
           "value": 1390,
           "estimated": false,
           "current": true
@@ -5815,6 +6081,18 @@
         }
       ],
       "unit": "mm"
+    },
+    "rearLegroomMm": {
+      "value": 740,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 74 cm, https://www.km77.com/coches/honda/zr-v/2023/estandar/mediciones-propias/detalle",
+          "value": 740,
+          "estimated": false,
+          "current": true
+        }
+      ]
     },
     "turningCircleM": {
       "value": 11,

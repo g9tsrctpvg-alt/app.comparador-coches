@@ -206,8 +206,8 @@ describe('FichaPage', () => {
       expect(markup).toContain('<option value="completa">Completa</option>');
     });
 
-    it('declares TOTAL_FIELD_COUNT as the twenty-six magnitudes of "Completa"', () => {
-      expect(TOTAL_FIELD_COUNT).toBe(26);
+    it('declares TOTAL_FIELD_COUNT as the twenty-eight magnitudes of "Completa"', () => {
+      expect(TOTAL_FIELD_COUNT).toBe(28);
     });
 
     it("matches FICHA_FIELDS exactly: no domain field silently missing from Completa's render", () => {
@@ -961,8 +961,9 @@ describe('magnitudes de electrificación (product/0028)', () => {
     const keys = [...COMPLETE_FIELD_DEFS.keys()];
     const consumption = keys.indexOf('consumption');
     expect(consumption).toBeGreaterThan(-1);
-    expect(keys.slice(consumption, consumption + 3)).toEqual([
+    expect(keys.slice(consumption, consumption + 4)).toEqual([
       'consumption',
+      'sustainedConsumption',
       'electricRangeKm',
       'batteryKwh',
     ]);
