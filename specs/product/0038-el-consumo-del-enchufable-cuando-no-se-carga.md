@@ -1,7 +1,7 @@
 # 0038 — El consumo del enchufable cuando no se carga en casa
 
 - **Id:** product/0038
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-09-06
 - **Specs relacionadas:** product/0003, product/0008, product/0013,
