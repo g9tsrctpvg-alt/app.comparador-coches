@@ -1,12 +1,18 @@
 # 0042 — El podio dice dónde saca ventaja al siguiente
 
 - **Id:** product/0042
-- **Estado:** approved
+- **Estado:** consolidated
 - **Tipo:** product
 - **Fecha:** 2026-09-07
 - **Specs relacionadas:** product/0022, product/0029, product/0031, technical/0011
 - **ADRs relacionados:** 0004
 - **Doc de estado:** `docs/estado/dominio.md`, `docs/estado/interfaz.md`
+
+> ⚠️ **Spec consolidada (2026-09-07).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/dominio.md` y `docs/estado/interfaz.md`. Vigentes aquí solo
+> los **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -162,26 +168,26 @@ ventaja al clasificado inmediatamente posterior, con el icono de ese eje.
 
 > Obligatorios y verificables.
 
-- [ ] `topAdvantageLine` devuelve la línea de mayor `value` positivo de un
+- [x] `topAdvantageLine` devuelve la línea de mayor `value` positivo de un
       `ScoreGap`, y `undefined` cuando ninguna línea es positiva.
-- [ ] Con dos líneas de idéntico `value` positivo, `topAdvantageLine`
+- [x] Con dos líneas de idéntico `value` positivo, `topAdvantageLine`
       devuelve siempre la primera según `AXIS_ORDER`.
-- [ ] Un eje con peso 0 y ventaja de nota a favor no es nunca la línea
+- [x] Un eje con peso 0 y ventaja de nota a favor no es nunca la línea
       devuelta.
-- [ ] Sobre el catálogo real y los pesos por defecto, las tres tarjetas del
+- [x] Sobre el catálogo real y los pesos por defecto, las tres tarjetas del
       podio enseñan el icono de `carga`, `estetica` y `coste`, en ese orden,
       y ninguno es el eje de mayor valor absoluto del primer par
       (`prestaciones`, negativo).
-- [ ] Una tarjeta de podio sin siguiente clasificado no contiene ningún
+- [x] Una tarjeta de podio sin siguiente clasificado no contiene ningún
       icono de eje.
-- [ ] Una fila con `variant="list"` no contiene ningún icono de eje, ni
+- [x] Una fila con `variant="list"` no contiene ningún icono de eje, ni
       desplegada ni plegada.
-- [ ] El icono no está dentro del elemento `button` que despliega la fila.
-- [ ] El texto accesible del elemento nombra al rival, al eje y la ventaja en
+- [x] El icono no está dentro del elemento `button` que despliega la fila.
+- [x] El texto accesible del elemento nombra al rival, al eje y la ventaja en
       pp.
-- [ ] El *snapshot* de `scoreCatalog` no cambia, y `npm run test:recovery`
+- [x] El *snapshot* de `scoreCatalog` no cambia, y `npm run test:recovery`
       sigue en verde: ninguna nota se ha movido.
-- [ ] La CI entera pasa en local, con el suelo de cobertura del dominio
+- [x] La CI entera pasa en local, con el suelo de cobertura del dominio
       intacto.
 
 ## Dependencias y supuestos

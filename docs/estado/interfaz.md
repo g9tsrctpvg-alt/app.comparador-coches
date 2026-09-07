@@ -376,8 +376,11 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   presupuesto y todas las reglas activas—, con el mismo tratamiento de
   podio de siempre (`variant="podium"` para las tres primeras posiciones,
   `variant="list"` para el resto, `PODIUM_SIZE = 3`, product/0022; con tres
-  coches o menos no hay «resto»), delegado a `RankingRow`; y el **no
-  elegible**, en una sección plegable de `CollapsiblePanel`, «No cumplen tus
+  coches o menos no hay «resto»), delegado a `RankingRow` —a quien pasa
+  también, para cada tarjeta de podio, el clasificado inmediatamente
+  posterior de ese mismo tramo, que es contra quien mide su ventaja
+  (product/0042)—; y el **no elegible**, en una sección plegable de
+  `CollapsiblePanel`, «No cumplen tus
   imprescindibles (N)», plegada por defecto, con una `IneligibleRow` por
   coche. `hideFailingRules` activo oculta la sección entera; apagado, existe
   siempre que haya al menos un coche en ese tramo. Recibe también el
@@ -459,15 +462,41 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   debajo, y la puntuación con su barra en una tercera línea. Con
   `variant="podium"` la fila se renderiza como una tarjeta —fondo, sombra y
   radio de `surfaceRaised`, con el mismo canto de acento a la izquierda que
-  `LeaderCard` y `AxisBreakdownView`— en una sola línea: posición y nombre a
-  la izquierda, línea de apoyo y puntuación (`--font-size-lg`, mayor que la
-  del resto) a la derecha, y la barra de proporción debajo. **Las tres
+  `LeaderCard` y `AxisBreakdownView`— en una sola línea: posición, nombre y
+  **marca de ventaja** a la izquierda, línea de apoyo y puntuación
+  (`--font-size-lg`, mayor que la del resto) a la derecha, y la barra de
+  proporción debajo. **Las tres
   tarjetas del podio llevan el mismo tratamiento**: la primera no tiene
   fondo propio ni superficie invertida — se distingue de la segunda y la
   tercera solo por el acento en su posición y su puntuación
   (`.positionLeader`/`.scoreLeader`, igual que ya distinguía la fila líder
   antes de esta spec). `LeaderCard` sigue siendo, por eso, la única
   superficie invertida de la interfaz.
+- **`AdvantageMark`** (product/0042) — la única comparación que la
+  clasificación enseña **sin desplegar nada**: el icono del eje en el que
+  ese coche saca más ventaja al **clasificado inmediatamente posterior**,
+  junto a su nombre, con el color y el dibujo que ese eje tiene en todas
+  partes (`AXIS_THEME_CLASS` + `AxisIcon`, technical/0011). Solo en las tres
+  tarjetas del podio: en el resto de la lista sería una fila entera de
+  iconos, que es ruido. La línea la elige `topAdvantageLine`
+  (`docs/estado/dominio.md`), no la interfaz.
+
+  **El rival es otro que el del resumen desplegado, a propósito.** Aquel
+  compara con el líder —cuánto le falta a este coche para ganar—; este, con
+  el vecino de puesto —qué defiende su puesto—, así que la tercera tarjeta
+  se mide contra el 4.º clasificado aunque este ya no sea podio. Sin
+  siguiente clasificado —el 3.º cuando solo hay tres coches elegibles— no
+  hay marca, sin hueco ni relleno.
+
+  Va **fuera** del botón que despliega la fila: dentro pasaría a formar
+  parte de su nombre accesible, que ya dice lo suyo. Y va agrupada con el
+  nombre en un contenedor propio, porque suelta en una cabecera que reparte
+  con `space-between` se iría al borde derecho en cuanto la línea de apoyo
+  bajase de línea. El icono sigue siendo `aria-hidden`, como en los otros
+  tres sitios donde se usa: aquí el significado lo lleva el texto oculto que
+  tiene al lado —«Donde más ventaja saca frente a X: Estética, +4,5 pp»—,
+  que es además el `title` para el puntero. Nunca el color a solas, misma
+  regla que `DecisionMark`.
 - **`AxisBreakdownView`** — renderiza un `AxisBreakdown` completo como un
   bloque delimitado, **con el color y el icono de su eje** (`technical/0011`)
   en el filete izquierdo, el icono de la cabecera, la nota y el relleno de la
@@ -499,16 +528,20 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   La usan `AppFooter` (leyenda) y `FichaPage` (leyenda y celdas); el
   desglose de eje **no** la lleva todavía, límite explícito de
   `product/0040` anotado en `docs/roadmap.md`.
-- **`AxisIcon`** (technical/0011; `product/0033` añade el séptimo) — el
-  dibujo de cada eje: maleta `carga`, asiento trasero `habitabilidad`,
-  volante `diario`, cuentarrevoluciones `prestaciones`, escudo `fiabilidad`,
-  gema `estetica` y etiqueta `coste`. SVG en línea sobre un `viewBox` común de
+- **`AxisIcon`** (technical/0011; `product/0033` añade el séptimo y
+  `product/0037` el octavo) — el dibujo de cada eje: maleta `carga`, asiento
+  trasero `habitabilidad`, volante `diario`, cuentarrevoluciones
+  `prestaciones`, escudo `fiabilidad`, gema `estetica`, hoja de visita
+  `prueba` y etiqueta `coste`. SVG en línea sobre un `viewBox` común de
   24×24, `fill="none"`, `stroke="currentColor"` y un solo grosor de trazo
   (`--size-icon-stroke`, **sin unidad**: en un SVG `stroke-width` se mide en
   unidades del `viewBox`, no en píxeles). Las formas son un mapa de datos y no
-  un `switch`. **Siempre `aria-hidden`**: el nombre del eje está al lado en
-  texto real en los tres sitios donde aparece, así que anunciarlo lo diría dos
-  veces. Lo usan `ExplicacionPage`, `WeightSliders` y `AxisBreakdownView`.
+  un `switch`. **Siempre `aria-hidden`**: en los tres sitios donde el icono
+  acompaña al nombre del eje ese nombre ya está al lado en texto real, así
+  que anunciarlo lo diría dos veces; y en el cuarto —`AdvantageMark`, donde
+  el icono va solo— el significado lo lleva el texto oculto que la marca
+  pone a su lado, no el icono. Lo usan `ExplicacionPage`, `WeightSliders`,
+  `AxisBreakdownView` y `AdvantageMark`.
 - **`axisTheme`** (technical/0011) — cómo llega el color del eje al CSS.
   `axisTheme.module.css` declara una clase por eje que **solo** pone
   `--axis-color`, y `axisTheme.ts` mapea `axisId` a esa clase — un mapa de
