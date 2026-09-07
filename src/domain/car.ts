@@ -5,6 +5,14 @@ export const SourceEntrySchema = z.object({
   label: z.string().min(1),
   value: z.union([z.number(), z.string()]),
   estimated: z.boolean(),
+  /**
+   * El valor es un extremo de un rango que publica la fuente porque una
+   * pieza del coche se mueve —hoy, una banqueta trasera deslizante
+   * (product/0040)—, no una medida fija. Es independiente de `estimated`:
+   * un rango publicado no es una estimación, y una fuente puede llevar los
+   * dos campos, uno o ninguno. Ausente y `false` significan lo mismo.
+   */
+  adjustable: z.boolean().optional(),
   current: z.boolean(),
   discardedReason: z.string().min(1).optional(),
 });

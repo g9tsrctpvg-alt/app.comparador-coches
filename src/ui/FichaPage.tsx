@@ -38,6 +38,7 @@ import { TECHNOLOGY_LABELS } from './technologyLabels';
 import { DecisionEditor } from './components/DecisionEditor';
 import { DecisionMark } from './components/DecisionMark';
 import { EligibilityMark } from './components/EligibilityMark';
+import { AdjustableMark } from './components/AdjustableMark';
 import { EstimatedMark } from './components/EstimatedMark';
 import { ScoreGapPanel } from './components/ScoreGapPanel';
 import { useViewState } from './useViewState';
@@ -369,6 +370,7 @@ function CellValue({
         : `${formatNumber(cell.value, def.decimals ?? 0)}${unit ? ` ${unit}` : ''}`}
       {code && ` (${code})`}
       {cell.estimated && <EstimatedMark />}
+      {cell.adjustable && <AdjustableMark />}
     </>
   );
 }
@@ -1460,8 +1462,9 @@ export function FichaPage({
         contra qué se comparan las demás. Cuando hay un modelo de comparación,
         cada celda muestra debajo su diferencia, con el signo siempre escrito:
         el color es un refuerzo, nunca la única vía de leerlo. En maletero,
-        litros por m², potencia, fiabilidad, garantía, extensión de garantía,
-        valor residual a 5 años, anchura de hombros atrás y las dos notas de
+        litros por m², carga máxima en techo, espacio de piernas atrás, anchura
+        de hombros atrás, potencia, autonomía eléctrica, fiabilidad, garantía,
+        extensión de garantía, valor residual a 5 años y las dos notas de
         estética, más es mejor; en anchura, longitud, peso, aceleración,
         consumo, precio y mantenimiento, más es peor, porque el problema que
         resuelve el proyecto es que los sustitutos son más grandes y más caros.
@@ -1470,7 +1473,9 @@ export function FichaPage({
         prioridad declarada del proyecto. El selector de vista de foto cambia
         qué vista enseñan todas las columnas a la vez. La marca{' '}
         <EstimatedMark /> señala un dato estimado, sin fuente publicada
-        verificada directamente.
+        verificada directamente; la marca <AdjustableMark /> señala una magnitud
+        que sale de una pieza que se mueve —hoy, la banqueta trasera
+        deslizante—, y cuyo valor es el máximo que ese coche puede dar.
       </p>
 
       <dialog

@@ -1,7 +1,7 @@
 # 0040 — La banqueta deslizante cuenta a favor, no en contra
 
 - **Id:** product/0040
-- **Estado:** approved
+- **Estado:** consolidated
 - **Tipo:** product
 - **Fecha:** 2026-09-07
 - **Specs relacionadas:** product/0001, product/0013, product/0014,
@@ -9,6 +9,12 @@
 - **ADRs relacionados:** ninguno — no toca los anclajes de `habitabilidad`
   (ADR 0010), solo qué valor de un coche entra en la escala
 - **Doc de estado:** `docs/estado/dominio.md`, `docs/estado/interfaz.md`
+
+> ⚠️ **Spec consolidada (2026-09-07).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/dominio.md` y `docs/estado/interfaz.md`. Vigentes aquí solo
+> los **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -153,30 +159,30 @@ antes y después, para el X-Trail publicado— con las cifras reales.
 
 > Obligatorios y verificables.
 
-- [ ] `SourceEntrySchema` acepta `adjustable` opcional; su ausencia y
+- [x] `SourceEntrySchema` acepta `adjustable` opcional; su ausencia y
       `adjustable: false` son observacionalmente idénticos en cualquier
       lugar que lo lea.
-- [ ] `rearLegroomMm` del Nissan X-Trail e-Power vale 770 mm y el del BMW X1
+- [x] `rearLegroomMm` del Nissan X-Trail e-Power vale 770 mm y el del BMW X1
       xDrive25e vale 760 mm, cada uno con su fuente vigente marcando
       `adjustable: true` y citando el rango completo en la etiqueta.
-- [ ] Ningún otro `rearLegroomMm` del catálogo cambia de valor ni gana
+- [x] Ningún otro `rearLegroomMm` del catálogo cambia de valor ni gana
       `adjustable: true`.
-- [ ] `FichaCell` de tipo `'sourced'` expone `adjustable`, y la ficha
+- [x] `FichaCell` de tipo `'sourced'` expone `adjustable`, y la ficha
       completa renderiza la marca junto al valor exactamente en las celdas
       con `adjustable: true` en su fuente vigente, ninguna otra.
-- [ ] La marca tiene texto accesible propio, distinto del de
+- [x] La marca tiene texto accesible propio, distinto del de
       `EstimatedMark`, y no se confunde visualmente con la tilde de
       estimado.
-- [ ] `habitabilidad` puntúa el X-Trail e-Power con el nuevo valor sin
+- [x] `habitabilidad` puntúa el X-Trail e-Power con el nuevo valor sin
       ningún cambio de fórmula ni de anclaje.
-- [ ] El *snapshot* de puntuación está actualizado, y la verificación
+- [x] El *snapshot* de puntuación está actualizado, y la verificación
       declara el movimiento medido del X-Trail e-Power en el ranking
       publicado.
-- [ ] La skill `add-model` menciona el criterio del requisito 2.1 para una
+- [x] La skill `add-model` menciona el criterio del requisito 2.1 para una
       magnitud con banqueta deslizante.
-- [ ] El límite del requisito de alcance —sin indicador en el desglose del
+- [x] El límite del requisito de alcance —sin indicador en el desglose del
       eje— está anotado en `docs/roadmap.md`.
-- [ ] La CI entera pasa en local: `format:check`, `lint`, `typecheck`,
+- [x] La CI entera pasa en local: `format:check`, `lint`, `typecheck`,
       `arch:check`, `test:coverage` con el suelo de cobertura vigente,
       `markdownlint` y `build`.
 

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import {
+  CellContent,
   COMPLETE_FIELD_DEFS,
   FichaPage,
   PhotoCarousel,
@@ -13,12 +14,15 @@ import {
   setDecisionFilter,
 } from '../domain/decisions';
 import { buildFicha, FICHA_FIELDS } from '../domain/ficha';
+import type { FichaCell } from '../domain/ficha';
+import { loadCatalog } from '../data/loadCatalog';
 import type { Reference } from '../domain/reference';
 import { DEFAULT_ASSUMPTIONS } from '../domain/scoring/assumptions';
 import { DEFAULT_WEIGHTS } from '../domain/scoring/weights';
 import { scoreCatalog } from '../domain/scoring/score';
 import { formatNumber } from './format';
 import fichaCss from './FichaPage.module.css?raw';
+import primitivesCss from './primitives.module.css?raw';
 
 // La puntuación de `threeCarFixture` con los pesos por defecto: los treinta
 // puntos de entrada de este fichero llaman a `FichaPage` con este mismo
@@ -610,7 +614,10 @@ describe('FichaPage', () => {
   // párrafo lo dice): un campo con dirección declarada en POLARITY que no
   // aparezca aquí deja esa afirmación en falso para ese campo. Regresión
   // concreta: rearShoulderWidthMm, residualPct5y y warrantyExtensionYears
-  // llegaron a POLARITY sin llegar nunca a este párrafo.
+  // llegaron a POLARITY sin llegar nunca a este párrafo — y después les pasó
+  // lo mismo a maxRoofLoadKg, electricRangeKm y rearLegroomMm, corregidos
+  // el 2026-09-07 al consolidar `product/0040`, que es la tercera vez que
+  // esta lista se queda corta.
   it('names every field the color reinforces as "más es mejor" in the legend', () => {
     const markup = renderToStaticMarkup(
       <FichaPage
@@ -630,12 +637,15 @@ describe('FichaPage', () => {
     for (const label of [
       'maletero',
       'litros por m²',
+      'carga máxima en techo',
+      'espacio de piernas atrás',
+      'anchura de hombros atrás',
       'potencia',
+      'autonomía eléctrica',
       'fiabilidad',
       'garantía',
       'extensión de garantía',
       'valor residual a 5 años',
-      'anchura de hombros atrás',
       'estética',
     ]) {
       expect(legend.toLowerCase()).toContain(label);
@@ -1240,5 +1250,101 @@ describe('the eligibility mark (product/0031)', () => {
       />,
     );
     expect(withoutProp).toBe(withProp);
+  });
+});
+
+describe('the sliding-bench mark (product/0040, requisito 3.2)', () => {
+  const legroomDef = COMPLETE_FIELD_DEFS.get('rearLegroomMm')!;
+
+  function sourcedCell(
+    overrides: Partial<Extract<FichaCell, { kind: 'sourced' }>> = {},
+  ): FichaCell {
+    return {
+      kind: 'sourced',
+      value: 770,
+      unit: 'mm',
+      estimated: false,
+      adjustable: false,
+      delta: null,
+      ...overrides,
+    };
+  }
+
+  it('marks a cell whose current source declares the magnitude adjustable', () => {
+    const markup = renderToStaticMarkup(
+      <CellContent cell={sourcedCell({ adjustable: true })} def={legroomDef} />,
+    );
+    expect(markup).toContain('adjustableMark');
+    expect(markup).toContain('↔');
+    // La marca nunca va sola: lleva su explicación para quien no ve el
+    // símbolo, y esa explicación dice que el valor es el máximo.
+    expect(markup).toContain('banqueta trasera deslizante');
+    expect(markup).toContain('es el espacio máximo');
+  });
+
+  it('leaves an ordinary cell untouched', () => {
+    const markup = renderToStaticMarkup(
+      <CellContent cell={sourcedCell()} def={legroomDef} />,
+    );
+    expect(markup).not.toContain('adjustableMark');
+    expect(markup).not.toContain('↔');
+  });
+
+  it('never marks a rating cell, which has no sources behind it', () => {
+    const markup = renderToStaticMarkup(
+      <CellContent
+        cell={{ kind: 'rating', value: 4, delta: null }}
+        def={COMPLETE_FIELD_DEFS.get('aestheticsInterior')!}
+      />,
+    );
+    expect(markup).not.toContain('adjustableMark');
+  });
+
+  it('does not get confused with the estimated tilde: distinct text, symbol and colour', () => {
+    const both = renderToStaticMarkup(
+      <CellContent
+        cell={sourcedCell({ estimated: true, adjustable: true })}
+        def={legroomDef}
+      />,
+    );
+    // Las dos marcas conviven, cada una con su propio texto accesible: un
+    // dato puede ser a la vez estimado y ajustable, y son cosas distintas.
+    expect(both).toContain('estimatedMark');
+    expect(both).toContain('adjustableMark');
+    expect(both).toContain('valor estimado, no verificado directamente');
+    expect(both).toContain('banqueta trasera deslizante');
+    expect(both).toContain('~');
+    expect(both).toContain('↔');
+    // Y no comparten color: la tilde avisa de una reserva sobre el dato
+    // (`signal`); la flecha declara una capacidad del coche (`accent`).
+    expect(ruleBody(primitivesCss, 'estimatedMark')).toMatch(
+      /color:\s*var\(--color-signal\)/,
+    );
+    expect(ruleBody(primitivesCss, 'adjustableMark')).toMatch(
+      /color:\s*var\(--color-accent\)/,
+    );
+  });
+
+  it('marks exactly the cells of the real catalogue whose current source is adjustable, none other', () => {
+    // El criterio de la spec, comprobado contra el catálogo entero en vez de
+    // contra un caso construido: hoy son las dos filas de espacio de piernas
+    // atrás de los dos modelos con banqueta deslizante, y ninguna más.
+    const marked: string[] = [];
+    for (const entity of buildFicha(loadCatalog(), [])) {
+      for (const field of FICHA_FIELDS) {
+        const cell = entity.cells[field];
+        const def = COMPLETE_FIELD_DEFS.get(field)!;
+        const markup = renderToStaticMarkup(
+          <CellContent cell={cell} def={def} />,
+        );
+        const hasMark = markup.includes('adjustableMark');
+        expect(hasMark).toBe(cell.kind === 'sourced' && cell.adjustable);
+        if (hasMark) marked.push(`${entity.id}.${field}`);
+      }
+    }
+    expect(marked.sort()).toEqual([
+      'bmw-x1-xdrive25e.rearLegroomMm',
+      'nissan-x-trail-e-power.rearLegroomMm',
+    ]);
   });
 });
