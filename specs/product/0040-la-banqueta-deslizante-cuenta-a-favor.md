@@ -1,7 +1,7 @@
 # 0040 — La banqueta deslizante cuenta a favor, no en contra
 
 - **Id:** product/0040
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-09-07
 - **Specs relacionadas:** product/0001, product/0013, product/0014,
