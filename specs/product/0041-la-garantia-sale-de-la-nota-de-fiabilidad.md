@@ -1,7 +1,7 @@
 # 0041 — La garantía sale de la nota de fiabilidad
 
 - **Id:** product/0041
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-09-07
 - **Specs relacionadas:** product/0001, product/0007, product/0035
