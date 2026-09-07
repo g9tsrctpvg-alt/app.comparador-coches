@@ -1,7 +1,7 @@
 # 0042 — El podio dice dónde saca ventaja al siguiente
 
 - **Id:** product/0042
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-09-07
 - **Specs relacionadas:** product/0022, product/0029, product/0031, technical/0011
