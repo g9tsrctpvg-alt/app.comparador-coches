@@ -142,7 +142,7 @@ export function stableAxes(gap: ScoreGap): AxisGapLine[] {
  * del mismo lado, que cuentan la mitad de la historia. */
 export function topGapLines(gap: ScoreGap): AxisGapLine[] {
   // `splitScoreGap` construye `lines` a partir de `a.axes`, que siempre
-  // tiene las siete entradas de `AXIS_ORDER`: nunca vacío.
+  // tiene las ocho entradas de `AXIS_ORDER`: nunca vacío.
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- invariante de splitScoreGap
   const top = gap.lines[0]!;
   if (top.value === 0) return [top];
@@ -150,4 +150,26 @@ export function topGapLines(gap: ScoreGap): AxisGapLine[] {
     (line) => Math.sign(line.value) === -Math.sign(top.value),
   );
   return opposite ? [top, opposite] : [top];
+}
+
+/** El eje en el que `a` saca **más ventaja** a `b` (product/0042, requisito
+ * 1): la línea de mayor `value` estrictamente positivo, o `undefined` si no
+ * hay ninguna —dos coches empatados eje a eje, o uno que pierde en todos—.
+ *
+ * No es `topGapLines`, y la diferencia importa: aquella devuelve la línea de
+ * mayor valor **absoluto**, que puede ser un eje donde `a` pierde. Sobre el
+ * catálogo publicado le pasa al líder, cuya línea mayor frente al segundo es
+ * `prestaciones` **en contra**. Un resumen que enseñe solo esa línea diría lo
+ * contrario de lo que pasa.
+ *
+ * La ventaja se mide en `value` —peso × Δnota— y no en Δnota a secas: un eje
+ * de peso 0 no aporta nada al puesto, y así no puede salir elegido nunca.
+ *
+ * Basta con recorrer `lines`, que ya viene ordenada por valor absoluto
+ * descendente: la primera positiva es la de mayor `value`. El desempate es
+ * `AXIS_ORDER`, y sale gratis —`splitScoreGap` construye las líneas en ese
+ * orden y `sort` es estable—, así que dos ejecuciones con los mismos datos
+ * eligen siempre el mismo eje. */
+export function topAdvantageLine(gap: ScoreGap): AxisGapLine | undefined {
+  return gap.lines.find((line) => line.value > 0);
 }

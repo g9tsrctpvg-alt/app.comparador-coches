@@ -136,6 +136,15 @@
   row-gap: var(--space-2);
 }
 
+/* Nombre y marca de ventaja como un solo bloque (product/0042): sueltos en
+ * `.podiumHeader`, que reparte con `space-between`, la marca se iría al
+ * borde derecho en cuanto la línea de apoyo bajase de línea. */
+.podiumTitle {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
 .togglePodium {
   composes: unstyledButton from '../primitives.module.css';
   display: flex;

@@ -13,6 +13,7 @@ import { DECISION_LABELS } from '../decisionLabels';
 import { formatDate, formatEur, formatNumber, formatSigned } from '../format';
 import { visitaHashFor } from '../useHashRoute';
 import primitives from '../primitives.module.css';
+import { AdvantageMark } from './AdvantageMark';
 import { AxisBreakdownView } from './AxisBreakdownView';
 import { DecisionEditor } from './DecisionEditor';
 import { DecisionMark } from './DecisionMark';
@@ -43,6 +44,13 @@ interface RankingRowProps {
    * comparar —un único coche visible—, y entonces la fila no enseña
    * resumen. */
   compareTo?: CarScoreBreakdown;
+  /** El clasificado inmediatamente posterior dentro del tramo elegible
+   * (product/0042, requisito 2), que es contra quien se mide la ventaja que
+   * enseña la tarjeta del podio. Es otra referencia que `compareTo` a
+   * propósito: aquella responde a cuánto le falta a este coche para ganar,
+   * esta a qué defiende su puesto. `undefined` en la última posición del
+   * tramo —no hay siguiente— y entonces no hay marca. */
+  nextInRanking?: CarScoreBreakdown;
   weights: AxisWeights;
   /** El estado de decisión de este coche (product/0030): `undefined` de
    * entrada no existe — siempre llega `'undecided'` cuando no hay entrada,
@@ -128,6 +136,7 @@ export function RankingRow({
   editableRatings,
   onRatingChange,
   compareTo,
+  nextInRanking,
   weights,
   decisionState,
   decisionEntry,
@@ -236,7 +245,21 @@ export function RankingRow({
     return (
       <li className={styles.podiumCard}>
         <div className={styles.podiumHeader}>
-          {toggle}
+          {/* La marca va junto al nombre y fuera del botón (product/0042,
+              requisitos 3 y 3.3): dentro pasaría a formar parte de su
+              nombre accesible, que ya dice lo suyo, y suelta en la cabecera
+              se separaría del nombre en cuanto la línea de apoyo bajase de
+              línea. */}
+          <div className={styles.podiumTitle}>
+            {toggle}
+            {nextInRanking && (
+              <AdvantageMark
+                car={car}
+                rival={nextInRanking}
+                weights={weights}
+              />
+            )}
+          </div>
           <div className={styles.podiumMeta}>
             {secondaryLine}
             <span
