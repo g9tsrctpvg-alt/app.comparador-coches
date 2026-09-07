@@ -37,13 +37,19 @@ import { scoreCatalog } from './score';
  * puntúa el espacio de piernas atrás en vez de la batalla. El catálogo pasó
  * además de once a veintiún registros entre medias, así que las cifras de
  * abajo no son comparables con las de más arriba fila a fila.
+ *
+ * Vuelto a actualizar solo para `bmw-x1-xdrive25e` (2026-09-06): su
+ * `rearShoulderWidthMm` se corrige de 138 a 141 cm —«Anchura hombros
+ * máxima» de km77, confirmado por el usuario—, y el anterior queda como
+ * fuente descartada en `cars.json` con su motivo. Es un dato de catálogo,
+ * no una spec: mueve solo este registro.
  */
 const EXPECTED_TOTALS: Record<string, number> = {
   'kia-ev3': 245.69364308167013,
   'hyundai-kona-hev': 228.61475583572926,
   'hyundai-kona-electrico': 226.52676206884763,
   'toyota-corolla-cross': 187.59907792854295,
-  'bmw-x1-xdrive25e': 217.7546627259612,
+  'bmw-x1-xdrive25e': 222.64841272596118,
   'alfa-romeo-tonale': 205.34281371874985,
   'kia-sportage-hev': 248.4586970605884,
   'honda-civic-e-hev': 239.11661447558416,

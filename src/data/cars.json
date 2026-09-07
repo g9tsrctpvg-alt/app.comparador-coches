@@ -1204,7 +1204,7 @@
       "Es PHEV y el usuario no tiene carga en casa: no puede aprovechar el enchufe.",
       "Solo entra en presupuesto como seminuevo (43.900-45.900 € con ~18.000 km); nuevo cuesta ~52.900 €.",
       "Despublicado el 2026-08-08: fuera de presupuesto/rango.",
-      "Espacio de piernas atrás: km77 publica un rango 76-62 cm porque la segunda fila es deslizante; se declara el mínimo, la cifra que no depende de cómo se reparta el hueco con el maletero (product/0039). La anchura de hombros (138 cm) no se ha podido re-etiquetar como mínima o máxima: en septiembre de 2026 la ficha de km77 muestra ese dato dentro de un módulo comparativo con varios modelos, con 141 cm de máxima y sin mínima visible, así que no se sabe cuál de las dos filas era 138 cm cuando se declaró en agosto de 2026 — deuda registrada, no un valor corregido a ciegas."
+      "Espacio de piernas atrás: km77 publica un rango 76-62 cm porque la segunda fila es deslizante; se declara el mínimo, la cifra que no depende de cómo se reparta el hueco con el maletero (product/0039). La anchura de hombros se corrige a 141 cm —«Anchura hombros máxima» de km77— el 2026-09-06, confirmado por el usuario; el valor anterior (138 cm, sin fila identificada) queda como fuente descartada."
     ],
     "lengthMm": {
       "value": 4500,
@@ -1267,12 +1267,19 @@
       ]
     },
     "rearShoulderWidthMm": {
-      "value": 1380,
+      "value": 1410,
       "unit": "mm",
       "sources": [
         {
           "label": "km77, mediciones propias — xDrive25e (agosto 2026): 138 cm a la altura de los hombros, https://www.km77.com/coches/bmw/x1/2023/estandar/e/x1-xdrive25e/mediciones-propias/detalle",
           "value": 1380,
+          "estimated": false,
+          "current": false,
+          "discardedReason": "La etiqueta no identificaba si el dato era la fila «mínima» o «máxima» de km77; la ficha vigente en septiembre de 2026 da 141 cm como «Anchura hombros máxima», confirmado por el usuario (2026-09-06)."
+        },
+        {
+          "label": "km77, mediciones propias — xDrive25e (septiembre 2026): «Anchura hombros máxima» 141 cm, https://www.km77.com/coches/bmw/x1/2023/estandar/e/x1-xdrive25e/mediciones-propias/detalle",
+          "value": 1410,
           "estimated": false,
           "current": true
         }
