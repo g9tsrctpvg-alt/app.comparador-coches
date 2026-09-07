@@ -550,7 +550,12 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   —product/0031: que un imprescindible filtra y nunca puntúa, texto
   estático, sin pasar por `scoreCatalog`—, las limitaciones conocidas y la
   procedencia de los datos) y comparte `SCurveChart` y `AXIS_CONTENT`
-  con `AxisBreakdownView`. Las ocho tarjetas de eje y las ocho filas de la
+  con `AxisBreakdownView`. Una tarjeta de eje puede llevar además dos notas
+  al pie, y no significan lo mismo: `curveException` dice por qué una
+  magnitud **se puntúa** con una curva distinta —`estetica` y `prueba`, las
+  dos sin curva en S—, y `scoringException` (`product/0041`) dice por qué un
+  dato que el eje **enseña** no puntúa en absoluto — hoy solo `fiabilidad`,
+  con los años de garantía. Las ocho tarjetas de eje y las ocho filas de la
   lista de pesos llevan el icono y el filete de color de su eje
   (`technical/0011`); **la tabla de contenidos no**, porque sus entradas son
   secciones y no ejes — teñir «Los ocho ejes» de uno de los ocho colores

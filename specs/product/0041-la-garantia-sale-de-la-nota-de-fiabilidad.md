@@ -1,18 +1,18 @@
 # 0041 — La garantía sale de la nota de fiabilidad
 
 - **Id:** product/0041
-- **Estado:** verified
+- **Estado:** consolidated
 - **Tipo:** product
 - **Fecha:** 2026-09-07
 - **Specs relacionadas:** product/0001, product/0007, product/0035
 - **ADRs relacionados:** 0004, 0010
 - **Doc de estado:** `docs/estado/dominio.md`, `docs/estado/interfaz.md`
 
-> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio en
-> el momento en que se redactó; su sección *Contexto* retrata el sistema
-> **anterior** al cambio y hoy es histórica. Para el estado actual, ver
-> `docs/estado/dominio.md`. Vigentes aquí solo los **criterios de
-> aceptación**, como registro de verificación.
+> ⚠️ **Spec consolidada (2026-09-07).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/dominio.md` y `docs/estado/interfaz.md`. Vigentes aquí solo
+> los **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 

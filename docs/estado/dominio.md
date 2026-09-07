@@ -253,7 +253,7 @@ rango falla en vez de entrar al cálculo.
 | `carga` | `escala(maletero)`, escala absoluta | Un solo sumando: no hay reparto que declarar |
 | `habitabilidad` | `0,5×escala(espacio de piernas atrás) + 0,5×escala(anchura de hombros)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
 | `prestaciones` | `0,5×escala(CV/t) + 0,5×escala(aceleración invertida)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
-| `fiabilidad` | `0,7×escala(OCU) + 0,3×escala(garantía incondicional)`, escala absoluta | Cada magnitud se puntúa contra su escala absoluta antes de combinarse |
+| `fiabilidad` | `escala(índice OCU)`, escala absoluta | Un solo sumando: no hay reparto que declarar |
 | `prueba` | `0,2×Σ escala(juicioᵢ)` sobre los cinco juicios de la prueba real, escala absoluta lineal | Cada juicio se traduce a nota antes de combinarse; sin contestar, puntúa el neutro |
 
 **Los siete primeros ejes están migrados a escala absoluta** — `product/0002`
@@ -536,32 +536,46 @@ que el eje mide.
 | Magnitud | Nota 10 desde | Nota 0 hasta |
 | --- | --- | --- |
 | Índice de fiabilidad OCU | 93 | 64 |
-| Años de garantía incondicional | 7 | 0 |
 
 **El índice OCU no necesita anclajes inventados: son los extremos que la
 propia OCU publica** sobre 39 marcas — Lexus con 93, Land Rover con 64—, así
 que la escala es el mercado tal como se publica y no hay que justificar
-ningún recorte. Consecuencia asumida y no un fallo: nueve de los once
+ningún recorte. Consecuencia asumida y no un fallo: la mayoría de los
 candidatos del catálogo salen de marcas que caen en el tercio alto de esas
-39, así que el eje deja de separarlos — la escala relativa fabricaba un
+39, así que el eje apenas los separa — la escala relativa fabricaba un
 ranking donde solo había un empate.
 
-**La garantía puntúa solo los años incondicionales.** El 10 va en 7 años
-—Kia, MG, Omoda, Jaecoo—, el techo real del mercado sin condiciones. El 0 va
-en 0 años y no en los 3 del mínimo legal español: quedarse en el mínimo es
-una estrategia comercial, no una señal de que el coche se rompe, y anclar
-ahí habría convertido esa elección en un cero absoluto. Una extensión sujeta
-a mantenimiento en red oficial —campo `warrantyExtension` en `Car`— no suma
-a esta magnitud: es un compromiso del comprador, renovado servicio a
-servicio, no uno del fabricante. El desglose la muestra igual, como
-información que no entra en la nota (`AxisBreakdown.info`), con sus años, su
-límite de kilómetros si lo declara y su condición.
+**Es el único sumando del eje: la garantía no puntúa (`product/0041`).** Los
+años de garantía estuvieron dentro de la fórmula, al 0,3 contra el 0,7 del
+índice, hasta el 2026-09-07. Salieron porque miden otra cosa: una garantía
+larga dice que la marca ha elegido comprar confianza, no que el coche se
+averíe menos —Kia da siete años y Toyota tres, y es Toyota quien tiene mejor
+índice de averías de las dos—. Es el mismo argumento con el que
+`product/0007` había dejado fuera el índice de satisfacción de la OCU, que
+no se aplicó entonces a la garantía porque venía heredada. Con la garantía
+dentro, el eje **comprimía** en vez de separar —el recorrido sobre los
+dieciocho publicados era de 8,46 puntos, contra los 9,86 que da el índice
+solo—, su ancla en 0 años regalaba un suelo de 1,18 a cualquier coche a la
+venta, porque ninguno baja de los 3 años del mínimo legal, y su curva en S
+tenía la máxima pendiente en 3,5 años: separaba más entre 3 y 4 años (2,13
+puntos por año) que entre 6 y 7 (0,55), justo al revés de donde una garantía
+paga algo.
+
+**La garantía sigue viéndose, sin puntuar.** El desglose muestra en
+`AxisBreakdown.info` los años incondicionales (`warrantyYears`) y, cuando
+existe, la extensión sujeta a mantenimiento en red oficial
+(`warrantyExtension`) con sus años, su límite de kilómetros si lo declara y
+su condición. Las dos reciben el mismo trato porque miden lo mismo —qué debe
+el fabricante—, que no es lo que mide este eje.
 
 **El índice OCU es por marca, no por modelo — 39 marcas sobre 392 modelos
 analizados — y ese es el límite real del eje.** Ninguna escala lo arregla:
 mientras no exista un índice por modelo publicado, `fiabilidad` puntúa la
 marca y lo presenta como fiabilidad del coche. El desglose lo declara en su
-propia descripción de fórmula, no solo aquí.
+propia descripción de fórmula, no solo aquí. Desde que la garantía no
+puntúa, ese límite ya no está amortiguado por nada: el 64 asignado a Jeep
+—una convención, porque la OCU no publica la marca— decide solo la nota de
+fiabilidad del Compass.
 
 ## Supuestos globales
 
