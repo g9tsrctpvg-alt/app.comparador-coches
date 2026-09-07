@@ -49,29 +49,37 @@ import { scoreCatalog } from './score';
  * pasa a declarar el máximo del rango publicado en vez del mínimo —el
  * X-Trail e-Power de 560 a 770 mm, el X1 xDrive25e de 620 a 760 mm—, así
  * que su nota de `habitabilidad` sube. Ningún otro total cambia.
+ *
+ * Vueltos a actualizar por `product/0041` (2026-09-07), a propósito y en los
+ * veintiún registros: los años de garantía salen de la nota de `fiabilidad`,
+ * que pasa a ser la del índice OCU a secas. Cada total se mueve exactamente
+ * `7 × 0,3 × (nota_OCU − nota_garantía)`, así que sube en los coches cuya
+ * marca es más fiable que generosa —el Corolla Cross, +12,45— y baja en los
+ * que compraban nota con la garantía —el Compass, −8,27, y los tres Kia de
+ * siete años—.
  */
 const EXPECTED_TOTALS: Record<string, number> = {
-  'kia-ev3': 245.69364308167013,
-  'hyundai-kona-hev': 228.61475583572926,
-  'hyundai-kona-electrico': 226.52676206884763,
-  'toyota-corolla-cross': 187.59907792854295,
-  'bmw-x1-xdrive25e': 243.09356674549537,
-  'alfa-romeo-tonale': 205.34281371874985,
-  'kia-sportage-hev': 248.4586970605884,
-  'honda-civic-e-hev': 239.11661447558416,
-  'lexus-nx-350h': 228.6204486805267,
-  'mazda-cx-5': 224.81873486066428,
-  'honda-cr-v-e-hev': 215.46078820092563,
-  'volkswagen-id4': 212.33339309204013,
-  'kia-ev5': 228.93586705072403,
-  'hyundai-ioniq-5': 208.34515555176395,
-  'hyundai-tucson-hev': 257.64085864892127,
-  'hyundai-tucson-phev': 252.74589285395749,
-  'citroen-c5-aircross': 183.88761207042228,
-  'jeep-compass': 174.66062309944914,
-  'nissan-qashqai-e-power': 231.53860254680305,
-  'nissan-x-trail-e-power': 235.82933350499098,
-  'honda-zr-v': 206.54844756159966,
+  'kia-ev3': 244.6052835753353,
+  'hyundai-kona-hev': 230.45320257610487,
+  'hyundai-kona-electrico': 228.36520880922325,
+  'toyota-corolla-cross': 200.04790522689842,
+  'bmw-x1-xdrive25e': 253.50344205729954,
+  'alfa-romeo-tonale': 200.62957732328553,
+  'kia-sportage-hev': 247.37033755425358,
+  'honda-civic-e-hev': 242.1915202753718,
+  'lexus-nx-350h': 241.35514255807772,
+  'mazda-cx-5': 224.89364066045192,
+  'honda-cr-v-e-hev': 218.53569400071328,
+  'volkswagen-id4': 218.2959765919619,
+  'kia-ev5': 227.8475075443892,
+  'hyundai-ioniq-5': 210.18360229213957,
+  'hyundai-tucson-hev': 259.4793053892969,
+  'hyundai-tucson-phev': 254.5843395943331,
+  'citroen-c5-aircross': 183.43369632888272,
+  'jeep-compass': 166.39531697700016,
+  'nissan-qashqai-e-power': 241.94847785860722,
+  'nissan-x-trail-e-power': 246.23920881679516,
+  'honda-zr-v': 209.6233533613873,
 };
 
 describe('scoreCatalog against the real catalogue (product/0009 regression)', () => {

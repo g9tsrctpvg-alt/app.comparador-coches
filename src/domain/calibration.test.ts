@@ -281,8 +281,11 @@ describe('calibrate', () => {
     // —`coste` deja de leer el consumo ponderado del Tucson PHEV sin carga
     // en casa, y `habitabilidad` puntúa el espacio de piernas atrás—, así
     // que el par más lejano deja de ser kia-ev3/jeep-compass.
+    // product/0041 (2026-09-07) lo vuelve a mover: sin el sumando de
+    // garantía, el Corolla Cross sube en fiabilidad y el Compass baja, así
+    // que el par más separado pasa a ser ese.
     expect(state.nextMatchup).toEqual({
-      aCarId: 'honda-civic-e-hev',
+      aCarId: 'toyota-corolla-cross',
       bCarId: 'jeep-compass',
     });
     // Y no depende de con qué pesos se haya puntuado.
@@ -303,13 +306,17 @@ describe('calibrate', () => {
     expect(again.nextMatchup).toEqual(state.nextMatchup);
   });
 
-  it('de partida trece coches pueden liderar y ningún par está decidido', () => {
+  it('de partida catorce coches pueden liderar y ningún par está decidido', () => {
     const state = calibrate(profiles, [], DEFAULT_WEIGHTS);
     expect(state.totalPairs).toBe(153);
     expect(state.settledPairs).toBe(0);
-    expect(state.possibleLeaderIds).toHaveLength(13);
+    // Eran trece hasta product/0041 (2026-09-07): el decimocuarto es el
+    // Corolla Cross, que entra justo por lo que la spec corrige — con la
+    // garantía dentro del eje, la marca con mejor índice de averías del
+    // catálogo no podía liderar con ninguna combinación de pesos.
+    expect(state.possibleLeaderIds).toHaveLength(14);
     expect(state.possibleLeaderIds).toContain('kia-ev3');
-    expect(state.possibleLeaderIds).not.toContain('toyota-corolla-cross');
+    expect(state.possibleLeaderIds).toContain('toyota-corolla-cross');
   });
 
   it('es determinista: mismas respuestas, mismo resultado (requisito 3.4)', () => {

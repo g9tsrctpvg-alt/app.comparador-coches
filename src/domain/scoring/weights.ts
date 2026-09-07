@@ -50,7 +50,7 @@ export const AXIS_LABELS: Record<AxisId, string> = {
   habitabilidad: 'Espacio para los de atrás',
   diario: 'Facilidad de uso diario',
   prestaciones: 'Prestaciones',
-  fiabilidad: 'Fiabilidad y garantía',
+  fiabilidad: 'Fiabilidad',
   estetica: 'Estética',
   prueba: 'Prueba real',
   coste: 'Coste total',
