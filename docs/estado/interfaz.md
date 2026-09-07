@@ -100,7 +100,8 @@ de colores por debajo de su umbral de contraste hace fallar
   (la pastilla de la barra de la ficha: la misma superficie con el rótulo
   flotando sobre un `<select>` que ocupa el rectángulo entero, para que todo él
   sea objetivo táctil), `proportionBar`/`proportionBarRow`/`proportionBarAxis`
-  con su relleno normal o apagado, `statusMark` y `estimatedMark`,
+  con su relleno normal o apagado, `statusMark`, `estimatedMark` y
+  `adjustableMark`,
   `secondaryText`, `prose` (medida de línea acotada a `--size-line-measure`
   y partición de palabras largas), `visuallyHidden` (texto solo para
   lectores de pantalla), `rangeInput` (deslizador con objetivo táctil de
@@ -237,8 +238,9 @@ antes de esto, las tres páginas repetían literalmente
   Medido sobre el build: los cuatro se distinguen entre sí y del fondo de la
   cabecera.
 - **`AppFooter`** — la procedencia y fecha de los datos («Los precios del
-  catálogo son de julio de 2026…») y la leyenda de la marca de estimado
-  (`<EstimatedMark />`), antes repetidas al pie de cada tabla de la ficha.
+  catálogo son de julio de 2026…») y la leyenda de las dos marcas de la
+  ficha, `<EstimatedMark />` y `<AdjustableMark />` (product/0040), antes
+  repetidas al pie de cada tabla de la ficha.
 
 **Ruta y alias** (`src/ui/useHashRoute.ts`): la ruta canónica de la ficha es
 `#/ficha`; `#/ficha-tecnica` y `#/ficha-completa` —las dos vistas que
@@ -487,6 +489,16 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   perciba visualmente. La usan `RankingRow` (línea de apoyo),
   `AxisBreakdownView` (datos de entrada), `AppFooter` (leyenda) y
   `FichaPage` (leyenda y celdas).
+- **`AdjustableMark`** (product/0040) — la marca de una magnitud que sale de
+  una pieza que el usuario mueve: hoy, el espacio de piernas atrás de un
+  coche con banqueta trasera deslizante, cuyo valor declarado es el máximo
+  del rango. Mismo patrón que `EstimatedMark` —símbolo (`↔`) más su
+  explicación accesible al lado, nunca solo—, **distinto color a
+  propósito**: la tilde va en `signal` porque avisa de una reserva sobre el
+  dato; la flecha va en `accent` porque declara una capacidad del coche.
+  La usan `AppFooter` (leyenda) y `FichaPage` (leyenda y celdas); el
+  desglose de eje **no** la lleva todavía, límite explícito de
+  `product/0040` anotado en `docs/roadmap.md`.
 - **`AxisIcon`** (technical/0011; `product/0033` añade el séptimo) — el
   dibujo de cada eje: maleta `carga`, asiento trasero `habitabilidad`,
   volante `diario`, cuentarrevoluciones `prestaciones`, escudo `fiabilidad`,
@@ -780,7 +792,10 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   - El contenedor desplazable es alcanzable con teclado
     (`tabindex="0"`, `role="group"`).
   - La leyenda al pie explica la Δ, la dirección de cada magnitud, los
-    litros por m² y la marca de estimado.
+    litros por m² y las dos marcas: la de estimado y la de banqueta
+    deslizante (product/0040). La lista de magnitudes «más es mejor» de esa
+    leyenda nombra hoy las trece que declaran esa dirección; que se quedara
+    corta ya ha pasado tres veces, y hay un test que la comprueba entera.
 - **`VisitaPage`** (`#/visita`, product/0037) — la hoja de visita. El índice
   lista los candidatos publicados en el orden de la clasificación vigente
   —`total` descendente—, con el filtro de decisión de `product/0030`

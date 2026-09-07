@@ -88,8 +88,36 @@ describe('buildFicha', () => {
       value: 4540,
       unit: 'mm',
       estimated: false,
+      adjustable: false,
       delta: null,
     });
+  });
+
+  it('carries the adjustable flag of the current source into the cell (product/0040)', () => {
+    const sliding = {
+      ...sportageFixture,
+      rearLegroomMm: {
+        ...sportageFixture.rearLegroomMm,
+        value: 770,
+        sources: [
+          {
+            label: 'km77: 77-56 cm, banqueta deslizante',
+            value: 770,
+            estimated: false,
+            adjustable: true,
+            current: true,
+          },
+        ],
+      },
+    };
+    const [entity] = buildFicha([sliding], []);
+    expect(entity?.cells.rearLegroomMm).toMatchObject({
+      kind: 'sourced',
+      value: 770,
+      adjustable: true,
+    });
+    // Ninguna otra celda del mismo coche se contagia.
+    expect(entity?.cells.lengthMm).toMatchObject({ adjustable: false });
   });
 
   it('extracts a rating cell', () => {
@@ -138,6 +166,7 @@ describe('buildFicha', () => {
       value: 15,
       unit: 'años',
       estimated: false,
+      adjustable: false,
       delta: null,
     });
   });
@@ -149,6 +178,7 @@ describe('buildFicha', () => {
       value: 2022,
       unit: undefined,
       estimated: false,
+      adjustable: false,
       delta: null,
     });
   });
@@ -172,6 +202,7 @@ describe('buildFicha', () => {
       value: 2025,
       unit: undefined,
       estimated: false,
+      adjustable: false,
       delta: null,
     });
   });
@@ -183,6 +214,7 @@ describe('buildFicha', () => {
       value: 2010,
       unit: undefined,
       estimated: false,
+      adjustable: false,
       delta: null,
     });
   });

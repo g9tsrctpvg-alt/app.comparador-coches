@@ -1204,7 +1204,7 @@
       "Es PHEV y el usuario no tiene carga en casa: no puede aprovechar el enchufe.",
       "Solo entra en presupuesto como seminuevo (43.900-45.900 € con ~18.000 km); nuevo cuesta ~52.900 €.",
       "Despublicado el 2026-08-08: fuera de presupuesto/rango.",
-      "Espacio de piernas atrás: km77 publica un rango 76-62 cm porque la segunda fila es deslizante; se declara el mínimo, la cifra que no depende de cómo se reparta el hueco con el maletero (product/0039). La anchura de hombros se corrige a 141 cm —«Anchura hombros máxima» de km77— el 2026-09-06, confirmado por el usuario; el valor anterior (138 cm, sin fila identificada) queda como fuente descartada."
+      "Espacio de piernas atrás: km77 publica un rango 76-62 cm porque la segunda fila es deslizante; desde `product/0040` se declara el **máximo** —lo que el banco puede llegar a dar—, marcado como ajustable para que la ficha lo enseñe. El mínimo anterior queda como fuente descartada. La anchura de hombros se corrige a 141 cm —«Anchura hombros máxima» de km77— el 2026-09-06, confirmado por el usuario; el valor anterior (138 cm, sin fila identificada) queda como fuente descartada."
     ],
     "lengthMm": {
       "value": 4500,
@@ -1255,13 +1255,21 @@
       ]
     },
     "rearLegroomMm": {
-      "value": 620,
+      "value": 760,
       "unit": "mm",
       "sources": [
         {
           "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 62 cm, https://www.km77.com/coches/bmw/x1/2023/estandar/e/x1-xdrive25e/mediciones-propias/detalle",
           "value": 620,
           "estimated": false,
+          "current": false,
+          "discardedReason": "Era el mínimo del rango 76-62 cm que publica la fuente por banqueta deslizante. `product/0040` declara el máximo: comparar el peor caso de un banco móvil contra el único caso de un banco fijo no compara lo mismo."
+        },
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 76-62 cm —banqueta deslizante—; se declara el máximo, 76 cm (product/0040), https://www.km77.com/coches/bmw/x1/2023/estandar/e/x1-xdrive25e/mediciones-propias/detalle",
+          "value": 760,
+          "estimated": false,
+          "adjustable": true,
           "current": true
         }
       ]
@@ -5714,7 +5722,7 @@
       "Mantenimiento anual estimado a partir de la tarifa oficial de contratos de Nissan España: el contrato de mantenimiento anual de 3 años del X-Trail (T33) cuesta 795 €, es decir 265 € al año. No es un coste anual desglosado por revisión.",
       "Faltan las fotos de maletero: ni Wikimedia Commons, ni la sala de prensa de Nissan España, ni la web comercial de nissan.es publican el portón abierto y vacío del X-Trail 2026.",
       "Las fotos de frontal, lateral y trasera son los renders oficiales del configurador de nissan.es en acabado Tekna, no en el N-Connecta que puntúa la ficha. Wikimedia Commons solo tiene unidades anteriores al retoque de 2026, que cambia justo la parrilla y los pilotos, así que no servían para estas vistas.",
-      "Espacio de piernas atrás: km77 publica un rango 77-56 cm porque la segunda fila es deslizante; se declara el mínimo, la cifra que no depende de cómo se reparta el hueco con el maletero (product/0039)."
+      "Espacio de piernas atrás: km77 publica un rango 77-56 cm porque la segunda fila es deslizante; desde `product/0040` se declara el **máximo** —lo que el banco puede llegar a dar—, marcado como ajustable para que la ficha lo enseñe. El mínimo anterior queda como fuente descartada."
     ],
     "lengthMm": {
       "value": 4680,
@@ -5765,13 +5773,21 @@
       "unit": "mm"
     },
     "rearLegroomMm": {
-      "value": 560,
+      "value": 770,
       "unit": "mm",
       "sources": [
         {
           "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 56 cm, https://www.km77.com/coches/nissan/x-trail/2026/estandar/mediciones-propias/detalle",
           "value": 560,
           "estimated": false,
+          "current": false,
+          "discardedReason": "Era el mínimo del rango 77-56 cm que publica la fuente por banqueta deslizante. `product/0040` declara el máximo: comparar el peor caso de un banco móvil contra el único caso de un banco fijo no compara lo mismo."
+        },
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 77-56 cm —banqueta deslizante—; se declara el máximo, 77 cm (product/0040), https://www.km77.com/coches/nissan/x-trail/2026/estandar/mediciones-propias/detalle",
+          "value": 770,
+          "estimated": false,
+          "adjustable": true,
           "current": true
         }
       ]

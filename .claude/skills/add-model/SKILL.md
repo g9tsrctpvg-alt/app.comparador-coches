@@ -74,7 +74,7 @@ no entra en la puntuación. Tiene tres campos:
 intercambiables:
 
 - **`SourcedNumber`** — `{ value, unit?, sources: [{ label, value,
-  estimated, current, discardedReason? }] }`.
+  estimated, adjustable?, current, discardedReason? }] }`.
   Es el formato de todo lo que viene de fuera: `lengthMm`, `widthMm`,
   `heightMm`, `wheelbaseMm`, `turningCircleM` (opcional), `rearLegroomMm`,
   `rearShoulderWidthMm`, `groundClearanceMm`, `trunkLiters`, `maxRoofLoadKg`
@@ -181,10 +181,18 @@ omitir como si fuera opcional de verdad.
 - **No vale** una cifra de «espacio para las piernas» del propio
   fabricante, ni la longitud del habitáculo: no es la misma medida.
 - Si la fila muestra un **rango** (p. ej. «76-62 cm») porque la segunda
-  fila es deslizante, declara el **mínimo** — la cifra que no depende de
-  cómo se reparta el hueco con el maletero —, y dilo en una nota del coche
-  (`notes`) igual que ya hacen el BMW X1 xDrive25e y el Nissan X-Trail
-  e-Power en el catálogo actual.
+  fila es deslizante, declara el **máximo** (product/0040): la banqueta
+  deslizante es una capacidad del coche, no una reserva sobre el dato, y
+  declarar el mínimo la convertía en un castigo. Además:
+  - cita el rango entero en el `label` de la fuente, para que la ficha
+    pueda leerse sin abrir km77 (p. ej. `«Distancia del respaldo al
+    respaldo delantero» (banqueta deslizante, 76-62 cm), km77`);
+  - marca esa fuente con `adjustable: true`, que es lo que hace que la
+    ficha pinte la flecha «↔» junto al valor;
+  - y dilo también en una nota del coche (`notes`), igual que ya hacen el
+    BMW X1 xDrive25e y el Nissan X-Trail e-Power en el catálogo actual.
+  `adjustable` es **solo** para esto: una pieza que el usuario mueve. Un
+  dato incierto se marca `estimated`, que es otra cosa.
 - Si de verdad la fuente no la publica para la versión que das de alta, el
   alta se detiene ahí: no es una magnitud que se estime a ojo, porque va
   directa a la nota de `habitabilidad`.

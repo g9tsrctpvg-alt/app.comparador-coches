@@ -15,7 +15,12 @@ Un `Car` (`src/domain/car.ts`) tiene identidad (`id`, `name`, `brand`,
 - **`SourcedValue<T>`** — `{ value, unit?, sources }`. Es el formato de todo
   dato que viene de fuera: dimensiones, potencia, consumo, precio,
   fiabilidad OCU, garantía, valor residual, mantenimiento, aceleración. Cada
-  fuente (`SourceEntry`) lleva `label`, `value`, `estimated` y `current`;
+  fuente (`SourceEntry`) lleva `label`, `value`, `estimated`, `current` y,
+  opcionalmente, `adjustable` (product/0040: el valor es el máximo de un
+  rango que la fuente publica porque una pieza del coche se mueve —hoy, una
+  banqueta trasera deslizante—, y no es una reserva sobre el dato como
+  `estimated`, sino una capacidad del coche; ausente y `false` significan lo
+  mismo);
   **exactamente una** fuente por dato está marcada `current`, y su valor es
   el que entra en el cálculo — lo impone Zod (`superRefine` en
   `sourcedValueSchema`), no una convención. Una fuente descartada conserva
@@ -450,9 +455,20 @@ km77, la misma ficha que ya mide la anchura de hombros. El techo lo marca el
 Play** —59 cm—, el más justo de once modelos ajenos al catálogo medidos al
 fijar la escala. Cuando la fuente publica un rango porque la segunda fila es
 deslizante —el BMW X1 xDrive25e (76-62 cm) y el Nissan X-Trail e-Power
-(77-56 cm) del catálogo, y el propio BMW i7 que ancla el techo—, el
-catálogo declara el **mínimo**: la cifra que no depende de cómo se reparta
-el hueco con el maletero.
+(77-56 cm) del catálogo—, el catálogo declara el **máximo** del rango, con
+`adjustable: true` en esa fuente y el rango entero citado en su etiqueta
+(product/0040, desde el 2026-09-07). Hasta esa fecha declaraba el mínimo,
+y era un error de comparación: un coche con banco fijo publica **un solo
+número, que ya es el mejor que va a dar nunca**, así que enfrentar su único
+caso al peor caso del que tiene banqueta deslizante castiga precisamente al
+que puede dar más sitio. Medido: con el mínimo (56 cm) el X-Trail e-Power
+sacaba 0,00 en ese sumando —saturaba el suelo de la escala—; con el máximo
+(77 cm) saca 9,13, el mismo hueco que el Hyundai Tucson, que es literalmente
+la misma medida. Poder mover el banco es una capacidad, y ahora cuenta como
+tal. El anclaje del techo —el BMW i7, que también publica rango— **sigue
+declarado con el criterio anterior**: es un anclaje de escala, no un valor
+de catálogo, y `product/0040` no lo toca (queda anotado en
+`docs/roadmap.md`).
 
 **Anchura de hombros** (`rearShoulderWidthMm`): el Mercedes Clase E —146 cm,
 mediciones propias de km77— marca el techo; el Kia Picanto —126 cm, km77—

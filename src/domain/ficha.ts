@@ -103,6 +103,11 @@ export type FichaCell =
       value: number;
       unit?: string;
       estimated: boolean;
+      /** El valor es el máximo de un rango que la fuente publica porque una
+       * pieza del coche se mueve (product/0040): no es una reserva sobre el
+       * dato como `estimated`, es una capacidad del coche, y la ficha la
+       * enseña como tal. */
+      adjustable: boolean;
       delta: FichaDelta | null | 'unavailable';
     }
   | { kind: 'rating'; value: number; delta: FichaDelta | null | 'unavailable' }
@@ -281,6 +286,7 @@ function sourcedCell(sourced: SourcedNumber | undefined): FichaCell {
     value: sourced.value,
     unit: sourced.unit,
     estimated: currentSourceOf(sourced).estimated,
+    adjustable: currentSourceOf(sourced).adjustable ?? false,
     delta: null,
   };
 }
@@ -309,6 +315,10 @@ function litersPerSquareMeterCell(entity: EntityLike): FichaCell {
       currentSourceOf(lengthMm).estimated ||
       currentSourceOf(widthMm).estimated ||
       currentSourceOf(trunkLiters).estimated,
+    // Ninguna de las tres magnitudes de las que sale esta derivada admite
+    // hoy un rango por pieza móvil, y sumar el `adjustable` de tres fuentes
+    // distintas no diría nada del valor resultante (product/0040).
+    adjustable: false,
     delta: null,
   };
 }

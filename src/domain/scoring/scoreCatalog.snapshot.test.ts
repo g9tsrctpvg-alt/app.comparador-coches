@@ -43,13 +43,19 @@ import { scoreCatalog } from './score';
  * máxima» de km77, confirmado por el usuario—, y el anterior queda como
  * fuente descartada en `cars.json` con su motivo. Es un dato de catálogo,
  * no una spec: mueve solo este registro.
+ *
+ * Vuelto a actualizar por `product/0040` (2026-09-07), a propósito y solo
+ * en los dos registros con banqueta trasera deslizante: `rearLegroomMm`
+ * pasa a declarar el máximo del rango publicado en vez del mínimo —el
+ * X-Trail e-Power de 560 a 770 mm, el X1 xDrive25e de 620 a 760 mm—, así
+ * que su nota de `habitabilidad` sube. Ningún otro total cambia.
  */
 const EXPECTED_TOTALS: Record<string, number> = {
   'kia-ev3': 245.69364308167013,
   'hyundai-kona-hev': 228.61475583572926,
   'hyundai-kona-electrico': 226.52676206884763,
   'toyota-corolla-cross': 187.59907792854295,
-  'bmw-x1-xdrive25e': 222.64841272596118,
+  'bmw-x1-xdrive25e': 243.09356674549537,
   'alfa-romeo-tonale': 205.34281371874985,
   'kia-sportage-hev': 248.4586970605884,
   'honda-civic-e-hev': 239.11661447558416,
@@ -64,7 +70,7 @@ const EXPECTED_TOTALS: Record<string, number> = {
   'citroen-c5-aircross': 183.88761207042228,
   'jeep-compass': 174.66062309944914,
   'nissan-qashqai-e-power': 231.53860254680305,
-  'nissan-x-trail-e-power': 213.00814642760557,
+  'nissan-x-trail-e-power': 235.82933350499098,
   'honda-zr-v': 206.54844756159966,
 };
 

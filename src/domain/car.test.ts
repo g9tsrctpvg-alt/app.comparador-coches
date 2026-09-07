@@ -533,6 +533,69 @@ describe('CarSchema, espacio de piernas atrás (product/0039)', () => {
   });
 });
 
+describe('SourceEntry, magnitud ajustable (product/0040)', () => {
+  function legroomWith(source: Record<string, unknown>) {
+    return { ...validCar, rearLegroomMm: { value: 770, sources: [source] } };
+  }
+
+  it('accepts a source that declares adjustable: true', () => {
+    const result = CarSchema.safeParse(
+      legroomWith({
+        label: 'km77, mediciones propias: 77-56 cm, banqueta deslizante',
+        value: 770,
+        estimated: false,
+        adjustable: true,
+        current: true,
+      }),
+    );
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.rearLegroomMm.sources[0]?.adjustable).toBe(true);
+    }
+  });
+
+  it('leaves the field optional: a source without it still validates', () => {
+    const result = CarSchema.safeParse(
+      legroomWith({
+        label: 'km77, mediciones propias: 77 cm',
+        value: 770,
+        estimated: false,
+        current: true,
+      }),
+    );
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.rearLegroomMm.sources[0]?.adjustable).toBeUndefined();
+    }
+  });
+
+  it('is independent of estimated: a source can carry both', () => {
+    const result = CarSchema.safeParse(
+      legroomWith({
+        label: 'Estimación sobre un rango publicado',
+        value: 770,
+        estimated: true,
+        adjustable: true,
+        current: true,
+      }),
+    );
+    expect(result.success).toBe(true);
+  });
+
+  it('rejects a non-boolean adjustable', () => {
+    const result = CarSchema.safeParse(
+      legroomWith({
+        label: 'km77',
+        value: 770,
+        estimated: false,
+        adjustable: 'sí',
+        current: true,
+      }),
+    );
+    expect(result.success).toBe(false);
+  });
+});
+
 describe('CarSchema, consumo en modo sostenido (product/0038)', () => {
   const plugIn = {
     ...validCar,
