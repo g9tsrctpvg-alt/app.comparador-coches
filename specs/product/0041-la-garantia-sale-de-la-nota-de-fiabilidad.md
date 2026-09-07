@@ -1,12 +1,18 @@
 # 0041 — La garantía sale de la nota de fiabilidad
 
 - **Id:** product/0041
-- **Estado:** approved
+- **Estado:** verified
 - **Tipo:** product
 - **Fecha:** 2026-09-07
 - **Specs relacionadas:** product/0001, product/0007, product/0035
 - **ADRs relacionados:** 0004, 0010
 - **Doc de estado:** `docs/estado/dominio.md`, `docs/estado/interfaz.md`
+
+> ⚠️ **Spec histórica — implementada, sin consolidar.** Describe un cambio en
+> el momento en que se redactó; su sección *Contexto* retrata el sistema
+> **anterior** al cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/dominio.md`. Vigentes aquí solo los **criterios de
+> aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -211,30 +217,30 @@ esta spec la vuelve más cara y conviene aprobarla sabiéndolo.
 
 > Obligatorios y verificables.
 
-- [ ] Dos coches con el mismo índice OCU y distinta garantía incondicional —3
+- [x] Dos coches con el mismo índice OCU y distinta garantía incondicional —3
       y 7 años— sacan exactamente la misma nota de `fiabilidad`.
-- [ ] Un coche de una marca con índice 93 saca un 10 en el eje, y uno con 64
+- [x] Un coche de una marca con índice 93 saca un 10 en el eje, y uno con 64
       saca un 0: la nota del eje es la de su índice, sin corrección.
-- [ ] Sobre el catálogo real y con los pesos por defecto, el Corolla Cross saca
+- [x] Sobre el catálogo real y con los pesos por defecto, el Corolla Cross saca
       9,86 en `fiabilidad` (antes 8,09) y su total pasa de 46,90 % a 50,01 %.
-- [ ] Sobre el catálogo real y con los pesos por defecto, el Compass saca 0,00
+- [x] Sobre el catálogo real y con los pesos por defecto, el Compass saca 0,00
       en `fiabilidad` (antes 1,18) y su total pasa de 43,67 % a 41,60 %.
-- [ ] El desglose del eje no contiene ningún subcomponente de garantía, y sí
+- [x] El desglose del eje no contiene ningún subcomponente de garantía, y sí
       contiene el del índice OCU con sus dos anclajes y su nota.
-- [ ] El desglose del eje muestra los años de garantía incondicional como
+- [x] El desglose del eje muestra los años de garantía incondicional como
       información que no puntúa.
-- [ ] Un coche con extensión condicionada sigue mostrándola en el desglose,
+- [x] Un coche con extensión condicionada sigue mostrándola en el desglose,
       con años, límite de kilómetros y condición.
-- [ ] El desglose declara que el índice de fiabilidad es por marca, no por
+- [x] El desglose declara que el índice de fiabilidad es por marca, no por
       modelo.
-- [ ] El eje aparece como «Fiabilidad» —sin «y garantía»— en el ranking, en la
+- [x] El eje aparece como «Fiabilidad» —sin «y garantía»— en el ranking, en la
       ficha, en el reparto de la diferencia entre dos coches y en la página de
       explicación.
-- [ ] La página de explicación no afirma en ningún punto que los años de
+- [x] La página de explicación no afirma en ningún punto que los años de
       garantía entren en la nota.
-- [ ] La nota de `fiabilidad` de un coche es la misma con los dieciocho
+- [x] La nota de `fiabilidad` de un coche es la misma con los dieciocho
       candidatos publicados que con ese coche solo.
-- [ ] El *snapshot* de `scoreCatalog` recoge los veintiún totales nuevos, y la
+- [x] El *snapshot* de `scoreCatalog` recoge los veintiún totales nuevos, y la
       CI entera pasa en local.
 
 ## Dependencias y supuestos

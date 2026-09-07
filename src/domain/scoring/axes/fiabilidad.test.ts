@@ -11,16 +11,6 @@ function ocuScale(
     .subcomponents!.find((s) => s.label === 'Índice OCU')!.scale!;
 }
 
-function warrantyScale(
-  breakdown: ReturnType<typeof buildFiabilidadBreakdown>,
-  id: string,
-) {
-  return breakdown
-    .get(id)!
-    .subcomponents!.find((s) => s.label === 'Años de garantía incondicional')!
-    .scale!;
-}
-
 function withOcuAndWarranty(ocu: number, warrantyYears: number, id = 'x') {
   const base = threeCarFixture[0]!;
   return {
@@ -52,43 +42,44 @@ describe('buildFiabilidadBreakdown', () => {
     expect(ocuScale(breakdown, 'worse').score).toBe(0);
   });
 
-  it('scores 10 on warranty at and above 7 years, and 0 at 0 years', () => {
+  /** El criterio que da nombre a product/0041: la garantía no mueve la nota. */
+  it('gives the same score to three and seven years of unconditional warranty', () => {
+    const short = withOcuAndWarranty(85, 3, 'short');
     const long = withOcuAndWarranty(85, 7, 'long');
-    const longer = withOcuAndWarranty(85, 10, 'longer');
-    const none = withOcuAndWarranty(85, 0, 'none');
-    const breakdown = buildFiabilidadBreakdown([long, longer, none], 2);
-    expect(warrantyScale(breakdown, 'long').score).toBe(10);
-    expect(warrantyScale(breakdown, 'longer').score).toBe(10);
-    expect(warrantyScale(breakdown, 'none').score).toBe(0);
+    const breakdown = buildFiabilidadBreakdown([short, long], 2);
+    expect(breakdown.get('short')!.score).toBe(breakdown.get('long')!.score);
   });
 
-  it('scores 3 years of warranty at approximately 3.9, not 0', () => {
-    const car = withOcuAndWarranty(85, 3);
-    const breakdown = buildFiabilidadBreakdown([car], 2);
-    expect(warrantyScale(breakdown, 'x').score).toBeCloseTo(3.9, 1);
+  it('makes the axis score the OCU score, with no other term', () => {
+    const breakdown = buildFiabilidadBreakdown(threeCarFixture, 2);
+    for (const car of threeCarFixture) {
+      const entry = breakdown.get(car.id)!;
+      expect(entry.rawScore).toBeCloseTo(ocuScale(breakdown, car.id).score, 9);
+    }
   });
 
-  it('gives the same warranty score whether or not there is a conditioned extension', () => {
-    const base = withOcuAndWarranty(85, 3, 'plain');
-    const withExtension = {
-      ...withOcuAndWarranty(85, 3, 'extended'),
-      warrantyExtension: {
-        years: {
-          value: 15,
-          sources: [
-            { label: 'Fixture', value: 15, estimated: false, current: true },
-          ],
-        },
-        condition: 'Sujeta a mantenimiento en red oficial',
-      },
-    };
-    const breakdown = buildFiabilidadBreakdown([base, withExtension], 2);
-    expect(warrantyScale(breakdown, 'plain').score).toBe(
-      warrantyScale(breakdown, 'extended').score,
+  it('has no warranty subcomponent left', () => {
+    const breakdown = buildFiabilidadBreakdown(threeCarFixture, 2);
+    for (const car of threeCarFixture) {
+      const labels = breakdown
+        .get(car.id)!
+        .subcomponents!.map((sub) => sub.label);
+      expect(labels).toEqual(['Índice OCU']);
+    }
+  });
+
+  it('shows the unconditional warranty years as information that does not score', () => {
+    const breakdown = buildFiabilidadBreakdown(
+      [withOcuAndWarranty(85, 5, 'plain')],
+      2,
     );
+    const info = breakdown.get('plain')!.info!;
+    expect(info).toHaveLength(1);
+    expect(info[0]!.label).toContain('no puntúa');
+    expect(info[0]!.value).toBe('5 años');
   });
 
-  it('shows the conditioned extension as informational only when it exists', () => {
+  it('shows the conditioned extension next to it when it exists', () => {
     const withExtension = {
       ...withOcuAndWarranty(85, 3, 'extended'),
       warrantyExtension: {
@@ -112,38 +103,42 @@ describe('buildFiabilidadBreakdown', () => {
         condition: 'Sujeta a mantenimiento en red oficial',
       },
     };
-    const withoutExtension = withOcuAndWarranty(85, 3, 'plain');
-    const breakdown = buildFiabilidadBreakdown(
-      [withExtension, withoutExtension],
-      2,
+    const plain = withOcuAndWarranty(85, 3, 'plain');
+    const breakdown = buildFiabilidadBreakdown([withExtension, plain], 2);
+    const info = breakdown.get('extended')!.info!;
+    expect(info).toHaveLength(2);
+    expect(info[1]!.value).toContain('15 años');
+    expect(info[1]!.value).toContain('100000 km');
+    expect(breakdown.get('plain')!.info).toHaveLength(1);
+  });
+
+  it('scores a car with an extension the same as one without it', () => {
+    const plain = withOcuAndWarranty(85, 3, 'plain');
+    const extended = {
+      ...withOcuAndWarranty(85, 3, 'extended'),
+      warrantyExtension: {
+        years: {
+          value: 15,
+          sources: [
+            { label: 'Fixture', value: 15, estimated: false, current: true },
+          ],
+        },
+        condition: 'Sujeta a mantenimiento en red oficial',
+      },
+    };
+    const breakdown = buildFiabilidadBreakdown([plain, extended], 2);
+    expect(breakdown.get('plain')!.score).toBe(
+      breakdown.get('extended')!.score,
     );
-    expect(breakdown.get('extended')!.info).toHaveLength(1);
-    expect(breakdown.get('extended')!.info![0]!.value).toContain('15 años');
-    expect(breakdown.get('extended')!.info![0]!.value).toContain('100000 km');
-    expect(breakdown.get('plain')!.info).toEqual([]);
   });
 
-  it('combines the two scales 0.7/0.3', () => {
-    const breakdown = buildFiabilidadBreakdown(threeCarFixture, 2);
-    for (const car of threeCarFixture) {
-      const entry = breakdown.get(car.id)!;
-      const ocu = ocuScale(breakdown, car.id).score;
-      const warranty = warrantyScale(breakdown, car.id).score;
-      expect(entry.rawScore).toBeCloseTo(0.7 * ocu + 0.3 * warranty, 9);
-    }
-  });
-
-  it('shows both anchors and the resulting score for each magnitude, and names no model', () => {
+  it('shows both anchors and the resulting score, and names no model', () => {
     const breakdown = buildFiabilidadBreakdown(threeCarFixture, 2);
     const sportage = breakdown.get('kia-sportage-hev')!;
     expect(sportage.normalization).toBeUndefined();
     expect(ocuScale(breakdown, 'kia-sportage-hev')).toMatchObject({
       goodAnchor: 93,
       badAnchor: 64,
-    });
-    expect(warrantyScale(breakdown, 'kia-sportage-hev')).toMatchObject({
-      goodAnchor: 7,
-      badAnchor: 0,
     });
     expect(
       sportage.subcomponents!.every((s) => s.normalization === undefined),
@@ -157,12 +152,15 @@ describe('buildFiabilidadBreakdown', () => {
     );
   });
 
-  it('names the OCU index and warranty years as inputs, each with their source', () => {
+  it('names only the OCU index as input, with its source', () => {
     const breakdown = buildFiabilidadBreakdown(threeCarFixture, 2);
-    const sportage = breakdown.get('kia-sportage-hev')!;
-    expect(sportage.inputs.map((input) => input.label)).toEqual([
-      'Índice de fiabilidad OCU',
-      'Años de garantía incondicional',
-    ]);
+    expect(
+      breakdown.get('kia-sportage-hev')!.inputs.map((i) => i.label),
+    ).toEqual(['Índice de fiabilidad OCU']);
+  });
+
+  it('is called Fiabilidad, without the warranty in its name', () => {
+    const breakdown = buildFiabilidadBreakdown(threeCarFixture, 2);
+    expect(breakdown.get('kia-sportage-hev')!.label).toBe('Fiabilidad');
   });
 });

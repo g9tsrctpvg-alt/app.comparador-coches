@@ -64,9 +64,9 @@ describe('splitScoreGap against the real catalogue', () => {
     }
   });
 
-  it('splits the EV3-vs-Civic e:HEV gap as measured: +5,6 estética, -4,5 habitabilidad, -3,0 diario, +1,2 carga, total +1,6', () => {
+  it('splits the EV3-vs-Civic e:HEV gap as measured: +5,6 estética, -4,5 habitabilidad, -3,0 diario, +1,2 carga, 0 fiabilidad, total +0,6', () => {
     const gap = splitScoreGap(byId('kia-ev3'), byId('honda-civic-e-hev'));
-    expect(gap.percentageDiff).toBeCloseTo(1.6, 1);
+    expect(gap.percentageDiff).toBeCloseTo(0.6, 1);
 
     const byAxis = (axisId: string) =>
       gap.lines.find((line) => line.axisId === axisId)!;
@@ -77,8 +77,14 @@ describe('splitScoreGap against the real catalogue', () => {
     expect(ppOf(byAxis('carga').value)).toBeCloseTo(1.2, 1);
     // `habitabilidad` puntuaba aquí -4,0 pp con la batalla (product/0033);
     // con el espacio de piernas atrás (product/0039) el EV3 pierde más
-    // frente al Civic, y por eso el total del par baja de +2,2 a +1,6 pp.
+    // frente al Civic, y por eso el total del par bajó de +2,2 a +1,6 pp.
     expect(ppOf(byAxis('habitabilidad').value)).toBeCloseTo(-4.5, 1);
+    // Este par es el caso que da la razón a `product/0041`: Kia y Honda
+    // comparten índice OCU (89), así que en fiabilidad empatan de verdad.
+    // Hasta esta spec el eje daba +1,05 pp al EV3 por siete años de
+    // garantía contra cinco, y ese punto entero era lo que separaba al par:
+    // el total baja de +1,6 a +0,6 pp al quitarlo.
+    expect(ppOf(byAxis('fiabilidad').value)).toBeCloseTo(0, 5);
 
     const summed = gap.lines.reduce((sum, line) => sum + line.value, 0);
     expect(summed).toBeCloseTo(gap.totalDiff, 9);

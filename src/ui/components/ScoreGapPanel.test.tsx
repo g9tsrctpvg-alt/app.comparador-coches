@@ -93,7 +93,7 @@ describe('ScoreGapPanel', () => {
       'Espacio para los de atrás',
       'Facilidad de uso diario',
       'Prestaciones',
-      'Fiabilidad y garantía',
+      'Fiabilidad',
       'Estética',
       'Coste total',
     ]) {

@@ -51,7 +51,7 @@ function matchupMarkup(): string {
 describe('MatchupView', () => {
   it('enseña los dos coches con sus magnitudes y su Δ (requisito 7.1)', () => {
     const markup = matchupMarkup();
-    expect(markup).toContain('Civic e:HEV');
+    expect(markup).toContain('Corolla Cross');
     expect(markup).toContain('Compass');
     // Las mismas magnitudes de la ficha completa, en sus bloques.
     for (const label of [
@@ -89,20 +89,32 @@ describe('MatchupView', () => {
       expect(columns, axisId).not.toContain(AXIS_THEME_CLASS[axisId]);
     }
 
-    // Ni su nombre. `estetica` queda fuera de esta comprobación porque su
-    // rótulo de eje —«Estética»— es prefijo de dos magnitudes de la ficha,
-    // «Estética exterior» y «Estética interior», que son dato del coche y
-    // que el requisito 7.3 manda enseñar. Que aparezcan no es una fuga del
-    // modelo: son las valoraciones que se editan en la clasificación.
-    for (const axisId of AXIS_ORDER.filter((id) => id !== 'estetica')) {
-      expect(text, axisId).not.toContain(AXIS_LABELS[axisId]);
+    // Ni su nombre. Dos ejes quedan fuera de la comprobación por contención
+    // simple, porque su rótulo es prefijo de texto de ficha que el requisito
+    // 7.3 manda enseñar, y que por tanto no es ninguna fuga del modelo:
+    // `estetica` —«Estética exterior» y «Estética interior», las dos
+    // valoraciones que se editan en la clasificación— y, desde
+    // `product/0041`, `fiabilidad`, cuyo rótulo pasa de «Fiabilidad y
+    // garantía» a «Fiabilidad» y se vuelve prefijo del bloque «Fiabilidad y
+    // respaldo» y de la fila «Fiabilidad OCU». Los dos se comprueban abajo
+    // con la excepción explícita, que es más estrecha que no comprobarlos.
+    const prefixExceptions: Partial<Record<AxisId, RegExp>> = {
+      estetica: /Estética(?! exterior| interior)/,
+      fiabilidad: /Fiabilidad(?! y respaldo| OCU)/,
+    };
+    for (const axisId of AXIS_ORDER) {
+      const exception = prefixExceptions[axisId];
+      if (exception) {
+        expect(text, axisId).not.toMatch(exception);
+      } else {
+        expect(text, axisId).not.toContain(AXIS_LABELS[axisId]);
+      }
     }
-    expect(text).not.toMatch(/Estética(?! exterior| interior)/);
   });
 
   it('ofrece preferir cada uno de los dos coches', () => {
     const markup = matchupMarkup();
-    expect(markup).toContain('Prefiero el Civic e:HEV');
+    expect(markup).toContain('Prefiero el Corolla Cross');
     expect(markup).toContain('Prefiero el Compass');
   });
 });
