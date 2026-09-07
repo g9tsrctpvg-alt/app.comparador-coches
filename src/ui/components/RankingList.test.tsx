@@ -10,6 +10,8 @@ import type { CarScoreBreakdown } from '../../domain/scoring/breakdown';
 import { loadCatalog } from '../../data/loadCatalog';
 import { publishedCars } from '../../domain/car';
 import rowStyles from './RankingRow.module.css';
+import advantageStyles from './AdvantageMark.module.css';
+import { AXIS_THEME_CLASS } from '../axisTheme';
 
 const EMPTY_DECISIONS = defaultDecisionLog();
 
@@ -249,7 +251,12 @@ describe('RankingList', () => {
 
     /** Comprueba que, dentro de la ventana de marcado que sigue al nombre
      * del coche, los `tokens` aparecen en ese orden — sin asumir en qué
-     * parte de la lista cae la fila. */
+     * parte de la lista cae la fila.
+     *
+     * La ventana pasó de 600 a 1400 caracteres con `product/0042`: entre el
+     * nombre y la línea de apoyo de una tarjeta de podio va ahora el SVG de
+     * la marca de ventaja, que son varios cientos de caracteres de marcado
+     * sin texto. El orden que comprueba el test es el mismo. */
     function expectOrderedInRow(
       markup: string,
       carName: string,
@@ -257,7 +264,7 @@ describe('RankingList', () => {
     ) {
       const start = markup.indexOf(carName);
       expect(start).toBeGreaterThan(-1);
-      const window = markup.slice(start, start + 600);
+      const window = markup.slice(start, start + 1400);
       let last = -1;
       for (const token of tokens) {
         const index = window.indexOf(token);
@@ -344,6 +351,75 @@ describe('RankingList', () => {
       ]);
       expectOrderedInRow(markup, 'CX-5', ['ligero', '10,5', '583', '35.200']);
       expect(markup).not.toMatch(/\d\s*CV\b/);
+    });
+  });
+
+  describe('the podium advantage mark (product/0042)', () => {
+    /** Las clases de tema de eje que lleva cada marca de ventaja, en el
+     * orden en que aparecen en el marcado: una por tarjeta de podio que la
+     * enseñe. */
+    function advantageAxes(markup: string): string[] {
+      const pattern = new RegExp(
+        `class="${advantageStyles.mark!} ([^"]+)"`,
+        'g',
+      );
+      return [...markup.matchAll(pattern)].map((match) => match[1]!);
+    }
+
+    function renderRealCatalog(): string {
+      const realCars = publishedCars(loadCatalog());
+      return renderToStaticMarkup(
+        <RankingList
+          cars={scoreCatalog(
+            realCars,
+            DEFAULT_WEIGHTS,
+            DEFAULT_ASSUMPTIONS,
+            47000,
+          )}
+          rawCars={realCars}
+          weights={DEFAULT_WEIGHTS}
+          decisionLog={EMPTY_DECISIONS}
+          onSetDecision={() => undefined}
+          onClearDecision={() => undefined}
+          onDecisionFilterChange={() => undefined}
+          eliminatoryRules={[]}
+          hideFailingRules={false}
+          onClearRules={() => undefined}
+          onRatingChange={() => undefined}
+        />,
+      );
+    }
+
+    it('marks each podium card with the axis where it gains most on the next car, and nothing below the podium', () => {
+      // Medido sobre el catálogo real con los pesos por defecto: el líder
+      // saca su mayor ventaja al 2.º en `carga` (+1,5 pp), el 2.º al 3.º en
+      // `estetica` (+4,5 pp) y el 3.º al 4.º en `coste` (+2,1 pp).
+      expect(advantageAxes(renderRealCatalog())).toEqual([
+        AXIS_THEME_CLASS.carga,
+        AXIS_THEME_CLASS.estetica,
+        AXIS_THEME_CLASS.coste,
+      ]);
+    });
+
+    it('never picks the biggest line when that line is a loss', () => {
+      // La mayor línea en valor absoluto del par líder-2.º es
+      // `prestaciones`, y va en contra del líder: es justo la que
+      // `topGapLines` habría devuelto.
+      expect(advantageAxes(renderRealCatalog())).not.toContain(
+        AXIS_THEME_CLASS.prestaciones,
+      );
+    });
+
+    it('names the rival, the axis and the gap in pp for a screen reader', () => {
+      expect(renderRealCatalog()).toContain(
+        'Donde más ventaja saca frente a Tucson PHEV: Capacidad de carga, +1,5 pp',
+      );
+    });
+
+    it('leaves the last podium card unmarked when there is no next car', () => {
+      // `threeCarFixture` son tres coches: los tres son podio, y el tercero
+      // no tiene siguiente clasificado contra el que medirse.
+      expect(advantageAxes(renderExpanded(scored()))).toHaveLength(2);
     });
   });
 });

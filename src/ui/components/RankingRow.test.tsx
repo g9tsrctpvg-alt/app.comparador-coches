@@ -5,6 +5,7 @@ import { scoreCatalog } from '../../domain/scoring/score';
 import { DEFAULT_ASSUMPTIONS } from '../../domain/scoring/assumptions';
 import { DEFAULT_WEIGHTS } from '../../domain/scoring/weights';
 import { RankingRow } from './RankingRow';
+import advantageStyles from './AdvantageMark.module.css';
 
 const SCORED = scoreCatalog(
   threeCarFixture,
@@ -136,5 +137,50 @@ describe('RankingRow, decision status (product/0030)', () => {
     const markup = renderRow();
     expect(markup).toContain(`href="#/visita/${sportage.carId}"`);
     expect(markup).toContain('Hoja de visita');
+  });
+});
+
+/** La clase de la marca de ventaja, con la aserción que exige
+ * `noUncheckedIndexedAccess` al leer una clase de un módulo CSS: si dejara
+ * de existir, estos cuatro tests fallarían por comparar contra `undefined`
+ * en vez de por lo que comprueban. */
+const MARK_CLASS = advantageStyles.mark!;
+
+describe('RankingRow, podium advantage mark (product/0042)', () => {
+  it('renders the mark outside the toggle button, so its accessible name does not change (requisito 3.3)', () => {
+    const markup = renderRow({
+      variant: 'podium',
+      expanded: false,
+      nextInRanking: x1,
+    });
+    const buttonEnd = markup.indexOf('</button>');
+    const markAt = markup.indexOf(MARK_CLASS);
+    expect(markAt).toBeGreaterThan(buttonEnd);
+    // El botón sigue anunciando lo mismo que antes de esta spec.
+    expect(markup.slice(0, buttonEnd)).toContain(', ver desglose');
+    expect(markup.slice(0, buttonEnd)).not.toContain('Donde más ventaja saca');
+  });
+
+  it('marks nothing on a list row, expanded or collapsed (fuera de alcance)', () => {
+    for (const expanded of [true, false]) {
+      const markup = renderRow({
+        variant: 'list',
+        expanded,
+        nextInRanking: x1,
+      });
+      expect(markup).not.toContain(MARK_CLASS);
+    }
+  });
+
+  it('marks nothing on a podium card without a next car (requisito 2.2)', () => {
+    const markup = renderRow({ variant: 'podium', nextInRanking: undefined });
+    expect(markup).toContain('podiumCard');
+    expect(markup).not.toContain(MARK_CLASS);
+  });
+
+  it('keeps the icon hidden from assistive technology, and the text next to it visible to it', () => {
+    const markup = renderRow({ variant: 'podium', nextInRanking: x1 });
+    expect(markup).toContain('aria-hidden="true"');
+    expect(markup).toMatch(/Donde más ventaja saca frente a .+: .+, \+\d/);
   });
 });

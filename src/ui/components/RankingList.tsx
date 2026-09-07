@@ -129,6 +129,11 @@ export function RankingList({
   // visible: no hay con qué comparar, y la fila no enseña resumen.
   const leader = eligible[0];
   const second = eligible[1];
+  // La marca de ventaja del podio compara contra otra referencia
+  // (product/0042, requisito 2): el clasificado inmediatamente posterior
+  // dentro de este mismo tramo, con los filtros ya aplicados. La tercera
+  // tarjeta se mide, por tanto, contra el 4.º, que ya no es podio; y el
+  // último del tramo no tiene con quién medirse.
 
   const ineligibleSection = !hideFailingRules && ineligible.length > 0 && (
     <div className={styles.ineligibleSection}>
@@ -195,6 +200,9 @@ export function RankingList({
               editableRatings={editableRatingsOf(car)}
               onRatingChange={(override) => onRatingChange(car.carId, override)}
               compareTo={index === 0 ? second : leader}
+              nextInRanking={
+                index < PODIUM_SIZE ? eligible[index + 1] : undefined
+              }
               weights={weights}
               decisionState={decisionOf(decisionLog, car.carId)}
               decisionEntry={entryOf(decisionLog, car.carId)}
