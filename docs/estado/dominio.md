@@ -166,6 +166,18 @@ ausencia de dato—. `topGapLines` selecciona las dos que más explican la
 diferencia, una de cada signo cuando lo hay: el eje de mayor valor absoluto
 por sí solo podría ser, dos veces, el mismo lado de la historia.
 
+`topAdvantageLine` responde a otra pregunta —**dónde saca más ventaja** el
+primero de los dos coches— y devuelve la línea de mayor valor
+**estrictamente positivo**, o nada cuando no hay ninguna. No es
+`topGapLines` restringida: la línea mayor en valor absoluto puede ser un eje
+en el que ese coche **pierde**, y sobre el catálogo publicado le pasa
+justamente al líder frente al segundo (`prestaciones`, en contra). Que la
+ventaja se mida en `value` —peso × Δnota— y no en Δnota a secas es lo que
+impide que salga elegido un eje de peso 0, que no aporta nada al puesto. El
+desempate es `AXIS_ORDER`, gratis: las líneas se construyen en ese orden y
+la ordenación por valor absoluto es estable, así que dos ejecuciones con los
+mismos datos eligen siempre el mismo eje.
+
 **La sensibilidad se deriva de la misma propiedad que hace exacto el
 reparto.** Desde que los ocho ejes puntúan contra escalas absolutas (ADR
 0004), la nota de un eje no depende de los pesos ni del resto de
@@ -179,13 +191,13 @@ pueden darle la vuelta al resultado. `stableAxes` es su complemento exacto.
 Un eje con ventaja 0 nunca tiene cruce: ningún peso multiplicando a cero
 cambia nada.
 
-Ninguna de las cuatro funciones normaliza, pondera ni decide un umbral de
+Ninguna de las cinco funciones normaliza, pondera ni decide un umbral de
 «diferencia pequeña»: la aplicación no declara ningún empate técnico —se
 consideró y se descartó (`docs/roadmap.md`, propuesta P2b)—, y quien mira la
 comparativa juzga por sí mismo si una diferencia importa. `scoreGap.ts` es
 lectura pura sobre lo que `scoreCatalog` ya calculó, con el mismo contrato
 de `ui-no-scoring-internals` que el resto de `domain/scoring/`: la interfaz
-importa estas cuatro funciones y los tipos, nunca las fórmulas de un eje.
+importa estas cinco funciones y los tipos, nunca las fórmulas de un eje.
 
 ## Cómo se puntúa un sumando
 
