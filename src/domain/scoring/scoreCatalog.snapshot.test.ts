@@ -57,6 +57,14 @@ import { scoreCatalog } from './score';
  * marca es más fiable que generosa —el Corolla Cross, +12,45— y baja en los
  * que compraban nota con la garantía —el Compass, −8,27, y los tres Kia de
  * siete años—.
+ *
+ * Vuelto a actualizar solo para `kia-ev5` (2026-09-13): la ficha pasa a
+ * comparar el acabado **Earth** en vez del **GT-Line**, por decisión del
+ * usuario, para medirlo en la misma parte de la gama que el resto del
+ * catálogo. El precio baja de 53.071 € a 47.571 €, y con la llanta de 18 pulgadas
+ * el consumo baja de 17,8 a 16,9 kWh/100 km y la autonomía sube de 505 a
+ * 530 km; su total sube +0,48. Es un dato de catálogo, no una spec: ningún
+ * otro registro se mueve.
  */
 const EXPECTED_TOTALS: Record<string, number> = {
   'kia-ev3': 244.6052835753353,
@@ -71,7 +79,7 @@ const EXPECTED_TOTALS: Record<string, number> = {
   'mazda-cx-5': 224.89364066045192,
   'honda-cr-v-e-hev': 218.53569400071328,
   'volkswagen-id4': 218.2959765919619,
-  'kia-ev5': 227.8475075443892,
+  'kia-ev5': 228.32748986860798,
   'hyundai-ioniq-5': 210.18360229213957,
   'hyundai-tucson-hev': 259.4793053892969,
   'hyundai-tucson-phev': 254.5843395943331,

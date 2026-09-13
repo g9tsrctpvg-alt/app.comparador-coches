@@ -3568,8 +3568,10 @@
       }
     },
     "notes": [
-      "Versión GT-Line (81,4 kWh, 217 CV, tracción delantera), el acabado superior de la gama — motor.es y km77, agosto 2026. El precio es el PVP de catálogo sin descuentos, para no mezclarlo con precios ya rebajados de otros modelos: km77 declara aparte un descuento oficial de fábrica de 1.634 €, que llevaría el precio a 51.437 €. Supera el presupuesto de referencia (47.000 €).",
-      "Sin foto de lateral estricto ni de maletero: no se ha encontrado en Wikimedia Commons un perfil cercano a 90º ni una vista con el portón abierto para este modelo.",
+      "Versión Earth (81,4 kWh, 217 CV, tracción delantera), el acabado intermedio de la gama —Air, Earth y GT-Line comparten motor y batería, y se diferencian en equipamiento y en la llanta: 18\" en Air y Earth, 19\" en GT-Line—, elegida por el usuario el 2026-09-13 en lugar del GT-Line que el catálogo declaraba antes, para comparar el EV5 en un acabado equiparable al del resto del catálogo. La llanta de 18\" es también la que homologa la autonomía larga: 530 km y 16,9 kWh/100 km, frente a 505 km y 17,8 kWh/100 km del GT-Line. El precio es el PVP de catálogo sin descuentos, para no mezclarlo con precios ya rebajados de otros modelos: km77 declara aparte un descuento oficial de fábrica de 1.634 €, que llevaría el precio a 45.937 €. Roza el presupuesto de referencia (47.000 €).",
+      "Las cuatro fotos son de unidades del acabado GT-Line, no del Earth que puntúa la ficha: no hay fotos verificables del Earth europeo en los orígenes que admite product/0016 —Wikimedia Commons solo tiene unidades GT-Line o encuadres de 3/4 que no valen como frontal ni trasera estricta, y la galería comercial de Kia está publicada entera en GT-Line—. Decisión del usuario (2026-09-13) al cambiar el acabado: se mantienen las fotos y se declara la discrepancia en cada `shows`, en vez de vaciar las vistas de exterior. Por tanto las dos notas de estética están emitidas sobre el GT-Line. Queda como deuda en docs/roadmap.md.",
+      "Sobre el precio: km77 es la fuente que declara aparte el descuento oficial, y su tarifa de 02/2026 da 47.571 € para el Earth (45.937 € + 1.634 €). La prensa publica 47.570 € de PVP para ese mismo acabado (es.motor1.com, febrero de 2026), así que la cifra cuadra al euro. motor.es publica 46.808 €, 763 € menos, y la misma diferencia de 763 € aparece en los tres acabados de la gama, así que no es un precio distinto del Earth sino otro criterio de tarifa; se mantiene el de km77, que es el que ya usaban el resto de fichas.",
+      "Sin foto de maletero: no se ha encontrado una vista con el portón abierto para este modelo. El lateral sí está cubierto, con la foto de estudio de la web comercial de Kia Europa.",
       "Mantenimiento anual estimado por el rango genérico de un eléctrico en España (150-300 €/año), no por un coste de revisión desglosado del modelo.",
       "Valor residual a 5 años estimado por comparación con otros eléctricos del catálogo: el EV5 se lanzó en 2025 y no tiene todavía histórico real de mercado de segunda mano a ese horizonte."
     ],
@@ -3638,7 +3640,7 @@
       "unit": "m",
       "sources": [
         {
-          "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV (agosto 2026): «Diámetro de giro entre bordillos» 11,72 m, https://www.km77.com/coches/kia/ev5/2025/estandar/estandar/ev5-gt-line-81-kwh-long-range-160-kw-217-cv/datos",
+          "label": "km77, ficha EV5 Earth 81 kWh Long Range 217 CV (septiembre 2026, tarifa de 02/2026): «Diámetro de giro entre bordillos» 11,72 m, https://www.km77.com/coches/kia/ev5/2025/estandar/estandar/ev5-earth-81-kwh-long-range-160-kw-217-cv/datos",
           "value": 11.72,
           "estimated": false,
           "current": true
@@ -3662,7 +3664,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV (agosto 2026)",
+          "label": "km77, ficha EV5 Earth 81 kWh Long Range 217 CV (septiembre 2026, tarifa de 02/2026): «Altura libre» 167 mm, https://www.km77.com/coches/kia/ev5/2025/estandar/estandar/ev5-earth-81-kwh-long-range-160-kw-217-cv/datos",
           "value": 167,
           "estimated": false,
           "current": true
@@ -3686,7 +3688,7 @@
       "unit": "CV",
       "sources": [
         {
-          "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV (agosto 2026)",
+          "label": "km77, ficha EV5 Earth 81 kWh Long Range 217 CV (septiembre 2026, tarifa de 02/2026)",
           "value": 217,
           "estimated": false,
           "current": true
@@ -3698,7 +3700,7 @@
       "unit": "kg",
       "sources": [
         {
-          "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV (agosto 2026)",
+          "label": "km77, ficha EV5 Earth 81 kWh Long Range 217 CV (septiembre 2026, tarifa de 02/2026): «Peso» 2.069 kg, https://www.km77.com/coches/kia/ev5/2025/estandar/estandar/ev5-earth-81-kwh-long-range-160-kw-217-cv/datos",
           "value": 2069,
           "estimated": false,
           "current": true
@@ -3710,7 +3712,7 @@
       "unit": "s",
       "sources": [
         {
-          "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV (agosto 2026)",
+          "label": "km77, ficha EV5 Earth 81 kWh Long Range 217 CV (septiembre 2026, tarifa de 02/2026): «Aceleración 0-100 km/h» 8,4 s, https://www.km77.com/coches/kia/ev5/2025/estandar/estandar/ev5-earth-81-kwh-long-range-160-kw-217-cv/datos",
           "value": 8.4,
           "estimated": false,
           "current": true
@@ -3718,23 +3720,23 @@
       ]
     },
     "consumption": {
-      "value": 17.8,
+      "value": 16.9,
       "unit": "kWh/100km",
       "sources": [
         {
-          "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV, consumo WLTP combinado (agosto 2026)",
-          "value": 17.8,
+          "label": "km77, ficha EV5 Earth 81 kWh Long Range 217 CV (septiembre 2026, tarifa de 02/2026): «Consumo WLTP combinado batería cargada» 16,9 kWh/100 km, https://www.km77.com/coches/kia/ev5/2025/estandar/estandar/ev5-earth-81-kwh-long-range-160-kw-217-cv/datos",
+          "value": 16.9,
           "estimated": false,
           "current": true
         }
       ]
     },
     "electricRangeKm": {
-      "value": 505,
+      "value": 530,
       "sources": [
         {
-          "label": "km77, ficha EV5 GT-Line 81 kWh Long Range 217 CV (agosto 2026): «Autonomía eléctrica WLTP» 505 km, https://www.km77.com/coches/kia/ev5/2025/estandar/estandar/ev5-gt-line-81-kwh-long-range-160-kw-217-cv/datos",
-          "value": 505,
+          "label": "km77, ficha EV5 Earth 81 kWh Long Range 217 CV (septiembre 2026, tarifa de 02/2026): «Autonomía eléctrica WLTP» 530 km, https://www.km77.com/coches/kia/ev5/2025/estandar/estandar/ev5-earth-81-kwh-long-range-160-kw-217-cv/datos",
+          "value": 530,
           "estimated": false,
           "current": true
         }
@@ -3745,7 +3747,7 @@
       "value": 81.4,
       "sources": [
         {
-          "label": "km77, ficha EV5 GT-Line 81 kWh Long Range 217 CV (agosto 2026): «Capacidad» 81,4 kWh, https://www.km77.com/coches/kia/ev5/2025/estandar/estandar/ev5-gt-line-81-kwh-long-range-160-kw-217-cv/datos",
+          "label": "km77, ficha EV5 Earth 81 kWh Long Range 217 CV (septiembre 2026, tarifa de 02/2026): «Capacidad» 81,4 kWh, https://www.km77.com/coches/kia/ev5/2025/estandar/estandar/ev5-earth-81-kwh-long-range-160-kw-217-cv/datos",
           "value": 81.4,
           "estimated": false,
           "current": true
@@ -3766,19 +3768,19 @@
       ]
     },
     "priceEur": {
-      "value": 53071,
+      "value": 47571,
       "unit": "€",
       "sources": [
         {
-          "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV, PVP con descuento oficial (agosto 2026)",
-          "value": 51437,
+          "label": "km77, ficha EV5 Earth 81 kWh Long Range 217 CV, PVP con descuento oficial (septiembre 2026, tarifa de 02/2026): 45.937 €, https://www.km77.com/coches/kia/ev5/2025/estandar/estandar/ev5-earth-81-kwh-long-range-160-kw-217-cv/datos",
+          "value": 45937,
           "estimated": false,
           "current": false,
           "discardedReason": "PVP con el descuento oficial de fábrica (1.634 €) ya aplicado; el catálogo registra el PVP de catálogo sin descuentos para poder comparar precios de forma homogénea entre modelos"
         },
         {
-          "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV, PVP sin descuento (agosto 2026)",
-          "value": 53071,
+          "label": "km77, ficha EV5 Earth 81 kWh Long Range 217 CV, PVP sin descuento (septiembre 2026, tarifa de 02/2026): 45.937 € + 1.634 € de descuento oficial = 47.571 €, https://www.km77.com/coches/kia/ev5/2025/estandar/estandar/ev5-earth-81-kwh-long-range-160-kw-217-cv/datos",
+          "value": 47571,
           "estimated": false,
           "current": true
         }
@@ -3830,22 +3832,22 @@
       "front": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Kia_EV5_GT-Line_IAA_2025_DSC_2079.jpg/1280px-Kia_EV5_GT-Line_IAA_2025_DSC_2079.jpg",
         "credit": "Wikimedia Commons — Alexander Migl (CC BY-SA 4.0)",
-        "shows": "Kia EV5 GT-Line, gris oscuro, IAA Mobility 2025 (Múnich) — foto de salón"
+        "shows": "Kia EV5 GT-Line, gris oscuro, IAA Mobility 2025 (Múnich) — foto de salón. ATENCIÓN: la unidad es del acabado GT-Line, no del Earth que puntúa la ficha; se diferencian en la llanta (19\" en el GT-Line, 18\" en el Earth) y en los detalles específicos GT-Line del paragolpes"
       },
       "rear": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Kia_EV5_GT-Line_IAA_2025_DSC_2077.jpg/1280px-Kia_EV5_GT-Line_IAA_2025_DSC_2077.jpg",
         "credit": "Wikimedia Commons — Alexander Migl (CC BY-SA 4.0)",
-        "shows": "Kia EV5 GT-Line, gris oscuro, IAA Mobility 2025 (Múnich) — foto de salón, portón cerrado, rótulo «EV5 GT-Line» visible"
+        "shows": "Kia EV5 GT-Line, gris oscuro, IAA Mobility 2025 (Múnich) — foto de salón, portón cerrado, rótulo «EV5 GT-Line» visible. ATENCIÓN: la unidad es del acabado GT-Line, no del Earth que puntúa la ficha"
       },
       "side": {
         "url": "https://www.kia.com/content/dam/kwcms/kme/global/en/assets/vehicles/ev5/my26-presales/gallery/ev5-presales-6d-m.jpg",
         "credit": "Kia — kia.com/eu (web comercial oficial, galería EV5 GT-Line)",
-        "shows": "Kia EV5 GT-Line, gris plata metalizado (más claro que el gris oscuro de front/rear), estudio — vista lateral estricta, foto oficial de la web comercial de Kia Europa"
+        "shows": "Kia EV5 GT-Line, gris plata metalizado (más claro que el gris oscuro de front/rear), estudio — vista lateral estricta, foto oficial de la web comercial de Kia Europa. ATENCIÓN: la unidad es del acabado GT-Line, no del Earth que puntúa la ficha; la llanta que se ve es la de 19\" del GT-Line, no la de 18\" del Earth"
       },
       "interior": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Kia_EV5_GT-Line_IAA_2025_DSC_2420.jpg/1280px-Kia_EV5_GT-Line_IAA_2025_DSC_2420.jpg",
         "credit": "Wikimedia Commons — Alexander Migl (CC BY-SA 4.0)",
-        "shows": "Kia EV5 GT-Line, volante, pantallas y consola central — foto de salón, IAA Mobility 2025"
+        "shows": "Kia EV5 GT-Line, volante, pantallas y consola central — foto de salón, IAA Mobility 2025. ATENCIÓN: la unidad es del acabado GT-Line, no del Earth que puntúa la ficha"
       }
     }
   },
