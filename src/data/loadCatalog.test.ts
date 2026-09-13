@@ -192,6 +192,6 @@ describe('parseCatalog', () => {
 describe('loadCatalog', () => {
   it('loads the bundled catalog without throwing, with every candidate', () => {
     const cars = loadCatalog();
-    expect(cars).toHaveLength(21);
+    expect(cars).toHaveLength(22);
   });
 });

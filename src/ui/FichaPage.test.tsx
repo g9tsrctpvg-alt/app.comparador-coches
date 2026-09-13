@@ -1345,6 +1345,10 @@ describe('the sliding-bench mark (product/0040, requisito 3.2)', () => {
     expect(marked.sort()).toEqual([
       'bmw-x1-xdrive25e.rearLegroomMm',
       'nissan-x-trail-e-power.rearLegroomMm',
+      // El Touran (alta del 2026-09-13) es el tercer coche del catálogo con
+      // banqueta trasera deslizante: km77 publica 55-75 cm y la ficha declara
+      // el máximo.
+      'volkswagen-touran.rearLegroomMm',
     ]);
   });
 });
