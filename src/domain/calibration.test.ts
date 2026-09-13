@@ -306,17 +306,23 @@ describe('calibrate', () => {
     expect(again.nextMatchup).toEqual(state.nextMatchup);
   });
 
-  it('de partida catorce coches pueden liderar y ningún par está decidido', () => {
+  it('de partida quince coches pueden liderar y ningún par está decidido', () => {
     const state = calibrate(profiles, [], DEFAULT_WEIGHTS);
-    expect(state.totalPairs).toBe(153);
+    // Eran 153 pares con dieciocho elegibles; el alta de `volkswagen-touran`
+    // (2026-09-13) los sube a los 171 de diecinueve.
+    expect(state.totalPairs).toBe(171);
     expect(state.settledPairs).toBe(0);
     // Eran trece hasta product/0041 (2026-09-07): el decimocuarto es el
     // Corolla Cross, que entra justo por lo que la spec corrige — con la
     // garantía dentro del eje, la marca con mejor índice de averías del
     // catálogo no podía liderar con ninguna combinación de pesos.
-    expect(state.possibleLeaderIds).toHaveLength(14);
+    // Y quince desde el alta de `volkswagen-touran` (2026-09-13): con el peso
+    // de `carga` alto lidera por maletero —743 L, el mayor del catálogo—,
+    // aunque con los pesos por defecto quede en mitad de tabla.
+    expect(state.possibleLeaderIds).toHaveLength(15);
     expect(state.possibleLeaderIds).toContain('kia-ev3');
     expect(state.possibleLeaderIds).toContain('toyota-corolla-cross');
+    expect(state.possibleLeaderIds).toContain('volkswagen-touran');
   });
 
   it('es determinista: mismas respuestas, mismo resultado (requisito 3.4)', () => {

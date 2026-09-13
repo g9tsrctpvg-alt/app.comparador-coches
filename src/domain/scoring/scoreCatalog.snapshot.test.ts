@@ -57,6 +57,10 @@ import { scoreCatalog } from './score';
  * marca es más fiable que generosa —el Corolla Cross, +12,45— y baja en los
  * que compraban nota con la garantía —el Compass, −8,27, y los tres Kia de
  * siete años—.
+ *
+ * Ampliado con `volkswagen-touran` (2026-09-13): un alta de catálogo, no una
+ * spec, así que solo añade su fila —el primer registro `ICE` del fichero— y
+ * no mueve ninguno de los veintiún totales anteriores.
  */
 const EXPECTED_TOTALS: Record<string, number> = {
   'kia-ev3': 244.6052835753353,
@@ -80,6 +84,7 @@ const EXPECTED_TOTALS: Record<string, number> = {
   'nissan-qashqai-e-power': 241.94847785860722,
   'nissan-x-trail-e-power': 246.23920881679516,
   'honda-zr-v': 209.6233533613873,
+  'volkswagen-touran': 220.97577702505313,
 };
 
 describe('scoreCatalog against the real catalogue (product/0009 regression)', () => {
