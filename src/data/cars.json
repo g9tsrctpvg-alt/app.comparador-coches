@@ -6628,7 +6628,8 @@
       "Puntúa la versión Hybrid 200 Advance FWD (185 CV), la de acceso a la gama HEV; la Spirit comparte mecánica idéntica y solo cambia equipamiento.",
       "Sexta generación (XA60), a la venta en España desde enero de 2026: km77 todavía no ha publicado sus mediciones propias para esta generación, así que el espacio de piernas y la anchura de hombros de la segunda fila no salen del protocolo «respaldo a respaldo» que usa el resto del catálogo, sino de la ficha de un concesionario Toyota de EE. UU. (protocolo SAE J1100), por decisión expresa del usuario. No son directamente comparables con el resto de candidatos.",
       "El PVP de catálogo es 47.250 €: los 44.250 € que muestra km77 ya llevan restado un descuento oficial de 3.000 €.",
-      "La foto de frontal/lateral/trasera es del acabado japonés «CORE» (grado base, mostrado como «RAV4 HEV Z» en el Japan Mobility Show Kansai 2025), no del Advance español que puntúa la ficha: misma generación XA60 y motorización HEV, pero puede haber pequeñas diferencias de parrilla o llantas entre mercados."
+      "La foto de frontal/lateral/trasera es del acabado japonés «CORE» (grado base, mostrado como «RAV4 HEV Z» en el Japan Mobility Show Kansai 2025), no del Advance español que puntúa la ficha: misma generación XA60 y motorización HEV, pero puede haber pequeñas diferencias de parrilla o llantas entre mercados.",
+      "El diámetro de giro (11,28 m) es el de las versiones AWD de Toyota Canadá con llanta de 18\", no el de la Advance FWD española, porque no se ha encontrado una ficha oficial FWD; validado por el usuario tras contrastar con otra fuente independiente."
     ],
     "lengthMm": {
       "value": 4600,
@@ -6685,6 +6686,18 @@
         {
           "label": "Toyota of Glendale (concesionario, EE. UU.): «Rear legroom of 37.8 inches» (37,8 in = 960 mm), protocolo SAE J1100, no el de km77 — km77 aún no ha medido esta generación, https://www.toyotaofglendale.com/manufacturer-research/2026-toyota-rav4-interior-cargo-space/",
           "value": 960,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "turningCircleM": {
+      "value": 11.28,
+      "unit": "m",
+      "sources": [
+        {
+          "label": "Toyota Canadá, ficha de producto oficial «2026 RAV4 Product Information»: «Turning diameter — All other grades» 11,28 m (36,9 ft.), llanta de 18\" — mismas AWD Canadá, la Advance española es FWD; no hay ficha FWD de referencia disponible, https://toyotacanada.scene7.com/is/content/toyotacanada/2026%20RAV4%20Hybrid%20Product%20Information%20ENpdf",
+          "value": 11.28,
           "estimated": true,
           "current": true
         }
