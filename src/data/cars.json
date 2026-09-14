@@ -6351,5 +6351,258 @@
         "shows": "Honda ZR-V e:HEV expuesto en el Auto Zürich 2023, salpicadero y volante en negro — acabado no confirmado, puede no ser el Advance que puntúa la ficha. Usada con conformidad expresa del usuario para la valoración de interior pese a esa incertidumbre."
       }
     }
+  },
+  {
+    "id": "volkswagen-touran",
+    "name": "Touran",
+    "brand": "Volkswagen",
+    "technology": "ICE",
+    "generation": {
+      "launchYear": {
+        "value": 2015,
+        "sources": [
+          {
+            "label": "Wikipedia (septiembre 2026), «Volkswagen Touran»: la generación 5T se presentó en el Salón de Ginebra de 2015 —«introduced at the 2015 Geneva Motor Show»—, https://en.wikipedia.org/wiki/Volkswagen_Touran",
+            "value": 2015,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "code": "5T"
+    },
+    "notes": [
+      "Versión puntuada: Touran Más 1.5 TSI 110 kW (150 CV) DSG 7 vel. 5 plazas (km77, septiembre 2026). Se pidió el acabado Life, que hoy no se ofrece con cambio DSG en la gama española: Más es el acabado de volumen y el más barato con DSG, y es el que se ha dado de alta, decisión confirmada por el usuario.",
+      "Cinco plazas, sin tercera fila: el maletero declarado (743 L) es el de esta carrocería con los asientos en uso, comparable con el resto del catálogo. La variante de siete plazas del mismo acabado cuesta 710 € más y declara 633 L con la tercera fila plegada y 137 L con las tres filas en uso.",
+      "Primer registro `ICE` del catálogo: la gama del Touran es 100 % térmica —etiqueta C de la DGT, sin versión MHEV, HEV, PHEV ni EV—, así que no declara autonomía eléctrica ni batería de tracción, que `CarSchema` prohíbe en un `ICE`.",
+      "Espacio de piernas atrás con banqueta deslizante: km77 publica el rango 55-75 cm y se declara el máximo, 75 cm (product/0040); la fuente queda marcada con `adjustable`.",
+      "Sin diámetro de giro entre bordillos: km77 y la ficha comercial de Volkswagen solo publican el diámetro entre paredes (11,5 m), que es otra medida y no se usa (product/0032).",
+      "Sin carga máxima en techo: no se ha encontrado documentación técnica de Volkswagen que la publique. Las capacidades de 70-100 kg que anuncian las barras de accesorio son un dato del accesorio, no del coche (product/0034).",
+      "Sin `faceliftYear`: la generación 5T no ha recibido un retoque de mitad de ciclo documentado —los cambios de 2019, 2020 y 2025 son de gama, mecánicas y equipamiento, no de carrocería—, así que se omite el campo en vez de fechar un retoque que no existe.",
+      "Mantenimiento anual estimado: media de una revisión completa (~325 €) y un cambio de aceite (~110 €) en años alternos con el intervalo de 15.000 km/1 año que publica garajo.es, no una tarifa oficial de Volkswagen España.",
+      "Sin valor residual a 5 años: no se ha encontrado fuente específica del modelo en España.",
+      "Sin fotos frontal, trasera ni de maletero: en la sala de prensa de Volkswagen y en Wikimedia Commons solo hay tres cuartos delanteros y traseros de esta generación, y el requisito 3 de product/0014 exige frontal y trasera rectas. El lateral y el interior sí son fotos oficiales de la sala de prensa.",
+      "Las mediciones propias de km77 (espacio de piernas y anchura de hombros) se tomaron sobre un Touran Sport 2.0 TDI 150 CV de 7 plazas: misma carrocería y misma generación 5T que la versión puntuada, distinta motorización."
+    ],
+    "published": true,
+    "lengthMm": {
+      "value": 4527,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha Touran Más 1.5 TSI 110 kW (150 CV) DSG 7 vel. 5 plazas (septiembre 2026), https://www.km77.com/coches/volkswagen/touran/2016/estandar/estandar/touran-mas-15-tsi-110-kw-150-cv-dsg-7-vel-5-plazas/datos",
+          "value": 4527,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "widthMm": {
+      "value": 1829,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha Touran Más 1.5 TSI 110 kW (150 CV) DSG 7 vel. 5 plazas (septiembre 2026), https://www.km77.com/coches/volkswagen/touran/2016/estandar/estandar/touran-mas-15-tsi-110-kw-150-cv-dsg-7-vel-5-plazas/datos",
+          "value": 1829,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "heightMm": {
+      "value": 1659,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha Touran Más 1.5 TSI 110 kW (150 CV) DSG 7 vel. 5 plazas (septiembre 2026), https://www.km77.com/coches/volkswagen/touran/2016/estandar/estandar/touran-mas-15-tsi-110-kw-150-cv-dsg-7-vel-5-plazas/datos",
+          "value": 1659,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "wheelbaseMm": {
+      "value": 2791,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha Touran Más 1.5 TSI 110 kW (150 CV) DSG 7 vel. 5 plazas (septiembre 2026), https://www.km77.com/coches/volkswagen/touran/2016/estandar/estandar/touran-mas-15-tsi-110-kw-150-cv-dsg-7-vel-5-plazas/datos",
+          "value": 2791,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearLegroomMm": {
+      "value": 750,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 55-75 cm —banqueta deslizante—; se declara el máximo, 75 cm (product/0040), https://www.km77.com/coches/volkswagen/touran/2016/estandar/mediciones-propias/detalle",
+          "value": 750,
+          "estimated": false,
+          "adjustable": true,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1420,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Anchura hombros máxima» 142 cm en la segunda fila —km77 no publica la mínima para este modelo—, https://www.km77.com/coches/volkswagen/touran/2016/estandar/mediciones-propias/detalle",
+          "value": 1420,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "groundClearanceMm": {
+      "value": 156,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "carwow.es, ficha técnica del Touran (septiembre 2026): «156 mm de altura libre sobre el suelo sin carga»; coincide con los 15,6 cm de ultimatespecs para el 1.5 TSI, https://www.carwow.es/volkswagen/touran/caracteristicas-tecnicas",
+          "value": 156,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "trunkLiters": {
+      "value": 743,
+      "unit": "L",
+      "sources": [
+        {
+          "label": "km77, ficha Touran Más 1.5 TSI 110 kW (150 CV) DSG 7 vel. 5 plazas (septiembre 2026): 743 L con las dos filas en uso; las mediciones propias de km77 dan el rango VDA 633-743 L de la carrocería (633 L es la de 7 plazas con la tercera fila plegada), https://www.km77.com/coches/volkswagen/touran/2016/estandar/estandar/touran-mas-15-tsi-110-kw-150-cv-dsg-7-vel-5-plazas/datos",
+          "value": 743,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "powerCv": {
+      "value": 150,
+      "unit": "CV",
+      "sources": [
+        {
+          "label": "km77, ficha Touran Más 1.5 TSI 110 kW (150 CV) DSG 7 vel. 5 plazas (septiembre 2026), https://www.km77.com/coches/volkswagen/touran/2016/estandar/estandar/touran-mas-15-tsi-110-kw-150-cv-dsg-7-vel-5-plazas/datos",
+          "value": 150,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "weightKg": {
+      "value": 1533,
+      "unit": "kg",
+      "sources": [
+        {
+          "label": "km77, ficha Touran Más 1.5 TSI 110 kW (150 CV) DSG 7 vel. 5 plazas (septiembre 2026): peso en vacío 1.533 kg, https://www.km77.com/coches/volkswagen/touran/2016/estandar/estandar/touran-mas-15-tsi-110-kw-150-cv-dsg-7-vel-5-plazas/datos",
+          "value": 1533,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "acceleration0to100": {
+      "value": 8.9,
+      "unit": "s",
+      "sources": [
+        {
+          "label": "km77, ficha Touran Más 1.5 TSI 110 kW (150 CV) DSG 7 vel. 5 plazas (septiembre 2026), https://www.km77.com/coches/volkswagen/touran/2016/estandar/estandar/touran-mas-15-tsi-110-kw-150-cv-dsg-7-vel-5-plazas/datos",
+          "value": 8.9,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "consumption": {
+      "value": 6.4,
+      "unit": "l/100km",
+      "sources": [
+        {
+          "label": "km77, ficha Touran Más 1.5 TSI 110 kW (150 CV) DSG 7 vel. 5 plazas (septiembre 2026): consumo WLTP combinado 6,4 l/100 km (146 g/km de CO2, etiqueta C), https://www.km77.com/coches/volkswagen/touran/2016/estandar/estandar/touran-mas-15-tsi-110-kw-150-cv-dsg-7-vel-5-plazas/datos",
+          "value": 6.4,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "maintenanceEurYear": {
+      "value": 218,
+      "unit": "€/año",
+      "sources": [
+        {
+          "label": "garajo.es, mantenimiento del Volkswagen Touran (septiembre 2026): revisión completa ~325 € y cambio de aceite ~110 € con intervalo de 15.000 km o 1 año; media anual de años alternos, 218 €, https://garajo.es/mantenimiento/volkswagen/touran",
+          "value": 218,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "priceEur": {
+      "value": 42130,
+      "unit": "€",
+      "sources": [
+        {
+          "label": "km77, ficha Touran Más 1.5 TSI 110 kW (150 CV) DSG 7 vel. 5 plazas (septiembre 2026): 36.925 €, el PVP menos el descuento oficial de 5.205 € que anuncia la misma ficha",
+          "value": 36925,
+          "estimated": false,
+          "current": false,
+          "discardedReason": "incluía un descuento oficial ya restado; el catálogo compara siempre PVP sin descuentos, como se corrigió en el alta del Kia EV5"
+        },
+        {
+          "label": "km77, ficha Touran Más 1.5 TSI 110 kW (150 CV) DSG 7 vel. 5 plazas (septiembre 2026): PVP de catálogo 42.130 €, https://www.km77.com/coches/volkswagen/touran/2016/estandar/estandar/touran-mas-15-tsi-110-kw-150-cv-dsg-7-vel-5-plazas/datos",
+          "value": 42130,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "reliabilityOcu": {
+      "value": 82,
+      "sources": [
+        {
+          "label": "OCU, índice de fiabilidad 2026 — 85.590 encuestas, 39 marcas (vía carwow.es, agosto 2026): índice de marca de Volkswagen, el mismo que ya usa el ID.4",
+          "value": 82,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyYears": {
+      "value": 3,
+      "unit": "años",
+      "sources": [
+        {
+          "label": "Garantía comercial Volkswagen España (septiembre 2026): 3 años sin límite de kilómetros, https://www.volkswagen.es/es/clientes/beneficios-volkswagen/garantia-fabricante.html",
+          "value": 3,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "aestheticsExterior": {
+      "value": 2,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "aestheticsInterior": {
+      "value": 2,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "photos": {
+      "side": {
+        "url": "https://uploads.vw-mms.de/system/production/images/vwn/076/035/images/bab5b03bbae8dbdb5bbedbce257c493b2672b209/DB2023AU00269_web_1600.jpg",
+        "credit": "Volkswagen Newsroom (sala de prensa oficial de Volkswagen AG)",
+        "shows": "Volkswagen Touran (5T), azul claro, lateral estricto a 90º con el coche completo — foto de prensa de la gama 2023, llanta de radios de la gama media (no R-Line)"
+      },
+      "interior": {
+        "url": "https://uploads.vw-mms.de/system/production/images/vwn/076/039/images/dfc11ba749e6acf8391adcb7e057e98c6e8ec36f/DB2023AU00273_web_1600.jpg",
+        "credit": "Volkswagen Newsroom (sala de prensa oficial de Volkswagen AG)",
+        "shows": "Volkswagen Touran (5T), habitáculo delantero con volante a la izquierda, cuadro digital, pantalla central y selector del cambio DSG; tapicería de tela gris oscura — foto de prensa de la gama 2023, no es la misma unidad que el lateral"
+      }
+    }
   }
 ]
