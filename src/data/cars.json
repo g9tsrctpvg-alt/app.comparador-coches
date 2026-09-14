@@ -6604,5 +6604,303 @@
         "shows": "Volkswagen Touran (5T), habitáculo delantero con volante a la izquierda, cuadro digital, pantalla central y selector del cambio DSG; tapicería de tela gris oscura — foto de prensa de la gama 2023, no es la misma unidad que el lateral"
       }
     }
+  },
+  {
+    "id": "toyota-rav4-hev",
+    "name": "RAV4",
+    "brand": "Toyota",
+    "technology": "HEV",
+    "generation": {
+      "launchYear": {
+        "value": 2025,
+        "sources": [
+          {
+            "label": "Toyota Global Newsroom (mayo 2025), «All-New RAV4 World Premiere»: presentación mundial en Tokio el 21 de mayo de 2025, https://global.toyota/en/newsroom/toyota/42762524.html",
+            "value": 2025,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "code": "XA60"
+    },
+    "notes": [
+      "Puntúa la versión Hybrid 200 Advance FWD (185 CV), la de acceso a la gama HEV; la Spirit comparte mecánica idéntica y solo cambia equipamiento.",
+      "Sexta generación (XA60), a la venta en España desde enero de 2026: km77 todavía no ha publicado sus mediciones propias para esta generación, así que el espacio de piernas y la anchura de hombros de la segunda fila no salen del protocolo «respaldo a respaldo» que usa el resto del catálogo, sino de la ficha de un concesionario Toyota de EE. UU. (protocolo SAE J1100), por decisión expresa del usuario. No son directamente comparables con el resto de candidatos.",
+      "El PVP de catálogo es 47.250 €: los 44.250 € que muestra km77 ya llevan restado un descuento oficial de 3.000 €.",
+      "La foto de frontal/lateral/trasera es del acabado japonés «CORE» (grado base, mostrado como «RAV4 HEV Z» en el Japan Mobility Show Kansai 2025), no del Advance español que puntúa la ficha: misma generación XA60 y motorización HEV, pero puede haber pequeñas diferencias de parrilla o llantas entre mercados."
+    ],
+    "lengthMm": {
+      "value": 4600,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha RAV4 Hybrid 200 Advance (septiembre 2026), https://www.km77.com/coches/toyota/rav4/2026/estandar/estandar/rav4-2026-hev-advance/datos",
+          "value": 4600,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "widthMm": {
+      "value": 1855,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha RAV4 Hybrid 200 Advance (septiembre 2026), https://www.km77.com/coches/toyota/rav4/2026/estandar/estandar/rav4-2026-hev-advance/datos",
+          "value": 1855,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "heightMm": {
+      "value": 1680,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha RAV4 Hybrid 200 Advance (septiembre 2026), https://www.km77.com/coches/toyota/rav4/2026/estandar/estandar/rav4-2026-hev-advance/datos",
+          "value": 1680,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "wheelbaseMm": {
+      "value": 2690,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha RAV4 Hybrid 200 Advance (septiembre 2026), https://www.km77.com/coches/toyota/rav4/2026/estandar/estandar/rav4-2026-hev-advance/datos",
+          "value": 2690,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearLegroomMm": {
+      "value": 960,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "Toyota of Glendale (concesionario, EE. UU.): «Rear legroom of 37.8 inches» (37,8 in = 960 mm), protocolo SAE J1100, no el de km77 — km77 aún no ha medido esta generación, https://www.toyotaofglendale.com/manufacturer-research/2026-toyota-rav4-interior-cargo-space/",
+          "value": 960,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1433,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "Toyota of Glendale (concesionario, EE. UU.): «Shoulder room» segunda fila 56,4 in (= 1.433 mm), protocolo SAE J1100, no el de km77 — km77 aún no ha medido esta generación, https://www.toyotaofglendale.com/manufacturer-research/2026-toyota-rav4-interior-cargo-space/",
+          "value": 1433,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "groundClearanceMm": {
+      "value": 186,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha RAV4 Hybrid 200 Advance (septiembre 2026), https://www.km77.com/coches/toyota/rav4/2026/estandar/estandar/rav4-2026-hev-advance/datos",
+          "value": 186,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "trunkLiters": {
+      "value": 514,
+      "unit": "L",
+      "sources": [
+        {
+          "label": "km77, ficha RAV4 Hybrid 200 Advance (septiembre 2026): «Volumen mínimo con dos filas de asientos disponibles» 514 L, https://www.km77.com/coches/toyota/rav4/2026/estandar/estandar/rav4-2026-hev-advance/datos",
+          "value": 514,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "powerCv": {
+      "value": 185,
+      "unit": "CV",
+      "sources": [
+        {
+          "label": "km77, ficha RAV4 Hybrid 200 Advance (septiembre 2026): «Potencia máxima» 185 CV / 136 kW, https://www.km77.com/coches/toyota/rav4/2026/estandar/estandar/rav4-2026-hev-advance/datos",
+          "value": 185,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "weightKg": {
+      "value": 1700,
+      "unit": "kg",
+      "sources": [
+        {
+          "label": "km77, ficha RAV4 Hybrid 200 Advance (septiembre 2026): «Peso» 1.700 kg, https://www.km77.com/coches/toyota/rav4/2026/estandar/estandar/rav4-2026-hev-advance/datos",
+          "value": 1700,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "acceleration0to100": {
+      "value": 8,
+      "unit": "s",
+      "sources": [
+        {
+          "label": "km77, ficha RAV4 Hybrid 200 Advance (septiembre 2026): «Aceleración 0-100 km/h» 8 s, https://www.km77.com/coches/toyota/rav4/2026/estandar/estandar/rav4-2026-hev-advance/datos",
+          "value": 8,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "consumption": {
+      "value": 4.9,
+      "unit": "l/100km",
+      "sources": [
+        {
+          "label": "km77, ficha RAV4 Hybrid 200 Advance (septiembre 2026): «Consumo WLTP Combinado» 4,9 l/100 km, https://www.km77.com/coches/toyota/rav4/2026/estandar/estandar/rav4-2026-hev-advance/datos",
+          "value": 4.9,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "batteryKwh": {
+      "value": 1.09,
+      "unit": "kWh",
+      "sources": [
+        {
+          "label": "km77, ficha RAV4 Hybrid 200 Advance (septiembre 2026): «Batería» Capacidad 1,09 kWh, https://www.km77.com/coches/toyota/rav4/2026/estandar/estandar/rav4-2026-hev-advance/datos",
+          "value": 1.09,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "maintenanceEurYear": {
+      "value": 221,
+      "unit": "€/año",
+      "sources": [
+        {
+          "label": "carwow.es, precios de revisiones oficiales M1-M5 de un concesionario de Madrid (media de las cinco: 165+300+175+300+165 € / 5 años), no una tarifa anual desglosada por Toyota, https://www.carwow.es/blog/mantenimiento-toyota-rav4",
+          "value": 221,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "priceEur": {
+      "value": 47250,
+      "unit": "€",
+      "sources": [
+        {
+          "label": "km77, precio con descuento oficial de 3.000 € ya restado (septiembre 2026): 44.250 €, https://www.km77.com/coches/toyota/rav4/2026/estandar/estandar/rav4-2026-hev-advance/datos",
+          "value": 44250,
+          "estimated": false,
+          "current": false,
+          "discardedReason": "Incluye un descuento oficial de 3.000 € ya restado; el proyecto usa siempre el PVP de catálogo sin descontar"
+        },
+        {
+          "label": "PVP de catálogo reconstruido (44.250 € + 3.000 € de descuento oficial), km77 (septiembre 2026)",
+          "value": 47250,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "reliabilityOcu": {
+      "value": 91,
+      "sources": [
+        {
+          "label": "OCU, índice de fiabilidad 2026 — 85.590 encuestas, 39 marcas (vía motor.es)",
+          "value": 91,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyYears": {
+      "value": 3,
+      "unit": "años",
+      "sources": [
+        {
+          "label": "Toyota España, garantía mecánica de fábrica: «3 años o 100.000 km, lo que antes suceda», https://www.toyota.es/service-and-accessories/warranty-and-assistance/garantia-toyota",
+          "value": 3,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyExtension": {
+      "years": {
+        "value": 15,
+        "unit": "años",
+        "sources": [
+          {
+            "label": "Toyota España, Toyota Relax: «hasta los 15 años o 250.000 km del vehículo», https://www.toyota.es/service-and-accessories/warranty-and-assistance/toyota-relax",
+            "value": 15,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "kmLimit": {
+        "value": 250000,
+        "unit": "km",
+        "sources": [
+          {
+            "label": "Toyota España, Toyota Relax: «hasta los 15 años o 250.000 km del vehículo», https://www.toyota.es/service-and-accessories/warranty-and-assistance/toyota-relax",
+            "value": 250000,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "condition": "Exige el mantenimiento en la red oficial de talleres Toyota año a año; se renueva en cada revisión (Toyota Relax)"
+    },
+    "aestheticsExterior": {
+      "value": 3,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "aestheticsInterior": {
+      "value": 3,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "photos": {
+      "front": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Japan_Mobility_Show_Kansai_2025_%2817%29_-_Toyota_RAV4_HEV_CORE_%28XA60%29.jpg/1280px-Japan_Mobility_Show_Kansai_2025_%2817%29_-_Toyota_RAV4_HEV_CORE_%28XA60%29.jpg",
+        "credit": "Wikimedia Commons — Tokumeigakarinoaoshima (CC0)",
+        "shows": "Toyota RAV4 HEV, gris/plata, acabado japonés CORE — Japan Mobility Show Kansai 2025"
+      },
+      "side": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Japan_Mobility_Show_Kansai_2025_%2819%29_-_Toyota_RAV4_HEV_CORE_%28XA60%29.jpg/1280px-Japan_Mobility_Show_Kansai_2025_%2819%29_-_Toyota_RAV4_HEV_CORE_%28XA60%29.jpg",
+        "credit": "Wikimedia Commons — Tokumeigakarinoaoshima (CC0)",
+        "shows": "Toyota RAV4 HEV, gris/plata, acabado japonés CORE — Japan Mobility Show Kansai 2025"
+      },
+      "rear": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Japan_Mobility_Show_Kansai_2025_%2821%29_-_Toyota_RAV4_HEV_CORE_%28XA60%29.jpg/1280px-Japan_Mobility_Show_Kansai_2025_%2821%29_-_Toyota_RAV4_HEV_CORE_%28XA60%29.jpg",
+        "credit": "Wikimedia Commons — Tokumeigakarinoaoshima (CC0)",
+        "shows": "Toyota RAV4 HEV, gris/plata, acabado japonés CORE — Japan Mobility Show Kansai 2025"
+      },
+      "trunk": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Japan_Mobility_Show_Kansai_2025_%2822%29_-_Toyota_RAV4_HEV_CORE_%28XA60%29.jpg/1280px-Japan_Mobility_Show_Kansai_2025_%2822%29_-_Toyota_RAV4_HEV_CORE_%28XA60%29.jpg",
+        "credit": "Wikimedia Commons — Tokumeigakarinoaoshima (CC0)",
+        "shows": "Toyota RAV4 HEV, maletero vacío con el portón abierto y los asientos traseros sin abatir — mismo acabado CORE"
+      },
+      "interior": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Japan_Mobility_Show_Kansai_2025_%2824%29_-_Toyota_RAV4_HEV_CORE_%28XA60%29.jpg/1280px-Japan_Mobility_Show_Kansai_2025_%2824%29_-_Toyota_RAV4_HEV_CORE_%28XA60%29.jpg",
+        "credit": "Wikimedia Commons — Tokumeigakarinoaoshima (CC0)",
+        "shows": "Toyota RAV4 HEV, salpicadero, volante y consola central, tapicería negra — mismo acabado CORE"
+      }
+    }
   }
 ]

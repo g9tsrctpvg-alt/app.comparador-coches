@@ -75,6 +75,7 @@ const EXPECTED_TOTALS: Record<string, number> = {
   'hyundai-kona-hev': 230.45320257610487,
   'hyundai-kona-electrico': 228.36520880922325,
   'toyota-corolla-cross': 200.04790522689842,
+  'toyota-rav4-hev': 241.06987973077568,
   'bmw-x1-xdrive25e': 253.50344205729954,
   'alfa-romeo-tonale': 200.62957732328553,
   'kia-sportage-hev': 247.37033755425358,
