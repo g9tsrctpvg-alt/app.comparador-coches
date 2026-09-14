@@ -144,6 +144,10 @@ export function ExplicacionPage({ cars }: ExplicacionPageProps) {
                 <p className={styles.exception}>{content.curveException}</p>
               )}
 
+              {content.scoringException && (
+                <p className={styles.exception}>{content.scoringException}</p>
+              )}
+
               <dl className={styles.anchors}>
                 {(axis.subcomponents ?? []).map((sub, index) => (
                   <div key={sub.label} className={styles.anchorRow}>

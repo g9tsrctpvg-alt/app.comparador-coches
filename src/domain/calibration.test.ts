@@ -277,8 +277,15 @@ describe('la rejilla', () => {
 describe('calibrate', () => {
   it('el primer cara a cara es el par de perfiles más lejanos (requisito 6.2)', () => {
     const state = calibrate(profiles, [], DEFAULT_WEIGHTS);
+    // product/0038 y product/0039 (2026-09-06) mueven los perfiles reales
+    // —`coste` deja de leer el consumo ponderado del Tucson PHEV sin carga
+    // en casa, y `habitabilidad` puntúa el espacio de piernas atrás—, así
+    // que el par más lejano deja de ser kia-ev3/jeep-compass.
+    // product/0041 (2026-09-07) lo vuelve a mover: sin el sumando de
+    // garantía, el Corolla Cross sube en fiabilidad y el Compass baja, así
+    // que el par más separado pasa a ser ese.
     expect(state.nextMatchup).toEqual({
-      aCarId: 'kia-ev3',
+      aCarId: 'toyota-corolla-cross',
       bCarId: 'jeep-compass',
     });
     // Y no depende de con qué pesos se haya puntuado.
@@ -299,13 +306,23 @@ describe('calibrate', () => {
     expect(again.nextMatchup).toEqual(state.nextMatchup);
   });
 
-  it('de partida trece coches pueden liderar y ningún par está decidido', () => {
+  it('de partida quince coches pueden liderar y ningún par está decidido', () => {
     const state = calibrate(profiles, [], DEFAULT_WEIGHTS);
-    expect(state.totalPairs).toBe(153);
+    // Eran 153 pares con dieciocho elegibles; el alta de `volkswagen-touran`
+    // (2026-09-13) los sube a los 171 de diecinueve.
+    expect(state.totalPairs).toBe(171);
     expect(state.settledPairs).toBe(0);
-    expect(state.possibleLeaderIds).toHaveLength(13);
+    // Eran trece hasta product/0041 (2026-09-07): el decimocuarto es el
+    // Corolla Cross, que entra justo por lo que la spec corrige — con la
+    // garantía dentro del eje, la marca con mejor índice de averías del
+    // catálogo no podía liderar con ninguna combinación de pesos.
+    // Y quince desde el alta de `volkswagen-touran` (2026-09-13): con el peso
+    // de `carga` alto lidera por maletero —743 L, el mayor del catálogo—,
+    // aunque con los pesos por defecto quede en mitad de tabla.
+    expect(state.possibleLeaderIds).toHaveLength(15);
     expect(state.possibleLeaderIds).toContain('kia-ev3');
-    expect(state.possibleLeaderIds).not.toContain('toyota-corolla-cross');
+    expect(state.possibleLeaderIds).toContain('toyota-corolla-cross');
+    expect(state.possibleLeaderIds).toContain('volkswagen-touran');
   });
 
   it('es determinista: mismas respuestas, mismo resultado (requisito 3.4)', () => {
