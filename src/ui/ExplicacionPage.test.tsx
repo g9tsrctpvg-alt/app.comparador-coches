@@ -48,17 +48,29 @@ describe('ExplicacionPage', () => {
     );
   });
 
-  it('shows all eighteen anchors with a value taken from the domain', () => {
+  it('shows all seventeen anchors with a value taken from the domain', () => {
     const markup = render();
-    // Cinco ejes de dos magnitudes cada uno —diario, prestaciones,
-    // fiabilidad, estética (editable por el usuario, pero con la misma
-    // forma de anclaje) y coste—, más `carga` con una sola magnitud y
+    // Cuatro ejes de dos magnitudes cada uno —diario, prestaciones,
+    // estética (editable por el usuario, pero con la misma forma de
+    // anclaje) y coste—, más `carga` y `fiabilidad` con una sola cada uno
+    // (product/0041 le quita a `fiabilidad` el sumando de garantía) y
     // `habitabilidad` con dos (product/0033 parte lo que antes era `viaje`,
-    // de tres magnitudes, sin cambiar el total): trece. `prueba` añade
-    // cinco más, uno por juicio (product/0037): dieciocho en total.
+    // de tres magnitudes, sin cambiar el total): doce. `prueba` añade cinco
+    // más, uno por juicio (product/0037): diecisiete en total.
     const anchorCount = (markup.match(/→ 10/g) ?? []).length;
-    expect(anchorCount).toBe(18);
-    expect((markup.match(/→ 0/g) ?? []).length).toBe(18);
+    expect(anchorCount).toBe(17);
+    expect((markup.match(/→ 0/g) ?? []).length).toBe(17);
+  });
+
+  it('never says the warranty years score (product/0041)', () => {
+    const text = render().replace(/<[^>]*>/g, ' ');
+    // El eje se nombra por lo que mide, y la garantía aparece solo para
+    // decir que no puntúa: el criterio es que no quede ninguna frase que la
+    // presente como parte de la nota.
+    expect(text).toContain('Fiabilidad');
+    expect(text).not.toContain('Fiabilidad y garantía');
+    expect(text).not.toContain('años de garantía incondicional');
+    expect(text).toContain('ya no puntúan');
   });
 
   it('gives every anchor row its own non-empty reasoning text — none left blank by index', () => {
@@ -71,7 +83,7 @@ describe('ExplicacionPage', () => {
     const markup = render();
     const reasoningCells =
       markup.match(/<dd class="[^"]*reasoning[^"]*">([\s\S]*?)<\/dd>/g) ?? [];
-    expect(reasoningCells).toHaveLength(18);
+    expect(reasoningCells).toHaveLength(17);
     for (const cell of reasoningCells) {
       expect(cell.replace(/<[^>]*>/g, '').trim().length).toBeGreaterThan(0);
     }

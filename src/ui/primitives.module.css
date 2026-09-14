@@ -121,6 +121,16 @@
   color: var(--color-signal);
 }
 
+/* La marca de magnitud ajustable (product/0040): mismo tamaño y sitio que
+ * la tilde de estimado, pero en `accent` y no en `signal`, porque no avisa
+ * de nada — declara que el coche puede dar ese hueco moviendo la banqueta.
+ * `accent` sobre `paper` y sobre `card` son pares ya declarados en
+ * `scripts/validateContrast.ts`, así que no añade ninguno nuevo. */
+.adjustableMark {
+  composes: mono;
+  color: var(--color-accent);
+}
+
 .secondaryText {
   color: var(--color-mute);
   font-size: var(--font-size-xs);
