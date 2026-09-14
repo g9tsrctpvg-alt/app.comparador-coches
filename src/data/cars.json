@@ -68,6 +68,18 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 720,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 72 cm, https://www.km77.com/coches/kia/ev3/2025/estandar/mediciones-propias/detalle",
+          "value": 720,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 10.4,
       "unit": "m",
@@ -85,7 +97,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — Standard (2025) (agosto 2026): 134 cm a la altura de los hombros, https://www.km77.com/coches/kia/ev3/2025/estandar/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — Standard (2025) (agosto 2026): «Anchura hombros mínima» 134 cm, https://www.km77.com/coches/kia/ev3/2025/estandar/mediciones-propias/detalle",
           "value": 1340,
           "estimated": false,
           "current": true
@@ -345,6 +357,18 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 730,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 73 cm, https://www.km77.com/coches/hyundai/kona/2023/estandar/hibrido/kona-n-line-style-hibrido-16-gdi-129-cv/mediciones-propias/detalle",
+          "value": 730,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 10.6,
       "unit": "m",
@@ -362,7 +386,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — Hibrido N Line Style 1.6 GDi 129 CV (agosto 2026): 138 cm a la altura de los hombros, https://www.km77.com/coches/hyundai/kona/2023/estandar/hibrido/kona-n-line-style-hibrido-16-gdi-129-cv/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — Hibrido N Line Style 1.6 GDi 129 CV (agosto 2026): «Anchura hombros máxima» 138 cm, https://www.km77.com/coches/hyundai/kona/2023/estandar/hibrido/kona-n-line-style-hibrido-16-gdi-129-cv/mediciones-propias/detalle",
           "value": 1380,
           "estimated": false,
           "current": true
@@ -612,6 +636,18 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 730,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 73 cm, https://www.km77.com/coches/hyundai/kona/2023/estandar/electric/kona-electrico-204-cv-65-kwh-tecno/mediciones-propias/detalle",
+          "value": 730,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 10.6,
       "unit": "m",
@@ -629,7 +665,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — Electrico Tecno 204 CV 65 kWh (agosto 2026): 138 cm a la altura de los hombros, https://www.km77.com/coches/hyundai/kona/2023/estandar/electric/kona-electrico-204-cv-65-kwh-tecno/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — Electrico Tecno 204 CV 65 kWh (agosto 2026): «Anchura hombros máxima» 138 cm, https://www.km77.com/coches/hyundai/kona/2023/estandar/electric/kona-electrico-204-cv-65-kwh-tecno/mediciones-propias/detalle",
           "value": 1380,
           "estimated": false,
           "current": true
@@ -896,6 +932,18 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 680,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 68 cm, https://www.km77.com/coches/toyota/corolla-cross/2023/estandar/estandar/corolla-cross-style-18-hybrid/mediciones-propias/detalle",
+          "value": 680,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 10.4,
       "unit": "m",
@@ -913,7 +961,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — Style 140H Hybrid FWD (agosto 2026): 135 cm a la altura de los hombros, https://www.km77.com/coches/toyota/corolla-cross/2023/estandar/estandar/corolla-cross-style-18-hybrid/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — Style 140H Hybrid FWD (agosto 2026): «Anchura hombros máxima» 135 cm, https://www.km77.com/coches/toyota/corolla-cross/2023/estandar/estandar/corolla-cross-style-18-hybrid/mediciones-propias/detalle",
           "value": 1350,
           "estimated": false,
           "current": true
@@ -1155,7 +1203,8 @@
     "notes": [
       "Es PHEV y el usuario no tiene carga en casa: no puede aprovechar el enchufe.",
       "Solo entra en presupuesto como seminuevo (43.900-45.900 € con ~18.000 km); nuevo cuesta ~52.900 €.",
-      "Despublicado el 2026-08-08: fuera de presupuesto/rango."
+      "Despublicado el 2026-08-08: fuera de presupuesto/rango.",
+      "Espacio de piernas atrás: km77 publica un rango 76-62 cm porque la segunda fila es deslizante; desde `product/0040` se declara el **máximo** —lo que el banco puede llegar a dar—, marcado como ajustable para que la ficha lo enseñe. El mínimo anterior queda como fuente descartada. La anchura de hombros se corrige a 141 cm —«Anchura hombros máxima» de km77— el 2026-09-06, confirmado por el usuario; el valor anterior (138 cm, sin fila identificada) queda como fuente descartada."
     ],
     "lengthMm": {
       "value": 4500,
@@ -1205,13 +1254,40 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 760,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 62 cm, https://www.km77.com/coches/bmw/x1/2023/estandar/e/x1-xdrive25e/mediciones-propias/detalle",
+          "value": 620,
+          "estimated": false,
+          "current": false,
+          "discardedReason": "Era el mínimo del rango 76-62 cm que publica la fuente por banqueta deslizante. `product/0040` declara el máximo: comparar el peor caso de un banco móvil contra el único caso de un banco fijo no compara lo mismo."
+        },
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 76-62 cm —banqueta deslizante—; se declara el máximo, 76 cm (product/0040), https://www.km77.com/coches/bmw/x1/2023/estandar/e/x1-xdrive25e/mediciones-propias/detalle",
+          "value": 760,
+          "estimated": false,
+          "adjustable": true,
+          "current": true
+        }
+      ]
+    },
     "rearShoulderWidthMm": {
-      "value": 1380,
+      "value": 1410,
       "unit": "mm",
       "sources": [
         {
           "label": "km77, mediciones propias — xDrive25e (agosto 2026): 138 cm a la altura de los hombros, https://www.km77.com/coches/bmw/x1/2023/estandar/e/x1-xdrive25e/mediciones-propias/detalle",
           "value": 1380,
+          "estimated": false,
+          "current": false,
+          "discardedReason": "La etiqueta no identificaba si el dato era la fila «mínima» o «máxima» de km77; la ficha vigente en septiembre de 2026 da 141 cm como «Anchura hombros máxima», confirmado por el usuario (2026-09-06)."
+        },
+        {
+          "label": "km77, mediciones propias — xDrive25e (septiembre 2026): «Anchura hombros máxima» 141 cm, https://www.km77.com/coches/bmw/x1/2023/estandar/e/x1-xdrive25e/mediciones-propias/detalle",
+          "value": 1410,
           "estimated": false,
           "current": true
         }
@@ -1288,6 +1364,18 @@
         }
       ],
       "unit": "l/100km"
+    },
+    "sustainedConsumption": {
+      "value": 6.0,
+      "unit": "l/100km",
+      "sources": [
+        {
+          "label": "ADAC (adac.de), ficha «BMW X1 xDrive25e xLine Steptronic (DKG) (11/23 - 10/25)», datos del fabricante (septiembre 2026): «Verbrauch kombiniert (WLTP) PHEV (Batterie leer)» 6,0 l/100 km — consumo WLTP en modo sostenido, distinto del combinado ponderado (0,8 l/100 km); misma autonomía eléctrica (83 km) y misma capacidad de batería bruta (16,3 kWh) que declara el catálogo, https://www.adac.de/rund-ums-fahrzeug/autokatalog/marken-modelle/bmw/x1/u11/330732/",
+          "value": 6.0,
+          "estimated": false,
+          "current": true
+        }
+      ]
     },
     "electricRangeKm": {
       "value": 83,
@@ -1473,6 +1561,18 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 700,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 70 cm, https://www.km77.com/coches/alfa-romeo/tonale/2022/estandar/mediciones-propias/detalle",
+          "value": 700,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 11.6,
       "unit": "m",
@@ -1490,7 +1590,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — ficha estandar del modelo (agosto 2026): 137 cm a la altura de los hombros, https://www.km77.com/coches/alfa-romeo/tonale/2022/estandar/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — ficha estandar del modelo (agosto 2026): «Anchura hombros máxima» 137 cm, https://www.km77.com/coches/alfa-romeo/tonale/2022/estandar/mediciones-propias/detalle",
           "value": 1370,
           "estimated": false,
           "current": true
@@ -1745,6 +1845,18 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 770,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 77 cm, https://www.km77.com/coches/kia/sportage/2022/estandar/hev/mediciones-propias",
+          "value": 770,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 10.92,
       "unit": "m",
@@ -1762,7 +1874,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — ficha HEV del modelo (agosto 2026): 139 cm a la altura de los hombros, https://www.km77.com/coches/kia/sportage/2022/estandar/hev/mediciones-propias",
+          "label": "km77, mediciones propias — ficha HEV del modelo (agosto 2026): «Anchura hombros máxima» 139 cm, https://www.km77.com/coches/kia/sportage/2022/estandar/hev/mediciones-propias",
           "value": 1390,
           "estimated": false,
           "current": true
@@ -2009,6 +2121,18 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 750,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 75 cm, https://www.km77.com/coches/honda/civic/2023/5-puertas/hev/civic-ehev-advance/mediciones-propias/detalle",
+          "value": 750,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 11.6,
       "unit": "m",
@@ -2026,7 +2150,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — e:HEV Advance (agosto 2026): 142 cm a la altura de los hombros, https://www.km77.com/coches/honda/civic/2023/5-puertas/hev/civic-ehev-advance/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — e:HEV Advance (agosto 2026): «Anchura hombros máxima» 142 cm, https://www.km77.com/coches/honda/civic/2023/5-puertas/hev/civic-ehev-advance/mediciones-propias/detalle",
           "value": 1420,
           "estimated": false,
           "current": true
@@ -2275,6 +2399,18 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 780,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 78 cm, https://www.km77.com/coches/lexus/nx/2022/estandar/hev/nx-350h-4wd-business/mediciones-propias/detalle",
+          "value": 780,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 11.6,
       "unit": "m",
@@ -2292,7 +2428,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — 350h 4WD Business (agosto 2026): 138 cm a la altura de los hombros, https://www.km77.com/coches/lexus/nx/2022/estandar/hev/nx-350h-4wd-business/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — 350h 4WD Business (agosto 2026): «Anchura hombros máxima» 138 cm, https://www.km77.com/coches/lexus/nx/2022/estandar/hev/nx-350h-4wd-business/mediciones-propias/detalle",
           "value": 1380,
           "estimated": false,
           "current": true
@@ -2566,12 +2702,24 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 720,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 72 cm, https://www.km77.com/coches/mazda/cx-5/2022/estandar/estandar/cx-5-20-e-skyactiv-g-mhev-121-kw-165-cv-2wd-takumi/mediciones-propias/detalle",
+          "value": 720,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "rearShoulderWidthMm": {
       "value": 1390,
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — 2.0 e-SKYACTIV G MHEV 165 CV 2WD Takumi (agosto 2026): 139 cm a la altura de los hombros, https://www.km77.com/coches/mazda/cx-5/2022/estandar/estandar/cx-5-20-e-skyactiv-g-mhev-121-kw-165-cv-2wd-takumi/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — 2.0 e-SKYACTIV G MHEV 165 CV 2WD Takumi (agosto 2026): «Anchura hombros máxima» 139 cm, https://www.km77.com/coches/mazda/cx-5/2022/estandar/estandar/cx-5-20-e-skyactiv-g-mhev-121-kw-165-cv-2wd-takumi/mediciones-propias/detalle",
           "value": 1390,
           "estimated": false,
           "current": true
@@ -2843,6 +2991,18 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 780,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 78 cm, https://www.km77.com/coches/honda/cr-v/2024/estandar/hev/cr-v-elegance-full-hybrid-4x4/mediciones-propias/detalle",
+          "value": 780,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 11,
       "unit": "m",
@@ -2860,7 +3020,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — Full Hybrid 4x4 (agosto 2026): 142 cm a la altura de los hombros, https://www.km77.com/coches/honda/cr-v/2024/estandar/hev/cr-v-elegance-full-hybrid-4x4/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — Full Hybrid 4x4 (agosto 2026): «Anchura hombros máxima» 142 cm, https://www.km77.com/coches/honda/cr-v/2024/estandar/hev/cr-v-elegance-full-hybrid-4x4/mediciones-propias/detalle",
           "value": 1420,
           "estimated": false,
           "current": true
@@ -3139,12 +3299,24 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 780,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 78 cm, https://www.km77.com/coches/volkswagen/id4/2021/estandar/mediciones-propias",
+          "value": 780,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "rearShoulderWidthMm": {
       "value": 1370,
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — ID.4 estándar (agosto 2026): 137 cm a la altura de los hombros, https://www.km77.com/coches/volkswagen/id4/2021/estandar/mediciones-propias",
+          "label": "km77, mediciones propias — ID.4 estándar (agosto 2026): «Anchura hombros mínima» 137 cm, https://www.km77.com/coches/volkswagen/id4/2021/estandar/mediciones-propias",
           "value": 1370,
           "estimated": false,
           "current": true
@@ -3396,8 +3568,10 @@
       }
     },
     "notes": [
-      "Versión GT-Line (81,4 kWh, 217 CV, tracción delantera), el acabado superior de la gama — motor.es y km77, agosto 2026. El precio es el PVP de catálogo sin descuentos, para no mezclarlo con precios ya rebajados de otros modelos: km77 declara aparte un descuento oficial de fábrica de 1.634 €, que llevaría el precio a 51.437 €. Supera el presupuesto de referencia (47.000 €).",
-      "Sin foto de lateral estricto ni de maletero: no se ha encontrado en Wikimedia Commons un perfil cercano a 90º ni una vista con el portón abierto para este modelo.",
+      "Versión Earth (81,4 kWh, 217 CV, tracción delantera), el acabado intermedio de la gama —Air, Earth y GT-Line comparten motor y batería, y se diferencian en equipamiento y en la llanta: 18\" en Air y Earth, 19\" en GT-Line—, elegida por el usuario el 2026-09-13 en lugar del GT-Line que el catálogo declaraba antes, para comparar el EV5 en un acabado equiparable al del resto del catálogo. La llanta de 18\" es también la que homologa la autonomía larga: 530 km y 16,9 kWh/100 km, frente a 505 km y 17,8 kWh/100 km del GT-Line. El precio es el PVP de catálogo sin descuentos, para no mezclarlo con precios ya rebajados de otros modelos: km77 declara aparte un descuento oficial de fábrica de 1.634 €, que llevaría el precio a 45.937 €. Roza el presupuesto de referencia (47.000 €).",
+      "Las cuatro fotos son de unidades del acabado GT-Line, no del Earth que puntúa la ficha: no hay fotos verificables del Earth europeo en los orígenes que admite product/0016 —Wikimedia Commons solo tiene unidades GT-Line o encuadres de 3/4 que no valen como frontal ni trasera estricta, y la galería comercial de Kia está publicada entera en GT-Line—. Decisión del usuario (2026-09-13) al cambiar el acabado: se mantienen las fotos y se declara la discrepancia en cada `shows`, en vez de vaciar las vistas de exterior. Por tanto las dos notas de estética están emitidas sobre el GT-Line. Queda como deuda en docs/roadmap.md.",
+      "Sobre el precio: km77 es la fuente que declara aparte el descuento oficial, y su tarifa de 02/2026 da 47.571 € para el Earth (45.937 € + 1.634 €). La prensa publica 47.570 € de PVP para ese mismo acabado (es.motor1.com, febrero de 2026), así que la cifra cuadra al euro. motor.es publica 46.808 €, 763 € menos, y la misma diferencia de 763 € aparece en los tres acabados de la gama, así que no es un precio distinto del Earth sino otro criterio de tarifa; se mantiene el de km77, que es el que ya usaban el resto de fichas.",
+      "Sin foto de maletero: no se ha encontrado una vista con el portón abierto para este modelo. El lateral sí está cubierto, con la foto de estudio de la web comercial de Kia Europa.",
       "Mantenimiento anual estimado por el rango genérico de un eléctrico en España (150-300 €/año), no por un coste de revisión desglosado del modelo.",
       "Valor residual a 5 años estimado por comparación con otros eléctricos del catálogo: el EV5 se lanzó en 2025 y no tiene todavía histórico real de mercado de segunda mano a ese horizonte."
     ],
@@ -3449,12 +3623,24 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 770,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 77 cm, https://www.km77.com/coches/kia/ev5/2025/mediciones-propias/detalle",
+          "value": 770,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 11.72,
       "unit": "m",
       "sources": [
         {
-          "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV (agosto 2026): «Diámetro de giro entre bordillos» 11,72 m, https://www.km77.com/coches/kia/ev5/2025/estandar/estandar/ev5-gt-line-81-kwh-long-range-160-kw-217-cv/datos",
+          "label": "km77, ficha EV5 Earth 81 kWh Long Range 217 CV (septiembre 2026, tarifa de 02/2026): «Diámetro de giro entre bordillos» 11,72 m, https://www.km77.com/coches/kia/ev5/2025/estandar/estandar/ev5-earth-81-kwh-long-range-160-kw-217-cv/datos",
           "value": 11.72,
           "estimated": false,
           "current": true
@@ -3466,7 +3652,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — KIA EV5 (agosto 2026): 140 cm de anchura de hombros en la 2ª fila, https://www.km77.com/coches/kia/ev5/2025/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — KIA EV5 (agosto 2026): «Anchura hombros máxima» 140 cm, https://www.km77.com/coches/kia/ev5/2025/mediciones-propias/detalle",
           "value": 1400,
           "estimated": false,
           "current": true
@@ -3478,7 +3664,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV (agosto 2026)",
+          "label": "km77, ficha EV5 Earth 81 kWh Long Range 217 CV (septiembre 2026, tarifa de 02/2026): «Altura libre» 167 mm, https://www.km77.com/coches/kia/ev5/2025/estandar/estandar/ev5-earth-81-kwh-long-range-160-kw-217-cv/datos",
           "value": 167,
           "estimated": false,
           "current": true
@@ -3502,7 +3688,7 @@
       "unit": "CV",
       "sources": [
         {
-          "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV (agosto 2026)",
+          "label": "km77, ficha EV5 Earth 81 kWh Long Range 217 CV (septiembre 2026, tarifa de 02/2026)",
           "value": 217,
           "estimated": false,
           "current": true
@@ -3514,7 +3700,7 @@
       "unit": "kg",
       "sources": [
         {
-          "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV (agosto 2026)",
+          "label": "km77, ficha EV5 Earth 81 kWh Long Range 217 CV (septiembre 2026, tarifa de 02/2026): «Peso» 2.069 kg, https://www.km77.com/coches/kia/ev5/2025/estandar/estandar/ev5-earth-81-kwh-long-range-160-kw-217-cv/datos",
           "value": 2069,
           "estimated": false,
           "current": true
@@ -3526,7 +3712,7 @@
       "unit": "s",
       "sources": [
         {
-          "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV (agosto 2026)",
+          "label": "km77, ficha EV5 Earth 81 kWh Long Range 217 CV (septiembre 2026, tarifa de 02/2026): «Aceleración 0-100 km/h» 8,4 s, https://www.km77.com/coches/kia/ev5/2025/estandar/estandar/ev5-earth-81-kwh-long-range-160-kw-217-cv/datos",
           "value": 8.4,
           "estimated": false,
           "current": true
@@ -3534,23 +3720,23 @@
       ]
     },
     "consumption": {
-      "value": 17.8,
+      "value": 16.9,
       "unit": "kWh/100km",
       "sources": [
         {
-          "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV, consumo WLTP combinado (agosto 2026)",
-          "value": 17.8,
+          "label": "km77, ficha EV5 Earth 81 kWh Long Range 217 CV (septiembre 2026, tarifa de 02/2026): «Consumo WLTP combinado batería cargada» 16,9 kWh/100 km, https://www.km77.com/coches/kia/ev5/2025/estandar/estandar/ev5-earth-81-kwh-long-range-160-kw-217-cv/datos",
+          "value": 16.9,
           "estimated": false,
           "current": true
         }
       ]
     },
     "electricRangeKm": {
-      "value": 505,
+      "value": 530,
       "sources": [
         {
-          "label": "km77, ficha EV5 GT-Line 81 kWh Long Range 217 CV (agosto 2026): «Autonomía eléctrica WLTP» 505 km, https://www.km77.com/coches/kia/ev5/2025/estandar/estandar/ev5-gt-line-81-kwh-long-range-160-kw-217-cv/datos",
-          "value": 505,
+          "label": "km77, ficha EV5 Earth 81 kWh Long Range 217 CV (septiembre 2026, tarifa de 02/2026): «Autonomía eléctrica WLTP» 530 km, https://www.km77.com/coches/kia/ev5/2025/estandar/estandar/ev5-earth-81-kwh-long-range-160-kw-217-cv/datos",
+          "value": 530,
           "estimated": false,
           "current": true
         }
@@ -3561,7 +3747,7 @@
       "value": 81.4,
       "sources": [
         {
-          "label": "km77, ficha EV5 GT-Line 81 kWh Long Range 217 CV (agosto 2026): «Capacidad» 81,4 kWh, https://www.km77.com/coches/kia/ev5/2025/estandar/estandar/ev5-gt-line-81-kwh-long-range-160-kw-217-cv/datos",
+          "label": "km77, ficha EV5 Earth 81 kWh Long Range 217 CV (septiembre 2026, tarifa de 02/2026): «Capacidad» 81,4 kWh, https://www.km77.com/coches/kia/ev5/2025/estandar/estandar/ev5-earth-81-kwh-long-range-160-kw-217-cv/datos",
           "value": 81.4,
           "estimated": false,
           "current": true
@@ -3582,19 +3768,19 @@
       ]
     },
     "priceEur": {
-      "value": 53071,
+      "value": 47571,
       "unit": "€",
       "sources": [
         {
-          "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV, PVP con descuento oficial (agosto 2026)",
-          "value": 51437,
+          "label": "km77, ficha EV5 Earth 81 kWh Long Range 217 CV, PVP con descuento oficial (septiembre 2026, tarifa de 02/2026): 45.937 €, https://www.km77.com/coches/kia/ev5/2025/estandar/estandar/ev5-earth-81-kwh-long-range-160-kw-217-cv/datos",
+          "value": 45937,
           "estimated": false,
           "current": false,
           "discardedReason": "PVP con el descuento oficial de fábrica (1.634 €) ya aplicado; el catálogo registra el PVP de catálogo sin descuentos para poder comparar precios de forma homogénea entre modelos"
         },
         {
-          "label": "km77, ficha EV5 GT-Line 81 kWh 217 CV, PVP sin descuento (agosto 2026)",
-          "value": 53071,
+          "label": "km77, ficha EV5 Earth 81 kWh Long Range 217 CV, PVP sin descuento (septiembre 2026, tarifa de 02/2026): 45.937 € + 1.634 € de descuento oficial = 47.571 €, https://www.km77.com/coches/kia/ev5/2025/estandar/estandar/ev5-earth-81-kwh-long-range-160-kw-217-cv/datos",
+          "value": 47571,
           "estimated": false,
           "current": true
         }
@@ -3646,22 +3832,22 @@
       "front": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Kia_EV5_GT-Line_IAA_2025_DSC_2079.jpg/1280px-Kia_EV5_GT-Line_IAA_2025_DSC_2079.jpg",
         "credit": "Wikimedia Commons — Alexander Migl (CC BY-SA 4.0)",
-        "shows": "Kia EV5 GT-Line, gris oscuro, IAA Mobility 2025 (Múnich) — foto de salón"
+        "shows": "Kia EV5 GT-Line, gris oscuro, IAA Mobility 2025 (Múnich) — foto de salón. ATENCIÓN: la unidad es del acabado GT-Line, no del Earth que puntúa la ficha; se diferencian en la llanta (19\" en el GT-Line, 18\" en el Earth) y en los detalles específicos GT-Line del paragolpes"
       },
       "rear": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Kia_EV5_GT-Line_IAA_2025_DSC_2077.jpg/1280px-Kia_EV5_GT-Line_IAA_2025_DSC_2077.jpg",
         "credit": "Wikimedia Commons — Alexander Migl (CC BY-SA 4.0)",
-        "shows": "Kia EV5 GT-Line, gris oscuro, IAA Mobility 2025 (Múnich) — foto de salón, portón cerrado, rótulo «EV5 GT-Line» visible"
+        "shows": "Kia EV5 GT-Line, gris oscuro, IAA Mobility 2025 (Múnich) — foto de salón, portón cerrado, rótulo «EV5 GT-Line» visible. ATENCIÓN: la unidad es del acabado GT-Line, no del Earth que puntúa la ficha"
       },
       "side": {
         "url": "https://www.kia.com/content/dam/kwcms/kme/global/en/assets/vehicles/ev5/my26-presales/gallery/ev5-presales-6d-m.jpg",
         "credit": "Kia — kia.com/eu (web comercial oficial, galería EV5 GT-Line)",
-        "shows": "Kia EV5 GT-Line, gris plata metalizado (más claro que el gris oscuro de front/rear), estudio — vista lateral estricta, foto oficial de la web comercial de Kia Europa"
+        "shows": "Kia EV5 GT-Line, gris plata metalizado (más claro que el gris oscuro de front/rear), estudio — vista lateral estricta, foto oficial de la web comercial de Kia Europa. ATENCIÓN: la unidad es del acabado GT-Line, no del Earth que puntúa la ficha; la llanta que se ve es la de 19\" del GT-Line, no la de 18\" del Earth"
       },
       "interior": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Kia_EV5_GT-Line_IAA_2025_DSC_2420.jpg/1280px-Kia_EV5_GT-Line_IAA_2025_DSC_2420.jpg",
         "credit": "Wikimedia Commons — Alexander Migl (CC BY-SA 4.0)",
-        "shows": "Kia EV5 GT-Line, volante, pantallas y consola central — foto de salón, IAA Mobility 2025"
+        "shows": "Kia EV5 GT-Line, volante, pantallas y consola central — foto de salón, IAA Mobility 2025. ATENCIÓN: la unidad es del acabado GT-Line, no del Earth que puntúa la ficha"
       }
     }
   },
@@ -3751,6 +3937,18 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 770,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 77 cm, https://www.km77.com/coches/hyundai/ioniq-5/2021/estandar/estandar/ioniq-5-218-cv-bateria-74-kwh-rwd-light/mediciones-propias/detalle",
+          "value": 770,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 11.8,
       "unit": "m",
@@ -3768,7 +3966,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — IONIQ 5 Light RWD (agosto 2026): 146 cm de anchura de hombros en la 2ª fila, https://www.km77.com/coches/hyundai/ioniq-5/2021/estandar/estandar/ioniq-5-218-cv-bateria-74-kwh-rwd-light/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — IONIQ 5 Light RWD (agosto 2026): «Anchura hombros máxima» 146 cm, https://www.km77.com/coches/hyundai/ioniq-5/2021/estandar/estandar/ioniq-5-218-cv-bateria-74-kwh-rwd-light/mediciones-propias/detalle",
           "value": 1460,
           "estimated": false,
           "current": true
@@ -4044,6 +4242,18 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 770,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 77 cm, https://www.km77.com/coches/hyundai/tucson/2024/mediciones-propias/detalle",
+          "value": 770,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 11,
       "unit": "m",
@@ -4061,7 +4271,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — Hyundai Tucson (agosto 2026): 139 cm de anchura de hombros en la 2ª fila, https://www.km77.com/coches/hyundai/tucson/2024/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — Hyundai Tucson (agosto 2026): «Anchura hombros máxima» 139 cm, https://www.km77.com/coches/hyundai/tucson/2024/mediciones-propias/detalle",
           "value": 1390,
           "estimated": false,
           "current": true
@@ -4332,6 +4542,18 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 770,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 77 cm, https://www.km77.com/coches/hyundai/tucson/2024/mediciones-propias/detalle",
+          "value": 770,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 11,
       "unit": "m",
@@ -4349,7 +4571,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — Hyundai Tucson (agosto 2026): 139 cm de anchura de hombros en la 2ª fila, misma carrocería que el HEV, https://www.km77.com/coches/hyundai/tucson/2024/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — Hyundai Tucson (agosto 2026): «Anchura hombros máxima» 139 cm, https://www.km77.com/coches/hyundai/tucson/2024/mediciones-propias/detalle",
           "value": 1390,
           "estimated": false,
           "current": true
@@ -4423,6 +4645,18 @@
         {
           "label": "km77, ficha Tucson Klass 1.6 T-GDi PHEV 288 CV, consumo WLTP combinado (agosto 2026)",
           "value": 2.7,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "sustainedConsumption": {
+      "value": 6.0,
+      "unit": "l/100km",
+      "sources": [
+        {
+          "label": "ADAC (adac.de), ficha «Hyundai Tucson 1.6 T-GDI PHEV Select Automatik (ab 11/25)», datos del fabricante (septiembre 2026): «Verbrauch kombiniert (WLTP) PHEV (Batterie leer)» 6,0 l/100 km — consumo WLTP en modo sostenido, distinto del combinado ponderado (2,7 l/100 km) que ya declara «consumption»; misma autonomía eléctrica (70 km) y misma batería (13,8 kWh) que la versión Klass 288 CV que compara el catálogo, https://www.adac.de/rund-ums-fahrzeug/autokatalog/marken-modelle/hyundai/tucson/3generation-facelift/346749/",
+          "value": 6.0,
           "estimated": false,
           "current": true
         }
@@ -4621,6 +4855,18 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 740,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 74 cm, https://www.km77.com/coches/citroen/c5-aircross/2026/estandar/mediciones-propias/detalle",
+          "value": 740,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 10.9,
       "unit": "m",
@@ -4638,7 +4884,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — C5 Aircross (2026) (agosto 2026): 142 cm a la altura de los hombros en la segunda fila, https://www.km77.com/coches/citroen/c5-aircross/2026/estandar/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — C5 Aircross (2026) (agosto 2026): «Anchura hombros máxima» 142 cm, https://www.km77.com/coches/citroen/c5-aircross/2026/estandar/mediciones-propias/detalle",
           "value": 1420,
           "estimated": false,
           "current": true
@@ -4887,6 +5133,18 @@
         }
       ]
     },
+    "rearLegroomMm": {
+      "value": 690,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 69 cm, https://www.km77.com/coches/jeep/compass/2025/estandar/mediciones-propias/detalle",
+          "value": 690,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 10.8,
       "unit": "m",
@@ -4904,7 +5162,7 @@
       "unit": "mm",
       "sources": [
         {
-          "label": "km77, mediciones propias — Jeep Compass (2025) (agosto 2026): 142 cm a la altura de los hombros en la segunda fila, https://www.km77.com/coches/jeep/compass/2025/estandar/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — Jeep Compass (2025) (agosto 2026): «Anchura hombros máxima» 142 cm, https://www.km77.com/coches/jeep/compass/2025/estandar/mediciones-propias/detalle",
           "value": 1420,
           "estimated": false,
           "current": true
@@ -5182,6 +5440,18 @@
       ],
       "unit": "mm"
     },
+    "rearLegroomMm": {
+      "value": 720,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 72 cm, https://www.km77.com/coches/nissan/qashqai/2024/estandar/mediciones-propias/detalle",
+          "value": 720,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 11.1,
       "unit": "m",
@@ -5198,7 +5468,7 @@
       "value": 1380,
       "sources": [
         {
-          "label": "km77, mediciones propias — Nissan Qashqai (2024), unidad e-POWER 140 kW (190 CV) N-Design (agosto 2026): 138 cm de anchura de hombros en la segunda fila, https://www.km77.com/coches/nissan/qashqai/2024/estandar/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — Nissan Qashqai (2024), unidad e-POWER 140 kW (190 CV) N-Design (agosto 2026): «Anchura hombros máxima» 138 cm, https://www.km77.com/coches/nissan/qashqai/2024/estandar/mediciones-propias/detalle",
           "value": 1380,
           "estimated": false,
           "current": true
@@ -5453,7 +5723,8 @@
       "Anchura de hombros: km77 publica 139 cm como «anchura de hombros máxima» de la segunda fila. El Qashqai de este mismo alta lleva la suya declarada como mínima, así que las dos cifras no son estrictamente comparables entre sí — es la deuda de hombros mínimos mezclados con máximos que ya arrastra el catálogo.",
       "Mantenimiento anual estimado a partir de la tarifa oficial de contratos de Nissan España: el contrato de mantenimiento anual de 3 años del X-Trail (T33) cuesta 795 €, es decir 265 € al año. No es un coste anual desglosado por revisión.",
       "Faltan las fotos de maletero: ni Wikimedia Commons, ni la sala de prensa de Nissan España, ni la web comercial de nissan.es publican el portón abierto y vacío del X-Trail 2026.",
-      "Las fotos de frontal, lateral y trasera son los renders oficiales del configurador de nissan.es en acabado Tekna, no en el N-Connecta que puntúa la ficha. Wikimedia Commons solo tiene unidades anteriores al retoque de 2026, que cambia justo la parrilla y los pilotos, así que no servían para estas vistas."
+      "Las fotos de frontal, lateral y trasera son los renders oficiales del configurador de nissan.es en acabado Tekna, no en el N-Connecta que puntúa la ficha. Wikimedia Commons solo tiene unidades anteriores al retoque de 2026, que cambia justo la parrilla y los pilotos, así que no servían para estas vistas.",
+      "Espacio de piernas atrás: km77 publica un rango 77-56 cm porque la segunda fila es deslizante; desde `product/0040` se declara el **máximo** —lo que el banco puede llegar a dar—, marcado como ajustable para que la ficha lo enseñe. El mínimo anterior queda como fuente descartada."
     ],
     "lengthMm": {
       "value": 4680,
@@ -5503,6 +5774,26 @@
       ],
       "unit": "mm"
     },
+    "rearLegroomMm": {
+      "value": 770,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 56 cm, https://www.km77.com/coches/nissan/x-trail/2026/estandar/mediciones-propias/detalle",
+          "value": 560,
+          "estimated": false,
+          "current": false,
+          "discardedReason": "Era el mínimo del rango 77-56 cm que publica la fuente por banqueta deslizante. `product/0040` declara el máximo: comparar el peor caso de un banco móvil contra el único caso de un banco fijo no compara lo mismo."
+        },
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 77-56 cm —banqueta deslizante—; se declara el máximo, 77 cm (product/0040), https://www.km77.com/coches/nissan/x-trail/2026/estandar/mediciones-propias/detalle",
+          "value": 770,
+          "estimated": false,
+          "adjustable": true,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 11.1,
       "unit": "m",
@@ -5519,7 +5810,7 @@
       "value": 1390,
       "sources": [
         {
-          "label": "km77, mediciones propias — Nissan X-Trail (2026) (agosto 2026): 139 cm de anchura de hombros máxima en la segunda fila, https://www.km77.com/coches/nissan/x-trail/2026/estandar/mediciones-propias/detalle",
+          "label": "km77, mediciones propias — Nissan X-Trail (2026) (agosto 2026): «Anchura hombros máxima» 139 cm, https://www.km77.com/coches/nissan/x-trail/2026/estandar/mediciones-propias/detalle",
           "value": 1390,
           "estimated": false,
           "current": true
@@ -5816,6 +6107,18 @@
       ],
       "unit": "mm"
     },
+    "rearLegroomMm": {
+      "value": 740,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 74 cm, https://www.km77.com/coches/honda/zr-v/2023/estandar/mediciones-propias/detalle",
+          "value": 740,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
     "turningCircleM": {
       "value": 11,
       "sources": [
@@ -6046,6 +6349,259 @@
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Honda_ZR-V_e-HEV_Auto_Zuerich_2023_1X7A1218.jpg/1280px-Honda_ZR-V_e-HEV_Auto_Zuerich_2023_1X7A1218.jpg",
         "credit": "Wikimedia Commons — Alexander-93",
         "shows": "Honda ZR-V e:HEV expuesto en el Auto Zürich 2023, salpicadero y volante en negro — acabado no confirmado, puede no ser el Advance que puntúa la ficha. Usada con conformidad expresa del usuario para la valoración de interior pese a esa incertidumbre."
+      }
+    }
+  },
+  {
+    "id": "volkswagen-touran",
+    "name": "Touran",
+    "brand": "Volkswagen",
+    "technology": "ICE",
+    "generation": {
+      "launchYear": {
+        "value": 2015,
+        "sources": [
+          {
+            "label": "Wikipedia (septiembre 2026), «Volkswagen Touran»: la generación 5T se presentó en el Salón de Ginebra de 2015 —«introduced at the 2015 Geneva Motor Show»—, https://en.wikipedia.org/wiki/Volkswagen_Touran",
+            "value": 2015,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "code": "5T"
+    },
+    "notes": [
+      "Versión puntuada: Touran Más 1.5 TSI 110 kW (150 CV) DSG 7 vel. 5 plazas (km77, septiembre 2026). Se pidió el acabado Life, que hoy no se ofrece con cambio DSG en la gama española: Más es el acabado de volumen y el más barato con DSG, y es el que se ha dado de alta, decisión confirmada por el usuario.",
+      "Cinco plazas, sin tercera fila: el maletero declarado (743 L) es el de esta carrocería con los asientos en uso, comparable con el resto del catálogo. La variante de siete plazas del mismo acabado cuesta 710 € más y declara 633 L con la tercera fila plegada y 137 L con las tres filas en uso.",
+      "Primer registro `ICE` del catálogo: la gama del Touran es 100 % térmica —etiqueta C de la DGT, sin versión MHEV, HEV, PHEV ni EV—, así que no declara autonomía eléctrica ni batería de tracción, que `CarSchema` prohíbe en un `ICE`.",
+      "Espacio de piernas atrás con banqueta deslizante: km77 publica el rango 55-75 cm y se declara el máximo, 75 cm (product/0040); la fuente queda marcada con `adjustable`.",
+      "Sin diámetro de giro entre bordillos: km77 y la ficha comercial de Volkswagen solo publican el diámetro entre paredes (11,5 m), que es otra medida y no se usa (product/0032).",
+      "Sin carga máxima en techo: no se ha encontrado documentación técnica de Volkswagen que la publique. Las capacidades de 70-100 kg que anuncian las barras de accesorio son un dato del accesorio, no del coche (product/0034).",
+      "Sin `faceliftYear`: la generación 5T no ha recibido un retoque de mitad de ciclo documentado —los cambios de 2019, 2020 y 2025 son de gama, mecánicas y equipamiento, no de carrocería—, así que se omite el campo en vez de fechar un retoque que no existe.",
+      "Mantenimiento anual estimado: media de una revisión completa (~325 €) y un cambio de aceite (~110 €) en años alternos con el intervalo de 15.000 km/1 año que publica garajo.es, no una tarifa oficial de Volkswagen España.",
+      "Sin valor residual a 5 años: no se ha encontrado fuente específica del modelo en España.",
+      "Sin fotos frontal, trasera ni de maletero: en la sala de prensa de Volkswagen y en Wikimedia Commons solo hay tres cuartos delanteros y traseros de esta generación, y el requisito 3 de product/0014 exige frontal y trasera rectas. El lateral y el interior sí son fotos oficiales de la sala de prensa.",
+      "Las mediciones propias de km77 (espacio de piernas y anchura de hombros) se tomaron sobre un Touran Sport 2.0 TDI 150 CV de 7 plazas: misma carrocería y misma generación 5T que la versión puntuada, distinta motorización."
+    ],
+    "published": true,
+    "lengthMm": {
+      "value": 4527,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha Touran Más 1.5 TSI 110 kW (150 CV) DSG 7 vel. 5 plazas (septiembre 2026), https://www.km77.com/coches/volkswagen/touran/2016/estandar/estandar/touran-mas-15-tsi-110-kw-150-cv-dsg-7-vel-5-plazas/datos",
+          "value": 4527,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "widthMm": {
+      "value": 1829,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha Touran Más 1.5 TSI 110 kW (150 CV) DSG 7 vel. 5 plazas (septiembre 2026), https://www.km77.com/coches/volkswagen/touran/2016/estandar/estandar/touran-mas-15-tsi-110-kw-150-cv-dsg-7-vel-5-plazas/datos",
+          "value": 1829,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "heightMm": {
+      "value": 1659,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha Touran Más 1.5 TSI 110 kW (150 CV) DSG 7 vel. 5 plazas (septiembre 2026), https://www.km77.com/coches/volkswagen/touran/2016/estandar/estandar/touran-mas-15-tsi-110-kw-150-cv-dsg-7-vel-5-plazas/datos",
+          "value": 1659,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "wheelbaseMm": {
+      "value": 2791,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha Touran Más 1.5 TSI 110 kW (150 CV) DSG 7 vel. 5 plazas (septiembre 2026), https://www.km77.com/coches/volkswagen/touran/2016/estandar/estandar/touran-mas-15-tsi-110-kw-150-cv-dsg-7-vel-5-plazas/datos",
+          "value": 2791,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearLegroomMm": {
+      "value": 750,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Distancia del respaldo al respaldo delantero» 55-75 cm —banqueta deslizante—; se declara el máximo, 75 cm (product/0040), https://www.km77.com/coches/volkswagen/touran/2016/estandar/mediciones-propias/detalle",
+          "value": 750,
+          "estimated": false,
+          "adjustable": true,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1420,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias (septiembre 2026): «Anchura hombros máxima» 142 cm en la segunda fila —km77 no publica la mínima para este modelo—, https://www.km77.com/coches/volkswagen/touran/2016/estandar/mediciones-propias/detalle",
+          "value": 1420,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "groundClearanceMm": {
+      "value": 156,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "carwow.es, ficha técnica del Touran (septiembre 2026): «156 mm de altura libre sobre el suelo sin carga»; coincide con los 15,6 cm de ultimatespecs para el 1.5 TSI, https://www.carwow.es/volkswagen/touran/caracteristicas-tecnicas",
+          "value": 156,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "trunkLiters": {
+      "value": 743,
+      "unit": "L",
+      "sources": [
+        {
+          "label": "km77, ficha Touran Más 1.5 TSI 110 kW (150 CV) DSG 7 vel. 5 plazas (septiembre 2026): 743 L con las dos filas en uso; las mediciones propias de km77 dan el rango VDA 633-743 L de la carrocería (633 L es la de 7 plazas con la tercera fila plegada), https://www.km77.com/coches/volkswagen/touran/2016/estandar/estandar/touran-mas-15-tsi-110-kw-150-cv-dsg-7-vel-5-plazas/datos",
+          "value": 743,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "powerCv": {
+      "value": 150,
+      "unit": "CV",
+      "sources": [
+        {
+          "label": "km77, ficha Touran Más 1.5 TSI 110 kW (150 CV) DSG 7 vel. 5 plazas (septiembre 2026), https://www.km77.com/coches/volkswagen/touran/2016/estandar/estandar/touran-mas-15-tsi-110-kw-150-cv-dsg-7-vel-5-plazas/datos",
+          "value": 150,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "weightKg": {
+      "value": 1533,
+      "unit": "kg",
+      "sources": [
+        {
+          "label": "km77, ficha Touran Más 1.5 TSI 110 kW (150 CV) DSG 7 vel. 5 plazas (septiembre 2026): peso en vacío 1.533 kg, https://www.km77.com/coches/volkswagen/touran/2016/estandar/estandar/touran-mas-15-tsi-110-kw-150-cv-dsg-7-vel-5-plazas/datos",
+          "value": 1533,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "acceleration0to100": {
+      "value": 8.9,
+      "unit": "s",
+      "sources": [
+        {
+          "label": "km77, ficha Touran Más 1.5 TSI 110 kW (150 CV) DSG 7 vel. 5 plazas (septiembre 2026), https://www.km77.com/coches/volkswagen/touran/2016/estandar/estandar/touran-mas-15-tsi-110-kw-150-cv-dsg-7-vel-5-plazas/datos",
+          "value": 8.9,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "consumption": {
+      "value": 6.4,
+      "unit": "l/100km",
+      "sources": [
+        {
+          "label": "km77, ficha Touran Más 1.5 TSI 110 kW (150 CV) DSG 7 vel. 5 plazas (septiembre 2026): consumo WLTP combinado 6,4 l/100 km (146 g/km de CO2, etiqueta C), https://www.km77.com/coches/volkswagen/touran/2016/estandar/estandar/touran-mas-15-tsi-110-kw-150-cv-dsg-7-vel-5-plazas/datos",
+          "value": 6.4,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "maintenanceEurYear": {
+      "value": 218,
+      "unit": "€/año",
+      "sources": [
+        {
+          "label": "garajo.es, mantenimiento del Volkswagen Touran (septiembre 2026): revisión completa ~325 € y cambio de aceite ~110 € con intervalo de 15.000 km o 1 año; media anual de años alternos, 218 €, https://garajo.es/mantenimiento/volkswagen/touran",
+          "value": 218,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "priceEur": {
+      "value": 42130,
+      "unit": "€",
+      "sources": [
+        {
+          "label": "km77, ficha Touran Más 1.5 TSI 110 kW (150 CV) DSG 7 vel. 5 plazas (septiembre 2026): 36.925 €, el PVP menos el descuento oficial de 5.205 € que anuncia la misma ficha",
+          "value": 36925,
+          "estimated": false,
+          "current": false,
+          "discardedReason": "incluía un descuento oficial ya restado; el catálogo compara siempre PVP sin descuentos, como se corrigió en el alta del Kia EV5"
+        },
+        {
+          "label": "km77, ficha Touran Más 1.5 TSI 110 kW (150 CV) DSG 7 vel. 5 plazas (septiembre 2026): PVP de catálogo 42.130 €, https://www.km77.com/coches/volkswagen/touran/2016/estandar/estandar/touran-mas-15-tsi-110-kw-150-cv-dsg-7-vel-5-plazas/datos",
+          "value": 42130,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "reliabilityOcu": {
+      "value": 82,
+      "sources": [
+        {
+          "label": "OCU, índice de fiabilidad 2026 — 85.590 encuestas, 39 marcas (vía carwow.es, agosto 2026): índice de marca de Volkswagen, el mismo que ya usa el ID.4",
+          "value": 82,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyYears": {
+      "value": 3,
+      "unit": "años",
+      "sources": [
+        {
+          "label": "Garantía comercial Volkswagen España (septiembre 2026): 3 años sin límite de kilómetros, https://www.volkswagen.es/es/clientes/beneficios-volkswagen/garantia-fabricante.html",
+          "value": 3,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "aestheticsExterior": {
+      "value": 2,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "aestheticsInterior": {
+      "value": 2,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "photos": {
+      "side": {
+        "url": "https://uploads.vw-mms.de/system/production/images/vwn/076/035/images/bab5b03bbae8dbdb5bbedbce257c493b2672b209/DB2023AU00269_web_1600.jpg",
+        "credit": "Volkswagen Newsroom (sala de prensa oficial de Volkswagen AG)",
+        "shows": "Volkswagen Touran (5T), azul claro, lateral estricto a 90º con el coche completo — foto de prensa de la gama 2023, llanta de radios de la gama media (no R-Line)"
+      },
+      "interior": {
+        "url": "https://uploads.vw-mms.de/system/production/images/vwn/076/039/images/dfc11ba749e6acf8391adcb7e057e98c6e8ec36f/DB2023AU00273_web_1600.jpg",
+        "credit": "Volkswagen Newsroom (sala de prensa oficial de Volkswagen AG)",
+        "shows": "Volkswagen Touran (5T), habitáculo delantero con volante a la izquierda, cuadro digital, pantalla central y selector del cambio DSG; tapicería de tela gris oscura — foto de prensa de la gama 2023, no es la misma unidad que el lateral"
       }
     }
   }

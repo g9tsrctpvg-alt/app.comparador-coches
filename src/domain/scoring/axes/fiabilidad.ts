@@ -11,30 +11,34 @@ import {
 // como se publica.
 const OCU_BUENO = 93;
 const OCU_MALO = 64;
-// 7 años (Kia, MG, Omoda, Jaecoo) es el techo real del mercado sin
-// condiciones. El 0 va en 0 años, no en el mínimo legal de 3: quedarse en 3
-// es una estrategia comercial, no una señal de que el coche se rompe.
-const GARANTIA_BUENA_ANIOS = 7;
-const GARANTIA_MALA_ANIOS = 0;
 
 export const FIABILIDAD_FORMULA =
-  'nota = 0,7 × escala(índice OCU) + 0,3 × escala(garantía incondicional). ' +
-  `escala(OCU): 10 desde ${OCU_BUENO}, 0 hasta ${OCU_MALO} — extremos publicados por la OCU. ` +
-  `escala(garantía): 10 desde ${GARANTIA_BUENA_ANIOS} años, 0 en ${GARANTIA_MALA_ANIOS}. ` +
-  'Solo cuentan los años de garantía comercial incondicional: una extensión sujeta ' +
-  'a mantenimiento en red oficial no suma a esta magnitud. El índice OCU es por ' +
-  'marca, no por modelo — es el límite real del eje, y no lo arregla ninguna escala.';
+  `nota = escala(índice OCU): 10 desde ${OCU_BUENO}, 0 hasta ${OCU_MALO} — ` +
+  'extremos publicados por la OCU. El índice OCU es por marca, no por modelo ' +
+  '— es el límite real del eje, y no lo arregla ninguna escala. ' +
+  'Los años de garantía no puntúan (product/0041): son una señal de estrategia ' +
+  'comercial, no de cuánto se avería el coche, y se muestran como información.';
 
-function warrantyExtensionInfo(car: Car): AssumptionEcho[] {
-  if (!car.warrantyExtension) return [];
-  const ext = car.warrantyExtension;
-  const kmPart = ext.kmLimit ? `, hasta ${ext.kmLimit.value} km` : '';
-  return [
+/** Lo que el eje enseña y no puntúa (product/0041, requisito 3): los años de
+ * garantía incondicional siempre, y la extensión condicionada cuando existe.
+ * Los dos reciben el mismo trato porque miden lo mismo —qué debe el
+ * fabricante—, que no es lo que mide este eje. */
+function warrantyInfo(car: Car): AssumptionEcho[] {
+  const info: AssumptionEcho[] = [
     {
-      label: 'Extensión de garantía condicionada (no puntúa)',
-      value: `${ext.years.value} años${kmPart} — ${ext.condition}`,
+      label: 'Garantía incondicional (no puntúa)',
+      value: `${car.warrantyYears.value} años`,
     },
   ];
+  if (car.warrantyExtension) {
+    const ext = car.warrantyExtension;
+    const kmPart = ext.kmLimit ? `, hasta ${ext.kmLimit.value} km` : '';
+    info.push({
+      label: 'Extensión de garantía condicionada (no puntúa)',
+      value: `${ext.years.value} años${kmPart} — ${ext.condition}`,
+    });
+  }
+  return info;
 }
 
 export function buildFiabilidadBreakdown(
@@ -48,24 +52,16 @@ export function buildFiabilidadBreakdown(
       OCU_BUENO,
       OCU_MALO,
     );
-    const warrantyScore = scoreOnAbsoluteScale(
-      car.warrantyYears.value,
-      GARANTIA_BUENA_ANIOS,
-      GARANTIA_MALA_ANIOS,
-    );
-    const rawScore = 0.7 * ocuScore + 0.3 * warrantyScore;
+    const rawScore = ocuScore;
     const score = Math.min(10, Math.max(0, rawScore));
 
     result.set(car.id, {
       axisId: 'fiabilidad',
-      label: 'Fiabilidad y garantía',
+      label: 'Fiabilidad',
       formulaDescription: FIABILIDAD_FORMULA,
-      inputs: [
-        inputDatumFrom('Índice de fiabilidad OCU', car.reliabilityOcu),
-        inputDatumFrom('Años de garantía incondicional', car.warrantyYears),
-      ],
+      inputs: [inputDatumFrom('Índice de fiabilidad OCU', car.reliabilityOcu)],
       assumptionsUsed: [],
-      info: warrantyExtensionInfo(car),
+      info: warrantyInfo(car),
       subcomponents: [
         {
           label: 'Índice OCU',
@@ -75,17 +71,6 @@ export function buildFiabilidadBreakdown(
             goodAnchor: OCU_BUENO,
             badAnchor: OCU_MALO,
             score: ocuScore,
-          },
-        },
-        {
-          label: 'Años de garantía incondicional',
-          rawValue: car.warrantyYears.value,
-          unit: 'años',
-          scale: {
-            value: car.warrantyYears.value,
-            goodAnchor: GARANTIA_BUENA_ANIOS,
-            badAnchor: GARANTIA_MALA_ANIOS,
-            score: warrantyScore,
           },
         },
       ],

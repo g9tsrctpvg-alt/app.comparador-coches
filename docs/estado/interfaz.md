@@ -100,7 +100,8 @@ de colores por debajo de su umbral de contraste hace fallar
   (la pastilla de la barra de la ficha: la misma superficie con el rótulo
   flotando sobre un `<select>` que ocupa el rectángulo entero, para que todo él
   sea objetivo táctil), `proportionBar`/`proportionBarRow`/`proportionBarAxis`
-  con su relleno normal o apagado, `statusMark` y `estimatedMark`,
+  con su relleno normal o apagado, `statusMark`, `estimatedMark` y
+  `adjustableMark`,
   `secondaryText`, `prose` (medida de línea acotada a `--size-line-measure`
   y partición de palabras largas), `visuallyHidden` (texto solo para
   lectores de pantalla), `rangeInput` (deslizador con objetivo táctil de
@@ -237,8 +238,9 @@ antes de esto, las tres páginas repetían literalmente
   Medido sobre el build: los cuatro se distinguen entre sí y del fondo de la
   cabecera.
 - **`AppFooter`** — la procedencia y fecha de los datos («Los precios del
-  catálogo son de julio de 2026…») y la leyenda de la marca de estimado
-  (`<EstimatedMark />`), antes repetidas al pie de cada tabla de la ficha.
+  catálogo son de julio de 2026…») y la leyenda de las dos marcas de la
+  ficha, `<EstimatedMark />` y `<AdjustableMark />` (product/0040), antes
+  repetidas al pie de cada tabla de la ficha.
 
 **Ruta y alias** (`src/ui/useHashRoute.ts`): la ruta canónica de la ficha es
 `#/ficha`; `#/ficha-tecnica` y `#/ficha-completa` —las dos vistas que
@@ -281,7 +283,7 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   su eje: la cifra del peso y el pulgar del deslizador van en `--axis-color`.
   El valor se apaga a `--color-mute` cuando vale 0, y ese apagado gana al
   color del eje — que un eje no cuente pesa más que de qué color es. Debajo
-  de los siete deslizadores, y separado por un filete, el control que abre la
+  de los ocho deslizadores, y separado por un filete, el control que abre la
   tanda de calibración (`product/0035`); se deshabilita con menos de cuatro
   coches elegibles y dice por qué.
 - **`CalibrationDialog`** — la tanda de cara a cara que deduce los siete
@@ -351,11 +353,11 @@ independientemente del fragmento, así que ningún alias puede dar 404.
 - **`EliminatoryRulesPanel`** (product/0031) — el panel «Imprescindibles»:
   una fila fija y no eliminable con el presupuesto, y una lista de reglas
   eliminatorias, cada una magnitud + operador + umbral, sobre cualquiera de
-  las veintiséis claves de `FICHA_FIELDS`. El `<select>` de magnitud
+  las veintiocho claves de `FICHA_FIELDS`. El `<select>` de magnitud
   agrupa por los mismos seis bloques que «Orden» en la ficha
   (`COMPLETE_BLOCKS`, exportado de `FichaPage.tsx` para esto), y oculta las
   magnitudes que ya tienen regla —a lo sumo una por magnitud—. El operador
-  es un texto fijo («mínimo»/«máximo») en los dieciocho campos con
+  es un texto fijo («mínimo»/«máximo») en los veintidós campos con
   polaridad declarada, y un `<select>` de dos opciones solo en los seis
   campos `neutral` (`requiredOperatorFor`, `src/domain/eliminatoryRules.ts`):
   la interfaz nunca deja construir una combinación que el dominio no
@@ -374,8 +376,11 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   presupuesto y todas las reglas activas—, con el mismo tratamiento de
   podio de siempre (`variant="podium"` para las tres primeras posiciones,
   `variant="list"` para el resto, `PODIUM_SIZE = 3`, product/0022; con tres
-  coches o menos no hay «resto»), delegado a `RankingRow`; y el **no
-  elegible**, en una sección plegable de `CollapsiblePanel`, «No cumplen tus
+  coches o menos no hay «resto»), delegado a `RankingRow` —a quien pasa
+  también, para cada tarjeta de podio, el clasificado inmediatamente
+  posterior de ese mismo tramo, que es contra quien mide su ventaja
+  (product/0042)—; y el **no elegible**, en una sección plegable de
+  `CollapsiblePanel`, «No cumplen tus
   imprescindibles (N)», plegada por defecto, con una `IneligibleRow` por
   coche. `hideFailingRules` activo oculta la sección entera; apagado, existe
   siempre que haya al menos un coche en ese tramo. Recibe también el
@@ -450,22 +455,48 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   van los controles de valoración editables (los subcomponentes que el
   dominio marca con `editableRating`; la fila no sabe
   de antemano cuáles son ni cuántos) y por último el desglose completo de
-  los siete ejes.
+  los ocho ejes.
 
   Con `variant="list"` la fila conserva el marcado y el tamaño que ya tenía
   antes de `product/0022`: posición y nombre en una línea, la línea de apoyo
   debajo, y la puntuación con su barra en una tercera línea. Con
   `variant="podium"` la fila se renderiza como una tarjeta —fondo, sombra y
   radio de `surfaceRaised`, con el mismo canto de acento a la izquierda que
-  `LeaderCard` y `AxisBreakdownView`— en una sola línea: posición y nombre a
-  la izquierda, línea de apoyo y puntuación (`--font-size-lg`, mayor que la
-  del resto) a la derecha, y la barra de proporción debajo. **Las tres
+  `LeaderCard` y `AxisBreakdownView`— en una sola línea: posición, nombre y
+  **marca de ventaja** a la izquierda, línea de apoyo y puntuación
+  (`--font-size-lg`, mayor que la del resto) a la derecha, y la barra de
+  proporción debajo. **Las tres
   tarjetas del podio llevan el mismo tratamiento**: la primera no tiene
   fondo propio ni superficie invertida — se distingue de la segunda y la
   tercera solo por el acento en su posición y su puntuación
   (`.positionLeader`/`.scoreLeader`, igual que ya distinguía la fila líder
   antes de esta spec). `LeaderCard` sigue siendo, por eso, la única
   superficie invertida de la interfaz.
+- **`AdvantageMark`** (product/0042) — la única comparación que la
+  clasificación enseña **sin desplegar nada**: el icono del eje en el que
+  ese coche saca más ventaja al **clasificado inmediatamente posterior**,
+  junto a su nombre, con el color y el dibujo que ese eje tiene en todas
+  partes (`AXIS_THEME_CLASS` + `AxisIcon`, technical/0011). Solo en las tres
+  tarjetas del podio: en el resto de la lista sería una fila entera de
+  iconos, que es ruido. La línea la elige `topAdvantageLine`
+  (`docs/estado/dominio.md`), no la interfaz.
+
+  **El rival es otro que el del resumen desplegado, a propósito.** Aquel
+  compara con el líder —cuánto le falta a este coche para ganar—; este, con
+  el vecino de puesto —qué defiende su puesto—, así que la tercera tarjeta
+  se mide contra el 4.º clasificado aunque este ya no sea podio. Sin
+  siguiente clasificado —el 3.º cuando solo hay tres coches elegibles— no
+  hay marca, sin hueco ni relleno.
+
+  Va **fuera** del botón que despliega la fila: dentro pasaría a formar
+  parte de su nombre accesible, que ya dice lo suyo. Y va agrupada con el
+  nombre en un contenedor propio, porque suelta en una cabecera que reparte
+  con `space-between` se iría al borde derecho en cuanto la línea de apoyo
+  bajase de línea. El icono sigue siendo `aria-hidden`, como en los otros
+  tres sitios donde se usa: aquí el significado lo lleva el texto oculto que
+  tiene al lado —«Donde más ventaja saca frente a X: Estética, +4,5 pp»—,
+  que es además el `title` para el puntero. Nunca el color a solas, misma
+  regla que `DecisionMark`.
 - **`AxisBreakdownView`** — renderiza un `AxisBreakdown` completo como un
   bloque delimitado, **con el color y el icono de su eje** (`technical/0011`)
   en el filete izquierdo, el icono de la cabecera, la nota y el relleno de la
@@ -487,16 +518,30 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   perciba visualmente. La usan `RankingRow` (línea de apoyo),
   `AxisBreakdownView` (datos de entrada), `AppFooter` (leyenda) y
   `FichaPage` (leyenda y celdas).
-- **`AxisIcon`** (technical/0011; `product/0033` añade el séptimo) — el
-  dibujo de cada eje: maleta `carga`, asiento trasero `habitabilidad`,
-  volante `diario`, cuentarrevoluciones `prestaciones`, escudo `fiabilidad`,
-  gema `estetica` y etiqueta `coste`. SVG en línea sobre un `viewBox` común de
+- **`AdjustableMark`** (product/0040) — la marca de una magnitud que sale de
+  una pieza que el usuario mueve: hoy, el espacio de piernas atrás de un
+  coche con banqueta trasera deslizante, cuyo valor declarado es el máximo
+  del rango. Mismo patrón que `EstimatedMark` —símbolo (`↔`) más su
+  explicación accesible al lado, nunca solo—, **distinto color a
+  propósito**: la tilde va en `signal` porque avisa de una reserva sobre el
+  dato; la flecha va en `accent` porque declara una capacidad del coche.
+  La usan `AppFooter` (leyenda) y `FichaPage` (leyenda y celdas); el
+  desglose de eje **no** la lleva todavía, límite explícito de
+  `product/0040` anotado en `docs/roadmap.md`.
+- **`AxisIcon`** (technical/0011; `product/0033` añade el séptimo y
+  `product/0037` el octavo) — el dibujo de cada eje: maleta `carga`, asiento
+  trasero `habitabilidad`, volante `diario`, cuentarrevoluciones
+  `prestaciones`, escudo `fiabilidad`, gema `estetica`, hoja de visita
+  `prueba` y etiqueta `coste`. SVG en línea sobre un `viewBox` común de
   24×24, `fill="none"`, `stroke="currentColor"` y un solo grosor de trazo
   (`--size-icon-stroke`, **sin unidad**: en un SVG `stroke-width` se mide en
   unidades del `viewBox`, no en píxeles). Las formas son un mapa de datos y no
-  un `switch`. **Siempre `aria-hidden`**: el nombre del eje está al lado en
-  texto real en los tres sitios donde aparece, así que anunciarlo lo diría dos
-  veces. Lo usan `ExplicacionPage`, `WeightSliders` y `AxisBreakdownView`.
+  un `switch`. **Siempre `aria-hidden`**: en los tres sitios donde el icono
+  acompaña al nombre del eje ese nombre ya está al lado en texto real, así
+  que anunciarlo lo diría dos veces; y en el cuarto —`AdvantageMark`, donde
+  el icono va solo— el significado lo lleva el texto oculto que la marca
+  pone a su lado, no el icono. Lo usan `ExplicacionPage`, `WeightSliders`,
+  `AxisBreakdownView` y `AdvantageMark`.
 - **`axisTheme`** (technical/0011) — cómo llega el color del eje al CSS.
   `axisTheme.module.css` declara una clase por eje que **solo** pone
   `--axis-color`, y `axisTheme.ts` mapea `axisId` a esa clase — un mapa de
@@ -538,7 +583,12 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   —product/0031: que un imprescindible filtra y nunca puntúa, texto
   estático, sin pasar por `scoreCatalog`—, las limitaciones conocidas y la
   procedencia de los datos) y comparte `SCurveChart` y `AXIS_CONTENT`
-  con `AxisBreakdownView`. Las ocho tarjetas de eje y las ocho filas de la
+  con `AxisBreakdownView`. Una tarjeta de eje puede llevar además dos notas
+  al pie, y no significan lo mismo: `curveException` dice por qué una
+  magnitud **se puntúa** con una curva distinta —`estetica` y `prueba`, las
+  dos sin curva en S—, y `scoringException` (`product/0041`) dice por qué un
+  dato que el eje **enseña** no puntúa en absoluto — hoy solo `fiabilidad`,
+  con los años de garantía. Las ocho tarjetas de eje y las ocho filas de la
   lista de pesos llevan el icono y el filete de color de su eje
   (`technical/0011`); **la tabla de contenidos no**, porque sus entradas son
   secciones y no ejes — teñir «Los ocho ejes» de uno de los ocho colores
@@ -566,23 +616,30 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     anchura, altura libre al suelo, maletero, potencia, precio —tamaño,
     mecánica y coste, en ese orden— reutilizando el mismo `FieldDef` que
     `Completa` para potencia y precio, sin una segunda declaración) o
-    `Completa` (las veintiséis, agrupadas en seis bloques con cabecera
+    `Completa` (las veintiocho, agrupadas en seis bloques con cabecera
     propia). Arranca en `Esenciales`. En «Mecánica y prestaciones», detrás
-    de «Consumo», van **«Autonomía eléctrica»** y **«Batería»**
-    (product/0028): consumo, autonomía y batería son la misma pregunta
-    contada por sus tres caras y se leen juntas. La batería se muestra con
-    **dos decimales**, y no por gusto: las capacidades de los híbridos y
-    microhíbridos van de 0,77 a 1,49 kWh, y con un solo decimal 0,77 y 0,85
-    se leerían las dos como «0,8» — la comparación entre híbridos, que es la
-    razón de que esa magnitud exista, quedaría anulada por el formato. En
-    «Tamaño y espacio», detrás de «Batalla», va **«Diámetro de giro»**
-    (product/0032, un decimal): las dos se leen juntas porque la batalla es
-    el factor que más manda en el giro. A diferencia de la batalla —neutra—,
-    aquí sí hay una dirección afirmable: menos es mejor. Detrás de «Litros
-    por m²», cierra el bloque **«Carga máxima en techo»** (product/0034, sin
-    decimales): misma dirección afirmable que el diámetro de giro, pero al
-    revés —más es mejor—, y su Δ es `'unavailable'` contra cualquier
-    referencia o candidato que no la declare.
+    de «Consumo», va **«Consumo sin cargar»** (product/0038: el consumo WLTP
+    en modo sostenido, solo declarado por un enchufable) y, detrás,
+    **«Autonomía eléctrica»** y **«Batería»** (product/0028): las cuatro
+    filas responden la misma pregunta contada por sus caras y se leen
+    juntas. La batería se muestra con **dos decimales**, y no por gusto: las
+    capacidades de los híbridos y microhíbridos van de 0,77 a 1,49 kWh, y
+    con un solo decimal 0,77 y 0,85 se leerían las dos como «0,8» — la
+    comparación entre híbridos, que es la razón de que esa magnitud exista,
+    quedaría anulada por el formato. En «Tamaño y espacio», detrás de
+    «Batalla», va **«Diámetro de giro»** (product/0032, un decimal): las dos
+    se leen juntas porque la batalla es el factor que más manda en el giro.
+    A diferencia de la batalla —neutra—, aquí sí hay una dirección
+    afirmable: menos es mejor. Justo detrás, **«Espacio de piernas atrás»**
+    (product/0039) precede a «Anchura de hombros atrás»: las tres son las
+    medidas de la segunda fila que km77 mide dentro del coche, y por eso van
+    seguidas; a diferencia de la batalla, el espacio de piernas sí tiene
+    dirección afirmable —más es mejor— y es el que hoy puntúa
+    `habitabilidad`. Detrás de «Litros por m²», cierra el bloque **«Carga
+    máxima en techo»** (product/0034, sin decimales): misma dirección
+    afirmable que el diámetro de giro, pero al revés —más es mejor—, y su Δ
+    es `'unavailable'` contra cualquier referencia o candidato que no la
+    declare.
   - **Comparar** — **dos controles para el mismo estado**, sincronizados por
     construcción porque los dos escriben `comparisonId`: un radio por columna,
     con `name` compartido (`pinned-model`), y el `<select>` de la barra, que
@@ -603,16 +660,17 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     que una celda sin dato, no un número que no diría nada. Arranca fijada
     la primera referencia del catálogo, si hay alguna.
   - **Orden** — `Catálogo` más **una opción por cada una de las
-    veintiséis magnitudes** de «Completa» (product/0027), agrupadas en el
+    veintiocho magnitudes** de «Completa» (product/0027), agrupadas en el
     `<select>` por los mismos seis bloques y con el mismo rótulo que da a esa
     fila su
     `FieldDef` —las opciones se generan de `COMPLETE_BLOCKS`, no de una
     segunda lista—. Ordena **mejor primero**, con la dirección que fija la
     tabla de polaridad del dominio (`docs/estado/dominio.md`): descendente
     donde más es mejor (potencia, maletero, fiabilidad, valor residual,
-    estética…, y la autonomía eléctrica), ascendente donde más es peor
-    (precio, longitud, anchura, peso, diámetro de giro…) y ascendente en las
-    neutras (altura, batalla, generación, capacidad de la batería…).
+    estética, espacio de piernas atrás…, y la autonomía eléctrica),
+    ascendente donde más es peor (precio, longitud, anchura, peso, diámetro
+    de giro, consumo sin cargar…) y ascendente en las neutras (altura,
+    batalla, generación, capacidad de la batería…).
     Arranca en Longitud. El criterio vigente ordena a la vez las columnas
     desplazables de la tabla, las opciones de «Comparar» y la tira de
     candidatos de la vista de duelo. Es independiente de «Campos»: se puede
@@ -772,7 +830,10 @@ independientemente del fragmento, así que ningún alias puede dar 404.
   - El contenedor desplazable es alcanzable con teclado
     (`tabindex="0"`, `role="group"`).
   - La leyenda al pie explica la Δ, la dirección de cada magnitud, los
-    litros por m² y la marca de estimado.
+    litros por m² y las dos marcas: la de estimado y la de banqueta
+    deslizante (product/0040). La lista de magnitudes «más es mejor» de esa
+    leyenda nombra hoy las trece que declaran esa dirección; que se quedara
+    corta ya ha pasado tres veces, y hay un test que la comprueba entera.
 - **`VisitaPage`** (`#/visita`, product/0037) — la hoja de visita. El índice
   lista los candidatos publicados en el orden de la clasificación vigente
   —`total` descendente—, con el filtro de decisión de `product/0030`
@@ -1042,7 +1103,7 @@ el marcado del shell y la ficha (que cada vista renderice exactamente un
 `<h1>`; que la navegación marque `aria-current="page"` sobre la activa y
 sobre ninguna más; que el conjunto de campos, el modelo de comparación y el
 criterio de orden por defecto sean los que la spec fija; que una Δ se
-renderice con signo escrito). La puntuación de los once candidatos del
+renderice con signo escrito). La puntuación de los veintiún registros del
 catálogo real está protegida aparte, en
 `src/domain/scoring/scoreCatalog.snapshot.test.ts`: no es un test de `ui/`,
 pero es la comprobación de que ningún cambio de presentación mueve una

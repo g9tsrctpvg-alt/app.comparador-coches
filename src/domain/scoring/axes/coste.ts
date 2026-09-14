@@ -1,4 +1,4 @@
-import type { Car } from '../../car';
+import type { Car, SourcedNumber } from '../../car';
 import type { GlobalAssumptions } from '../assumptions';
 import { scoreOnAbsoluteScale } from '../scale';
 import { inputDatumFrom, type AxisBreakdown } from '../breakdown';
@@ -29,6 +29,50 @@ export function costeFormula(assumptions: GlobalAssumptions): string {
 interface CosteComponents {
   precioCompra: number;
   costeUsoMensual: number;
+  consumoAplicado: SourcedNumber;
+  razonConsumo: string;
+}
+
+/**
+ * Qué consumo entra en el eje (product/0038, requisito 2.1): la cifra
+ * sostenida solo si las tres condiciones se cumplen a la vez —el coche es
+ * `PHEV`, no se carga en casa y la cifra existe—; en cualquier otro caso,
+ * la homologada de siempre. Un enchufable que no se enchufa es un híbrido
+ * que carga con la batería vacía, y su consumo WLTP ponderado presupone
+ * justo lo contrario.
+ */
+function consumoParaCoste(
+  car: Car,
+  assumptions: GlobalAssumptions,
+): { datum: SourcedNumber; razon: string } {
+  if (
+    car.technology === 'PHEV' &&
+    !assumptions.cargaEnCasa &&
+    car.sustainedConsumption
+  ) {
+    return {
+      datum: car.sustainedConsumption,
+      razon:
+        'Consumo en modo sostenido — es un enchufable y no se carga en casa',
+    };
+  }
+  if (car.technology === 'PHEV' && !assumptions.cargaEnCasa) {
+    return {
+      datum: car.consumption,
+      razon:
+        'Consumo WLTP combinado — es un enchufable sin consumo sostenido declarado',
+    };
+  }
+  if (car.technology === 'PHEV') {
+    return {
+      datum: car.consumption,
+      razon: 'Consumo WLTP combinado — se carga en casa',
+    };
+  }
+  return {
+    datum: car.consumption,
+    razon: 'Consumo WLTP combinado',
+  };
 }
 
 export function costeComponents(
@@ -37,13 +81,19 @@ export function costeComponents(
 ): CosteComponents {
   const precioUnitario =
     car.technology === 'EV' ? assumptions.precioKwh : assumptions.precioLitro;
+  const { datum: consumoAplicado, razon: razonConsumo } = consumoParaCoste(
+    car,
+    assumptions,
+  );
   const energiaAnual =
-    (car.consumption.value / 100) * assumptions.kmPorAnio * precioUnitario;
+    (consumoAplicado.value / 100) * assumptions.kmPorAnio * precioUnitario;
   const mantenimientoAnual = car.maintenanceEurYear.value;
 
   return {
     precioCompra: car.priceEur.value,
     costeUsoMensual: (energiaAnual + mantenimientoAnual) / 12,
+    consumoAplicado,
+    razonConsumo,
   };
 }
 
@@ -56,7 +106,8 @@ export function buildCosteBreakdown(
 
   const result = new Map<string, AxisBreakdown>();
   for (const car of cars) {
-    const { precioCompra, costeUsoMensual } = costeComponents(car, assumptions);
+    const { precioCompra, costeUsoMensual, consumoAplicado, razonConsumo } =
+      costeComponents(car, assumptions);
     const precioScore = scoreOnAbsoluteScale(
       precioCompra,
       PRECIO_BUENO_EUR,
@@ -76,7 +127,7 @@ export function buildCosteBreakdown(
       formulaDescription: formula,
       inputs: [
         inputDatumFrom('Precio', car.priceEur),
-        inputDatumFrom('Consumo', car.consumption),
+        inputDatumFrom('Consumo', consumoAplicado),
         inputDatumFrom('Mantenimiento anual', car.maintenanceEurYear),
       ],
       assumptionsUsed: [
@@ -91,6 +142,10 @@ export function buildCosteBreakdown(
             car.technology === 'EV'
               ? `${assumptions.precioKwh.toFixed(2)} €/kWh — es un vehículo eléctrico`
               : `${assumptions.precioLitro.toFixed(2)} €/l — no es un vehículo eléctrico`,
+        },
+        {
+          label: 'Consumo aplicado',
+          value: razonConsumo,
         },
       ],
       subcomponents: [

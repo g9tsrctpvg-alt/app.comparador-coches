@@ -6,6 +6,7 @@ import {
   crossingsInRange,
   splitScoreGap,
   stableAxes,
+  topAdvantageLine,
   topGapLines,
 } from './scoreGap';
 
@@ -276,6 +277,100 @@ describe('topGapLines', () => {
     const top = topGapLines(tie);
     expect(top).toHaveLength(1);
     expect(top[0]?.value).toBe(0);
+  });
+});
+
+describe('topAdvantageLine (product/0042, requisito 1)', () => {
+  it('returns the axis with the biggest positive value', () => {
+    // carga: +2 × peso 4 = +8, la única línea positiva.
+    expect(topAdvantageLine(splitScoreGap(carA, carB))?.axisId).toBe('carga');
+  });
+
+  it('ignores a bigger line of the opposite sign', () => {
+    // Frente a B: carga +1 × 4 = +4, diario −3 × 3 = −9. La mayor en valor
+    // absoluto es la que pierde, y `topGapLines` devolvería esa.
+    const car = carBreakdown('mixed', {
+      carga: 5,
+      habitabilidad: 5,
+      diario: 2,
+      prestaciones: 8,
+      fiabilidad: 8,
+      estetica: 7,
+      prueba: 7,
+      coste: 5,
+    });
+    const gap = splitScoreGap(car, carB);
+    expect(topGapLines(gap)[0]?.axisId).toBe('diario');
+    expect(topAdvantageLine(gap)?.axisId).toBe('carga');
+  });
+
+  it('breaks an exact tie by AXIS_ORDER (requisito 1.1)', () => {
+    // diario +2 × 3 = +6 y prestaciones +6 × 1 = +6: el mismo valor, y
+    // `diario` va antes en `AXIS_ORDER`.
+    const car = carBreakdown('tied', {
+      carga: 4,
+      habitabilidad: 5,
+      diario: 7,
+      prestaciones: 14,
+      fiabilidad: 8,
+      estetica: 7,
+      prueba: 7,
+      coste: 5,
+    });
+    const gap = splitScoreGap(car, carB);
+    expect(topAdvantageLine(gap)?.axisId).toBe('diario');
+  });
+
+  it('never returns an axis whose weight is 0, however big its score advantage (requisito 1.2)', () => {
+    // prueba gana por 3 puntos de nota y aporta 0; coste gana por 1 con
+    // peso 1, y es la única ventaja real.
+    const car = carBreakdown('weightless', {
+      carga: 4,
+      habitabilidad: 5,
+      diario: 5,
+      prestaciones: 8,
+      fiabilidad: 8,
+      estetica: 7,
+      prueba: 10,
+      coste: 6,
+    });
+    const gap = splitScoreGap(car, carB);
+    expect(topAdvantageLine(gap)?.axisId).toBe('coste');
+  });
+
+  it('returns undefined when the only axis ahead has weight 0', () => {
+    const car = carBreakdown('weightless-only', {
+      carga: 4,
+      habitabilidad: 5,
+      diario: 5,
+      prestaciones: 8,
+      fiabilidad: 8,
+      estetica: 7,
+      prueba: 10,
+      coste: 5,
+    });
+    expect(topAdvantageLine(splitScoreGap(car, carB))).toBeUndefined();
+  });
+
+  it('returns undefined when the two cars tie on every axis', () => {
+    expect(topAdvantageLine(splitScoreGap(carA, carA))).toBeUndefined();
+  });
+
+  it('returns undefined for a car that loses on every axis it does not tie', () => {
+    expect(topAdvantageLine(splitScoreGap(carB, carA))?.axisId).toBe(
+      'prestaciones',
+    );
+    const behind = carBreakdown('behind', {
+      carga: 3,
+      habitabilidad: 5,
+      diario: 5,
+      prestaciones: 8,
+      fiabilidad: 8,
+      estetica: 7,
+      prueba: 7,
+      coste: 5,
+    });
+    expect(topAdvantageLine(splitScoreGap(behind, carB))).toBeUndefined();
   });
 });
 

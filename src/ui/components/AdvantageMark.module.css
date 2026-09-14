@@ -1,0 +1,15 @@
+/* La marca de ventaja del podio (product/0042).
+ *
+ * No declara color: el icono hereda `--axis-color`, que pone la clase de tema
+ * del eje que esta misma marca lleva puesta (technical/0011).
+ *
+ * `align-self: baseline` alinea el canto inferior del icono con la línea base
+ * del nombre que tiene al lado: un cuadro de 24×24 sin texto dentro no tiene
+ * línea base propia, y centrarlo en la caja del botón —que es más alta que su
+ * texto por el mínimo táctil— lo dejaba colgando por debajo del nombre.
+ */
+.mark {
+  display: inline-flex;
+  align-self: baseline;
+  flex-shrink: 0;
+}

@@ -80,7 +80,7 @@ que no valida lanza `CatalogValidationError`, identificando el campo y el
 registro afectados —por `id` cuando existe en el dato crudo, si no por
 índice—.
 
-El **contenido** del catálogo —once candidatos reales, cada dato con su
+El **contenido** del catálogo —veintiún registros reales, cada dato con su
 estructura de fuentes— es responsabilidad de `product/0001`, ya
 implementada: detalle en `docs/estado/dominio.md`.
 

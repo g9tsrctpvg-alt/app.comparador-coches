@@ -1,13 +1,12 @@
 # comparador-coches
 
-Comparador de coches: once candidatos puntuados sobre seis ejes, con pesos
-ajustables y recálculo en vivo.
+Comparador de coches: dieciocho candidatos publicados puntuados sobre ocho
+ejes, con pesos ajustables y recálculo en vivo.
 
-El proyecto está en fase de base. Hay contrato de trabajo, estructura
-documental, CI de gates documentales y **stack decidido** —SPA estática con
-Vite, React y TypeScript, sin backend—, pero **todavía no hay código de
-producción**: las dos specs que lo introducen siguen en `draft`, esperando el
-gate humano.
+La aplicación está **en producción sobre GitHub Pages**, con el catálogo, la
+clasificación y la ficha comparada implementados sobre el stack decidido —SPA
+estática con Vite, React y TypeScript, sin backend— y el suelo de CI completo.
+Qué fase sigue abierta y qué deuda arrastra está en `docs/roadmap.md`.
 
 ## Por dónde empezar
 

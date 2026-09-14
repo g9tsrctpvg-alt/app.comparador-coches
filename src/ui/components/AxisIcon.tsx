@@ -87,9 +87,11 @@ interface AxisIconProps {
 }
 
 /**
- * El icono de un eje. Siempre `aria-hidden` (requisito 5.3): el nombre del eje
- * está al lado en texto real en los tres sitios donde se usa, así que
- * anunciarlo aquí solo lo diría dos veces.
+ * El icono de un eje. Siempre `aria-hidden` (requisito 5.3): en los tres
+ * sitios donde acompaña al nombre del eje, ese nombre ya está al lado en texto
+ * real, así que anunciarlo aquí solo lo diría dos veces; y donde el icono va
+ * solo —`AdvantageMark`, product/0042— el significado lo lleva el texto oculto
+ * que esa marca pone a su lado, que es suyo y no de este dibujo.
  */
 export function AxisIcon({ axisId }: AxisIconProps) {
   return (

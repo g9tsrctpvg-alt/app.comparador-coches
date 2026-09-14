@@ -174,13 +174,76 @@ describe('buildCosteBreakdown', () => {
     const ev3 = breakdown.get('kia-ev3')!; // eléctrico
     const sportage = breakdown.get('kia-sportage-hev')!; // no eléctrico
 
-    expect(ev3.info).toHaveLength(1);
+    expect(ev3.info).toHaveLength(2);
     expect(ev3.info![0]!.value).toContain(
       `${DEFAULT_ASSUMPTIONS.precioKwh.toFixed(2)} €/kWh`,
     );
-    expect(sportage.info).toHaveLength(1);
+    expect(sportage.info).toHaveLength(2);
     expect(sportage.info![0]!.value).toContain(
       `${DEFAULT_ASSUMPTIONS.precioLitro.toFixed(2)} €/l`,
     );
+  });
+});
+
+describe('sustained consumption on a plug-in (product/0038)', () => {
+  const base = threeCarFixture[1]!; // BMW X1 xDrive25e, PHEV with sustainedConsumption
+
+  it('uses the sustained figure when the car is a PHEV, cargaEnCasa is off and the figure exists', () => {
+    const components = costeComponents(base, DEFAULT_ASSUMPTIONS);
+    const energiaAnual =
+      (base.sustainedConsumption!.value / 100) *
+      DEFAULT_ASSUMPTIONS.kmPorAnio *
+      DEFAULT_ASSUMPTIONS.precioLitro;
+    const expected = (energiaAnual + base.maintenanceEurYear.value) / 12;
+    expect(components.costeUsoMensual).toBeCloseTo(expected, 6);
+  });
+
+  it('uses the weighted figure when cargaEnCasa is on, even with a sustained figure declared', () => {
+    const assumptions = { ...DEFAULT_ASSUMPTIONS, cargaEnCasa: true };
+    const components = costeComponents(base, assumptions);
+    const energiaAnual =
+      (base.consumption.value / 100) *
+      assumptions.kmPorAnio *
+      assumptions.precioLitro;
+    const expected = (energiaAnual + base.maintenanceEurYear.value) / 12;
+    expect(components.costeUsoMensual).toBeCloseTo(expected, 6);
+  });
+
+  it('uses the weighted figure when the PHEV declares no sustained consumption', () => {
+    const withoutSustained = { ...base, sustainedConsumption: undefined };
+    const components = costeComponents(withoutSustained, DEFAULT_ASSUMPTIONS);
+    const energiaAnual =
+      (withoutSustained.consumption.value / 100) *
+      DEFAULT_ASSUMPTIONS.kmPorAnio *
+      DEFAULT_ASSUMPTIONS.precioLitro;
+    const expected =
+      (energiaAnual + withoutSustained.maintenanceEurYear.value) / 12;
+    expect(components.costeUsoMensual).toBeCloseTo(expected, 6);
+  });
+
+  it('never applies the sustained figure to a non-PHEV', () => {
+    const sportage = threeCarFixture[0]!; // HEV
+    const components = costeComponents(sportage, DEFAULT_ASSUMPTIONS);
+    const energiaAnual =
+      (sportage.consumption.value / 100) *
+      DEFAULT_ASSUMPTIONS.kmPorAnio *
+      DEFAULT_ASSUMPTIONS.precioLitro;
+    const expected = (energiaAnual + sportage.maintenanceEurYear.value) / 12;
+    expect(components.costeUsoMensual).toBeCloseTo(expected, 6);
+  });
+
+  it('shows the applied figure as the Consumo input, not always the weighted one', () => {
+    const breakdown = buildCosteBreakdown([base], DEFAULT_ASSUMPTIONS, 1);
+    const consumo = breakdown
+      .get(base.id)!
+      .inputs.find((input) => input.label === 'Consumo')!;
+    expect(consumo.value).toBe(base.sustainedConsumption!.value);
+  });
+
+  it('declares which figure it applied and why, as its own info line', () => {
+    const breakdown = buildCosteBreakdown([base], DEFAULT_ASSUMPTIONS, 1);
+    const info = breakdown.get(base.id)!.info!;
+    const consumoInfo = info.find((line) => line.label === 'Consumo aplicado')!;
+    expect(consumoInfo.value).toMatch(/sostenido/);
   });
 });

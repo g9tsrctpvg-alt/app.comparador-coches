@@ -212,9 +212,14 @@ describe('lo que una tanda recupera', () => {
     // Requisito 6.5 y criterio de aceptación: 18 preguntas o menos.
     expect(longest).toBeLessThanOrEqual(18);
     expect(lengths / n).toBeLessThan(18);
-    // Requisito 10.3: al menos el 95 %, contra el 81,2 % de la línea base.
+    // Requisito 10.3: al menos el 95 %, contra el 81,2 % de la línea base
+    // medida al redactar `product/0035`. `product/0038` y `product/0039`
+    // (2026-09-06) mueven los perfiles reales —cambian `coste` y
+    // `habitabilidad`— y con ellos la línea base sube al 84,3 %: no es una
+    // regresión de la tanda, es que los pesos por defecto quedan mejor
+    // alineados con los perfiles nuevos.
     expect(derived / n).toBeGreaterThanOrEqual(0.95);
-    expect(baseline / n).toBeLessThan(0.83);
+    expect(baseline / n).toBeLessThan(0.85);
   }, 120000);
 
   it('aguanta una de cada diez respuestas invertida', () => {

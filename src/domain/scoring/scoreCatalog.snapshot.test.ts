@@ -30,29 +30,69 @@ import { scoreCatalog } from './score';
  * con el `viaje` de peso 10 anterior (requisito 4.2 de la spec), así que
  * este test sigue en verde sin cambiar una sola cifra — es el criterio de
  * aceptación que lo demuestra.
+ *
+ * Vueltos a actualizar por `product/0038` y `product/0039` (2026-09-06), a
+ * propósito: `coste` deja de leer el consumo ponderado de los dos `PHEV`
+ * cuando declaran modo sostenido y no se carga en casa, y `habitabilidad`
+ * puntúa el espacio de piernas atrás en vez de la batalla. El catálogo pasó
+ * además de once a veintiún registros entre medias, así que las cifras de
+ * abajo no son comparables con las de más arriba fila a fila.
+ *
+ * Vuelto a actualizar solo para `bmw-x1-xdrive25e` (2026-09-06): su
+ * `rearShoulderWidthMm` se corrige de 138 a 141 cm —«Anchura hombros
+ * máxima» de km77, confirmado por el usuario—, y el anterior queda como
+ * fuente descartada en `cars.json` con su motivo. Es un dato de catálogo,
+ * no una spec: mueve solo este registro.
+ *
+ * Vuelto a actualizar por `product/0040` (2026-09-07), a propósito y solo
+ * en los dos registros con banqueta trasera deslizante: `rearLegroomMm`
+ * pasa a declarar el máximo del rango publicado en vez del mínimo —el
+ * X-Trail e-Power de 560 a 770 mm, el X1 xDrive25e de 620 a 760 mm—, así
+ * que su nota de `habitabilidad` sube. Ningún otro total cambia.
+ *
+ * Vueltos a actualizar por `product/0041` (2026-09-07), a propósito y en los
+ * veintiún registros: los años de garantía salen de la nota de `fiabilidad`,
+ * que pasa a ser la del índice OCU a secas. Cada total se mueve exactamente
+ * `7 × 0,3 × (nota_OCU − nota_garantía)`, así que sube en los coches cuya
+ * marca es más fiable que generosa —el Corolla Cross, +12,45— y baja en los
+ * que compraban nota con la garantía —el Compass, −8,27, y los tres Kia de
+ * siete años—.
+ *
+ * Ampliado con `volkswagen-touran` (2026-09-13): un alta de catálogo, no una
+ * spec, así que solo añade su fila —el primer registro `ICE` del fichero— y
+ * no mueve ninguno de los veintiún totales anteriores.
+ *
+ * Vuelto a actualizar solo para `kia-ev5` (2026-09-13): la ficha pasa a
+ * comparar el acabado **Earth** en vez del **GT-Line**, por decisión del
+ * usuario, para medirlo en la misma parte de la gama que el resto del
+ * catálogo. El precio baja de 53.071 € a 47.571 €, y con la llanta de 18 pulgadas
+ * el consumo baja de 17,8 a 16,9 kWh/100 km y la autonomía sube de 505 a
+ * 530 km; su total sube +0,48. Es un dato de catálogo, no una spec: ningún
+ * otro registro se mueve.
  */
 const EXPECTED_TOTALS: Record<string, number> = {
-  'honda-zr-v': 193.61323375362224,
-  'hyundai-tucson-hev': 241.86342157153587,
-  'hyundai-tucson-phev': 240.49144853205905,
-  'kia-sportage-hev': 232.68125998320298,
-  'mazda-cx-5': 222.1500051017747,
-  'bmw-x1-xdrive25e': 217.30430796428354,
-  'kia-ev3': 236.8658679126243,
-  'honda-civic-e-hev': 228.11517767231123,
-  'hyundai-kona-hev': 217.33337259474501,
-  'lexus-nx-350h': 212.3620228757981,
-  'kia-ev5': 216.28313700458864,
-  'hyundai-kona-electrico': 215.24537882786342,
-  'hyundai-ioniq-5': 206.6177184743785,
-  'honda-cr-v-e-hev': 199.6827626891658,
-  'alfa-romeo-tonale': 198.08606996874985,
-  'volkswagen-id4': 199.65102109590532,
-  'toyota-corolla-cross': 183.87060309758877,
-  'citroen-c5-aircross': 176.62035617260113,
-  'jeep-compass': 176.12611004352019,
-  'nissan-qashqai-e-power': 222.07922337385097,
-  'nissan-x-trail-e-power': 221.13874945494933,
+  'kia-ev3': 244.6052835753353,
+  'hyundai-kona-hev': 230.45320257610487,
+  'hyundai-kona-electrico': 228.36520880922325,
+  'toyota-corolla-cross': 200.04790522689842,
+  'bmw-x1-xdrive25e': 253.50344205729954,
+  'alfa-romeo-tonale': 200.62957732328553,
+  'kia-sportage-hev': 247.37033755425358,
+  'honda-civic-e-hev': 242.1915202753718,
+  'lexus-nx-350h': 241.35514255807772,
+  'mazda-cx-5': 224.89364066045192,
+  'honda-cr-v-e-hev': 218.53569400071328,
+  'volkswagen-id4': 218.2959765919619,
+  'kia-ev5': 228.32748986860798,
+  'hyundai-ioniq-5': 210.18360229213957,
+  'hyundai-tucson-hev': 259.4793053892969,
+  'hyundai-tucson-phev': 254.5843395943331,
+  'citroen-c5-aircross': 183.43369632888272,
+  'jeep-compass': 166.39531697700016,
+  'nissan-qashqai-e-power': 241.94847785860722,
+  'nissan-x-trail-e-power': 246.23920881679516,
+  'honda-zr-v': 209.6233533613873,
+  'volkswagen-touran': 220.97577702505313,
 };
 
 describe('scoreCatalog against the real catalogue (product/0009 regression)', () => {
@@ -64,7 +104,7 @@ describe('scoreCatalog against the real catalogue (product/0009 regression)', ()
     47000,
   );
 
-  it('covers the same eleven candidates as the expectation table', () => {
+  it('covers the same candidates as the expectation table', () => {
     expect(result.map((car) => car.carId).sort()).toEqual(
       Object.keys(EXPECTED_TOTALS).sort(),
     );

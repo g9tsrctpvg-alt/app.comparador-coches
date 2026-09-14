@@ -20,6 +20,10 @@ export interface AxisContent {
   anchorReasoning: string[];
   /** `estetica` y `prueba`: por qué son los únicos ejes sin curva en S. */
   curveException?: string;
+  /** `fiabilidad`: por qué un dato que el eje enseña no entra en su nota
+   * (product/0041). Es distinto de `curveException`, que habla de cómo se
+   * puntúa una magnitud; esta dice por qué una magnitud **no** se puntúa. */
+  scoringException?: string;
 }
 
 export const AXIS_CONTENT: Record<AxisId, AxisContent> = {
@@ -57,13 +61,13 @@ export const AXIS_CONTENT: Record<AxisId, AxisContent> = {
     ],
   },
   fiabilidad: {
-    measures:
-      'Cuánto se puede confiar en el coche: fiabilidad de la marca y años de garantía.',
-    data: 'Índice de fiabilidad de la OCU (por marca, no por modelo) y años de garantía incondicional.',
+    measures: 'Cuánto se avería el coche.',
+    data: 'El índice de fiabilidad de la OCU, que es por marca y no por modelo.',
     anchorReasoning: [
       'Son los extremos que la propia OCU publica sobre 39 marcas —Lexus arriba, Land Rover abajo—: la escala es el mercado tal como se publica, sin ningún recorte que justificar.',
-      'El 10 va en el techo real del mercado sin condiciones —Kia, MG, Omoda, Jaecoo—. El 0 va en 0 años y no en los 3 del mínimo legal español: quedarse en el mínimo es una estrategia comercial, no una señal de que el coche se rompe. Una extensión de garantía sujeta a mantenimiento en red oficial no cuenta para esta nota: es un compromiso del comprador, no del fabricante, y el desglose de cada coche la muestra aparte, como información que no puntúa.',
     ],
+    scoringException:
+      'Los años de garantía estaban aquí y ya no puntúan. Una garantía larga dice que la marca ha elegido comprar tu confianza, no que el coche se rompa menos: Kia da siete años y Toyota tres, y es Toyota quien tiene mejor índice de averías de las dos. Mientras contó, el salto de tres a siete años movía la nota final más de tres puntos porcentuales, tanto como bajar el precio del coche unos 7.500 €. La garantía sigue en el desglose de cada coche, con sus años y con la extensión condicionada si la tiene, como información que no entra en la nota.',
   },
   estetica: {
     measures: 'Cuánto gusta el diseño, exterior e interior.',
