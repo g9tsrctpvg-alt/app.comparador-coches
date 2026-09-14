@@ -308,9 +308,9 @@ describe('calibrate', () => {
 
   it('de partida quince coches pueden liderar y ningún par está decidido', () => {
     const state = calibrate(profiles, [], DEFAULT_WEIGHTS);
-    // Eran 153 pares con dieciocho elegibles; el alta de `volkswagen-touran`
-    // (2026-09-13) los sube a los 171 de diecinueve.
-    expect(state.totalPairs).toBe(171);
+    // Eran 171 pares con diecinueve elegibles; el alta de `toyota-rav4-hev`
+    // (2026-09-14) los sube a los 190 de veinte.
+    expect(state.totalPairs).toBe(190);
     expect(state.settledPairs).toBe(0);
     // Eran trece hasta product/0041 (2026-09-07): el decimocuarto es el
     // Corolla Cross, que entra justo por lo que la spec corrige — con la
