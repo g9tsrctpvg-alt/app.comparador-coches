@@ -41,9 +41,9 @@ disponible como criterio eliminatorio. Sin nota y sin eje.
 
 ## Alcance
 
-- **Un campo nuevo y opcional en `Car`**: `isofix`, con la misma forma de
-  dato con fuente que el resto (`SourcedValue`), cuyo valor es la lista de
-  plazas —de un conjunto cerrado de cuatro— que llevan anclaje.
+- **Un campo nuevo y opcional en `Car`**: `isofix`, con un recuento sourced
+  (`SourcedNumber`, la misma estructura de fuentes que el resto) y la lista
+  de plazas —de un conjunto cerrado de cuatro— que llevan anclaje.
 - **El mismo campo, también opcional, en `Reference`**, por el motivo por el
   que `product/0032` y `product/0034` lo añadieron allí: sin él, la Δ de
   esta magnitud saldría `'unavailable'` para los candidatos siempre que se
@@ -88,16 +88,24 @@ disponible como criterio eliminatorio. Sin nota y sin eje.
 
 ### 1. El dato
 
-1.1. `Car` declara `isofix?: SourcedValue<IsofixSeatPosition[]>`,
-reutilizando `sourcedValueSchema` (`src/domain/car.ts`) igual que
-`SourcedNumberSchema` lo hace para `z.number()`, con la misma estructura de
-fuentes que el resto: exactamente una vigente, y una descartada obliga a
-declarar su motivo.
+1.1. `Car` declara `isofix?: { count: SourcedNumber; seats:
+IsofixSeatPosition[] }` (`IsofixSchema`, `src/domain/car.ts`). `count`
+reutiliza `SourcedNumberSchema` tal cual —la misma estructura de fuentes
+que el resto: exactamente una vigente, y una descartada obliga a declarar
+su motivo—; `seats` es la lista de plazas concretas, sin fuente propia
+porque sale de la misma cita que `count`, el mismo trato que ya recibe
+`generation.code` junto a `generation.launchYear`. Van en campos hermanos y
+no en un único `SourcedValue` con un array por valor porque
+`SourceEntry.value` (`src/domain/car.ts`) solo admite número o texto: un
+array de plazas no encaja ahí sin ensanchar ese tipo para todo el proyecto,
+y esta spec no lo justifica.
 
 1.2. `IsofixSeatPosition` es un conjunto cerrado de cuatro valores —
 `'rearLeft'`, `'rearCenter'`, `'rearRight'`, `'frontPassenger'` —, las
-cuatro plazas donde un turismo puede llevar anclaje ISOFIX. `value` es la
-lista de las plazas que sí lo llevan: sin duplicados y con al menos una.
+cuatro plazas donde un turismo puede llevar anclaje ISOFIX. `seats` es la
+lista de las plazas que sí lo llevan: sin duplicados y con al menos una. Una
+invariante cruzada de `IsofixSchema` exige `seats.length === count.value`;
+romperla falla al cargar el catálogo nombrando el campo y el registro.
 
 1.3. Es opcional en la forma, y opcional de verdad, igual que
 `maxRoofLoadKg` (product/0034): no hay ninguna invariante cruzada con
@@ -115,11 +123,10 @@ ya justifica `turningCircleM` y `maxRoofLoadKg` ahí.
 
 ### 2. En la ficha
 
-2.1. `FICHA_FIELDS` gana `isofixSeatCount`: no es un campo propio de `Car`
-ni de `Reference`, es derivado —el número de plazas en `isofix.value`—,
-igual que `litersPerSquareMeter` deriva de otras tres magnitudes sin ser
-ella misma un campo declarado (`litersPerSquareMeterCell`, `ficha.ts`).
-Gana Δ, orden por columna (`product/0027`) y disponibilidad como criterio
+2.1. `FICHA_FIELDS` gana `isofixSeatCount`, que lee directamente
+`isofix.count` —un `SourcedNumber` más, igual que cualquier otra
+magnitud opcional de la ficha (`maxRoofLoadKg`, `turningCircleM`)—. Gana Δ,
+orden por columna (`product/0027`) y disponibilidad como criterio
 eliminatorio (`product/0031`) sin código propio en ninguno de los tres.
 
 2.2. Fila nueva «Anclajes ISOFIX» al final del bloque «Tamaño y espacio» de
@@ -166,12 +173,13 @@ guía.
 
 > Obligatorios y verificables.
 
-- [ ] `CarSchema` y `ReferenceSchema` aceptan `isofix` opcional, con `value`
-      un array no vacío de `IsofixSeatPosition` sin duplicados y la misma
-      estructura de fuentes que el resto; un registro con dos fuentes
-      vigentes, con una descartada sin motivo, o con un valor de plaza
-      fuera del conjunto cerrado de cuatro, falla al cargar el catálogo
-      nombrando el campo y el registro.
+- [ ] `CarSchema` y `ReferenceSchema` aceptan `isofix` opcional, con `seats`
+      un array no vacío de `IsofixSeatPosition` sin duplicados y `count` con
+      la misma estructura de fuentes que el resto; un registro con dos
+      fuentes vigentes en `count`, con una descartada sin motivo, con un
+      valor de plaza fuera del conjunto cerrado de cuatro, o con
+      `seats.length !== count.value`, falla al cargar el catálogo nombrando
+      el campo y el registro.
 - [ ] Ninguna tecnología obliga a declarar el campo ni lo prohíbe: un `EV`,
       un `HEV` y un `ICE` con y sin el dato cargan los seis sin error.
 - [ ] `FICHA_FIELDS` incluye `isofixSeatCount`, y `polarityOf` devuelve
