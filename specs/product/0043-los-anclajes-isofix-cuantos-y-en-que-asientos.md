@@ -1,13 +1,19 @@
 # 0043 — Los anclajes ISOFIX: cuántos y en qué asientos
 
 - **Id:** product/0043
-- **Estado:** approved
+- **Estado:** consolidated
 - **Tipo:** product
 - **Fecha:** 2026-09-15
 - **Specs relacionadas:** product/0018, product/0021, product/0027,
   product/0031, product/0032, product/0034
 - **ADRs relacionados:** ninguno
 - **Doc de estado:** `docs/estado/dominio.md`, `docs/estado/interfaz.md`
+
+> ⚠️ **Spec consolidada (2026-09-15).** Describe un cambio en el momento en
+> que se redactó; su sección *Contexto* retrata el sistema **anterior** al
+> cambio y hoy es histórica. Para el estado actual, ver
+> `docs/estado/dominio.md` y `docs/estado/interfaz.md`. Vigentes aquí solo
+> los **criterios de aceptación**, como registro de verificación.
 
 ## Contexto
 
@@ -173,29 +179,44 @@ guía.
 
 > Obligatorios y verificables.
 
-- [ ] `CarSchema` y `ReferenceSchema` aceptan `isofix` opcional, con `seats`
+- [x] `CarSchema` y `ReferenceSchema` aceptan `isofix` opcional, con `seats`
       un array no vacío de `IsofixSeatPosition` sin duplicados y `count` con
       la misma estructura de fuentes que el resto; un registro con dos
       fuentes vigentes en `count`, con una descartada sin motivo, con un
       valor de plaza fuera del conjunto cerrado de cuatro, o con
       `seats.length !== count.value`, falla al cargar el catálogo nombrando
-      el campo y el registro.
-- [ ] Ninguna tecnología obliga a declarar el campo ni lo prohíbe: un `EV`,
+      el campo y el registro. (`src/domain/car.test.ts`, `describe`
+      «CarSchema, anclajes ISOFIX (product/0043)»; `src/domain/reference.test.ts`.)
+- [x] Ninguna tecnología obliga a declarar el campo ni lo prohíbe: un `EV`,
       un `HEV` y un `ICE` con y sin el dato cargan los seis sin error.
-- [ ] `FICHA_FIELDS` incluye `isofixSeatCount`, y `polarityOf` devuelve
-      `'moreIsBetter'`.
-- [ ] La ficha completa muestra «Anclajes ISOFIX» al final de «Tamaño y
+      (`car.test.ts`, `it.each` de las cinco tecnologías.)
+- [x] `FICHA_FIELDS` incluye `isofixSeatCount`, y `polarityOf` devuelve
+      `'moreIsBetter'`. (`src/domain/ficha.test.ts`.)
+- [x] La ficha completa muestra «Anclajes ISOFIX» al final de «Tamaño y
       espacio», con el recuento como valor y las plazas en español como
-      texto de apoyo.
-- [ ] Una regla eliminatoria sobre `isofixSeatCount` solo admite `min`;
+      texto de apoyo. (`COMPLETE_BLOCKS` en `src/ui/FichaPage.tsx`;
+      verificado en `src/ui/FichaPage.test.tsx`, `describe` «ISOFIX seat
+      count row (product/0043)», incluida la comprobación contra el
+      catálogo real de que el recuento coincide con la lista de plazas de
+      cada coche.)
+- [x] Una regla eliminatoria sobre `isofixSeatCount` solo admite `min`;
       `isOperatorAllowed` rechaza `max`, y una regla guardada con `max` se
-      descarta sola al restaurar la configuración.
-- [ ] Un coche sin el dato muestra la celda vacía y Δ `'unavailable'`, y no
+      descarta sola al restaurar la configuración. (Genérico por
+      `polarityOf`/`forcedRuleOperator`: cubierto por el bucle sobre
+      `FICHA_FIELDS` en `eliminatoryRules.test.ts` y por
+      `config.test.ts`.)
+- [x] Un coche sin el dato muestra la celda vacía y Δ `'unavailable'`, y no
       queda marcado como incumplidor por una regla sobre esta magnitud.
-- [ ] Todo `isofix` presente en `cars.json` y en `references.json` lleva
-      fuente con enlace, y ninguno está marcado `estimated: true`.
-- [ ] La skill `add-model` pide el campo, con la definición del requisito
+      (`ficha.test.ts`, «leaves the cell missing for a car that does not
+      declare it, not zero»; comportamiento genérico de `evaluateRules`.)
+- [x] Todo `isofix` presente en `cars.json` y en `references.json` lleva
+      fuente con enlace, y ninguno está marcado `estimated: true`. Veintidós
+      de los veintitrés registros y la referencia lo declaran; el único sin
+      dato (`toyota-rav4-hev`) está registrado como deuda en
+      `docs/roadmap.md`, no relleno a ojo.
+- [x] La skill `add-model` pide el campo, con la definición del requisito
       1.4 y el rechazo del requisito 3.2 escritos en su guía.
+      (`.claude/skills/add-model/SKILL.md`, sección «Las 26 magnitudes».)
 
 ## Dependencias y supuestos
 

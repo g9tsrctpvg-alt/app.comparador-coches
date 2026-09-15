@@ -353,7 +353,7 @@ independientemente del fragmento, así que ningún alias puede dar 404.
 - **`EliminatoryRulesPanel`** (product/0031) — el panel «Imprescindibles»:
   una fila fija y no eliminable con el presupuesto, y una lista de reglas
   eliminatorias, cada una magnitud + operador + umbral, sobre cualquiera de
-  las veintiocho claves de `FICHA_FIELDS`. El `<select>` de magnitud
+  las veintinueve claves de `FICHA_FIELDS`. El `<select>` de magnitud
   agrupa por los mismos seis bloques que «Orden» en la ficha
   (`COMPLETE_BLOCKS`, exportado de `FichaPage.tsx` para esto), y oculta las
   magnitudes que ya tienen regla —a lo sumo una por magnitud—. El operador
@@ -616,7 +616,7 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     anchura, altura libre al suelo, maletero, potencia, precio —tamaño,
     mecánica y coste, en ese orden— reutilizando el mismo `FieldDef` que
     `Completa` para potencia y precio, sin una segunda declaración) o
-    `Completa` (las veintiocho, agrupadas en seis bloques con cabecera
+    `Completa` (las veintinueve, agrupadas en seis bloques con cabecera
     propia). Arranca en `Esenciales`. En «Mecánica y prestaciones», detrás
     de «Consumo», va **«Consumo sin cargar»** (product/0038: el consumo WLTP
     en modo sostenido, solo declarado por un enchufable) y, detrás,
@@ -635,11 +635,15 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     medidas de la segunda fila que km77 mide dentro del coche, y por eso van
     seguidas; a diferencia de la batalla, el espacio de piernas sí tiene
     dirección afirmable —más es mejor— y es el que hoy puntúa
-    `habitabilidad`. Detrás de «Litros por m²», cierra el bloque **«Carga
-    máxima en techo»** (product/0034, sin decimales): misma dirección
-    afirmable que el diámetro de giro, pero al revés —más es mejor—, y su Δ
-    es `'unavailable'` contra cualquier referencia o candidato que no la
-    declare.
+    `habitabilidad`. Detrás de «Litros por m²», va **«Carga máxima en
+    techo»** (product/0034, sin decimales): misma dirección afirmable que el
+    diámetro de giro, pero al revés —más es mejor—, y su Δ es
+    `'unavailable'` contra cualquier referencia o candidato que no la
+    declare. Cierra el bloque **«Anclajes ISOFIX»** (product/0043, sin
+    decimales ni unidad: es un recuento): misma dirección afirmable —más es
+    mejor—, y junto al número, entre paréntesis, las plazas concretas en
+    español —«2 (trasero izquierdo, trasero derecho)»—, el mismo texto de
+    apoyo que ya lleva el año de generación con el código del fabricante.
   - **Comparar** — **dos controles para el mismo estado**, sincronizados por
     construcción porque los dos escriben `comparisonId`: un radio por columna,
     con `name` compartido (`pinned-model`), y el `<select>` de la barra, que
@@ -660,7 +664,7 @@ independientemente del fragmento, así que ningún alias puede dar 404.
     que una celda sin dato, no un número que no diría nada. Arranca fijada
     la primera referencia del catálogo, si hay alguna.
   - **Orden** — `Catálogo` más **una opción por cada una de las
-    veintiocho magnitudes** de «Completa» (product/0027), agrupadas en el
+    veintinueve magnitudes** de «Completa» (product/0027), agrupadas en el
     `<select>` por los mismos seis bloques y con el mismo rótulo que da a esa
     fila su
     `FieldDef` —las opciones se generan de `COMPLETE_BLOCKS`, no de una
