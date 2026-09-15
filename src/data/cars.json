@@ -128,6 +128,20 @@
       ],
       "unit": "L"
     },
+    "isofix": {
+      "count": {
+        "value": 2,
+        "sources": [
+          {
+            "label": "km77, ficha de equipamiento Kia EV3 Air Standard Range (2025): «Fijaciones ISOFIX en plazas exteriores traseras», de serie (septiembre 2026)",
+            "value": 2,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "seats": ["rearLeft", "rearRight"]
+    },
     "powerCv": {
       "value": 204,
       "sources": [
@@ -417,6 +431,20 @@
       ],
       "unit": "L"
     },
+    "isofix": {
+      "count": {
+        "value": 2,
+        "sources": [
+          {
+            "label": "km77, ficha de equipamiento Hyundai Kona Maxx Híbrido 1.6 GDi 104 kW (141 CV) DCT, 2ª generación SX2 (2023): «Fijaciones ISOFIX en asientos laterales traseros», de serie (septiembre 2026)",
+            "value": 2,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "seats": ["rearLeft", "rearRight"]
+    },
     "powerCv": {
       "value": 138,
       "sources": [
@@ -695,6 +723,20 @@
         }
       ],
       "unit": "L"
+    },
+    "isofix": {
+      "count": {
+        "value": 2,
+        "sources": [
+          {
+            "label": "Euro NCAP, informe de seguridad Hyundai Kona Electric (2023, 2ª generación SX2): tabla de protección del ocupante infantil — ISOFIX de serie en plazas traseras exteriores, no disponible en plaza central ni copiloto (septiembre 2026)",
+            "value": 2,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "seats": ["rearLeft", "rearRight"]
     },
     "powerCv": {
       "value": 204,
@@ -991,6 +1033,20 @@
         }
       ],
       "unit": "L"
+    },
+    "isofix": {
+      "count": {
+        "value": 2,
+        "sources": [
+          {
+            "label": "km77, ficha de equipamiento Toyota Corolla Cross Style 140H Hybrid (2023): «Anclajes ISOFIX en plazas traseras exteriores», de serie (septiembre 2026)",
+            "value": 2,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "seats": ["rearLeft", "rearRight"]
     },
     "powerCv": {
       "value": 140,
@@ -1317,6 +1373,20 @@
       ],
       "unit": "L"
     },
+    "isofix": {
+      "count": {
+        "value": 3,
+        "sources": [
+          {
+            "label": "km77, ficha de equipamiento BMW X1 xDrive25e, 3ª generación U11 (2023): «Fijaciones i-Size para sillas infantiles en plazas laterales traseras» y «Fijación de silla infantil i-Size en asiento del acompañante», ambas de serie (septiembre 2026)",
+            "value": 3,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "seats": ["rearLeft", "rearRight", "frontPassenger"]
+    },
     "powerCv": {
       "value": 245,
       "sources": [
@@ -1621,6 +1691,20 @@
       ],
       "unit": "L"
     },
+    "isofix": {
+      "count": {
+        "value": 2,
+        "sources": [
+          {
+            "label": "Euro NCAP, informe de seguridad Alfa Romeo Tonale 1.5 GSE MHEV (2022, código 965): tabla de protección del ocupante infantil — ISOFIX de serie en plazas traseras exteriores, no disponible en plaza central ni copiloto (septiembre 2026)",
+            "value": 2,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "seats": ["rearLeft", "rearRight"]
+    },
     "powerCv": {
       "value": 175,
       "sources": [
@@ -1905,6 +1989,20 @@
       ],
       "unit": "L"
     },
+    "isofix": {
+      "count": {
+        "value": 2,
+        "sources": [
+          {
+            "label": "Euro NCAP, informe de seguridad Kia Sportage 1.6 T-GDI HEV (2022, 5ª generación NQ5): tabla de protección del ocupante infantil — ISOFIX de serie en plazas traseras exteriores, no disponible en plaza central ni copiloto (septiembre 2026)",
+            "value": 2,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "seats": ["rearLeft", "rearRight"]
+    },
     "powerCv": {
       "value": 239,
       "sources": [
@@ -2180,6 +2278,20 @@
         }
       ],
       "unit": "L"
+    },
+    "isofix": {
+      "count": {
+        "value": 2,
+        "sources": [
+          {
+            "label": "Euro NCAP, informe de seguridad Honda Civic 2.0 hybrid (2022, 11ª generación): tabla de protección del ocupante infantil — ISOFIX de serie en plazas traseras exteriores, no disponible en plaza central ni copiloto (septiembre 2026)",
+            "value": 2,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "seats": ["rearLeft", "rearRight"]
     },
     "powerCv": {
       "value": 184,
@@ -2458,6 +2570,20 @@
         }
       ],
       "unit": "L"
+    },
+    "isofix": {
+      "count": {
+        "value": 2,
+        "sources": [
+          {
+            "label": "Euro NCAP, informe de seguridad Lexus NX 350h (2022, 2ª generación AZ20): tabla de protección del ocupante infantil — ISOFIX de serie en plazas traseras exteriores, no disponible en plaza central ni copiloto (septiembre 2026)",
+            "value": 2,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "seats": ["rearLeft", "rearRight"]
     },
     "powerCv": {
       "value": 197,
@@ -2749,6 +2875,20 @@
         }
       ],
       "unit": "L"
+    },
+    "isofix": {
+      "count": {
+        "value": 2,
+        "sources": [
+          {
+            "label": "km77, ficha de equipamiento Mazda CX-5 2.0 e-SKYACTIV G M Hybrid 121 kW (165 CV) FWD, 2ª generación KF (2022): «Fijaciones ISOFIX en plazas laterales traseras», de serie (septiembre 2026)",
+            "value": 2,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "seats": ["rearLeft", "rearRight"]
     },
     "powerCv": {
       "value": 141,
@@ -3063,6 +3203,20 @@
         }
       ]
     },
+    "isofix": {
+      "count": {
+        "value": 2,
+        "sources": [
+          {
+            "label": "Euro NCAP, informe de seguridad Honda CR-V 2.0 Hybrid (2024, 6ª generación): tabla de protección del ocupante infantil — ISOFIX de serie en plazas traseras exteriores, no disponible en plaza central ni copiloto (septiembre 2026)",
+            "value": 2,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "seats": ["rearLeft", "rearRight"]
+    },
     "powerCv": {
       "value": 184,
       "sources": [
@@ -3353,6 +3507,20 @@
           "current": true
         }
       ]
+    },
+    "isofix": {
+      "count": {
+        "value": 3,
+        "sources": [
+          {
+            "label": "km77, ficha de equipamiento Volkswagen ID.4 Pro 128 kW (175 CV) 77 kWh (2021): «Argollas de sujeción ISOFIX para asientos de niños en asiento de acompañante» y «...en plazas traseras exteriores», ambas de serie (septiembre 2026)",
+            "value": 3,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "seats": ["rearLeft", "rearRight", "frontPassenger"]
     },
     "powerCv": {
       "value": 286,
@@ -3683,6 +3851,20 @@
         }
       ]
     },
+    "isofix": {
+      "count": {
+        "value": 2,
+        "sources": [
+          {
+            "label": "Euro NCAP, informe de seguridad Kia EV5 160 kW 4x2 (2025): tabla de protección del ocupante infantil — ISOFIX de serie en plazas traseras exteriores, no disponible en plaza central ni copiloto (septiembre 2026)",
+            "value": 2,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "seats": ["rearLeft", "rearRight"]
+    },
     "powerCv": {
       "value": 217,
       "unit": "CV",
@@ -3997,6 +4179,20 @@
         }
       ]
     },
+    "isofix": {
+      "count": {
+        "value": 2,
+        "sources": [
+          {
+            "label": "Euro NCAP, informe de seguridad Hyundai IONIQ 5 (2021, 1ª generación NE1): tabla de protección del ocupante infantil — ISOFIX de serie en plazas traseras exteriores, no disponible en plaza central ni copiloto (septiembre 2026)",
+            "value": 2,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "seats": ["rearLeft", "rearRight"]
+    },
     "powerCv": {
       "value": 228,
       "unit": "CV",
@@ -4302,6 +4498,20 @@
         }
       ]
     },
+    "isofix": {
+      "count": {
+        "value": 2,
+        "sources": [
+          {
+            "label": "Euro NCAP, informe de seguridad Hyundai Tucson 1.6 T-GDI HEV GLS (2021, 4ª generación NX4): tabla de protección del ocupante infantil — ISOFIX de serie en plazas traseras exteriores, no disponible en plaza central ni copiloto (septiembre 2026)",
+            "value": 2,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "seats": ["rearLeft", "rearRight"]
+    },
     "powerCv": {
       "value": 215,
       "unit": "CV",
@@ -4492,7 +4702,8 @@
       "Mantenimiento anual estimado por el rango genérico de revisión de Hyundai (desde ~250 €, algo más que el HEV por el cambio de aceite anual recomendado en PHEV), no por un coste desglosado del modelo.",
       "Valor residual a 5 años estimado por comparación con el BMW X1 xDrive25e del catálogo (mismo tipo PHEV); sin fuente de reventa española específica del Tucson PHEV.",
       "Las fotos frontal y trasera son del acabado N-Line, no del Klass que puntúa la ficha, aunque sí de la misma generación retocada (2024) — llantas y algún detalle de parachoques pueden no coincidir exactamente con el Klass.",
-      "Sin foto de lateral estricto ni de maletero: no se ha encontrado en Wikimedia Commons un perfil cercano a 90º ni una vista con el portón abierto para este modelo."
+      "Sin foto de lateral estricto ni de maletero: no se ha encontrado en Wikimedia Commons un perfil cercano a 90º ni una vista con el portón abierto para este modelo.",
+      "Los anclajes ISOFIX declarados proceden del ensayo Euro NCAP del Tucson HEV (misma generación NX4 y misma estructura de asiento): no se ha encontrado un ensayo específico del PHEV, y Hyundai declara la calificación de seguridad de esa plataforma válida también para sus variantes enchufables."
     ],
     "lengthMm": {
       "value": 4510,
@@ -4601,6 +4812,20 @@
           "current": true
         }
       ]
+    },
+    "isofix": {
+      "count": {
+        "value": 2,
+        "sources": [
+          {
+            "label": "Euro NCAP, informe de seguridad Hyundai Tucson 1.6 T-GDI HEV GLS (2021, 4ª generación NX4): tabla de protección del ocupante infantil — ISOFIX de serie en plazas traseras exteriores, no disponible en plaza central ni copiloto; Hyundai declara la misma calificación de seguridad válida para las variantes PHEV de la misma plataforma (septiembre 2026)",
+            "value": 2,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "seats": ["rearLeft", "rearRight"]
     },
     "powerCv": {
       "value": 288,
@@ -4922,6 +5147,20 @@
         }
       ]
     },
+    "isofix": {
+      "count": {
+        "value": 2,
+        "sources": [
+          {
+            "label": "Euro NCAP, informe de seguridad Citroën C5 Aircross (2025, 2ª generación CR3, plataforma STLA Medium): tabla de protección del ocupante infantil — ISOFIX de serie en plazas traseras exteriores, no disponible en plaza central ni copiloto (septiembre 2026)",
+            "value": 2,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "seats": ["rearLeft", "rearRight"]
+    },
     "powerCv": {
       "value": 145,
       "unit": "CV",
@@ -5199,6 +5438,20 @@
           "discardedReason": "Cifra de catálogo redondeada que no coincide con la medición publicada por km77 para la versión que puntúa la ficha."
         }
       ]
+    },
+    "isofix": {
+      "count": {
+        "value": 2,
+        "sources": [
+          {
+            "label": "Euro NCAP, informe de seguridad Jeep Compass 74 kWh FWD Altitude (2025, 2ª generación J4U): tabla de protección del ocupante infantil — ISOFIX de serie en plazas traseras exteriores, no disponible en plaza central ni copiloto (septiembre 2026)",
+            "value": 2,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "seats": ["rearLeft", "rearRight"]
     },
     "powerCv": {
       "value": 145,
@@ -5512,6 +5765,20 @@
         }
       ]
     },
+    "isofix": {
+      "count": {
+        "value": 2,
+        "sources": [
+          {
+            "label": "Nissan España, manual del propietario Qashqai e-POWER (3ª generación J12): «Los puntos de anclaje ISOFIX se proporcionan para poder montar los dispositivos de retención infantil solamente en los asientos traseros más cercanos a las ventanillas» (septiembre 2026)",
+            "value": 2,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "seats": ["rearLeft", "rearRight"]
+    },
     "powerCv": {
       "value": 205,
       "sources": [
@@ -5724,7 +5991,8 @@
       "Mantenimiento anual estimado a partir de la tarifa oficial de contratos de Nissan España: el contrato de mantenimiento anual de 3 años del X-Trail (T33) cuesta 795 €, es decir 265 € al año. No es un coste anual desglosado por revisión.",
       "Faltan las fotos de maletero: ni Wikimedia Commons, ni la sala de prensa de Nissan España, ni la web comercial de nissan.es publican el portón abierto y vacío del X-Trail 2026.",
       "Las fotos de frontal, lateral y trasera son los renders oficiales del configurador de nissan.es en acabado Tekna, no en el N-Connecta que puntúa la ficha. Wikimedia Commons solo tiene unidades anteriores al retoque de 2026, que cambia justo la parrilla y los pilotos, así que no servían para estas vistas.",
-      "Espacio de piernas atrás: km77 publica un rango 77-56 cm porque la segunda fila es deslizante; desde `product/0040` se declara el **máximo** —lo que el banco puede llegar a dar—, marcado como ajustable para que la ficha lo enseñe. El mínimo anterior queda como fuente descartada."
+      "Espacio de piernas atrás: km77 publica un rango 77-56 cm porque la segunda fila es deslizante; desde `product/0040` se declara el **máximo** —lo que el banco puede llegar a dar—, marcado como ajustable para que la ficha lo enseñe. El mínimo anterior queda como fuente descartada.",
+      "Manual en inglés del mercado británico: la página equivalente en español existe pero no se pudo verificar su contenido exacto desde este entorno. Misma generación y plataforma T33 que la versión española."
     ],
     "lengthMm": {
       "value": 4680,
@@ -5853,6 +6121,20 @@
           "current": true
         }
       ]
+    },
+    "isofix": {
+      "count": {
+        "value": 2,
+        "sources": [
+          {
+            "label": "Nissan UK, manual del propietario X-Trail e-POWER (4ª generación T33): «The ISOFIX anchor points are provided to install child restraints in the second row outboard seating positions only» (septiembre 2026)",
+            "value": 2,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "seats": ["rearLeft", "rearRight"]
     },
     "powerCv": {
       "value": 204,
@@ -6186,6 +6468,20 @@
       ],
       "unit": "kg"
     },
+    "isofix": {
+      "count": {
+        "value": 2,
+        "sources": [
+          {
+            "label": "Euro NCAP, informe de seguridad Honda ZR-V 2.0 hybrid Advance (2023): tabla de protección del ocupante infantil — ISOFIX de serie en plazas traseras exteriores, no disponible en plaza central ni copiloto (septiembre 2026)",
+            "value": 2,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "seats": ["rearLeft", "rearRight"]
+    },
     "powerCv": {
       "value": 184,
       "sources": [
@@ -6382,7 +6678,8 @@
       "Mantenimiento anual estimado: media de una revisión completa (~325 €) y un cambio de aceite (~110 €) en años alternos con el intervalo de 15.000 km/1 año que publica garajo.es, no una tarifa oficial de Volkswagen España.",
       "Sin valor residual a 5 años: no se ha encontrado fuente específica del modelo en España.",
       "Sin fotos frontal, trasera ni de maletero: en la sala de prensa de Volkswagen y en Wikimedia Commons solo hay tres cuartos delanteros y traseros de esta generación, y el requisito 3 de product/0014 exige frontal y trasera rectas. El lateral y el interior sí son fotos oficiales de la sala de prensa.",
-      "Las mediciones propias de km77 (espacio de piernas y anchura de hombros) se tomaron sobre un Touran Sport 2.0 TDI 150 CV de 7 plazas: misma carrocería y misma generación 5T que la versión puntuada, distinta motorización."
+      "Las mediciones propias de km77 (espacio de piernas y anchura de hombros) se tomaron sobre un Touran Sport 2.0 TDI 150 CV de 7 plazas: misma carrocería y misma generación 5T que la versión puntuada, distinta motorización.",
+      "Los tres asientos de la segunda fila llevan anclaje ISOFIX, no solo los dos exteriores — caso poco común, corroborado por motorpasion.com y motor.mapfre.es. La página de prensa actual de Volkswagen España solo declara dos plazas ISOFIX, pero corresponde al Touran relanzado en Turquía desde 2024 sobre otra plataforma, no a esta generación 5T (2015)."
     ],
     "published": true,
     "lengthMm": {
@@ -6481,6 +6778,20 @@
           "current": true
         }
       ]
+    },
+    "isofix": {
+      "count": {
+        "value": 3,
+        "sources": [
+          {
+            "label": "km77, «Volkswagen Touran (2016) | Impresiones del interior», 3ª generación 5T, sobre la plaza central de la segunda fila: «Tiene fijaciones Isofix, como el resto» (septiembre 2026)",
+            "value": 3,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "seats": ["rearLeft", "rearCenter", "rearRight"]
     },
     "powerCv": {
       "value": 150,
