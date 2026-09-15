@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import type { IsofixSeatPosition } from './car';
 import type { Reference } from './reference';
 import {
   buildFicha,
@@ -484,6 +485,62 @@ describe('withComparison', () => {
       expect(entities[0]?.cells.maxRoofLoadKg).toEqual({ kind: 'missing' });
     });
   });
+
+  describe('isofix seat count (product/0043)', () => {
+    const isofix = (seats: IsofixSeatPosition[]) => ({
+      count: sourced(seats.length),
+      seats,
+    });
+
+    it('reads the count from isofix.count, like any other sourced number', () => {
+      const withIsofix = {
+        ...sportageFixture,
+        isofix: isofix(['rearLeft', 'rearRight']),
+      };
+      const entities = buildFicha([withIsofix], []);
+      expect(entities[0]?.cells.isofixSeatCount).toMatchObject({
+        kind: 'sourced',
+        value: 2,
+      });
+    });
+
+    it('marks more anchor seats as better and fewer as worse: moreIsBetter', () => {
+      const more = {
+        ...sportageFixture,
+        isofix: isofix(['rearLeft', 'rearRight', 'frontPassenger']),
+      };
+      const fewer = { ...x1Fixture, isofix: isofix(['rearLeft', 'rearRight']) };
+      const entities = withComparison(
+        buildFicha([more, fewer], []),
+        'kia-sportage-hev',
+      );
+      const x1 = entities.find((e) => e.id === 'bmw-x1-xdrive25e')!;
+      expect(x1.cells.isofixSeatCount).toMatchObject({
+        value: 2,
+        delta: { value: 2 - 3, direction: 'worse' },
+      });
+    });
+
+    it('leaves the cell missing for a car that does not declare it, not zero', () => {
+      const entities = buildFicha([sportageFixture], []);
+      expect(entities[0]?.cells.isofixSeatCount).toEqual({ kind: 'missing' });
+    });
+
+    it('surfaces the seat list on the entity, as support text and not a cell', () => {
+      const [withoutIsofix] = buildFicha([sportageFixture], []);
+      expect(withoutIsofix?.isofixSeats).toBeUndefined();
+      const withIsofix = {
+        ...sportageFixture,
+        isofix: isofix(['rearLeft', 'rearCenter', 'rearRight']),
+      };
+      const [entity] = buildFicha([withIsofix], []);
+      expect(entity?.isofixSeats).toEqual([
+        'rearLeft',
+        'rearCenter',
+        'rearRight',
+      ]);
+    });
+  });
 });
 
 describe('sortFicha', () => {
@@ -686,6 +743,11 @@ describe('polarityOf and forcedRuleOperator (product/0031, requisito 1.2)', () =
   it('leaves a neutral field like wheelbaseMm unforced', () => {
     expect(polarityOf('wheelbaseMm')).toBe('neutral');
     expect(forcedRuleOperator('wheelbaseMm')).toBeNull();
+  });
+
+  it('forces "min" on isofixSeatCount (product/0043): nadie prefiere menos plazas', () => {
+    expect(polarityOf('isofixSeatCount')).toBe('moreIsBetter');
+    expect(forcedRuleOperator('isofixSeatCount')).toBe('min');
   });
 });
 

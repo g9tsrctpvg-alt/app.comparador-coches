@@ -503,6 +503,135 @@ describe('CarSchema, carga máxima sobre el techo (product/0034)', () => {
   );
 });
 
+describe('CarSchema, anclajes ISOFIX (product/0043)', () => {
+  function isofix(
+    seats: string[],
+    countOverrides?: Partial<{ sources: unknown[] }>,
+  ) {
+    return { count: sourced(seats.length, countOverrides), seats };
+  }
+
+  it('accepts a car that declares which seats carry a two-point anchor', () => {
+    const result = CarSchema.safeParse({
+      ...validCar,
+      isofix: isofix(['rearLeft', 'rearRight']),
+    });
+    expect(result.success).toBe(true);
+    expect(result.data?.isofix?.count.value).toBe(2);
+    expect(result.data?.isofix?.seats).toEqual(['rearLeft', 'rearRight']);
+  });
+
+  it('accepts all four seats, including the front passenger', () => {
+    expect(
+      CarSchema.safeParse({
+        ...validCar,
+        isofix: isofix([
+          'rearLeft',
+          'rearCenter',
+          'rearRight',
+          'frontPassenger',
+        ]),
+      }).success,
+    ).toBe(true);
+  });
+
+  it('accepts a car without the optional isofix data', () => {
+    const result = CarSchema.safeParse(validCar);
+    expect(result.success).toBe(true);
+  });
+
+  it('rejects a count that does not match the number of declared seats', () => {
+    const result = CarSchema.safeParse({
+      ...validCar,
+      isofix: { count: sourced(2), seats: ['rearLeft'] },
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(
+        result.error.issues.some(
+          (issue) => issue.path[0] === 'isofix' && issue.path[1] === 'count',
+        ),
+      ).toBe(true);
+    }
+  });
+
+  it('rejects a repeated seat', () => {
+    const result = CarSchema.safeParse({
+      ...validCar,
+      isofix: { count: sourced(2), seats: ['rearLeft', 'rearLeft'] },
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(
+        result.error.issues.some(
+          (issue) => issue.path[0] === 'isofix' && issue.path[1] === 'seats',
+        ),
+      ).toBe(true);
+    }
+  });
+
+  it('rejects a seat outside the closed set of four', () => {
+    const result = CarSchema.safeParse({
+      ...validCar,
+      isofix: { count: sourced(1), seats: ['trunk'] },
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it('rejects a malformed count, same as any other sourced value', () => {
+    const result = CarSchema.safeParse({
+      ...validCar,
+      isofix: isofix(['rearLeft', 'rearRight'], {
+        sources: [
+          {
+            label: 'km77',
+            value: 2,
+            estimated: false,
+            current: true,
+          },
+          {
+            label: 'Ficha del fabricante',
+            value: 2,
+            estimated: false,
+            current: true,
+          },
+        ],
+      }),
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(
+        result.error.issues.some((issue) => issue.path[0] === 'isofix'),
+      ).toBe(true);
+    }
+  });
+
+  it.each(['ICE', 'MHEV', 'HEV', 'PHEV', 'EV'] as const)(
+    'is genuinely optional on a %s: no cross-field rule with technology',
+    (technology) => {
+      const range = sourced(510);
+      const battery = sourced(65.4);
+      const base =
+        technology === 'EV' || technology === 'PHEV'
+          ? {
+              ...validCar,
+              technology,
+              electricRangeKm: range,
+              batteryKwh: battery,
+            }
+          : { ...validCar, technology };
+
+      expect(CarSchema.safeParse(base).success).toBe(true);
+      expect(
+        CarSchema.safeParse({
+          ...base,
+          isofix: isofix(['rearLeft', 'rearRight']),
+        }).success,
+      ).toBe(true);
+    },
+  );
+});
+
 describe('CarSchema, espacio de piernas atrás (product/0039)', () => {
   it('rejects a car without the required rear legroom, naming the field', () => {
     const { rearLegroomMm: _rearLegroomMm, ...withoutLegroom } = validCar;

@@ -110,4 +110,25 @@ describe('ReferenceSchema', () => {
     const result = ReferenceSchema.safeParse(validReference);
     expect(result.success).toBe(true);
   });
+
+  it('accepts isofix, a fourth exception to "solo dimensiones" (product/0043)', () => {
+    const result = ReferenceSchema.safeParse({
+      ...validReference,
+      isofix: { count: sourced(2), seats: ['rearLeft', 'rearRight'] },
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it('accepts a reference without the optional isofix data', () => {
+    const result = ReferenceSchema.safeParse(validReference);
+    expect(result.success).toBe(true);
+  });
+
+  it('rejects an isofix count that does not match the declared seats', () => {
+    const result = ReferenceSchema.safeParse({
+      ...validReference,
+      isofix: { count: sourced(2), seats: ['rearLeft'] },
+    });
+    expect(result.success).toBe(false);
+  });
 });
