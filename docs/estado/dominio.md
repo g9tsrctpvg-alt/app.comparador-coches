@@ -115,6 +115,47 @@ molesta de un eléctrico en viaje no es solo el alcance sino el tiempo de
 repostaje, y el catálogo no declara ni potencia de carga ni curva. Estas dos
 magnitudes se declaran, se muestran y se comparan; no producen nota.
 
+## Anclajes ISOFIX: cuántos y en qué asientos
+
+Un `Car` declara además, opcionalmente, `isofix` (product/0043): qué plazas
+llevan anclaje ISOFIX de dos puntos, de un conjunto cerrado de cuatro —
+`rearLeft`, `rearCenter`, `rearRight`, `frontPassenger`—. Como `generation` y
+la electrificación, **no entra en ninguna nota**: se declara y se muestra,
+ningún eje lo lee.
+
+`isofix` no es un `SourcedValue` con un array por valor, aunque conceptualmente
+lo sea: `SourceEntry.value` (`src/domain/car.ts`) solo admite número o texto,
+así que un array de plazas no tiene dónde encajar sin ensanchar ese tipo para
+todo el proyecto. En su lugar, `isofix` lleva dos campos hermanos:
+
+- **`count`** — un `SourcedNumber` normal, con la misma estructura de fuentes
+  que el resto de magnitudes: exactamente una fuente vigente, y una
+  descartada exige motivo.
+- **`seats`** — la lista de plazas concretas, sin fuente propia: sale de la
+  misma cita que `count`, el mismo trato que ya recibe `generation.code`
+  junto a `generation.launchYear`. Sin duplicados y con al menos una.
+
+Una invariante cruzada de `IsofixSchema` exige `seats.length === count.value`
+y que `seats` no repita ninguna plaza; romperla falla al cargar el catálogo
+nombrando el campo y el registro. `Reference` declara el mismo campo, por el
+mismo motivo que ya justifica `turningCircleM` y `maxRoofLoadKg` ahí: sin él,
+la Δ de esta magnitud saldría `'unavailable'` para los candidatos siempre que
+se comparen contra la referencia.
+
+**Es opcional de verdad.** Todo turismo homologado en la Unión Europea lleva
+al menos dos anclajes, pero no toda fuente publica el desglose por plaza —
+distinto de «tiene ISOFIX» como casilla genérica de equipamiento, que publica
+casi cualquier ficha comercial sin decir cuántas plazas ni cuáles—. Un
+registro sin el dato es un registro incompleto, no inválido; hoy solo
+`toyota-rav4-hev` está en ese caso —su generación XA60, a la venta en España
+desde enero de 2026, todavía no tiene informe Euro NCAP publicado—, deuda
+registrada en `docs/roadmap.md`.
+
+**El caso normal es dos plazas traseras exteriores**, pero no el único: el
+BMW X1 xDrive25e y el Volkswagen ID.4 añaden de serie el anclaje del asiento
+del copiloto, y el Volkswagen Touran es hoy el único candidato con anclaje en
+las tres plazas de la segunda fila, central incluida.
+
 ## Puntuación explicable
 
 El núcleo de puntuación (`src/domain/scoring/`) no expone una función que
@@ -814,7 +855,7 @@ peso.
 ## Los imprescindibles
 
 `src/domain/eliminatoryRules.ts` (product/0031): un umbral sobre una de las
-veintiocho magnitudes de la ficha (`FICHA_FIELDS`), `{ field, operator,
+veintinueve magnitudes de la ficha (`FICHA_FIELDS`), `{ field, operator,
 value }`, con `operator` en `'min'` o `'max'`. `evaluateRules` los evalúa
 contra los valores numéricos ya extraídos de un coche
 (`numericFieldValues`/`numericValuesFromCells`, `src/domain/ficha.ts`) y
@@ -860,18 +901,21 @@ declara identidad, tecnología, fotos, generación (`product/0021` — la
 referencia existe para dar contexto, y de cuándo es el coche contra el que
 se compara todo es precisamente eso) y cinco magnitudes dimensionales
 obligatorias —longitud, anchura, altura, altura libre al suelo y
-maletero—, nada de lo que solo sirve para puntuar. Dos excepciones más,
-ambas opcionales por el mismo motivo: sin ellas, la Δ de esa magnitud
+maletero—, nada de lo que solo sirve para puntuar. Tres excepciones más,
+todas opcionales por el mismo motivo: sin ellas, la Δ de esa magnitud
 quedaría `'unavailable'` para todos los candidatos siempre que se comparen
 contra esta referencia. El diámetro de giro (`turningCircleM`,
 `product/0032`) fue la primera; la carga máxima sobre el techo
-(`maxRoofLoadKg`, `product/0034`) es la segunda. Una lista separada, no un
-campo en `Car`, hace que pasarle una `Reference` a `scoreCatalog` sea un
-error de tipos, no un olvido posible en tiempo de ejecución.
+(`maxRoofLoadKg`, `product/0034`), la segunda; los anclajes ISOFIX (`isofix`,
+`product/0043`), la tercera. Una lista separada, no un campo en `Car`, hace
+que pasarle una `Reference` a `scoreCatalog` sea un error de tipos, no un
+olvido posible en tiempo de ejecución.
 
 `references.json` trae hoy al Alfa Romeo Giulietta de la especificación
 original del proyecto —la fila que `product/0001` dejó fuera a propósito
-por no ser un candidato—, con sus cinco magnitudes fuente por fuente.
+por no ser un candidato—, con sus cinco magnitudes fuente por fuente y con
+`isofix` declarado: dos plazas traseras exteriores, según su manual del
+propietario.
 
 ## Ficha
 
@@ -879,36 +923,44 @@ por no ser un candidato—, con sus cinco magnitudes fuente por fuente.
 por product/0018; product/0021 añade las dos de generación; product/0028
 la autonomía eléctrica y la batería; product/0032 el diámetro de giro;
 product/0034 la carga máxima sobre el techo; product/0038 el consumo en
-modo sostenido; product/0039 el espacio de piernas atrás): compara
-candidatos y referencias entre sí, magnitud por magnitud, sobre veintiocho
-campos de `Car`/`Reference` —veintisiete propios más
-`litersPerSquareMeter`, derivada—. No calcula puntuación: es lectura, no
-juicio agregado, así que vive fuera de `scoring/`.
+modo sostenido; product/0039 el espacio de piernas atrás; product/0043 el
+recuento de anclajes ISOFIX): compara candidatos y referencias entre sí,
+magnitud por magnitud, sobre veintinueve campos de `Car`/`Reference` —
+veintiocho propios más `litersPerSquareMeter`, derivada—. No calcula
+puntuación: es lectura, no juicio agregado, así que vive fuera de
+`scoring/`.
 
 - **`litrosPorMetroCuadrado(trunkLiters, lengthMm, widthMm)`** — litros de
   maletero por metro cuadrado de huella en el suelo: cuánto espacio da un
   coche por el sitio que ocupa (`product/0013`, requisito 11).
-- **`FICHA_FIELDS`/`FichaField`** — las veintiocho claves, en el orden en
+- **`FICHA_FIELDS`/`FichaField`** — las veintinueve claves, en el orden en
   que se declaran; la interfaz decide etiqueta, unidad y agrupación por
-  bloque a partir de ahí, no aquí.
+  bloque a partir de ahí, no aquí. `isofixSeatCount` (product/0043) es una
+  de ellas sin ser un campo propio de `Car`: lee `isofix.count` como
+  cualquier otro `SourcedNumber` opcional de la ficha.
 - **`buildFicha(cars, references)`** — un `FichaEntity` por candidato y por
   referencia, en el orden del catálogo, sin ordenar y sin Δ todavía: eso
   son pasos aparte, deliberadamente, porque el orden y el modelo de
   comparación los elige quien mira la ficha. Una celda es `'sourced'`
   (valor, unidad, estimado), `'rating'` (una nota de usuario, sobre 5) o
   `'missing'` —el campo no existe en esa entidad, no un cero—: una
-  `Reference` declara siempre siete de las veintiocho —las cinco
+  `Reference` declara siempre siete de las veintinueve —las cinco
   dimensionales, `litersPerSquareMeter` derivada y el año de lanzamiento de
   su generación, obligatorio—, así que comparar contra ella deja
-  veintiuna celdas `'missing'` por construcción, no por caso especial; tres
-  más —el año de retoque, el diámetro de giro (product/0032) y la carga
-  máxima sobre el techo (product/0034)— dependen de si esa referencia
-  concreta las declara. Entre las que faltan siempre están la autonomía
-  eléctrica, la batería, el consumo en modo sostenido y el espacio de
-  piernas atrás: la referencia es un térmico puro y no declara magnitudes
-  que no sean dimensionales.
+  veintidós celdas `'missing'` por construcción, no por caso especial;
+  cuatro más —el año de retoque, el diámetro de giro (product/0032), la
+  carga máxima sobre el techo (product/0034) y el recuento de anclajes
+  ISOFIX (product/0043)— dependen de si esa referencia concreta las
+  declara. Entre las que faltan siempre están la autonomía eléctrica, la
+  batería, el consumo en modo sostenido y el espacio de piernas atrás: la
+  referencia es un térmico puro y no declara magnitudes que no sean
+  dimensionales (ni, en el caso de ISOFIX, la única excepción declarada
+  además de la generación).
+  `FichaEntity.isofixSeats` expone las plazas concretas, sin ser una celda
+  comparable propia —el mismo trato que `generationCode`—: texto de apoyo
+  que la interfaz muestra junto al recuento.
 - **La tabla de polaridad** (`POLARITY`, `Record<FichaField,
-  DeltaPolarity>` — TypeScript exige las veintiocho claves en tiempo de
+  DeltaPolarity>` — TypeScript exige las veintinueve claves en tiempo de
   compilación, así que ninguna puede quedar sin dirección declarada por
   descuido) fija si más es mejor, peor o si el dato no tiene una dirección
   declarada, con su razón junto a cada una:
@@ -928,7 +980,9 @@ juicio agregado, así que vive fuera de `scoring/`.
     (la magnitud que `product/0017` añadió porque mide si caben tres
     personas atrás), `maxRoofLoadKg` (product/0034: la misma dirección
     afirmable sin matices que el diámetro de giro — nadie prefiere que el
-    techo aguante menos), `powerCv`, `residualPct5y` (lo que se recupera al
+    techo aguante menos), `isofixSeatCount` (product/0043: la misma
+    dirección afirmable sin matices — nadie prefiere menos plazas con
+    anclaje), `powerCv`, `residualPct5y` (lo que se recupera al
     vender), `reliabilityOcu`, `warrantyYears`, `warrantyExtensionYears`,
     `electricRangeKm` (kilómetros con la batería llena: aquí sí hay una
     dirección que el proyecto puede afirmar sin matices),
@@ -961,7 +1015,7 @@ juicio agregado, así que vive fuera de `scoring/`.
   con texto accesible, nunca como un cero engañoso, pero el dominio los
   distingue: apagar la Δ a propósito no es lo mismo que no poder calcularla.
 - **`sortFicha(entities, criterion)`** — ordena por `catalog` (el orden del
-  propio catálogo) o por **cualquiera de las veintiocho magnitudes**:
+  propio catálogo) o por **cualquiera de las veintinueve magnitudes**:
   `FICHA_SORT_CRITERIA` se declara como `['catalog', ...FICHA_FIELDS]`, no
   como una lista aparte, así que una magnitud nueva en la ficha es ordenable
   el mismo día que existe. La **dirección la fija la tabla de polaridad**, no

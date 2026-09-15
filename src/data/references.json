@@ -101,6 +101,20 @@
         }
       ]
     },
+    "isofix": {
+      "count": {
+        "value": 2,
+        "sources": [
+          {
+            "label": "Manual del propietario Alfa Romeo Giulietta (tipo 940): «The central rear seat is not approved for any type of Isofix child restraint system» (septiembre 2026)",
+            "value": 2,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "seats": ["rearLeft", "rearRight"]
+    },
     "photos": {
       "front": {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Alfa_Romeo_Giulietta_front_20100704.jpg/1280px-Alfa_Romeo_Giulietta_front_20100704.jpg",

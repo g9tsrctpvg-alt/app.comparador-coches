@@ -137,6 +137,55 @@ export type WarrantyExtension = {
   condition: string;
 };
 
+/**
+ * Las cuatro plazas donde un turismo puede llevar anclaje ISOFIX de dos
+ * puntos (product/0043).
+ */
+export const ISOFIX_SEAT_POSITIONS = [
+  'rearLeft',
+  'rearCenter',
+  'rearRight',
+  'frontPassenger',
+] as const;
+export type IsofixSeatPosition = (typeof ISOFIX_SEAT_POSITIONS)[number];
+
+/**
+ * Qué plazas llevan anclaje ISOFIX (product/0043). `count` reutiliza
+ * `SourcedNumberSchema` tal cual —la misma estructura de fuentes que el
+ * resto de magnitudes—; `seats` es el desglose de plazas concretas, sin
+ * fuente propia porque sale de la misma cita que `count`, el mismo trato
+ * que ya recibe `Generation.code` junto a `Generation.launchYear`. Van en
+ * campos hermanos y no en un único `SourcedValue` con un array por valor
+ * porque `SourceEntrySchema.value` solo admite número o texto: un array de
+ * plazas no encaja ahí sin ensanchar ese tipo para todo el proyecto.
+ * Informativa, como `maxRoofLoadKg`: ningún eje la lee.
+ */
+export const IsofixSchema = z
+  .object({
+    count: SourcedNumberSchema,
+    seats: z.array(z.enum(ISOFIX_SEAT_POSITIONS)).min(1),
+  })
+  .superRefine((data, ctx) => {
+    if (new Set(data.seats).size !== data.seats.length) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'no puede repetir una plaza',
+        path: ['seats'],
+      });
+    }
+    if (data.count.value !== data.seats.length) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'el recuento no coincide con el número de plazas declaradas',
+        path: ['count'],
+      });
+    }
+  });
+export type Isofix = {
+  count: SourcedNumber;
+  seats: IsofixSeatPosition[];
+};
+
 const CarObjectSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
@@ -186,6 +235,12 @@ const CarObjectSchema = z.object({
    * electrificación (product/0028).
    */
   maxRoofLoadKg: SourcedNumberSchema.optional(),
+  /**
+   * Qué plazas llevan anclaje ISOFIX de dos puntos (product/0043). Opcional
+   * de verdad: todo turismo homologado en la UE lleva al menos dos, pero no
+   * toda fuente publica el desglose por plaza.
+   */
+  isofix: IsofixSchema.optional(),
   powerCv: SourcedNumberSchema,
   weightKg: SourcedNumberSchema,
   acceleration0to100: SourcedNumberSchema,

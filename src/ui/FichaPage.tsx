@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
-import type { Car } from '../domain/car';
+import type { Car, IsofixSeatPosition } from '../domain/car';
 import {
   decisionOf,
   entryOf,
@@ -73,6 +73,25 @@ const PHOTO_VIEW_LABELS: Record<PhotoView, string> = {
   interior: 'Interior',
 };
 
+/** Traducción de cada plaza a su etiqueta en español (product/0043): vive
+ * en la interfaz, igual que el resto de etiquetas de `COMPLETE_BLOCKS` —
+ * el dominio solo declara el conjunto cerrado de claves. */
+const ISOFIX_SEAT_LABELS: Record<IsofixSeatPosition, string> = {
+  rearLeft: 'trasero izquierdo',
+  rearCenter: 'trasero central',
+  rearRight: 'trasero derecho',
+  frontPassenger: 'copiloto',
+};
+
+/** Texto de apoyo de la fila «Anclajes ISOFIX»: las plazas concretas, no
+ * una celda ni una Δ propia — el mismo trato que `generationCode`. */
+function isofixSeatsLabel(
+  seats: IsofixSeatPosition[] | undefined,
+): string | undefined {
+  if (seats === undefined || seats.length === 0) return undefined;
+  return seats.map((seat) => ISOFIX_SEAT_LABELS[seat]).join(', ');
+}
+
 // Exportado para que `EliminatoryRulesPanel` e `IneligibleRow` (product/0031)
 // puedan formatear un umbral con la misma unidad y los mismos decimales que
 // la propia celda de la ficha, sin declarar su propio `FieldDef`.
@@ -99,14 +118,15 @@ interface BlockDef {
 type CompleteBlockDef = BlockDef & { label: string };
 
 /**
- * Las veintiocho magnitudes de la ficha (product/0014, requisito 1;
+ * Las veintinueve magnitudes de la ficha (product/0014, requisito 1;
  * product/0018 las reparte en dos conjuntos; product/0021 añade el bloque
  * de generación; product/0028 añade autonomía eléctrica y batería;
  * product/0032 añade el diámetro de giro; product/0034 añade la carga
  * máxima sobre el techo; product/0038 añade el consumo en modo sostenido;
- * product/0039 el espacio de piernas atrás), agrupadas y rotuladas — el
- * dominio (`ficha.ts`) solo declara las claves y extrae los valores;
- * etiquetas, unidades de respaldo y decimales son decisión de la interfaz.
+ * product/0039 el espacio de piernas atrás; product/0043 el recuento de
+ * anclajes ISOFIX), agrupadas y rotuladas — el dominio (`ficha.ts`) solo
+ * declara las claves y extrae los valores; etiquetas, unidades de respaldo y
+ * decimales son decisión de la interfaz.
  */
 // Exportado además de `COMPLETE_FIELD_DEFS` (más abajo) para que
 // `EliminatoryRulesPanel` (product/0031) pueda agrupar el selector de
@@ -171,6 +191,10 @@ export const COMPLETE_BLOCKS: CompleteBlockDef[] = [
         label: 'Carga máxima en techo',
         unitFallback: 'kg',
       },
+      // Recuento de plazas con anclaje ISOFIX (product/0043); las plazas
+      // concretas viajan como texto de apoyo, igual que el código de
+      // generación junto al año de lanzamiento.
+      { key: 'isofixSeatCount', label: 'Anclajes ISOFIX' },
     ],
   },
   {
@@ -299,7 +323,7 @@ const ESSENTIAL_BLOCKS: BlockDef[] = [
 
 /** El orden del propio catálogo: la única opción del selector que no es una
  * magnitud, y por eso la única que se rotula aquí a mano. Las otras
- * veintiocho salen de `COMPLETE_BLOCKS` (product/0027, requisitos 1-3). */
+ * veintinueve salen de `COMPLETE_BLOCKS` (product/0027, requisitos 1-3). */
 const CATALOG_SORT_LABEL = 'Catálogo';
 
 // Exportado para que el test de estructura compruebe el número de filas de
@@ -441,7 +465,11 @@ function DataCell({
   isPinned: boolean;
 }) {
   const code =
-    def.key === 'generationLaunchYear' ? entity.generationCode : undefined;
+    def.key === 'generationLaunchYear'
+      ? entity.generationCode
+      : def.key === 'isofixSeatCount'
+        ? isofixSeatsLabel(entity.isofixSeats)
+        : undefined;
   return (
     <td className={isPinned ? PINNED_CELL_CLASS : MODEL_CELL_CLASS}>
       <span className={styles.cellLabel}>{def.label}</span>
@@ -1053,7 +1081,7 @@ function attachScrollAxisLock(el: HTMLDivElement): () => void {
  * Δ que antes solo existía contra el Alfa Romeo Giulietta ahora se calcula
  * contra cualquier modelo que se elija, y un conmutador de campos recupera
  * la lectura «de un vistazo» de seis magnitudes cuando no hace falta ver
- * las veintiocho. No calcula nada por su cuenta: `ficha.ts` ya entrega cada
+ * las veintinueve. No calcula nada por su cuenta: `ficha.ts` ya entrega cada
  * celda lista para formatear (`ui-no-scoring-internals`).
  */
 export function FichaPage({

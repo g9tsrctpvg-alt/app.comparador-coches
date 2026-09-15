@@ -210,8 +210,8 @@ describe('FichaPage', () => {
       expect(markup).toContain('<option value="completa">Completa</option>');
     });
 
-    it('declares TOTAL_FIELD_COUNT as the twenty-eight magnitudes of "Completa"', () => {
-      expect(TOTAL_FIELD_COUNT).toBe(28);
+    it('declares TOTAL_FIELD_COUNT as the twenty-nine magnitudes of "Completa"', () => {
+      expect(TOTAL_FIELD_COUNT).toBe(29);
     });
 
     it("matches FICHA_FIELDS exactly: no domain field silently missing from Completa's render", () => {
@@ -1350,5 +1350,64 @@ describe('the sliding-bench mark (product/0040, requisito 3.2)', () => {
       // el máximo.
       'volkswagen-touran.rearLegroomMm',
     ]);
+  });
+});
+
+describe('ISOFIX seat count row (product/0043)', () => {
+  const isofixDef = COMPLETE_FIELD_DEFS.get('isofixSeatCount')!;
+
+  it('declares the row label "Anclajes ISOFIX", no decimals and no fallback unit', () => {
+    expect(isofixDef.label).toBe('Anclajes ISOFIX');
+    expect(isofixDef.decimals).toBeUndefined();
+    expect(isofixDef.unitFallback).toBeUndefined();
+  });
+
+  it('shows the seat breakdown as support text next to the count, the same mechanism as the generation code', () => {
+    const markup = renderToStaticMarkup(
+      <CellContent
+        cell={{
+          kind: 'sourced',
+          value: 2,
+          estimated: false,
+          adjustable: false,
+          delta: null,
+        }}
+        def={isofixDef}
+        code="trasero izquierdo, trasero derecho"
+      />,
+    );
+    expect(markup).toContain('2 (trasero izquierdo, trasero derecho)');
+  });
+
+  it('shows only the count, with no parenthetical, when no seat breakdown is available', () => {
+    const markup = renderToStaticMarkup(
+      <CellContent
+        cell={{
+          kind: 'sourced',
+          value: 2,
+          estimated: false,
+          adjustable: false,
+          delta: null,
+        }}
+        def={isofixDef}
+      />,
+    );
+    expect(markup).not.toContain('(');
+  });
+
+  it('matches every car in the real catalogue: the count equals its seat list length', () => {
+    // Comprobado contra el catálogo real, no contra un caso construido: si
+    // `count` y `seats.length` alguna vez discreparan, `CarSchema` ya lo
+    // habría rechazado al cargar — esto confirma que la ficha lee el mismo
+    // par consistente.
+    for (const entity of buildFicha(loadCatalog(), [])) {
+      const cell = entity.cells.isofixSeatCount;
+      if (cell.kind !== 'sourced') {
+        expect(entity.isofixSeats).toBeUndefined();
+        continue;
+      }
+      expect(entity.isofixSeats).toBeDefined();
+      expect(cell.value).toBe(entity.isofixSeats?.length);
+    }
   });
 });

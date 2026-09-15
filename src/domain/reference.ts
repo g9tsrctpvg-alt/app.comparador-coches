@@ -1,5 +1,10 @@
 import { z } from 'zod';
-import { GenerationSchema, SourcedNumberSchema, TechnologySchema } from './car';
+import {
+  GenerationSchema,
+  IsofixSchema,
+  SourcedNumberSchema,
+  TechnologySchema,
+} from './car';
 import { PhotosSchema } from './photo';
 
 /**
@@ -41,6 +46,13 @@ export const ReferenceSchema = z.object({
    * los candidatos siempre que se comparen contra esta referencia.
    */
   maxRoofLoadKg: SourcedNumberSchema.optional(),
+  /**
+   * Qué plazas llevan anclaje ISOFIX (product/0043): la misma excepción a
+   * «solo dimensiones» que `turningCircleM` y `maxRoofLoadKg`, y por el
+   * mismo motivo — sin ella, la Δ de esta magnitud quedaría `'unavailable'`
+   * para los candidatos siempre que se comparen contra esta referencia.
+   */
+  isofix: IsofixSchema.optional(),
   photos: PhotosSchema,
 });
 export type Reference = z.infer<typeof ReferenceSchema>;

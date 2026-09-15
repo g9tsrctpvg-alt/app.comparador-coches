@@ -1,6 +1,6 @@
 ---
 name: add-model
-description: Añade un coche nuevo al catálogo de comparador-coches (src/data/cars.json) — investiga en la web sus 25 magnitudes con fuente real (incluidas su generación y, si es electrificado, su autonomía eléctrica y su batería), busca y verifica sus 5 fotos (frontal, lateral, trasera, maletero, interior), y deja el repositorio en verde antes de comitear. Úsala en cuanto el usuario pida "añadir un coche", "meter un modelo nuevo en la comparativa", "comparar también el/la <marca modelo>", o describa un coche que quiere ver en el ranking o en la ficha completa — aunque no mencione explícitamente "catálogo" ni "cars.json". No la uses para corregir un dato de un coche que ya está en el catálogo (eso es una edición puntual, no un alta) ni para cambiar la referencia (`references.json`, hoy solo el Alfa Romeo Giulietta).
+description: Añade un coche nuevo al catálogo de comparador-coches (src/data/cars.json) — investiga en la web sus 26 magnitudes con fuente real (incluidas su generación, si es electrificado su autonomía eléctrica y su batería, y sus anclajes ISOFIX), busca y verifica sus 5 fotos (frontal, lateral, trasera, maletero, interior), y deja el repositorio en verde antes de comitear. Úsala en cuanto el usuario pida "añadir un coche", "meter un modelo nuevo en la comparativa", "comparar también el/la <marca modelo>", o describa un coche que quiere ver en el ranking o en la ficha completa — aunque no mencione explícitamente "catálogo" ni "cars.json". No la uses para corregir un dato de un coche que ya está en el catálogo (eso es una edición puntual, no un alta) ni para cambiar la referencia (`references.json`, hoy solo el Alfa Romeo Giulietta).
 ---
 
 # Añadir un modelo al catálogo
@@ -23,7 +23,7 @@ relleno de formulario.
 
 1. Rama nueva para esta unidad de trabajo (`docs/proceso/trazabilidad.md`).
 2. Identidad: `id`, `name`, `brand`, `technology`, `generation`.
-3. Las 25 magnitudes, cada una con una fuente real — la sección más larga.
+3. Las 26 magnitudes, cada una con una fuente real — la sección más larga.
 4. Las 5 fotos — flujo completo en `references/photo-sourcing.md`.
 5. Las valoraciones subjetivas, **enseñándole las fotos del paso 4 al
    usuario** para que las puntúe. Es interactivo por diseño: van después de
@@ -47,7 +47,7 @@ motorización/acabado— pregúntaselo antes de investigar nada: `technology`
 buscar la genérica cuando hay varias en el mercado es la forma más directa
 de acabar mezclando datos de dos coches distintos.
 
-## 2. Las 25 magnitudes
+## 2. Las 26 magnitudes
 
 **La generación va aparte y no puntúa.** `generation` (product/0021, ADR
 0009) es obligatoria y no es una de las magnitudes con las que se puntúa:
@@ -168,6 +168,29 @@ coche tiene techo, pero no toda fuente publica su límite— y, como
 - Si de verdad no lo encuentras, omite el campo — no es una de las
   magnitudes que se estiman a ojo, porque una cifra inventada aquí puede
   llevar a poner peso de más sobre un techo real.
+
+**`isofix` declara qué plazas llevan anclaje ISOFIX de dos puntos**
+(product/0043): `{ count: SourcedNumber, seats: [...] }`, donde `seats` es
+la lista de plazas —de un conjunto cerrado de cuatro: `rearLeft`,
+`rearCenter`, `rearRight`, `frontPassenger`— y `count` tiene que coincidir
+con `seats.length`. Es opcional para cualquier tecnología, como
+`maxRoofLoadKg`, y la definición también es más estricta de lo que parece:
+
+- Vale una fuente que desglose **cuántas plazas y cuáles**: la ficha
+  técnica oficial del fabricante, el informe de EuroNCAP en su apartado de
+  protección del ocupante infantil («Child Occupant Protection»), o un
+  medio especializado (km77, motor.es, coches.net) que lo detalle para la
+  versión que das de alta.
+- **No vale** una fuente que solo diga «lleva ISOFIX» o «preparado ISOFIX»
+  como equipamiento genérico, sin decir cuántas plazas ni cuáles: es el
+  dato que la mayoría de fichas comerciales dan, y no es el que pide este
+  campo.
+- No declares aquí si el asiento es compatible i-Size ni si lleva top
+  tether: son datos relacionados que quedan fuera de esta magnitud.
+- Si de verdad no encuentras el desglose por plaza, omite el campo entero
+  —no rellenes solo `count` sin `seats`, ni al revés— y regístralo como
+  deuda en `docs/roadmap.md`, igual que cualquier otra magnitud opcional
+  sin fuente.
 
 **`rearLegroomMm` es el espacio de piernas de la segunda fila, en
 milímetros, y es obligatorio** (product/0039): a diferencia de
