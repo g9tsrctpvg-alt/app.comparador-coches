@@ -1,7 +1,7 @@
 # 0043 — Los anclajes ISOFIX: cuántos y en qué asientos
 
 - **Id:** product/0043
-- **Estado:** draft
+- **Estado:** approved
 - **Tipo:** product
 - **Fecha:** 2026-09-15
 - **Specs relacionadas:** product/0018, product/0021, product/0027,
