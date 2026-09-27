@@ -49,7 +49,7 @@ activos, en el mismo orden en que aparecen ahí.
 | Enlaces de documentación | Activo | `lychee` sobre `**/*.md` |
 | Coherencia de specs y ADRs | Activo | `scripts/validateDocs.ts`, bajo Vitest |
 | Escaneo de secretos | Activo | TruffleHog sobre el repositorio |
-| Actualización de dependencias | Activo | Dependabot (`github-actions`, `npm`) |
+| Actualización de dependencias | Activo | Dependabot (`github-actions`, `npm`), con grupos en `npm` (ver abajo) |
 
 Los *jobs* del workflow están encadenados con `needs` en este orden:
 `lint → typecheck → architecture → test → docs → links → secrets`. `build`
@@ -139,6 +139,24 @@ un test por cada una—:
 Lo que **no** comprueba —y por tanto sigue siendo juicio humano— es si el
 alcance es claro, si los criterios son realmente verificables y si el doc de
 estado se actualizó de verdad al consolidar.
+
+### Grupos de Dependabot
+
+En el ecosistema `npm`, Dependabot no abre un PR por paquete: agrupa según
+`.github/dependabot.yml`. Cada dependencia entra en el **primer** grupo cuyas
+reglas cumple:
+
+| Grupo | Qué entra | Por qué |
+| --- | --- | --- |
+| `vitest` | `vitest` y `@vitest/*`, cualquier versión, majors incluidos | `@vitest/coverage-v8` fija `vitest` como *peer* exacto: subir uno sin el otro rompe `npm ci` |
+| `dev-minor-patch` | Dependencias de desarrollo, solo *minor* y *patch* | Un PR semanal en vez de uno por herramienta, probado con el lockfile combinado |
+| `prod-minor-patch` | Dependencias de producción, solo *minor* y *patch* | Separado del anterior porque va en el bundle publicado |
+
+Un **major** fuera de `vitest` sigue llegando en su propio PR, para revisarlo
+aislado. `github-actions` no se agrupa.
+
+Si un PR agrupado falla, la CI no dice qué paquete lo rompe: se localiza
+reproduciendo en local la subida de cada paquete del grupo por separado.
 
 ## 5. Lo que la CI no comprueba, lo declaras tú
 

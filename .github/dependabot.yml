@@ -14,3 +14,23 @@ updates:
       interval: weekly
     commit-message:
       prefix: build
+    # A dependency joins the first group whose rules it matches. Anything
+    # left out (majors outside vitest) still gets its own PR.
+    groups:
+      # @vitest/coverage-v8 pins vitest as an exact peer: they must move
+      # together, majors included.
+      vitest:
+        patterns:
+          - vitest
+          - '@vitest/*'
+      dev-minor-patch:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+      # Kept apart from dev tooling: these ship in the published bundle.
+      prod-minor-patch:
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
