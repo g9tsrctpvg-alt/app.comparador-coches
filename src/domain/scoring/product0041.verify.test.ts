@@ -52,9 +52,9 @@ describe('product/0041 sobre el catálogo real', () => {
     }
   });
 
-  it('los siete coches con extensión condicionada la siguen mostrando', () => {
+  it('los ocho coches con extensión condicionada la siguen mostrando', () => {
     const conExtension = cars.filter((car) => car.warrantyExtension);
-    expect(conExtension).toHaveLength(7);
+    expect(conExtension).toHaveLength(8);
     for (const car of conExtension) {
       const info = axisOf(car.id).info!;
       expect(info).toHaveLength(2);
