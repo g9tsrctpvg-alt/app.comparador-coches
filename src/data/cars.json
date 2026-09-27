@@ -7226,5 +7226,366 @@
         "shows": "Toyota RAV4 HEV, salpicadero, volante y consola central, tapicería negra — mismo acabado CORE"
       }
     }
+  },
+  {
+    "id": "renault-austral-hev",
+    "name": "Austral",
+    "brand": "Renault",
+    "technology": "HEV",
+    "generation": {
+      "launchYear": {
+        "value": 2022,
+        "sources": [
+          {
+            "label": "Wikipedia (en), «Renault Austral» (septiembre 2026): «It was unveiled in March 2022 as a successor to the Kadjar», https://en.wikipedia.org/wiki/Renault_Austral",
+            "value": 2022,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "faceliftYear": {
+        "value": 2025,
+        "sources": [
+          {
+            "label": "Renault España, nota de prensa «Nuevo Renault Austral: diseño asertivo, confort mejorado y eficiencia híbrida» (3 de abril de 2025), presentación del Austral renovado; la versión puntuada es la de km77 «(2025)», posterior al retoque (4.533 mm de longitud frente a los 4.510 mm de la anterior), https://prensa.renault.es/nuevo-renault-austral-diseno-asertivo-confort-mejorado-y-eficiencia-hibrida/",
+            "value": 2025,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "code": "HHN"
+    },
+    "notes": [
+      "Puntúa la versión techno full hybrid E-Tech 200 (199 CV / 146 kW, tracción delantera, llanta de 19\"), del Austral renovado en 2025; la gama española tiene también versiones mild hybrid (MHEV) de 140-160 CV que no son las de esta ficha.",
+      "El PVP de catálogo es 40.825 €, el que publica Renault España para la techno full hybrid E-Tech 200: los 38.809 € que muestra su web y los 38.517 € de km77 están por debajo de esa tarifa y no se usan.",
+      "La banqueta trasera es deslizante: km77 da un maletero de 430 L con la banqueta atrás y 555 L con ella adelantada; se declara el mínimo, coherente con el espacio de piernas medido con la banqueta atrás. km77 publica una sola cifra de «respaldo a respaldo» (75 cm), sin rango, así que no se marca como ajustable.",
+      "Las fotos de frontal, lateral, trasera e interior son del acabado esprit Alpine de la sala de prensa de Renault (llantas de 20\" negras y techo negro), no del techno que puntúa la ficha: misma generación, carrocería renovada y motorización E-Tech 200."
+    ],
+    "lengthMm": {
+      "value": 4533,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha Austral techno full hybrid E-Tech 200 (2025) (septiembre 2026), https://www.km77.com/coches/renault/austral/2025/estandar/hev/austral-techno-full-hybrid-e-tech-200-146-kw/datos",
+          "value": 4533,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "widthMm": {
+      "value": 1830,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha Austral techno full hybrid E-Tech 200 (2025) (septiembre 2026), https://www.km77.com/coches/renault/austral/2025/estandar/hev/austral-techno-full-hybrid-e-tech-200-146-kw/datos",
+          "value": 1830,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "heightMm": {
+      "value": 1618,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha Austral techno full hybrid E-Tech 200 (2025) (septiembre 2026), https://www.km77.com/coches/renault/austral/2025/estandar/hev/austral-techno-full-hybrid-e-tech-200-146-kw/datos",
+          "value": 1618,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "wheelbaseMm": {
+      "value": 2667,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha Austral techno full hybrid E-Tech 200 (2025) (septiembre 2026), https://www.km77.com/coches/renault/austral/2025/estandar/hev/austral-techno-full-hybrid-e-tech-200-146-kw/datos",
+          "value": 2667,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearLegroomMm": {
+      "value": 750,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — Renault Austral (2025) (septiembre 2026): «Distancia del respaldo al respaldo delantero» 75 cm, https://www.km77.com/coches/renault/austral/2025/estandar/mediciones-propias/detalle",
+          "value": 750,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "turningCircleM": {
+      "value": 11.2,
+      "unit": "m",
+      "sources": [
+        {
+          "label": "km77, ficha Austral techno full hybrid E-Tech 200 (2025) (septiembre 2026): «Diámetro de giro entre bordillos» 11,2 m, llanta de 19\", https://www.km77.com/coches/renault/austral/2025/estandar/hev/austral-techno-full-hybrid-e-tech-200-146-kw/datos",
+          "value": 11.2,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "rearShoulderWidthMm": {
+      "value": 1370,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, mediciones propias — Renault Austral (2025) (septiembre 2026): «Anchura hombros máxima» 137 cm —km77 no publica la mínima para este modelo—, https://www.km77.com/coches/renault/austral/2025/estandar/mediciones-propias/detalle",
+          "value": 1370,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "groundClearanceMm": {
+      "value": 180,
+      "unit": "mm",
+      "sources": [
+        {
+          "label": "km77, ficha Austral techno full hybrid E-Tech 200 (2025) (septiembre 2026): «Altura libre» 180 mm, https://www.km77.com/coches/renault/austral/2025/estandar/hev/austral-techno-full-hybrid-e-tech-200-146-kw/datos",
+          "value": 180,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "trunkLiters": {
+      "value": 430,
+      "unit": "L",
+      "sources": [
+        {
+          "label": "km77, ficha Austral techno full hybrid E-Tech 200 (2025) (septiembre 2026): «Volumen mínimo con dos filas de asientos disponibles» 430 L (555 L con la banqueta deslizante adelantada), https://www.km77.com/coches/renault/austral/2025/estandar/hev/austral-techno-full-hybrid-e-tech-200-146-kw/datos",
+          "value": 430,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "maxRoofLoadKg": {
+      "value": 75,
+      "unit": "kg",
+      "sources": [
+        {
+          "label": "Renault, manual de utilización oficial del Austral (HHN), «Pesos (en kg)» (septiembre 2026): «Carga admitida sobre el techo 75 (incluido dispositivo portador)», https://www.user-manual.renault.com/es/content/renault-austral/technical-specifications/information-about-vehicle/pesos-en-kg",
+          "value": 75,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "isofix": {
+      "count": {
+        "value": 2,
+        "sources": [
+          {
+            "label": "Euro NCAP, informe de seguridad Renault Austral (2022, 1.3 TCe 103 kW, generación HHN): tabla de protección del ocupante infantil — ISOFIX de serie en plazas traseras exteriores, opcional en el copiloto y no disponible en plaza central (septiembre 2026), https://www.euroncap.com/en/results/renault/austral/46615",
+            "value": 2,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "seats": ["rearLeft", "rearRight"]
+    },
+    "powerCv": {
+      "value": 199,
+      "unit": "CV",
+      "sources": [
+        {
+          "label": "km77, ficha Austral techno full hybrid E-Tech 200 (2025) (septiembre 2026): «Potencia máxima» 199 CV / 146 kW, https://www.km77.com/coches/renault/austral/2025/estandar/hev/austral-techno-full-hybrid-e-tech-200-146-kw/datos",
+          "value": 199,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "weightKg": {
+      "value": 1613,
+      "unit": "kg",
+      "sources": [
+        {
+          "label": "km77, ficha Austral techno full hybrid E-Tech 200 (2025) (septiembre 2026): «Peso» 1.613 kg, https://www.km77.com/coches/renault/austral/2025/estandar/hev/austral-techno-full-hybrid-e-tech-200-146-kw/datos",
+          "value": 1613,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "acceleration0to100": {
+      "value": 8.4,
+      "unit": "s",
+      "sources": [
+        {
+          "label": "km77, ficha Austral techno full hybrid E-Tech 200 (2025) (septiembre 2026): «Aceleración 0-100 km/h» 8,4 s, https://www.km77.com/coches/renault/austral/2025/estandar/hev/austral-techno-full-hybrid-e-tech-200-146-kw/datos",
+          "value": 8.4,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "consumption": {
+      "value": 4.7,
+      "unit": "l/100km",
+      "sources": [
+        {
+          "label": "km77, ficha Austral techno full hybrid E-Tech 200 (2025) (septiembre 2026): «Consumo WLTP Combinado» 4,7 l/100 km, https://www.km77.com/coches/renault/austral/2025/estandar/hev/austral-techno-full-hybrid-e-tech-200-146-kw/datos",
+          "value": 4.7,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "batteryKwh": {
+      "value": 2,
+      "unit": "kWh",
+      "sources": [
+        {
+          "label": "km77, ficha Austral techno full hybrid E-Tech 200 (2025) (septiembre 2026): «Batería» Capacidad 2 kWh, https://www.km77.com/coches/renault/austral/2025/estandar/hev/austral-techno-full-hybrid-e-tech-200-146-kw/datos",
+          "value": 2,
+          "estimated": false,
+          "current": true
+        },
+        {
+          "label": "Wikipedia (en), «Renault Austral» (septiembre 2026): «400V Lithium-ion, 1.7 kWh», https://en.wikipedia.org/wiki/Renault_Austral",
+          "value": 1.7,
+          "estimated": false,
+          "current": false,
+          "discardedReason": "Fuente secundaria sin cita de ficha técnica; el catálogo toma la capacidad de la ficha km77 de la versión, como en el resto de híbridos"
+        }
+      ]
+    },
+    "maintenanceEurYear": {
+      "value": 500,
+      "unit": "€/año",
+      "sources": [
+        {
+          "label": "carwow.es, «Mantenimiento del Renault Austral» (junio 2025): revisiones cada 30.000 km o 1 año a 300-400, 400-500, 500-600 y 600-700 € en los cuatro primeros años; media de los puntos medios (350+450+550+650 € / 4 años), no una tarifa anual desglosada por Renault, https://www.carwow.es/editorial/consejos-conductores/mantenimiento-reparaciones-cuidado-coche/mantenimiento-renault-austral",
+          "value": 500,
+          "estimated": true,
+          "current": true
+        }
+      ]
+    },
+    "priceEur": {
+      "value": 40825,
+      "unit": "€",
+      "sources": [
+        {
+          "label": "Renault España, precios y versiones del Austral (septiembre 2026): PVP de tarifa de la «techno full hybrid E-Tech 200 (147kW)», 40.825 €, antes de la oferta vigente, https://www.renault.es/hibridos/austral/precios-versiones.html?gradeCode=ENS_MDL2P1SERIELIM2",
+          "value": 40825,
+          "estimated": false,
+          "current": true
+        },
+        {
+          "label": "Renault España, precio mostrado «precio desde 38.809 €» para la techno full hybrid E-Tech 200 (septiembre 2026)",
+          "value": 38809,
+          "estimated": false,
+          "current": false,
+          "discardedReason": "Es el precio con la oferta comercial vigente ya restada (2.016 € sobre el PVP de tarifa de 40.825 €); el proyecto usa siempre el PVP de catálogo sin descontar"
+        },
+        {
+          "label": "km77, precio de la techno full hybrid E-Tech 200 (tarifa de marzo de 2026): 38.517 €, con «Descuento oficial 0 €», https://www.km77.com/coches/renault/austral/2025/estandar/hev/austral-techno-full-hybrid-e-tech-200-146-kw/datos",
+          "value": 38517,
+          "estimated": false,
+          "current": false,
+          "discardedReason": "Está por debajo del PVP de tarifa que publica Renault España (40.825 €) sin desglosar por qué; previsiblemente incluye una promoción, y el proyecto usa siempre el PVP de catálogo sin descontar"
+        }
+      ]
+    },
+    "reliabilityOcu": {
+      "value": 82,
+      "sources": [
+        {
+          "label": "OCU, índice de fiabilidad 2026 — 85.590 encuestas, 39 marcas (vía motor.es): Renault, 82 sobre 100, https://www.motor.es/noticias/ocu-ranking-fiabilidad-coches-2026-mg-2026112948.html",
+          "value": 82,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyYears": {
+      "value": 3,
+      "unit": "años",
+      "sources": [
+        {
+          "label": "Renault España, servicios del Austral (septiembre 2026), Renault care 5: «5 años de garantía: incluye 3 años de garantía + 2 años de extensión de garantía», https://www.renault.es/hibridos/austral/financiacion-servicios.html",
+          "value": 3,
+          "estimated": false,
+          "current": true
+        }
+      ]
+    },
+    "warrantyExtension": {
+      "years": {
+        "value": 8,
+        "unit": "años",
+        "sources": [
+          {
+            "label": "Renault España, promoción del Austral (septiembre 2026): «con la compra del vehículo y la suscripción de My Service (desde 41€/mes), accedes a un beneficio de extensión de garantía comercial sobre la legal. hasta 8 años desde la fecha de entrega o 160.000 km», https://promociones.renault.es/particulares/austral/",
+            "value": 8,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "kmLimit": {
+        "value": 160000,
+        "unit": "km",
+        "sources": [
+          {
+            "label": "Renault España, promoción del Austral (septiembre 2026): «hasta 8 años desde la fecha de entrega o 160.000 km», https://promociones.renault.es/particulares/austral/",
+            "value": 160000,
+            "estimated": false,
+            "current": true
+          }
+        ]
+      },
+      "condition": "Exige mantener la suscripción mensual de mantenimiento My Service en la red oficial Renault (desde 41 €/mes para el Austral); si se cancela, la extensión termina. No disponible en Canarias, Ceuta y Melilla"
+    },
+    "aestheticsExterior": {
+      "value": 3,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "aestheticsInterior": {
+      "value": 3,
+      "label": "Valoración del usuario sobre fotos de catálogo"
+    },
+    "photos": {
+      "front": {
+        "url": "https://prensa.renault.es/wp-content/uploads/2025/04/2587b4021f2f766cbd8b72d4b9a41503-l.jpg",
+        "credit": "Renault España — prensa.renault.es (sala de prensa oficial de Renault)",
+        "shows": "Renault Austral renovado (2025), gris con techo negro y llantas negras de 20\", acabado esprit Alpine — foto de estudio de la presentación de abril de 2025"
+      },
+      "side": {
+        "url": "https://prensa.renault.es/wp-content/uploads/2025/04/1d1d61ca0df543374100df3d4d335d72-l.jpg",
+        "credit": "Renault España — prensa.renault.es (sala de prensa oficial de Renault)",
+        "shows": "Renault Austral renovado (2025), perfil derecho, gris con techo negro y llantas negras de 20\", acabado esprit Alpine — misma unidad de estudio"
+      },
+      "rear": {
+        "url": "https://prensa.renault.es/wp-content/uploads/2025/04/9e76f99f788103f4d5677f29ddc684ae-l.jpg",
+        "credit": "Renault España — prensa.renault.es (sala de prensa oficial de Renault)",
+        "shows": "Renault Austral renovado (2025), trasera con el portón cerrado, gris, acabado esprit Alpine — misma unidad de estudio"
+      },
+      "trunk": {
+        "url": "https://prensa.renault.es/wp-content/uploads/2025/05/ec67e256958dd34b14350c15428b72b6-l.jpg",
+        "credit": "Renault España — prensa.renault.es (sala de prensa oficial de Renault)",
+        "shows": "Renault Austral renovado (2025), gris, maletero vacío con el portón abierto y los asientos traseros sin abatir — prueba de prensa de mayo de 2025, acabado no identificado"
+      },
+      "interior": {
+        "url": "https://prensa.renault.es/wp-content/uploads/2025/04/7aad3d4cbd0e45e670b96536828172f6-l.jpg",
+        "credit": "Renault España — prensa.renault.es (sala de prensa oficial de Renault)",
+        "shows": "Renault Austral renovado (2025), salpicadero, volante y consola central desde la puerta del conductor, tapicería oscura con pespuntes azules del acabado esprit Alpine — no del techno que puntúa la ficha"
+      }
+    }
   }
 ]

@@ -94,6 +94,7 @@ const EXPECTED_TOTALS: Record<string, number> = {
   'nissan-x-trail-e-power': 246.23920881679516,
   'honda-zr-v': 209.6233533613873,
   'volkswagen-touran': 220.97577702505313,
+  'renault-austral-hev': 205.96116313080108,
 };
 
 describe('scoreCatalog against the real catalogue (product/0009 regression)', () => {
