@@ -18,9 +18,9 @@
     "check:photos": "node scripts/checkPhotos.ts"
   },
   "dependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.3.0",
-    "zod": "^4.6.5"
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
